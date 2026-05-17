@@ -8,7 +8,7 @@ Use these templates as starting points only. The phase rules in `docs/ai/workflo
 
 | Phase | Template | Typical Destination |
 | --- | --- | --- |
-| 0. Repo Intake / Initial Audit | `0_initial_audit_template.md` | `docs/projects/<project>/intake/0_initial_audit.md` |
+| 0. Repo Intake / Initial Audit | `0_initial_audit_template.md` | `docs/ai/REPO-INTAKE.md` for repo-level bootstrap, or `docs/projects/<project>/intake/0_initial_audit.md` for project/context intake |
 | 1. Architecture | `1_architecture_phase_template.md` | `docs/projects/<project>/architecture/1_architecture_phase.md` |
 | 1.5 Architecture QA | `1_5_architecture_qa_template.md` | `docs/projects/<project>/quality/1_5_architecture_qa.md` |
 | 1.7 Architecture Fix Loop | `1_7_architecture_fix_loop_template.md` | `docs/projects/<project>/quality/1_7_architecture_fix_loop.md` |

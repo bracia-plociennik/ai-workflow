@@ -25,12 +25,13 @@ Follow this order when sources disagree:
 4. `docs/ai/WORKFLOW.md`.
 5. The relevant phase file in `docs/ai/workflow/`.
 6. Repo status in `docs/ai/STATUS.md` and project status in `docs/projects/<project>/STATUS.md`.
-7. Context, chat history, repo memory, and other supporting notes.
+7. Context, chat history, repo memory, external workflow memory, and other supporting notes.
 
 Repository state is authoritative for actual implementation.
 Workflow docs are authoritative for process.
 Context is supporting input only.
 Repo memory is an aggregate, not source of truth.
+`docs/ai/EXTERNAL-MEMORY.md` is universal workflow/process memory only. It can inform future workflow improvements, but it does not override a concrete repo's execution contract, workflow gates, status, architecture, plan, specs, or repository state.
 
 If process documents conflict or a shortcut is insufficient, stop and follow the most specific applicable phase file in `docs/ai/workflow/` together with this file.
 
@@ -62,9 +63,11 @@ Write operations are allowed only after:
 Repository-level AI docs:
 
 - `docs/ai/STATUS.md` - cross-project workflow status.
+- `docs/ai/REPO-INTAKE.md` - repo-level workflow/bootstrap readiness artifact.
 - `docs/ai/WORKFLOW.md` - operational workflow router.
 - `docs/ai/workflow/` - detailed phase specifications.
 - `docs/ai/AUTOPILOT.md` - autopilot operating guide.
+- `docs/ai/EXTERNAL-MEMORY.md` - universal workflow/process memory for improving this template.
 - `docs/ai/REPO-MEMORY.md` - aggregate repo memory after checkpoints.
 - `docs/ai/templates/` - reusable artifact templates.
 
@@ -133,6 +136,7 @@ Autopilot may run only when the user explicitly requests autonomous execution or
 
 Autopilot is allowed only after the active project workspace has:
 
+- repo-level workflow readiness recorded in `docs/ai/REPO-INTAKE.md`;
 - context or explicit project input;
 - repo intake / initial audit artifact;
 - architecture artifact;
@@ -184,6 +188,7 @@ Before each autopilot phase, check:
 - task dependencies and implementation gates;
 - dirty workspace and overlapping write set;
 - drift between repo, architecture, plan, spec, implementation, checkpoint, and status;
+- external workflow memory if the task promotes universal process lessons;
 - critical-risk triggers;
 - retry counters and execution budget.
 
@@ -399,6 +404,7 @@ Every repository should refine this list. Default restricted zones:
 - production deployment manifests;
 - historical project docs outside the active task scope;
 - aggregate memory files unless the active phase explicitly updates them.
+- `docs/ai/EXTERNAL-MEMORY.md`, unless the task is workflow maintenance or a checkpoint has a universal workflow lesson to promote.
 
 Do not edit restricted zones unless the approved task explicitly targets them.
 

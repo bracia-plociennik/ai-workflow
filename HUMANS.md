@@ -33,9 +33,11 @@ Kiedy nie wiesz, co wolno zrobić albo jaka faza jest aktualna, czytaj źródła
 3. `docs/ai/workflow/<phase>.md` - szczegółowa specyfikacja konkretnej fazy.
 4. `docs/ai/workflow/00_overview.md` - globalny opis workflow, statusu, autopilota i recovery.
 5. `docs/ai/AUTOPILOT.md` - checklist startu i warunki działania autopilota.
-6. `docs/ai/STATUS.md` - repo-level status bieżącej pracy.
-7. `docs/projects/<project>/STATUS.md` - project-local status bieżącej pracy.
-8. `docs/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
+6. `docs/ai/REPO-INTAKE.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
+7. `docs/ai/EXTERNAL-MEMORY.md` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
+8. `docs/ai/STATUS.md` - repo-level status bieżącej pracy.
+9. `docs/projects/<project>/STATUS.md` - project-local status bieżącej pracy.
+10. `docs/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
 
 Jeśli źródła są sprzeczne, nie proś Codexa o zgadywanie. Poproś o reconciliation albo escalation.
 
@@ -72,6 +74,10 @@ Znaczenie katalogów:
 - `distillations/`: wiedza po zakończonych taskach.
 - `checkpoints/`: okresowa synchronizacja stabilnego stanu.
 - `autopilot/`: runtime autopilota.
+
+`docs/ai/REPO-INTAKE.md` jest repo-level artefaktem bootstrap. Używaj go, gdy workflow został dopiero dodany do repo albo zanim powstanie pierwszy `docs/projects/<project>/`.
+
+`docs/ai/EXTERNAL-MEMORY.md` jest miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
 
 `docs/human/` nie jest miejscem na specs, QA evidence ani runtime. To miejsce na dokumenty dla ludzi.
 

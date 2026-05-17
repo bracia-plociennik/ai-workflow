@@ -36,6 +36,12 @@
 - Reason:
 - Suggested memory entry:
 
+## External Workflow Memory Candidate
+
+- Should sync to `docs/ai/EXTERNAL-MEMORY.md`: `<yes|no>`
+- Reason:
+- Suggested external memory entry:
+
 ## Artifacts Updated
 
 | Artifact | Update |

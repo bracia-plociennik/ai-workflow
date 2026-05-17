@@ -81,6 +81,7 @@ Final Check musi zweryfikować:
   - architekturą
   - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md`
   - `docs/ai/REPO-MEMORY.md`
+  - `docs/ai/EXTERNAL-MEMORY.md`, jeśli etap promował uniwersalne lekcje workflow
   - checkpointami
 - czy rzeczywisty system odpowiada deklarowanemu stanowi
 - czy etap realizuje zamierzony cel systemowy
@@ -106,6 +107,7 @@ FAIL jeśli:
 - plan etapu nie zgadza się z rzeczywistym stanem systemu
 - project memory utrwala nieprawdziwy stan projektu
 - repo memory utrwala nieprawdziwy stan repo-level
+- external memory utrwala repo-specific albo project-specific wiedzę jako uniwersalną zasadę workflow
 - istnieją niespójności między komponentami wpływające na correctness
 
 ## Relacja do checkpointu
@@ -115,6 +117,7 @@ Final Check zakłada, że:
 - checkpoint został wykonany
 - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md` jest zsynchronizowany
 - `docs/ai/REPO-MEMORY.md` jest zsynchronizowany, jeśli checkpoint dotyczył wiedzy repo-level
+- `docs/ai/EXTERNAL-MEMORY.md` jest zsynchronizowany, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow
 
 Jeśli checkpoint nie istnieje:
 
@@ -210,7 +213,7 @@ Zweryfikuj cały etap jako system.
 Zasady:
 - oceń zgodność z architekturą
 - oceń zgodność z planem etapu
-- oceń spójność repo, PROJECT-MEMORY.md, docs/ai/REPO-MEMORY.md i checkpointów
+- oceń spójność repo, PROJECT-MEMORY.md, docs/ai/REPO-MEMORY.md, docs/ai/EXTERNAL-MEMORY.md jeśli dotyczy, i checkpointów
 - sprawdź brak sprzeczności systemowych
 
 Reguły:

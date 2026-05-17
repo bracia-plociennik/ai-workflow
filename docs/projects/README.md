@@ -2,6 +2,8 @@
 
 This directory stores project-local workflow artifacts.
 
+Repo-level workflow/bootstrap intake belongs in `docs/ai/REPO-INTAKE.md`. Do not create a project workspace only to validate that the workflow template is installed correctly.
+
 Each real project should have its own workspace:
 
 ```text
@@ -45,4 +47,3 @@ docs/projects/<project>/
 - Keep project decisions in `decisions/`.
 - Keep QA and gate evidence in `quality/`.
 - Keep autopilot runtime in `autopilot/`.
-

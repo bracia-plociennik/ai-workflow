@@ -12,6 +12,7 @@
 ## Sources
 
 - Repository state: `<commands/files inspected>`
+- Repo-level intake: `docs/ai/REPO-INTAKE.md`
 - Context artifact: `docs/projects/<project>/intake/0_context.md` or `none`
 - Workflow rules: `docs/ai/workflow/0_repo_intake_initial_audit.md`
 - Repo instructions: `AGENTS.md`
@@ -32,6 +33,8 @@
 | Workflow guide | `docs/ai/WORKFLOW.md` | `<present|missing|incomplete>` | |
 | Workflow phases | `docs/ai/workflow/` | `<present|missing|incomplete>` | |
 | Repo status | `docs/ai/STATUS.md` | `<present|missing|incomplete>` | |
+| Repo intake | `docs/ai/REPO-INTAKE.md` | `<present|missing|incomplete>` | |
+| External memory | `docs/ai/EXTERNAL-MEMORY.md` | `<present|missing|incomplete>` | |
 | Repo memory | `docs/ai/REPO-MEMORY.md` | `<present|missing|incomplete>` | |
 | Project status | `docs/projects/<project>/STATUS.md` | `<present|missing|incomplete>` | |
 

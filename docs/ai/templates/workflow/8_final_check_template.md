@@ -23,6 +23,7 @@
 | Distillations complete | `<PASS|FAIL>` | |
 | Checkpoint complete | `<PASS|FAIL>` | |
 | Repo/memory/status consistent | `<PASS|FAIL>` | |
+| External workflow memory consistent, if used | `<PASS|FAIL|n/a>` | |
 | No unresolved blocking decisions | `<PASS|FAIL>` | |
 
 ## Findings

@@ -11,6 +11,7 @@
 ## Inputs
 
 - Repo memory: `docs/ai/REPO-MEMORY.md`
+- External workflow memory: `docs/ai/EXTERNAL-MEMORY.md`
 - Project memory: `docs/projects/<project>/PROJECT-MEMORY.md`
 - Distillations processed:
 - Architecture: `docs/projects/<project>/architecture/1_architecture_phase.md`
@@ -28,6 +29,7 @@
 | Memory File | Update Summary |
 | --- | --- |
 | `docs/ai/REPO-MEMORY.md` | |
+| `docs/ai/EXTERNAL-MEMORY.md` | |
 | `docs/projects/<project>/PROJECT-MEMORY.md` | |
 
 ## Drift Review

@@ -4,6 +4,11 @@ Ta faza jest obowiązkowym wejściem do pracy z repozytorium objętym pełnym wo
 
 Celem nie jest implementacja. Celem jest ustalenie prawdziwego stanu repo, docsów, komend, ryzyk i brakujących decyzji, zanim powstanie architektura, plan albo autopilot.
 
+Faza 0 ma dwa możliwe poziomy artefaktu:
+
+- `docs/ai/REPO-INTAKE.md` - repo-level bootstrap/intake dla workflow i autopilota, także wtedy, gdy nie istnieje jeszcze żaden projekt.
+- `docs/projects/<what_we_doing>/intake/0_initial_audit.md` - project/context-specific intake, gdy istnieje konkretny projekt, produkt, feature, context albo plan.
+
 ## Warunek wejścia
 
 Fazę 0 można uruchomić, gdy:
@@ -13,6 +18,8 @@ Fazę 0 można uruchomić, gdy:
 - użytkownik chce rozpocząć workflow, audyt albo przygotowanie repo pod workflow/autopilot.
 
 `0_context.md` jest opcjonalny. Brak contextu nie blokuje fazy 0.
+
+Brak aktywnego projektu nie blokuje repo-level intake. W takim przypadku artefaktem fazy jest `docs/ai/REPO-INTAKE.md`, a nie project-local `0_initial_audit.md`.
 
 ## Cel fazy
 
@@ -25,7 +32,8 @@ Codex ma:
 - znaleźć stare, zdublowane, przeniesione albo sprzeczne artefakty;
 - wykryć high-risk areas i restricted zones;
 - ustalić bezpieczne komendy walidacyjne;
-- przygotować artefakt `docs/projects/<what_we_doing>/intake/0_initial_audit.md`;
+- przygotować albo odświeżyć `docs/ai/REPO-INTAKE.md`, jeśli audyt dotyczy repo-level workflow/bootstrap;
+- przygotować artefakt `docs/projects/<what_we_doing>/intake/0_initial_audit.md`, jeśli audyt dotyczy konkretnego projektu/contextu;
 - wypisać decyzje ownera potrzebne przed kolejnymi fazami.
 
 ## Zakres fazy
@@ -43,6 +51,8 @@ Faza 0 obejmuje:
 - `docs/ai/workflow/`;
 - `docs/ai/AUTOPILOT.md`;
 - `docs/ai/STATUS.md`;
+- `docs/ai/REPO-INTAKE.md`;
+- `docs/ai/EXTERNAL-MEMORY.md`;
 - `docs/ai/templates/`;
 - `docs/ai/REPO-MEMORY.md`;
 - `docs/projects/<what_we_doing>/STATUS.md`, jeśli projekt już istnieje;
@@ -84,19 +94,25 @@ Context pomaga zrozumieć intencję, ale nie nadpisuje repo ani zatwierdzonych a
 
 ## Lokalizacja artefaktów
 
+Repo-level intake, jeśli nie ma jeszcze projektu albo audyt dotyczy tylko gotowości workflow/autopilota:
+
+```text
+docs/ai/REPO-INTAKE.md
+```
+
 Context, jeśli istnieje:
 
 ```text
 docs/projects/<what_we_doing>/intake/0_context.md
 ```
 
-Initial audit:
+Project/context-specific initial audit:
 
 ```text
 docs/projects/<what_we_doing>/intake/0_initial_audit.md
 ```
 
-Jeśli aktywny workspace nie istnieje, faza 0 może zaproponować jego utworzenie, ale nie może go stworzyć bez zatwierdzenia użytkownika.
+Jeśli aktywny workspace nie istnieje, faza 0 może zakończyć się na `docs/ai/REPO-INTAKE.md` i zaproponować utworzenie workspace'u, ale nie może go stworzyć bez zatwierdzenia użytkownika.
 
 ## Obowiązkowe sprawdzenia repo
 
@@ -124,6 +140,8 @@ Codex musi sprawdzić, czy istnieją i są użyteczne:
 - `docs/ai/workflow/`;
 - `docs/ai/AUTOPILOT.md`;
 - `docs/ai/STATUS.md`;
+- `docs/ai/REPO-INTAKE.md`;
+- `docs/ai/EXTERNAL-MEMORY.md`;
 - `docs/ai/REPO-MEMORY.md`;
 - `docs/ai/templates/`;
 - `docs/projects/README.md`;
@@ -149,6 +167,8 @@ Audit ma odpowiedzieć, czy poniższe warunki są spełnione:
 
 - `AGENTS.md` istnieje i jest dostosowany do repo.
 - `HUMANS.md` istnieje i opisuje pracę człowieka z workflow.
+- `docs/ai/REPO-INTAKE.md` istnieje i opisuje repo-level workflow/bootstrap readiness.
+- `docs/ai/EXTERNAL-MEMORY.md` istnieje i jest rozdzielony od repo-specific memory.
 - `docs/ai/STATUS.md` wskazuje aktywny workspace albo jasno mówi, że go nie ma.
 - `docs/projects/<what_we_doing>/STATUS.md` istnieje, jeśli projekt jest aktywny.
 - Canonical docs layout jest jasny.
@@ -162,7 +182,7 @@ Audit ma odpowiedzieć, czy poniższe warunki są spełnione:
 - Git branch/commit/push policy jest znana.
 - Stop triggers są jasne.
 
-Ta checklista ma trafić do `0_initial_audit.md` jako osobna sekcja z wynikiem per punkt.
+Ta checklista ma trafić do `docs/ai/REPO-INTAKE.md` przy repo-level bootstrap intake albo do `0_initial_audit.md` przy project/context-specific intake.
 
 ## Repo Adaptation Layer
 
@@ -273,7 +293,23 @@ Codex nie może bez zgody:
 
 ## Minimalny Kontrakt Artefaktu
 
-`docs/projects/<what_we_doing>/intake/0_initial_audit.md` musi zawierać:
+`docs/ai/REPO-INTAKE.md` musi zawierać repo-level bootstrap contract:
+
+- metadata: repo, path, date, result, active project workspace if any;
+- sources reviewed;
+- required AI workflow files and their status;
+- required workflow phase files and their status;
+- canonical docs layout check;
+- repo adaptation layer;
+- safe environment;
+- repo risk register;
+- artifact reconciliation;
+- readiness checklist;
+- owner decisions required;
+- gate decision;
+- evidence.
+
+`docs/projects/<what_we_doing>/intake/0_initial_audit.md` musi zawierać project/context-specific contract:
 
 - metadata: data, repo, workspace, scope;
 - sources reviewed;
@@ -292,6 +328,7 @@ Codex nie może bez zgody:
 - workflow docs findings;
 - status files findings;
 - memory files findings;
+- external memory findings;
 - human docs findings;
 - high-risk areas;
 - restricted zones;
@@ -311,7 +348,9 @@ Codex nie może bez zgody:
 
 Faza 0 może przejść dalej tylko jeśli:
 
-- audit artifact istnieje;
+- właściwy audit artifact istnieje:
+  - `docs/ai/REPO-INTAKE.md` dla repo-level bootstrap intake;
+  - `docs/projects/<what_we_doing>/intake/0_initial_audit.md` dla project/context-specific intake;
 - MUST recommendations są zaakceptowane, odrzucone albo świadomie odroczone przez ownera;
 - nie ma blocking unknowns wpływających na architekturę;
 - canonical docs layout jest jasny;
@@ -342,7 +381,10 @@ Zbadaj repo, docs/workflow layout, AGENTS.md, HUMANS.md, statusy, memory, templa
 
 Jeśli istnieje context, użyj go pomocniczo i nie traktuj go jako source of truth.
 
-Utwórz albo zaktualizuj:
+Jeśli nie ma aktywnego projektu albo celem jest bootstrap workflow/autopilota, utwórz albo zaktualizuj:
+docs/ai/REPO-INTAKE.md
+
+Jeśli istnieje aktywny projekt/context, utwórz albo zaktualizuj:
 docs/projects/<what_we_doing>/intake/0_initial_audit.md
 
 Nie zmieniaj kodu produktu.

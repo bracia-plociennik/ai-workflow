@@ -129,6 +129,7 @@ Autopilot jest trybem wykonawczym dla zadań wynikających z zatwierdzonego plan
 
 Autopilot może działać dopiero wtedy, gdy istnieją i przeszły wymagane bramki:
 
+- repo-level workflow readiness w `docs/ai/REPO-INTAKE.md`
 - context albo jawnie wskazany materiał wejściowy
 - `0_initial_audit.md`
 - `1_architecture_phase.md`
@@ -689,7 +690,9 @@ Każda faza:
 ### 0. Repo Intake / Initial Audit
 
 - audit wykonywany najczęściej w Codex (kod)
-- wynik musi być zapisany jako artefakt (np. `docs/projects/<what_we_doing>/intake/0_initial_audit.md` lub audit file)
+- wynik musi być zapisany jako artefakt:
+  - `docs/ai/REPO-INTAKE.md` dla repo-level bootstrap/workflow readiness
+  - `docs/projects/<what_we_doing>/intake/0_initial_audit.md` dla konkretnego projektu/contextu
 
 Warunek przejścia dalej:
 

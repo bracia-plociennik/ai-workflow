@@ -4,7 +4,7 @@
 
 This is the repository-level workflow status file.
 
-In a new repository, update this file during `0. REPO INTAKE / INITIAL AUDIT` so it points to the active project workspace and current workflow phase.
+In a new repository, update this file during repo-level intake so it records workflow/bootstrap readiness, then point it to the active project workspace and current workflow phase once a project exists.
 
 ## Current Status
 
@@ -17,7 +17,7 @@ In a new repository, update this file during `0. REPO INTAKE / INITIAL AUDIT` so
 | `current_task` | `template setup / no active task` |
 | `current_phase` | `none` |
 | `phase_result` | `not_started` |
-| `next_phase` | `0. REPO INTAKE / INITIAL AUDIT` |
+| `next_phase` | `repo-level intake in docs/ai/REPO-INTAKE.md` |
 | `last_completed_phase` | `none` |
 | `blocking_reason` | `repo adaptation layer not filled` |
 | `autopilot_mode` | `not_active` |
@@ -27,6 +27,7 @@ In a new repository, update this file during `0. REPO INTAKE / INITIAL AUDIT` so
 ## Notes
 
 - This template status is intentionally not tied to any real project.
+- First fill `docs/ai/REPO-INTAKE.md` to validate repo-level workflow readiness.
+- Keep `docs/ai/EXTERNAL-MEMORY.md` for universal workflow lessons only.
 - Before implementation work, create or select `docs/projects/<project>/` and update this file.
 - Do not mark any phase as `PASS` without evidence in the relevant project `quality/` directory.
-

@@ -93,14 +93,19 @@ Checkpoint musi wykonać trzy rzeczy:
    - implementacją
    - project memory
    - repo memory
+   - external workflow memory, jeśli checkpoint wykrył uniwersalną lekcję o procesie
 
 `docs/ai/REPO-MEMORY.md` jest agregatem repo-level. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
+
+`docs/ai/EXTERNAL-MEMORY.md` jest pamięcią uniwersalną dla samego workflow. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
 
 ## **Minimalny kontrakt PROJECT-MEMORY.md i REPO-MEMORY.md**
 
 Project Memory powinno zawierać wiedzę istotną dla danego projektu.
 
 Repo Memory powinno zawierać tylko rzeczy globalnie istotne dla całego repo.
+
+External Memory powinno zawierać tylko rzeczy globalnie istotne dla `ai-workflow` jako systemu, nie dla konkretnego repo.
 
 Nie zapisuj wszystkiego z distillation.
 
@@ -255,6 +260,11 @@ Jeśli `docs/ai/REPO-MEMORY.md` nie istnieje:
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
 - nie zapisuj lokalnej wiedzy projektowej do repo memory tylko dlatego, że repo memory istnieje
 
+Jeśli `docs/ai/EXTERNAL-MEMORY.md` nie istnieje:
+
+- checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy uniwersalnej wiedzy workflow
+- nie zapisuj repo-specific ani project-specific wiedzy do external memory
+
 ## **Zakaz mechanicznego merge**
 
 Nie wolno:
@@ -292,6 +302,7 @@ Wykonaj checkpoint projektu.
 Wejście:
 - docs/projects/<what_we_doing>/PROJECT-MEMORY.md
 - docs/ai/REPO-MEMORY.md
+- docs/ai/EXTERNAL-MEMORY.md
 - wszystkie X_task_or_package_name_distillation.md z memory_in_repo_memory: false
 - aktualny stan repo
 - aktualna architektura
@@ -302,6 +313,7 @@ Wykonaj:
 - kompresję i deduplikację informacji
 - aktualizację PROJECT-MEMORY.md
 - aktualizację docs/ai/REPO-MEMORY.md tylko dla wiedzy repo-level
+- aktualizację docs/ai/EXTERNAL-MEMORY.md tylko dla uniwersalnej wiedzy workflow
 - walidację zgodności między:
   - architekturą
   - implementacją

@@ -22,6 +22,14 @@ If this guide is insufficient, open the linked phase file. If process documents 
 
 For workflow-governed work, update the relevant `STATUS.md` whenever a phase starts, ends, fails, passes, becomes blocked, or changes the next required phase.
 
+## Repo-Level Intake
+
+Use [`docs/ai/REPO-INTAKE.md`](REPO-INTAKE.md) when the repository has no active project workspace yet, when `ai-workflow` has just been installed, or when repo-level workflow/autopilot readiness needs to be checked before creating a project.
+
+`REPO-INTAKE.md` checks whether the repository has the required workflow infrastructure: `AGENTS.md`, `HUMANS.md`, `docs/ai`, status, templates, safe command policy, STOP conditions and autopilot readiness defaults.
+
+It is different from `docs/projects/<project>/intake/0_initial_audit.md`, which is project/context-specific and prepares a concrete architecture/plan.
+
 ## Artifact Paths
 
 Project artifacts live under `docs/projects/<what_we_doing>/...`.
