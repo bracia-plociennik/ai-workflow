@@ -5,21 +5,21 @@ It is not active workflow state and must not be used as the source of truth for 
 
 ## Included Artifact Types
 
-- Root support files: `STATUS.md`, `PROJECT-MEMORY.md`, `PLANS.md`, `CODE-REVIEW.md`
-- Phase 000/0: `intake/000_idea_validation.md`, `intake/0_context.md`, `intake/0_initial_audit.md`
-- Phase 1: `architecture/1_architecture_phase.md`
-- Phase 1.5/1.7: `quality/1_5_architecture_qa.md`, `quality/1_7_architecture_fix_loop.md`
-- Phase 2: `planning/2_project_plan.md`
+- Root support files: `status.md`, `project-memory.md`, `plans.md`, `code-review.md`
+- Phase 000/0: `intake/phase-0-idea-validation.md`, `intake/context.md`, `intake/phase-0-repo-intake.md`
+- Phase 1: `architecture/phase-1-architecture.md`
+- Phase 1.5/1.7: `quality/phase-1-architecture-qa.md`, `quality/phase-1-architecture-fix-loop.md`
+- Phase 2: `planning/phase-2-project-plan.md`
 - Phase 2.5/2.6/2.7/2.9/2.9.1: plan QA, fix loop, packaging, packaging QA, package fix loop quality artifacts
-- Phase 3: `specs/3_EX-01_example-task_specification.md`
+- Phase 3: `specs/phase-3-ex-01-example-task-specification.md`
 - Phase 3.5/3.7: spec QA and spec fix loop quality artifacts
 - Phase 4/5/5.5: implementation result, quality, and fix loop artifacts
-- Phase 6: `distillations/3_EX-01_example-task_distillation.md`
-- Phase 7: `checkpoints/7_checkpoint_2026-05-16_example.md`
-- Phase 8: `quality/8_final_check.md`
-- Decisions: `decisions/3_EX-01_example-task_decisions.md`
-- Escalations: `escalations/EXAMPLE_escalation_2026-05-16.md`
-- Autopilot runtime examples: `autopilot/AUTOPILOT_STATE.md`, `autopilot/AUTOPILOT_LEDGER.md`, `autopilot/AUTOPILOT_EVENTS.md`
+- Phase 6: `distillations/phase-6-ex-01-example-task-distillation.md`
+- Phase 7: `checkpoints/phase-7-checkpoint-2026-05-16-example.md`
+- Phase 8: `quality/phase-8-final-check.md`
+- Decisions: `decisions/ex-01-example-task-decisions.md`
+- Escalations: `escalations/example-escalation-2026-05-16.md`
+- Autopilot runtime examples: `autopilot/autopilot-state.md`, `autopilot/autopilot-ledger.md`, `autopilot/autopilot-events.md`
 
 ## Warning
 

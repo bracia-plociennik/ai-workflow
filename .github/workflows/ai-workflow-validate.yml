@@ -1,0 +1,41 @@
+name: AI Workflow Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+      - name: Install workflow validator dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
+      - name: Check validator toolchain
+        run: command -v rg
+
+      - name: Validate workflow template
+        run: scripts/validate-workflow
+
+      - name: Check strict naming
+        run: scripts/check-naming
+
+      - name: Check diff whitespace
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git diff --check "origin/${{ github.base_ref }}...HEAD"
+          elif git rev-parse HEAD^ >/dev/null 2>&1; then
+            git diff --check HEAD^..HEAD
+          else
+            git diff --check
+          fi

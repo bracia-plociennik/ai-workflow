@@ -1,6 +1,6 @@
 # Workflow Templates
 
-Reusable templates for artifacts produced by `docs/ai/workflow/*` phases.
+Reusable templates for artifacts produced by `docs/ai/workflow/` phases.
 
 Use these templates as starting points only. The phase rules in `docs/ai/workflow/` remain authoritative.
 
@@ -8,25 +8,25 @@ Use these templates as starting points only. The phase rules in `docs/ai/workflo
 
 | Phase | Template | Typical Destination |
 | --- | --- | --- |
-| 000. Idea Validation | `000_idea_validation_template.md` | `docs/projects/<project>/intake/000_idea_validation.md` |
-| 0. Repo Intake / Initial Audit | `0_initial_audit_template.md` | `docs/repo/REPO-INTAKE.md` for repo-level bootstrap, or `docs/projects/<project>/intake/0_initial_audit.md` for project/context intake |
-| 1. Architecture | `1_architecture_phase_template.md` | `docs/projects/<project>/architecture/1_architecture_phase.md` |
-| 1.5 Architecture QA | `1_5_architecture_qa_template.md` | `docs/projects/<project>/quality/1_5_architecture_qa.md` |
-| 1.7 Architecture Fix Loop | `1_7_architecture_fix_loop_template.md` | `docs/projects/<project>/quality/1_7_architecture_fix_loop.md` |
-| 2. Project Plan | `2_project_plan_template.md` | `docs/projects/<project>/planning/2_project_plan.md` |
-| 2.5 Plan QA | `2_5_plan_qa_template.md` | `docs/projects/<project>/quality/2_5_plan_qa.md` |
-| 2.6 Plan Fix Loop | `2_6_plan_fix_loop_template.md` | `docs/projects/<project>/quality/2_6_plan_fix_loop.md` |
-| 2.7 Task Packaging | `2_7_task_packaging_template.md` | `docs/projects/<project>/planning/2_project_plan.md` section or `quality/2_7_task_packaging.md` |
-| 2.9 Packaging QA | `2_9_packaging_qa_template.md` | `docs/projects/<project>/quality/2_9_packaging_qa.md` |
-| 2.9.1 Package Fix Loop | `2_9_1_package_fix_loop_template.md` | `docs/projects/<project>/quality/2_9_1_package_fix_loop.md` |
-| 3. Specification | `3_task_specification_template.md` | `docs/projects/<project>/specs/3_<task>_specification.md` |
-| 3.5 Spec QA | `3_5_spec_qa_template.md` | `docs/projects/<project>/quality/3_5_<task>_spec_qa.md` |
-| 3.7 Spec Fix Loop | `3_7_spec_fix_loop_template.md` | `docs/projects/<project>/quality/3_7_<task>_spec_fix_loop.md` |
-| 4. Implementation | `4_implementation_result_template.md` | response body or `docs/projects/<project>/quality/4_<task>_implementation_result.md` when persisted |
-| 5. Quality | `5_quality_template.md` | `docs/projects/<project>/quality/5_<task>_quality.md` |
-| 5.5 Fix Loop | `5_5_fix_loop_template.md` | `docs/projects/<project>/quality/5_5_<task>_fix_loop.md` |
-| 6. Distillation | `6_distillation_template.md` | `docs/projects/<project>/distillations/3_<task>_distillation.md` |
-| 7. Checkpoint | `7_checkpoint_template.md` | `docs/projects/<project>/checkpoints/7_checkpoint_<date>_<scope>.md` |
-| 8. Final Check | `8_final_check_template.md` | `docs/projects/<project>/quality/8_final_check.md` |
+| 0 idea validation | `phase-0-idea-validation.template.md` | `docs/projects/<project>/intake/phase-0-idea-validation.md` |
+| 0 repo intake | `phase-0-repo-intake.template.md` | `docs/repo/repo-intake.md` or `docs/projects/<project>/intake/phase-0-repo-intake.md` |
+| 1 architecture | `phase-1-architecture.template.md` | `docs/projects/<project>/architecture/phase-1-architecture.md` |
+| 1 architecture QA | `phase-1-architecture-qa.template.md` | `docs/projects/<project>/quality/phase-1-architecture-qa.md` |
+| 1 architecture fix loop | `phase-1-architecture-fix-loop.template.md` | `docs/projects/<project>/quality/phase-1-architecture-fix-loop.md` |
+| 2 project plan | `phase-2-project-plan.template.md` | `docs/projects/<project>/planning/phase-2-project-plan.md` |
+| 2 plan QA | `phase-2-plan-qa.template.md` | `docs/projects/<project>/quality/phase-2-plan-qa.md` |
+| 2 plan fix loop | `phase-2-plan-fix-loop.template.md` | `docs/projects/<project>/quality/phase-2-plan-fix-loop.md` |
+| 2 task packaging | `phase-2-task-packaging.template.md` | `docs/projects/<project>/quality/phase-2-task-packaging.md` |
+| 2 packaging QA | `phase-2-packaging-qa.template.md` | `docs/projects/<project>/quality/phase-2-packaging-qa.md` |
+| 2 package fix loop | `phase-2-package-fix-loop.template.md` | `docs/projects/<project>/quality/phase-2-package-fix-loop.md` |
+| 3 specification | `phase-3-specification.template.md` | `docs/projects/<project>/specs/phase-3-<task-id>-specification.md` |
+| 3 spec QA | `phase-3-spec-qa.template.md` | `docs/projects/<project>/quality/phase-3-<task-id>-spec-qa.md` |
+| 3 spec fix loop | `phase-3-spec-fix-loop.template.md` | `docs/projects/<project>/quality/phase-3-<task-id>-spec-fix-loop.md` |
+| 4 implementation | `phase-4-implementation.template.md` | `docs/projects/<project>/quality/phase-4-<task-id>-implementation-result.md` |
+| 5 quality | `phase-5-quality.template.md` | `docs/projects/<project>/quality/phase-5-<task-id>-quality.md` |
+| 5 fix loop | `phase-5-fix-loop.template.md` | `docs/projects/<project>/quality/phase-5-<task-id>-fix-loop.md` |
+| 6 distillation | `phase-6-distillation.template.md` | `docs/projects/<project>/distillations/phase-6-<task-id>-distillation.md` |
+| 7 checkpoint | `phase-7-checkpoint.template.md` | `docs/projects/<project>/checkpoints/phase-7-checkpoint-<date>-<scope>.md` |
+| 8 final check | `phase-8-final-check.template.md` | `docs/projects/<project>/quality/phase-8-final-check.md` |
 
 Autopilot runtime templates live in `../autopilot/`.

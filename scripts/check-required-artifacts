@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+required=(
+  "AGENTS.md"
+  "HUMANS.md"
+  "README.md"
+  "docs/ai/operating-model.md"
+  "docs/ai/workflow.md"
+  "docs/ai/autopilot.md"
+  "docs/ai/definition-of-done.md"
+  "docs/ai/permissions.md"
+  "docs/ai/risk-model.md"
+  "docs/ai/commands.md"
+  "docs/ai/prompt-injection.md"
+  "docs/ai/rollback.md"
+  "docs/ai/dependencies.md"
+  "docs/ai/deprecation.md"
+  "docs/ai/version.md"
+  "docs/ai/changelog.md"
+  "docs/repo/context.md"
+  "docs/repo/repo-intake.md"
+  "docs/repo/status.md"
+  "docs/repo/memory.md"
+  "docs/ai/templates/codex/config.toml.template"
+  "docs/ai/templates/codex/requirements.toml.template"
+  "docs/ai/templates/projects/tasks.template.md"
+  "docs/ai/templates/autopilot/autopilot-events.template.md"
+  "docs/ai/templates/autopilot/autopilot-ledger.template.md"
+  "docs/ai/templates/autopilot/autopilot-state.template.md"
+  "docs/ai/templates/autopilot/escalation.template.md"
+  "docs/ai/templates/autopilot/qa-evidence.template.md"
+  "docs/ai/templates/autopilot/task-decisions.template.md"
+  "docs/ai/templates/humans/approval.template.md"
+  "docs/ai/templates/humans/audit.template.md"
+  "docs/ai/templates/humans/decision.template.md"
+  "docs/ai/templates/humans/runbook.template.md"
+  "docs/ai/templates/humans/summary.template.md"
+  ".github/workflows/ai-workflow-validate.yml"
+  "scripts/check-validator-smoke-tests"
+)
+
+phases=(
+  "phase-0-idea-validation.md"
+  "phase-0-repo-intake.md"
+  "phase-1-architecture.md"
+  "phase-1-architecture-qa.md"
+  "phase-1-architecture-fix-loop.md"
+  "phase-2-project-plan.md"
+  "phase-2-plan-qa.md"
+  "phase-2-plan-fix-loop.md"
+  "phase-2-task-packaging.md"
+  "phase-2-packaging-qa.md"
+  "phase-2-package-fix-loop.md"
+  "phase-3-specification.md"
+  "phase-3-spec-qa.md"
+  "phase-3-spec-fix-loop.md"
+  "phase-4-implementation.md"
+  "phase-5-quality.md"
+  "phase-5-fix-loop.md"
+  "phase-6-distillation.md"
+  "phase-7-checkpoint.md"
+  "phase-8-final-check.md"
+)
+
+fail=0
+
+for path in "${required[@]}"; do
+  if [[ ! -f "$path" ]]; then
+    echo "Missing required artifact: $path"
+    fail=1
+  fi
+done
+
+for phase in "${phases[@]}"; do
+  if [[ ! -f "docs/ai/workflow/$phase" ]]; then
+    echo "Missing workflow phase: docs/ai/workflow/$phase"
+    fail=1
+  fi
+
+  template="docs/ai/templates/workflow/${phase%.md}.template.md"
+  if [[ ! -f "$template" ]]; then
+    echo "Missing workflow template: $template"
+    fail=1
+  fi
+done
+
+exit "$fail"

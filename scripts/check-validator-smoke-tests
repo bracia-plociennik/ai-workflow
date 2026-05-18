@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/ai-workflow-validator-smoke.XXXXXX")"
+cleanup() {
+  rm -rf "$tmp"
+}
+trap cleanup EXIT
+
+tar --exclude='.git' -cf - . | tar -xf - -C "$tmp"
+
+run_must_fail() {
+  local name="$1"
+  shift
+  local output="$tmp/${name}.out"
+
+  if (cd "$tmp" && "$@") >"$output" 2>&1; then
+    echo "Validator smoke test unexpectedly passed: $name"
+    cat "$output"
+    exit 1
+  fi
+}
+
+mv "$tmp/docs/ai/workflow/phase-8-final-check.md" "$tmp/docs/ai/workflow/Phase_8_BAD.md"
+run_must_fail "bad-naming" scripts/check-naming
+mv "$tmp/docs/ai/workflow/Phase_8_BAD.md" "$tmp/docs/ai/workflow/phase-8-final-check.md"
+
+perl -0pi -e 's/^### Evidence required$/### Evidence missing/m' "$tmp/docs/ai/workflow/phase-8-final-check.md"
+run_must_fail "missing-gate-heading" env AI_WORKFLOW_SKIP_SMOKE_TESTS=1 scripts/validate-workflow
+perl -0pi -e 's/^### Evidence missing$/### Evidence required/m' "$tmp/docs/ai/workflow/phase-8-final-check.md"
+
+cat > "$tmp/docs/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
+# Bad quality
+
+Result: `PASS`
+
+## Gate Decision
+
+can-proceed: true
+MD
+run_must_fail "pass-without-evidence" scripts/check-qa-evidence
+
+cat > "$tmp/docs/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
+# Bad quality
+
+Result: `PASS`
+
+## Evidence
+
+```yaml
+commands:
+  - command: "example check"
+    result: "FAIL"
+    notes: "failed command must block PASS"
+manual-checks: []
+artifacts-reviewed:
+  - "docs/projects/EXAMPLE/tasks.md"
+skipped-checks: []
+```
+
+## Gate Decision
+
+```yaml
+result: PASS
+can-proceed: true
+```
+MD
+run_must_fail "pass-with-failed-command" scripts/check-qa-evidence
+
+perl -0pi -e 's/\\| `current-phase` \\| `phase-5-quality` \\|/| `current-phase` | `phase-1-architecture` |/' "$tmp/docs/repo/status.md"
+perl -0pi -e 's/\\| `next-phase` \\| `none` \\|/| `next-phase` | `phase-8-final-check` |/' "$tmp/docs/repo/status.md"
+run_must_fail "bad-phase-transition" scripts/check-status-consistency
+
+echo "Validator smoke tests passed."

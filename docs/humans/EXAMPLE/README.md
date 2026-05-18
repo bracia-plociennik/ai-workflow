@@ -5,11 +5,11 @@ It is not active project state.
 
 ## Included Artifact Types
 
-- `summaries/example_summary.md`
-- `decisions/example_decision.md`
-- `runbooks/example_runbook.md`
-- `audits/example_audit.md`
-- `approvals/example_approval.md`
-- `plans/example_plan.md`
+- `summaries/example-summary.md`
+- `decisions/example-decision.md`
+- `runbooks/example-runbook.md`
+- `audits/example-audit.md`
+- `approvals/example-approval.md`
+- `plans/example-plan.md`
 
 Human docs are for owner/operator-facing communication. AI execution artifacts belong in `docs/projects/EXAMPLE/`.

@@ -6,20 +6,33 @@ Do not store target-repository-specific facts in `docs/ai/`. Runtime repo contex
 
 ## Contents
 
-- `WORKFLOW.md` - main workflow guide and phase router.
-- `AUTOPILOT.md` - repo-level autopilot launch checklist.
+- `operating-model.md` - primary operating contract behind the short `AGENTS.md` router.
+- `workflow.md` - phase router and canonical phase index.
+- `autopilot.md` - autopilot launch and runtime rules.
+- `definition-of-done.md` - evidence-backed done criteria.
+- `risk-model.md` - risk classes and approval routing.
+- `commands.md` - verification command contract.
+- `permissions.md` - forbidden actions and safe defaults.
+- `prompt-injection.md` - defense rules for untrusted repository content.
+- `rollback.md` - rollback requirements for high-risk work.
+- `dependencies.md` - dependency approval and review policy.
+- `deprecation.md` - archive and supersession policy.
+- `version.md` and `changelog.md` - workflow version and migration history.
 - `workflow/` - detailed phase-level workflow rules.
-- `STATUS.md` - template-owned pointer to `docs/repo/STATUS.md`.
-- `REPO-INTAKE.md` - template-owned guidance for repo-level intake.
-- `MEMORY.md` - aggregate memory for this workflow template, not target-repo facts.
-- `EXTERNAL-MEMORY.md` - universal workflow/process memory for improving `ai-workflow` across repositories.
-- `templates/` - reusable templates for AI runtime, workflow, autopilot, project workspace, and human-facing artifacts.
+- `templates/` - reusable templates for repo runtime, workflow, autopilot, project, human, and Codex artifacts.
+
+## Runtime Boundaries
+
+- Repo-specific facts belong in `docs/repo/`.
+- Project-specific facts belong in `docs/projects/<project>/`.
+- Human-facing coordination docs belong in `docs/humans/<project>/`.
+- Template/process docs belong in `docs/ai/`.
 
 ## Manual Iterations
 
-For a new repository or a repository where `ai-workflow` was just installed, start from `docs/repo/CONTEXT.md` and `docs/repo/REPO-INTAKE.md`, using `templates/ai/` if the runtime files are missing.
+For a new repository or a repository where `ai-workflow` was just installed, start from `docs/repo/context.md` and `docs/repo/repo-intake.md`, using `templates/ai/` if the runtime files are missing.
 
-For project-level workflow work, start from `WORKFLOW.md`, verify `docs/repo/STATUS.md`, then open the relevant phase file under `workflow/`.
+For project-level workflow work, start from `workflow.md`, verify `docs/repo/status.md`, then open the relevant phase file under `workflow/`.
 
 ## Autopilot Iterations
 
