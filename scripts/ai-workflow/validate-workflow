@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v rg >/dev/null 2>&1; then
+  echo "Missing required command: rg"
+  exit 1
+fi
+
+scripts/ai-workflow/check-required-artifacts
+scripts/ai-workflow/check-naming
+scripts/ai-workflow/check-status-consistency
+scripts/ai-workflow/check-qa-evidence
+
+fail=0
+phases=(
+  phase-0-idea-validation.md
+  phase-0-repo-intake.md
+  phase-1-architecture.md
+  phase-1-architecture-qa.md
+  phase-1-architecture-fix-loop.md
+  phase-2-project-plan.md
+  phase-2-plan-qa.md
+  phase-2-plan-fix-loop.md
+  phase-2-task-packaging.md
+  phase-2-packaging-qa.md
+  phase-2-package-fix-loop.md
+  phase-3-specification.md
+  phase-3-spec-qa.md
+  phase-3-spec-fix-loop.md
+  phase-4-implementation.md
+  phase-5-quality.md
+  phase-5-fix-loop.md
+  phase-6-distillation.md
+  phase-7-checkpoint.md
+  phase-8-final-check.md
+)
+
+requiredHeadings=(
+  "## Gate Conditions"
+  "### Input required"
+  "### Output required"
+  "### Pass criteria"
+  "### Fail criteria"
+  "### Who can approve"
+  "### Evidence required"
+  "### Next allowed phases"
+  "### Stop conditions"
+  "### Writes allowed"
+)
+
+while IFS= read -r -d '' phaseFile; do
+  for heading in "${requiredHeadings[@]}"; do
+    if ! rg -q "^${heading}$" "$phaseFile"; then
+      echo "Missing gate heading '$heading' in ${phaseFile#./}"
+      fail=1
+    fi
+  done
+
+  if rg -q 'Active request matches this phase|Phase-specific inputs listed below|The phase artifact named by|Follow `docs/ai-workflow/ai/workflow.md`|Product-code writes are allowed only in implementation or fix-loop phases that explicitly permit them' "$phaseFile"; then
+    echo "Generic gate placeholder remains in ${phaseFile#./}"
+    fail=1
+  fi
+done < <(find docs/ai-workflow/ai/workflow -maxdepth 1 -type f -name 'phase-*.md' -print0)
+
+phaseCount="$(find docs/ai-workflow/ai/workflow -maxdepth 1 -type f -name 'phase-*.md' | wc -l | tr -d ' ')"
+if [[ "$phaseCount" != "${#phases[@]}" ]]; then
+  echo "Unexpected workflow phase file count: $phaseCount, expected ${#phases[@]}"
+  fail=1
+fi
+
+for phase in "${phases[@]}"; do
+  if ! rg -q "$phase" docs/ai-workflow/ai/workflow.md; then
+    echo "Phase missing from router: $phase"
+    fail=1
+  fi
+
+  template="docs/ai-workflow/ai/templates/workflow/${phase%.md}.template.md"
+  if [[ ! -f "$template" ]]; then
+    echo "Phase template missing for $phase: $template"
+    fail=1
+  fi
+done
+
+if [[ "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != "1" ]]; then
+  scripts/ai-workflow/check-validator-smoke-tests
+fi
+
+exit "$fail"

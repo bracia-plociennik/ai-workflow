@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+required=(
+  "AGENTS.md"
+  "HUMANS.md"
+  "README.md"
+  "docs/ai-workflow/ai/operating-model.md"
+  "docs/ai-workflow/ai/installation.md"
+  "docs/ai-workflow/ai/workflow.md"
+  "docs/ai-workflow/ai/autopilot.md"
+  "docs/ai-workflow/ai/definition-of-done.md"
+  "docs/ai-workflow/ai/permissions.md"
+  "docs/ai-workflow/ai/risk-model.md"
+  "docs/ai-workflow/ai/commands.md"
+  "docs/ai-workflow/ai/prompt-injection.md"
+  "docs/ai-workflow/ai/rollback.md"
+  "docs/ai-workflow/ai/dependencies.md"
+  "docs/ai-workflow/ai/deprecation.md"
+  "docs/ai-workflow/ai/version.md"
+  "docs/ai-workflow/ai/changelog.md"
+  "docs/ai-workflow/ai/skills/README.md"
+  "docs/ai-workflow/repo/context.md"
+  "docs/ai-workflow/repo/repo-intake.md"
+  "docs/ai-workflow/repo/status.md"
+  "docs/ai-workflow/repo/memory.md"
+  "docs/ai-workflow/ai/templates/repo/README.md"
+  "docs/ai-workflow/ai/templates/repo/repo-context.template.md"
+  "docs/ai-workflow/ai/templates/repo/repo-intake.template.md"
+  "docs/ai-workflow/ai/templates/repo/status.template.md"
+  "docs/ai-workflow/ai/templates/repo/memory.template.md"
+  "docs/ai-workflow/ai/templates/codex/config.toml.template"
+  "docs/ai-workflow/ai/templates/codex/requirements.toml.template"
+  "docs/ai-workflow/ai/templates/projects/tasks.template.md"
+  "docs/ai-workflow/ai/templates/autopilot/autopilot-events.template.md"
+  "docs/ai-workflow/ai/templates/autopilot/autopilot-ledger.template.md"
+  "docs/ai-workflow/ai/templates/autopilot/autopilot-state.template.md"
+  "docs/ai-workflow/ai/templates/autopilot/escalation.template.md"
+  "docs/ai-workflow/ai/templates/autopilot/qa-evidence.template.md"
+  "docs/ai-workflow/ai/templates/autopilot/task-decisions.template.md"
+  "docs/ai-workflow/ai/templates/humans/approval.template.md"
+  "docs/ai-workflow/ai/templates/humans/audit.template.md"
+  "docs/ai-workflow/ai/templates/humans/decision.template.md"
+  "docs/ai-workflow/ai/templates/humans/runbook.template.md"
+  "docs/ai-workflow/ai/templates/humans/summary.template.md"
+  ".github/workflows/ai-workflow-validate.yml"
+  "scripts/ai-workflow/validate-workflow"
+  "scripts/ai-workflow/check-naming"
+  "scripts/ai-workflow/check-qa-evidence"
+  "scripts/ai-workflow/check-required-artifacts"
+  "scripts/ai-workflow/check-status-consistency"
+  "scripts/ai-workflow/check-validator-smoke-tests"
+)
+
+phases=(
+  "phase-0-idea-validation.md"
+  "phase-0-repo-intake.md"
+  "phase-1-architecture.md"
+  "phase-1-architecture-qa.md"
+  "phase-1-architecture-fix-loop.md"
+  "phase-2-project-plan.md"
+  "phase-2-plan-qa.md"
+  "phase-2-plan-fix-loop.md"
+  "phase-2-task-packaging.md"
+  "phase-2-packaging-qa.md"
+  "phase-2-package-fix-loop.md"
+  "phase-3-specification.md"
+  "phase-3-spec-qa.md"
+  "phase-3-spec-fix-loop.md"
+  "phase-4-implementation.md"
+  "phase-5-quality.md"
+  "phase-5-fix-loop.md"
+  "phase-6-distillation.md"
+  "phase-7-checkpoint.md"
+  "phase-8-final-check.md"
+)
+
+fail=0
+
+for path in "${required[@]}"; do
+  if [[ ! -f "$path" ]]; then
+    echo "Missing required artifact: $path"
+    fail=1
+  fi
+done
+
+for phase in "${phases[@]}"; do
+  if [[ ! -f "docs/ai-workflow/ai/workflow/$phase" ]]; then
+    echo "Missing workflow phase: docs/ai-workflow/ai/workflow/$phase"
+    fail=1
+  fi
+
+  template="docs/ai-workflow/ai/templates/workflow/${phase%.md}.template.md"
+  if [[ ! -f "$template" ]]; then
+    echo "Missing workflow template: $template"
+    fail=1
+  fi
+done
+
+exit "$fail"
