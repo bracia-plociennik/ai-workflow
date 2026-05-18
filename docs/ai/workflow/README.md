@@ -5,7 +5,7 @@ Use:
 - [`../../HUMANS.md`](../../HUMANS.md) as the human operating guide.
 - [`../WORKFLOW.md`](../WORKFLOW.md) as the main operational guide and phase router.
 - The phase file below when a phase requires exact rules, gates, prompts, or edge-case handling.
-- [`../STATUS.md`](../STATUS.md) for the repo-local workflow snapshot.
+- [`../../repo/STATUS.md`](../../repo/STATUS.md) for the repo-local workflow snapshot.
 - `docs/projects/<project>/STATUS.md` for project-local workflow status when a project workspace owns one.
 
 ## Global Workflow Rules
@@ -18,6 +18,7 @@ Use:
 
 | Phase | File |
 | --- | --- |
+| `000. IDEA VALIDATION` | [`000_idea_validation.md`](000_idea_validation.md) |
 | `0. REPO INTAKE / INITIAL AUDIT` | [`0_repo_intake_initial_audit.md`](0_repo_intake_initial_audit.md) |
 | `1. FAZA ARCHITEKTURY` | [`1_architecture.md`](1_architecture.md) |
 | `1.5. ARCHITECTURE QA` | [`1_5_architecture_qa.md`](1_5_architecture_qa.md) |

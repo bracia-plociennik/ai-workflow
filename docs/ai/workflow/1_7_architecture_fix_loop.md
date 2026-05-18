@@ -1,4 +1,4 @@
-# 1.7. ARCHITECTURE FIX LOOP - ChatGPT
+# 1.7. ARCHITECTURE FIX LOOP - Codex
 
 Ta faza służy do naprawy problemów wykrytych w fazie 1.5. FAZA ARCHITEKTURY QA.
 
@@ -27,7 +27,7 @@ Brak wyniku FAIL albo brak raportu z 1.5:
 - poprawa tylko wskazanych problemów
 - przygotowanie architektury do ponownej walidacji w 1.5
 
-ChatGPT nie może:
+Codex nie może:
 
 - rozszerzać scope poza problemy wskazane przez 1.5
 - przepisywać całej architektury od zera, jeśli nie jest to konieczne do naprawy wskazanych błędów
@@ -112,7 +112,7 @@ Output fazy 1.7 musi jawnie zawierać:
 
 ## Output fazy
 
-ChatGPT musi zwrócić:
+Codex musi zwrócić:
 
 - które problemy z raportu 1.5 zostały naprawione
 - których problemów nie naprawiono

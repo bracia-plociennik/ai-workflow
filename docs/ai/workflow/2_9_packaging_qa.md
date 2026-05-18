@@ -1,4 +1,4 @@
-# 2.9. FAZA TASK PACKAGING QA - ChatGPT
+# 2.9. FAZA TASK PACKAGING QA - Codex
 
 Ta faza służy do krytycznej walidacji pakietów tasków przed przejściem do specyfikacji.
 
@@ -54,7 +54,7 @@ To jest pominięcie fazy z powodu braku pakietów.
 - próba obalenia poprawności pakietów
 - walidacja gate przed specyfikacją
 
-ChatGPT nie może:
+Codex nie może:
 
 - przepisywać pakietów
 - proponować nowych pakietów jako wyniku tej fazy
@@ -63,7 +63,7 @@ ChatGPT nie może:
 
 ## Zakres walidacji
 
-ChatGPT musi obowiązkowo sprawdzić:
+Codex musi obowiązkowo sprawdzić:
 
 ### 1. Spójność pakietów
 
@@ -172,7 +172,7 @@ Zasady:
 
 Domyślnie:
 
-- drugi review wykonuje ChatGPT (drugi prompt)
+- drugi review wykonuje Codex (drugi prompt)
 
 Codex review:
 
@@ -183,7 +183,7 @@ Codex review:
 
 ## Output
 
-ChatGPT musi zwrócić:
+Codex musi zwrócić:
 
 - wynik końcowy: PASS / FAIL
 - lista problemów

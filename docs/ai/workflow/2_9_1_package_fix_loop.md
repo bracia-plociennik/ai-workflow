@@ -1,4 +1,4 @@
-# 2.9.1. FAZA PACKAGE FIX LOOP - ChatGPT
+# 2.9.1. FAZA PACKAGE FIX LOOP - Codex
 
 Ta faza służy do naprawy problemów wykrytych w fazie 2.9. FAZA TASK PACKAGING QA.
 
@@ -27,7 +27,7 @@ Brak wyniku FAIL albo brak raportu z 2.9:
 - poprawa tylko wskazanych problemów
 - przygotowanie packagingu do ponownej walidacji w 2.9
 
-ChatGPT nie może:
+Codex nie może:
 
 - rozszerzać scope poza problemy wskazane przez 2.9
 - przepisywać całego packagingu od zera, jeśli nie jest to konieczne
@@ -107,7 +107,7 @@ Output musi zawierać:
 
 ## Output fazy
 
-ChatGPT musi zwrócić:
+Codex musi zwrócić:
 
 - które problemy z raportu 2.9 naprawiono
 - których nie naprawiono

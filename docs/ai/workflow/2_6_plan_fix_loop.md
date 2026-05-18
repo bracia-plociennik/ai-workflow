@@ -1,4 +1,4 @@
-# 2.6. PLAN FIX LOOP - ChatGPT
+# 2.6. PLAN FIX LOOP - Codex
 
 Ta faza służy do naprawy problemów wykrytych w fazie 2.5. FAZA PLANU PROJEKTU QA.
 
@@ -27,7 +27,7 @@ Brak wyniku FAIL albo brak raportu z 2.5:
 - poprawa tylko wskazanych problemów
 - przygotowanie planu do ponownej walidacji w 2.5
 
-ChatGPT nie może:
+Codex nie może:
 
 - rozszerzać scope poza problemy wskazane przez 2.5
 - przepisywać całego planu od zera, jeśli nie jest to konieczne do naprawy błędów
@@ -114,7 +114,7 @@ Output fazy 2.6 musi zawierać:
 
 ## Output fazy
 
-ChatGPT musi zwrócić:
+Codex musi zwrócić:
 
 - które problemy z raportu 2.5 zostały naprawione
 - których problemów nie naprawiono

@@ -24,8 +24,9 @@ Follow this order when sources disagree:
 3. Approved project architecture, project plan, task specification, or task package specification.
 4. `docs/ai/WORKFLOW.md`.
 5. The relevant phase file in `docs/ai/workflow/`.
-6. Repo status in `docs/ai/STATUS.md` and project status in `docs/projects/<project>/STATUS.md`.
-7. Context, chat history, repo memory, external workflow memory, and other supporting notes.
+6. Repo-local runtime artifacts in `docs/repo/`, including `STATUS.md`, `CONTEXT.md`, `REPO-INTAKE.md`, and `MEMORY.md`.
+7. Project status in `docs/projects/<project>/STATUS.md`.
+8. Context, chat history, repo memory, external workflow memory, and other supporting notes.
 
 Repository state is authoritative for actual implementation.
 Workflow docs are authoritative for process.
@@ -60,16 +61,21 @@ Write operations are allowed only after:
 
 ## Canonical Artifact Layout
 
-Repository-level AI docs:
+Template-owned AI docs:
 
-- `docs/ai/STATUS.md` - cross-project workflow status.
-- `docs/ai/REPO-INTAKE.md` - repo-level workflow/bootstrap readiness artifact.
 - `docs/ai/WORKFLOW.md` - operational workflow router.
 - `docs/ai/workflow/` - detailed phase specifications.
 - `docs/ai/AUTOPILOT.md` - autopilot operating guide.
+- `docs/ai/MEMORY.md` - aggregate memory for this workflow template, not target-repo facts.
 - `docs/ai/EXTERNAL-MEMORY.md` - universal workflow/process memory for improving this template.
-- `docs/ai/REPO-MEMORY.md` - aggregate repo memory after checkpoints.
 - `docs/ai/templates/` - reusable artifact templates.
+
+Repo-local runtime docs:
+
+- `docs/repo/CONTEXT.md` - global description of the target repository, domain, stack, modules, boundaries, and local constraints.
+- `docs/repo/REPO-INTAKE.md` - repo-level workflow/bootstrap readiness artifact for the target repository.
+- `docs/repo/STATUS.md` - cross-project workflow status for the target repository.
+- `docs/repo/MEMORY.md` - aggregate target-repo memory after checkpoints and final checks.
 
 Project-local docs:
 
@@ -91,7 +97,7 @@ Some workflow artifacts use `<what_we_doing>` as the placeholder name. Treat `<w
 Human-facing docs:
 
 - `HUMANS.md` - global human runbook.
-- `docs/human/` - human-readable audits, runbooks, approvals, summaries, and decisions.
+- `docs/humans/` - human-readable audits, runbooks, approvals, summaries, and decisions.
 
 When an artifact is moved or renamed, update all repo-local references in workflow, status, plan, and task artifacts before considering the phase complete.
 
@@ -136,7 +142,7 @@ Autopilot may run only when the user explicitly requests autonomous execution or
 
 Autopilot is allowed only after the active project workspace has:
 
-- repo-level workflow readiness recorded in `docs/ai/REPO-INTAKE.md`;
+- repo-level workflow readiness recorded in `docs/repo/REPO-INTAKE.md`;
 - context or explicit project input;
 - repo intake / initial audit artifact;
 - architecture artifact;
@@ -179,7 +185,7 @@ Autopilot artifacts are workflow memory only. Repository state remains authorita
 
 Before each autopilot phase, check:
 
-- `docs/ai/STATUS.md`;
+- `docs/repo/STATUS.md`;
 - `docs/projects/<project>/STATUS.md`;
 - `docs/projects/<project>/autopilot/AUTOPILOT_STATE.md`;
 - `docs/projects/<project>/autopilot/AUTOPILOT_LEDGER.md`;
@@ -260,7 +266,7 @@ Before implementation, reconcile the task spec with current repo state, complete
 
 After interruption, context compaction, restart, or partial run:
 
-1. Read `docs/ai/STATUS.md`.
+1. Read `docs/repo/STATUS.md`.
 2. Read project-local `STATUS.md`.
 3. Read autopilot state and ledger if autopilot is active.
 4. Check the relevant phase artifacts.
@@ -344,29 +350,22 @@ A task that requires owner decision must not be treated as ready for implementat
 
 ---
 
-## Repo Adaptation Layer
+## Repo Runtime Layer
 
-This section must be adapted during `0. REPO INTAKE / INITIAL AUDIT` before autopilot can run.
+Do not adapt `AGENTS.md` when installing this template into a target repository.
 
-### Commands
+Repo-specific facts discovered during `0. REPO INTAKE / INITIAL AUDIT` belong in `docs/repo/`, primarily:
 
-Replace placeholders with commands from the actual repository:
+- `docs/repo/CONTEXT.md` for the global repository description;
+- `docs/repo/REPO-INTAKE.md` for command discovery, safe environment policy, risks, restricted zones, and readiness;
+- `docs/repo/STATUS.md` for current cross-project workflow state;
+- `docs/repo/MEMORY.md` for aggregate repo memory after checkpoints or final checks.
 
-- install: `<fill during repo intake>`
-- development server: `<fill during repo intake>`
-- test: `<fill during repo intake>`
-- lint/style: `<fill during repo intake>`
-- typecheck/static analysis: `<fill during repo intake>`
-- build: `<fill during repo intake>`
-- migration/schema check: `<fill during repo intake if applicable>`
-- scheduler/cron/queue: `<fill during repo intake if applicable>`
-- e2e/browser tests: `<fill during repo intake if applicable>`
-
-If a command is not configured, write `not configured` rather than inventing it.
+If a command cannot be discovered from repo state, record `not configured` in `docs/repo/REPO-INTAKE.md` rather than inventing it.
 
 ### Safe Test Environment
 
-Define the safe local/test environment before implementation:
+Define the safe local/test environment in `docs/repo/REPO-INTAKE.md` before implementation:
 
 - test database strategy;
 - fake or test service adapters;
@@ -379,7 +378,7 @@ If no safe test environment exists, autopilot must stop before implementation th
 
 ### High-Risk Areas
 
-Every repository should refine this list. Default high-risk areas:
+Every repository should refine this list in `docs/repo/REPO-INTAKE.md`. Default high-risk areas:
 
 - environment configuration and secrets;
 - authentication, authorization, and permission boundaries;
@@ -395,7 +394,7 @@ High-risk areas are not eligible for micro-task handling.
 
 ### Restricted Zones
 
-Every repository should refine this list. Default restricted zones:
+Every repository should refine this list in `docs/repo/REPO-INTAKE.md`. Default restricted zones:
 
 - secret-bearing files such as `.env*`;
 - dependency directories;
@@ -410,9 +409,9 @@ Do not edit restricted zones unless the approved task explicitly targets them.
 
 ### Domain Operating Rules
 
-Add repository-specific domain rules during intake and architecture.
+Add repository-specific domain rules to `docs/repo/CONTEXT.md`, `docs/repo/REPO-INTAKE.md`, and project artifacts during intake and architecture.
 
-Do not keep real project names, clients, credentials, production details, or vendor-specific assumptions in this template copy.
+Do not keep real project names, clients, credentials, production details, or vendor-specific assumptions in `AGENTS.md`, `HUMANS.md`, root workflow files, or `docs/ai/`.
 
 ---
 

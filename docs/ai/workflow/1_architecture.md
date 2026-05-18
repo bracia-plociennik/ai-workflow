@@ -1,4 +1,4 @@
-# 1. FAZA ARCHITEKTURY - ChatGPT
+# 1. FAZA ARCHITEKTURY - Codex
 
 Ta faza służy do zamknięcia decyzji architektonicznych przed planowaniem tasków.
 
@@ -20,13 +20,13 @@ Najpierw robisz analizę architektoniczną projektu lub zmiany.
 
 ## Opcjonalny audyt repo przed architekturą
 
-ChatGPT powinien najpierw ocenić, czy warto wykonać audyt istniejącego repo i dokumentacji przed stworzeniem architektury.
+Codex powinien najpierw ocenić, czy warto wykonać audyt istniejącego repo i dokumentacji przed stworzeniem architektury.
 
 Jeśli taki audyt może istotnie poprawić jakość architektury:
 
-- ChatGPT powinien zapytać, czy chcesz wykonać audyt istniejącego repo.
+- Codex powinien zapytać, czy chcesz wykonać audyt istniejącego repo.
 - Brak audytu nie blokuje stworzenia architektury.
-- Jeśli architektura powstaje bez audytu, ChatGPT musi to jasno zaznaczyć i wskazać ryzyko wynikające z braku weryfikacji istniejącego stanu.
+- Jeśli architektura powstaje bez audytu, Codex musi to jasno zaznaczyć i wskazać ryzyko wynikające z braku weryfikacji istniejącego stanu.
 
 ## Cel fazy
 
@@ -127,7 +127,7 @@ Jeśli sposób implementacji zależy od nierozstrzygniętej decyzji architektoni
 
 ## **Output kontrolny na końcu fazy**
 
-Na końcu tej fazy ChatGPT powinien krótko wypisać:
+Na końcu tej fazy Codex powinien krótko wypisać:
 
 - decyzje architektoniczne zamknięte
 - decyzje architektoniczne otwarte

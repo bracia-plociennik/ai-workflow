@@ -6,7 +6,7 @@ Celem nie jest implementacja. Celem jest ustalenie prawdziwego stanu repo, docs�
 
 Faza 0 ma dwa możliwe poziomy artefaktu:
 
-- `docs/ai/REPO-INTAKE.md` - repo-level bootstrap/intake dla workflow i autopilota, także wtedy, gdy nie istnieje jeszcze żaden projekt.
+- `docs/repo/REPO-INTAKE.md` - repo-level bootstrap/intake dla workflow i autopilota, także wtedy, gdy nie istnieje jeszcze żaden projekt.
 - `docs/projects/<what_we_doing>/intake/0_initial_audit.md` - project/context-specific intake, gdy istnieje konkretny projekt, produkt, feature, context albo plan.
 
 ## Warunek wejścia
@@ -17,9 +17,11 @@ Fazę 0 można uruchomić, gdy:
 - istnieje konkretna intencja pracy, projekt docs albo materiał wejściowy;
 - użytkownik chce rozpocząć workflow, audyt albo przygotowanie repo pod workflow/autopilot.
 
-`0_context.md` jest opcjonalny. Brak contextu nie blokuje fazy 0.
+Repo-level context powinien być zapisany w `docs/repo/CONTEXT.md`. Project-local `0_context.md` jest opcjonalny dla repo-level intake, ale wymagany przed architekturą konkretnego projektu.
 
-Brak aktywnego projektu nie blokuje repo-level intake. W takim przypadku artefaktem fazy jest `docs/ai/REPO-INTAKE.md`, a nie project-local `0_initial_audit.md`.
+Jeśli projekt zaczyna się od brain dumpu, najpierw uruchom `000. IDEA VALIDATION`, a dopiero po zaakceptowanym wyniku utwórz `0_context.md`.
+
+Brak aktywnego projektu nie blokuje repo-level intake. W takim przypadku artefaktem fazy jest `docs/repo/REPO-INTAKE.md`, a nie project-local `0_initial_audit.md`.
 
 ## Cel fazy
 
@@ -28,11 +30,12 @@ Codex ma:
 - rozpoznać strukturę repo;
 - rozpoznać stack, frameworki, entrypointy, testy, build i runtime;
 - sprawdzić, czy repo ma aktualny kontrakt dla agentów i ludzi;
+- sprawdzić, czy `docs/repo/CONTEXT.md` opisuje repo globalnie;
 - ustalić canonical docs layout;
 - znaleźć stare, zdublowane, przeniesione albo sprzeczne artefakty;
 - wykryć high-risk areas i restricted zones;
 - ustalić bezpieczne komendy walidacyjne;
-- przygotować albo odświeżyć `docs/ai/REPO-INTAKE.md`, jeśli audyt dotyczy repo-level workflow/bootstrap;
+- przygotować albo odświeżyć `docs/repo/REPO-INTAKE.md`, jeśli audyt dotyczy repo-level workflow/bootstrap;
 - przygotować artefakt `docs/projects/<what_we_doing>/intake/0_initial_audit.md`, jeśli audyt dotyczy konkretnego projektu/contextu;
 - wypisać decyzje ownera potrzebne przed kolejnymi fazami.
 
@@ -50,14 +53,15 @@ Faza 0 obejmuje:
 - `docs/ai/WORKFLOW.md`;
 - `docs/ai/workflow/`;
 - `docs/ai/AUTOPILOT.md`;
-- `docs/ai/STATUS.md`;
-- `docs/ai/REPO-INTAKE.md`;
+- `docs/repo/CONTEXT.md`;
+- `docs/repo/STATUS.md`;
+- `docs/repo/REPO-INTAKE.md`;
 - `docs/ai/EXTERNAL-MEMORY.md`;
 - `docs/ai/templates/`;
-- `docs/ai/REPO-MEMORY.md`;
+- `docs/repo/MEMORY.md`;
 - `docs/projects/<what_we_doing>/STATUS.md`, jeśli projekt już istnieje;
 - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md`, jeśli projekt już istnieje;
-- `docs/human/` jako katalog artefaktów dla człowieka;
+- `docs/humans/` jako katalog artefaktów dla człowieka;
 - istniejące intake/architecture/planning/specs/quality/decisions/escalations/distillations/checkpoints/autopilot dla aktywnego projektu;
 - dirty git state i potencjalne konflikty write-set;
 - politykę sekretów, migracji, real external effects, retry, checkpointów i git.
@@ -83,7 +87,7 @@ Jeśli źródła są sprzeczne:
 1. repo state;
 2. root `AGENTS.md`;
 3. `docs/ai/WORKFLOW.md` i szczegółowe pliki `docs/ai/workflow/`;
-4. `docs/ai/STATUS.md`;
+4. `docs/repo/STATUS.md`;
 5. `docs/projects/<what_we_doing>/STATUS.md`;
 6. zatwierdzona architektura;
 7. zatwierdzony plan;
@@ -97,7 +101,7 @@ Context pomaga zrozumieć intencję, ale nie nadpisuje repo ani zatwierdzonych a
 Repo-level intake, jeśli nie ma jeszcze projektu albo audyt dotyczy tylko gotowości workflow/autopilota:
 
 ```text
-docs/ai/REPO-INTAKE.md
+docs/repo/REPO-INTAKE.md
 ```
 
 Context, jeśli istnieje:
@@ -112,7 +116,7 @@ Project/context-specific initial audit:
 docs/projects/<what_we_doing>/intake/0_initial_audit.md
 ```
 
-Jeśli aktywny workspace nie istnieje, faza 0 może zakończyć się na `docs/ai/REPO-INTAKE.md` i zaproponować utworzenie workspace'u, ale nie może go stworzyć bez zatwierdzenia użytkownika.
+Jeśli aktywny workspace nie istnieje, faza 0 może zakończyć się na `docs/repo/REPO-INTAKE.md` i zaproponować utworzenie workspace'u, ale nie może go stworzyć bez zatwierdzenia użytkownika.
 
 ## Obowiązkowe sprawdzenia repo
 
@@ -139,17 +143,17 @@ Codex musi sprawdzić, czy istnieją i są użyteczne:
 - `docs/ai/WORKFLOW.md`;
 - `docs/ai/workflow/`;
 - `docs/ai/AUTOPILOT.md`;
-- `docs/ai/STATUS.md`;
-- `docs/ai/REPO-INTAKE.md`;
+- `docs/repo/STATUS.md`;
+- `docs/repo/REPO-INTAKE.md`;
 - `docs/ai/EXTERNAL-MEMORY.md`;
-- `docs/ai/REPO-MEMORY.md`;
+- `docs/repo/MEMORY.md`;
 - `docs/ai/templates/`;
 - `docs/projects/README.md`;
 - `docs/projects/<what_we_doing>/README.md`, jeśli projekt istnieje;
 - `docs/projects/<what_we_doing>/STATUS.md`, jeśli projekt istnieje;
 - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md`, jeśli projekt istnieje;
-- `docs/human/README.md`;
-- `docs/human/<project>/`, jeśli istnieją project-local human docs.
+- `docs/humans/README.md`;
+- `docs/humans/<project>/`, jeśli istnieją project-local human docs.
 
 Codex musi też wykryć:
 
@@ -165,11 +169,12 @@ Codex musi też wykryć:
 
 Audit ma odpowiedzieć, czy poniższe warunki są spełnione:
 
-- `AGENTS.md` istnieje i jest dostosowany do repo.
+- `AGENTS.md` istnieje i pozostaje template-owned, bez repo-specific faktów.
 - `HUMANS.md` istnieje i opisuje pracę człowieka z workflow.
-- `docs/ai/REPO-INTAKE.md` istnieje i opisuje repo-level workflow/bootstrap readiness.
+- `docs/repo/CONTEXT.md` istnieje i opisuje repo globalnie.
+- `docs/repo/REPO-INTAKE.md` istnieje i opisuje repo-level workflow/bootstrap readiness.
 - `docs/ai/EXTERNAL-MEMORY.md` istnieje i jest rozdzielony od repo-specific memory.
-- `docs/ai/STATUS.md` wskazuje aktywny workspace albo jasno mówi, że go nie ma.
+- `docs/repo/STATUS.md` wskazuje aktywny workspace albo jasno mówi, że go nie ma.
 - `docs/projects/<what_we_doing>/STATUS.md` istnieje, jeśli projekt jest aktywny.
 - Canonical docs layout jest jasny.
 - Plan projektu, jeśli istnieje, ma QA evidence.
@@ -182,11 +187,11 @@ Audit ma odpowiedzieć, czy poniższe warunki są spełnione:
 - Git branch/commit/push policy jest znana.
 - Stop triggers są jasne.
 
-Ta checklista ma trafić do `docs/ai/REPO-INTAKE.md` przy repo-level bootstrap intake albo do `0_initial_audit.md` przy project/context-specific intake.
+Ta checklista ma trafić do `docs/repo/REPO-INTAKE.md` przy repo-level bootstrap intake albo do `0_initial_audit.md` przy project/context-specific intake.
 
-## Repo Adaptation Layer
+## Repo Runtime Layer
 
-Audit musi ustalić albo oznaczyć jako brakujące:
+Audit musi ustalić albo oznaczyć jako brakujące w `docs/repo/REPO-INTAKE.md`:
 
 - install commands;
 - test commands;
@@ -198,7 +203,7 @@ Audit musi ustalić albo oznaczyć jako brakujące:
 - safe environment variables for testing;
 - known local runtime caveats.
 
-Nie wolno wpisywać do audit ani `AGENTS.md` komend, których nie da się wiarygodnie wyprowadzić z repo.
+Nie wolno wpisywać do `AGENTS.md` komend, domeny ani zasad specyficznych dla repo. Jeśli komendy nie da się wiarygodnie wyprowadzić z repo, zapisz `not configured` w `docs/repo/REPO-INTAKE.md`.
 
 ## Ryzyka I Restricted Zones
 
@@ -216,6 +221,12 @@ Audit musi wskazać:
 Jeśli obszar jest high-risk, mikro-task nie powinien być domyślnym trybem pracy.
 
 ## Context
+
+Codex musi rozróżnić:
+
+- `docs/repo/CONTEXT.md` - globalny context repo;
+- `docs/projects/<what_we_doing>/intake/000_idea_validation.md` - walidacja pomysłu projektu, jeśli była potrzebna;
+- `docs/projects/<what_we_doing>/intake/0_context.md` - zaakceptowany context projektu.
 
 Jeśli istnieje `0_context.md`, Codex musi:
 
@@ -293,14 +304,15 @@ Codex nie może bez zgody:
 
 ## Minimalny Kontrakt Artefaktu
 
-`docs/ai/REPO-INTAKE.md` musi zawierać repo-level bootstrap contract:
+`docs/repo/REPO-INTAKE.md` musi zawierać repo-level bootstrap contract:
 
 - metadata: repo, path, date, result, active project workspace if any;
 - sources reviewed;
+- relationship to `docs/repo/CONTEXT.md`;
 - required AI workflow files and their status;
 - required workflow phase files and their status;
 - canonical docs layout check;
-- repo adaptation layer;
+- repo runtime layer;
 - safe environment;
 - repo risk register;
 - artifact reconciliation;
@@ -323,7 +335,7 @@ Codex nie może bez zgody:
 - missing operational artifacts;
 - empty/outdated/conflicting/duplicate artifacts;
 - old paths not to revive;
-- AGENTS.md adaptation findings;
+- AGENTS.md template-boundary findings;
 - HUMANS.md findings;
 - workflow docs findings;
 - status files findings;
@@ -335,6 +347,7 @@ Codex nie może bez zgody:
 - external integrations and side effects;
 - DB/migration safety notes;
 - git/branch/dirty workspace notes;
+- idea validation analysis, if `000_idea_validation.md` exists;
 - context analysis, if context exists;
 - quick start checklist results;
 - MUST recommendations;
@@ -349,7 +362,7 @@ Codex nie może bez zgody:
 Faza 0 może przejść dalej tylko jeśli:
 
 - właściwy audit artifact istnieje:
-  - `docs/ai/REPO-INTAKE.md` dla repo-level bootstrap intake;
+  - `docs/repo/REPO-INTAKE.md` dla repo-level bootstrap intake;
   - `docs/projects/<what_we_doing>/intake/0_initial_audit.md` dla project/context-specific intake;
 - MUST recommendations są zaakceptowane, odrzucone albo świadomie odroczone przez ownera;
 - nie ma blocking unknowns wpływających na architekturę;
@@ -377,12 +390,13 @@ Na końcu fazy Codex powinien podać krótko:
 ```text
 Przeprowadź 0. REPO INTAKE / INITIAL AUDIT.
 
-Zbadaj repo, docs/workflow layout, AGENTS.md, HUMANS.md, statusy, memory, templates, human docs, komendy, safe test env, high-risk areas, restricted zones, external side effects, migrations, git state i istniejące artefakty projektu.
+Zbadaj repo, docs/workflow layout, AGENTS.md, HUMANS.md, docs/repo/CONTEXT.md, statusy, memory, templates, human docs, komendy, safe test env, high-risk areas, restricted zones, external side effects, migrations, git state i istniejące artefakty projektu.
 
 Jeśli istnieje context, użyj go pomocniczo i nie traktuj go jako source of truth.
 
 Jeśli nie ma aktywnego projektu albo celem jest bootstrap workflow/autopilota, utwórz albo zaktualizuj:
-docs/ai/REPO-INTAKE.md
+docs/repo/CONTEXT.md
+docs/repo/REPO-INTAKE.md
 
 Jeśli istnieje aktywny projekt/context, utwórz albo zaktualizuj:
 docs/projects/<what_we_doing>/intake/0_initial_audit.md

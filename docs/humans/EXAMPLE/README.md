@@ -10,5 +10,6 @@ It is not active project state.
 - `runbooks/example_runbook.md`
 - `audits/example_audit.md`
 - `approvals/example_approval.md`
+- `plans/example_plan.md`
 
 Human docs are for owner/operator-facing communication. AI execution artifacts belong in `docs/projects/EXAMPLE/`.

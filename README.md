@@ -4,7 +4,7 @@
 
 This folder is a portable workflow template for repositories that should be operated with AI-assisted planning, gated implementation, QA evidence, distillation, checkpoints, and optional autopilot execution.
 
-It is intentionally repository-neutral. Before using it in another repository, adapt the repo-specific parts in `AGENTS.md`, `docs/ai/STATUS.md`, and the project workspace under `docs/projects/<project>/`.
+It is intentionally repository-neutral. Before using it in another repository, keep `AGENTS.md`, `HUMANS.md`, root workflow files, and `docs/ai/` template-owned. Put repository-specific runtime facts in `docs/repo/` and project-specific facts in `docs/projects/<project>/`.
 
 Some workflow files use `<what_we_doing>` and some use `<project>`. In this template they mean the same thing: the active directory name under `docs/projects/`.
 
@@ -13,43 +13,44 @@ Some workflow files use `<what_we_doing>` and some use `<project>`. In this temp
 - `AGENTS.md` - execution contract for AI agents.
 - `HUMANS.md` - practical runbook for owners, operators, and engineers.
 - `docs/ai/WORKFLOW.md` - workflow router and phase index.
-- `docs/ai/REPO-INTAKE.md` - repo-level workflow/bootstrap intake for repositories with or without an active project workspace.
+- `docs/repo/` - target-repository runtime context, intake, status, and aggregate memory.
 - `docs/ai/workflow/` - detailed process rules for every phase.
 - `docs/ai/AUTOPILOT.md` - autopilot behavior, gates, runtime files, retry policy, and STOP conditions.
+- `docs/ai/MEMORY.md` - template-local memory for this workflow repository.
 - `docs/ai/EXTERNAL-MEMORY.md` - universal workflow/process memory for improving this template across repositories.
-- `docs/ai/templates/` - reusable templates for workflow, project, human, and autopilot artifacts.
+- `docs/ai/templates/` - reusable templates for AI runtime, workflow, project, human, and autopilot artifacts.
 - `docs/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
-- `docs/human/EXAMPLE/` - example human-facing artifacts.
+- `docs/humans/EXAMPLE/` - example human-facing artifacts.
 
 ## How To Install In Another Repository
 
 1. Copy `AGENTS.md`, `HUMANS.md`, and `docs/` into the repository root.
 2. Read `HUMANS.md` first to understand the operating model.
-3. Adapt `AGENTS.md`:
-   - fill the repo adaptation layer;
-   - define commands for install, test, lint, build, migrations, scheduler, and e2e if present;
-   - define safe test environment rules;
-   - define high-risk areas and restricted zones;
-   - add domain operating rules.
-4. Run repo-level intake and fill `docs/ai/REPO-INTAKE.md`:
-   - verify `AGENTS.md`, `HUMANS.md`, `docs/ai`, status, templates, safe command policy, STOP conditions, and memory files;
+3. Create or refresh `docs/repo/` from `docs/ai/templates/ai/`.
+4. Fill `docs/repo/CONTEXT.md` with global repository context:
+   - repository purpose, domain, stack, main modules, boundaries, and local rules.
+5. Run repo-level intake and fill `docs/repo/REPO-INTAKE.md`:
+   - verify `AGENTS.md`, `HUMANS.md`, `docs/ai`, `docs/repo`, status, templates, safe command policy, STOP conditions, and memory files;
    - do this even before a project workspace exists.
-5. Set `docs/ai/STATUS.md` for the repository:
+6. Set `docs/repo/STATUS.md` for the repository:
    - active workspace;
    - current phase;
    - next phase;
    - whether workflow is mandatory or optional.
-6. Create a real project workspace under `docs/projects/<project>/`.
-7. Run project/context intake into `docs/projects/<project>/intake/0_initial_audit.md`.
-8. Continue through architecture, QA, plan, packaging, specs, implementation, quality, distillation, checkpoints, and final check.
+7. Create a real project workspace under `docs/projects/<project>/`.
+8. If starting from a rough idea, run `000. IDEA VALIDATION` into `docs/projects/<project>/intake/000_idea_validation.md`.
+9. Create accepted project context in `docs/projects/<project>/intake/0_context.md`.
+10. Run project/context intake into `docs/projects/<project>/intake/0_initial_audit.md`.
+11. Continue through architecture, QA, plan, packaging, specs, implementation, quality, distillation, checkpoints, and final check.
 
 ## First-Time Checklist
 
-- `AGENTS.md` exists in repo root and no longer contains template placeholders that affect execution.
+- `AGENTS.md` exists in repo root and remains template-owned.
 - `HUMANS.md` exists in repo root.
-- `docs/ai/REPO-INTAKE.md` exists and has been filled for the target repository.
+- `docs/repo/CONTEXT.md` exists and describes the target repository.
+- `docs/repo/REPO-INTAKE.md` exists and has been filled for the target repository.
 - `docs/ai/EXTERNAL-MEMORY.md` exists and is kept universal, not repo-specific.
-- `docs/ai/STATUS.md` points to the current real workspace or explicitly says no workspace is active.
+- `docs/repo/STATUS.md` points to the current real workspace or explicitly says no workspace is active.
 - `docs/projects/<project>/STATUS.md` exists for active project work.
 - Repo commands are recorded and verified.
 - Safe test environment is documented.
@@ -76,7 +77,7 @@ The included `EXAMPLE` workspaces are illustrative only. Replace them or keep th
 After copying this template to a new repository, run:
 
 ```bash
-rg -n "<fill|TO[D]O|TB[D]|FIX[M]E|source-repo-name|old-project-name" AGENTS.md HUMANS.md docs
+rg -n "source-repo-name|old-project-name|production-credential" AGENTS.md HUMANS.md docs/ai docs/repo
 git diff --check
 ```
 

@@ -13,7 +13,8 @@ It does not replace:
 - `AGENTS.md` as the execution contract in a concrete repository;
 - `HUMANS.md` as the human operating guide;
 - `docs/ai/WORKFLOW.md` and `docs/ai/workflow/` as workflow rules;
-- `docs/ai/REPO-MEMORY.md` as repo-specific aggregate memory;
+- `docs/ai/MEMORY.md` as template-local aggregate memory;
+- `docs/repo/MEMORY.md` as repo-specific aggregate memory;
 - `docs/projects/<project>/PROJECT-MEMORY.md` as project-specific aggregate memory;
 - repository state as the source of truth for implementation.
 
@@ -22,7 +23,8 @@ It does not replace:
 | Artifact | Scope | Belongs Here | Does Not Belong Here |
 | --- | --- | --- | --- |
 | `docs/ai/EXTERNAL-MEMORY.md` | universal workflow/process memory | cross-repo workflow improvements, reusable autopilot rules, process anti-patterns, template improvements | repo facts, domain facts, task-specific implementation knowledge |
-| `docs/ai/REPO-MEMORY.md` | one repository | durable facts about this repo, local constraints, local history | generic workflow improvements meant for other repos |
+| `docs/ai/MEMORY.md` | this workflow template | template-local maintenance facts and history | target-repo facts or universal workflow lessons |
+| `docs/repo/MEMORY.md` | one repository | durable facts about this repo, local constraints, local history | generic workflow improvements meant for other repos |
 | `docs/projects/<project>/PROJECT-MEMORY.md` | one project/workspace | durable project decisions, project architecture facts, project-specific lessons | generic workflow system design |
 | `docs/projects/<project>/distillations/` | one completed task/package | task-level implementation lessons after PASS | broad rules unless promoted by checkpoint |
 
@@ -116,7 +118,7 @@ Promotion examples:
 - human operating guidance -> `HUMANS.md`;
 - template change -> `docs/ai/templates/`;
 - autopilot rule -> `docs/ai/AUTOPILOT.md`;
-- repo bootstrap requirement -> `docs/ai/REPO-INTAKE.md`.
+- repo bootstrap requirement -> `docs/repo/REPO-INTAKE.md`.
 
 ## Review Cadence
 
@@ -136,10 +138,10 @@ Review this file:
 - Scope: docs-layout
 - Status: implemented
 - Source: workflow template refinement.
-- Recommendation: keep `docs/ai/REPO-INTAKE.md` as a repo-level bootstrap/readiness artifact that can exist before any project workspace.
+- Recommendation: keep `docs/repo/REPO-INTAKE.md` as a repo-level bootstrap/readiness artifact that can exist before any project workspace.
 - Impact: a new repository can validate `AGENTS.md`, `HUMANS.md`, `docs/ai`, templates, status, safe command policy and STOP conditions before a concrete project exists.
 - Applies to:
-  - `docs/ai/REPO-INTAKE.md`
+  - `docs/repo/REPO-INTAKE.md`
   - `docs/ai/WORKFLOW.md`
   - `docs/ai/workflow/0_repo_intake_initial_audit.md`
   - `HUMANS.md`
@@ -158,8 +160,7 @@ Review this file:
 - Applies to:
   - `docs/ai/EXTERNAL-MEMORY.md`
   - `docs/ai/README.md`
-  - `docs/ai/REPO-INTAKE.md`
+  - `docs/repo/REPO-INTAKE.md`
   - `docs/ai/AUTOPILOT.md`
 - Promotion path: promote accepted entries into `AGENTS.md`, `HUMANS.md`, workflow docs, autopilot docs or templates.
 - Notes: entries in external memory are advisory until promoted into an enforceable workflow contract.
-

@@ -1,4 +1,4 @@
-# 2.5. FAZA PLANU PROJEKTU QA - ChatGPT
+# 2.5. FAZA PLANU PROJEKTU QA - Codex
 
 Ta faza służy do krytycznej walidacji planu projektu przed przejściem do specyfikacji tasków.
 
@@ -35,7 +35,7 @@ Brak artefaktu:
 - próba obalenia planu
 - walidacja gate przed przejściem do specyfikacji tasków
 
-ChatGPT nie może:
+Codex nie może:
 
 - przepisywać planu
 - proponować pełnego nowego planu
@@ -43,7 +43,7 @@ ChatGPT nie może:
 
 ## Zakres walidacji
 
-ChatGPT musi obowiązkowo sprawdzić:
+Codex musi obowiązkowo sprawdzić:
 
 ### 1. Pokrycie architektury
 
@@ -183,7 +183,7 @@ Zasady:
 
 Domyślnie:
 
-- drugi review wykonuje ChatGPT (drugi prompt)
+- drugi review wykonuje Codex (drugi prompt)
 
 Codex review:
 
@@ -194,7 +194,7 @@ Codex review:
 
 ## Output
 
-ChatGPT musi zwrócić:
+Codex musi zwrócić:
 
 - wynik końcowy: PASS / FAIL
 - lista problemów

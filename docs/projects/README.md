@@ -2,7 +2,7 @@
 
 This directory stores project-local workflow artifacts.
 
-Repo-level workflow/bootstrap intake belongs in `docs/ai/REPO-INTAKE.md`. Do not create a project workspace only to validate that the workflow template is installed correctly.
+Repo-level workflow/bootstrap intake belongs in `docs/repo/REPO-INTAKE.md`. Do not create a project workspace only to validate that the workflow template is installed correctly.
 
 Each real project should have its own workspace:
 
@@ -33,16 +33,18 @@ docs/projects/<project>/
 └── autopilot/
 ```
 
+Project intake may include `intake/000_idea_validation.md` before `intake/0_context.md` when the owner starts from a rough idea or brain dump.
+
 ## Template Example
 
 - `EXAMPLE/` shows the recommended structure and sample artifact shapes.
 
-`EXAMPLE/` is not active project state. Copy it, rename it, or use the templates in `docs/ai/templates/project/` when starting a real project.
+`EXAMPLE/` is not active project state. Copy it, rename it, or use the templates in `docs/ai/templates/projects/` when starting a real project.
 
 ## Rules
 
 - Do not mix artifacts from multiple projects in one workspace.
-- Do not treat historical workspaces as active unless `docs/ai/STATUS.md` points to them.
+- Do not treat historical workspaces as active unless `docs/repo/STATUS.md` points to them.
 - Do not create duplicate phase artifacts when a current artifact already exists.
 - Keep project decisions in `decisions/`.
 - Keep QA and gate evidence in `quality/`.

@@ -75,7 +75,7 @@ Do not store checkpoint artifacts in `distillations/`; distillations are inputs 
 Checkpoint powinien pracować na następujących źródłach:
 
 - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md`
-- `docs/ai/REPO-MEMORY.md`
+- `docs/repo/MEMORY.md`
 - wszystkie pliki `X_task_or_package_name_distillation.md`, w których:
   - `memory_in_repo_memory: false`
 - aktualny stan repo
@@ -95,11 +95,11 @@ Checkpoint musi wykonać trzy rzeczy:
    - repo memory
    - external workflow memory, jeśli checkpoint wykrył uniwersalną lekcję o procesie
 
-`docs/ai/REPO-MEMORY.md` jest agregatem repo-level. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
+`docs/repo/MEMORY.md` jest agregatem repo-level. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
 
 `docs/ai/EXTERNAL-MEMORY.md` jest pamięcią uniwersalną dla samego workflow. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
 
-## **Minimalny kontrakt PROJECT-MEMORY.md i REPO-MEMORY.md**
+## **Minimalny kontrakt PROJECT-MEMORY.md i MEMORY.md**
 
 Project Memory powinno zawierać wiedzę istotną dla danego projektu.
 
@@ -227,7 +227,7 @@ Atomiczność checkpointu:
 Jeśli wystąpi częściowe wykonanie:
 
 - np.:
-  - `PROJECT-MEMORY.md` albo `REPO-MEMORY.md` zostało zaktualizowane
+  - `PROJECT-MEMORY.md` albo `MEMORY.md` zostało zaktualizowane
   - ale nie wszystkie pliki distillation mają ustawione memory_in_repo_memory: true
 
 wtedy:
@@ -240,7 +240,7 @@ wtedy:
 Reguła:
 
 - źródłem prawdy są zawsze pliki distillation z memory_in_repo_memory: false
-- `PROJECT-MEMORY.md` i `docs/ai/REPO-MEMORY.md` nie są źródłem prawdy, tylko wynikiem agregacji
+- `PROJECT-MEMORY.md` i `docs/repo/MEMORY.md` nie są źródłem prawdy, tylko wynikiem agregacji
 
 Zabronione:
 
@@ -255,7 +255,7 @@ Jeśli `docs/projects/<what_we_doing>/PROJECT-MEMORY.md` nie istnieje:
 - checkpoint powinien go utworzyć
 - nie traktuj tego jako błędu
 
-Jeśli `docs/ai/REPO-MEMORY.md` nie istnieje:
+Jeśli `docs/repo/MEMORY.md` nie istnieje:
 
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
 - nie zapisuj lokalnej wiedzy projektowej do repo memory tylko dlatego, że repo memory istnieje
@@ -280,7 +280,7 @@ Na końcu checkpointu Codex powinien krótko wypisać:
 - które distillation zostały przetworzone
 - które checkboxy zostały zmienione na true
 - jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `PROJECT-MEMORY.md`
-- jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `docs/ai/REPO-MEMORY.md`, jeśli dotyczy
+- jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `docs/repo/MEMORY.md`, jeśli dotyczy
 - czy wykryto drift
 - klasyfikację driftu:
   - critical
@@ -301,7 +301,7 @@ Wykonaj checkpoint projektu.
 
 Wejście:
 - docs/projects/<what_we_doing>/PROJECT-MEMORY.md
-- docs/ai/REPO-MEMORY.md
+- docs/repo/MEMORY.md
 - docs/ai/EXTERNAL-MEMORY.md
 - wszystkie X_task_or_package_name_distillation.md z memory_in_repo_memory: false
 - aktualny stan repo
@@ -312,7 +312,7 @@ Wykonaj:
 - agregację nowej wiedzy z distillation
 - kompresję i deduplikację informacji
 - aktualizację PROJECT-MEMORY.md
-- aktualizację docs/ai/REPO-MEMORY.md tylko dla wiedzy repo-level
+- aktualizację docs/repo/MEMORY.md tylko dla wiedzy repo-level
 - aktualizację docs/ai/EXTERNAL-MEMORY.md tylko dla uniwersalnej wiedzy workflow
 - walidację zgodności między:
   - architekturą

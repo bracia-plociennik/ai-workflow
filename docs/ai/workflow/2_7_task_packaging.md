@@ -1,4 +1,4 @@
-# 2.7. FAZA TASK PACKAGING - ChatGPT
+# 2.7. FAZA TASK PACKAGING - Codex
 
 Ta faza służy do grupowania tasków w pakiety przed specyfikacją.
 
@@ -104,7 +104,7 @@ Pakiet musi być:
 
 ## Reguła wykrywania konfliktów
 
-ChatGPT musi wykryć:
+Codex musi wykryć:
 
 - konflikty zależności
 - konflikty zakresu
@@ -131,7 +131,7 @@ Brak pakietyzacji:
 
 ## Output fazy
 
-ChatGPT musi zwrócić:
+Codex musi zwrócić:
 
 - listę pakietów
 - dla każdego pakietu:

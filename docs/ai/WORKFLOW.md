@@ -16,7 +16,7 @@ If this guide is insufficient, open the linked phase file. If process documents 
 
 ## Status Files
 
-- Repo-local status: [`docs/ai/STATUS.md`](STATUS.md).
+- Repo-local status: [`docs/repo/STATUS.md`](../repo/STATUS.md).
 - Project-local status, when used: `docs/projects/<project>/STATUS.md`.
 - Do not recreate the old workflow-status filename.
 
@@ -24,7 +24,7 @@ For workflow-governed work, update the relevant `STATUS.md` whenever a phase sta
 
 ## Repo-Level Intake
 
-Use [`docs/ai/REPO-INTAKE.md`](REPO-INTAKE.md) when the repository has no active project workspace yet, when `ai-workflow` has just been installed, or when repo-level workflow/autopilot readiness needs to be checked before creating a project.
+Use [`docs/repo/REPO-INTAKE.md`](../repo/REPO-INTAKE.md) when the repository has no active project workspace yet, when `ai-workflow` has just been installed, or when repo-level workflow/autopilot readiness needs to be checked before creating a project.
 
 `REPO-INTAKE.md` checks whether the repository has the required workflow infrastructure: `AGENTS.md`, `HUMANS.md`, `docs/ai`, status, templates, safe command policy, STOP conditions and autopilot readiness defaults.
 
@@ -53,6 +53,21 @@ Generic project layout:
 
 The included `docs/projects/EXAMPLE/` directory demonstrates the structure. It is not active project state.
 
+## Idea Validation And Context
+
+Use `000. IDEA VALIDATION` before creating `0_context.md` when the owner starts from a rough idea, brain dump, or unvalidated initiative.
+
+Canonical early flow:
+
+```text
+000 idea validation
+-> accepted idea
+-> 0_context.md
+-> 0 repo intake / initial audit
+```
+
+Skip `000` only when the project context already exists or the owner provides a clear accepted context.
+
 ## When Full Workflow Is Mandatory
 
 Full workflow is mandatory for tasks derived from an active project plan under `docs/projects/<what_we_doing>/...` while that plan still has open in-scope work or has not passed `8. FINAL CHECK`.
@@ -65,6 +80,7 @@ Even outside full workflow, repository-first execution, stop conditions, and evi
 
 | Phase | Detailed Rules |
 | --- | --- |
+| `000. IDEA VALIDATION` | [`docs/ai/workflow/000_idea_validation.md`](workflow/000_idea_validation.md) |
 | `0. REPO INTAKE / INITIAL AUDIT` | [`docs/ai/workflow/0_repo_intake_initial_audit.md`](workflow/0_repo_intake_initial_audit.md) |
 | `1. FAZA ARCHITEKTURY` | [`docs/ai/workflow/1_architecture.md`](workflow/1_architecture.md) |
 | `1.5. ARCHITECTURE QA` | [`docs/ai/workflow/1_5_architecture_qa.md`](workflow/1_5_architecture_qa.md) |
@@ -102,6 +118,7 @@ Natural-language workflow commands map to these phase files:
 
 | User Intent | Phase File |
 | --- | --- |
+| `idea validation`, `brain dump`, `walidacja pomyslu`, `mam pomysl` | [`000_idea_validation.md`](workflow/000_idea_validation.md) |
 | `repo intake`, `initial audit`, `faza audytu` | [`0_repo_intake_initial_audit.md`](workflow/0_repo_intake_initial_audit.md) |
 | `architektura`, `faza architektury` | [`1_architecture.md`](workflow/1_architecture.md) |
 | `qa architektury`, `sprawdz architekture` | [`1_5_architecture_qa.md`](workflow/1_5_architecture_qa.md) |

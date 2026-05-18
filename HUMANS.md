@@ -19,8 +19,9 @@ System działa dobrze tylko wtedy, gdy rozdzielamy kilka warstw:
 - **Repo state**: rzeczywisty kod, migracje, config, testy, pliki i aktualny stan gita.
 - **Agent contract**: `AGENTS.md`, czyli zasady wykonawcze dla Codexa.
 - **Workflow docs**: `docs/ai/WORKFLOW.md` i `docs/ai/workflow/`, czyli proces faz, bramek, QA i fix loopów.
+- **Repo runtime docs**: `docs/repo/`, czyli globalny context repo, repo intake, status i repo memory.
 - **Project docs**: `docs/projects/<project>/`, czyli aktywna przestrzeń projektu: intake, architektura, plan, specs, quality, decisions, distillations, checkpoints, autopilot.
-- **Human docs**: `docs/human/`, czyli artefakty pisane dla człowieka: runbooki, audyty, decyzje, podsumowania, zgody.
+- **Human docs**: `docs/humans/`, czyli artefakty pisane dla człowieka: runbooki, audyty, decyzje, podsumowania, zgody.
 
 Najważniejsza zasada: **repo state jest prawdą o tym, co faktycznie istnieje, a docs są kontraktem i pamięcią procesu**. Jeśli dokumentacja mówi jedno, a repo pokazuje drugie, to jest drift i trzeba go rozwiązać przed dalszą implementacją.
 
@@ -28,16 +29,17 @@ Najważniejsza zasada: **repo state jest prawdą o tym, co faktycznie istnieje, 
 
 Kiedy nie wiesz, co wolno zrobić albo jaka faza jest aktualna, czytaj źródła w tej kolejności:
 
-1. `AGENTS.md` - kontrakt wykonawczy dla agenta, stop conditions, quality rules, repo adaptation layer.
+1. `AGENTS.md` - kontrakt wykonawczy dla agenta, stop conditions, quality rules i artifact boundaries.
 2. `docs/ai/WORKFLOW.md` - główny router faz workflow.
 3. `docs/ai/workflow/<phase>.md` - szczegółowa specyfikacja konkretnej fazy.
 4. `docs/ai/workflow/00_overview.md` - globalny opis workflow, statusu, autopilota i recovery.
 5. `docs/ai/AUTOPILOT.md` - checklist startu i warunki działania autopilota.
-6. `docs/ai/REPO-INTAKE.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
-7. `docs/ai/EXTERNAL-MEMORY.md` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
-8. `docs/ai/STATUS.md` - repo-level status bieżącej pracy.
-9. `docs/projects/<project>/STATUS.md` - project-local status bieżącej pracy.
-10. `docs/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
+6. `docs/repo/CONTEXT.md` - globalny opis repo.
+7. `docs/repo/REPO-INTAKE.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
+8. `docs/ai/EXTERNAL-MEMORY.md` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
+9. `docs/repo/STATUS.md` - repo-level status bieżącej pracy.
+10. `docs/projects/<project>/STATUS.md` - project-local status bieżącej pracy.
+11. `docs/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
 
 Jeśli źródła są sprzeczne, nie proś Codexa o zgadywanie. Poproś o reconciliation albo escalation.
 
@@ -75,11 +77,13 @@ Znaczenie katalogów:
 - `checkpoints/`: okresowa synchronizacja stabilnego stanu.
 - `autopilot/`: runtime autopilota.
 
-`docs/ai/REPO-INTAKE.md` jest repo-level artefaktem bootstrap. Używaj go, gdy workflow został dopiero dodany do repo albo zanim powstanie pierwszy `docs/projects/<project>/`.
+`docs/repo/CONTEXT.md` jest miejscem na globalny opis repo: czym jest repo, jaki ma stack, domenę, główne moduły, granice i lokalne zasady.
+
+`docs/repo/REPO-INTAKE.md` jest repo-level artefaktem bootstrap. Używaj go, gdy workflow został dopiero dodany do repo albo zanim powstanie pierwszy `docs/projects/<project>/`.
 
 `docs/ai/EXTERNAL-MEMORY.md` jest miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
 
-`docs/human/` nie jest miejscem na specs, QA evidence ani runtime. To miejsce na dokumenty dla ludzi.
+`docs/humans/` nie jest miejscem na specs, QA evidence ani runtime. To miejsce na dokumenty dla ludzi.
 
 ## Pełny Workflow
 
@@ -87,24 +91,26 @@ Pełny workflow jest wymagany dla zadań wynikających z aktywnego planu projekt
 
 Fazy:
 
-1. `0. REPO INTAKE / INITIAL AUDIT` - rozpoznanie repo, komend, struktur, ryzyk, istniejących zasobów.
-2. `1. FAZA ARCHITEKTURY` - decyzje architektoniczne, granice domen, odpowiedzialności komponentów.
-3. `1.5. ARCHITECTURE QA` - kontrola jakości architektury.
-4. `1.7. ARCHITECTURE FIX LOOP` - poprawki architektury po FAIL.
-5. `2. FAZA PLANU PROJEKTU` - sekwencja tasków z kontraktami wykonawczymi.
-6. `2.5. PLAN QA` - kontrola planu.
-7. `2.6. PLAN FIX LOOP` - poprawki planu po FAIL.
-8. `2.7. TASK PACKAGING` - decyzja, czy taski można grupować.
-9. `2.9. PACKAGING QA` - QA paczek, jeśli powstały.
-10. `3. FAZA SPECYFIKACJI` - spec taska albo paczki.
-11. `3.5. SPEC QA` - sprawdzenie, czy spec nadaje się do implementacji.
-12. `3.7. SPEC FIX LOOP` - poprawki specyfikacji po FAIL.
-13. `4. FAZA IMPLEMENTACJI` - zmiany w kodzie albo docs zgodne ze specem.
-14. `5. FAZA JAKOŚCI` - testy, review, manual checks i evidence.
-15. `5.5. FIX LOOP` - poprawki implementacji po FAIL.
-16. `6. FAZA DESTYLACJI` - zapisanie wiedzy po tasku.
-17. `7. CHECKPOINT PROJEKTU` - synchronizacja po ustalonej kadencji albo drift.
-18. `8. FINAL CHECK` - finalne domknięcie planu, zwykle z owner final approval.
+1. `000. IDEA VALIDATION` - weryfikacja brain dumpu / pomysłu przed contextem.
+2. `0_context.md` - zaakceptowany context projektu.
+3. `0. REPO INTAKE / INITIAL AUDIT` - rozpoznanie repo, komend, struktur, ryzyk, istniejących zasobów.
+4. `1. FAZA ARCHITEKTURY` - decyzje architektoniczne, granice domen, odpowiedzialności komponentów.
+5. `1.5. ARCHITECTURE QA` - kontrola jakości architektury.
+6. `1.7. ARCHITECTURE FIX LOOP` - poprawki architektury po FAIL.
+7. `2. FAZA PLANU PROJEKTU` - sekwencja tasków z kontraktami wykonawczymi.
+8. `2.5. PLAN QA` - kontrola planu.
+9. `2.6. PLAN FIX LOOP` - poprawki planu po FAIL.
+10. `2.7. TASK PACKAGING` - decyzja, czy taski można grupować.
+11. `2.9. PACKAGING QA` - QA paczek, jeśli powstały.
+12. `3. FAZA SPECYFIKACJI` - spec taska albo paczki.
+13. `3.5. SPEC QA` - sprawdzenie, czy spec nadaje się do implementacji.
+14. `3.7. SPEC FIX LOOP` - poprawki specyfikacji po FAIL.
+15. `4. FAZA IMPLEMENTACJI` - zmiany w kodzie albo docs zgodne ze specem.
+16. `5. FAZA JAKOŚCI` - testy, review, manual checks i evidence.
+17. `5.5. FIX LOOP` - poprawki implementacji po FAIL.
+18. `6. FAZA DESTYLACJI` - zapisanie wiedzy po tasku.
+19. `7. CHECKPOINT PROJEKTU` - synchronizacja po ustalonej kadencji albo drift.
+20. `8. FINAL CHECK` - finalne domknięcie planu, zwykle z owner final approval.
 
 Reguła jest prosta:
 
@@ -116,7 +122,7 @@ Reguła jest prosta:
 
 Zawsze zacznij od:
 
-- `docs/ai/STATUS.md`;
+- `docs/repo/STATUS.md`;
 - `docs/projects/<project>/STATUS.md`.
 
 Najważniejsze pola:
@@ -141,6 +147,7 @@ Jeśli status mówi, że następna faza to `4. FAZA IMPLEMENTACJI`, ale spec nie
 Najbezpieczniej wydawać polecenia fazami:
 
 ```text
+idea validation
 repo intake
 architektura
 qa architektury
@@ -180,6 +187,8 @@ Uruchom autonomous_execution dla tasków TASK-01..TASK-16 z aktywnego planu, sek
 
 Jeśli chcesz tylko analizę, plan albo QA, powiedz to wprost. W tych fazach Codex nie powinien zmieniać kodu produktu.
 
+ChatGPT może być użyty jako opcjonalny dodatek do brainstormingu albo drugiego review, ale pełny workflow musi być możliwy do przejścia wyłącznie z Codexem.
+
 ## Autopilot
 
 Autopilot to nie jest tryb "rób wszystko bez zasad". To deterministyczna pętla wykonawcza z bramkami.
@@ -203,7 +212,7 @@ preflight
 
 Przed każdą fazą Codex powinien sprawdzić:
 
-- `docs/ai/STATUS.md`;
+- `docs/repo/STATUS.md`;
 - `docs/projects/<project>/STATUS.md`;
 - `AUTOPILOT_STATE.md`, jeśli autopilot jest aktywny;
 - wymagane artefakty fazy;
@@ -316,7 +325,7 @@ Po przerwaniu, restarcie, kompakcji kontekstu albo rozjeździe statusów:
 
 1. Odczytaj `docs/projects/<project>/autopilot/AUTOPILOT_STATE.md`.
 2. Odczytaj `docs/projects/<project>/autopilot/AUTOPILOT_LEDGER.md`.
-3. Odczytaj `docs/ai/STATUS.md`.
+3. Odczytaj `docs/repo/STATUS.md`.
 4. Odczytaj `docs/projects/<project>/STATUS.md`.
 5. Sprawdź ostatnie quality evidence.
 6. Sprawdź `git status`.
@@ -356,14 +365,14 @@ Minimalny zestaw do przeniesienia:
 3. `docs/ai/WORKFLOW.md`.
 4. `docs/ai/workflow/`.
 5. `docs/ai/AUTOPILOT.md`.
-6. `docs/ai/STATUS.md`.
+6. `docs/repo/` z `CONTEXT.md`, `REPO-INTAKE.md`, `STATUS.md`, `MEMORY.md`.
 7. `docs/ai/templates/`.
 8. `docs/projects/<project>/` z canonical layoutem.
-9. `docs/human/` na artefakty dla człowieka.
+9. `docs/humans/` na artefakty dla człowieka.
 
 Przed pierwszym autopilotem w nowym repo trzeba ustalić:
 
-- repo adaptation layer: install, test, lint, build, safe artisan/CLI commands;
+- repo runtime layer: global context, install, test, lint, build, safe artisan/CLI commands;
 - safe test environment;
 - politykę migracji i rollbacku;
 - politykę sekretów;
@@ -394,9 +403,10 @@ Unikaj:
 
 Przed startem pracy:
 
-- `AGENTS.md` istnieje i jest dostosowany do repo.
+- `AGENTS.md` istnieje i pozostaje template-owned.
 - `HUMANS.md` opisuje, jak człowiek ma pracować z workflow.
-- `docs/ai/STATUS.md` wskazuje aktywny workspace.
+- `docs/repo/CONTEXT.md` opisuje repo globalnie.
+- `docs/repo/STATUS.md` wskazuje aktywny workspace.
 - `docs/projects/<project>/STATUS.md` wskazuje task i następną fazę.
 - Plan projektu ma PASS.
 - Spec kolejnego taska ma PASS albo ma być odświeżony przed implementacją.

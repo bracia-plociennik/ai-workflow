@@ -9,12 +9,12 @@ Cel:
 - zapewnienie powtarzalności procesu
 - eliminacja zgadywania i decyzji ad-hoc
 - wymuszenie jakości przez QA i fix loop
-- rozdzielenie faz: analiza → architektura → plan → packaging → spec → implementacja → QA → destylacja
+- rozdzielenie faz: idea validation → context → intake → architektura → plan → packaging → spec → implementacja → QA → destylacja
 
 Ten artefakt jest globalną częścią szczegółowej specyfikacji procesu.
 `WORKFLOW.md` pozostaje głównym przewodnikiem i kieruje do tego pliku oraz do konkretnych plików faz.
 
-`STATUS.md` jest artefaktem wykonawczym, który przechowuje aktualny stan workflow.
+`docs/repo/STATUS.md` jest artefaktem wykonawczym, który przechowuje aktualny stan workflow.
 Nie definiuje reguł procesu, ale jest canonical source dla odpowiedzi na pytania:
 
 - jaki task jest aktualnie aktywny,
@@ -29,7 +29,7 @@ Nie definiuje reguł procesu, ale jest canonical source dla odpowiedzi na pytani
 
 `<what_we_doing>` jest placeholderem nazwy aktywnego katalogu roboczego dokumentacji.
 
-W template nie wskazuje aktywnego projektu. W realnym repo powinien zostać ustawiony przez `docs/ai/STATUS.md`, np. `new_product`, `billing_cleanup`, `migration_2026` albo inny katalog projektowy.
+W template nie wskazuje aktywnego projektu. W realnym repo powinien zostać ustawiony przez `docs/repo/STATUS.md`, np. `new_product`, `billing_cleanup`, `migration_2026` albo inny katalog projektowy.
 
 Placeholder nie narzuca jednej trwałej nazwy katalogu.
 
@@ -61,11 +61,11 @@ Dla side tasków po zamknięciu planu nadal obowiązują:
 
 Ale nie trzeba wymuszać wszystkich faz z tego dokumentu, jeśli użytkownik tego nie chce i nie pracujemy już w aktywnym planie.
 
-## Kontrakt `STATUS.md`
+## Kontrakt `docs/repo/STATUS.md`
 
 ### Cel
 
-`STATUS.md` ma dawać jeden repo-local, jawny status bieżącej pracy.
+`docs/repo/STATUS.md` ma dawać jeden repo-local, jawny status bieżącej pracy.
 
 Ma eliminować zgadywanie:
 
@@ -95,7 +95,7 @@ Plik musi zawierać co najmniej:
 
 ### Reguła aktualizacji
 
-Dla tasków objętych obowiązkowym workflow `STATUS.md` musi zostać zaktualizowany:
+Dla tasków objętych obowiązkowym workflow `docs/repo/STATUS.md` musi zostać zaktualizowany:
 
 1. przy wejściu w nowy task lub tasks package
 2. przy starcie fazy
@@ -117,7 +117,7 @@ Dla side tasków po zamknięciu planu:
 
 ### Reguła interpretacji
 
-Jeśli `STATUS.md` jest niezsynchronizowany z rzeczywistym stanem pracy:
+Jeśli `docs/repo/STATUS.md` jest niezsynchronizowany z rzeczywistym stanem pracy:
 
 - należy to potraktować jako drift operacyjny
 - przy taskach workflow-governed trzeba go poprawić przed dalszym przejściem przez fazy
@@ -129,7 +129,7 @@ Autopilot jest trybem wykonawczym dla zadań wynikających z zatwierdzonego plan
 
 Autopilot może działać dopiero wtedy, gdy istnieją i przeszły wymagane bramki:
 
-- repo-level workflow readiness w `docs/ai/REPO-INTAKE.md`
+- repo-level context i workflow readiness w `docs/repo/CONTEXT.md` oraz `docs/repo/REPO-INTAKE.md`
 - context albo jawnie wskazany materiał wejściowy
 - `0_initial_audit.md`
 - `1_architecture_phase.md`
@@ -687,11 +687,39 @@ Każda faza:
 
 ---
 
+### 000. Idea Validation
+
+- używana, gdy owner zaczyna od brain dumpu, pomysłu albo niezweryfikowanej inicjatywy
+- wynik musi być zapisany jako:
+  - `docs/projects/<what_we_doing>/intake/000_idea_validation.md`
+
+Warunek przejścia dalej:
+
+- idea ma wynik `accepted` albo `accepted_with_changes`
+- brak blocking decisions uniemożliwiających stworzenie contextu
+
+Następny krok:
+
+→ utworzenie `docs/projects/<what_we_doing>/intake/0_context.md`
+
+---
+
+### 0 Context
+
+- context opisuje zatwierdzony zakres projektu po walidacji pomysłu
+- może zostać dostarczony bez fazy 000, jeśli owner już ma zaakceptowany kontekst
+
+Następny krok:
+
+→ 0. Repo Intake / Initial Audit
+
+---
+
 ### 0. Repo Intake / Initial Audit
 
 - audit wykonywany najczęściej w Codex (kod)
 - wynik musi być zapisany jako artefakt:
-  - `docs/ai/REPO-INTAKE.md` dla repo-level bootstrap/workflow readiness
+  - `docs/repo/REPO-INTAKE.md` dla repo-level bootstrap/workflow readiness
   - `docs/projects/<what_we_doing>/intake/0_initial_audit.md` dla konkretnego projektu/contextu
 
 Warunek przejścia dalej:
@@ -701,7 +729,7 @@ Warunek przejścia dalej:
 
 ---
 
-### 1. Architektura (ChatGPT)
+### 1. Architektura (Codex)
 
 Wejście:
 
@@ -730,7 +758,7 @@ Proces:
 
 ---
 
-### 2. Plan projektu (ChatGPT)
+### 2. Plan projektu (Codex)
 
 - rozbicie architektury na taski
 
@@ -772,7 +800,7 @@ Proces:
 
 ### 3. Specyfikacja
 
-- wykonywana przez Codex (dla kodu) lub ChatGPT
+- wykonywana przez Codex
 
 Rzeczywisty wynik fazy:
 

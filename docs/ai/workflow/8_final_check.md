@@ -80,7 +80,7 @@ Final Check musi zweryfikować:
   - repo
   - architekturą
   - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md`
-  - `docs/ai/REPO-MEMORY.md`
+  - `docs/repo/MEMORY.md`
   - `docs/ai/EXTERNAL-MEMORY.md`, jeśli etap promował uniwersalne lekcje workflow
   - checkpointami
 - czy rzeczywisty system odpowiada deklarowanemu stanowi
@@ -116,7 +116,7 @@ Final Check zakłada, że:
 
 - checkpoint został wykonany
 - `docs/projects/<what_we_doing>/PROJECT-MEMORY.md` jest zsynchronizowany
-- `docs/ai/REPO-MEMORY.md` jest zsynchronizowany, jeśli checkpoint dotyczył wiedzy repo-level
+- `docs/repo/MEMORY.md` jest zsynchronizowany, jeśli checkpoint dotyczył wiedzy repo-level
 - `docs/ai/EXTERNAL-MEMORY.md` jest zsynchronizowany, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow
 
 Jeśli checkpoint nie istnieje:
@@ -195,7 +195,7 @@ Domyślnie Final Check wykonuje Codex.
 
 Opcjonalnie:
 
-- drugi przegląd może wykonać ChatGPT
+- drugi przegląd może wykonać Codex
 
 Celem drugiego przeglądu jest:
 
@@ -213,7 +213,7 @@ Zweryfikuj cały etap jako system.
 Zasady:
 - oceń zgodność z architekturą
 - oceń zgodność z planem etapu
-- oceń spójność repo, PROJECT-MEMORY.md, docs/ai/REPO-MEMORY.md, docs/ai/EXTERNAL-MEMORY.md jeśli dotyczy, i checkpointów
+- oceń spójność repo, PROJECT-MEMORY.md, docs/repo/MEMORY.md, docs/ai/EXTERNAL-MEMORY.md jeśli dotyczy, i checkpointów
 - sprawdź brak sprzeczności systemowych
 
 Reguły:

@@ -1,4 +1,4 @@
-# 2. FAZA PLANU PROJEKTU - ChatGPT
+# 2. FAZA PLANU PROJEKTU - Codex
 
 Ta faza służy do stworzenia planu tasków, który nadaje się do realnego wykonania i minimalizuje ryzyko reworku.
 
@@ -206,7 +206,7 @@ Jeśli którykolwiek z tych warunków nie jest spełniony:
 
 ## **Output kontrolny na końcu fazy**
 
-Na końcu tej fazy ChatGPT powinien krótko wypisać:
+Na końcu tej fazy Codex powinien krótko wypisać:
 
 - finalną kolejność tasków
 - taski o najwyższym ryzyku
