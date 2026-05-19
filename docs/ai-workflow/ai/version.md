@@ -12,7 +12,7 @@
 
 - `AGENTS.md` is a short router.
 - `HUMANS.md` is the long human runbook.
-- Default target-repository installation is a nested clone at `ai-workflow/` plus a root `AGENTS.md` shim from `root-agents.template.md`.
+- Default target-repository installation is a nested clone at `ai-workflow/` plus a root `AGENTS.md` shim from `docs/ai-workflow/ai/templates/root-agents.template.md`.
 - `docs/ai-workflow/` is the workflow-owned documentation namespace inside `AI_WORKFLOW_HOME`.
 - `docs/ai-workflow/ai/` is template-owned policy and workflow source.
 - `docs/ai-workflow/ai/skills/` stores optional task-specific workflow skills.

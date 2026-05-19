@@ -412,7 +412,7 @@ Domyślnie instalujesz AI Workflow jako osobny nested clone w katalogu `ai-workf
 
 ```bash
 git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
-cp ai-workflow/root-agents.template.md AGENTS.md
+cp ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md AGENTS.md
 git -C ai-workflow remote set-url --push origin DISABLED
 ```
 
@@ -422,7 +422,7 @@ Jeżeli nie chcesz przypadkiem zacommitować nested clone do repo aplikacji, dod
 printf "\n# Local AI Workflow nested clone\n/ai-workflow/\n" >> .gitignore
 ```
 
-Jeżeli `AGENTS.md` już istnieje, nie nadpisuj go automatycznie. Najpierw zachowaj stary plik jako legacy context, a potem ręcznie zmerguj rootowy shim z `ai-workflow/root-agents.template.md`. `README.md`, `HUMANS.md`, `docs/`, `scripts/`, `.github/` i product code zawsze traktuj jako target-owned.
+Jeżeli `AGENTS.md` już istnieje, nie nadpisuj go automatycznie. Najpierw zachowaj stary plik jako legacy context, a potem ręcznie zmerguj rootowy shim z `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md`. `README.md`, `HUMANS.md`, `docs/`, `scripts/`, `.github/` i product code zawsze traktuj jako target-owned.
 
 Jeśli repo miało już stare workflow, prompty, specyfikacje projektu, coding guidelines, architecture notes, runbooki albo własne `AGENTS.md` / `HUMANS.md`, zachowaj je jako legacy context:
 
@@ -440,7 +440,7 @@ Ważna zasada: wszystko w `ai-workflow/docs/ai-workflow/repo/legacy/` jest tylko
 Po zachowaniu legacy tworzysz albo mergujesz root entrypoint:
 
 ```bash
-if [ ! -e AGENTS.md ]; then cp ai-workflow/root-agents.template.md AGENTS.md; else echo "AGENTS.md exists: merge required"; fi
+if [ ! -e AGENTS.md ]; then cp ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md AGENTS.md; else echo "AGENTS.md exists: merge required"; fi
 ```
 
 Rootowy `AGENTS.md` jest tylko shimem. Pełny kontrakt wykonawczy zostaje w `ai-workflow/AGENTS.md`. Z perspektywy root aplikacji wszystkie ścieżki workflow mają prefiks `ai-workflow/`, np. `ai-workflow/docs/ai-workflow/repo/context.md`.

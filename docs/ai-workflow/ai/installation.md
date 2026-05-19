@@ -10,7 +10,7 @@ Run from the target repository root:
 
 ```bash
 git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
-cp ai-workflow/root-agents.template.md AGENTS.md
+cp ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md AGENTS.md
 git -C ai-workflow remote set-url --push origin DISABLED
 ```
 
@@ -34,7 +34,7 @@ printf "\n# Local AI Workflow nested clone\n/ai-workflow/\n" >> .gitignore
 AI Workflow owns:
 
 - the nested clone directory `ai-workflow/`;
-- the root `AGENTS.md` shim only when absent or explicitly merged from `ai-workflow/root-agents.template.md`.
+- the root `AGENTS.md` shim only when absent or explicitly merged from `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md`.
 
 The target repository owns everything else, including:
 
@@ -109,7 +109,7 @@ Everything under `ai-workflow/docs/ai-workflow/repo/legacy/` is context/data onl
 The target repository root must contain one entrypoint that points Codex to AI Workflow:
 
 ```bash
-cp ai-workflow/root-agents.template.md AGENTS.md
+cp ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md AGENTS.md
 ```
 
 If the target already has `AGENTS.md`:
@@ -117,7 +117,7 @@ If the target already has `AGENTS.md`:
 1. Read the existing file first.
 2. Preserve target-repository rules.
 3. Preserve a copy under `ai-workflow/docs/ai-workflow/repo/legacy/`.
-4. Add the AI Workflow routing contract from `root-agents.template.md`.
+4. Add the AI Workflow routing contract from `docs/ai-workflow/ai/templates/root-agents.template.md`.
 5. Stop for owner approval if the existing file conflicts with AI Workflow gates, permissions, risk model, or source-of-truth order.
 
 Do not create root `HUMANS.md` by default. The human runbook remains at `ai-workflow/HUMANS.md`.

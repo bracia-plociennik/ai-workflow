@@ -3,7 +3,6 @@ set -euo pipefail
 
 required=(
   "AGENTS.md"
-  "root-agents.template.md"
   "HUMANS.md"
   "README.md"
   "docs/ai-workflow/ai/operating-model.md"
@@ -42,6 +41,7 @@ required=(
   "docs/ai-workflow/ai/templates/repo/memory.template.md"
   "docs/ai-workflow/ai/templates/repo/memory-readme.template.md"
   "docs/ai-workflow/ai/templates/repo/date-memory-entry.template.md"
+  "docs/ai-workflow/ai/templates/root-agents.template.md"
   "docs/ai-workflow/ai/templates/memory/README.md"
   "docs/ai-workflow/ai/templates/memory/date-memory-entry.template.md"
   "docs/ai-workflow/ai/templates/external-memory/README.md"

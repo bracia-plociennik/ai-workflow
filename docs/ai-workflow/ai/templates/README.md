@@ -6,6 +6,7 @@ Use these as starting points when a target repository needs repo runtime files, 
 
 ## Template Groups
 
+- `root-agents.template.md` - target-repository root `AGENTS.md` shim that delegates to `ai-workflow/AGENTS.md`.
 - `repo/` - templates for target-repo runtime files under `docs/ai-workflow/repo/`.
 - `workflow/` - templates for artifacts produced by `docs/ai-workflow/ai/workflow/*` phases.
 - `autopilot/` - runtime autopilot, QA evidence, escalation, and decision templates.

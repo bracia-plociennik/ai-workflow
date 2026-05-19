@@ -82,7 +82,7 @@ for phase in "${phases[@]}"; do
   fi
 done
 
-root_agents_template="root-agents.template.md"
+root_agents_template="docs/ai-workflow/ai/templates/root-agents.template.md"
 for required_root_ref in 'ai-workflow/AGENTS.md' 'AI_WORKFLOW_HOME' 'TARGET_REPO_ROOT' 'cd ai-workflow'; do
   if ! rg -q "$required_root_ref" "$root_agents_template"; then
     echo "Root AGENTS template missing required nested-clone ref: $required_root_ref"

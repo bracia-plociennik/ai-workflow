@@ -43,7 +43,7 @@ In target repositories, this directory normally lives under `AI_WORKFLOW_HOME`, 
 
 For a new repository or a repository where `ai-workflow/` was just cloned, start from `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/context/`, and `docs/ai-workflow/repo/repo-intake.md`, using `templates/repo/` if the runtime files are missing or still describe the upstream `ai-workflow` repository.
 
-Before installing into an existing repository, follow `installation.md`. Do not overwrite target-owned `README.md`, `AGENTS.md`, `HUMANS.md`, `docs/`, `scripts/`, or `.github/`. The default install keeps workflow internals inside `ai-workflow/` and uses only the root `AGENTS.md` shim from `root-agents.template.md`.
+Before installing into an existing repository, follow `installation.md`. Do not overwrite target-owned `README.md`, `AGENTS.md`, `HUMANS.md`, `docs/`, `scripts/`, or `.github/`. The default install keeps workflow internals inside `ai-workflow/` and uses only the root `AGENTS.md` shim from `docs/ai-workflow/ai/templates/root-agents.template.md`.
 
 For project-level workflow work, start from `workflow.md`, verify `docs/ai-workflow/repo/status.md`, then open the relevant phase file under `workflow/`.
 

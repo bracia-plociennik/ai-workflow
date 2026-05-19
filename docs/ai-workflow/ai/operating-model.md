@@ -55,7 +55,7 @@ Use `docs/ai-workflow/ai/risk-model.md` for classification.
 
 When adding AI Workflow to an existing repository, follow `docs/ai-workflow/ai/installation.md`.
 
-Default installation is a nested clone at `ai-workflow/` plus a root `AGENTS.md` shim copied or merged from `ai-workflow/root-agents.template.md`. Do not copy workflow internals into target-owned `docs/`, `scripts/`, or `.github/`.
+Default installation is a nested clone at `ai-workflow/` plus a root `AGENTS.md` shim copied or merged from `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md`. Do not copy workflow internals into target-owned `docs/`, `scripts/`, or `.github/`.
 
 Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, `.github/`, or product code. If the target repo already has `AGENTS.md`, preserve it as legacy context under `ai-workflow/docs/ai-workflow/repo/legacy/` and merge the shim manually with owner approval.
 

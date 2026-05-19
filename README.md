@@ -10,12 +10,12 @@ The recommended installation model is a nested clone inside a target repository:
 git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
 ```
 
-In that model, the target repository keeps its own application files and gets only one root entrypoint: `AGENTS.md`, copied from `ai-workflow/root-agents.template.md`. The complete workflow system stays inside `ai-workflow/`.
+In that model, the target repository keeps its own application files and gets only one root entrypoint: `AGENTS.md`, copied from `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md`. The complete workflow system stays inside `ai-workflow/`.
 
 ## Contents
 
 - `AGENTS.md` - internal AI Workflow execution contract.
-- `root-agents.template.md` - root target-repository shim that delegates to `ai-workflow/AGENTS.md`.
+- `docs/ai-workflow/ai/templates/root-agents.template.md` - root target-repository shim that delegates to `ai-workflow/AGENTS.md`.
 - `HUMANS.md` - practical runbook for owners, operators, and engineers.
 - `docs/ai-workflow/ai/workflow.md` - workflow router and phase index.
 - `docs/ai-workflow/ai/installation.md` - nested-clone installation and collision policy.
@@ -30,7 +30,7 @@ From the target repository root, run:
 
 ```bash
 git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
-cp ai-workflow/root-agents.template.md AGENTS.md
+cp ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md AGENTS.md
 git -C ai-workflow remote set-url --push origin DISABLED
 ```
 

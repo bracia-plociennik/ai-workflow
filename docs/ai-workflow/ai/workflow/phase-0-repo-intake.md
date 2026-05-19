@@ -317,7 +317,7 @@ Klasyfikacja statusu:
 
 Root `README.md` jest dokumentem target repo. AI Workflow może tylko zaproponować krótki link albo sekcję prowadzącą do `ai-workflow/HUMANS.md`.
 
-Root `AGENTS.md` powinien być shimem z `ai-workflow/root-agents.template.md` albo zatwierdzonym merge'em istniejących instrukcji target repo z tym shimem. Root `HUMANS.md` nie jest tworzony domyślnie. Jeśli root `AGENTS.md` istnieje, Codex musi zaproponować merge i zatrzymać się, jeśli merge osłabiałby istniejące reguły bezpieczeństwa, CI, deployu, source-of-truth albo ownership.
+Root `AGENTS.md` powinien być shimem z `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md` albo zatwierdzonym merge'em istniejących instrukcji target repo z tym shimem. Root `HUMANS.md` nie jest tworzony domyślnie. Jeśli root `AGENTS.md` istnieje, Codex musi zaproponować merge i zatrzymać się, jeśli merge osłabiałby istniejące reguły bezpieczeństwa, CI, deployu, source-of-truth albo ownership.
 
 Szerokie kopiowanie `docs/`, `scripts/` albo `.github/` jest niedozwolone. Workflow internals pozostają wewnątrz `AI_WORKFLOW_HOME`, zwykle `ai-workflow/`. Target CI może dostać osobną integrację tylko na wyraźną decyzję ownera.
 

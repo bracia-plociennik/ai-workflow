@@ -22,7 +22,7 @@ This is the repo-level intake artifact for this `ai-workflow` template repositor
 - repository root listing via `rg --files`;
 - `git status --short --branch`;
 - `AGENTS.md`;
-- `root-agents.template.md`;
+- `docs/ai-workflow/ai/templates/root-agents.template.md`;
 - `HUMANS.md`;
 - `README.md`;
 - `docs/ai-workflow/ai/installation.md`;
@@ -42,13 +42,13 @@ This is the repo-level intake artifact for this `ai-workflow` template repositor
 
 This repository is the upstream AI Workflow template, so root `AGENTS.md`, `HUMANS.md`, `docs/ai-workflow/`, `scripts/ai-workflow/`, and `.github/workflows/ai-workflow-validate.yml` are template-owned here.
 
-In a target repository, AI Workflow must be installed as a nested clone at `ai-workflow/`. The only target-root file copied or merged by default is `AGENTS.md` from `ai-workflow/root-agents.template.md`. Target-root `docs/`, `scripts/`, `.github/`, `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, product code, app config, CI, and deployment files remain target-owned.
+In a target repository, AI Workflow must be installed as a nested clone at `ai-workflow/`. The only target-root file copied or merged by default is `AGENTS.md` from `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md`. Target-root `docs/`, `scripts/`, `.github/`, `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, product code, app config, CI, and deployment files remain target-owned.
 
 | Path | Owner | Status | Resolution |
 | --- | --- | --- | --- |
 | `README.md` | AI Workflow upstream | `current` | Template README for this repo; target repos must not overwrite their README. |
 | `AGENTS.md` | AI Workflow upstream | `current` | Internal execution contract for this repo and nested clones; target repos use the shim template, not a direct copy of this file. |
-| `root-agents.template.md` | AI Workflow upstream | `current` | Target-repository root `AGENTS.md` shim source. |
+| `docs/ai-workflow/ai/templates/root-agents.template.md` | AI Workflow upstream | `current` | Target-repository root `AGENTS.md` shim source. |
 | `HUMANS.md` | AI Workflow upstream | `current` | Human runbook stays at `ai-workflow/HUMANS.md` in target repos; no root `HUMANS.md` copy by default. |
 | `docs/` | AI Workflow upstream | `current` | Template docs in this repo; target-root `docs/` remains target-owned. |
 | `scripts/` | AI Workflow upstream | `current` | Template validators in this repo; target-root `scripts/` remains target-owned. |
@@ -119,7 +119,7 @@ In a target repository, AI Workflow must be installed as a nested clone at `ai-w
 | Check | Result | Notes |
 | --- | --- | --- |
 | `AGENTS.md` exists and remains template-owned | `PASS` | repo-specific layer moved to `docs/ai-workflow/repo/` |
-| `root-agents.template.md` exists | `PASS` | target root shim delegates to `ai-workflow/AGENTS.md` |
+| `docs/ai-workflow/ai/templates/root-agents.template.md` exists | `PASS` | target root shim delegates to `ai-workflow/AGENTS.md` |
 | `HUMANS.md` exists and remains template-owned | `PASS` | human runbook updated |
 | `docs/ai-workflow/ai/` workflow/template docs exist | `PASS` | phase files and templates present |
 | `docs/ai-workflow/repo/context.md` exists as router and `docs/ai-workflow/repo/context/` describes the repository | `PASS` | filled for this template repo |

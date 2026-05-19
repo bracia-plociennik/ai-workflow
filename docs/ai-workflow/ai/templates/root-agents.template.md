@@ -54,7 +54,7 @@ Install AI Workflow with:
 
 ```bash
 git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
-cp ai-workflow/root-agents.template.md AGENTS.md
+cp ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md AGENTS.md
 git -C ai-workflow remote set-url --push origin DISABLED
 ```
 

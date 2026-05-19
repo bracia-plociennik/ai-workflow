@@ -6,7 +6,7 @@ This file is the execution router for agents working in a repository that uses t
 
 Keep this file short. Detailed process rules live in `docs/ai-workflow/ai/`.
 
-When this repository is cloned into a target repository as `ai-workflow/`, the target repository root should contain a small `AGENTS.md` shim created from `root-agents.template.md`. That shim delegates workflow-governed work to this file.
+When this repository is cloned into a target repository as `ai-workflow/`, the target repository root should contain a small `AGENTS.md` shim created from `docs/ai-workflow/ai/templates/root-agents.template.md`. That shim delegates workflow-governed work to this file.
 
 ## Path Resolution
 
@@ -183,7 +183,7 @@ Template-owned docs:
 Workflow-owned install namespaces:
 
 - nested clone directory `ai-workflow/` in the target repository;
-- root target-repository `AGENTS.md` shim created from `ai-workflow/root-agents.template.md`.
+- root target-repository `AGENTS.md` shim created from `ai-workflow/docs/ai-workflow/ai/templates/root-agents.template.md`.
 
 Target-owned roots such as `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, `.github/`, and product code must not be overwritten during installation. Follow `docs/ai-workflow/ai/installation.md`.
 
