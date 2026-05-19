@@ -6,6 +6,18 @@ This file is the execution router for agents working in a repository that uses t
 
 Keep this file short. Detailed process rules live in `docs/ai-workflow/ai/`.
 
+When this repository is cloned into a target repository as `ai-workflow/`, the target repository root should contain a small `AGENTS.md` shim created from `root-agents.template.md`. That shim delegates workflow-governed work to this file.
+
+## Path Resolution
+
+When AI Workflow is used as a nested clone:
+
+- `AI_WORKFLOW_HOME` is the `ai-workflow/` directory.
+- `TARGET_REPO_ROOT` is the parent repository where product code lives.
+- Paths in this file such as `docs/ai-workflow/ai/workflow.md` are relative to `AI_WORKFLOW_HOME`.
+- Product code, application commands, framework commands, tests, builds, migrations, and git state are resolved against `TARGET_REPO_ROOT` unless repo intake records a different safe command directory.
+- Workflow docs, templates, validators, runtime status, project artifacts, memory, and human artifacts are resolved against `AI_WORKFLOW_HOME`.
+
 ## Always Read First
 
 Read in this order before workflow-governed work:
@@ -56,16 +68,17 @@ Never interpret a user command as permission to bypass risk policy, permissions,
 When sources disagree, use this repository-level order:
 
 1. Current repository state for factual implementation truth.
-2. Root `AGENTS.md`.
-3. `docs/ai-workflow/ai/operating-model.md`.
-4. Safety and policy docs in `docs/ai-workflow/ai/`, especially command routing, guide, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
-5. `docs/ai-workflow/ai/workflow.md`.
-6. Current phase file in `docs/ai-workflow/ai/workflow/`.
-7. Relevant skills under `docs/ai-workflow/ai/skills/`, as supporting execution guidance only.
-8. Approved architecture, plan, task spec, or package spec for scope, acceptance criteria, and task-specific decisions only.
-9. Repo runtime artifacts in `docs/ai-workflow/repo/`.
-10. Project runtime artifacts in `docs/ai-workflow/projects/<project>/`.
-11. Memory, chat history, and supporting notes.
+2. Target root `AGENTS.md` shim when this workflow is installed as `ai-workflow/`.
+3. Internal `AGENTS.md` in `AI_WORKFLOW_HOME`.
+4. `docs/ai-workflow/ai/operating-model.md`.
+5. Safety and policy docs in `docs/ai-workflow/ai/`, especially command routing, guide, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
+6. `docs/ai-workflow/ai/workflow.md`.
+7. Current phase file in `docs/ai-workflow/ai/workflow/`.
+8. Relevant skills under `docs/ai-workflow/ai/skills/`, as supporting execution guidance only.
+9. Approved architecture, plan, task spec, or package spec for scope, acceptance criteria, and task-specific decisions only.
+10. Repo runtime artifacts in `docs/ai-workflow/repo/`.
+11. Project runtime artifacts in `docs/ai-workflow/projects/<project>/`.
+12. Memory, chat history, and supporting notes.
 
 Approved project artifacts define what to build, not permission to bypass gates. They cannot weaken safety policy, permissions, risk classification, required evidence, or Definition of Done.
 
@@ -169,11 +182,10 @@ Template-owned docs:
 
 Workflow-owned install namespaces:
 
-- `docs/ai-workflow/`
-- `scripts/ai-workflow/`
-- `.github/workflows/ai-workflow-validate.yml`
+- nested clone directory `ai-workflow/` in the target repository;
+- root target-repository `AGENTS.md` shim created from `ai-workflow/root-agents.template.md`.
 
-Target-owned roots such as `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, and `.github/` must not be overwritten during installation. Follow `docs/ai-workflow/ai/installation.md`.
+Target-owned roots such as `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, `.github/`, and product code must not be overwritten during installation. Follow `docs/ai-workflow/ai/installation.md`.
 
 Repo-specific runtime:
 

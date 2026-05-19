@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.7.0 - 2026-05-19
+
+- Changed the target-repository installation model to a nested clone at `ai-workflow/`.
+- Added `root-agents.template.md` as the only root file that target repositories need to copy or merge.
+- Clarified `TARGET_REPO_ROOT` and `AI_WORKFLOW_HOME` path resolution across the root shim, internal `AGENTS.md`, installation policy, guide, command routing, repo intake, and workflow router.
+- Updated repo intake to treat `ai-workflow/docs/ai-workflow/repo/` as runtime that must be replaced with target-repository facts after installation.
+- Kept target-owned `docs/`, `scripts/`, `.github/`, `README.md`, `HUMANS.md`, and existing `AGENTS.md` out of the default install path.
+
 ## 0.6.0 - 2026-05-19
 
 - Converted repo context into `context.md` router plus detailed entries under `docs/ai-workflow/repo/context/`.

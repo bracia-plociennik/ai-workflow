@@ -2,7 +2,7 @@
 
 This directory contains target-repository-specific workflow runtime artifacts.
 
-`docs/ai-workflow/repo/` is the only canonical home for global facts about the repository that installed this workflow template. Keep workflow-owned files under `docs/ai-workflow/` and `scripts/ai-workflow/` portable and updateable from the upstream template.
+`docs/ai-workflow/repo/` is the only canonical home for global facts about the repository that installed this workflow template. In the default nested-clone install, this directory lives under `AI_WORKFLOW_HOME`, usually `ai-workflow/docs/ai-workflow/repo/` from the target repo root.
 
 ## Files
 
@@ -17,7 +17,7 @@ This directory contains target-repository-specific workflow runtime artifacts.
 ## Rules
 
 - In this upstream `ai-workflow` repository, `context.md`, `context/`, `repo-intake.md`, `status.md`, and `memory.md` may describe `ai-workflow` itself.
-- In a target repository, copied runtime files that still describe `ai-workflow` are stale bootstrap state. `phase-0-repo-intake` must replace them with facts about the current repository before architecture, planning, or implementation.
+- In a target repository, runtime files under `ai-workflow/docs/ai-workflow/repo/` that still describe upstream `ai-workflow` are stale bootstrap state. `phase-0-repo-intake` must replace them with facts about the current repository before architecture, planning, or implementation.
 - Neutral templates for replacing these runtime files live in `docs/ai-workflow/ai/templates/repo/`.
 - Do not store project task specs, QA evidence, or autopilot runtime here; those belong in `docs/ai-workflow/projects/<project>/`.
 - Do not store universal workflow lessons here; those belong in `docs/ai-workflow/ai/external-memory/` and are indexed by `docs/ai-workflow/ai/external-memory.md`.

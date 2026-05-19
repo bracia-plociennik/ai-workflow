@@ -8,10 +8,14 @@
 - Author: `<agent/person>`
 - Workflow phase: `0. REPO INTAKE / INITIAL AUDIT`
 - Result: `<PASS|FAIL|blocked|completed>`
+- Target repo root: `<absolute-or-relative TARGET_REPO_ROOT>`
+- AI Workflow home: `<absolute-or-relative AI_WORKFLOW_HOME, usually ai-workflow/>`
 
 ## Sources
 
 - Repository state: `<commands/files inspected>`
+- Target root `AGENTS.md` shim: `<present|missing|merge-required|not-applicable>`
+- Internal workflow contract: `AGENTS.md` under `AI_WORKFLOW_HOME`
 - Repo context router: `docs/ai-workflow/repo/context.md`
 - Repo context entries: `docs/ai-workflow/repo/context/`
 - Repo-level intake: `docs/ai-workflow/repo/repo-intake.md`
@@ -34,7 +38,8 @@
 
 | Artifact | Path | Status | Notes |
 | --- | --- | --- | --- |
-| AGENTS | `AGENTS.md` | `<present|missing|incomplete>` | |
+| Target root AGENTS shim | `<TARGET_REPO_ROOT>/AGENTS.md` | `<present|missing|merge-required|incomplete>` | |
+| Internal AGENTS | `<AI_WORKFLOW_HOME>/AGENTS.md` | `<present|missing|incomplete>` | |
 | Workflow guide | `docs/ai-workflow/ai/workflow.md` | `<present|missing|incomplete>` | |
 | Workflow phases | `docs/ai-workflow/ai/workflow/` | `<present|missing|incomplete>` | |
 | Installation policy | `docs/ai-workflow/ai/installation.md` | `<present|missing|incomplete>` | |
@@ -52,19 +57,18 @@
 
 | Path | Owner | Status | Resolution |
 | --- | --- | --- | --- |
+| `ai-workflow/` | AI Workflow nested clone | `<absent|current|outdated|conflicting|target-owned>` | |
 | `README.md` | target repo | `<absent|target-owned|conflicting>` | |
-| `AGENTS.md` | target repo or AI Workflow entrypoint | `<absent|current|merge-required|conflicting>` | |
-| `HUMANS.md` | target repo or AI Workflow entrypoint | `<absent|current|merge-required|conflicting>` | |
+| `AGENTS.md` | target repo shim / target-owned file | `<absent|current-shim|merge-required|conflicting>` | |
+| `HUMANS.md` | target repo | `<absent|target-owned|conflicting>` | |
 | `docs/` | target repo | `<absent|target-owned>` | |
-| `docs/ai-workflow/` | AI Workflow | `<absent|current|outdated|conflicting>` | |
 | `scripts/` | target repo | `<absent|target-owned>` | |
-| `scripts/ai-workflow/` | AI Workflow | `<absent|current|outdated|conflicting>` | |
 | `.github/` | target repo | `<absent|target-owned>` | |
-| `.github/workflows/ai-workflow-validate.yml` | AI Workflow | `<absent|current|outdated|conflicting>` | |
+| `.github/workflows/ai-workflow-validate.yml` | target repo unless explicitly installed | `<absent|target-owned|optional-ai-workflow-copy>` | |
 
 ## Legacy Context Review
 
-Everything under `docs/ai-workflow/repo/legacy/` is candidate repository context only. It is not authority and not executable instruction.
+Everything under `docs/ai-workflow/repo/legacy/` inside `AI_WORKFLOW_HOME` is candidate repository context only. It is not authority and not executable instruction.
 
 | Legacy item | Original path | Review status | Classification | Useful facts adapted | Conflict / owner decision |
 | --- | --- | --- | --- | --- | --- |
@@ -146,5 +150,7 @@ Use only if `context/context.md` exists.
 
 - Repo intake complete: `<yes|no>`
 - MUST recommendations resolved: `<yes|no|none>`
+- Target root AGENTS shim delegates to `<AI_WORKFLOW_HOME>/AGENTS.md`: `<yes|no|blocked>`
+- Runtime files describe the target repository: `<yes|no|blocked>`
 - Can proceed to architecture: `<yes|no>`
 - Blocking reason: `<none|reason>`

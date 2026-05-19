@@ -3,6 +3,7 @@ set -euo pipefail
 
 required=(
   "AGENTS.md"
+  "root-agents.template.md"
   "HUMANS.md"
   "README.md"
   "docs/ai-workflow/ai/operating-model.md"

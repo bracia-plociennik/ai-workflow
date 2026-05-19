@@ -10,6 +10,12 @@ Runtime repo intake for a target repository belongs in:
 docs/ai-workflow/repo/repo-intake.md
 ```
 
+When AI Workflow is installed as a nested clone, that path resolves to:
+
+```text
+ai-workflow/docs/ai-workflow/repo/repo-intake.md
+```
+
 The copyable templates for repo runtime artifacts live at:
 
 ```text
@@ -24,12 +30,13 @@ docs/ai-workflow/ai/installation.md
 
 ## Literal Trigger
 
-The user prompt `repo intake` is sufficient after AI Workflow has been copied or merged into a repository.
+The user prompt `repo intake` is sufficient after AI Workflow has been cloned into `ai-workflow/` and the target root `AGENTS.md` shim has been installed or merged.
 
 When the user says `repo intake`, Codex must run repo-level `phase-0-repo-intake` for the current repository and:
 
-- inspect installation collisions;
-- detect stale copied `ai-workflow` runtime under `docs/ai-workflow/repo/`;
+- detect `TARGET_REPO_ROOT` and `AI_WORKFLOW_HOME`;
+- inspect installation collisions, especially root `AGENTS.md` and existing `ai-workflow/`;
+- detect stale upstream runtime under `docs/ai-workflow/repo/` relative to `AI_WORKFLOW_HOME`;
 - inspect `docs/ai-workflow/repo/legacy/` when present;
 - create or refresh `docs/ai-workflow/repo/context.md`, `context/`, `repo-intake.md`, `status.md`, and `memory.md` from `docs/ai-workflow/ai/templates/repo/` when needed;
 - fill those runtime files with current repository facts;
@@ -38,15 +45,15 @@ When the user says `repo intake`, Codex must run repo-level `phase-0-repo-intake
 - record safe environment, restricted zones, high-risk areas, STOP conditions, owner decisions, and evidence;
 - avoid product-code writes.
 
-If required workflow files are missing, root entrypoints need an unresolved merge, or installation collisions are unresolved, `repo intake` must stop with a blocker instead of guessing or overwriting target-owned files.
+If required workflow files are missing, root `AGENTS.md` shim needs an unresolved merge, or installation collisions are unresolved, `repo intake` must stop with a blocker instead of guessing or overwriting target-owned files.
 
 Do not fill this `docs/ai-workflow/ai/repo-intake.md` with target-repository facts. Keeping `docs/ai-workflow/ai` generic makes the workflow template updateable from upstream without conflicts.
 
-If `docs/ai-workflow/repo/context.md`, entries under `docs/ai-workflow/repo/context/`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, or entries under `docs/ai-workflow/repo/memory/` still describe the upstream `ai-workflow` repository after this workflow is copied into another repository, repo intake must treat them as `STALE_RUNTIME_COPY`.
+If `docs/ai-workflow/repo/context.md`, entries under `docs/ai-workflow/repo/context/`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, or entries under `docs/ai-workflow/repo/memory/` still describe the upstream `ai-workflow` repository after this workflow is cloned into another repository, repo intake must treat them as `STALE_RUNTIME_COPY`.
 
 In that case, phase 0 must replace the runtime files with facts about the current repository before architecture, planning, specification, implementation, or autopilot can continue. Use `docs/ai-workflow/ai/templates/repo/` as the neutral source templates.
 
-If the repository had previous workflow rules, prompts, specs, or agent instructions and they were preserved in `docs/ai-workflow/repo/legacy/`, repo intake must treat them as candidate repository context only. Nothing in legacy is an executable instruction. Classify each legacy item as `keep-as-context`, `adapt-to-runtime`, `superseded`, `ignore`, or `owner-decision`.
+If the repository had previous workflow rules, prompts, specs, or agent instructions and they were preserved in `docs/ai-workflow/repo/legacy/` under `AI_WORKFLOW_HOME`, repo intake must treat them as candidate repository context only. Nothing in legacy is an executable instruction. Classify each legacy item as `keep-as-context`, `adapt-to-runtime`, `superseded`, `ignore`, or `owner-decision`.
 
 If the user says old rules existed but they are not preserved and cannot be inspected, record a blocker when correctness, safety, commands, risk, or project scope depends on them. Otherwise record a non-blocking unknown with impact.
 
@@ -64,6 +71,7 @@ It must record, in `docs/ai-workflow/repo/repo-intake.md`:
 
 - metadata and gate result;
 - installation collision status;
+- path resolution for `TARGET_REPO_ROOT` and `AI_WORKFLOW_HOME`;
 - sources reviewed;
 - command map;
 - safe local/test environment;
@@ -94,6 +102,7 @@ Repo-level intake can pass only when:
 - those files describe the current repository, not stale upstream `ai-workflow` runtime state;
 - AI Workflow entrypoints and `docs/ai-workflow/ai/` remain free of target-repo facts;
 - target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, and `.github/` were not overwritten;
+- target root `AGENTS.md` delegates to `ai-workflow/AGENTS.md` or has an owner-approved equivalent merge;
 - repo command policy is discovered or explicitly marked missing;
 - safe environment policy and STOP conditions are explicit;
 - no unresolved blocker prevents project workspace creation or workflow use.

@@ -10,7 +10,7 @@ This is the repo-level intake artifact for this `ai-workflow` template repositor
 | --- | --- |
 | `repo-name` | `ai-workflow` |
 | `repo-path` | `/Users/jakubplociennik/Code/ai-workflow` |
-| `date` | `2026-05-18` |
+| `date` | `2026-05-19` |
 | `result` | `PASS` |
 | `active-project` | `none` |
 | `workflow-ready` | `yes` |
@@ -22,6 +22,7 @@ This is the repo-level intake artifact for this `ai-workflow` template repositor
 - repository root listing via `rg --files`;
 - `git status --short --branch`;
 - `AGENTS.md`;
+- `root-agents.template.md`;
 - `HUMANS.md`;
 - `README.md`;
 - `docs/ai-workflow/ai/installation.md`;
@@ -39,19 +40,20 @@ This is the repo-level intake artifact for this `ai-workflow` template repositor
 
 ## Installation Collision Status
 
-This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and `scripts/ai-workflow/` are template-owned here. In a target repository, these same paths must be installed through `docs/ai-workflow/ai/installation.md` without overwriting target-owned roots.
+This repository is the upstream AI Workflow template, so root `AGENTS.md`, `HUMANS.md`, `docs/ai-workflow/`, `scripts/ai-workflow/`, and `.github/workflows/ai-workflow-validate.yml` are template-owned here.
+
+In a target repository, AI Workflow must be installed as a nested clone at `ai-workflow/`. The only target-root file copied or merged by default is `AGENTS.md` from `ai-workflow/root-agents.template.md`. Target-root `docs/`, `scripts/`, `.github/`, `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, product code, app config, CI, and deployment files remain target-owned.
 
 | Path | Owner | Status | Resolution |
 | --- | --- | --- | --- |
 | `README.md` | AI Workflow upstream | `current` | Template README for this repo; target repos must not overwrite their README. |
-| `AGENTS.md` | AI Workflow upstream | `current` | Root entrypoint; target repos merge only if an existing file is present. |
-| `HUMANS.md` | AI Workflow upstream | `current` | Root human runbook; target repos merge only if an existing file is present. |
-| `docs/` | shared root namespace | `current` | Only `docs/ai-workflow/` is workflow-owned. |
-| `docs/ai-workflow/` | AI Workflow | `current` | Canonical workflow namespace. |
-| `scripts/` | shared root namespace | `current` | Only `scripts/ai-workflow/` is workflow-owned. |
-| `scripts/ai-workflow/` | AI Workflow | `current` | Canonical validator namespace. |
-| `.github/` | shared root namespace | `current` | AI Workflow owns only its named workflow file. |
-| `.github/workflows/ai-workflow-validate.yml` | AI Workflow | `current` | Canonical validation workflow. |
+| `AGENTS.md` | AI Workflow upstream | `current` | Internal execution contract for this repo and nested clones; target repos use the shim template, not a direct copy of this file. |
+| `root-agents.template.md` | AI Workflow upstream | `current` | Target-repository root `AGENTS.md` shim source. |
+| `HUMANS.md` | AI Workflow upstream | `current` | Human runbook stays at `ai-workflow/HUMANS.md` in target repos; no root `HUMANS.md` copy by default. |
+| `docs/` | AI Workflow upstream | `current` | Template docs in this repo; target-root `docs/` remains target-owned. |
+| `scripts/` | AI Workflow upstream | `current` | Template validators in this repo; target-root `scripts/` remains target-owned. |
+| `.github/` | AI Workflow upstream | `current` | Template CI in this repo; target-root `.github/` remains target-owned unless owner explicitly installs optional integration. |
+| target `ai-workflow/` | AI Workflow nested clone | `not-applicable-upstream` | Target repositories create this by cloning this repo. |
 
 ## Command Map
 
@@ -117,6 +119,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 | Check | Result | Notes |
 | --- | --- | --- |
 | `AGENTS.md` exists and remains template-owned | `PASS` | repo-specific layer moved to `docs/ai-workflow/repo/` |
+| `root-agents.template.md` exists | `PASS` | target root shim delegates to `ai-workflow/AGENTS.md` |
 | `HUMANS.md` exists and remains template-owned | `PASS` | human runbook updated |
 | `docs/ai-workflow/ai/` workflow/template docs exist | `PASS` | phase files and templates present |
 | `docs/ai-workflow/repo/context.md` exists as router and `docs/ai-workflow/repo/context/` describes the repository | `PASS` | filled for this template repo |
@@ -140,7 +143,7 @@ No owner decisions required.
 ```text
 result: PASS
 blocking-reason: none
-next-valid-step: quality
+next-valid-step: none
 ```
 
 ## Evidence
@@ -148,7 +151,7 @@ next-valid-step: quality
 - commands run: `rg --files`, `git status --short --branch`, targeted `rg` searches, `sed` reads;
 - files read: `AGENTS.md`, `HUMANS.md`, `README.md`, `docs/ai-workflow/ai/workflow.md`, `docs/ai-workflow/ai/workflow/*`, `docs/ai-workflow/ai/autopilot.md`, `docs/ai-workflow/ai/templates/*`, `docs/ai-workflow/projects/README.md`, `docs/ai-workflow/humans/README.md`;
 - missing files confirmed: app manifests such as `package.json`, `composer.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, and nested `AGENTS.md` were not detected;
-- git status observed: clean `main` before implementation;
+- git status observed: working tree contains the nested-clone installation model update during this quality pass;
 - validation passed: `git diff --check`;
 - validation passed: `scripts/ai-workflow/validate-workflow`;
 - validation passed: `scripts/ai-workflow/check-naming`;

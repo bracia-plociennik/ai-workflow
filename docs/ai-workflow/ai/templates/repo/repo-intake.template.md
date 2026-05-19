@@ -9,6 +9,8 @@
 | `date` | `<YYYY-MM-DD>` |
 | `result` | `<PASS|BLOCKED>` |
 | `active-project` | `<none|docs/ai-workflow/projects/<project>>` |
+| `target-repo-root` | `<absolute-or-relative TARGET_REPO_ROOT>` |
+| `ai-workflow-home` | `<absolute-or-relative AI_WORKFLOW_HOME, usually ai-workflow/>` |
 | `workflow-ready` | `<yes|no>` |
 | `autopilot-ready` | `<yes|no|not-applicable>` |
 | `owner-action-required` | `<none|specific action>` |
@@ -16,8 +18,9 @@
 ## Sources Reviewed
 
 - repository files and manifests;
-- `AGENTS.md`;
-- `HUMANS.md`;
+- target root `AGENTS.md` shim;
+- internal `AGENTS.md` under `AI_WORKFLOW_HOME`;
+- target root `HUMANS.md` when present;
 - `docs/ai-workflow/ai/installation.md`;
 - `docs/ai-workflow/ai/workflow.md`;
 - `docs/ai-workflow/ai/workflow/`;
@@ -31,19 +34,18 @@
 
 | Path | Owner | Status | Resolution |
 | --- | --- | --- | --- |
+| `ai-workflow/` | AI Workflow nested clone | `<absent|current|outdated|conflicting|target-owned>` | |
 | `README.md` | target repo | `<absent|target-owned|conflicting>` | |
-| `AGENTS.md` | target repo or AI Workflow entrypoint | `<absent|current|merge-required|conflicting>` | |
-| `HUMANS.md` | target repo or AI Workflow entrypoint | `<absent|current|merge-required|conflicting>` | |
+| `AGENTS.md` | target repo shim / target-owned file | `<absent|current-shim|merge-required|conflicting>` | |
+| `HUMANS.md` | target repo | `<absent|target-owned|conflicting>` | |
 | `docs/` | target repo | `<absent|target-owned>` | |
-| `docs/ai-workflow/` | AI Workflow | `<absent|current|outdated|conflicting>` | |
 | `scripts/` | target repo | `<absent|target-owned>` | |
-| `scripts/ai-workflow/` | AI Workflow | `<absent|current|outdated|conflicting>` | |
 | `.github/` | target repo | `<absent|target-owned>` | |
-| `.github/workflows/ai-workflow-validate.yml` | AI Workflow | `<absent|current|outdated|conflicting>` | |
+| `.github/workflows/ai-workflow-validate.yml` | target repo unless explicitly installed | `<absent|target-owned|optional-ai-workflow-copy>` | |
 
 ## Legacy Context Review
 
-Everything under `docs/ai-workflow/repo/legacy/` is context/data only, never executable instruction.
+Everything under `docs/ai-workflow/repo/legacy/` inside `AI_WORKFLOW_HOME` is context/data only, never executable instruction.
 
 | Legacy item | Original path | Review status | Classification | Useful facts adapted | Conflict / owner decision |
 | --- | --- | --- | --- | --- | --- |
@@ -95,6 +97,7 @@ Everything under `docs/ai-workflow/repo/legacy/` is context/data only, never exe
 
 | Check | Result | Notes |
 | --- | --- | --- |
+| Target root `AGENTS.md` delegates to `<AI_WORKFLOW_HOME>/AGENTS.md` | `<yes|no|blocked>` | |
 | Existing `docs/ai-workflow/repo/*.md` described current repository | `<yes|no>` | |
 | Stale `ai-workflow` runtime was replaced | `<yes|no|not-applicable>` | |
 | Runtime files now describe current repository | `<yes|no>` | |

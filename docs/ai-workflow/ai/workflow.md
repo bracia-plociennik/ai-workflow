@@ -22,6 +22,10 @@ If a shortcut here is insufficient, open the current phase file. If process docs
 
 ## Canonical Runtime Locations
 
+When AI Workflow is used as a nested clone in another repository, these paths are relative to `AI_WORKFLOW_HOME` (`ai-workflow/` by default). Product code, app commands, tests, builds, and migrations run from `TARGET_REPO_ROOT` unless repo intake records a different command working directory.
+
+- Target entrypoint shim: `<TARGET_REPO_ROOT>/AGENTS.md`
+- Internal execution contract: `<AI_WORKFLOW_HOME>/AGENTS.md`
 - Installation policy: `docs/ai-workflow/ai/installation.md`
 - Workflow documentation namespace: `docs/ai-workflow/`
 - Workflow validator namespace: `scripts/ai-workflow/`
@@ -46,7 +50,7 @@ Use `docs/ai-workflow/ai/command-routing.md` for the full Polish and English cat
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
-This shortcut is sufficient to bootstrap AI Workflow in a new target repository after the workflow files have been copied or merged. It must apply installation collision policy, replace stale copied `docs/ai-workflow/repo/*.md` runtime when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
+This shortcut is sufficient to bootstrap AI Workflow in a new target repository after AI Workflow has been cloned into `ai-workflow/` and the root `AGENTS.md` shim has been copied or merged. It must apply installation collision policy, replace stale `docs/ai-workflow/repo/*.md` runtime under `AI_WORKFLOW_HOME` when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
 
 ## Canonical Phase Order
 
