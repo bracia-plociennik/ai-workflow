@@ -47,9 +47,3 @@ This file describes this repository at a global level.
 - Put global repo facts in `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, and `docs/ai-workflow/repo/memory.md`.
 - Put project-specific execution artifacts in `docs/ai-workflow/projects/<project>/`.
 - Put human-facing coordination artifacts in `docs/ai-workflow/humans/<project>/`.
-
-## Open Questions
-
-| Question | Impact | Owner |
-| --- | --- | --- |
-| Should uppercase template filenames be converted from `_` to `-` later? | Naming consistency, larger reference migration. | Owner |

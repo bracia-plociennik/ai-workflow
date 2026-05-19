@@ -132,9 +132,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 
 ## Owner Decisions Required
 
-| Decision | Class | Recommendation | Alternative | Blocks |
-| --- | --- | --- | --- | --- |
-| Uppercase filename separator migration | `high-impact` | Defer to a later dedicated rename task. | Rename now with broad reference migration. | no |
+No owner decisions required.
 
 ## Gate Decision
 
