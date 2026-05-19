@@ -11,7 +11,7 @@
 ## Inputs
 
 - Repo memory: `docs/ai-workflow/repo/memory.md`
-- External workflow memory: `docs/ai-workflow/ai/external-memory.md`
+- External workflow memory: `docs/ai-workflow/ai/external-memory/`
 - Project memory: `docs/ai-workflow/projects/<project>/project-memory.md`
 - Distillations processed:
 - Architecture: `docs/ai-workflow/projects/<project>/architecture/phase-1-architecture.md`
@@ -29,8 +29,14 @@
 | Memory File | Update Summary |
 | --- | --- |
 | `docs/ai-workflow/repo/memory.md` | |
-| `docs/ai-workflow/ai/external-memory.md` | |
+| `docs/ai-workflow/ai/external-memory/` | |
 | `docs/ai-workflow/projects/<project>/project-memory.md` | |
+
+## External Memory Entries
+
+| Entry File | Type | Scope | Privacy Check | Promotion Path |
+| --- | --- | --- | --- | --- |
+| `docs/ai-workflow/ai/external-memory/<YYYY-MM-DD-short-kebab-title>.md` | `<recommendation|rule|anti-pattern|template-change|skill-improvement|open-question>` | `<scope>` | `<pass|fail|n/a>` | `<target|n/a>` |
 
 ## Drift Review
 

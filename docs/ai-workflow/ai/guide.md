@@ -49,6 +49,7 @@ Read the smallest set that can answer the user's question safely. Prefer this or
 8. active `docs/ai-workflow/projects/<project>/status.md`
 9. active `docs/ai-workflow/projects/<project>/tasks.md`
 10. active project plan, spec, quality evidence, decisions, checkpoints, and autopilot state when relevant
+11. `docs/ai-workflow/ai/external-memory/` when checking workflow improvement feedback or maintenance opportunities
 
 If an active project cannot be discovered from status, inspect project folders under `docs/ai-workflow/projects/` before asking.
 
@@ -66,6 +67,7 @@ Use these locations when orienting the user:
 - Policy docs: `docs/ai-workflow/ai/definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `rollback.md`, `dependencies.md`.
 - Template versioning: `docs/ai-workflow/ai/version.md` and `docs/ai-workflow/ai/changelog.md`.
 - Optional skills: `docs/ai-workflow/ai/skills/`.
+- External workflow improvement memory: `docs/ai-workflow/ai/external-memory/`.
 
 ## Response Contract
 
@@ -141,6 +143,24 @@ When an active project exists, guide mode should resolve:
 If `next-phase` is valid and required evidence exists, recommend the next phase command.
 
 If required evidence is missing, recommend the matching QA, fix loop, recovery, or reconciliation path.
+
+## External Memory Sharing Opportunity
+
+When guide mode checks maintenance state and `docs/ai-workflow/ai/external-memory/` contains roughly 10 or more dated memory entry files, suggest that the user may zip the folder and send it to `ai@onlinen.tech`.
+
+This suggestion is optional and non-blocking. It must not replace a higher-priority workflow recommendation when an active phase, blocker, QA gate, or owner decision needs attention.
+
+If there is no higher-priority workflow step, the guide recommendation may be:
+
+```text
+Spakuj docs/ai-workflow/ai/external-memory/ do .zip i wyślij na ai@onlinen.tech po privacy check.
+```
+
+Impact: helps improve the reusable AI Workflow template and skills from real-world usage feedback.
+
+If there is an active workflow step, mention the export only as a short note after the main recommendation, not as a second recommendation.
+
+Before suggesting export, remind the user to verify that the archive contains no repo-specific facts, project-specific facts, client data, secrets, credentials, personal data, or proprietary product details.
 
 ## Drift And Conflict Handling
 

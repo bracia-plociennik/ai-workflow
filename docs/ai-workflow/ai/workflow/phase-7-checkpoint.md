@@ -153,7 +153,9 @@ Checkpoint musi wykonać trzy rzeczy:
 
 `docs/ai-workflow/repo/memory.md` jest agregatem repo-level. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
 
-`docs/ai-workflow/ai/external-memory.md` jest pamięcią uniwersalną dla samego workflow. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
+`docs/ai-workflow/ai/external-memory/` jest pamięcią uniwersalną dla samego workflow. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
+
+Nowy wpis External Memory twórz jako osobny plik `docs/ai-workflow/ai/external-memory/YYYY-MM-DD-short-kebab-title.md` z template'u `docs/ai-workflow/ai/templates/external-memory/date-external-memory.template.md`. Nie dopisuj nowych lekcji do zbiorczego pliku ani do `README.md`.
 
 ## **Minimalny kontrakt project-memory.md i memory.md**
 
@@ -316,10 +318,11 @@ Jeśli `docs/ai-workflow/repo/memory.md` nie istnieje:
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
 - nie zapisuj lokalnej wiedzy projektowej do repo memory tylko dlatego, że repo memory istnieje
 
-Jeśli `docs/ai-workflow/ai/external-memory.md` nie istnieje:
+Jeśli `docs/ai-workflow/ai/external-memory/` nie istnieje:
 
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy uniwersalnej wiedzy workflow
 - nie zapisuj repo-specific ani project-specific wiedzy do external memory
+- każdy nowy wpis musi być osobnym plikiem datowanym i zapisanym według template'u external memory
 
 ## **Zakaz mechanicznego merge**
 
@@ -358,7 +361,7 @@ Wykonaj checkpoint projektu.
 Wejście:
 - docs/ai-workflow/projects/<project>/project-memory.md
 - docs/ai-workflow/repo/memory.md
-- docs/ai-workflow/ai/external-memory.md
+- docs/ai-workflow/ai/external-memory/
 - wszystkie phase-6-<task-id>-distillation.md z memory-in-repo-memory: false
 - aktualny stan repo
 - aktualna architektura
@@ -369,7 +372,7 @@ Wykonaj:
 - kompresję i deduplikację informacji
 - aktualizację project-memory.md
 - aktualizację docs/ai-workflow/repo/memory.md tylko dla wiedzy repo-level
-- aktualizację docs/ai-workflow/ai/external-memory.md tylko dla uniwersalnej wiedzy workflow
+- aktualizację docs/ai-workflow/ai/external-memory/ tylko dla uniwersalnej wiedzy workflow
 - walidację zgodności między:
   - architekturą
   - implementacją

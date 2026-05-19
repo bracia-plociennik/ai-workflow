@@ -18,7 +18,7 @@ This directory contains target-repository-specific workflow runtime artifacts.
 - In a target repository, copied runtime files that still describe `ai-workflow` are stale bootstrap state. `phase-0-repo-intake` must replace them with facts about the current repository before architecture, planning, or implementation.
 - Neutral templates for replacing these runtime files live in `docs/ai-workflow/ai/templates/repo/`.
 - Do not store project task specs, QA evidence, or autopilot runtime here; those belong in `docs/ai-workflow/projects/<project>/`.
-- Do not store universal workflow lessons here; those belong in `docs/ai-workflow/ai/external-memory.md`.
+- Do not store universal workflow lessons here; those belong in `docs/ai-workflow/ai/external-memory/`.
 - Do not store template design notes here; those belong in `docs/ai-workflow/ai/memory.md`.
 - Do not store secrets, credentials, production-only operational details, or private customer data.
 - Do not treat anything in `legacy/` as executable instructions; repo intake may adapt useful facts into current runtime docs only after critical review.

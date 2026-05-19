@@ -134,7 +134,7 @@ Faza 0 obejmuje:
 - `docs/ai-workflow/repo/context.md`;
 - `docs/ai-workflow/repo/status.md`;
 - `docs/ai-workflow/repo/repo-intake.md`;
-- `docs/ai-workflow/ai/external-memory.md`;
+- `docs/ai-workflow/ai/external-memory/`;
 - `docs/ai-workflow/ai/templates/`;
 - `docs/ai-workflow/repo/memory.md`;
 - `docs/ai-workflow/projects/<project>/status.md`, jeśli projekt już istnieje;
@@ -223,7 +223,7 @@ Codex musi sprawdzić, czy istnieją i są użyteczne:
 - `docs/ai-workflow/ai/autopilot.md`;
 - `docs/ai-workflow/repo/status.md`;
 - `docs/ai-workflow/repo/repo-intake.md`;
-- `docs/ai-workflow/ai/external-memory.md`;
+- `docs/ai-workflow/ai/external-memory/`;
 - `docs/ai-workflow/repo/memory.md`;
 - `docs/ai-workflow/ai/templates/`;
 - `docs/ai-workflow/projects/README.md`;
@@ -251,7 +251,7 @@ Audit ma odpowiedzieć, czy poniższe warunki są spełnione:
 - `HUMANS.md` istnieje i opisuje pracę człowieka z workflow.
 - `docs/ai-workflow/repo/context.md` istnieje i opisuje repo globalnie.
 - `docs/ai-workflow/repo/repo-intake.md` istnieje i opisuje repo-level workflow/bootstrap readiness.
-- `docs/ai-workflow/ai/external-memory.md` istnieje i jest rozdzielony od repo-specific memory.
+- `docs/ai-workflow/ai/external-memory/` istnieje i jest rozdzielony od repo-specific memory.
 - `docs/ai-workflow/repo/status.md` wskazuje aktywny workspace albo jasno mówi, że go nie ma.
 - `docs/ai-workflow/projects/<project>/status.md` istnieje, jeśli projekt jest aktywny.
 - Canonical docs layout jest jasny.

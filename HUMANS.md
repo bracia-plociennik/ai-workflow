@@ -14,6 +14,24 @@ Ten dokument jest dla:
 
 Jeśli w dowolnym momencie nie wiesz, co zrobić dalej, możesz napisać do Codexa: `jak zacząć`, `co teraz`, `co dalej` albo `zgubiłem się`. AI Workflow powinien wtedy wejść w guide mode: przeczytać statusy i artefakty, podać aktualny stan, jedną rekomendację z wpływem oraz jedną alternatywę z wpływem.
 
+## External Memory I Rozwój Workflow
+
+Podczas pracy z AI Workflow mogą powstawać wpisy External Memory w `docs/ai-workflow/ai/external-memory/`.
+
+To są uniwersalne lekcje dla rozwoju samego `ai-workflow`: rekomendacje, antywzorce, pomysły na lepsze gate'y, evidence, autopilota, recovery, template'y albo skills. Nie zapisuj tam faktów lokalnego repo, decyzji konkretnego projektu, danych klienta, sekretów ani szczegółów produktu.
+
+Jeśli Codex wykryje lekcję, która może pomóc w wielu repozytoriach, powinien zaproponować albo utworzyć osobny wpis External Memory z template'u `docs/ai-workflow/ai/templates/external-memory/date-external-memory.template.md`. Taki wpis jest advisory: nie zmienia zasad workflow, dopóki nie zostanie ręcznie promowany do `AGENTS.md`, `HUMANS.md`, workflow docs, template'ów albo skills.
+
+Kiedy uzbierasz sensowną paczkę, na przykład 10-20-30 wpisów, możesz spakować katalog i wysłać go na `ai@onlinen.tech`. To pomoże rozwijać narzędzie.
+
+Przykładowo:
+
+```bash
+zip -r ai-workflow-external-memory.zip docs/ai-workflow/ai/external-memory/
+```
+
+Przed wysłaniem sprawdź, czy archiwum nie zawiera danych repo-specific, project-specific, klienta, sekretów ani informacji, których nie chcesz udostępniać.
+
 ## Przykłady poleceń
 
 Poniżej są krótkie, praktyczne przykłady poleceń dla Codexa. Pełny katalog wariantów po polsku i angielsku, razem z regułami interpretacji skrótów, jest w `docs/ai-workflow/ai/command-routing.md`.
@@ -892,7 +910,7 @@ Kiedy nie wiesz, co wolno zrobić albo jaka faza jest aktualna, czytaj źródła
 5. `docs/ai-workflow/ai/autopilot.md` - checklist startu i warunki działania autopilota.
 6. `docs/ai-workflow/repo/context.md` - globalny opis repo.
 7. `docs/ai-workflow/repo/repo-intake.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
-8. `docs/ai-workflow/ai/external-memory.md` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
+8. `docs/ai-workflow/ai/external-memory/` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
 9. `docs/ai-workflow/repo/status.md` - repo-level status bieżącej pracy.
 10. `docs/ai-workflow/projects/<project>/status.md` - project-local status bieżącej pracy.
 11. `docs/ai-workflow/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
@@ -941,7 +959,7 @@ Znaczenie katalogów:
 
 W upstreamowym repo `ai-workflow` pliki `docs/ai-workflow/repo/context.md`, `repo-intake.md`, `status.md` i `memory.md` mogą opisywać samo `ai-workflow`. Po skopiowaniu workflow do innego repo, np. aplikacji Laravel, te pliki są tylko skopiowanym runtime. Repo intake musi je zastąpić faktami o aktualnym repo, używając neutralnych template'ów z `docs/ai-workflow/ai/templates/repo/`.
 
-`docs/ai-workflow/ai/external-memory.md` jest miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
+`docs/ai-workflow/ai/external-memory/` jest miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
 
 `docs/ai-workflow/humans/` nie jest miejscem na specs, QA evidence ani runtime. To miejsce na dokumenty dla ludzi.
 

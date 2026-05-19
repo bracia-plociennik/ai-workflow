@@ -95,7 +95,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 - secret-bearing files such as `.env*`;
 - generated/runtime/cache/build artifacts;
 - dependency directories;
-- `docs/ai-workflow/ai/external-memory.md` unless promoting a universal workflow lesson;
+- `docs/ai-workflow/ai/external-memory/` unless promoting a universal workflow lesson;
 - example artifacts unless the task is explicitly template/example maintenance.
 
 ## Artifact Reconciliation

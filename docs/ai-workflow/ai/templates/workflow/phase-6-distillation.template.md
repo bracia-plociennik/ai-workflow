@@ -38,9 +38,10 @@
 
 ## External Workflow Memory Candidate
 
-- Should sync to `docs/ai-workflow/ai/external-memory.md`: `<yes|no>`
+- Should sync to `docs/ai-workflow/ai/external-memory/`: `<yes|no>`
 - Reason:
-- Suggested external memory entry:
+- Suggested external memory entry file: `docs/ai-workflow/ai/external-memory/<YYYY-MM-DD-short-kebab-title>.md`
+- Suggested external memory entry summary:
 
 ## Artifacts Updated
 

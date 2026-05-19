@@ -40,7 +40,7 @@
 | Repo context | `docs/ai-workflow/repo/context.md` | `<present|missing|incomplete>` | |
 | Repo status | `docs/ai-workflow/repo/status.md` | `<present|missing|incomplete>` | |
 | Repo intake | `docs/ai-workflow/repo/repo-intake.md` | `<present|missing|incomplete>` | |
-| External memory | `docs/ai-workflow/ai/external-memory.md` | `<present|missing|incomplete>` | |
+| External memory | `docs/ai-workflow/ai/external-memory/` | `<present|missing|incomplete>` | |
 | Repo memory | `docs/ai-workflow/repo/memory.md` | `<present|missing|incomplete>` | |
 | Project status | `docs/ai-workflow/projects/<project>/status.md` | `<present|missing|incomplete>` | |
 

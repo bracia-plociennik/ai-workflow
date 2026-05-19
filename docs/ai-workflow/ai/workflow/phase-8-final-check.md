@@ -135,7 +135,7 @@ Final Check musi zweryfikować:
   - architekturą
   - `docs/ai-workflow/projects/<project>/project-memory.md`
   - `docs/ai-workflow/repo/memory.md`
-  - `docs/ai-workflow/ai/external-memory.md`, jeśli etap promował uniwersalne lekcje workflow
+  - `docs/ai-workflow/ai/external-memory/`, jeśli etap promował uniwersalne lekcje workflow
   - checkpointami
 - czy rzeczywisty system odpowiada deklarowanemu stanowi
 - czy etap realizuje zamierzony cel systemowy
@@ -162,6 +162,7 @@ FAIL jeśli:
 - project memory utrwala nieprawdziwy stan projektu
 - repo memory utrwala nieprawdziwy stan repo-level
 - external memory utrwala repo-specific albo project-specific wiedzę jako uniwersalną zasadę workflow
+- external memory zawiera wpis bez privacy check albo wpis zapisany jako repo/project-specific fact
 - istnieją niespójności między komponentami wpływające na correctness
 
 ## Relacja do checkpointu
@@ -171,7 +172,7 @@ Final Check zakłada, że:
 - checkpoint został wykonany
 - `docs/ai-workflow/projects/<project>/project-memory.md` jest zsynchronizowany
 - `docs/ai-workflow/repo/memory.md` jest zsynchronizowany, jeśli checkpoint dotyczył wiedzy repo-level
-- `docs/ai-workflow/ai/external-memory.md` jest zsynchronizowany, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow
+- `docs/ai-workflow/ai/external-memory/` jest zsynchronizowany, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow, a użyte wpisy są osobnymi plikami z privacy check
 
 Jeśli checkpoint nie istnieje:
 
@@ -267,7 +268,7 @@ Zweryfikuj cały etap jako system.
 Zasady:
 - oceń zgodność z architekturą
 - oceń zgodność z planem etapu
-- oceń spójność repo, project-memory.md, docs/ai-workflow/repo/memory.md, docs/ai-workflow/ai/external-memory.md jeśli dotyczy, i checkpointów
+- oceń spójność repo, project-memory.md, docs/ai-workflow/repo/memory.md, docs/ai-workflow/ai/external-memory/ jeśli dotyczy, i checkpointów
 - sprawdź brak sprzeczności systemowych
 
 Reguły:

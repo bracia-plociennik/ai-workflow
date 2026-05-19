@@ -21,6 +21,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 - `dependencies.md` - dependency approval and review policy.
 - `deprecation.md` - archive and supersession policy.
 - `version.md` and `changelog.md` - workflow version and migration history.
+- `external-memory/` - universal advisory entries for improving AI Workflow across repositories.
 - `workflow/` - detailed phase-level workflow rules.
 - `templates/` - reusable templates for repo runtime, workflow, autopilot, project, human, and Codex artifacts.
 - `skills/` - optional task-specific execution guidance, empty by default.
@@ -31,6 +32,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 - Project-specific facts belong in `docs/ai-workflow/projects/<project>/`, with accepted project context under `docs/ai-workflow/projects/<project>/context/context.md`.
 - Human-facing coordination docs belong in `docs/ai-workflow/humans/<project>/`.
 - Template/process docs belong in `docs/ai-workflow/ai/`.
+- Universal AI Workflow improvement lessons belong in `docs/ai-workflow/ai/external-memory/`.
 - Reusable AI Workflow skills belong in `docs/ai-workflow/ai/skills/`.
 
 ## Manual Iterations

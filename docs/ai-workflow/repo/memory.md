@@ -12,7 +12,7 @@ No repository-specific memory has been recorded yet.
 
 Populate this file only through checkpoint/final-check updates after the workflow has produced evidence-backed project artifacts.
 
-Universal workflow/process lessons belong in `docs/ai-workflow/ai/external-memory.md`.
+Universal workflow/process lessons belong in `docs/ai-workflow/ai/external-memory/`.
 Template maintenance memory belongs in `docs/ai-workflow/ai/memory.md`.
 
 ## Rules

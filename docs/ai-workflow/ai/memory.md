@@ -11,7 +11,7 @@ Use it for durable facts, decisions, and maintenance notes about this template r
 | Artifact | Scope | Use For |
 | --- | --- | --- |
 | `docs/ai-workflow/ai/memory.md` | this workflow template | template maintenance facts and template-local history |
-| `docs/ai-workflow/ai/external-memory.md` | universal workflow/process memory | reusable lessons to promote into future versions |
+| `docs/ai-workflow/ai/external-memory/` | universal workflow/process memory | reusable lessons to promote into future versions |
 | `docs/ai-workflow/repo/memory.md` | target repository | aggregate repo-local facts after checkpoints/final checks |
 | `docs/ai-workflow/projects/<project>/project-memory.md` | one project workspace | project-specific facts and lessons |
 
@@ -24,4 +24,4 @@ No template-specific memory has been recorded yet.
 - Do not store target-repo facts here.
 - Do not store project-specific task implementation details here.
 - Do not store secrets, credentials, customer data, or production-only operational details.
-- Promote reusable workflow lessons to `docs/ai-workflow/ai/external-memory.md` when they should affect future template versions.
+- Promote reusable workflow lessons to `docs/ai-workflow/ai/external-memory/` when they should affect future template versions.

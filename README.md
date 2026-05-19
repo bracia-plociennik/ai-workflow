@@ -19,7 +19,7 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
 - `docs/ai-workflow/ai/workflow/` - detailed process rules for every phase.
 - `docs/ai-workflow/ai/autopilot.md` - autopilot behavior, gates, runtime files, retry policy, and STOP conditions.
 - `docs/ai-workflow/ai/memory.md` - template-local memory for this workflow repository.
-- `docs/ai-workflow/ai/external-memory.md` - universal workflow/process memory for improving this template across repositories.
+- `docs/ai-workflow/ai/external-memory/` - universal workflow/process memory for improving this template across repositories.
 - `docs/ai-workflow/ai/templates/` - reusable templates for repo runtime, workflow, project, human, and autopilot artifacts.
 - `docs/ai-workflow/ai/skills/` - optional task-specific skills for AI Workflow, empty by default.
 - `docs/ai-workflow/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
@@ -101,7 +101,7 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
 - `docs/ai-workflow/repo/repo-intake.md` exists and has been filled for the target repository.
 - copied `ai-workflow` runtime files under `docs/ai-workflow/repo/*.md` have been replaced when the current repo is not `ai-workflow`.
 - old workflow instructions, prompts, specs, and guidance are preserved in `docs/ai-workflow/repo/legacy/` when present and reviewed as context only.
-- `docs/ai-workflow/ai/external-memory.md` exists and is kept universal, not repo-specific.
+- `docs/ai-workflow/ai/external-memory/` exists and is kept universal, not repo-specific.
 - `docs/ai-workflow/repo/status.md` points to the current real workspace or explicitly says no workspace is active.
 - `docs/ai-workflow/projects/<project>/status.md` exists for active project work.
 - `docs/ai-workflow/projects/<project>/context/context.md` exists before architecture work starts.
