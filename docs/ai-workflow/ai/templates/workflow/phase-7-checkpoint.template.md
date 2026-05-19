@@ -10,9 +10,12 @@
 
 ## Inputs
 
-- Repo memory: `docs/ai-workflow/repo/memory.md`
-- External workflow memory: `docs/ai-workflow/ai/external-memory/`
-- Project memory: `docs/ai-workflow/projects/<project>/project-memory.md`
+- Repo memory router: `docs/ai-workflow/repo/memory.md`
+- Repo memory entries: `docs/ai-workflow/repo/memory/`
+- External workflow memory router: `docs/ai-workflow/ai/external-memory.md`
+- External workflow memory entries: `docs/ai-workflow/ai/external-memory/`
+- Project memory router: `docs/ai-workflow/projects/<project>/memory.md`
+- Project memory entries: `docs/ai-workflow/projects/<project>/memory/`
 - Distillations processed:
 - Architecture: `docs/ai-workflow/projects/<project>/architecture/phase-1-architecture.md`
 - Project plan: `docs/ai-workflow/projects/<project>/planning/phase-2-project-plan.md`
@@ -29,8 +32,23 @@
 | Memory File | Update Summary |
 | --- | --- |
 | `docs/ai-workflow/repo/memory.md` | |
+| `docs/ai-workflow/repo/memory/` | |
+| `docs/ai-workflow/ai/external-memory.md` | |
 | `docs/ai-workflow/ai/external-memory/` | |
-| `docs/ai-workflow/projects/<project>/project-memory.md` | |
+| `docs/ai-workflow/projects/<project>/memory.md` | |
+| `docs/ai-workflow/projects/<project>/memory/` | |
+
+## Project Memory Entries
+
+| Entry File | Type | Scope | Status | Router Updated |
+| --- | --- | --- | --- | --- |
+| `docs/ai-workflow/projects/<project>/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<project-decision|project-constraint|project-risk|implementation-note|testing-note|drift-note|watch-item>` | `<scope>` | `<active|superseded|deprecated>` | `<yes|no>` |
+
+## Repo Memory Entries
+
+| Entry File | Type | Scope | Status | Router Updated |
+| --- | --- | --- | --- | --- |
+| `docs/ai-workflow/repo/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<repo-fact|repo-rule|repo-constraint|repo-risk|command-note|integration-note|testing-note|deployment-note>` | `repo-wide` | `<active|superseded|deprecated>` | `<yes|no>` |
 
 ## External Memory Entries
 

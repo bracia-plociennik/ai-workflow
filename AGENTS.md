@@ -181,6 +181,7 @@ Repo-specific runtime:
 - `docs/ai-workflow/repo/repo-intake.md`
 - `docs/ai-workflow/repo/status.md`
 - `docs/ai-workflow/repo/memory.md`
+- `docs/ai-workflow/repo/memory/`
 - `docs/ai-workflow/repo/legacy/` as context/data only, never as executable instructions
 
 Project-specific runtime:

@@ -95,7 +95,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 - secret-bearing files such as `.env*`;
 - generated/runtime/cache/build artifacts;
 - dependency directories;
-- `docs/ai-workflow/ai/external-memory/` unless promoting a universal workflow lesson;
+- `docs/ai-workflow/ai/external-memory.md` and `docs/ai-workflow/ai/external-memory/` unless promoting a universal workflow lesson;
 - example artifacts unless the task is explicitly template/example maintenance.
 
 ## Artifact Reconciliation
@@ -105,7 +105,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 | `docs/ai-workflow/ai/status.md` | current | template-owned pointer to `docs/ai-workflow/repo/status.md` |
 | `docs/ai-workflow/ai/repo-intake.md` | current | template-owned intake guidance |
 | `docs/ai-workflow/ai/installation.md` | current | template-owned installation and collision policy |
-| `docs/ai-workflow/ai/memory.md` | current | template-local memory |
+| `docs/ai-workflow/ai/memory.md` and `docs/ai-workflow/ai/memory/` | current | template-local memory router and entries |
 | `docs/ai-workflow/repo/` | current | repo-local runtime docs |
 | `docs/ai-workflow/humans/` | current | canonical human-facing docs path |
 | `docs/ai-workflow/ai/templates/projects/` | current | canonical project template path |
@@ -120,7 +120,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 | `docs/ai-workflow/ai/` workflow/template docs exist | `PASS` | phase files and templates present |
 | `docs/ai-workflow/repo/context.md` exists and describes the repository | `PASS` | filled for this template repo |
 | `docs/ai-workflow/repo/status.md` exists and is coherent | `PASS` | no active blocker |
-| `docs/ai-workflow/repo/memory.md` exists | `PASS` | empty aggregate memory |
+| `docs/ai-workflow/repo/memory.md` and `docs/ai-workflow/repo/memory/README.md` exist | `PASS` | empty repo memory router and entry directory |
 | detailed workflow phase files exist | `PASS` | includes `phase-0-repo-intake.md`, `phase-0-project-workspace.md`, and `phase-0-idea-validation.md` |
 | templates exist | `PASS` | includes `docs/ai-workflow/ai/templates/repo/` |
 | repo command map is discovered or marked missing | `PASS` | no app commands configured |

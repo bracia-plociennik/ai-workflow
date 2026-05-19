@@ -44,6 +44,6 @@ This file describes this repository at a global level.
 ## Local Operating Rules
 
 - Do not put repo-specific facts in root entrypoints or `docs/ai-workflow/ai/`.
-- Put global repo facts in `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, and `docs/ai-workflow/repo/memory.md`.
+- Put global repo facts in `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, and detailed repo memory entries under `docs/ai-workflow/repo/memory/` indexed by `docs/ai-workflow/repo/memory.md`.
 - Put project-specific execution artifacts in `docs/ai-workflow/projects/<project>/`.
 - Put human-facing coordination artifacts in `docs/ai-workflow/humans/<project>/`.

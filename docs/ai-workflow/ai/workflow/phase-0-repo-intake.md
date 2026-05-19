@@ -25,7 +25,7 @@
 - Missing commands are marked `not configured`, not invented.
 - Autopilot readiness is explicit.
 - Existing target-owned root files and directories were preserved; any required `AGENTS.md` or `HUMANS.md` merge is approved or recorded as blocked.
-- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, and `docs/ai-workflow/repo/memory.md` describe the current repository, not stale upstream runtime state.
+- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, and `docs/ai-workflow/repo/memory/` describe the current repository, not stale upstream runtime state.
 - Legacy material is treated only as candidate repository context, never as authority or executable instructions.
 
 ### Fail criteria
@@ -36,7 +36,7 @@
 - Installation collision exists without owner-approved resolution.
 - Legacy material contains conflicting safety, testing, deploy, migration, approval, or source-of-truth instructions that have not been classified or resolved.
 - Target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, or `.github/` would need to be overwritten.
-- Copied `ai-workflow` runtime facts remain in `docs/ai-workflow/repo/*.md` after intake in a different target repository.
+- Copied `ai-workflow` runtime facts remain in `docs/ai-workflow/repo/*.md` or `docs/ai-workflow/repo/memory/` after intake in a different target repository.
 
 ### Who can approve
 
@@ -71,7 +71,7 @@
 
 ### Writes allowed
 
-- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`.
+- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, `docs/ai-workflow/repo/memory/`.
 - `docs/ai-workflow/repo/legacy/` only when preserving or documenting legacy context with owner intent; do not modify legacy source content except by copying into safe lowercase kebab-case filenames.
 - Do not edit `docs/ai-workflow/ai/templates/repo/` during target-repository intake.
 - Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, or `.github/`.
@@ -134,11 +134,13 @@ Faza 0 obejmuje:
 - `docs/ai-workflow/repo/context.md`;
 - `docs/ai-workflow/repo/status.md`;
 - `docs/ai-workflow/repo/repo-intake.md`;
+- `docs/ai-workflow/ai/external-memory.md`;
 - `docs/ai-workflow/ai/external-memory/`;
 - `docs/ai-workflow/ai/templates/`;
 - `docs/ai-workflow/repo/memory.md`;
+- `docs/ai-workflow/repo/memory/`;
 - `docs/ai-workflow/projects/<project>/status.md`, jeśli projekt już istnieje;
-- `docs/ai-workflow/projects/<project>/project-memory.md`, jeśli projekt już istnieje;
+- `docs/ai-workflow/projects/<project>/memory.md` i `docs/ai-workflow/projects/<project>/memory/`, jeśli projekt już istnieje;
 - `docs/ai-workflow/humans/` jako katalog artefaktów dla człowieka;
 - istniejące intake/architecture/planning/specs/quality/decisions/escalations/distillations/checkpoints/autopilot dla aktywnego projektu;
 - dirty git state i potencjalne konflikty write-set;
@@ -223,13 +225,15 @@ Codex musi sprawdzić, czy istnieją i są użyteczne:
 - `docs/ai-workflow/ai/autopilot.md`;
 - `docs/ai-workflow/repo/status.md`;
 - `docs/ai-workflow/repo/repo-intake.md`;
+- `docs/ai-workflow/ai/external-memory.md`;
 - `docs/ai-workflow/ai/external-memory/`;
 - `docs/ai-workflow/repo/memory.md`;
+- `docs/ai-workflow/repo/memory/`;
 - `docs/ai-workflow/ai/templates/`;
 - `docs/ai-workflow/projects/README.md`;
 - `docs/ai-workflow/projects/<project>/README.md`, jeśli projekt istnieje;
 - `docs/ai-workflow/projects/<project>/status.md`, jeśli projekt istnieje;
-- `docs/ai-workflow/projects/<project>/project-memory.md`, jeśli projekt istnieje;
+- `docs/ai-workflow/projects/<project>/memory.md` i `docs/ai-workflow/projects/<project>/memory/`, jeśli projekt istnieje;
 - `docs/ai-workflow/humans/README.md`;
 - `docs/ai-workflow/humans/<project>/`, jeśli istnieją project-local human docs.
 
@@ -251,7 +255,7 @@ Audit ma odpowiedzieć, czy poniższe warunki są spełnione:
 - `HUMANS.md` istnieje i opisuje pracę człowieka z workflow.
 - `docs/ai-workflow/repo/context.md` istnieje i opisuje repo globalnie.
 - `docs/ai-workflow/repo/repo-intake.md` istnieje i opisuje repo-level workflow/bootstrap readiness.
-- `docs/ai-workflow/ai/external-memory/` istnieje i jest rozdzielony od repo-specific memory.
+- `docs/ai-workflow/ai/external-memory.md` i `docs/ai-workflow/ai/external-memory/` istnieją i są rozdzielone od repo-specific memory.
 - `docs/ai-workflow/repo/status.md` wskazuje aktywny workspace albo jasno mówi, że go nie ma.
 - `docs/ai-workflow/projects/<project>/status.md` istnieje, jeśli projekt jest aktywny.
 - Canonical docs layout jest jasny.
@@ -357,11 +361,12 @@ docs/ai-workflow/repo/context.md
 docs/ai-workflow/repo/repo-intake.md
 docs/ai-workflow/repo/status.md
 docs/ai-workflow/repo/memory.md
+docs/ai-workflow/repo/memory/
 ```
 
 When this workflow is copied or cloned into a different target repository, those runtime files may still describe `ai-workflow`. During repo intake, Codex must treat that as stale bootstrap state, not as valid context.
 
-Detect stale runtime by comparing current repository identity with `docs/ai-workflow/repo/*.md`.
+Detect stale runtime by comparing current repository identity with `docs/ai-workflow/repo/*.md` and `docs/ai-workflow/repo/memory/`.
 
 Stale runtime indicators include:
 
@@ -374,10 +379,10 @@ Stale runtime indicators include:
 If stale runtime is detected:
 
 1. Do not use stale `docs/ai-workflow/repo/context.md` as project or architecture context.
-2. Replace `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, and `docs/ai-workflow/repo/memory.md` with current target-repository facts.
+2. Replace `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, and `docs/ai-workflow/repo/memory/` with current target-repository facts.
 3. Use neutral bootstrap templates from `docs/ai-workflow/ai/templates/repo/`.
 4. Record in `docs/ai-workflow/repo/repo-intake.md` that stale upstream runtime was replaced.
-5. Continue only after runtime files describe the current repository.
+5. Continue only after runtime files and repo memory entries describe the current repository.
 
 If replacement is not allowed or cannot be completed:
 

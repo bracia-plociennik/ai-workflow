@@ -126,6 +126,7 @@ During `phase-0-repo-intake`, replace these runtime files with target-repository
 - `docs/ai-workflow/repo/repo-intake.md`
 - `docs/ai-workflow/repo/status.md`
 - `docs/ai-workflow/repo/memory.md`
+- `docs/ai-workflow/repo/memory/`
 
 If stale upstream runtime cannot be replaced, repo intake must report `STALE_RUNTIME_COPY` and stop before architecture, planning, specification, implementation, or autopilot.
 

@@ -15,7 +15,8 @@ This directory contains project-scoped workflow artifacts for `<Project>`.
 - `distillations/` - task/package distillations after quality PASS.
 - `checkpoints/` - project checkpoint artifacts.
 - `autopilot/` - runtime autopilot artifacts when autopilot is active.
-- `project-memory.md` - project-specific aggregate memory.
+- `memory.md` - project memory router/index.
+- `memory/` - detailed project memory entries.
 - `status.md` - project-local workflow status snapshot.
 - `plans.md` - project-local planning notes.
 - `code-review.md` - project-local review checklist and notes.

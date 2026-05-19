@@ -28,7 +28,7 @@ If a shortcut here is insufficient, open the current phase file. If process docs
 - Repo context: `docs/ai-workflow/repo/context.md`
 - Repo intake: `docs/ai-workflow/repo/repo-intake.md`
 - Repo status: `docs/ai-workflow/repo/status.md`
-- Repo memory: `docs/ai-workflow/repo/memory.md`
+- Repo memory: router `docs/ai-workflow/repo/memory.md`, detailed entries `docs/ai-workflow/repo/memory/`
 - Project status: `docs/ai-workflow/projects/<project>/status.md`
 - Project context: `docs/ai-workflow/projects/<project>/context/context.md`
 - Project task index: `docs/ai-workflow/projects/<project>/tasks.md`

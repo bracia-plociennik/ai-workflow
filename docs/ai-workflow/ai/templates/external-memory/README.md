@@ -10,6 +10,12 @@ External Memory entries belong in:
 docs/ai-workflow/ai/external-memory/
 ```
 
+The router/index is:
+
+```text
+docs/ai-workflow/ai/external-memory.md
+```
+
 Do not use these templates for repository facts, project decisions, task implementation notes, secrets, client data, or product-domain knowledge.
 
 ## Templates

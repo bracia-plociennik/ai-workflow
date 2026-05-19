@@ -10,7 +10,7 @@
 
 ## Inputs
 
-- Project memory: `docs/ai-workflow/projects/EXAMPLE/project-memory.md`
+- Project memory: `docs/ai-workflow/projects/EXAMPLE/memory.md`
 - Distillation: `docs/ai-workflow/projects/EXAMPLE/distillations/phase-6-ex-01-example-task-distillation.md`
 
 ## Distillations Processed

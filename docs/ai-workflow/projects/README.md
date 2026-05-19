@@ -17,11 +17,12 @@ The project workspace is the canonical location for project-specific intake, arc
 ```text
 docs/ai-workflow/projects/<project>/
 ├── status.md
-├── project-memory.md
+├── memory.md
 ├── plans.md
 ├── code-review.md
 ├── README.md
 ├── context/
+├── memory/
 ├── intake/
 ├── architecture/
 ├── planning/
@@ -34,7 +35,7 @@ docs/ai-workflow/projects/<project>/
 └── autopilot/
 ```
 
-Project context belongs in `context/context.md`. Project intake may include `intake/phase-0-idea-validation.md` before context is accepted when the owner starts from a rough idea or brain dump.
+Project context belongs in `context/context.md`. Project memory is indexed by `memory.md`, with detailed entries under `memory/`. Project intake may include `intake/phase-0-idea-validation.md` before context is accepted when the owner starts from a rough idea or brain dump.
 
 ## Template Example
 

@@ -6,7 +6,7 @@
 - Scope: workflow
 - Status: implemented
 - Source: need to develop `ai-workflow` generally without polluting repo-specific memory.
-- Recommendation: keep `docs/ai-workflow/ai/external-memory/` for universal recommendations, rules, and observations about the workflow system itself.
+- Recommendation: keep `docs/ai-workflow/ai/external-memory.md` as the router and `docs/ai-workflow/ai/external-memory/` as the detailed entry directory for universal recommendations, rules, and observations about the workflow system itself.
 - Why it matters: reusable workflow improvements can be collected and later promoted into the standalone `ai-workflow` template without mixing them with one repository's product/domain history.
 - What worked well: separating universal workflow learning from repo and project memory prevents local facts from becoming global rules.
 - What failed or was weak: a single memory namespace made it too easy to mix repo-specific observations with process improvements.
@@ -14,6 +14,7 @@
 - Suggested skills improvement: use external memory to collect reusable skill improvement ideas when project work reveals better AI operating patterns.
 - Applies to:
   - `docs/ai-workflow/ai/external-memory/`
+  - `docs/ai-workflow/ai/external-memory.md`
   - `docs/ai-workflow/ai/README.md`
   - `docs/ai-workflow/repo/repo-intake.md`
   - `docs/ai-workflow/ai/autopilot.md`

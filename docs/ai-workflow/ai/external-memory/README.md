@@ -6,6 +6,8 @@
 
 Use it for universal recommendations, lessons, rules, refinements, anti-patterns, and process observations that should influence future versions of `ai-workflow` across repositories.
 
+The router/index is `docs/ai-workflow/ai/external-memory.md`.
+
 This directory is intentionally not repo-specific.
 
 It does not replace:
@@ -13,9 +15,9 @@ It does not replace:
 - `AGENTS.md` as the execution contract in a concrete repository;
 - `HUMANS.md` as the human operating guide;
 - `docs/ai-workflow/ai/workflow.md` and `docs/ai-workflow/ai/workflow/` as workflow rules;
-- `docs/ai-workflow/ai/memory.md` as template-local aggregate memory;
-- `docs/ai-workflow/repo/memory.md` as repo-specific aggregate memory;
-- `docs/ai-workflow/projects/<project>/project-memory.md` as project-specific aggregate memory;
+- `docs/ai-workflow/ai/memory.md` and `docs/ai-workflow/ai/memory/` as template-local memory router and entries;
+- `docs/ai-workflow/repo/memory.md` and `docs/ai-workflow/repo/memory/` as repo-specific memory router and entries;
+- `docs/ai-workflow/projects/<project>/memory.md` and `docs/ai-workflow/projects/<project>/memory/` as project-specific memory router and entries;
 - repository state as the source of truth for implementation.
 
 ## Relationship To Other Memory Files
@@ -23,9 +25,9 @@ It does not replace:
 | Artifact | Scope | Belongs Here | Does Not Belong Here |
 | --- | --- | --- | --- |
 | `docs/ai-workflow/ai/external-memory/` | universal workflow/process memory | cross-repo workflow improvements, reusable autopilot rules, process anti-patterns, template and skill improvements | repo facts, domain facts, task-specific implementation knowledge |
-| `docs/ai-workflow/ai/memory.md` | this workflow template | template-local maintenance facts and history | target-repo facts or universal workflow lessons |
-| `docs/ai-workflow/repo/memory.md` | one repository | durable facts about this repo, local constraints, local history | generic workflow improvements meant for other repos |
-| `docs/ai-workflow/projects/<project>/project-memory.md` | one project/workspace | durable project decisions, project architecture facts, project-specific lessons | generic workflow system design |
+| `docs/ai-workflow/ai/memory.md` and `docs/ai-workflow/ai/memory/` | this workflow template | template-local maintenance facts and history | target-repo facts or universal workflow lessons |
+| `docs/ai-workflow/repo/memory.md` and `docs/ai-workflow/repo/memory/` | one repository | durable facts about this repo, local constraints, local history | generic workflow improvements meant for other repos |
+| `docs/ai-workflow/projects/<project>/memory.md` and `docs/ai-workflow/projects/<project>/memory/` | one project/workspace | durable project decisions, project architecture facts, project-specific lessons | generic workflow system design |
 | `docs/ai-workflow/projects/<project>/distillations/` | one completed task/package | task-level implementation lessons after PASS | broad rules unless promoted by checkpoint |
 
 ## Source-Of-Truth Rule
@@ -60,6 +62,8 @@ YYYY-MM-DD-short-kebab-title-2.md
 ```
 
 Use `docs/ai-workflow/ai/templates/external-memory/date-external-memory.template.md` for new entries.
+
+After adding or updating an entry, update `docs/ai-workflow/ai/external-memory.md` with only date, topic, type, status, and route.
 
 ## What Belongs Here
 

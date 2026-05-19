@@ -13,8 +13,8 @@
 
 - `docs/ai-workflow/projects/<project>/` exists or is classified as blocked.
 - `docs/ai-workflow/humans/<project>/` exists or is classified as blocked.
-- Project support files exist or are classified: `README.md`, `status.md`, `project-memory.md`, `tasks.md`, `plans.md`, `code-review.md`.
-- Project directories exist or are classified: `context/`, `intake/`, `architecture/`, `planning/`, `specs/`, `quality/`, `decisions/`, `escalations/`, `distillations/`, `checkpoints/`, `autopilot/`.
+- Project support files exist or are classified: `README.md`, `status.md`, `memory.md`, `tasks.md`, `plans.md`, `code-review.md`.
+- Project directories exist or are classified: `context/`, `memory/`, `intake/`, `architecture/`, `planning/`, `specs/`, `quality/`, `decisions/`, `escalations/`, `distillations/`, `checkpoints/`, `autopilot/`.
 - Human directories exist or are classified: `approvals/`, `audits/`, `decisions/`, `plans/`, `runbooks/`, `summaries/`.
 - Repo status points to the active project workspace when the owner selects it as active.
 
@@ -86,7 +86,7 @@ Required project support files:
 
 - `README.md`
 - `status.md`
-- `project-memory.md`
+- `memory.md`
 - `tasks.md`
 - `plans.md`
 - `code-review.md`
@@ -94,6 +94,7 @@ Required project support files:
 Required project directories:
 
 - `context/`
+- `memory/`
 - `intake/`
 - `architecture/`
 - `planning/`
@@ -106,6 +107,8 @@ Required project directories:
 - `autopilot/`
 
 `context/context.md` is the accepted project context. The `context/` directory may also hold briefs, brandbook notes, logos, client guidelines, product notes, and other project-specific source material.
+
+`memory.md` is the project memory router. Detailed project memory entries belong in `memory/`.
 
 After this phase, the owner may place raw idea materials in `context/` before idea validation. `phase-0-idea-validation` must review those materials and must not rely only on chat input when `context/` contains project source files.
 

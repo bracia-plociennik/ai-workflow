@@ -27,7 +27,7 @@
 | --- | --- | --- |
 | `README.md` | `<created|current|missing|blocked>` | |
 | `status.md` | `<created|current|missing|blocked>` | |
-| `project-memory.md` | `<created|current|missing|blocked>` | |
+| `memory.md` | `<created|current|missing|blocked>` | |
 | `tasks.md` | `<created|current|missing|blocked>` | |
 | `plans.md` | `<created|current|missing|blocked>` | |
 | `code-review.md` | `<created|current|missing|blocked>` | |
@@ -37,6 +37,7 @@
 | Directory | Status | Notes |
 | --- | --- | --- |
 | `context/` | `<created|current|missing|blocked>` | |
+| `memory/` | `<created|current|missing|blocked>` | |
 | `intake/` | `<created|current|missing|blocked>` | |
 | `architecture/` | `<created|current|missing|blocked>` | |
 | `planning/` | `<created|current|missing|blocked>` | |

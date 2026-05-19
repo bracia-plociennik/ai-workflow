@@ -16,7 +16,7 @@ Jeśli w dowolnym momencie nie wiesz, co zrobić dalej, możesz napisać do Code
 
 ## External Memory I Rozwój Workflow
 
-Podczas pracy z AI Workflow mogą powstawać wpisy External Memory w `docs/ai-workflow/ai/external-memory/`.
+Podczas pracy z AI Workflow mogą powstawać wpisy External Memory w `docs/ai-workflow/ai/external-memory/`, indeksowane przez router `docs/ai-workflow/ai/external-memory.md`.
 
 To są uniwersalne lekcje dla rozwoju samego `ai-workflow`: rekomendacje, antywzorce, pomysły na lepsze gate'y, evidence, autopilota, recovery, template'y albo skills. Nie zapisuj tam faktów lokalnego repo, decyzji konkretnego projektu, danych klienta, sekretów ani szczegółów produktu.
 
@@ -454,7 +454,7 @@ Oczekiwany efekt:
 - `docs/ai-workflow/repo/context.md` opisuje `WorkshopHub`, nie `ai-workflow`;
 - `docs/ai-workflow/repo/repo-intake.md` zawiera komendy, safe environment i restricted zones tego repo;
 - `docs/ai-workflow/repo/status.md` mówi, że repo jest gotowe albo blokuje dalszą pracę konkretnym powodem;
-- `docs/ai-workflow/repo/memory.md` jest puste albo zawiera wyłącznie repo-local memory dla `WorkshopHub`.
+- `docs/ai-workflow/repo/memory.md` i `docs/ai-workflow/repo/memory/` są puste albo zawierają wyłącznie repo-local memory dla `WorkshopHub`.
 
 ### 2. Repo intake i bezpieczne komendy
 
@@ -910,7 +910,7 @@ Kiedy nie wiesz, co wolno zrobić albo jaka faza jest aktualna, czytaj źródła
 5. `docs/ai-workflow/ai/autopilot.md` - checklist startu i warunki działania autopilota.
 6. `docs/ai-workflow/repo/context.md` - globalny opis repo.
 7. `docs/ai-workflow/repo/repo-intake.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
-8. `docs/ai-workflow/ai/external-memory/` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
+8. `docs/ai-workflow/ai/external-memory.md` i `docs/ai-workflow/ai/external-memory/` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
 9. `docs/ai-workflow/repo/status.md` - repo-level status bieżącej pracy.
 10. `docs/ai-workflow/projects/<project>/status.md` - project-local status bieżącej pracy.
 11. `docs/ai-workflow/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
@@ -925,7 +925,7 @@ Canonical project workspace:
 docs/ai-workflow/projects/<project>/
   status.md
   README.md
-  project-memory.md
+  memory.md
   context/
   intake/
   architecture/
@@ -959,7 +959,7 @@ Znaczenie katalogów:
 
 W upstreamowym repo `ai-workflow` pliki `docs/ai-workflow/repo/context.md`, `repo-intake.md`, `status.md` i `memory.md` mogą opisywać samo `ai-workflow`. Po skopiowaniu workflow do innego repo, np. aplikacji Laravel, te pliki są tylko skopiowanym runtime. Repo intake musi je zastąpić faktami o aktualnym repo, używając neutralnych template'ów z `docs/ai-workflow/ai/templates/repo/`.
 
-`docs/ai-workflow/ai/external-memory/` jest miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
+`docs/ai-workflow/ai/external-memory.md` jest routerem, a `docs/ai-workflow/ai/external-memory/` miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
 
 `docs/ai-workflow/humans/` nie jest miejscem na specs, QA evidence ani runtime. To miejsce na dokumenty dla ludzi.
 

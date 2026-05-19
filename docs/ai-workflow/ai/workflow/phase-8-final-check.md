@@ -133,9 +133,9 @@ Final Check musi zweryfikować:
 - brak sprzeczności między:
   - repo
   - architekturą
-  - `docs/ai-workflow/projects/<project>/project-memory.md`
-  - `docs/ai-workflow/repo/memory.md`
-  - `docs/ai-workflow/ai/external-memory/`, jeśli etap promował uniwersalne lekcje workflow
+  - project memory router `docs/ai-workflow/projects/<project>/memory.md` and entries under `docs/ai-workflow/projects/<project>/memory/`
+  - repo memory router `docs/ai-workflow/repo/memory.md` and entries under `docs/ai-workflow/repo/memory/`
+  - external memory router `docs/ai-workflow/ai/external-memory.md` and entries under `docs/ai-workflow/ai/external-memory/`, jeśli etap promował uniwersalne lekcje workflow
   - checkpointami
 - czy rzeczywisty system odpowiada deklarowanemu stanowi
 - czy etap realizuje zamierzony cel systemowy
@@ -161,6 +161,8 @@ FAIL jeśli:
 - plan etapu nie zgadza się z rzeczywistym stanem systemu
 - project memory utrwala nieprawdziwy stan projektu
 - repo memory utrwala nieprawdziwy stan repo-level
+- project albo repo memory router wskazuje nieistniejący wpis
+- szczegółowy wpis project albo repo memory utrwala wiedzę z niewłaściwego scope'u
 - external memory utrwala repo-specific albo project-specific wiedzę jako uniwersalną zasadę workflow
 - external memory zawiera wpis bez privacy check albo wpis zapisany jako repo/project-specific fact
 - istnieją niespójności między komponentami wpływające na correctness
@@ -170,9 +172,9 @@ FAIL jeśli:
 Final Check zakłada, że:
 
 - checkpoint został wykonany
-- `docs/ai-workflow/projects/<project>/project-memory.md` jest zsynchronizowany
-- `docs/ai-workflow/repo/memory.md` jest zsynchronizowany, jeśli checkpoint dotyczył wiedzy repo-level
-- `docs/ai-workflow/ai/external-memory/` jest zsynchronizowany, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow, a użyte wpisy są osobnymi plikami z privacy check
+- `docs/ai-workflow/projects/<project>/memory.md` i `docs/ai-workflow/projects/<project>/memory/` są zsynchronizowane
+- `docs/ai-workflow/repo/memory.md` i `docs/ai-workflow/repo/memory/` są zsynchronizowane, jeśli checkpoint dotyczył wiedzy repo-level
+- `docs/ai-workflow/ai/external-memory.md` i `docs/ai-workflow/ai/external-memory/` są zsynchronizowane, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow, a użyte wpisy są osobnymi plikami z privacy check
 
 Jeśli checkpoint nie istnieje:
 
@@ -268,7 +270,7 @@ Zweryfikuj cały etap jako system.
 Zasady:
 - oceń zgodność z architekturą
 - oceń zgodność z planem etapu
-- oceń spójność repo, project-memory.md, docs/ai-workflow/repo/memory.md, docs/ai-workflow/ai/external-memory/ jeśli dotyczy, i checkpointów
+- oceń spójność repo, project memory router i wpisów, repo memory router i wpisów, external memory router i wpisów, jeśli dotyczy, oraz checkpointów
 - sprawdź brak sprzeczności systemowych
 
 Reguły:

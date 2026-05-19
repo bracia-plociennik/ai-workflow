@@ -11,7 +11,8 @@
 ### Output required
 
 - Checkpoint artifact under `docs/ai-workflow/projects/<project>/checkpoints/`.
-- Updated `docs/ai-workflow/projects/<project>/project-memory.md` and `docs/ai-workflow/repo/memory.md` when applicable.
+- Updated project memory router `docs/ai-workflow/projects/<project>/memory.md` and detailed entries under `docs/ai-workflow/projects/<project>/memory/` when applicable.
+- Updated repo memory router `docs/ai-workflow/repo/memory.md` and detailed entries under `docs/ai-workflow/repo/memory/` when applicable.
 - Updated task index/status and project status.
 
 ### Pass criteria
@@ -130,7 +131,7 @@ Do not store checkpoint artifacts in `distillations/`; distillations are inputs 
 
 Checkpoint powinien pracować na następujących źródłach:
 
-- `docs/ai-workflow/projects/<project>/project-memory.md`
+- `docs/ai-workflow/projects/<project>/memory.md`
 - `docs/ai-workflow/repo/memory.md`
 - wszystkie pliki `phase-6-<task-id>-distillation.md`, w których:
   - `memory-in-repo-memory: false`
@@ -143,7 +144,7 @@ Checkpoint powinien pracować na następujących źródłach:
 Checkpoint musi wykonać trzy rzeczy:
 
 1. przetworzyć nową wiedzę z niezsynchronizowanych distillation
-2. zaktualizować `docs/ai-workflow/projects/<project>/project-memory.md`
+2. zaktualizować project memory przez wpis w `docs/ai-workflow/projects/<project>/memory/` i router `docs/ai-workflow/projects/<project>/memory.md`
 3. sprawdzić spójność między:
    - architekturą
    - implementacją
@@ -151,17 +152,19 @@ Checkpoint musi wykonać trzy rzeczy:
    - repo memory
    - external workflow memory, jeśli checkpoint wykrył uniwersalną lekcję o procesie
 
-`docs/ai-workflow/repo/memory.md` jest agregatem repo-level. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
+`docs/ai-workflow/repo/memory.md` jest routerem pamięci repo-level. Szczegółowe wpisy zapisuj w `docs/ai-workflow/repo/memory/`. Aktualizuj repo memory tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
 
-`docs/ai-workflow/ai/external-memory/` jest pamięcią uniwersalną dla samego workflow. Aktualizuj go tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
+`docs/ai-workflow/projects/<project>/memory.md` jest routerem pamięci projektu. Szczegółowe wpisy zapisuj w `docs/ai-workflow/projects/<project>/memory/`. Aktualizuj project memory tylko wtedy, gdy wiedza dotyczy tego projektu i będzie potrzebna w kolejnych taskach, planach, QA albo checkpointach.
 
-Nowy wpis External Memory twórz jako osobny plik `docs/ai-workflow/ai/external-memory/YYYY-MM-DD-short-kebab-title.md` z template'u `docs/ai-workflow/ai/templates/external-memory/date-external-memory.template.md`. Nie dopisuj nowych lekcji do zbiorczego pliku ani do `README.md`.
+`docs/ai-workflow/ai/external-memory.md` jest routerem pamięci uniwersalnej, a `docs/ai-workflow/ai/external-memory/` przechowuje szczegółowe wpisy. Aktualizuj je tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
 
-## **Minimalny kontrakt project-memory.md i memory.md**
+Nowy wpis External Memory twórz jako osobny plik `docs/ai-workflow/ai/external-memory/YYYY-MM-DD-short-kebab-title.md` z template'u `docs/ai-workflow/ai/templates/external-memory/date-external-memory.template.md`. Następnie zaktualizuj router `docs/ai-workflow/ai/external-memory.md` tylko o datę, temat, typ, status i route.
 
-Project Memory powinno zawierać wiedzę istotną dla danego projektu.
+## **Minimalny kontrakt project, repo i external memory**
 
-Repo Memory powinno zawierać tylko rzeczy globalnie istotne dla całego repo.
+Project Memory powinno zawierać wiedzę istotną dla danego projektu. `memory.md` jest tylko routerem, a szczegóły trafiają do `memory/`.
+
+Repo Memory powinno zawierać tylko rzeczy globalnie istotne dla całego repo. `docs/ai-workflow/repo/memory.md` jest tylko routerem, a szczegóły trafiają do `docs/ai-workflow/repo/memory/`.
 
 External Memory powinno zawierać tylko rzeczy globalnie istotne dla `ai-workflow` jako systemu, nie dla konkretnego repo.
 
@@ -285,7 +288,7 @@ Atomiczność checkpointu:
 Jeśli wystąpi częściowe wykonanie:
 
 - np.:
-  - `project-memory.md` albo `memory.md` zostało zaktualizowane
+  - project memory router albo repo memory router został zaktualizowany
   - ale nie wszystkie pliki distillation mają ustawione memory-in-repo-memory: true
 
 wtedy:
@@ -298,7 +301,7 @@ wtedy:
 Reguła:
 
 - źródłem prawdy są zawsze pliki distillation z memory-in-repo-memory: false
-- `project-memory.md` i `docs/ai-workflow/repo/memory.md` nie są źródłem prawdy, tylko wynikiem agregacji
+- project memory router, repo memory router i ich katalogi wpisów nie są źródłem prawdy, tylko wynikiem agregacji
 
 Zabronione:
 
@@ -308,21 +311,31 @@ To jest źródło prawdy o tym, czy dana destylacja została już zsynchronizowa
 
 ## **Reguła tworzenia memory files**
 
-Jeśli `docs/ai-workflow/projects/<project>/project-memory.md` nie istnieje:
+Jeśli `docs/ai-workflow/projects/<project>/memory.md` nie istnieje:
 
 - checkpoint powinien go utworzyć
 - nie traktuj tego jako błędu
+
+Jeśli `docs/ai-workflow/projects/<project>/memory/` nie istnieje:
+
+- checkpoint powinien go utworzyć, gdy zapisuje project memory
+- każdy nowy wpis project memory musi być osobnym plikiem datowanym i zapisanym według template'u project memory
 
 Jeśli `docs/ai-workflow/repo/memory.md` nie istnieje:
 
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
 - nie zapisuj lokalnej wiedzy projektowej do repo memory tylko dlatego, że repo memory istnieje
 
-Jeśli `docs/ai-workflow/ai/external-memory/` nie istnieje:
+Jeśli `docs/ai-workflow/repo/memory/` nie istnieje:
 
-- checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy uniwersalnej wiedzy workflow
+- checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
+- każdy nowy wpis repo memory musi być osobnym plikiem datowanym i zapisanym według template'u repo memory
+
+Jeśli `docs/ai-workflow/ai/external-memory.md` albo `docs/ai-workflow/ai/external-memory/` nie istnieje:
+
+- checkpoint może zaproponować ich utworzenie albo utworzyć je, jeśli checkpoint dotyczy uniwersalnej wiedzy workflow
 - nie zapisuj repo-specific ani project-specific wiedzy do external memory
-- każdy nowy wpis musi być osobnym plikiem datowanym i zapisanym według template'u external memory
+- każdy nowy wpis musi być osobnym plikiem datowanym i zapisanym według template'u external memory oraz wpisem w routerze `external-memory.md`
 
 ## **Zakaz mechanicznego merge**
 
@@ -338,7 +351,7 @@ Na końcu checkpointu Codex powinien krótko wypisać:
 
 - które distillation zostały przetworzone
 - które checkboxy zostały zmienione na true
-- jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `project-memory.md`
+- jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `memory.md`
 - jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `docs/ai-workflow/repo/memory.md`, jeśli dotyczy
 - czy wykryto drift
 - klasyfikację driftu:
@@ -359,9 +372,12 @@ Prompt checkpointu powinien brzmieć mniej więcej tak:
 Wykonaj checkpoint projektu.
 
 Wejście:
-- docs/ai-workflow/projects/<project>/project-memory.md
+- docs/ai-workflow/projects/<project>/memory.md
+- docs/ai-workflow/projects/<project>/memory/
 - docs/ai-workflow/repo/memory.md
+- docs/ai-workflow/repo/memory/
 - docs/ai-workflow/ai/external-memory/
+- docs/ai-workflow/ai/external-memory.md
 - wszystkie phase-6-<task-id>-distillation.md z memory-in-repo-memory: false
 - aktualny stan repo
 - aktualna architektura
@@ -370,9 +386,9 @@ Wejście:
 Wykonaj:
 - agregację nowej wiedzy z distillation
 - kompresję i deduplikację informacji
-- aktualizację project-memory.md
-- aktualizację docs/ai-workflow/repo/memory.md tylko dla wiedzy repo-level
-- aktualizację docs/ai-workflow/ai/external-memory/ tylko dla uniwersalnej wiedzy workflow
+- aktualizację docs/ai-workflow/projects/<project>/memory.md i docs/ai-workflow/projects/<project>/memory/ tylko dla wiedzy project-level
+- aktualizację docs/ai-workflow/repo/memory.md i docs/ai-workflow/repo/memory/ tylko dla wiedzy repo-level
+- aktualizację docs/ai-workflow/ai/external-memory.md i docs/ai-workflow/ai/external-memory/ tylko dla uniwersalnej wiedzy workflow
 - walidację zgodności między:
   - architekturą
   - implementacją

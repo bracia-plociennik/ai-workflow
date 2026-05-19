@@ -49,7 +49,7 @@ Read the smallest set that can answer the user's question safely. Prefer this or
 8. active `docs/ai-workflow/projects/<project>/status.md`
 9. active `docs/ai-workflow/projects/<project>/tasks.md`
 10. active project plan, spec, quality evidence, decisions, checkpoints, and autopilot state when relevant
-11. `docs/ai-workflow/ai/external-memory/` when checking workflow improvement feedback or maintenance opportunities
+11. `docs/ai-workflow/ai/external-memory.md` and `docs/ai-workflow/ai/external-memory/` when checking workflow improvement feedback or maintenance opportunities
 
 If an active project cannot be discovered from status, inspect project folders under `docs/ai-workflow/projects/` before asking.
 
@@ -67,7 +67,7 @@ Use these locations when orienting the user:
 - Policy docs: `docs/ai-workflow/ai/definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `rollback.md`, `dependencies.md`.
 - Template versioning: `docs/ai-workflow/ai/version.md` and `docs/ai-workflow/ai/changelog.md`.
 - Optional skills: `docs/ai-workflow/ai/skills/`.
-- External workflow improvement memory: `docs/ai-workflow/ai/external-memory/`.
+- External workflow improvement memory: router `docs/ai-workflow/ai/external-memory.md`, entries `docs/ai-workflow/ai/external-memory/`.
 
 ## Response Contract
 
