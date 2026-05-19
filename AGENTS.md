@@ -12,7 +12,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `docs/ai-workflow/ai/operating-model.md`
-3. Policy docs under `docs/ai-workflow/ai/`, especially `command-routing.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
+3. Policy docs under `docs/ai-workflow/ai/`, especially `command-routing.md`, `guide.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
 4. `docs/ai-workflow/ai/workflow.md`
 5. The current phase file under `docs/ai-workflow/ai/workflow/`
 6. Relevant skills under `docs/ai-workflow/ai/skills/`, when a matching skill exists
@@ -33,7 +33,9 @@ For installing this workflow into a repository or running first repo intake, als
 
 ## Command Routing
 
-Use `docs/ai-workflow/ai/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, and unsafe bypass requests.
+Use `docs/ai-workflow/ai/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, guide requests, and unsafe bypass requests.
+
+If the user asks `co teraz`, `co dalej`, `jak zacząć`, `zgubiłem się`, `what should I do next`, or equivalent, use `docs/ai-workflow/ai/guide.md`. Read status and artifacts first, then give exactly one recommendation with impact and exactly one alternative with impact.
 
 If the user says `repo intake`, treat it as a request to run repo-level `phase-0-repo-intake` for the current repository.
 
@@ -56,7 +58,7 @@ When sources disagree, use this repository-level order:
 1. Current repository state for factual implementation truth.
 2. Root `AGENTS.md`.
 3. `docs/ai-workflow/ai/operating-model.md`.
-4. Safety and policy docs in `docs/ai-workflow/ai/`, especially command routing, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
+4. Safety and policy docs in `docs/ai-workflow/ai/`, especially command routing, guide, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
 5. `docs/ai-workflow/ai/workflow.md`.
 6. Current phase file in `docs/ai-workflow/ai/workflow/`.
 7. Relevant skills under `docs/ai-workflow/ai/skills/`, as supporting execution guidance only.

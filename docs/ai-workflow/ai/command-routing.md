@@ -6,7 +6,7 @@ This file defines how agents should interpret user-facing workflow commands.
 
 It covers natural-language prompts, not shell verification commands. Shell commands for install, lint, test, build, and validation live in `docs/ai-workflow/ai/commands.md` and `docs/ai-workflow/repo/repo-intake.md`.
 
-Use this file when a user gives a short command, phase alias, side-task request, autopilot request, rollback request, recovery request, or unsafe bypass request.
+Use this file when a user gives a short command, phase alias, side-task request, autopilot request, rollback request, recovery request, guide request, or unsafe bypass request.
 
 ## Authority
 
@@ -607,6 +607,41 @@ Routing notes:
 
 - Resume only from the last stable `PASS` with evidence.
 - Drift requires escalation or fix loop.
+
+### Guide / Next Step / Lost / Getting Started
+
+Route through `docs/ai-workflow/ai/guide.md`.
+
+Polish variants:
+
+- `Co teraz?`
+- `Co dalej?`
+- `Jak zacząć?`
+- `Zgubiłem się.`
+- `Pomóż mi wrócić do workflow.`
+- `Nie wiem, jaka jest następna faza.`
+- `Sprawdź status i powiedz, co powinienem zrobić.`
+- `Wgrałem AI Workflow do repo, co mam zrobić dalej?`
+
+English variants:
+
+- `What now?`
+- `What should I do next?`
+- `How do I start?`
+- `I am lost.`
+- `Help me get back to the workflow.`
+- `I do not know the next phase.`
+- `Check status and tell me what I should do.`
+- `I installed AI Workflow in this repo, what should I do next?`
+
+Routing notes:
+
+- Read status and relevant artifacts before recommending work.
+- Fresh install without valid repo runtime should recommend `repo intake`.
+- Active project guidance should identify project, task/package, current phase, next phase, blockers, and evidence state.
+- If status, repo, and artifacts conflict, route to recovery/reconciliation instead of guessing.
+- The response must include exactly one recommendation with impact and exactly one alternative with impact.
+- Guide mode does not write artifacts, start implementation, mark PASS, or bypass gates unless the user gives a separate execution command and gates allow it.
 
 ### Skills Check
 

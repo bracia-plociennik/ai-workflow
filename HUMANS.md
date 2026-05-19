@@ -12,6 +12,8 @@ Ten dokument jest dla:
 
 `HUMANS.md` mówi, jak człowiek ma pracować z systemem. `AGENTS.md` mówi, jak agent ma wykonywać pracę.
 
+Jeśli w dowolnym momencie nie wiesz, co zrobić dalej, możesz napisać do Codexa: `jak zacząć`, `co teraz`, `co dalej` albo `zgubiłem się`. AI Workflow powinien wtedy wejść w guide mode: przeczytać statusy i artefakty, podać aktualny stan, jedną rekomendację z wpływem oraz jedną alternatywę z wpływem.
+
 ## Przykłady poleceń
 
 Poniżej są krótkie, praktyczne przykłady poleceń dla Codexa. Pełny katalog wariantów po polsku i angielsku, razem z regułami interpretacji skrótów, jest w `docs/ai-workflow/ai/command-routing.md`.
@@ -745,6 +747,106 @@ Compare this external review with current WorkshopHub architecture and decisions
 ```
 
 Najważniejsza zasada z przykładu: AI Workflow nie ma spowalniać każdej drobnej pracy. Ma wymusić jasny status, decyzje i evidence tam, gdzie brak kontroli mógłby zepsuć projekt.
+
+## Co jeśli się zgubiłeś
+
+Jeśli nie wiesz, gdzie jesteś w workflow, nie próbuj zgadywać fazy. Poproś Codexa o guide mode. Guide ma przeczytać statusy, taski, intake, checkpointy, evidence i aktualny stan repo, a potem powiedzieć, jaki jest najlepszy następny krok.
+
+Guide nie jest osobną fazą. To tryb orientacyjny: pomaga odzyskać kontekst, ale nie pozwala ominąć gate'ów, risk modelu, evidence, STOP conditions ani final owner approval.
+
+Każda odpowiedź Guide powinna zawierać:
+
+- aktualny status;
+- przeczytane źródła;
+- blockery albo brakujące informacje;
+- dokładnie jedną rekomendację i jej wpływ;
+- dokładnie jedną alternatywę i jej wpływ;
+- gotowy prompt, który możesz wkleić jako następne polecenie.
+
+### Świeżo wgrałeś AI Workflow i nie wiesz, jak zacząć
+
+Pełny prompt:
+
+```text
+Właśnie wgrałem AI Workflow do tego repo i nie wiem, co zrobić dalej. Wejdź w guide mode: sprawdź AGENTS.md, docs/ai-workflow/ai/installation.md, docs/ai-workflow/repo/status.md, repo-intake.md i context.md. Powiedz, czy powinienem zacząć od repo intake, jakie są blockery, podaj jedną rekomendację z wpływem i jedną alternatywę z wpływem. Nie dotykaj product code.
+```
+
+Krótki prompt:
+
+```text
+Jak zacząć?
+```
+
+Typowa rekomendacja Guide:
+
+```text
+repo intake
+```
+
+Wpływ: repo intake zastąpi skopiowane runtime facts informacjami o aktualnym repo, wykryje kolizje instalacyjne, ustali bezpieczne komendy i zatrzyma dalsze fazy przed zgadywaniem.
+
+Typowa alternatywa:
+
+```text
+Sprawdź instalację AI Workflow i powiedz, czy można uruchomić repo intake.
+```
+
+Wpływ: wolniejszy start, ale lepszy wybór, jeśli repo miało już własne `docs/`, `scripts/`, `.github/`, `AGENTS.md` albo `HUMANS.md`.
+
+### Zgubiłeś się w aktywnym projekcie
+
+Pełny prompt:
+
+```text
+Zgubiłem się w tym projekcie. Ostatnio pracowałem nad <project/task>, ale nie wiem, jaka jest aktualna faza. Wejdź w guide mode: przeczytaj docs/ai-workflow/repo/status.md, docs/ai-workflow/projects/<project>/status.md, tasks.md, plan, specs, quality evidence, decisions, checkpoints i git status. Powiedz aktualny status, blockery, jedną rekomendację z wpływem, jedną alternatywę z wpływem i dokładny następny prompt.
+```
+
+Krótki prompt:
+
+```text
+Zgubiłem się, co dalej?
+```
+
+Guide powinien najpierw ustalić:
+
+- aktywny projekt;
+- aktywny task albo package;
+- aktualną fazę;
+- ostatni stabilny `PASS` z evidence;
+- następną dozwoloną fazę;
+- czy status, repo, plan, spec, quality i checkpoint są spójne.
+
+Jeśli status jest spójny, Guide podaje kolejną fazę. Jeśli status jest niespójny, Guide powinien rekomendować recovery albo reconciliation, a nie implementację.
+
+### Workflow przerwał się albo autopilot się zatrzymał
+
+Pełny prompt:
+
+```text
+Workflow przerwał się i chcę bezpiecznie wrócić. Wejdź w guide mode: porównaj repo status, project status, tasks, checkpoint, memory, autopilot state, ledger, events, quality evidence i git status. Nie zgaduj. Podaj jedną rekomendację z wpływem, jedną alternatywę z wpływem i dokładny prompt do wznowienia.
+```
+
+Krótki prompt:
+
+```text
+Pomóż mi wrócić do workflow.
+```
+
+Typowa rekomendacja, gdy są konflikty:
+
+```text
+Wznów workflow po przerwaniu. Przeczytaj status, tasks, checkpoint, memory i git status, porównaj je z repo i kontynuuj tylko od ostatniego stabilnego PASS z evidence.
+```
+
+Wpływ: chroni przed pracą na fałszywym statusie i przed oznaczeniem PASS bez evidence.
+
+Typowa alternatywa:
+
+```text
+Sprawdź status i powiedz, od której fazy można bezpiecznie kontynuować. Nie zapisuj artefaktów.
+```
+
+Wpływ: szybciej odzyskasz orientację, ale może nie rozwiązać pełnego driftu między repo, statusem i artefaktami.
 
 ## Model mentalny
 

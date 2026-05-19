@@ -11,6 +11,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 - `installation.md` - safe installation and collision policy for existing repositories.
 - `autopilot.md` - autopilot launch and runtime rules.
 - `command-routing.md` - user-facing workflow command aliases and interpretation rules.
+- `guide.md` - orientation rules for lost, starting, next-step, and recovery prompts.
 - `definition-of-done.md` - evidence-backed done criteria.
 - `risk-model.md` - risk classes and approval routing.
 - `commands.md` - verification command contract.

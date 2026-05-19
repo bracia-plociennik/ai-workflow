@@ -8,6 +8,7 @@
 - Clarified that target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, and `.github/` must not be overwritten.
 - Added `docs/ai-workflow/ai/skills/` as the reserved space for reusable task-specific workflow skills.
 - Added `docs/ai-workflow/ai/command-routing.md` as the bilingual catalog for user-facing workflow commands and safe command interpretation.
+- Added `docs/ai-workflow/ai/guide.md` for lost-user, next-step, fresh-start, and recovery guidance.
 - Added `phase-0-project-workspace` for creating project and human workspaces after repo intake.
 - Moved project context into the dedicated `context/context.md` project context directory.
 - Added human-facing `plans.template.md`.

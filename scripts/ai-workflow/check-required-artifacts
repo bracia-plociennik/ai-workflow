@@ -10,6 +10,7 @@ required=(
   "docs/ai-workflow/ai/workflow.md"
   "docs/ai-workflow/ai/autopilot.md"
   "docs/ai-workflow/ai/command-routing.md"
+  "docs/ai-workflow/ai/guide.md"
   "docs/ai-workflow/ai/definition-of-done.md"
   "docs/ai-workflow/ai/permissions.md"
   "docs/ai-workflow/ai/risk-model.md"
