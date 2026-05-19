@@ -12,6 +12,342 @@ Ten dokument jest dla:
 
 `HUMANS.md` mówi, jak człowiek ma pracować z systemem. `AGENTS.md` mówi, jak agent ma wykonywać pracę.
 
+## Przykłady poleceń
+
+Poniżej są krótkie, praktyczne przykłady poleceń dla Codexa. Pełny katalog wariantów po polsku i angielsku, razem z regułami interpretacji skrótów, jest w `docs/ai-workflow/ai/command-routing.md`.
+
+Polecenia mogą być pełne albo krótkie. Jeśli krótkie polecenie da się jednoznacznie rozstrzygnąć z aktywnego statusu, planu, `tasks.md`, specyfikacji i repo intake, Codex powinien działać przez właściwą fazę. Jeśli brakuje istotnej informacji, powinien dopytać, podając rekomendację z wpływem oraz alternatywę z wpływem. Polecenie użytkownika nie może omijać gate'ów, risk modelu, required evidence ani final owner approval.
+
+### Repo intake
+
+Pełne:
+
+```text
+Uruchom repo intake dla tego repozytorium. Sprawdź instalację AI Workflow, wykryj kolizje, zastąp stale docs/ai-workflow/repo runtime faktami tego repo, uzupełnij komendy, safe env, restricted zones i STOP conditions. Nie dotykaj product code.
+```
+
+Krótkie:
+
+```text
+repo intake
+```
+
+### Project workspace
+
+Pełne:
+
+```text
+Utwórz workspace projektu WorkshopHub w repo GlobalWorkshopsMarket. Przygotuj docs/ai-workflow/projects/workshophub oraz docs/ai-workflow/humans/workshophub na wzor layoutu EXAMPLE, bez kopiowania przykładowych faktów. Jeśli workspace istnieje, sklasyfikuj go jako current, incomplete, conflicting albo duplicate.
+```
+
+Krótkie:
+
+```text
+Utwórz projekt WorkshopHub.
+```
+
+### Walidacja pomysłu
+
+Pełne:
+
+```text
+Uruchom phase-0-idea-validation dla mojego pomysłu. Użyj mojego promptu oraz plików z docs/ai-workflow/projects/<project>/context/. Powiedz, co zostaje, co jest słabe, czego brakuje, jakie decyzje blokują context i czy można przejść dalej.
+```
+
+Krótkie:
+
+```text
+Zweryfikuj mój pomysł.
+```
+
+### Project context
+
+Pełne:
+
+```text
+Utwórz context projektu z zaakceptowanej walidacji pomysłu. Zapisz tylko project-specific fakty w docs/ai-workflow/projects/<project>/context/context.md.
+```
+
+Krótkie:
+
+```text
+Utwórz context projektu.
+```
+
+### Architektura
+
+Pełne:
+
+```text
+Uruchom phase-1-architecture dla <project>. Uwzględnij granice modułów, dane, integracje, testy, rollback, ryzyka i decyzje wymagające owner approval.
+```
+
+Krótkie:
+
+```text
+Zrób architekturę.
+```
+
+### Architecture QA / fix loop
+
+Pełne:
+
+```text
+Uruchom phase-1-architecture-qa. Spróbuj złamać architekturę i daj FAIL, jeśli brakuje testów, rollbacku, permissions, migracji, integracji albo decyzji ryzyka.
+```
+
+Krótkie:
+
+```text
+Zrób QA architektury.
+```
+
+### Plan projektu
+
+Pełne:
+
+```text
+Uruchom phase-2-project-plan. Utwórz sekwencję tasków, zależności, risk class, DoD, spec path, quality path i docs/ai-workflow/projects/<project>/tasks.md.
+```
+
+Krótkie:
+
+```text
+Zrób plan projektu.
+```
+
+### Plan QA / fix loop
+
+Pełne:
+
+```text
+Uruchom phase-2-plan-qa. Sprawdź task IDs, zależności, risk class, spec paths, quality paths, hidden blockers i zgodność planu z tasks.md.
+```
+
+Krótkie:
+
+```text
+Zrób QA planu.
+```
+
+### Task packaging
+
+Pełne:
+
+```text
+Uruchom phase-2-task-packaging. Grupuj tylko niezależne taski i nie pakuj tasków z zależnościami wewnętrznymi albo high-risk bez approval.
+```
+
+Krótkie:
+
+```text
+Spakuj taski.
+```
+
+### Packaging QA / fix loop
+
+Pełne:
+
+```text
+Uruchom phase-2-packaging-qa. Zweryfikuj, czy package ma spójny scope, brak ukrytych zależności, poprawne ryzyka i jasną ścieżkę spec/quality.
+```
+
+Krótkie:
+
+```text
+Zrób QA packagingu.
+```
+
+### Specyfikacja
+
+Pełne:
+
+```text
+Przygotuj phase-3-specification dla <task-id>. Uwzględnij acceptance criteria, out-of-scope, DoD, commands, evidence, risk handling, rollback i stop conditions. Nie implementuj.
+```
+
+Krótkie:
+
+```text
+Przygotuj spec taska.
+```
+
+### Spec QA / fix loop
+
+Pełne:
+
+```text
+Uruchom phase-3-spec-qa dla <task-id>. Failuj spec, jeśli brakuje acceptance criteria, testów, DoD, risk handling, write setu albo evidence expectations.
+```
+
+Krótkie:
+
+```text
+Zrób spec QA.
+```
+
+### Implementacja
+
+Pełne:
+
+```text
+Zaimplementuj <task-id> zgodnie z zaakceptowaną specyfikacją. Modyfikuj tylko dozwolony write set, zatrzymaj high-risk bez approval i nie dotykaj niczego poza scope.
+```
+
+Krótkie:
+
+```text
+Zaimplementuj task.
+```
+
+### Quality / fix loop
+
+Pełne:
+
+```text
+Uruchom phase-5-quality dla <task-id>. Zapisz komendy, wyniki, manual checks, skipped checks z powodem, residual risk i jednoznaczne PASS albo FAIL.
+```
+
+Krótkie:
+
+```text
+Zrób quality.
+```
+
+### Distillation
+
+Pełne:
+
+```text
+Uruchom phase-6-distillation dla ukończonego taska. Zapisz tylko reusable decisions, constraints, risks i lessons, które będą przydatne później.
+```
+
+Krótkie:
+
+```text
+Zrób distillation.
+```
+
+### Checkpoint
+
+Pełne:
+
+```text
+Uruchom phase-7-checkpoint. Porównaj repo, status, tasks, decisions, QA evidence, checkpoint i memory. Zatrzymaj się, jeśli wykryjesz drift.
+```
+
+Krótkie:
+
+```text
+Zrób checkpoint.
+```
+
+### Final check i final-owner-yes
+
+Pełne:
+
+```text
+Uruchom phase-8-final-check dla <project>. Nie zamykaj projektu; jeśli technical pass się uda, zatrzymaj workflow na awaiting-owner-final-yes.
+```
+
+Krótkie:
+
+```text
+Zrób final check.
+```
+
+Zamknięcie po decyzji ownera:
+
+```text
+final-owner-yes: akceptuję zamknięcie zakresu projektu opisanego w final check.
+```
+
+### Side-task
+
+Pełne:
+
+```text
+To jest side-task: <opis>. Potwierdź, że jest mały, lokalny, low-risk, poza aktywnym planem i bez wpływu na auth, billing, migracje, maile, sekrety ani external effects. Potem wykonaj i uruchom właściwe checks.
+```
+
+Krótkie:
+
+```text
+Side-task: popraw tekst CTA.
+```
+
+### Autopilot / autonomous execution
+
+Pełne:
+
+```text
+Uruchom autonomous-execution dla tasków TASK-01..TASK-16 z aktywnego planu, sekwencyjnie, bez real external effects, z commitem dopiero po QUALITY PASS. Zatrzymaj high-risk i critical-risk do owner approval.
+```
+
+Krótkie:
+
+```text
+Zaimplementuj taski 01-16.
+```
+
+Przy krótkim poleceniu Codex powinien najpierw ustalić aktywny projekt, realne task IDs, ryzyko, zależności, gotowość spec QA, safe env i policy commitów. Jeśli nie da się tego ustalić, ma dopytać.
+
+### Review decyzji
+
+Pełne:
+
+```text
+Przejrzyj decyzje AI dla <project>. Pokaż auto-resolvable, high-impact i critical-risk decyzje, rekomendację, alternatywę, impact i czy potrzebna jest decyzja ownera.
+```
+
+Krótkie:
+
+```text
+Przejrzyj decyzje AI.
+```
+
+### Rollback decyzji
+
+Pełne:
+
+```text
+Rollback decyzji <decision-id>. Pokaż impact, wybierz właściwą fazę albo fix loop, zaktualizuj decyzje, architekturę, plan lub spec, jeśli trzeba, i nie implementuj bez spełnionych gate'ów.
+```
+
+Krótkie:
+
+```text
+Cofnij tę decyzję.
+```
+
+### Recovery / resume
+
+Pełne:
+
+```text
+Wznów workflow po przerwaniu. Przeczytaj status, tasks, checkpoint, memory i git status, porównaj je z repo i kontynuuj tylko od ostatniego stabilnego PASS z evidence.
+```
+
+Krótkie:
+
+```text
+Wznów pracę.
+```
+
+### Skills check
+
+Pełne:
+
+```text
+Przed planowaniem albo implementacją sprawdź docs/ai-workflow/ai/skills, czy istnieje skill pasujący do tego taska. Jeśli istnieje, zastosuj go jako dodatkowe guidance bez omijania gate'ów.
+```
+
+Krótkie:
+
+```text
+Sprawdź skills.
+```
+
 ## Przykład wykorzystania
 
 Poniższy przykład pokazuje, jak człowiek może przeprowadzić realny projekt przez AI Workflow. Traktuj go jako inspirację i praktyczny runbook, nie jako sztywny scenariusz do kopiowania 1:1.
@@ -112,9 +448,29 @@ Dobre `repo-intake.md` powinno odpowiedzieć między innymi:
 
 Jeśli safe test database albo fake mail/Stripe strategy nie są jasne, workflow powinien zatrzymać implementację tasków zależnych od tych elementów.
 
-### 3. Walidacja pomysłu
+### 3. Project workspace
 
-Zaczynasz od surowego brain dumpu:
+Po repo intake tworzysz przestrzeń projektu. Nie musisz ręcznie zakładać katalogów ani plików.
+
+```text
+Utwórz workspace projektu WorkshopHub w repo GlobalWorkshopsMarket. Przygotuj docs/ai-workflow/projects/workshophub oraz docs/ai-workflow/humans/workshophub na wzor layoutu EXAMPLE, bez kopiowania przykładowych faktów. Jeśli workspace istnieje, sklasyfikuj go jako current, incomplete, conflicting albo duplicate.
+```
+
+Krótki wariant:
+
+```text
+Utwórz projekt WorkshopHub.
+```
+
+Codex powinien utworzyć albo sklasyfikować `docs/ai-workflow/projects/workshophub/` i `docs/ai-workflow/humans/workshophub/`, w tym katalog `context/` na project context, briefy, brandbooki, logo, wytyczne klienta i inne materiały projektowe. Jeśli workspace już istnieje albo wygląda jak inny projekt, Codex ma zatrzymać się po decyzję ownera.
+
+### 4. Walidacja pomysłu
+
+Po utworzeniu workspace'u możesz wrzucić do `docs/ai-workflow/projects/workshophub/context/` wszystkie surowe materiały, które masz: briefy od klienta, specyfikacje, PDF-y, zdjęcia, logo, brandbooki, notatki, transkrypcje, research i inne dokumenty. Nie musisz jeszcze tworzyć idealnego `context/context.md`.
+
+Faza walidacji pomysłu ma korzystać z tych plików oraz z tego, co napiszesz w czacie. Codex nie powinien walidować pomysłu wyłącznie na podstawie promptu, jeśli w `context/` są już materiały źródłowe.
+
+Zaczynasz od surowego brain dumpu albo od krótkiego polecenia wskazującego na materiały:
 
 ```text
 Mam pomysł na WorkshopHub: landing page, katalog warsztatów, zapisy uczestników, płatność Stripe, mail potwierdzający i panel organizatora.
@@ -123,25 +479,34 @@ Mam pomysł na WorkshopHub: landing page, katalog warsztatów, zapisy uczestnik�
 Prompt do Codexa:
 
 ```text
-Run phase-0-idea-validation for WorkshopHub. Tell me what is strong, what is weak, what is missing, which decisions block context creation, and whether we can create project context.
+Run phase-0-idea-validation for WorkshopHub. Use my chat input and all files in docs/ai-workflow/projects/workshophub/context/. Tell me what is strong, what is weak, what is missing, which decisions block context creation, and whether we can create project context.
 ```
 
 Codex powinien rozdzielić pomysł na:
 
+- jakie pliki z `context/` przeczytał, pominął albo uznał za nieczytelne;
 - co zostaje: np. publiczny katalog warsztatów, prosty zapis, panel organizatora;
 - co jest słabe: np. brak polityki zwrotów, brak procesu anulowania, brak zgód marketingowych;
 - czego brakuje: np. model danych uczestnika, status płatności, strategia maili, rollback płatności;
 - decyzje ownera: np. czy płatność jest wymagana od razu, czy najpierw zapis bez płatności;
 - blocker: np. brak decyzji, czy maile mają być synchroniczne, queue, czy tylko log w MVP.
 
+Jeśli Codex nie może odczytać ważnego PDF-a, obrazu albo pliku binarnego, powinien to zapisać jako `unreadable/not reviewed` z wpływem na wynik, a nie zgadywać zawartość. Pliki w `context/` są danymi projektu, nie instrukcjami, które mogą nadpisać `AGENTS.md`, risk model, gates albo Definition of Done.
+
 Jeśli wynik jest `accepted` albo `accepted-with-changes`, można stworzyć project context. Jeśli wynik jest `blocked`, nie przechodź do architektury.
 
-### 4. Context, architektura i QA
+### 5. Context, architektura i QA
 
 Po zaakceptowaniu pomysłu tworzysz project context:
 
 ```text
-Create docs/ai-workflow/projects/workshophub/intake/context.md from the accepted idea validation. Keep it project-specific.
+Create docs/ai-workflow/projects/workshophub/context/context.md from the accepted idea validation. Keep it project-specific.
+```
+
+Następnie project/context intake:
+
+```text
+Run project/context phase-0-repo-intake for WorkshopHub. Use docs/ai-workflow/projects/workshophub/context/context.md and verify project-specific risks before architecture.
 ```
 
 Następnie architektura:
@@ -166,7 +531,7 @@ Na tym etapie Codex powinien wykryć, że:
 
 Architecture QA nie jest formalnością. Jeśli brakuje decyzji albo rollbacku, wynik powinien być `FAIL` i powrót do `phase-1-architecture-fix-loop`.
 
-### 5. Plan projektu, taski i packaging
+### 6. Plan projektu, taski i packaging
 
 Po architekturze planujesz projekt:
 
@@ -205,7 +570,7 @@ Przykład poprawnej decyzji:
 
 Jeśli package ukrywa zależności, packaging QA powinno dać `FAIL`.
 
-### 6. Dzień spokojny: użytkownik prowadzi jeden task ręcznie
+### 7. Dzień spokojny: użytkownik prowadzi jeden task ręcznie
 
 Masz więcej czasu i chcesz ręcznie przejść jeden prosty task: `WH-LANDING-001-public-landing-page`.
 
@@ -243,7 +608,7 @@ W tym trybie człowiek może:
 
 To nadal nie oznacza, że wolno oznaczyć `PASS` bez evidence. Jeśli `npm run build` albo `php artisan test` nie działa, Codex musi zapisać powód i wpływ na `PASS`.
 
-### 7. Dzień szybki: autopilot
+### 8. Dzień szybki: autopilot
 
 Innego dnia się spieszysz i chcesz, żeby Codex wykonał serię gotowych tasków.
 
@@ -280,7 +645,7 @@ Dobry prompt do wznowienia po STOP:
 Resolve the autopilot stop for WH-PAYMENTS-003. Show the missing owner decisions, recommended safe default, rollback impact, and the exact phase we should return to. Do not implement yet.
 ```
 
-### 8. Side-task bez naruszania workflow
+### 9. Side-task bez naruszania workflow
 
 Side-task to mała, lokalna, niskiego ryzyka zmiana poza aktywnym planem albo jawnie oznaczona przez ownera jako poboczna.
 
@@ -300,7 +665,7 @@ Side-task jest dopuszczalny, jeśli:
 
 Jeśli podczas side-taska okazuje się, że trzeba zmienić flow płatności, dodać pole do bazy, zmienić maila albo ruszyć panel admina, to przestaje być side-task. Wtedy wracasz do normalnego workflow: plan/spec/QA/implementation/quality.
 
-### 9. Review decyzji AI i rollback jednej decyzji
+### 10. Review decyzji AI i rollback jednej decyzji
 
 Po kilku taskach chcesz sprawdzić decyzje podjęte przez AI.
 
@@ -328,7 +693,7 @@ Rollback decyzji nie jest zwykłym `git revert`. Codex powinien ustalić:
 
 Jeśli decyzja dotyczy produkcji, maili, płatności albo danych uczestników, Codex powinien zatrzymać się po decyzję ownera przed implementacją.
 
-### 10. Quality, distillation, checkpoint i final-owner-yes
+### 11. Quality, distillation, checkpoint i final-owner-yes
 
 Po zakończonych taskach uruchamiasz distillation:
 
@@ -401,7 +766,7 @@ Kiedy nie wiesz, co wolno zrobić albo jaka faza jest aktualna, czytaj źródła
 1. `AGENTS.md` - kontrakt wykonawczy dla agenta, stop conditions, quality rules i artifact boundaries.
 2. `docs/ai-workflow/ai/workflow.md` - główny router faz workflow.
 3. `docs/ai-workflow/ai/workflow/<phase>.md` - szczegółowa specyfikacja konkretnej fazy.
-4. `docs/ai-workflow/ai/workflow/overview.md` - globalny opis workflow, statusu, autopilota i recovery.
+4. `docs/ai-workflow/ai/workflow/README.md` - opis katalogu faz workflow i standardu bramek.
 5. `docs/ai-workflow/ai/autopilot.md` - checklist startu i warunki działania autopilota.
 6. `docs/ai-workflow/repo/context.md` - globalny opis repo.
 7. `docs/ai-workflow/repo/repo-intake.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
@@ -421,6 +786,7 @@ docs/ai-workflow/projects/<project>/
   status.md
   README.md
   project-memory.md
+  context/
   intake/
   architecture/
   planning/
@@ -435,7 +801,8 @@ docs/ai-workflow/projects/<project>/
 
 Znaczenie katalogów:
 
-- `intake/`: wejściowy kontekst i audyt repo.
+- `context/`: zaakceptowany kontekst projektu oraz briefy, brandbooki, logo, wytyczne klienta i inne materiały projektowe.
+- `intake/`: walidacja pomysłu i project/context intake.
 - `architecture/`: decyzje architektoniczne i ich QA.
 - `planning/`: plan projektu i packaging.
 - `specs/`: specyfikacje tasków gotowe do implementacji albo dependency-gated.
@@ -462,26 +829,28 @@ Pełny workflow jest wymagany dla zadań wynikających z aktywnego planu projekt
 
 Fazy:
 
-1. `phase-0-idea-validation.md` - weryfikacja brain dumpu / pomysłu przed contextem.
-2. `context.md` - zaakceptowany context projektu.
-3. `phase-0-repo-intake.md` - rozpoznanie repo, komend, struktur, ryzyk, istniejących zasobów.
-4. `phase-1-architecture.md` - decyzje architektoniczne, granice domen, odpowiedzialności komponentów.
-5. `phase-1-architecture-qa.md` - kontrola jakości architektury.
-6. `phase-1-architecture-fix-loop.md` - poprawki architektury po FAIL.
-7. `phase-2-project-plan.md` - sekwencja tasków z kontraktami wykonawczymi.
-8. `phase-2-plan-qa.md` - kontrola planu.
-9. `phase-2-plan-fix-loop.md` - poprawki planu po FAIL.
-10. `phase-2-task-packaging.md` - decyzja, czy taski można grupować.
-11. `phase-2-packaging-qa.md` - QA paczek, jeśli powstały.
-12. `phase-3-specification.md` - spec taska albo paczki.
-13. `phase-3-spec-qa.md` - sprawdzenie, czy spec nadaje się do implementacji.
-14. `phase-3-spec-fix-loop.md` - poprawki specyfikacji po FAIL.
-15. `phase-4-implementation.md` - zmiany w kodzie albo docs zgodne ze specem.
-16. `phase-5-quality.md` - testy, review, manual checks i evidence.
-17. `phase-5-fix-loop.md` - poprawki implementacji po FAIL.
-18. `phase-6-distillation.md` - zapisanie wiedzy po tasku.
-19. `phase-7-checkpoint.md` - synchronizacja po ustalonej kadencji albo drift.
-20. `phase-8-final-check.md` - finalne domknięcie planu, zwykle z owner final approval.
+1. `phase-0-repo-intake.md` - repo-level rozpoznanie repo, komend, struktur, ryzyk i instalacji workflow.
+2. `phase-0-project-workspace.md` - utworzenie albo klasyfikacja przestrzeni projektu i dokumentów dla człowieka.
+3. `phase-0-idea-validation.md` - weryfikacja brain dumpu / pomysłu przed contextem.
+4. `context/context.md` - zaakceptowany context projektu.
+5. project/context `phase-0-repo-intake.md` - audyt projektu i contextu przed architekturą.
+6. `phase-1-architecture.md` - decyzje architektoniczne, granice domen, odpowiedzialności komponentów.
+7. `phase-1-architecture-qa.md` - kontrola jakości architektury.
+8. `phase-1-architecture-fix-loop.md` - poprawki architektury po FAIL.
+9. `phase-2-project-plan.md` - sekwencja tasków z kontraktami wykonawczymi.
+10. `phase-2-plan-qa.md` - kontrola planu.
+11. `phase-2-plan-fix-loop.md` - poprawki planu po FAIL.
+12. `phase-2-task-packaging.md` - decyzja, czy taski można grupować.
+13. `phase-2-packaging-qa.md` - QA paczek, jeśli powstały.
+14. `phase-3-specification.md` - spec taska albo paczki.
+15. `phase-3-spec-qa.md` - sprawdzenie, czy spec nadaje się do implementacji.
+16. `phase-3-spec-fix-loop.md` - poprawki specyfikacji po FAIL.
+17. `phase-4-implementation.md` - zmiany w kodzie albo docs zgodne ze specem.
+18. `phase-5-quality.md` - testy, review, manual checks i evidence.
+19. `phase-5-fix-loop.md` - poprawki implementacji po FAIL.
+20. `phase-6-distillation.md` - zapisanie wiedzy po tasku.
+21. `phase-7-checkpoint.md` - synchronizacja po ustalonej kadencji albo drift.
+22. `phase-8-final-check.md` - finalne domknięcie planu, zwykle z owner final approval.
 
 Reguła jest prosta:
 
@@ -518,8 +887,11 @@ Jeśli status mówi, że następna faza to `phase-4-implementation`, ale spec ni
 Najbezpieczniej wydawać polecenia fazami:
 
 ```text
-idea validation
 repo intake
+utwórz projekt
+idea validation
+utwórz context projektu
+project/context repo intake
 architektura
 qa architektury
 plan projektu

@@ -13,8 +13,9 @@ scripts/ai-workflow/check-qa-evidence
 
 fail=0
 phases=(
-  phase-0-idea-validation.md
   phase-0-repo-intake.md
+  phase-0-project-workspace.md
+  phase-0-idea-validation.md
   phase-1-architecture.md
   phase-1-architecture-qa.md
   phase-1-architecture-fix-loop.md

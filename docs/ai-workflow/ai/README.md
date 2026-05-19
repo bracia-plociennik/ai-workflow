@@ -10,6 +10,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 - `workflow.md` - phase router and canonical phase index.
 - `installation.md` - safe installation and collision policy for existing repositories.
 - `autopilot.md` - autopilot launch and runtime rules.
+- `command-routing.md` - user-facing workflow command aliases and interpretation rules.
 - `definition-of-done.md` - evidence-backed done criteria.
 - `risk-model.md` - risk classes and approval routing.
 - `commands.md` - verification command contract.
@@ -26,7 +27,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 ## Runtime Boundaries
 
 - Repo-specific facts belong in `docs/ai-workflow/repo/`.
-- Project-specific facts belong in `docs/ai-workflow/projects/<project>/`.
+- Project-specific facts belong in `docs/ai-workflow/projects/<project>/`, with accepted project context under `docs/ai-workflow/projects/<project>/context/context.md`.
 - Human-facing coordination docs belong in `docs/ai-workflow/humans/<project>/`.
 - Template/process docs belong in `docs/ai-workflow/ai/`.
 - Reusable AI Workflow skills belong in `docs/ai-workflow/ai/skills/`.

@@ -9,10 +9,18 @@ Use:
 - `../risk-model.md` for approval and risk routing.
 - `../definition-of-done.md` for done criteria.
 
+## Canonical Rule
+
+- Phase files in this directory define phase-specific gates.
+- Policy rules live in `docs/ai-workflow/ai/*.md`.
+- Templates live in `docs/ai-workflow/ai/templates/`.
+- Runtime facts live in `docs/ai-workflow/repo/`, `docs/ai-workflow/projects/<project>/`, and `docs/ai-workflow/humans/<project>/`.
+
 ## Phase Files
 
-- `phase-0-idea-validation.md`
 - `phase-0-repo-intake.md`
+- `phase-0-project-workspace.md`
+- `phase-0-idea-validation.md`
 - `phase-1-architecture.md`
 - `phase-1-architecture-qa.md`
 - `phase-1-architecture-fix-loop.md`
@@ -31,6 +39,14 @@ Use:
 - `phase-6-distillation.md`
 - `phase-7-checkpoint.md`
 - `phase-8-final-check.md`
+
+Phase files are named with the phase number, not execution order. Related QA and fix-loop files keep the phase number of their parent phase.
+
+## Gate Standard
+
+Every phase file must include `## Gate Conditions` with the required headings defined in `docs/ai-workflow/ai/workflow.md`.
+
+`scripts/ai-workflow/validate-workflow` enforces that structure.
 
 ## Maintenance Rule
 

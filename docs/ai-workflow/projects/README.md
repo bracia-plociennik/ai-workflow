@@ -21,6 +21,7 @@ docs/ai-workflow/projects/<project>/
 ├── plans.md
 ├── code-review.md
 ├── README.md
+├── context/
 ├── intake/
 ├── architecture/
 ├── planning/
@@ -33,7 +34,7 @@ docs/ai-workflow/projects/<project>/
 └── autopilot/
 ```
 
-Project intake may include `intake/phase-0-idea-validation.md` before `intake/context.md` when the owner starts from a rough idea or brain dump.
+Project context belongs in `context/context.md`. Project intake may include `intake/phase-0-idea-validation.md` before context is accepted when the owner starts from a rough idea or brain dump.
 
 ## Template Example
 

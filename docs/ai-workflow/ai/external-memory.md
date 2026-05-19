@@ -113,7 +113,7 @@ An entry may be promoted from memory into workflow rules when:
 
 Promotion examples:
 
-- universal process rule -> `docs/ai-workflow/ai/workflow/overview.md`;
+- universal process rule -> `docs/ai-workflow/ai/workflow/README.md`;
 - agent execution rule -> `AGENTS.md`;
 - human operating guidance -> `HUMANS.md`;
 - template change -> `docs/ai-workflow/ai/templates/`;

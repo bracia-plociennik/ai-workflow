@@ -22,6 +22,22 @@ Installation and collision handling is defined in:
 docs/ai-workflow/ai/installation.md
 ```
 
+## Literal Trigger
+
+The user prompt `repo intake` is sufficient after AI Workflow has been copied or merged into a repository.
+
+When the user says `repo intake`, Codex must run repo-level `phase-0-repo-intake` for the current repository and:
+
+- inspect installation collisions;
+- detect stale copied `ai-workflow` runtime under `docs/ai-workflow/repo/`;
+- create or refresh `docs/ai-workflow/repo/context.md`, `repo-intake.md`, `status.md`, and `memory.md` from `docs/ai-workflow/ai/templates/repo/` when needed;
+- fill those runtime files with current repository facts;
+- discover actual install/test/lint/build commands or write `not configured`;
+- record safe environment, restricted zones, high-risk areas, STOP conditions, owner decisions, and evidence;
+- avoid product-code writes.
+
+If required workflow files are missing, root entrypoints need an unresolved merge, or installation collisions are unresolved, `repo intake` must stop with a blocker instead of guessing or overwriting target-owned files.
+
 Do not fill this `docs/ai-workflow/ai/repo-intake.md` with target-repository facts. Keeping `docs/ai-workflow/ai` generic makes the workflow template updateable from upstream without conflicts.
 
 If `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, or `docs/ai-workflow/repo/memory.md` still describe the upstream `ai-workflow` repository after this workflow is copied into another repository, repo intake must treat them as `STALE_RUNTIME_COPY`.
@@ -56,8 +72,9 @@ It must record, in `docs/ai-workflow/repo/repo-intake.md`:
 | --- | --- | --- |
 | `docs/ai-workflow/repo/context.md` | whole repository | global repo description before project work |
 | `docs/ai-workflow/repo/repo-intake.md` | whole repository | workflow/bootstrap readiness after installing `ai-workflow` |
+| `docs/ai-workflow/projects/<project>/` and `docs/ai-workflow/humans/<project>/` | one project | project workspace after repo intake and before idea validation |
 | `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` | one project idea | brain dump validation before context creation |
-| `docs/ai-workflow/projects/<project>/intake/context.md` | one project | accepted project context |
+| `docs/ai-workflow/projects/<project>/context/context.md` | one project | accepted project context |
 | `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md` | one project | project/context-specific audit before architecture |
 
 ## Gate Rule

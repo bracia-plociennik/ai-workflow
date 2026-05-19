@@ -6,7 +6,7 @@
 
 - Repository files are readable.
 - Installation collision policy in `docs/ai-workflow/ai/installation.md` has been reviewed when this workflow was just copied into the repository.
-- `docs/ai-workflow/repo/context.md` exists or can be created from `docs/ai-workflow/ai/templates/repo/repo-context.template.md`.
+- `docs/ai-workflow/repo/context.md` exists or can be created from `docs/ai-workflow/ai/templates/repo/context.template.md`.
 - Existing `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/repo-intake.md`, and project intake artifacts are reconciled when present.
 
 ### Output required
@@ -50,8 +50,8 @@
 
 ### Next allowed phases
 
+- `phase-0-project-workspace` after repo-level intake when a new project workspace is needed.
 - `phase-1-architecture` when project context exists.
-- `phase-0-idea-validation` when the idea/context is still missing.
 - Stop when repo readiness is blocked.
 
 ### Stop conditions
@@ -88,9 +88,9 @@ Fazę 0 można uruchomić, gdy:
 - istnieje konkretna intencja pracy, projekt docs albo materiał wejściowy;
 - użytkownik chce rozpocząć workflow, audyt albo przygotowanie repo pod workflow/autopilot.
 
-Repo-level context powinien być zapisany w `docs/ai-workflow/repo/context.md`. Project-local `context.md` jest opcjonalny dla repo-level intake, ale wymagany przed architekturą konkretnego projektu.
+Repo-level context powinien być zapisany w `docs/ai-workflow/repo/context.md`. Project-local `context/context.md` jest opcjonalny dla repo-level intake, ale wymagany przed architekturą konkretnego projektu.
 
-Jeśli projekt zaczyna się od brain dumpu, najpierw uruchom `000. IDEA VALIDATION`, a dopiero po zaakceptowanym wyniku utwórz `context.md`.
+Jeśli projekt zaczyna się od brain dumpu, najpierw upewnij się, że `phase-0-project-workspace` utworzył workspace, potem uruchom `phase-0-idea-validation`, a dopiero po zaakceptowanym wyniku utwórz `context/context.md`.
 
 Brak aktywnego projektu nie blokuje repo-level intake. W takim przypadku artefaktem fazy jest `docs/ai-workflow/repo/repo-intake.md`, a nie project-local `phase-0-repo-intake.md`.
 
@@ -178,7 +178,7 @@ docs/ai-workflow/repo/repo-intake.md
 Context, jeśli istnieje:
 
 ```text
-docs/ai-workflow/projects/<project>/intake/context.md
+docs/ai-workflow/projects/<project>/context/context.md
 ```
 
 Project/context-specific initial audit:
@@ -187,7 +187,7 @@ Project/context-specific initial audit:
 docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md
 ```
 
-Jeśli aktywny workspace nie istnieje, faza 0 może zakończyć się na `docs/ai-workflow/repo/repo-intake.md` i zaproponować utworzenie workspace'u, ale nie może go stworzyć bez zatwierdzenia użytkownika.
+Jeśli aktywny workspace nie istnieje, repo-level intake może zakończyć się na `docs/ai-workflow/repo/repo-intake.md` i skierować użytkownika do `phase-0-project-workspace`. Repo intake nie tworzy workspace'u samodzielnie.
 
 ## Obowiązkowe sprawdzenia repo
 
@@ -366,9 +366,9 @@ Codex musi rozróżnić:
 
 - `docs/ai-workflow/repo/context.md` - globalny context repo;
 - `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` - walidacja pomysłu projektu, jeśli była potrzebna;
-- `docs/ai-workflow/projects/<project>/intake/context.md` - zaakceptowany context projektu.
+- `docs/ai-workflow/projects/<project>/context/context.md` - zaakceptowany context projektu.
 
-Jeśli istnieje `context.md`, Codex musi:
+Jeśli istnieje `context/context.md`, Codex musi:
 
 1. sprawdzić, czy dotyczy bieżącego repo albo projektu;
 2. wskazać, które informacje są użyteczne dla audytu;

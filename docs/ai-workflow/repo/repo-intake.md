@@ -121,7 +121,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 | `docs/ai-workflow/repo/context.md` exists and describes the repository | `PASS` | filled for this template repo |
 | `docs/ai-workflow/repo/status.md` exists and is coherent | `PASS` | no active blocker |
 | `docs/ai-workflow/repo/memory.md` exists | `PASS` | empty aggregate memory |
-| detailed workflow phase files exist | `PASS` | includes `phase-0-idea-validation.md` |
+| detailed workflow phase files exist | `PASS` | includes `phase-0-repo-intake.md`, `phase-0-project-workspace.md`, and `phase-0-idea-validation.md` |
 | templates exist | `PASS` | includes `docs/ai-workflow/ai/templates/repo/` |
 | repo command map is discovered or marked missing | `PASS` | no app commands configured |
 | safe test environment is known or explicitly missing | `PASS` | not applicable for Markdown-only repo |
@@ -158,4 +158,4 @@ next-valid-step: quality
 - validation passed: `scripts/ai-workflow/check-qa-evidence`;
 - validation passed: no stale legacy path or runtime-blocker references found in the configured reference search;
 - validation passed: optional external review wording appears only in the human runbook;
-- validation passed: workflow route includes `000 idea validation -> context.md -> 0 repo intake / initial audit`.
+- validation passed: workflow route includes repo intake, project workspace, idea validation, project context, and project/context intake before architecture.

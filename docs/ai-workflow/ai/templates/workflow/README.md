@@ -8,8 +8,9 @@ Use these templates as starting points only. The phase rules in `docs/ai-workflo
 
 | Phase | Template | Typical Destination |
 | --- | --- | --- |
-| 0 idea validation | `phase-0-idea-validation.template.md` | `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` |
 | 0 repo intake | `phase-0-repo-intake.template.md` | `docs/ai-workflow/repo/repo-intake.md` or `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md` |
+| 0 project workspace | `phase-0-project-workspace.template.md` | `docs/ai-workflow/projects/<project>/` and `docs/ai-workflow/humans/<project>/` |
+| 0 idea validation | `phase-0-idea-validation.template.md` | `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` |
 | 1 architecture | `phase-1-architecture.template.md` | `docs/ai-workflow/projects/<project>/architecture/phase-1-architecture.md` |
 | 1 architecture QA | `phase-1-architecture-qa.template.md` | `docs/ai-workflow/projects/<project>/quality/phase-1-architecture-qa.md` |
 | 1 architecture fix loop | `phase-1-architecture-fix-loop.template.md` | `docs/ai-workflow/projects/<project>/quality/phase-1-architecture-fix-loop.md` |

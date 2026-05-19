@@ -9,7 +9,7 @@ Use these as starting points when a target repository needs repo runtime files, 
 - `repo/` - templates for target-repo runtime files under `docs/ai-workflow/repo/`.
 - `workflow/` - templates for artifacts produced by `docs/ai-workflow/ai/workflow/*` phases.
 - `autopilot/` - runtime autopilot, QA evidence, escalation, and decision templates.
-- `projects/` - project workspace support-file templates.
+- `projects/` - project workspace support-file and context templates.
 - `humans/` - owner/operator-facing document templates.
 
 Project-specific copies should be written under the relevant `docs/ai-workflow/projects/<project>/...` or `docs/ai-workflow/humans/<project>/...` directory, not edited in place here.

@@ -10,7 +10,7 @@
 
 ## Sources
 
-- `docs/ai-workflow/projects/EXAMPLE/intake/context.md`
+- `docs/ai-workflow/projects/EXAMPLE/context/context.md`
 - `docs/ai-workflow/ai/workflow/phase-0-repo-intake.md`
 
 ## Repo Snapshot

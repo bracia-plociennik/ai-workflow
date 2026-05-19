@@ -4,7 +4,8 @@ This directory contains project-scoped workflow artifacts for `<Project>`.
 
 ## Directory Layout
 
-- `intake/` - context and initial audit artifacts.
+- `context/` - accepted project context and supporting briefs, brand notes, client guidelines, and project source material.
+- `intake/` - idea validation and project/context initial audit artifacts.
 - `architecture/` - architecture artifacts and supporting notes.
 - `planning/` - project plan and packaging updates.
 - `specs/` - task/package implementation specifications only.

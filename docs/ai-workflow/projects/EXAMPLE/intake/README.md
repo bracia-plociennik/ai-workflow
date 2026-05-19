@@ -1,3 +1,5 @@
 # EXAMPLE Intake
 
-Idea validation, context, and initial audit examples.
+Idea validation and initial audit examples.
+
+Accepted project context belongs in `../context/context.md`.

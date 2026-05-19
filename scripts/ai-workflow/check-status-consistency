@@ -5,8 +5,9 @@ fail=0
 status="docs/ai-workflow/repo/status.md"
 
 phases=(
-  phase-0-idea-validation
   phase-0-repo-intake
+  phase-0-project-workspace
+  phase-0-idea-validation
   phase-1-architecture
   phase-1-architecture-qa
   phase-1-architecture-fix-loop
@@ -100,6 +101,13 @@ is_allowed_transition() {
     phase-0-idea-validation:PASS:phase-0-repo-intake|\
     phase-0-idea-validation:completed:phase-0-repo-intake|\
     phase-0-idea-validation:blocked:none|\
+    phase-0-project-workspace:PASS:phase-0-idea-validation|\
+    phase-0-project-workspace:completed:phase-0-idea-validation|\
+    phase-0-project-workspace:PASS:phase-0-repo-intake|\
+    phase-0-project-workspace:completed:phase-0-repo-intake|\
+    phase-0-project-workspace:blocked:none|\
+    phase-0-repo-intake:PASS:phase-0-project-workspace|\
+    phase-0-repo-intake:completed:phase-0-project-workspace|\
     phase-0-repo-intake:PASS:phase-1-architecture|\
     phase-0-repo-intake:completed:phase-1-architecture|\
     phase-0-repo-intake:blocked:none|\

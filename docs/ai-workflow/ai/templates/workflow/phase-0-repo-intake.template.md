@@ -15,7 +15,7 @@
 - Repo context: `docs/ai-workflow/repo/context.md`
 - Repo-level intake: `docs/ai-workflow/repo/repo-intake.md`
 - Idea validation: `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` or `none`
-- Context artifact: `docs/ai-workflow/projects/<project>/intake/context.md` or `none`
+- Context artifact: `docs/ai-workflow/projects/<project>/context/context.md` or `none`
 - Workflow rules: `docs/ai-workflow/ai/workflow/phase-0-repo-intake.md`
 - Installation policy: `docs/ai-workflow/ai/installation.md`
 - Repo instructions: `AGENTS.md`
@@ -86,7 +86,7 @@ Use only if `phase-0-idea-validation.md` exists.
 
 ## Context Analysis
 
-Use only if `context.md` exists.
+Use only if `context/context.md` exists.
 
 - Relevant context facts:
 - Context items ignored as irrelevant:

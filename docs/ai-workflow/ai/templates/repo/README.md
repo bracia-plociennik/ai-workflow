@@ -4,7 +4,7 @@ Templates for target-repository runtime artifacts under `docs/ai-workflow/repo/`
 
 Use these when installing or refreshing `ai-workflow` in another repository:
 
-- `repo-context.template.md` -> `docs/ai-workflow/repo/context.md`
+- `context.template.md` -> `docs/ai-workflow/repo/context.md`
 - `repo-intake.template.md` -> `docs/ai-workflow/repo/repo-intake.md`
 - `status.template.md` -> `docs/ai-workflow/repo/status.md`
 - `memory.template.md` -> `docs/ai-workflow/repo/memory.md`

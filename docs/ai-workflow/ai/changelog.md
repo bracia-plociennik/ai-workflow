@@ -7,6 +7,12 @@
 - Added installation collision policy for existing target repositories.
 - Clarified that target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, and `.github/` must not be overwritten.
 - Added `docs/ai-workflow/ai/skills/` as the reserved space for reusable task-specific workflow skills.
+- Added `docs/ai-workflow/ai/command-routing.md` as the bilingual catalog for user-facing workflow commands and safe command interpretation.
+- Added `phase-0-project-workspace` for creating project and human workspaces after repo intake.
+- Moved project context into the dedicated `context/context.md` project context directory.
+- Added human-facing `plans.template.md`.
+- Renamed repo runtime context template to `context.template.md` to match `docs/ai-workflow/repo/context.md`.
+- Clarified that the literal `repo intake` prompt is sufficient for repo-level bootstrap when AI Workflow is installed.
 
 ## 0.4.0 - 2026-05-18
 

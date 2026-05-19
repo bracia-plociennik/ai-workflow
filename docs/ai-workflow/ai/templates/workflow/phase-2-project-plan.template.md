@@ -12,7 +12,7 @@
 - Architecture: `docs/ai-workflow/projects/<project>/architecture/phase-1-architecture.md`
 - Architecture QA: `docs/ai-workflow/projects/<project>/quality/phase-1-architecture-qa.md`
 - Initial audit: `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md`
-- Context: `docs/ai-workflow/projects/<project>/intake/context.md` or `none`
+- Context: `docs/ai-workflow/projects/<project>/context/context.md` or `none`
 - Task index: `docs/ai-workflow/projects/<project>/tasks.md`
 - Workflow rules: `docs/ai-workflow/ai/workflow/phase-2-project-plan.md`
 

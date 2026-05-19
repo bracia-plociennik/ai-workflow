@@ -7,4 +7,4 @@ EXAMPLE demonstrates the expected documentation structure for a project workspac
 ## Important Notes
 
 - This context is not source of truth for real implementation.
-- It exists only to show where raw project context belongs.
+- It exists only to show where accepted project context belongs.

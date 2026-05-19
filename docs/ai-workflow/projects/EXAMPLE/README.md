@@ -6,7 +6,8 @@ It is not active workflow state and must not be used as the source of truth for 
 ## Included Artifact Types
 
 - Root support files: `status.md`, `project-memory.md`, `plans.md`, `code-review.md`
-- Phase 000/0: `intake/phase-0-idea-validation.md`, `intake/context.md`, `intake/phase-0-repo-intake.md`
+- Project context: `context/context.md` plus supporting materials in `context/`
+- Phase 0: `intake/phase-0-idea-validation.md`, `intake/phase-0-repo-intake.md`
 - Phase 1: `architecture/phase-1-architecture.md`
 - Phase 1.5/1.7: `quality/phase-1-architecture-qa.md`, `quality/phase-1-architecture-fix-loop.md`
 - Phase 2: `planning/phase-2-project-plan.md`

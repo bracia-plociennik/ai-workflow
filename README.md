@@ -14,6 +14,7 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
 - `HUMANS.md` - practical runbook for owners, operators, and engineers.
 - `docs/ai-workflow/ai/workflow.md` - workflow router and phase index.
 - `docs/ai-workflow/ai/installation.md` - safe install and collision policy for existing repositories.
+- `docs/ai-workflow/ai/command-routing.md` - user-facing command aliases and safe interpretation rules.
 - `docs/ai-workflow/repo/` - target-repository runtime context, intake, status, and aggregate memory.
 - `docs/ai-workflow/ai/workflow/` - detailed process rules for every phase.
 - `docs/ai-workflow/ai/autopilot.md` - autopilot behavior, gates, runtime files, retry policy, and STOP conditions.
@@ -66,9 +67,9 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
    - current phase;
    - next phase;
    - whether workflow is mandatory or optional.
-10. Create a real project workspace under `docs/ai-workflow/projects/<project>/`.
+10. Run `phase-0-project-workspace` to create or reconcile a real project workspace under `docs/ai-workflow/projects/<project>/` and `docs/ai-workflow/humans/<project>/`.
 11. If starting from a rough idea, run `000. IDEA VALIDATION` into `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md`.
-12. Create accepted project context in `docs/ai-workflow/projects/<project>/intake/context.md`.
+12. Create accepted project context in `docs/ai-workflow/projects/<project>/context/context.md`.
 13. Run project/context intake into `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md`.
 14. Continue through architecture, QA, plan, packaging, specs, implementation, quality, distillation, checkpoints, and final check.
 
@@ -83,6 +84,8 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
 - `docs/ai-workflow/ai/external-memory.md` exists and is kept universal, not repo-specific.
 - `docs/ai-workflow/repo/status.md` points to the current real workspace or explicitly says no workspace is active.
 - `docs/ai-workflow/projects/<project>/status.md` exists for active project work.
+- `docs/ai-workflow/projects/<project>/context/context.md` exists before architecture work starts.
+- `docs/ai-workflow/humans/<project>/` exists when the project needs human-facing approvals, audits, runbooks, plans, or summaries.
 - Repo commands are recorded and verified.
 - Safe test environment is documented.
 - STOP conditions are accepted by the owner.
@@ -123,4 +126,4 @@ Then ask Codex to run:
 repo intake
 ```
 
-The first intake should adapt the workflow to the new repository before any implementation work starts.
+The literal `repo intake` prompt is enough after AI Workflow has been copied or merged into the repository. It must adapt the workflow to the new repository, replace stale copied `docs/ai-workflow/repo/*.md` runtime, fill repo-specific command/safety/risk information, and stop on unresolved installation collisions before any implementation work starts.

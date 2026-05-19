@@ -30,18 +30,28 @@ If a shortcut here is insufficient, open the current phase file. If process docs
 - Repo status: `docs/ai-workflow/repo/status.md`
 - Repo memory: `docs/ai-workflow/repo/memory.md`
 - Project status: `docs/ai-workflow/projects/<project>/status.md`
+- Project context: `docs/ai-workflow/projects/<project>/context/context.md`
 - Project task index: `docs/ai-workflow/projects/<project>/tasks.md`
 - Project QA evidence: `docs/ai-workflow/projects/<project>/quality/`
 - Project decisions: `docs/ai-workflow/projects/<project>/decisions/`
 
 `docs/ai-workflow/ai/` is template-owned. Do not store target-repository facts there.
 
+## Shortcut Prompts
+
+Use `docs/ai-workflow/ai/command-routing.md` for the full Polish and English catalog of user-facing commands, aliases, short prompts, side-task prompts, autopilot prompts, rollback prompts, recovery prompts, and unsafe bypass requests.
+
+`repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
+
+This shortcut is sufficient to bootstrap AI Workflow in a new target repository after the workflow files have been copied or merged. It must apply installation collision policy, replace stale copied `docs/ai-workflow/repo/*.md` runtime when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
+
 ## Canonical Phase Order
 
 | Phase | Phase File | Required Output |
 | --- | --- | --- |
-| 0 idea validation | `docs/ai-workflow/ai/workflow/phase-0-idea-validation.md` | `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` |
 | 0 repo intake | `docs/ai-workflow/ai/workflow/phase-0-repo-intake.md` | `docs/ai-workflow/repo/repo-intake.md` or `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md` |
+| 0 project workspace | `docs/ai-workflow/ai/workflow/phase-0-project-workspace.md` | `docs/ai-workflow/projects/<project>/` and `docs/ai-workflow/humans/<project>/` |
+| 0 idea validation | `docs/ai-workflow/ai/workflow/phase-0-idea-validation.md` | `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` |
 | 1 architecture | `docs/ai-workflow/ai/workflow/phase-1-architecture.md` | `docs/ai-workflow/projects/<project>/architecture/phase-1-architecture.md` |
 | 1 architecture QA | `docs/ai-workflow/ai/workflow/phase-1-architecture-qa.md` | `docs/ai-workflow/projects/<project>/quality/phase-1-architecture-qa.md` |
 | 1 architecture fix loop | `docs/ai-workflow/ai/workflow/phase-1-architecture-fix-loop.md` | updated architecture plus fix evidence |
@@ -73,8 +83,11 @@ If a shortcut here is insufficient, open the current phase file. If process docs
 ## Full Workflow Route
 
 ```text
-phase 0 idea validation
--> phase 0 repo intake
+repo-level phase 0 repo intake
+-> phase 0 project workspace
+-> phase 0 idea validation
+-> project context in docs/ai-workflow/projects/<project>/context/context.md
+-> project/context phase 0 repo intake
 -> phase 1 architecture
 -> phase 1 architecture QA
 -> phase 2 project plan
@@ -121,10 +134,13 @@ Each phase file must include this exact gate block:
 
 ## Command Aliases
 
+This table is a compact phase router only. Use `docs/ai-workflow/ai/command-routing.md` when a prompt is short, bilingual, ambiguous, or asks for side-task/autopilot/recovery/rollback behavior.
+
 | User intent | Phase file |
 | --- | --- |
-| idea validation, brain dump, mam pomysl | `phase-0-idea-validation.md` |
 | repo intake, initial audit | `phase-0-repo-intake.md` |
+| create project, project workspace, utworz projekt, utwórz projekt | `phase-0-project-workspace.md` |
+| idea validation, brain dump, mam pomysl | `phase-0-idea-validation.md` |
 | architektura | `phase-1-architecture.md` |
 | qa architektury | `phase-1-architecture-qa.md` |
 | plan projektu | `phase-2-project-plan.md` |
@@ -138,3 +154,6 @@ Each phase file must include this exact gate block:
 | destylacja | `phase-6-distillation.md` |
 | checkpoint | `phase-7-checkpoint.md` |
 | final check | `phase-8-final-check.md` |
+| side-task, micro-task | use side-task contract in `AGENTS.md` and `operating-model.md` |
+| autopilot, autonomous-execution | use `autopilot.md` plus current task/package gates |
+| decision review, rollback, resume, skills check | use `command-routing.md` to choose the safe phase or stop condition |
