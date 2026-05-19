@@ -10,6 +10,7 @@
 - Added `docs/ai-workflow/ai/command-routing.md` as the bilingual catalog for user-facing workflow commands and safe command interpretation.
 - Added `docs/ai-workflow/ai/guide.md` for lost-user, next-step, fresh-start, and recovery guidance.
 - Added `phase-0-project-workspace` for creating project and human workspaces after repo intake.
+- Added `docs/ai-workflow/repo/legacy/` for preserving pre-existing repository workflow material as context-only legacy input during repo intake.
 - Moved project context into the dedicated `context/context.md` project context directory.
 - Added human-facing `plans.template.md`.
 - Renamed repo runtime context template to `context.template.md` to match `docs/ai-workflow/repo/context.md`.
