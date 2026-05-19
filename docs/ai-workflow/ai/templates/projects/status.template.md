@@ -15,3 +15,4 @@
 | `updated-at` | `<YYYY-MM-DD>` |
 | `autopilot-mode` | `<none|supervised|semi-autonomous|autonomous-execution>` |
 | `autopilot-state` | `<not-running|running|stopped|awaiting-owner|completed>` |
+| `autopilot-run` | `<none|autopilot-001|autopilot-002|...>` |

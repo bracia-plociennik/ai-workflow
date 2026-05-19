@@ -1,11 +1,12 @@
-# autopilot-state.md
+# state.md
 
-Purpose: runtime state for Codex Autopilot in one active docs workspace.
+Purpose: runtime state for one Codex Autopilot run.
 
 This file records state. It does not replace `status.md`, `docs/ai-workflow/ai/workflow/`, `workflow.md`, `AGENTS.md`, or repository state.
 
 ```yaml
 autopilot:
+  run-id: <autopilot-001>
   mode: none # supervised | semi-autonomous | autonomous-execution
   status: not-running # not-running | running | stopped | awaiting-owner | completed
   active-project: <project>

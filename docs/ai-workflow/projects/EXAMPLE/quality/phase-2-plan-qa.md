@@ -5,6 +5,7 @@
 - Project: EXAMPLE
 - Date: 2026-05-16
 - Artifact under review: `docs/ai-workflow/projects/EXAMPLE/planning/phase-2-project-plan.md`
+- Planning router under review: `docs/ai-workflow/projects/EXAMPLE/plans.md`
 - Task index under review: `docs/ai-workflow/projects/EXAMPLE/tasks.md`
 - Workflow phase: `phase-2-plan-qa`
 - Result: `PASS`
@@ -22,8 +23,12 @@ manual-checks:
     notes: "Example architecture is covered by EX-DOCS-001-example-task."
   - check: "task index consistency"
     result: "PASS"
-    notes: "Task ID, risk, status, spec path, and quality path are present."
+    notes: "Task ID, risk, status, task card path, spec path, and quality path are present."
+  - check: "planning router consistency"
+    result: "PASS"
+    notes: "plans.md points to the example project plan."
 artifacts-reviewed:
+  - "docs/ai-workflow/projects/EXAMPLE/plans.md"
   - "docs/ai-workflow/projects/EXAMPLE/planning/phase-2-project-plan.md"
   - "docs/ai-workflow/projects/EXAMPLE/tasks.md"
 skipped-checks: []

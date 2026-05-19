@@ -114,7 +114,7 @@ If the target repository already has `AGENTS.md` or `HUMANS.md`:
 4. Do not weaken existing safety, security, CI, deployment, or ownership rules.
 5. Stop for owner approval if the existing file conflicts with AI Workflow gates, permissions, risk model, or source-of-truth order.
 
-If the old root entrypoint contains useful repository rules, preserve a copy in `docs/ai-workflow/repo/legacy/` and let repo intake classify which facts should be adapted into `docs/ai-workflow/repo/context.md` or `docs/ai-workflow/repo/repo-intake.md`.
+If the old root entrypoint contains useful repository rules, preserve a copy in `docs/ai-workflow/repo/legacy/` and let repo intake classify which facts should be adapted into `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/context/`, or `docs/ai-workflow/repo/repo-intake.md`.
 
 ## Repo Runtime Replacement
 
@@ -123,6 +123,7 @@ After installation, `docs/ai-workflow/repo/*.md` may still describe the upstream
 During `phase-0-repo-intake`, replace these runtime files with target-repository facts using templates from `docs/ai-workflow/ai/templates/repo/`:
 
 - `docs/ai-workflow/repo/context.md`
+- `docs/ai-workflow/repo/context/`
 - `docs/ai-workflow/repo/repo-intake.md`
 - `docs/ai-workflow/repo/status.md`
 - `docs/ai-workflow/repo/memory.md`

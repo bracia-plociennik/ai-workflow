@@ -1,8 +1,12 @@
-# code-review.md - <Project>
+# <Project> Code Review Router
 
 ## Purpose
 
-Project-local review checklist and review notes for larger changes, standard tasks, and high-risk areas.
+`code-review.md` is the project-local review checklist and router.
+
+Detailed review artifacts live in `docs/ai-workflow/projects/<project>/reviews/`.
+
+Review artifacts do not replace QA evidence in `quality/`.
 
 ## Review Checklist
 
@@ -16,11 +20,8 @@ Project-local review checklist and review notes for larger changes, standard tas
 - Security, data, infrastructure, or contract risks are called out when relevant.
 - Required docs and operational artifacts are updated when the change affects them.
 
-## Review Notes
+## Review Index
 
-### <YYYY-MM-DD> <Task>
-
-- Result: `<PASS|FAIL>`
-- Findings:
-- Evidence:
-- Residual risk:
+| Date | Task | Result | Route |
+| --- | --- | --- | --- |
+| `<YYYY-MM-DD>` | `<task-id>` | `<PASS|FAIL|blocked>` | `docs/ai-workflow/projects/<project>/reviews/<YYYY-MM-DD-task-id-review>.md` |

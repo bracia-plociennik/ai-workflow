@@ -1,6 +1,6 @@
-# autopilot-ledger.md - EXAMPLE
+# ledger.md - EXAMPLE
 
-Purpose: example append-only ledger. Not an active autopilot run.
+Purpose: example append-only ledger for one autopilot run. Not an active autopilot run.
 
 ```yaml
 - at: 2026-05-16

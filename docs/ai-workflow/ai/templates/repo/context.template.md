@@ -1,44 +1,27 @@
-# Repo Context
+# Repo Context Router
 
 ## Purpose
 
-Describe the target repository globally before project-specific work starts.
+`docs/ai-workflow/repo/context.md` is the router and index for global repository context.
 
-## Repository Summary
+Detailed repo context lives in `docs/ai-workflow/repo/context/`.
 
-| Field | Value |
-| --- | --- |
-| Repository name | `<fill in target repo>` |
-| Repository path | `<fill in target repo>` |
-| Primary purpose | `<what this repository/tool/application does>` |
-| Primary audience/users | `<users/operators/customers/developers>` |
-| Main domain | `<domain>` |
-| Current lifecycle stage | `<template|prototype|production|maintenance|unknown>` |
+Use this router only for topic, type, status, and route to detailed context entries. Do not store the full repository context body in this file.
 
-## Stack And Runtime
+## Context Index
 
-- Languages:
-- Frameworks:
-- Package managers:
-- Runtime services:
-- Datastores:
-- Queues/schedulers:
-- External integrations:
+| Topic | Type | Status | Route |
+| --- | --- | --- | --- |
+| Repository overview | overview | `<current|missing|incomplete>` | `docs/ai-workflow/repo/context/overview.md` |
+| Stack and runtime | stack | `<current|missing|incomplete>` | `docs/ai-workflow/repo/context/stack.md` |
+| Main repository areas | areas | `<current|missing|incomplete>` | `docs/ai-workflow/repo/context/areas.md` |
+| Boundaries | boundaries | `<current|missing|incomplete>` | `docs/ai-workflow/repo/context/boundaries.md` |
+| Local operating rules | local-rules | `<current|missing|incomplete>` | `docs/ai-workflow/repo/context/local-rules.md` |
 
-## Main Areas
+## Rules
 
-| Area | Purpose | Notes |
-| --- | --- | --- |
-| `<area>` | `<purpose>` | `<notes>` |
-
-## Boundaries
-
-- In scope for this repository:
-- Out of scope for this repository:
-- Shared ownership boundaries:
-
-## Local Operating Rules
-
-- Commands and safe environment details belong in `docs/ai-workflow/repo/repo-intake.md`.
-- Project-specific decisions belong in `docs/ai-workflow/projects/<project>/decisions/`.
-- Human-facing summaries and runbooks belong in `docs/ai-workflow/humans/<project>/`.
+- Keep this file short. It is an index, not the context body.
+- Store detailed repo-wide context in `docs/ai-workflow/repo/context/`.
+- Commands, safe environments, high-risk areas, and restricted zones belong in `docs/ai-workflow/repo/repo-intake.md`.
+- Repo memory entries belong in `docs/ai-workflow/repo/memory/` and are indexed by `docs/ai-workflow/repo/memory.md`.
+- Project-specific context belongs in `docs/ai-workflow/projects/<project>/context/`.

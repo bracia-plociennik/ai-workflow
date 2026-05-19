@@ -6,18 +6,18 @@
 
 - Plan QA result is `FAIL`.
 - `docs/ai-workflow/projects/<project>/quality/phase-2-plan-qa.md` lists findings.
-- Project plan and `tasks.md` are available.
+- Project plan, `plans.md`, and `tasks.md` are available.
 
 ### Output required
 
-- Updated project plan and `docs/ai-workflow/projects/<project>/tasks.md` when findings require it.
+- Updated project plan, `docs/ai-workflow/projects/<project>/plans.md`, and `docs/ai-workflow/projects/<project>/tasks.md` when findings require it.
 - Fix evidence in `docs/ai-workflow/projects/<project>/quality/phase-2-plan-fix-loop.md`.
 - Updated project status.
 
 ### Pass criteria
 
 - Every Plan QA finding is fixed, deferred with approval, or escalated.
-- Task index remains synchronized with the plan.
+- Planning router and task index remain synchronized with the plan.
 - Plan is ready for another Plan QA run.
 
 ### Fail criteria
@@ -34,7 +34,7 @@
 ### Evidence required
 
 - QA findings addressed.
-- Plan and task index changes.
+- Plan router, plan, and task index changes.
 - Evidence that each finding is fixed or escalated.
 
 ### Next allowed phases
@@ -52,7 +52,7 @@
 
 ### Writes allowed
 
-- Project plan, `tasks.md`, fix-loop evidence, project status, decisions/escalations.
+- Project plan, `plans.md`, `tasks.md`, optional task cards, fix-loop evidence, project status, decisions/escalations.
 - No product-code writes.
 
 Ta faza służy do naprawy problemów wykrytych w fazie 2.5. FAZA PLANU PROJEKTU QA.

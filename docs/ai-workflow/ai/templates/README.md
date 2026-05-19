@@ -9,7 +9,8 @@ Use these as starting points when a target repository needs repo runtime files, 
 - `repo/` - templates for target-repo runtime files under `docs/ai-workflow/repo/`.
 - `workflow/` - templates for artifacts produced by `docs/ai-workflow/ai/workflow/*` phases.
 - `autopilot/` - runtime autopilot, QA evidence, escalation, and decision templates.
-- `projects/` - project workspace support-file, context, and memory templates.
+- `projects/` - project workspace support-file, context, memory, planning router, task, and review router templates.
+- `reviews/` - project-local review artifact templates.
 - `humans/` - owner/operator-facing document templates.
 - `memory/` - template maintenance memory templates.
 - `external-memory/` - universal AI Workflow improvement memory templates.

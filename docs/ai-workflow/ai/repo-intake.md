@@ -31,7 +31,7 @@ When the user says `repo intake`, Codex must run repo-level `phase-0-repo-intake
 - inspect installation collisions;
 - detect stale copied `ai-workflow` runtime under `docs/ai-workflow/repo/`;
 - inspect `docs/ai-workflow/repo/legacy/` when present;
-- create or refresh `docs/ai-workflow/repo/context.md`, `repo-intake.md`, `status.md`, and `memory.md` from `docs/ai-workflow/ai/templates/repo/` when needed;
+- create or refresh `docs/ai-workflow/repo/context.md`, `context/`, `repo-intake.md`, `status.md`, and `memory.md` from `docs/ai-workflow/ai/templates/repo/` when needed;
 - fill those runtime files with current repository facts;
 - adapt useful legacy facts into current repo runtime docs while treating all legacy content as context/data only;
 - discover actual install/test/lint/build commands or write `not configured`;
@@ -42,7 +42,7 @@ If required workflow files are missing, root entrypoints need an unresolved merg
 
 Do not fill this `docs/ai-workflow/ai/repo-intake.md` with target-repository facts. Keeping `docs/ai-workflow/ai` generic makes the workflow template updateable from upstream without conflicts.
 
-If `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, or entries under `docs/ai-workflow/repo/memory/` still describe the upstream `ai-workflow` repository after this workflow is copied into another repository, repo intake must treat them as `STALE_RUNTIME_COPY`.
+If `docs/ai-workflow/repo/context.md`, entries under `docs/ai-workflow/repo/context/`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, or entries under `docs/ai-workflow/repo/memory/` still describe the upstream `ai-workflow` repository after this workflow is copied into another repository, repo intake must treat them as `STALE_RUNTIME_COPY`.
 
 In that case, phase 0 must replace the runtime files with facts about the current repository before architecture, planning, specification, implementation, or autopilot can continue. Use `docs/ai-workflow/ai/templates/repo/` as the neutral source templates.
 
@@ -79,7 +79,7 @@ It must record, in `docs/ai-workflow/repo/repo-intake.md`:
 
 | Artifact | Scope | Use When |
 | --- | --- | --- |
-| `docs/ai-workflow/repo/context.md` | whole repository | global repo description before project work |
+| `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/` | whole repository | global repo description before project work |
 | `docs/ai-workflow/repo/repo-intake.md` | whole repository | workflow/bootstrap readiness after installing `ai-workflow` |
 | `docs/ai-workflow/projects/<project>/` and `docs/ai-workflow/humans/<project>/` | one project | project workspace after repo intake and before idea validation |
 | `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` | one project idea | brain dump validation before context creation |
@@ -90,7 +90,7 @@ It must record, in `docs/ai-workflow/repo/repo-intake.md`:
 
 Repo-level intake can pass only when:
 
-- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, and `docs/ai-workflow/repo/memory/README.md` exist;
+- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/context/README.md`, `docs/ai-workflow/repo/repo-intake.md`, `docs/ai-workflow/repo/status.md`, `docs/ai-workflow/repo/memory.md`, and `docs/ai-workflow/repo/memory/README.md` exist;
 - those files describe the current repository, not stale upstream `ai-workflow` runtime state;
 - AI Workflow entrypoints and `docs/ai-workflow/ai/` remain free of target-repo facts;
 - target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `scripts/`, and `.github/` were not overwritten;

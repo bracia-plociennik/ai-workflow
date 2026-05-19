@@ -5,6 +5,7 @@
 ### Input required
 
 - `docs/ai-workflow/projects/<project>/planning/phase-2-project-plan.md` exists.
+- `docs/ai-workflow/projects/<project>/plans.md` exists and routes to the plan under review.
 - `docs/ai-workflow/projects/<project>/tasks.md` exists and is current.
 - Architecture QA result is `PASS`.
 
@@ -16,12 +17,12 @@
 ### Pass criteria
 
 - Plan covers architecture, dependencies, sequencing, task contracts, readiness statuses, and risk routing.
-- Task index matches the plan for task IDs, risk class, status, spec path, quality path, and notes.
+- Planning router points to the current plan, and task index matches the plan for task IDs, risk class, status, optional task card path, spec path, quality path, and notes.
 - Evidence supports every PASS check.
 
 ### Fail criteria
 
-- Plan and task index disagree.
+- Planning router, plan, and task index disagree.
 - Any task contract or dependency is incomplete.
 - Evidence is missing or plan requires architecture changes.
 
@@ -32,7 +33,7 @@
 
 ### Evidence required
 
-- Plan and task index artifacts reviewed.
+- Planning router, plan, and task index artifacts reviewed.
 - QA checks, task index consistency, findings, skipped checks, and residual risks.
 - Explicit gate decision.
 
@@ -242,9 +243,14 @@ Task index musi zgadzać się z planem dla:
 - status
 - spec path
 - quality path
+- optional task card path, jeśli task cards są używane
 - notes, jeśli zawierają blocker albo warunek wykonania
 
 Brak `tasks.md`, niepoprawny task ID albo niespójność z planem:
+
+- FAIL
+
+Brak `plans.md`, router wskazujący nieistniejący plan albo router wskazujący plan inny niż aktualny artifact under review:
 
 - FAIL
 

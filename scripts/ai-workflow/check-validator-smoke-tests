@@ -21,6 +21,51 @@ run_must_fail() {
   fi
 }
 
+run_must_pass() {
+  local name="$1"
+  shift
+  local output="$tmp/${name}.out"
+
+  if ! (cd "$tmp" && "$@") >"$output" 2>&1; then
+    echo "Validator smoke test unexpectedly failed: $name"
+    cat "$output"
+    exit 1
+  fi
+}
+
+cp "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
+cp "$tmp/docs/ai-workflow/projects/EXAMPLE/tasks.md" "$tmp/example-tasks.orig"
+
+mv "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md" "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md.bak"
+run_must_fail "missing-autopilot-readme-template" scripts/ai-workflow/check-required-artifacts
+mv "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md.bak" "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md"
+
+cat > "$tmp/docs/ai-workflow/projects/EXAMPLE/tasks.md" <<'MD'
+# EXAMPLE Tasks Router
+
+## Tasks
+
+| Task ID | Title | Risk | Status | Task Card | Spec | Quality | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+MD
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-0-project-workspace` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `completed` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-0-idea-validation` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+run_must_pass "pre-plan-empty-tasks" scripts/ai-workflow/check-status-consistency
+
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-2-project-plan` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `PASS` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-2-plan-qa` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+run_must_fail "post-plan-empty-tasks" scripts/ai-workflow/check-status-consistency
+
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-4-implementation` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `not-started` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-4-implementation` |/' "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+run_must_fail "later-phase-empty-tasks" scripts/ai-workflow/check-status-consistency
+
+cp "$tmp/example-status.orig" "$tmp/docs/ai-workflow/projects/EXAMPLE/status.md"
+cp "$tmp/example-tasks.orig" "$tmp/docs/ai-workflow/projects/EXAMPLE/tasks.md"
+
 mv "$tmp/docs/ai-workflow/ai/workflow/phase-8-final-check.md" "$tmp/docs/ai-workflow/ai/workflow/Phase_8_BAD.md"
 run_must_fail "bad-naming" scripts/ai-workflow/check-naming
 mv "$tmp/docs/ai-workflow/ai/workflow/Phase_8_BAD.md" "$tmp/docs/ai-workflow/ai/workflow/phase-8-final-check.md"

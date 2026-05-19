@@ -29,7 +29,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 
 ## Runtime Boundaries
 
-- Repo-specific facts belong in `docs/ai-workflow/repo/`.
+- Repo-specific facts belong in `docs/ai-workflow/repo/`; detailed repo context belongs in `docs/ai-workflow/repo/context/` and is indexed by `docs/ai-workflow/repo/context.md`.
 - Project-specific facts belong in `docs/ai-workflow/projects/<project>/`, with accepted project context under `docs/ai-workflow/projects/<project>/context/context.md`.
 - Human-facing coordination docs belong in `docs/ai-workflow/humans/<project>/`.
 - Template/process docs belong in `docs/ai-workflow/ai/`.
@@ -39,7 +39,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 
 ## Manual Iterations
 
-For a new repository or a repository where `ai-workflow` was just installed, start from `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/repo-intake.md`, using `templates/repo/` if the runtime files are missing or still describe the upstream `ai-workflow` repository.
+For a new repository or a repository where `ai-workflow` was just installed, start from `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/context/`, and `docs/ai-workflow/repo/repo-intake.md`, using `templates/repo/` if the runtime files are missing or still describe the upstream `ai-workflow` repository.
 
 Before copying workflow files into an existing repository, follow `installation.md`. Do not overwrite target-owned `README.md`, `AGENTS.md`, `HUMANS.md`, `docs/`, `scripts/`, or `.github/`.
 
@@ -49,6 +49,6 @@ Before planning, specifying, implementing, or reviewing a task, check `skills/` 
 
 ## Autopilot Iterations
 
-Global autopilot rules and templates live here. Runtime autopilot artifacts belong in the active project workspace, for example `docs/ai-workflow/projects/<project>/autopilot/`.
+Global autopilot rules and templates live here. Runtime autopilot artifacts belong in the active project workspace, under run directories such as `docs/ai-workflow/projects/<project>/autopilot/runs/autopilot-001/`.
 
 Do not store project task specs, project plans, project QA evidence, project decisions, or target-repo runtime facts directly in `docs/ai-workflow/ai/`.

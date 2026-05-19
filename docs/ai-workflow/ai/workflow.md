@@ -25,15 +25,18 @@ If a shortcut here is insufficient, open the current phase file. If process docs
 - Installation policy: `docs/ai-workflow/ai/installation.md`
 - Workflow documentation namespace: `docs/ai-workflow/`
 - Workflow validator namespace: `scripts/ai-workflow/`
-- Repo context: `docs/ai-workflow/repo/context.md`
+- Repo context: router `docs/ai-workflow/repo/context.md`, detailed entries `docs/ai-workflow/repo/context/`
 - Repo intake: `docs/ai-workflow/repo/repo-intake.md`
 - Repo status: `docs/ai-workflow/repo/status.md`
 - Repo memory: router `docs/ai-workflow/repo/memory.md`, detailed entries `docs/ai-workflow/repo/memory/`
 - Project status: `docs/ai-workflow/projects/<project>/status.md`
 - Project context: `docs/ai-workflow/projects/<project>/context/context.md`
-- Project task index: `docs/ai-workflow/projects/<project>/tasks.md`
+- Project planning router: `docs/ai-workflow/projects/<project>/plans.md`
+- Project task index: router `docs/ai-workflow/projects/<project>/tasks.md`, optional task cards `docs/ai-workflow/projects/<project>/tasks/`
 - Project QA evidence: `docs/ai-workflow/projects/<project>/quality/`
 - Project decisions: `docs/ai-workflow/projects/<project>/decisions/`
+- Project reviews: `docs/ai-workflow/projects/<project>/reviews/`
+- Project autopilot runs: `docs/ai-workflow/projects/<project>/autopilot/runs/`
 
 `docs/ai-workflow/ai/` is template-owned. Do not store target-repository facts there.
 
@@ -55,7 +58,7 @@ This shortcut is sufficient to bootstrap AI Workflow in a new target repository 
 | 1 architecture | `docs/ai-workflow/ai/workflow/phase-1-architecture.md` | `docs/ai-workflow/projects/<project>/architecture/phase-1-architecture.md` |
 | 1 architecture QA | `docs/ai-workflow/ai/workflow/phase-1-architecture-qa.md` | `docs/ai-workflow/projects/<project>/quality/phase-1-architecture-qa.md` |
 | 1 architecture fix loop | `docs/ai-workflow/ai/workflow/phase-1-architecture-fix-loop.md` | updated architecture plus fix evidence |
-| 2 project plan | `docs/ai-workflow/ai/workflow/phase-2-project-plan.md` | `docs/ai-workflow/projects/<project>/planning/phase-2-project-plan.md` and `docs/ai-workflow/projects/<project>/tasks.md` |
+| 2 project plan | `docs/ai-workflow/ai/workflow/phase-2-project-plan.md` | `docs/ai-workflow/projects/<project>/planning/phase-2-project-plan.md`, `plans.md`, and `tasks.md` |
 | 2 plan QA | `docs/ai-workflow/ai/workflow/phase-2-plan-qa.md` | `docs/ai-workflow/projects/<project>/quality/phase-2-plan-qa.md` |
 | 2 plan fix loop | `docs/ai-workflow/ai/workflow/phase-2-plan-fix-loop.md` | updated plan plus fix evidence |
 | 2 task packaging | `docs/ai-workflow/ai/workflow/phase-2-task-packaging.md` | packaging decision/evidence |

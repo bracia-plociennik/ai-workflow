@@ -29,6 +29,7 @@ This is the repo-level intake artifact for this `ai-workflow` template repositor
 - `docs/ai-workflow/ai/workflow/`;
 - `docs/ai-workflow/ai/autopilot.md`;
 - `docs/ai-workflow/repo/context.md`;
+- `docs/ai-workflow/repo/context/`;
 - `docs/ai-workflow/repo/status.md`;
 - `docs/ai-workflow/repo/memory.md`;
 - `docs/ai-workflow/ai/templates/`;
@@ -118,7 +119,7 @@ This repository is the upstream AI Workflow template, so `docs/ai-workflow/` and
 | `AGENTS.md` exists and remains template-owned | `PASS` | repo-specific layer moved to `docs/ai-workflow/repo/` |
 | `HUMANS.md` exists and remains template-owned | `PASS` | human runbook updated |
 | `docs/ai-workflow/ai/` workflow/template docs exist | `PASS` | phase files and templates present |
-| `docs/ai-workflow/repo/context.md` exists and describes the repository | `PASS` | filled for this template repo |
+| `docs/ai-workflow/repo/context.md` exists as router and `docs/ai-workflow/repo/context/` describes the repository | `PASS` | filled for this template repo |
 | `docs/ai-workflow/repo/status.md` exists and is coherent | `PASS` | no active blocker |
 | `docs/ai-workflow/repo/memory.md` and `docs/ai-workflow/repo/memory/README.md` exist | `PASS` | empty repo memory router and entry directory |
 | detailed workflow phase files exist | `PASS` | includes `phase-0-repo-intake.md`, `phase-0-project-workspace.md`, and `phase-0-idea-validation.md` |

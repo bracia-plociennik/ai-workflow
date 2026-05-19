@@ -20,8 +20,8 @@ Give a human operator a concise process for starting supervised autopilot.
 1. Review `docs/ai-workflow/projects/EXAMPLE/status.md`.
 2. Confirm the next task specification is ready.
 3. Ask Codex to start supervised autopilot for the EXAMPLE project.
-4. Verify autopilot runtime files are created under `docs/ai-workflow/projects/EXAMPLE/autopilot/`.
-5. Monitor `autopilot-events.md` for owner-facing stops.
+4. Verify autopilot runtime files are created under `docs/ai-workflow/projects/EXAMPLE/autopilot/runs/<run-id>/`.
+5. Monitor `events.md` in the active run for owner-facing stops.
 
 ## Validation
 
@@ -30,7 +30,7 @@ Give a human operator a concise process for starting supervised autopilot.
 
 ## Rollback / Recovery
 
-Stop autopilot and resume from the last stable PASS recorded in `autopilot-state.md` and `autopilot-ledger.md`.
+Stop autopilot and resume from the last stable PASS recorded in the active run's `state.md` and `ledger.md`.
 
 ## Escalation
 

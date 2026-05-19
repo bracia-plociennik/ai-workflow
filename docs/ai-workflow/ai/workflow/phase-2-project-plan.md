@@ -11,6 +11,7 @@
 ### Output required
 
 - `docs/ai-workflow/projects/<project>/planning/phase-2-project-plan.md`.
+- `docs/ai-workflow/projects/<project>/plans.md` updated as the planning router.
 - `docs/ai-workflow/projects/<project>/tasks.md` updated with every planned task.
 - Updated project status and decision artifacts when needed.
 
@@ -52,7 +53,7 @@
 
 ### Writes allowed
 
-- Project plan, `docs/ai-workflow/projects/<project>/tasks.md`, project status, decisions/escalations.
+- Project plan, `docs/ai-workflow/projects/<project>/plans.md`, `docs/ai-workflow/projects/<project>/tasks.md`, optional task cards in `tasks/`, project status, decisions/escalations.
 - No product-code writes.
 
 Ta faza służy do stworzenia planu tasków, który nadaje się do realnego wykonania i minimalizuje ryzyko reworku.
@@ -107,7 +108,7 @@ Faza 2 musi utworzyć albo zaktualizować:
 
 `docs/ai-workflow/projects/<project>/tasks.md`
 
-Task index jest operacyjną mapą tasków dla statusu, specyfikacji, QA, autopilota i checkpointów.
+Task index jest operacyjną mapą tasków dla statusu, specyfikacji, QA, autopilota i checkpointów. `tasks.md` jest routerem/indexem, a opcjonalne szczegółowe task cards mogą trafić do `docs/ai-workflow/projects/<project>/tasks/`.
 
 Każdy task z planu musi mieć odpowiadający wiersz w `tasks.md`.
 
@@ -120,6 +121,8 @@ Każdy wiersz w `tasks.md` musi zawierać:
 - spec path
 - quality path
 - notes
+
+- opcjonalny task card path, jeśli task potrzebuje dodatkowego kontekstu
 
 Plan i task index muszą być spójne dla:
 
@@ -134,6 +137,14 @@ Jeśli `tasks.md` jest brakujący, nieaktualny albo niespójny z planem:
 
 - Plan Gate nie może przejść
 - Plan QA musi zakończyć się `FAIL`
+
+## **Plans Router**
+
+Faza 2 musi zaktualizować:
+
+`docs/ai-workflow/projects/<project>/plans.md`
+
+`plans.md` jest routerem do canonical planning artifacts w `planning/`. Nie przechowuje luźnych notatek planistycznych i nie zastępuje `planning/phase-2-project-plan.md`.
 
 ## **Definicja taska niezdefiniowanego**
 

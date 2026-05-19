@@ -5,13 +5,13 @@
 ### Input required
 
 - Implementation result exists for the selected task/package.
-- Accepted spec, task index, repo command map, and changed-file list are available.
+- Accepted spec, task index, optional task card, repo command map, and changed-file list are available.
 - Safe verification commands are known or skipped checks have explicit impact analysis.
 
 ### Output required
 
 - `docs/ai-workflow/projects/<project>/quality/phase-5-<task-id>-quality.md` with `PASS` or `FAIL`.
-- Updated task index/status and project status.
+- Updated task index/status, optional task card, and project status.
 
 ### Pass criteria
 
@@ -52,7 +52,7 @@
 
 ### Writes allowed
 
-- Quality evidence artifact, task index/status, project status, decisions/escalations.
+- Quality evidence artifact, task index/status, optional task card, project status, decisions/escalations.
 - No product-code writes.
 
 Ta faza służy do twardej walidacji, czy task / tasks package rzeczywiście spełnia warunki zakończenia.

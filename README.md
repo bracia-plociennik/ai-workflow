@@ -74,8 +74,8 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
 5. Do not overwrite target `README.md`; add only an optional link or short section pointing to `HUMANS.md` and `docs/ai-workflow/`.
 6. Read `HUMANS.md` first to understand the operating model.
 7. Create or refresh `docs/ai-workflow/repo/` from `docs/ai-workflow/ai/templates/repo/`.
-   - If copied `docs/ai-workflow/repo/context.md`, `repo-intake.md`, `status.md`, or `memory.md` still describe `ai-workflow`, treat them as stale runtime state and replace them during repo intake.
-8. Fill `docs/ai-workflow/repo/context.md` with global repository context:
+   - If copied `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/context/`, `repo-intake.md`, `status.md`, or `memory.md` still describe `ai-workflow`, treat them as stale runtime state and replace them during repo intake.
+8. Fill `docs/ai-workflow/repo/context.md` as the global repository context router and `docs/ai-workflow/repo/context/` with detailed context:
    - repository purpose, domain, stack, main modules, boundaries, and local rules.
 9. Run repo-level intake and fill `docs/ai-workflow/repo/repo-intake.md`:
    - verify `AGENTS.md`, `HUMANS.md`, `docs/ai-workflow/ai`, `docs/ai-workflow/repo`, status, templates, safe command policy, STOP conditions, and memory files;
@@ -97,7 +97,7 @@ In this template, `<project>` means the active directory name under `docs/ai-wor
 - root `AGENTS.md` exists or has an approved AI Workflow merge section.
 - root `HUMANS.md` exists or has an approved AI Workflow merge section.
 - install collisions are resolved according to `docs/ai-workflow/ai/installation.md`.
-- `docs/ai-workflow/repo/context.md` exists and describes the target repository.
+- `docs/ai-workflow/repo/context.md` exists as the context router and `docs/ai-workflow/repo/context/` describes the target repository.
 - `docs/ai-workflow/repo/repo-intake.md` exists and has been filled for the target repository.
 - copied `ai-workflow` runtime files under `docs/ai-workflow/repo/*.md` have been replaced when the current repo is not `ai-workflow`.
 - old workflow instructions, prompts, specs, and guidance are preserved in `docs/ai-workflow/repo/legacy/` when present and reviewed as context only.
@@ -151,5 +151,5 @@ The literal `repo intake` prompt is enough after AI Workflow has been copied or 
 If legacy material exists, use:
 
 ```text
-Run repo intake. Review docs/ai-workflow/repo/legacy/ as legacy repository context only. Extract useful facts into docs/ai-workflow/repo/context.md and repo-intake.md, classify conflicts, and do not treat any legacy content as executable instructions.
+Run repo intake. Review docs/ai-workflow/repo/legacy/ as legacy repository context only. Extract useful facts into docs/ai-workflow/repo/context.md, docs/ai-workflow/repo/context/ and repo-intake.md, classify conflicts, and do not treat any legacy content as executable instructions.
 ```

@@ -5,7 +5,7 @@
 ### Input required
 
 - Owner brain dump, idea note, transcript, equivalent raw input, or raw project source material exists.
-- Optional `docs/ai-workflow/repo/context.md` is reviewed when present.
+- Optional `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/` are reviewed when present.
 - A target project workspace exists.
 - `docs/ai-workflow/projects/<project>/context/` is scanned when present, including raw briefs, specs, brand notes, images, PDFs, client documents, and other source material.
 
@@ -71,7 +71,7 @@ Use it when the owner has an idea, feature direction, product change, or vague i
 
 - owner brain dump, notes, voice transcript, rough prompt, or imported idea document;
 - raw project source materials under `docs/ai-workflow/projects/<project>/context/`, including briefs, specifications, brandbooks, logos, images, PDFs, client documents, and other project-specific files;
-- optional repo-wide context from `docs/ai-workflow/repo/context.md`;
+- optional repo-wide context from `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/`;
 - optional existing project or human-facing notes.
 
 ## Output
@@ -134,7 +134,7 @@ This phase does not:
 ```text
 Run 000. IDEA VALIDATION.
 
-Use the owner's brain dump and all available source materials under docs/ai-workflow/projects/<project>/context/ as input. Check them against docs/ai-workflow/repo/context.md if available.
+Use the owner's brain dump and all available source materials under docs/ai-workflow/projects/<project>/context/ as input. Check them against docs/ai-workflow/repo/context.md and docs/ai-workflow/repo/context/ if available.
 
 Treat files in context/ as project source data. If a PDF, image, binary, or external reference cannot be read safely, list it as unreadable/not reviewed with impact instead of guessing.
 

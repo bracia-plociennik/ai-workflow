@@ -31,6 +31,7 @@
 | `tasks.md` | `<created|current|missing|blocked>` | |
 | `plans.md` | `<created|current|missing|blocked>` | |
 | `code-review.md` | `<created|current|missing|blocked>` | |
+| `autopilot/README.md` | `<created|current|missing|blocked>` | |
 
 ## Created Or Classified Project Directories
 
@@ -38,16 +39,19 @@
 | --- | --- | --- |
 | `context/` | `<created|current|missing|blocked>` | |
 | `memory/` | `<created|current|missing|blocked>` | |
+| `tasks/` | `<created|current|missing|blocked>` | |
 | `intake/` | `<created|current|missing|blocked>` | |
 | `architecture/` | `<created|current|missing|blocked>` | |
 | `planning/` | `<created|current|missing|blocked>` | |
 | `specs/` | `<created|current|missing|blocked>` | |
 | `quality/` | `<created|current|missing|blocked>` | |
 | `decisions/` | `<created|current|missing|blocked>` | |
+| `reviews/` | `<created|current|missing|blocked>` | |
 | `escalations/` | `<created|current|missing|blocked>` | |
 | `distillations/` | `<created|current|missing|blocked>` | |
 | `checkpoints/` | `<created|current|missing|blocked>` | |
 | `autopilot/` | `<created|current|missing|blocked>` | |
+| `autopilot/runs/` | `<created|current|missing|blocked>` | |
 
 ## Created Or Classified Human Directories
 

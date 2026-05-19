@@ -5,7 +5,7 @@
 ### Input required
 
 - Plan QA has `PASS`.
-- `docs/ai-workflow/projects/<project>/tasks.md` identifies ready tasks and dependencies.
+- `docs/ai-workflow/projects/<project>/tasks.md` identifies ready tasks and dependencies; optional task cards in `tasks/` are reviewed when present.
 - Parallel/package candidates are known or the work is explicitly solo-task execution.
 
 ### Output required

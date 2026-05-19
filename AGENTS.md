@@ -18,7 +18,7 @@ Read in this order before workflow-governed work:
 6. Relevant skills under `docs/ai-workflow/ai/skills/`, when a matching skill exists
 7. Active project artifacts under `docs/ai-workflow/projects/<project>/`
 8. `docs/ai-workflow/repo/status.md`
-9. `docs/ai-workflow/repo/context.md`
+9. `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/`
 10. `docs/ai-workflow/repo/repo-intake.md`
 
 For implementation work, also read:
@@ -178,6 +178,7 @@ Target-owned roots such as `README.md`, existing `AGENTS.md`, existing `HUMANS.m
 Repo-specific runtime:
 
 - `docs/ai-workflow/repo/context.md`
+- `docs/ai-workflow/repo/context/`
 - `docs/ai-workflow/repo/repo-intake.md`
 - `docs/ai-workflow/repo/status.md`
 - `docs/ai-workflow/repo/memory.md`
@@ -188,12 +189,14 @@ Project-specific runtime:
 
 - `docs/ai-workflow/projects/<project>/status.md`
 - `docs/ai-workflow/projects/<project>/tasks.md`
+- `docs/ai-workflow/projects/<project>/tasks/`
 - `docs/ai-workflow/projects/<project>/context/`
 - `docs/ai-workflow/projects/<project>/planning/`
 - `docs/ai-workflow/projects/<project>/specs/`
 - `docs/ai-workflow/projects/<project>/quality/`
 - `docs/ai-workflow/projects/<project>/decisions/`
-- `docs/ai-workflow/projects/<project>/autopilot/`
+- `docs/ai-workflow/projects/<project>/reviews/`
+- `docs/ai-workflow/projects/<project>/autopilot/runs/`
 
 ## Commands
 

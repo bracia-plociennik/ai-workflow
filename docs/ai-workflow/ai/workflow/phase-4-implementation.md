@@ -12,7 +12,7 @@
 
 - Implementation changes limited to the accepted spec.
 - `docs/ai-workflow/projects/<project>/quality/phase-4-<task-id>-implementation-result.md`.
-- Updated task index/status and project status.
+- Updated task index/status, optional task card, and project status.
 
 ### Pass criteria
 
@@ -54,7 +54,7 @@
 ### Writes allowed
 
 - Product-code writes are allowed only inside the accepted spec scope and only after implementation gate is satisfied.
-- Implementation result, task index/status, decisions/escalations may be updated.
+- Implementation result, task index/status, optional task card, and decisions/escalations may be updated.
 - Do not edit unrelated runtime docs or template files unless the spec requires it.
 
 Ta faza służy do wykonania zadania albo paczki zadań dokładnie według zatwierdzonej specyfikacji.

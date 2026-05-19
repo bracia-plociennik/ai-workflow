@@ -1,6 +1,6 @@
-# autopilot-state.md - EXAMPLE
+# state.md - EXAMPLE
 
-Purpose: example runtime state. Not an active autopilot run.
+Purpose: example runtime state for one autopilot run. Not an active autopilot run.
 
 ```yaml
 autopilot:

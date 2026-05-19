@@ -1,21 +1,20 @@
-# plans.md - EXAMPLE
+# EXAMPLE Plans Router
 
 ## Purpose
 
-Example local planning notes.
+`plans.md` is the router/index for canonical project planning artifacts under `planning/`.
 
-## Current Source Artifacts
+It is not a loose planning notes file. Operational project plans belong in `planning/`.
 
-- Project plan: `planning/phase-2-project-plan.md`
-- Active task specification: `specs/phase-3-ex-01-example-task-specification.md`
-- Decisions: `decisions/ex-01-example-task-decisions.md`
+## Planning Index
 
-## Current Plan Pointer
+| Plan | Status | Route | Notes |
+| --- | --- | --- | --- |
+| Example project plan | example-only | `docs/ai-workflow/projects/EXAMPLE/planning/phase-2-project-plan.md` | Demonstrates phase-2 project planning location. |
 
-- Task: EX-01 Example Task
-- Specification: `specs/phase-3-ex-01-example-task-specification.md`
-- Status: example-only
+## Rules
 
-## Planning Notes
-
-- This file demonstrates where local execution-plan notes belong.
+- Keep this file short. It points to planning artifacts.
+- Do not store task specifications here; use `specs/`.
+- Do not store QA evidence here; use `quality/`.
+- Do not store task cards here; use `tasks/`.

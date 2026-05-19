@@ -1,6 +1,6 @@
-# autopilot-events.md - EXAMPLE
+# events.md - EXAMPLE
 
-Purpose: example owner-facing event log. Not an active autopilot run.
+Purpose: example owner-facing event log for one autopilot run. Not an active autopilot run.
 
 ```yaml
 - at: 2026-05-16

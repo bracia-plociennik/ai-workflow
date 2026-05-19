@@ -22,6 +22,7 @@
 - `docs/ai-workflow/ai/workflow.md`;
 - `docs/ai-workflow/ai/workflow/`;
 - `docs/ai-workflow/repo/context.md`;
+- `docs/ai-workflow/repo/context/`;
 - `docs/ai-workflow/repo/status.md`;
 - `docs/ai-workflow/repo/legacy/` when present;
 - existing project artifacts when present.

@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.6.0 - 2026-05-19
+
+- Converted repo context into `context.md` router plus detailed entries under `docs/ai-workflow/repo/context/`.
+- Clarified `plans.md` as a router to canonical `planning/` artifacts.
+- Converted `tasks.md` into a task index/router with optional task cards under `tasks/`.
+- Added project `reviews/` for review artifacts while keeping `quality/` as QA evidence.
+- Converted autopilot runtime to run directories under `autopilot/runs/autopilot-XXX/`.
+
 ## 0.5.0 - 2026-05-18
 
 - Moved workflow-owned docs under `docs/ai-workflow/`.

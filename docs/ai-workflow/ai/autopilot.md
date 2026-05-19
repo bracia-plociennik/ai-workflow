@@ -17,7 +17,7 @@ It does not replace:
 Autopilot may start only when:
 
 - the user explicitly requests autonomous execution or project status says autopilot is active;
-- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/repo-intake.md`, and `docs/ai-workflow/repo/status.md` exist;
+- `docs/ai-workflow/repo/context.md`, `docs/ai-workflow/repo/context/`, `docs/ai-workflow/repo/repo-intake.md`, and `docs/ai-workflow/repo/status.md` exist;
 - active project status exists at `docs/ai-workflow/projects/<project>/status.md`;
 - architecture and Architecture QA have `PASS`;
 - project plan and Plan QA have `PASS`;
@@ -29,11 +29,15 @@ Autopilot may start only when:
 
 ## Runtime Files
 
-Runtime files live under `docs/ai-workflow/projects/<project>/autopilot/`:
+Runtime files live under run directories in `docs/ai-workflow/projects/<project>/autopilot/runs/`.
 
-- `autopilot-state.md`
-- `autopilot-ledger.md`
-- `autopilot-events.md`
+Each run uses a monotonic ID such as `autopilot-001`:
+
+- `docs/ai-workflow/projects/<project>/autopilot/runs/autopilot-001/state.md`
+- `docs/ai-workflow/projects/<project>/autopilot/runs/autopilot-001/ledger.md`
+- `docs/ai-workflow/projects/<project>/autopilot/runs/autopilot-001/events.md`
+
+Root-level `autopilot-state.md`, `autopilot-ledger.md`, and `autopilot-events.md` are not canonical.
 
 Templates live under `docs/ai-workflow/ai/templates/autopilot/`.
 

@@ -1,4 +1,4 @@
-# autopilot-ledger.md
+# ledger.md
 
 Purpose: append-only operational ledger for one autopilot run.
 

@@ -21,6 +21,7 @@ Example project-local status snapshot.
 | `updated-at` | `2026-05-16` |
 | `autopilot-mode` | `supervised` |
 | `autopilot-state` | `not-running` |
+| `autopilot-run` | `autopilot-001` |
 
 ## Notes
 

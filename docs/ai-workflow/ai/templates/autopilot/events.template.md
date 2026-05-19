@@ -1,4 +1,4 @@
-# autopilot-events.md
+# events.md
 
 Purpose: owner-facing event log. Only record events that require attention or explain why autopilot stopped.
 

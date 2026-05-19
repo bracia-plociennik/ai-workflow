@@ -5,8 +5,9 @@ It is not active workflow state and must not be used as the source of truth for 
 
 ## Included Artifact Types
 
-- Root support files: `status.md`, `memory.md`, `plans.md`, `code-review.md`
+- Root support files: `status.md`, `memory.md`, `plans.md`, `tasks.md`, `code-review.md`
 - Project memory entries: `memory/`
+- Task cards: `tasks/`
 - Project context: `context/context.md` plus supporting materials in `context/`
 - Phase 0: `intake/phase-0-idea-validation.md`, `intake/phase-0-repo-intake.md`
 - Phase 1: `architecture/phase-1-architecture.md`
@@ -21,7 +22,8 @@ It is not active workflow state and must not be used as the source of truth for 
 - Phase 8: `quality/phase-8-final-check.md`
 - Decisions: `decisions/ex-01-example-task-decisions.md`
 - Escalations: `escalations/example-escalation-2026-05-16.md`
-- Autopilot runtime examples: `autopilot/autopilot-state.md`, `autopilot/autopilot-ledger.md`, `autopilot/autopilot-events.md`
+- Reviews: `reviews/2026-05-16-ex-docs-001-example-task-review.md`
+- Autopilot router and runtime examples: `autopilot/README.md`, `autopilot/runs/autopilot-001/state.md`, `autopilot/runs/autopilot-001/ledger.md`, `autopilot/runs/autopilot-001/events.md`
 
 ## Warning
 

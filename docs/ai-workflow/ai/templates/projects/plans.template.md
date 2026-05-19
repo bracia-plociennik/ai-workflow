@@ -1,23 +1,20 @@
-# plans.md - <Project>
+# <Project> Plans Router
 
 ## Purpose
 
-Project-local planning notes when a task needs an explicit execution plan before it becomes a specification or implementation input.
+`plans.md` is the router/index for canonical project planning artifacts under `planning/`.
 
-This file is not the project plan source of truth.
+It is not a loose planning notes file. Operational project plans belong in `planning/`.
 
-## Current Source Artifacts
+## Planning Index
 
-- Project plan:
-- Active task specification:
-- Decisions:
+| Plan | Status | Route | Notes |
+| --- | --- | --- | --- |
+| `<plan name>` | `<draft|active|passed|superseded|blocked>` | `docs/ai-workflow/projects/<project>/planning/<plan-file>.md` | `<notes>` |
 
-## Current Plan Pointer
+## Rules
 
-- Task/package:
-- Specification:
-- Status:
-
-## Planning Notes
-
-- 
+- Keep this file short. It points to planning artifacts.
+- Do not store task specifications here; use `specs/`.
+- Do not store QA evidence here; use `quality/`.
+- Do not store task cards here; use `tasks/`.

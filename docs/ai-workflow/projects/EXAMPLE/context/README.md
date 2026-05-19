@@ -14,7 +14,7 @@ Before `context.md` is accepted, this directory can contain raw owner/client inp
 
 ## Does Not Belong Here
 
-- Repo-wide context; use `docs/ai-workflow/repo/context.md`.
+- Repo-wide context; use `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/`.
 - Phase evidence; use `quality/`.
 - Task specifications; use `specs/`.
 - Human-facing summaries; use `docs/ai-workflow/humans/EXAMPLE/`.

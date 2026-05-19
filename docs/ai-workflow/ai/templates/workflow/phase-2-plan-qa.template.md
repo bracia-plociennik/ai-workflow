@@ -5,6 +5,7 @@
 - Project: `<project>`
 - Date: `<YYYY-MM-DD>`
 - Artifact under review: `docs/ai-workflow/projects/<project>/planning/phase-2-project-plan.md`
+- Planning router under review: `docs/ai-workflow/projects/<project>/plans.md`
 - Task index under review: `docs/ai-workflow/projects/<project>/tasks.md`
 - Workflow phase: `2.5. PLAN QA`
 - Result: `<PASS|FAIL>`
@@ -20,6 +21,7 @@
 | Task contract completeness | `<PASS|FAIL>` | | |
 | Hidden dependencies | `<PASS|FAIL>` | | |
 | Readiness statuses | `<PASS|FAIL>` | | |
+| Planning router consistency | `<PASS|FAIL>` | | |
 | Task index consistency | `<PASS|FAIL>` | | |
 
 ## Findings

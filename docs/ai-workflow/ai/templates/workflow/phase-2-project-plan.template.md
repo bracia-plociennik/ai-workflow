@@ -13,6 +13,7 @@
 - Architecture QA: `docs/ai-workflow/projects/<project>/quality/phase-1-architecture-qa.md`
 - Initial audit: `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md`
 - Context: `docs/ai-workflow/projects/<project>/context/context.md` or `none`
+- Planning router: `docs/ai-workflow/projects/<project>/plans.md`
 - Task index: `docs/ai-workflow/projects/<project>/tasks.md`
 - Workflow rules: `docs/ai-workflow/ai/workflow/phase-2-project-plan.md`
 
@@ -30,7 +31,7 @@
 
 Each task must contain: ID in `<PROJECT>-<AREA>-<NNN>-<slug>` format, name, goal, scope, out-of-scope, DoD, dependencies, risk type, main risk, start condition, end condition, readiness status, and user-decision flag.
 
-The same task IDs must be present in `docs/ai-workflow/projects/<project>/tasks.md`.
+The same task IDs must be present in `docs/ai-workflow/projects/<project>/tasks.md`. Optional task cards may be created under `docs/ai-workflow/projects/<project>/tasks/` when additional task-level context is useful.
 
 ## Tasks
 
@@ -57,9 +58,9 @@ The same task IDs must be present in `docs/ai-workflow/projects/<project>/tasks.
 
 ## Task Index Sync
 
-| Task ID | Present in `tasks.md`? | Risk matches? | Status matches? | Spec path set? | Quality path set? |
-| --- | --- | --- | --- | --- | --- |
-| `<TASK-ID>` | `<yes|no>` | `<yes|no>` | `<yes|no>` | `<yes|no>` | `<yes|no>` |
+| Task ID | Present in `tasks.md`? | Risk matches? | Status matches? | Task card needed? | Spec path set? | Quality path set? |
+| --- | --- | --- | --- | --- | --- | --- |
+| `<TASK-ID>` | `<yes|no>` | `<yes|no>` | `<yes|no>` | `<yes|no>` | `<yes|no>` | `<yes|no>` |
 
 ## Dependency Map
 
@@ -88,6 +89,7 @@ The same task IDs must be present in `docs/ai-workflow/projects/<project>/tasks.
 ## Plan Gate Decision
 
 - All tasks have full contract: `<yes|no>`
+- `docs/ai-workflow/projects/<project>/plans.md` routes to this plan: `<yes|no>`
 - `docs/ai-workflow/projects/<project>/tasks.md` exists and matches the plan: `<yes|no>`
 - Dependencies are labeled: `<yes|no>`
 - Blocking decisions resolved or task marked conditional/blocked: `<yes|no>`

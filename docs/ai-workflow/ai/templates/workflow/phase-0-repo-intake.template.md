@@ -12,7 +12,8 @@
 ## Sources
 
 - Repository state: `<commands/files inspected>`
-- Repo context: `docs/ai-workflow/repo/context.md`
+- Repo context router: `docs/ai-workflow/repo/context.md`
+- Repo context entries: `docs/ai-workflow/repo/context/`
 - Repo-level intake: `docs/ai-workflow/repo/repo-intake.md`
 - Idea validation: `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` or `none`
 - Context artifact: `docs/ai-workflow/projects/<project>/context/context.md` or `none`
@@ -37,7 +38,8 @@
 | Workflow guide | `docs/ai-workflow/ai/workflow.md` | `<present|missing|incomplete>` | |
 | Workflow phases | `docs/ai-workflow/ai/workflow/` | `<present|missing|incomplete>` | |
 | Installation policy | `docs/ai-workflow/ai/installation.md` | `<present|missing|incomplete>` | |
-| Repo context | `docs/ai-workflow/repo/context.md` | `<present|missing|incomplete>` | |
+| Repo context router | `docs/ai-workflow/repo/context.md` | `<present|missing|incomplete>` | |
+| Repo context entries | `docs/ai-workflow/repo/context/` | `<present|missing|incomplete>` | |
 | Repo status | `docs/ai-workflow/repo/status.md` | `<present|missing|incomplete>` | |
 | Repo intake | `docs/ai-workflow/repo/repo-intake.md` | `<present|missing|incomplete>` | |
 | External memory router | `docs/ai-workflow/ai/external-memory.md` | `<present|missing|incomplete>` | |

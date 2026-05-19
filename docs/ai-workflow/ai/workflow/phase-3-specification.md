@@ -6,12 +6,12 @@
 
 - A ready task or approved package is selected from `docs/ai-workflow/projects/<project>/tasks.md`.
 - Plan QA has `PASS`; Packaging QA has `PASS` or valid skipped status when applicable.
-- Architecture, plan, task index, and dependency outputs needed by the task are available.
+- Architecture, plan, task index, optional task card, and dependency outputs needed by the task are available.
 
 ### Output required
 
 - Task or package specification under `docs/ai-workflow/projects/<project>/specs/`.
-- Updated `docs/ai-workflow/projects/<project>/tasks.md` spec path/status.
+- Updated `docs/ai-workflow/projects/<project>/tasks.md` spec path/status and optional `tasks/<task-id>.md` when a task card exists.
 - Updated project status and decisions when needed.
 
 ### Pass criteria
@@ -52,7 +52,7 @@
 
 ### Writes allowed
 
-- Spec artifact, task index update, project status, decisions/escalations.
+- Spec artifact, task index update, optional task card update, project status, decisions/escalations.
 - No product-code writes.
 
 Ta faza jest twardym Implementation Gate przed rozpoczęciem implementacji.

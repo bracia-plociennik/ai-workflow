@@ -12,6 +12,8 @@
 - Architecture: `docs/ai-workflow/projects/EXAMPLE/architecture/phase-1-architecture.md`
 - Architecture QA: `docs/ai-workflow/projects/EXAMPLE/quality/phase-1-architecture-qa.md`
 - Initial audit: `docs/ai-workflow/projects/EXAMPLE/intake/phase-0-repo-intake.md`
+- Planning router: `docs/ai-workflow/projects/EXAMPLE/plans.md`
+- Task index: `docs/ai-workflow/projects/EXAMPLE/tasks.md`
 
 ## Tasks
 
@@ -40,9 +42,17 @@
 
 No packages created. EX-01 runs as a solo task.
 
+## Task Index Sync
+
+| Task ID | Present in `tasks.md`? | Risk matches? | Status matches? | Task card needed? | Spec path set? | Quality path set? |
+| --- | --- | --- | --- | --- | --- | --- |
+| `EX-DOCS-001-example-task` | yes | yes | yes | yes | yes | yes |
+
 ## Plan Gate Decision
 
 - All tasks have full contract: yes
+- `docs/ai-workflow/projects/EXAMPLE/plans.md` routes to this plan: yes
+- `docs/ai-workflow/projects/EXAMPLE/tasks.md` exists and matches the plan: yes
 - Dependencies are labeled: yes
 - Ready for Plan QA: yes
 - Blocking reason: none

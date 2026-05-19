@@ -14,7 +14,8 @@
 - `docs/ai-workflow/projects/<project>/` exists or is classified as blocked.
 - `docs/ai-workflow/humans/<project>/` exists or is classified as blocked.
 - Project support files exist or are classified: `README.md`, `status.md`, `memory.md`, `tasks.md`, `plans.md`, `code-review.md`.
-- Project directories exist or are classified: `context/`, `memory/`, `intake/`, `architecture/`, `planning/`, `specs/`, `quality/`, `decisions/`, `escalations/`, `distillations/`, `checkpoints/`, `autopilot/`.
+- Project directories exist or are classified: `context/`, `memory/`, `tasks/`, `intake/`, `architecture/`, `planning/`, `specs/`, `quality/`, `decisions/`, `reviews/`, `escalations/`, `distillations/`, `checkpoints/`, `autopilot/`, `autopilot/runs/`.
+- Autopilot router `autopilot/README.md` exists or is classified.
 - Human directories exist or are classified: `approvals/`, `audits/`, `decisions/`, `plans/`, `runbooks/`, `summaries/`.
 - Repo status points to the active project workspace when the owner selects it as active.
 
@@ -95,20 +96,33 @@ Required project directories:
 
 - `context/`
 - `memory/`
+- `tasks/`
 - `intake/`
 - `architecture/`
 - `planning/`
 - `specs/`
 - `quality/`
 - `decisions/`
+- `reviews/`
 - `escalations/`
 - `distillations/`
 - `checkpoints/`
 - `autopilot/`
+- `autopilot/runs/`
 
 `context/context.md` is the accepted project context. The `context/` directory may also hold briefs, brandbook notes, logos, client guidelines, product notes, and other project-specific source material.
 
 `memory.md` is the project memory router. Detailed project memory entries belong in `memory/`.
+
+`plans.md` is the planning router. Canonical project planning artifacts belong in `planning/`.
+
+`tasks.md` is the task index/router. Optional detailed task cards belong in `tasks/`.
+
+`code-review.md` is the review checklist/router. Detailed review artifacts belong in `reviews/`, while QA gate evidence remains in `quality/`.
+
+`autopilot/README.md` is the autopilot run router.
+
+`autopilot/` stores run-based runtime state. Each autopilot run belongs under `autopilot/runs/autopilot-XXX/` with `state.md`, `ledger.md`, and `events.md`.
 
 After this phase, the owner may place raw idea materials in `context/` before idea validation. `phase-0-idea-validation` must review those materials and must not rely only on chat input when `context/` contains project source files.
 

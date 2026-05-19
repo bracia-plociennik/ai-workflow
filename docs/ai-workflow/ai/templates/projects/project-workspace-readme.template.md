@@ -14,12 +14,16 @@ This directory contains project-scoped workflow artifacts for `<Project>`.
 - `escalations/` - STOP/escalation artifacts.
 - `distillations/` - task/package distillations after quality PASS.
 - `checkpoints/` - project checkpoint artifacts.
-- `autopilot/` - runtime autopilot artifacts when autopilot is active.
+- `autopilot/` - runtime autopilot runs when autopilot is active.
+- `autopilot/README.md` - autopilot run router.
 - `memory.md` - project memory router/index.
 - `memory/` - detailed project memory entries.
 - `status.md` - project-local workflow status snapshot.
-- `plans.md` - project-local planning notes.
-- `code-review.md` - project-local review checklist and notes.
+- `plans.md` - planning router/index for `planning/`.
+- `tasks.md` - task index/router.
+- `tasks/` - optional task cards.
+- `code-review.md` - project-local review checklist and router.
+- `reviews/` - detailed review artifacts.
 
 ## Current Canonical Artifacts
 

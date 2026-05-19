@@ -6,7 +6,8 @@ This directory contains target-repository-specific workflow runtime artifacts.
 
 ## Files
 
-- `context.md` - global repository context: what this repository is, domain, stack, modules, boundaries, and local constraints.
+- `context.md` - global repository context router/index.
+- `context/` - detailed repository context entries: overview, stack, areas, boundaries, and local rules.
 - `repo-intake.md` - repo-level workflow/bootstrap readiness, command map, safe environment, risks, restricted zones, and evidence.
 - `status.md` - current cross-project workflow status for this repository.
 - `memory.md` - repository memory router/index after checkpoints and final checks.
@@ -15,7 +16,7 @@ This directory contains target-repository-specific workflow runtime artifacts.
 
 ## Rules
 
-- In this upstream `ai-workflow` repository, `context.md`, `repo-intake.md`, `status.md`, and `memory.md` may describe `ai-workflow` itself.
+- In this upstream `ai-workflow` repository, `context.md`, `context/`, `repo-intake.md`, `status.md`, and `memory.md` may describe `ai-workflow` itself.
 - In a target repository, copied runtime files that still describe `ai-workflow` are stale bootstrap state. `phase-0-repo-intake` must replace them with facts about the current repository before architecture, planning, or implementation.
 - Neutral templates for replacing these runtime files live in `docs/ai-workflow/ai/templates/repo/`.
 - Do not store project task specs, QA evidence, or autopilot runtime here; those belong in `docs/ai-workflow/projects/<project>/`.
