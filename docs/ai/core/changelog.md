@@ -1,5 +1,11 @@
 # changelog.md
 
+## 0.7.3 - 2026-05-20
+
+- Added `docs/ai/core/response-contract.md` as the canonical user-facing response contract.
+- Required substantive Codex responses to end with `Co dalej?`, one recommendation with impact and copy-paste prompt, and one safe alternative with impact and copy-paste prompt.
+- Connected the response contract to `AGENTS.md`, operating model, workflow routing, guide mode, command routing, and human documentation.
+
 ## 0.7.2 - 2026-05-20
 
 - Flattened the old internal documentation namespace so the nested clone now uses `docs/ai/`, `docs/repo/`, `docs/projects/`, `docs/humans/`, and `docs/micro-projects/` directly.

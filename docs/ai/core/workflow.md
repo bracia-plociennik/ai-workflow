@@ -50,6 +50,8 @@ When AI Workflow is used as a nested clone in another repository, these paths ar
 
 Use `docs/ai/core/command-routing.md` for the full Polish and English catalog of user-facing commands, aliases, short prompts, side-task prompts, autopilot prompts, rollback prompts, recovery prompts, and unsafe bypass requests.
 
+Use `docs/ai/core/response-contract.md` for the required `Co dalej?` footer after phase summaries, blocker reports, implementation summaries, QA reports, guide responses, side-task responses, micro-task responses, micro-project responses, and autopilot responses.
+
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
 This shortcut is sufficient to bootstrap AI Workflow in a new target repository after AI Workflow has been cloned into `ai-workflow/` and the root `AGENTS.md` shim has been copied or merged. It must apply installation collision policy, replace stale `docs/repo/core/*.md` runtime under `AI_WORKFLOW_HOME` when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
@@ -88,6 +90,7 @@ This shortcut is sufficient to bootstrap AI Workflow in a new target repository 
 - Missing evidence means `FAIL`, not warning.
 - Critical-risk work stops immediately under `docs/ai/core/risk-model.md`.
 - Final check cannot close with full `PASS` without explicit owner approval.
+- User-facing phase responses must end with one recommended next step and one safe alternative under `Co dalej?`; choose them from this transition model, the current phase file, status, evidence, and blockers. Each path must include `Napisz:` with a direct copy-paste prompt.
 
 ## Full Workflow Route
 

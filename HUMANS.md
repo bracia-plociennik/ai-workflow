@@ -14,6 +14,8 @@ Ten dokument jest dla:
 
 Jeśli w dowolnym momencie nie wiesz, co zrobić dalej, możesz napisać do Codexa: `jak zacząć`, `co teraz`, `co dalej` albo `zgubiłem się`. AI Workflow powinien wtedy wejść w guide mode: przeczytać statusy i artefakty, podać aktualny stan, jedną rekomendację z wpływem oraz jedną alternatywę z wpływem.
 
+Każda merytoryczna odpowiedź Codexa w tym workflow powinna kończyć się sekcją `Co dalej?`. To nie jest nowa faza ani dodatkowa praca do wykonania automatycznie. To krótki drogowskaz: jedna rekomendacja z wpływem oraz jedna bezpieczna alternatywa z wpływem, wybrane na podstawie statusu, aktualnej fazy, gate'ów, ryzyka, evidence i Twojej intencji. Każda ścieżka powinna zawierać `Napisz:` z gotowym promptem do wklejenia. Szczegółowy kontrakt odpowiedzi jest w `docs/ai/core/response-contract.md`.
+
 ## External Memory I Rozwój Workflow
 
 Podczas pracy z AI Workflow mogą powstawać wpisy External Memory w `docs/ai/external-memory/`, indeksowane przez router `docs/ai/core/external-memory.md`.

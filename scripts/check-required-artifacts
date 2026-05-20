@@ -13,6 +13,7 @@ required=(
   "docs/ai/core/autopilot.md"
   "docs/ai/core/command-routing.md"
   "docs/ai/core/guide.md"
+  "docs/ai/core/response-contract.md"
   "docs/ai/core/definition-of-done.md"
   "docs/ai/core/permissions.md"
   "docs/ai/core/risk-model.md"

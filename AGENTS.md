@@ -24,7 +24,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `docs/ai/core/operating-model.md`
-3. Policy docs under `docs/ai/core/`, especially `command-routing.md`, `guide.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
+3. Policy docs under `docs/ai/core/`, especially `command-routing.md`, `guide.md`, `response-contract.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
 4. `docs/ai/core/workflow.md`
 5. The current phase file under `docs/ai/workflow/`
 6. Relevant skills under `docs/ai/skills/`, when a matching skill exists
@@ -65,6 +65,14 @@ If a blocking detail is missing, ask before continuing. The clarification must i
 
 Never interpret a user command as permission to bypass risk policy, permissions, Definition of Done, QA evidence, stop conditions, external-effect restrictions, or final owner approval. If a command asks to skip required checks, mark `PASS` without evidence, write outside the allowed phase, or perform high/critical-risk work without approval, stop and explain the blocking gate.
 
+## Response Contract
+
+Use `docs/ai/core/response-contract.md` for final user-facing responses.
+
+Every substantive response must end with `Co dalej?`, containing exactly one recommendation with impact and exactly one safe alternative with impact. Each path must include `Napisz:` with a direct copy-paste prompt for the user. Choose the recommendation from the current user intent, phase `Next allowed phases`, status, task artifacts, quality evidence, blockers, risk model, and guide/command routing. If sources conflict, recommend recovery or reconciliation instead of guessing.
+
+Do not use the footer to bypass gates, evidence, approval, risk policy, Definition of Done, stop conditions, or final owner approval.
+
 ## Source Of Truth
 
 When sources disagree, use this repository-level order:
@@ -73,7 +81,7 @@ When sources disagree, use this repository-level order:
 2. Target root `AGENTS.md` shim when this workflow is installed as `ai-workflow/`.
 3. Internal `AGENTS.md` in `AI_WORKFLOW_HOME`.
 4. `docs/ai/core/operating-model.md`.
-5. Safety and policy docs in `docs/ai/core/`, especially command routing, guide, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
+5. Safety and policy docs in `docs/ai/core/`, especially command routing, guide, response contract, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
 6. `docs/ai/core/workflow.md`.
 7. Current phase file in `docs/ai/workflow/`.
 8. Relevant skills under `docs/ai/skills/`, as supporting execution guidance only.

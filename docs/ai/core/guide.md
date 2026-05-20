@@ -81,6 +81,8 @@ Use these locations when orienting the user:
 
 ## Response Contract
 
+Guide mode is a specialized use of the global response contract in `docs/ai/core/response-contract.md`.
+
 Every guide response must include:
 
 - current status;
@@ -88,11 +90,13 @@ Every guide response must include:
 - blockers or unknowns;
 - exactly one recommendation with impact;
 - exactly one alternative with impact;
-- exact next prompt the user can send.
+- exact copy-paste prompts for the recommended path and the alternative path.
+
+The recommendation and alternative should appear under the `Co dalej?` footer unless the response shape would become confusing; in that case keep this guide structure and still preserve exactly one recommendation with impact, one alternative with impact, and direct `Napisz:` prompts for both paths.
 
 Use this shape:
 
-```text
+````text
 Current status:
 - ...
 
@@ -105,14 +109,19 @@ Blockers:
 Recommendation:
 - <one recommended next step>
 - Impact: <what this unlocks or protects>
+- Napisz:
+  ```text
+  <copy-paste prompt for the recommended path>
+  ```
 
 Alternative:
 - <one reasonable alternative>
 - Impact: <tradeoff>
-
-Next prompt:
-<copy-paste prompt>
-```
+- Napisz:
+  ```text
+  <copy-paste prompt for the alternative path>
+  ```
+````
 
 Do not provide a long menu of options. If more possibilities exist, pick the safest recommendation and one meaningful alternative.
 

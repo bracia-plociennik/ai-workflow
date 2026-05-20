@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.7.2` |
+| Workflow version | `0.7.3` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-05-20` |
 | Naming standard | lowercase kebab-case |
@@ -16,6 +16,7 @@
 - `docs/` is the workflow-owned documentation namespace inside `AI_WORKFLOW_HOME`.
 - `docs/ai/` is template-owned policy and workflow source.
 - `docs/ai/core/` stores canonical AI router and policy files.
+- `docs/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
 - `docs/ai/core/update-from-upstream.md` defines the safe target-repository update flow for nested clones.
 - `docs/ai/skills/` stores optional task-specific workflow skills.
 - `docs/repo/` stores repo-specific runtime facts.

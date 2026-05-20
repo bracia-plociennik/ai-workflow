@@ -657,7 +657,7 @@ Routing notes:
 
 ### Guide / Next Step / Lost / Getting Started
 
-Route through `docs/ai/core/guide.md`.
+Route through `docs/ai/core/guide.md` and the global response contract in `docs/ai/core/response-contract.md`.
 
 Polish variants:
 
@@ -689,6 +689,33 @@ Routing notes:
 - If status, repo, and artifacts conflict, route to recovery/reconciliation instead of guessing.
 - The response must include exactly one recommendation with impact and exactly one alternative with impact.
 - Guide mode does not write artifacts, start implementation, mark PASS, or bypass gates unless the user gives a separate execution command and gates allow it.
+
+### Final Response Footer
+
+Use `docs/ai/core/response-contract.md` for every substantive user-facing response, not only guide mode.
+
+Polish trigger examples:
+
+- `Co dalej po tym kroku?`
+- `Daj rekomendowany kolejny krok.`
+- `Podsumuj i powiedz, co dalej.`
+- `Jaka jest alternatywa?`
+
+English trigger examples:
+
+- `What should happen next?`
+- `Give me the recommended next step.`
+- `Summarize and tell me what is next.`
+- `What is the safe alternative?`
+
+Routing notes:
+
+- Completed phase responses use the phase file's `Next allowed phases`, current status, and evidence state.
+- Blocked responses recommend resolving the highest-impact blocker before progressing.
+- Short or ambiguous commands use the footer to present the recommended interpretation and one safe alternative.
+- Each recommendation and alternative must include `Napisz:` with a direct copy-paste prompt for that path.
+- Micro-task, micro-project, and autopilot responses still require evidence and risk routing before recommending continuation.
+- Never use recommendation or alternative text to bypass checks, approvals, stop conditions, final owner approval, or Definition of Done.
 
 ### Skills Check
 

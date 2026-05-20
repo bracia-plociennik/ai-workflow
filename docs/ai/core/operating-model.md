@@ -136,9 +136,35 @@ The agent must not:
 
 ## Output Format
 
+Use `docs/ai/core/response-contract.md`.
+
 Final responses must include:
 
 - what changed;
 - validation run;
 - skipped validation with reason;
 - remaining risk or blocker.
+
+Every substantive response must end with:
+
+````text
+Co dalej?
+
+Rekomendacja:
+<one concrete next step>.
+Wpływ: <what this unlocks, protects, or makes clearer>.
+Napisz:
+```
+<copy-paste prompt for the recommended path>
+```
+
+Alternatywa:
+<one safe alternative next step>.
+Wpływ: <tradeoff and when this path is useful>.
+Napisz:
+```
+<copy-paste prompt for the alternative path>
+```
+````
+
+Choose the recommendation from the active gate, status, phase `Next allowed phases`, project artifacts, blockers, risk model, and user intent. Choose exactly one safe alternative that does not bypass gates, evidence, approval, risk policy, Definition of Done, stop conditions, or final owner approval. Both `Napisz:` prompts must be directly usable by the user.
