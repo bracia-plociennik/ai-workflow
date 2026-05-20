@@ -2,6 +2,8 @@
 
 This directory is reserved for preserved target-repository material that existed before AI Workflow was installed.
 
+The router/index is `docs/ai-workflow/repo/legacy.md`.
+
 Use it for old workflow notes, prompts, project specs, coding guidelines, architecture notes, runbooks, or prior root entrypoints that may contain useful repository context.
 
 ## Rule
@@ -29,7 +31,9 @@ If a legacy file may contain sensitive content, record only its original path an
 
 ## Naming
 
-Preserved Markdown files must use lowercase kebab-case so workflow validation can pass.
+Preserved legacy files are exempt from `scripts/ai-workflow/check-naming`.
+
+Prefer keeping source filenames when that preserves provenance or helps the owner recognize the material. Use normalized lowercase kebab-case names when creating a cleaned or summarized copy.
 
 Examples:
 

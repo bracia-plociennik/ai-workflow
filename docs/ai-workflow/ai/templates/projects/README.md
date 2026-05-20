@@ -5,7 +5,7 @@ Templates for project-local support files, project context, project memory, plan
 ## Context Templates
 
 - `context-readme.template.md` -> `docs/ai-workflow/projects/<project>/context/README.md`
-- `context.template.md` -> `docs/ai-workflow/projects/<project>/context/context.md`
+- `context.template.md` -> `docs/ai-workflow/projects/<project>/context.md`
 
 ## Memory Templates
 

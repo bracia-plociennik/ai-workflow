@@ -2,4 +2,4 @@
 
 Idea validation and initial audit examples.
 
-Accepted project context belongs in `../context/context.md`.
+Accepted project context belongs in `../context.md`.

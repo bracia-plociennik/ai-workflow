@@ -22,6 +22,7 @@ Use this router only for date, topic, type, status, and route to detailed contex
 
 - Keep this file short. It is an index, not the context body.
 - Store detailed repo-wide context in `docs/ai-workflow/repo/context/`.
+- Files in `docs/ai-workflow/repo/context/` are supporting context and are exempt from `scripts/ai-workflow/check-naming`; this router remains the canonical `docs/ai-workflow/repo/context.md`.
 - Commands, safe environments, high-risk areas, and restricted zones belong in `docs/ai-workflow/repo/repo-intake.md`.
 - Repo memory entries belong in `docs/ai-workflow/repo/memory/` and are indexed by `docs/ai-workflow/repo/memory.md`.
 - Project-specific context belongs in `docs/ai-workflow/projects/<project>/context/`.

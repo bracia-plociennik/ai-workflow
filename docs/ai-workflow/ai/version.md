@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.7.0` |
+| Workflow version | `0.7.1` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-05-19` |
+| Last process migration | `2026-05-20` |
 | Naming standard | lowercase kebab-case |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -18,6 +18,8 @@
 - `docs/ai-workflow/ai/skills/` stores optional task-specific workflow skills.
 - `docs/ai-workflow/repo/` stores repo-specific runtime facts.
 - `docs/ai-workflow/repo/context.md` is the repo context router; detailed repo context lives in `docs/ai-workflow/repo/context/`.
+- `docs/ai-workflow/repo/legacy.md` is the legacy context router and summary; preserved source material lives in `docs/ai-workflow/repo/legacy/`.
+- Preserved legacy inputs under `docs/ai-workflow/repo/legacy/`, detailed repo context entries under `docs/ai-workflow/repo/context/`, and supporting project source materials under `docs/ai-workflow/projects/<project>/context/` are exempt from strict Markdown filename checks. Canonical repo context remains `docs/ai-workflow/repo/context.md`, and canonical accepted project context remains `docs/ai-workflow/projects/<project>/context.md`.
 - `docs/ai-workflow/projects/<project>/` stores project-specific runtime facts.
 - `docs/ai-workflow/projects/<project>/plans.md` routes to `planning/`, and `tasks.md` routes to task cards in `tasks/`.
 - Autopilot runtime is run-scoped under `docs/ai-workflow/projects/<project>/autopilot/runs/`.

@@ -230,6 +230,52 @@ tasks_required_for_status() {
   return 1
 }
 
+context_required_for_status() {
+  local current_phase="$1"
+  local phase_result="$2"
+
+  if [[ "$current_phase" == "phase-0-repo-intake" && "$phase_result" =~ ^(PASS|completed)$ ]]; then
+    return 0
+  fi
+
+  case "$current_phase" in
+    phase-1-architecture|\
+    phase-1-architecture-qa|\
+    phase-1-architecture-fix-loop|\
+    phase-2-project-plan|\
+    phase-2-plan-qa|\
+    phase-2-plan-fix-loop|\
+    phase-2-task-packaging|\
+    phase-2-packaging-qa|\
+    phase-2-package-fix-loop|\
+    phase-3-specification|\
+    phase-3-spec-qa|\
+    phase-3-spec-fix-loop|\
+    phase-4-implementation|\
+    phase-5-quality|\
+    phase-5-fix-loop|\
+    phase-6-distillation|\
+    phase-7-checkpoint|\
+    phase-8-final-check)
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
+validate_project_context() {
+  local project_dir="$1"
+  local current_phase="${2:-}"
+  local phase_result="${3:-}"
+  local context_file="$project_dir/context.md"
+
+  if context_required_for_status "$current_phase" "$phase_result" && [[ ! -f "$context_file" ]]; then
+    echo "${project_dir#./} is in or past project/context intake but missing canonical context: $context_file"
+    fail=1
+  fi
+}
+
 validate_tasks_file() {
   local file="$1"
   local current_phase="${2:-}"
@@ -306,10 +352,22 @@ if [[ -n "${activeProject:-}" && "$activeProject" != "none" && "$activeProject" 
       validate_tasks_file "docs/ai-workflow/projects/$activeProject/tasks.md" phase-8-final-check PASS
     fi
   fi
+
+  if [[ -f "docs/ai-workflow/projects/$activeProject/status.md" ]]; then
+    validate_project_context \
+      "docs/ai-workflow/projects/$activeProject" \
+      "$(value_for current-phase "docs/ai-workflow/projects/$activeProject/status.md")" \
+      "$(value_for phase-result "docs/ai-workflow/projects/$activeProject/status.md")"
+  fi
 fi
 
 while IFS= read -r -d '' project_status; do
   validate_status_file "$project_status"
+  project_dir="${project_status%/status.md}"
+  validate_project_context \
+    "$project_dir" \
+    "$(value_for current-phase "$project_status")" \
+    "$(value_for phase-result "$project_status")"
 done < <(find docs/ai-workflow/projects -mindepth 2 -maxdepth 2 -name 'status.md' -print0 2>/dev/null || true)
 
 while IFS= read -r -d '' tasks_file; do

@@ -4,7 +4,8 @@ This directory contains project-scoped workflow artifacts for `<Project>`.
 
 ## Directory Layout
 
-- `context/` - accepted project context and supporting briefs, brand notes, client guidelines, and project source material.
+- `context.md` - accepted project context after idea validation.
+- `context/` - raw/supporting briefs, brand notes, client guidelines, and project source material.
 - `intake/` - idea validation and project/context initial audit artifacts.
 - `architecture/` - architecture artifacts and supporting notes.
 - `planning/` - project plan and packaging updates.

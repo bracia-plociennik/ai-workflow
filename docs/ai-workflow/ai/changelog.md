@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.7.1 - 2026-05-20
+
+- Excluded preserved legacy workflow inputs under `docs/ai-workflow/repo/legacy/` and detailed repo context entries under `docs/ai-workflow/repo/context/` from strict Markdown naming checks while keeping canonical repo context at `docs/ai-workflow/repo/context.md`.
+- Added `docs/ai-workflow/repo/legacy.md` as the canonical router and summary for preserved legacy material under `docs/ai-workflow/repo/legacy/`.
+- Simplified canonical accepted project context from the previous nested context-file model to `docs/ai-workflow/projects/<project>/context.md`.
+- Excluded supporting project source materials under `docs/ai-workflow/projects/<project>/context/` from strict Markdown naming checks while keeping canonical project `context.md` required and status-validated before architecture and later phases.
+- Added validator smoke coverage for legacy/context naming exemptions and missing canonical project context.
+
 ## 0.7.0 - 2026-05-19
 
 - Changed the target-repository installation model to a nested clone at `ai-workflow/`.
@@ -27,7 +35,7 @@
 - Added `docs/ai-workflow/ai/guide.md` for lost-user, next-step, fresh-start, and recovery guidance.
 - Added `phase-0-project-workspace` for creating project and human workspaces after repo intake.
 - Added `docs/ai-workflow/repo/legacy/` for preserving pre-existing repository workflow material as context-only legacy input during repo intake.
-- Moved project context into the dedicated `context/context.md` project context directory.
+- Moved project context into a dedicated project context area.
 - Added human-facing `plans.template.md`.
 - Renamed repo runtime context template to `context.template.md` to match `docs/ai-workflow/repo/context.md`.
 - Clarified that the literal `repo intake` prompt is sufficient for repo-level bootstrap when AI Workflow is installed.

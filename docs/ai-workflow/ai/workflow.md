@@ -34,7 +34,7 @@ When AI Workflow is used as a nested clone in another repository, these paths ar
 - Repo status: `docs/ai-workflow/repo/status.md`
 - Repo memory: router `docs/ai-workflow/repo/memory.md`, detailed entries `docs/ai-workflow/repo/memory/`
 - Project status: `docs/ai-workflow/projects/<project>/status.md`
-- Project context: `docs/ai-workflow/projects/<project>/context/context.md`
+- Project context: `docs/ai-workflow/projects/<project>/context.md`
 - Project planning router: `docs/ai-workflow/projects/<project>/plans.md`
 - Project task index: router `docs/ai-workflow/projects/<project>/tasks.md`, optional task cards `docs/ai-workflow/projects/<project>/tasks/`
 - Project QA evidence: `docs/ai-workflow/projects/<project>/quality/`
@@ -93,7 +93,7 @@ This shortcut is sufficient to bootstrap AI Workflow in a new target repository 
 repo-level phase 0 repo intake
 -> phase 0 project workspace
 -> phase 0 idea validation
--> project context in docs/ai-workflow/projects/<project>/context/context.md
+-> project context in docs/ai-workflow/projects/<project>/context.md
 -> project/context phase 0 repo intake
 -> phase 1 architecture
 -> phase 1 architecture QA

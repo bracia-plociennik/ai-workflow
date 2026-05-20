@@ -8,7 +8,7 @@ It is not active workflow state and must not be used as the source of truth for 
 - Root support files: `status.md`, `memory.md`, `plans.md`, `tasks.md`, `code-review.md`
 - Project memory entries: `memory/`
 - Task cards: `tasks/`
-- Project context: `context/context.md` plus supporting materials in `context/`
+- Project context: `context.md` plus supporting materials in `context/`
 - Phase 0: `intake/phase-0-idea-validation.md`, `intake/phase-0-repo-intake.md`
 - Phase 1: `architecture/phase-1-architecture.md`
 - Phase 1.5/1.7: `quality/phase-1-architecture-qa.md`, `quality/phase-1-architecture-fix-loop.md`

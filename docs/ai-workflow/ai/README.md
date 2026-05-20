@@ -32,7 +32,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 In target repositories, this directory normally lives under `AI_WORKFLOW_HOME`, usually `ai-workflow/docs/ai-workflow/ai/`. Product files, app commands, tests, builds, migrations, and target-owned root docs remain in `TARGET_REPO_ROOT`.
 
 - Repo-specific facts belong in `docs/ai-workflow/repo/`; detailed repo context belongs in `docs/ai-workflow/repo/context/` and is indexed by `docs/ai-workflow/repo/context.md`.
-- Project-specific facts belong in `docs/ai-workflow/projects/<project>/`, with accepted project context under `docs/ai-workflow/projects/<project>/context/context.md`.
+- Project-specific facts belong in `docs/ai-workflow/projects/<project>/`, with accepted project context under `docs/ai-workflow/projects/<project>/context.md`.
 - Human-facing coordination docs belong in `docs/ai-workflow/humans/<project>/`.
 - Template/process docs belong in `docs/ai-workflow/ai/`.
 - Template maintenance memory belongs in `docs/ai-workflow/ai/memory/` and is indexed by `docs/ai-workflow/ai/memory.md`.

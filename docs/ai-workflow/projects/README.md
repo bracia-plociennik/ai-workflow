@@ -22,6 +22,7 @@ docs/ai-workflow/projects/<project>/
 ├── tasks.md
 ├── code-review.md
 ├── README.md
+├── context.md
 ├── context/
 ├── memory/
 ├── tasks/
@@ -39,7 +40,7 @@ docs/ai-workflow/projects/<project>/
     └── runs/
 ```
 
-Project context belongs in `context/context.md`. Project memory is indexed by `memory.md`, with detailed entries under `memory/`. `plans.md` routes to canonical artifacts in `planning/`. `tasks.md` is the task index/router, with optional task cards under `tasks/`. Review artifacts belong in `reviews/`, while QA evidence stays in `quality/`. Project intake may include `intake/phase-0-idea-validation.md` before context is accepted when the owner starts from a rough idea or brain dump.
+Project context belongs in `context.md`. Supporting source materials under `context/` are exempt from naming checks, but `context.md` is canonical and required before architecture and later phases. Project memory is indexed by `memory.md`, with detailed entries under `memory/`. `plans.md` routes to canonical artifacts in `planning/`. `tasks.md` is the task index/router, with optional task cards under `tasks/`. Review artifacts belong in `reviews/`, while QA evidence stays in `quality/`. Project intake may include `intake/phase-0-idea-validation.md` before context is accepted when the owner starts from a rough idea or brain dump.
 
 ## Template Example
 

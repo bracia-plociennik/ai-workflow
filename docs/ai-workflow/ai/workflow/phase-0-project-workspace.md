@@ -110,7 +110,7 @@ Required project directories:
 - `autopilot/`
 - `autopilot/runs/`
 
-`context/context.md` is the accepted project context. The `context/` directory may also hold briefs, brandbook notes, logos, client guidelines, product notes, and other project-specific source material.
+`context.md` is the accepted project context. The `context/` directory may also hold briefs, brandbook notes, logos, client guidelines, product notes, and other project-specific source material. Supporting source files under `context/` are exempt from naming checks, but canonical `context.md` remains required before architecture and later phases.
 
 `memory.md` is the project memory router. Detailed project memory entries belong in `memory/`.
 

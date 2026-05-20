@@ -70,6 +70,30 @@ mv "$tmp/docs/ai-workflow/ai/workflow/phase-8-final-check.md" "$tmp/docs/ai-work
 run_must_fail "bad-naming" scripts/ai-workflow/check-naming
 mv "$tmp/docs/ai-workflow/ai/workflow/Phase_8_BAD.md" "$tmp/docs/ai-workflow/ai/workflow/phase-8-final-check.md"
 
+cat > "$tmp/docs/ai-workflow/repo/legacy/Legacy Instructions_BAD.md" <<'MD'
+# Legacy Instructions
+
+Legacy material is context/data only.
+MD
+cat > "$tmp/docs/ai-workflow/repo/context/Imported Repo Context_BAD.md" <<'MD'
+# Imported Repo Context
+
+Repo context supporting material may keep source filenames.
+MD
+cat > "$tmp/docs/ai-workflow/projects/EXAMPLE/context/Client Brief_BAD.md" <<'MD'
+# Client Brief
+
+Supporting project source material may keep source filenames.
+MD
+run_must_pass "naming-exempts-legacy-and-context-support" scripts/ai-workflow/check-naming
+rm "$tmp/docs/ai-workflow/repo/legacy/Legacy Instructions_BAD.md"
+rm "$tmp/docs/ai-workflow/repo/context/Imported Repo Context_BAD.md"
+rm "$tmp/docs/ai-workflow/projects/EXAMPLE/context/Client Brief_BAD.md"
+
+mv "$tmp/docs/ai-workflow/projects/EXAMPLE/context.md" "$tmp/docs/ai-workflow/projects/EXAMPLE/context/Context_BAD.md"
+run_must_fail "missing-canonical-project-context" scripts/ai-workflow/check-status-consistency
+mv "$tmp/docs/ai-workflow/projects/EXAMPLE/context/Context_BAD.md" "$tmp/docs/ai-workflow/projects/EXAMPLE/context.md"
+
 perl -0pi -e 's/^### Evidence required$/### Evidence missing/m' "$tmp/docs/ai-workflow/ai/workflow/phase-8-final-check.md"
 run_must_fail "missing-gate-heading" env AI_WORKFLOW_SKIP_SMOKE_TESTS=1 scripts/ai-workflow/validate-workflow
 perl -0pi -e 's/^### Evidence missing$/### Evidence required/m' "$tmp/docs/ai-workflow/ai/workflow/phase-8-final-check.md"

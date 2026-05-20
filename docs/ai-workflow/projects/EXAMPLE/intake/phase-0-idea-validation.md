@@ -6,13 +6,13 @@
 - Date: 2026-05-18
 - Source: example brain dump
 - Result: `accepted`
-- Next valid step: `create context/context.md`
+- Next valid step: `create context.md`
 
 ## Source Materials Reviewed
 
 | Source | Type | Status | Notes |
 | --- | --- | --- | --- |
-| `docs/ai-workflow/projects/EXAMPLE/context/context.md` | example context | reviewed | Demonstrates context location only. |
+| `docs/ai-workflow/projects/EXAMPLE/context.md` | example context | reviewed | Demonstrates context location only. |
 
 ## Raw Idea Summary
 
@@ -51,5 +51,5 @@ EXAMPLE remains a documentation-only project workspace that demonstrates artifac
 ```text
 result: accepted
 blocking-reason: none
-next-valid-step: create context/context.md
+next-valid-step: create context.md
 ```

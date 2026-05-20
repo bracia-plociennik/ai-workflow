@@ -12,7 +12,7 @@ This is the workflow status snapshot for this repository.
 | `workflow-scope` | `template-maintenance` |
 | `active-project` | `none` |
 | `active-plan-status` | `none` |
-| `current-task` | `nested clone installation model` |
+| `current-task` | `legacy router, project context path simplification, and naming exemptions` |
 | `current-phase` | `phase-5-quality` |
 | `phase-result` | `completed` |
 | `next-phase` | `none` |
@@ -20,7 +20,7 @@ This is the workflow status snapshot for this repository.
 | `blocking-reason` | `none` |
 | `autopilot-mode` | `not-active` |
 | `autopilot-state` | `not-created` |
-| `updated-at` | `2026-05-19` |
+| `updated-at` | `2026-05-20` |
 
 ## Notes
 

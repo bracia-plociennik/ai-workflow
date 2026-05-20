@@ -62,7 +62,7 @@ In a target repository, AI Workflow must be installed as a nested clone at `ai-w
 | install | `not configured` | `missing` | Markdown-only template repo. |
 | dev server | `not configured` | `not-applicable` | No app runtime. |
 | test | `scripts/ai-workflow/validate-workflow` | `usable` | Full workflow-template validation. |
-| lint/style check | `scripts/ai-workflow/check-naming` | `usable` | Enforces Markdown filename policy. |
+| lint/style check | `scripts/ai-workflow/check-naming` | `usable` | Enforces Markdown filename policy, with context-only exemptions for preserved legacy input, detailed repo context entries, and project context source materials. |
 | typecheck | `not configured` | `not-applicable` | No typed source detected. |
 | build | `not configured` | `not-applicable` | No build system detected. |
 | migration/schema check | `not configured` | `not-applicable` | No database layer. |

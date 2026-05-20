@@ -20,7 +20,7 @@
 - The idea is classified into keep, fix/remove, and missing parts.
 - Raw source materials in `docs/ai-workflow/projects/<project>/context/` were reviewed or explicitly listed as unreadable/not reviewed with impact.
 - Blocking assumptions are either resolved, recorded as decisions, or marked as blockers.
-- The result clearly says whether `docs/ai-workflow/projects/<project>/context/context.md` may be created.
+- The result clearly says whether `docs/ai-workflow/projects/<project>/context.md` may be created.
 
 ### Fail criteria
 
@@ -43,7 +43,7 @@
 
 ### Next allowed phases
 
-- Create or update `docs/ai-workflow/projects/<project>/context/context.md`, then run `phase-0-repo-intake` after accepted or accepted-with-changes result.
+- Create or update `docs/ai-workflow/projects/<project>/context.md`, then run `phase-0-repo-intake` after accepted or accepted-with-changes result.
 - Stop for owner clarification when blocked.
 
 ### Stop conditions
@@ -63,7 +63,7 @@
 
 ## Purpose
 
-This phase turns a raw owner brain dump into a validated project idea before `docs/ai-workflow/projects/<project>/context/context.md` exists.
+This phase turns a raw owner brain dump into a validated project idea before `docs/ai-workflow/projects/<project>/context.md` exists.
 
 Use it when the owner has an idea, feature direction, product change, or vague initiative and wants Codex to challenge, clarify, and stabilize it before the formal workflow starts.
 
@@ -82,7 +82,7 @@ Write the accepted validation artifact to:
 docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md
 ```
 
-This phase does not replace `context/context.md`. It produces the material from which accepted project context can be created after the owner accepts the validated idea.
+This phase does not replace `context.md`. It produces the material from which accepted project context can be created after the owner accepts the validated idea.
 
 ## Required Analysis
 
@@ -98,7 +98,7 @@ Codex must classify the idea into:
 
 ## Gate Rule
 
-`context/context.md` may be created only after this phase has one of these results:
+`context.md` may be created only after this phase has one of these results:
 
 - `accepted`: owner accepts the validated idea;
 - `accepted-with-changes`: owner accepts the idea after documented changes;
@@ -127,7 +127,7 @@ This phase does not:
 - missing parts are listed with owner/action requirement;
 - decisions are classified;
 - blockers are explicit;
-- next valid step is `create context/context.md`, `revise idea`, or `owner decision`.
+- next valid step is `create context.md`, `revise idea`, or `owner decision`.
 
 ## Prompt Base
 
@@ -148,5 +148,5 @@ Return:
 - recommended next version of the idea;
 - gate result: accepted, accepted-with-changes, or blocked.
 
-Do not create `context/context.md` until the validated idea is accepted.
+Do not create `context.md` until the validated idea is accepted.
 ```

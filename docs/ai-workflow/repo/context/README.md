@@ -6,6 +6,8 @@ This directory stores detailed global context for the current repository.
 
 The router/index is `docs/ai-workflow/repo/context.md`.
 
+Files in this directory are supporting repo context entries and are exempt from `scripts/ai-workflow/check-naming`. The canonical router is still `docs/ai-workflow/repo/context.md` and should remain lowercase kebab-case.
+
 ## Entry Types
 
 - `overview.md` - what this repository is and who it serves.

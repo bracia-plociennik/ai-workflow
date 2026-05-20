@@ -11,7 +11,7 @@
 
 - Repo state:
 - Initial audit: `docs/ai-workflow/projects/<project>/intake/phase-0-repo-intake.md`
-- Context: `docs/ai-workflow/projects/<project>/context/context.md` or `none`
+- Context: `docs/ai-workflow/projects/<project>/context.md` or `none`
 - Workflow rules: `docs/ai-workflow/ai/workflow/phase-1-architecture.md`
 - Supporting sources:
 

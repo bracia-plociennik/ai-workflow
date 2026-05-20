@@ -7,6 +7,7 @@ Use these when installing or refreshing `ai-workflow` in another repository:
 - `context.template.md` -> `docs/ai-workflow/repo/context.md`
 - `context-readme.template.md` -> `docs/ai-workflow/repo/context/README.md`
 - `context-entry.template.md` -> `docs/ai-workflow/repo/context/<entry>.md`
+- `legacy.template.md` -> `docs/ai-workflow/repo/legacy.md`
 - `repo-intake.template.md` -> `docs/ai-workflow/repo/repo-intake.md`
 - `status.template.md` -> `docs/ai-workflow/repo/status.md`
 - `memory.template.md` -> `docs/ai-workflow/repo/memory.md`

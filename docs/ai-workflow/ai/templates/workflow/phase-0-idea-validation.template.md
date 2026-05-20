@@ -6,7 +6,7 @@
 - Date: `<YYYY-MM-DD>`
 - Source: `<brain dump|notes|conversation|document>`
 - Result: `<accepted|accepted-with-changes|blocked>`
-- Next valid step: `<create context/context.md|revise idea|owner decision>`
+- Next valid step: `<create context.md|revise idea|owner decision>`
 
 ## Source Materials Reviewed
 
@@ -44,12 +44,12 @@ Briefly summarize the owner's idea in plain language, using both the chat prompt
 
 ## Recommended Idea Shape
 
-Write the validated version of the idea that should become the basis for `docs/ai-workflow/projects/<project>/context/context.md`.
+Write the validated version of the idea that should become the basis for `docs/ai-workflow/projects/<project>/context.md`.
 
 ## Gate Decision
 
 ```text
 result: <accepted|accepted-with-changes|blocked>
 blocking-reason: <none|reason>
-next-valid-step: <create context/context.md|revise idea|owner decision>
+next-valid-step: <create context.md|revise idea|owner decision>
 ```

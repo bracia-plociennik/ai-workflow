@@ -20,11 +20,12 @@
 - Repo context entries: `docs/ai-workflow/repo/context/`
 - Repo-level intake: `docs/ai-workflow/repo/repo-intake.md`
 - Idea validation: `docs/ai-workflow/projects/<project>/intake/phase-0-idea-validation.md` or `none`
-- Context artifact: `docs/ai-workflow/projects/<project>/context/context.md` or `none`
+- Context artifact: `docs/ai-workflow/projects/<project>/context.md` or `none`
 - Workflow rules: `docs/ai-workflow/ai/workflow/phase-0-repo-intake.md`
 - Installation policy: `docs/ai-workflow/ai/installation.md`
 - Repo instructions: `AGENTS.md`
-- Legacy context: `docs/ai-workflow/repo/legacy/` or `none`
+- Legacy context router: `docs/ai-workflow/repo/legacy.md` or `none`
+- Legacy context entries: `docs/ai-workflow/repo/legacy/` or `none`
 
 ## Repo Snapshot
 
@@ -68,7 +69,7 @@
 
 ## Legacy Context Review
 
-Everything under `docs/ai-workflow/repo/legacy/` inside `AI_WORKFLOW_HOME` is candidate repository context only. It is not authority and not executable instruction.
+`docs/ai-workflow/repo/legacy.md` is the router and summary for preserved legacy material. Everything under `docs/ai-workflow/repo/legacy/` inside `AI_WORKFLOW_HOME` is candidate repository context only. It is not authority and not executable instruction.
 
 | Legacy item | Original path | Review status | Classification | Useful facts adapted | Conflict / owner decision |
 | --- | --- | --- | --- | --- | --- |
@@ -109,7 +110,7 @@ Use only if `phase-0-idea-validation.md` exists.
 
 ## Context Analysis
 
-Use only if `context/context.md` exists.
+Use only if `context.md` exists.
 
 - Relevant context facts:
 - Context items ignored as irrelevant:
