@@ -1,0 +1,23 @@
+# 2026-05-17 - Repo-Level Intake Before Project Workspace
+
+- Date: 2026-05-17
+- Title: Repo-Level Intake Before Project Workspace
+- Type: rule
+- Scope: docs-layout
+- Status: implemented
+- Source: workflow template refinement.
+- Recommendation: keep `docs/repo/core/repo-intake.md` as a repo-level bootstrap/readiness artifact that can exist before any project workspace.
+- Why it matters: a new repository can validate `AGENTS.md`, `HUMANS.md`, `docs/ai`, templates, status, safe command policy, and STOP conditions before a concrete project exists.
+- What worked well: separating repo bootstrap from project workspace made initial installation and target-repo adaptation explicit.
+- What failed or was weak: treating intake as project-only left no canonical place for repository readiness before the first project existed.
+- Suggested workflow improvement: keep repo intake as the first repository-level gate before project workspace creation.
+- Suggested skills improvement: n/a.
+- Applies to:
+  - `docs/repo/core/repo-intake.md`
+  - `docs/ai/core/workflow.md`
+  - `docs/ai/workflow/phase-0-repo-intake.md`
+  - `HUMANS.md`
+  - `AGENTS.md`
+- Promotion path: already promoted into this workflow template.
+- Privacy check: contains no repo-specific product facts, secrets, client data, or task implementation details.
+- Notes: project-specific repo intake remains the correct artifact once a project/context exists.

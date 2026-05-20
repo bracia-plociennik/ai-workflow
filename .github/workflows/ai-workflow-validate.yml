@@ -24,10 +24,10 @@ jobs:
         run: command -v rg
 
       - name: Validate workflow template
-        run: scripts/ai-workflow/validate-workflow
+        run: scripts/validate-workflow
 
       - name: Check strict naming
-        run: scripts/ai-workflow/check-naming
+        run: scripts/check-naming
 
       - name: Check diff whitespace
         shell: bash

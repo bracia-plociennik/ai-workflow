@@ -1,0 +1,234 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/ai-workflow-validator-smoke.XXXXXX")"
+cleanup() {
+  rm -rf "$tmp"
+}
+trap cleanup EXIT
+
+tar --exclude='.git' -cf - . | tar -xf - -C "$tmp"
+
+run_must_fail() {
+  local name="$1"
+  shift
+  local output="$tmp/${name}.out"
+
+  if (cd "$tmp" && "$@") >"$output" 2>&1; then
+    echo "Validator smoke test unexpectedly passed: $name"
+    cat "$output"
+    exit 1
+  fi
+}
+
+run_must_pass() {
+  local name="$1"
+  shift
+  local output="$tmp/${name}.out"
+
+  if ! (cd "$tmp" && "$@") >"$output" 2>&1; then
+    echo "Validator smoke test unexpectedly failed: $name"
+    cat "$output"
+    exit 1
+  fi
+}
+
+cp "$tmp/docs/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
+cp "$tmp/docs/projects/EXAMPLE/tasks.md" "$tmp/example-tasks.orig"
+
+mv "$tmp/docs/ai/templates/autopilot/autopilot-readme.template.md" "$tmp/docs/ai/templates/autopilot/autopilot-readme.template.md.bak"
+run_must_fail "missing-autopilot-readme-template" scripts/check-required-artifacts
+mv "$tmp/docs/ai/templates/autopilot/autopilot-readme.template.md.bak" "$tmp/docs/ai/templates/autopilot/autopilot-readme.template.md"
+
+mv "$tmp/docs/ai/templates/projects/micro-task.template.md" "$tmp/docs/ai/templates/projects/micro-task.template.md.bak"
+run_must_fail "missing-micro-task-template" scripts/check-required-artifacts
+mv "$tmp/docs/ai/templates/projects/micro-task.template.md.bak" "$tmp/docs/ai/templates/projects/micro-task.template.md"
+
+mv "$tmp/docs/ai/templates/micro-projects/micro-project.template.md" "$tmp/docs/ai/templates/micro-projects/micro-project.template.md.bak"
+run_must_fail "missing-micro-project-template" scripts/check-required-artifacts
+mv "$tmp/docs/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/docs/ai/templates/micro-projects/micro-project.template.md"
+
+cat > "$tmp/docs/projects/EXAMPLE/tasks.md" <<'MD'
+# EXAMPLE Tasks Router
+
+## Tasks
+
+| Task ID | Title | Risk | Status | Task Card | Spec | Quality | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+MD
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-0-project-workspace` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `completed` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-0-idea-validation` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+run_must_pass "pre-plan-empty-tasks" scripts/check-status-consistency
+
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-2-project-plan` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `PASS` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-2-plan-qa` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+run_must_fail "post-plan-empty-tasks" scripts/check-status-consistency
+
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-4-implementation` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `not-started` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-4-implementation` |/' "$tmp/docs/projects/EXAMPLE/status.md"
+run_must_fail "later-phase-empty-tasks" scripts/check-status-consistency
+
+cp "$tmp/example-status.orig" "$tmp/docs/projects/EXAMPLE/status.md"
+cp "$tmp/example-tasks.orig" "$tmp/docs/projects/EXAMPLE/tasks.md"
+
+mv "$tmp/docs/ai/workflow/phase-8-final-check.md" "$tmp/docs/ai/workflow/Phase_8_BAD.md"
+run_must_fail "bad-naming" scripts/check-naming
+mv "$tmp/docs/ai/workflow/Phase_8_BAD.md" "$tmp/docs/ai/workflow/phase-8-final-check.md"
+
+cat > "$tmp/docs/repo/legacy/Legacy Instructions_BAD.md" <<'MD'
+# Legacy Instructions
+
+Legacy material is context/data only.
+MD
+cat > "$tmp/docs/repo/context/Imported Repo Context_BAD.md" <<'MD'
+# Imported Repo Context
+
+Repo context supporting material may keep source filenames.
+MD
+cat > "$tmp/docs/projects/EXAMPLE/context/Client Brief_BAD.md" <<'MD'
+# Client Brief
+
+Supporting project source material may keep source filenames.
+MD
+run_must_pass "naming-exempts-legacy-and-context-support" scripts/check-naming
+rm "$tmp/docs/repo/legacy/Legacy Instructions_BAD.md"
+rm "$tmp/docs/repo/context/Imported Repo Context_BAD.md"
+rm "$tmp/docs/projects/EXAMPLE/context/Client Brief_BAD.md"
+
+mv "$tmp/docs/projects/EXAMPLE/context.md" "$tmp/docs/projects/EXAMPLE/context/Context_BAD.md"
+run_must_fail "missing-canonical-project-context" scripts/check-status-consistency
+mv "$tmp/docs/projects/EXAMPLE/context/Context_BAD.md" "$tmp/docs/projects/EXAMPLE/context.md"
+
+perl -0pi -e 's/^### Evidence required$/### Evidence missing/m' "$tmp/docs/ai/workflow/phase-8-final-check.md"
+run_must_fail "missing-gate-heading" env AI_WORKFLOW_SKIP_SMOKE_TESTS=1 scripts/validate-workflow
+perl -0pi -e 's/^### Evidence missing$/### Evidence required/m' "$tmp/docs/ai/workflow/phase-8-final-check.md"
+
+cat > "$tmp/docs/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
+# Bad quality
+
+Result: `PASS`
+
+## Gate Decision
+
+can-proceed: true
+MD
+run_must_fail "pass-without-evidence" scripts/check-qa-evidence
+
+cat > "$tmp/docs/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
+# Bad quality
+
+Result: `PASS`
+
+## Evidence
+
+```yaml
+commands:
+  - command: "example check"
+    result: "FAIL"
+    notes: "failed command must block PASS"
+manual-checks: []
+artifacts-reviewed:
+  - "docs/projects/EXAMPLE/tasks.md"
+skipped-checks: []
+```
+
+## Gate Decision
+
+```yaml
+result: PASS
+can-proceed: true
+```
+MD
+run_must_fail "pass-with-failed-command" scripts/check-qa-evidence
+
+perl -0pi -e 's/\\| `current-phase` \\| `phase-5-quality` \\|/| `current-phase` | `phase-1-architecture` |/' "$tmp/docs/repo/core/status.md"
+perl -0pi -e 's/\\| `next-phase` \\| `none` \\|/| `next-phase` | `phase-8-final-check` |/' "$tmp/docs/repo/core/status.md"
+run_must_fail "bad-phase-transition" scripts/check-status-consistency
+
+update_fixture="$tmp/.update-smoke"
+remote_work="$update_fixture/remote-work"
+remote_bare="$update_fixture/remote.git"
+target_work="$update_fixture/target/ai-workflow"
+mkdir -p "$remote_work" "$update_fixture/target"
+(cd "$tmp" && tar --exclude='.git' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$remote_work"
+git -C "$remote_work" init -q
+git -C "$remote_work" checkout -q -b main
+git -C "$remote_work" config user.email "smoke@example.invalid"
+git -C "$remote_work" config user.name "AI Workflow Smoke"
+git -C "$remote_work" add -A
+git -C "$remote_work" commit -q -m "initial"
+git clone -q --bare "$remote_work" "$remote_bare"
+git clone -q "$remote_bare" "$target_work"
+git -C "$remote_work" remote add origin "$remote_bare"
+
+echo "dirty template blocker" >> "$target_work/AGENTS.md"
+run_must_fail "update-blocks-dirty-template" "$target_work/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+git -C "$target_work" checkout -q -- AGENTS.md
+
+echo "dirty example micro-project blocker" >> "$target_work/docs/micro-projects/EXAMPLE/micro-project.md"
+run_must_fail "update-blocks-dirty-example-micro-project" "$target_work/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+git -C "$target_work" checkout -q -- docs/micro-projects/EXAMPLE/micro-project.md
+
+echo "upstream update marker" >> "$remote_work/README.md"
+git -C "$remote_work" add README.md
+git -C "$remote_work" commit -q -m "upstream update"
+git -C "$remote_work" push -q origin main
+
+echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_work/docs/repo/core/status.md"
+mkdir -p "$target_work/docs/micro-projects/my-micro-project" "$target_work/docs/projects/my-project" "$target_work/docs/humans/my-project" "$target_work/docs/repo/legacy"
+cat > "$target_work/docs/micro-projects/my-micro-project/micro-project.md" <<'MD'
+# My Micro-project
+
+LOCAL_MICRO_PROJECT_MARKER
+MD
+cat > "$target_work/docs/projects/my-project/status.md" <<'MD'
+# My Project Status
+
+LOCAL_PROJECT_RUNTIME_MARKER
+MD
+cat > "$target_work/docs/humans/my-project/summary.md" <<'MD'
+# My Project Human Summary
+
+LOCAL_HUMAN_RUNTIME_MARKER
+MD
+echo "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" >> "$target_work/docs/ai/core/external-memory.md"
+cat > "$target_work/docs/ai/external-memory/2026-05-20-local-smoke.md" <<'MD'
+# Local Smoke External Memory
+
+LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER
+MD
+cat > "$target_work/docs/repo/legacy/Old Prompt FINAL_v2.md" <<'MD'
+# Old Prompt
+
+LEGACY_ORIGINAL_FILENAME_MARKER
+MD
+
+run_must_pass "update-preserves-protected-runtime" "$target_work/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+grep -q "upstream update marker" "$target_work/README.md" || { echo "Update smoke missing upstream marker"; exit 1; }
+grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_work/docs/repo/core/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
+grep -q "LOCAL_MICRO_PROJECT_MARKER" "$target_work/docs/micro-projects/my-micro-project/micro-project.md" || { echo "Update smoke lost micro-project"; exit 1; }
+grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_work/docs/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }
+grep -q "LOCAL_HUMAN_RUNTIME_MARKER" "$target_work/docs/humans/my-project/summary.md" || { echo "Update smoke lost human workspace"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_work/docs/ai/core/external-memory.md" || { echo "Update smoke lost external memory router"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER" "$target_work/docs/ai/external-memory/2026-05-20-local-smoke.md" || { echo "Update smoke lost external memory entry"; exit 1; }
+grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_work/docs/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
+
+git -C "$target_work" config user.email "smoke@example.invalid"
+git -C "$target_work" config user.name "AI Workflow Smoke"
+echo "local divergent commit" >> "$target_work/README.md"
+git -C "$target_work" add README.md
+git -C "$target_work" commit -q -m "local divergence"
+
+echo "second upstream marker" >> "$remote_work/README.md"
+git -C "$remote_work" add README.md
+git -C "$remote_work" commit -q -m "second upstream update"
+git -C "$remote_work" push -q origin main
+
+echo "FF_ONLY_PROTECTED_MARKER" >> "$target_work/docs/repo/core/status.md"
+run_must_fail "update-ff-only-failure-restores-protected" "$target_work/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+grep -q "FF_ONLY_PROTECTED_MARKER" "$target_work/docs/repo/core/status.md" || { echo "Update smoke failed to restore protected files after ff-only failure"; exit 1; }
+
+echo "Validator smoke tests passed."
