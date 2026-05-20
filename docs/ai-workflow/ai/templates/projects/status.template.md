@@ -3,7 +3,7 @@
 | Field | Value |
 | --- | --- |
 | `workflow-requirement` | `<mandatory|optional>` |
-| `workflow-scope` | `<plan-derived|side-task>` |
+| `workflow-scope` | `<plan-derived|side-task|micro-task>` |
 | `project-workspace` | `docs/ai-workflow/projects/<project>` |
 | `active-plan-status` | `<active|closed|none|other>` |
 | `current-task` | `<task>` |

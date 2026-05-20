@@ -37,10 +37,12 @@ When AI Workflow is used as a nested clone in another repository, these paths ar
 - Project context: `docs/ai-workflow/projects/<project>/context.md`
 - Project planning router: `docs/ai-workflow/projects/<project>/plans.md`
 - Project task index: router `docs/ai-workflow/projects/<project>/tasks.md`, optional task cards `docs/ai-workflow/projects/<project>/tasks/`
+- Project micro-tasks: router `docs/ai-workflow/projects/<project>/micro-tasks.md`, entries `docs/ai-workflow/projects/<project>/micro-tasks/`
 - Project QA evidence: `docs/ai-workflow/projects/<project>/quality/`
 - Project decisions: `docs/ai-workflow/projects/<project>/decisions/`
 - Project reviews: `docs/ai-workflow/projects/<project>/reviews/`
 - Project autopilot runs: `docs/ai-workflow/projects/<project>/autopilot/runs/`
+- Repo-level micro-projects: `docs/ai-workflow/micro-projects/`
 
 `docs/ai-workflow/ai/` is template-owned. Do not store target-repository facts there.
 
@@ -161,7 +163,8 @@ This table is a compact phase router only. Use `docs/ai-workflow/ai/command-rout
 | destylacja | `phase-6-distillation.md` |
 | checkpoint | `phase-7-checkpoint.md` |
 | final check | `phase-8-final-check.md` |
-| side-task, micro-task | use side-task contract in `AGENTS.md` and `operating-model.md` |
+| side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
+| micro-project | use `docs/ai-workflow/micro-projects/` and the micro-project contract in `operating-model.md` |
 | autopilot, autonomous-execution | use `autopilot.md` plus current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `scripts/ai-workflow/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |

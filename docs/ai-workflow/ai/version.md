@@ -23,6 +23,8 @@
 - Preserved legacy inputs under `docs/ai-workflow/repo/legacy/`, detailed repo context entries under `docs/ai-workflow/repo/context/`, and supporting project source materials under `docs/ai-workflow/projects/<project>/context/` are exempt from strict Markdown filename checks. Canonical repo context remains `docs/ai-workflow/repo/context.md`, and canonical accepted project context remains `docs/ai-workflow/projects/<project>/context.md`.
 - `docs/ai-workflow/projects/<project>/` stores project-specific runtime facts.
 - `docs/ai-workflow/projects/<project>/plans.md` routes to `planning/`, and `tasks.md` routes to task cards in `tasks/`.
+- `docs/ai-workflow/projects/<project>/micro-tasks.md` routes to project-local low-risk micro-task artifacts in `micro-tasks/`.
+- `docs/ai-workflow/micro-projects/` stores repo-level low-risk micro-projects.
 - Autopilot runtime is run-scoped under `docs/ai-workflow/projects/<project>/autopilot/runs/`.
 - `scripts/ai-workflow/` is the workflow-owned validator namespace inside `AI_WORKFLOW_HOME`.
 - Existing target-owned `README.md`, `AGENTS.md`, `HUMANS.md`, `docs/`, `scripts`, and `.github/` require merge or preservation, not overwrite.

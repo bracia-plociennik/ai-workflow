@@ -3,7 +3,7 @@
 | Field | Value |
 | --- | --- |
 | `workflow-requirement` | `<mandatory|optional>` |
-| `workflow-scope` | `<template-not-initialized|repo-ready|plan-derived|side-task>` |
+| `workflow-scope` | `<template-not-initialized|repo-ready|plan-derived|side-task|micro-project>` |
 | `active-project` | `<none|project-name>` |
 | `active-plan-status` | `<none|active|closed|blocked>` |
 | `current-task` | `<task|none>` |

@@ -126,7 +126,7 @@ Do not modify product code during idea validation, repo intake, architecture, pl
 
 Side tasks are allowed without the full project workflow only when they are small, local, low-risk, and outside any active plan scope.
 
-Use `docs/ai-workflow/ai/operating-model.md` for the side-task contract. A side task must still have:
+Use `docs/ai-workflow/ai/operating-model.md` for the side-task, micro-task, and micro-project contracts. A side task must still have:
 
 - a clear owner request or accepted micro-plan;
 - no unresolved decision;
@@ -136,6 +136,17 @@ Use `docs/ai-workflow/ai/operating-model.md` for the side-task contract. A side 
 - relevant validation evidence or a recorded reason why validation is not applicable.
 
 If any condition is false, route the work into the normal workflow phase instead of treating it as a side task.
+
+Project-local micro-tasks are side tasks with a durable project-local record. Store them in:
+
+- `docs/ai-workflow/projects/<project>/micro-tasks.md`
+- `docs/ai-workflow/projects/<project>/micro-tasks/`
+
+Repo-level micro-projects are small low-risk work items outside a full project workspace. Store them in:
+
+- `docs/ai-workflow/micro-projects/<micro-project>/`
+
+Micro-task and micro-project architecture, planning, spec QA, quality phase, distillation, and checkpoint artifacts are optional. Risk classification and evidence are not optional.
 
 ## Risk Routing
 
@@ -205,6 +216,8 @@ Project-specific runtime:
 - `docs/ai-workflow/projects/<project>/status.md`
 - `docs/ai-workflow/projects/<project>/tasks.md`
 - `docs/ai-workflow/projects/<project>/tasks/`
+- `docs/ai-workflow/projects/<project>/micro-tasks.md`
+- `docs/ai-workflow/projects/<project>/micro-tasks/`
 - `docs/ai-workflow/projects/<project>/context/`
 - `docs/ai-workflow/projects/<project>/planning/`
 - `docs/ai-workflow/projects/<project>/specs/`

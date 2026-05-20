@@ -92,7 +92,7 @@ done
 
 workspace_phase="docs/ai-workflow/ai/workflow/phase-0-project-workspace.md"
 workspace_template="docs/ai-workflow/ai/templates/workflow/phase-0-project-workspace.template.md"
-for required_workspace_ref in 'tasks/' 'reviews/' 'autopilot/README.md' 'autopilot/runs/'; do
+for required_workspace_ref in 'tasks/' 'micro-tasks.md' 'micro-tasks/' 'reviews/' 'autopilot/README.md' 'autopilot/runs/'; do
   if ! rg -q "$required_workspace_ref" "$workspace_phase"; then
     echo "Project workspace phase missing required workspace ref: $required_workspace_ref"
     fail=1

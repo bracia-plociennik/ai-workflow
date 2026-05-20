@@ -2,6 +2,7 @@
 
 ## 0.7.1 - 2026-05-20
 
+- Added project-local `micro-tasks.md` and `micro-tasks/` plus repo-level `docs/ai-workflow/micro-projects/` for low-risk work that does not need full workflow phases.
 - Added the official `update-from-upstream` flow for safely updating target repository nested clones while preserving runtime, workspaces, local External Memory, and legacy source filenames.
 - Excluded preserved legacy workflow inputs under `docs/ai-workflow/repo/legacy/` and detailed repo context entries under `docs/ai-workflow/repo/context/` from strict Markdown naming checks while keeping canonical repo context at `docs/ai-workflow/repo/context.md`.
 - Added `docs/ai-workflow/repo/legacy.md` as the canonical router and summary for preserved legacy material under `docs/ai-workflow/repo/legacy/`.

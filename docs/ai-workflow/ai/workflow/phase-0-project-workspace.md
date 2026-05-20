@@ -89,6 +89,7 @@ Required project support files:
 - `status.md`
 - `memory.md`
 - `tasks.md`
+- `micro-tasks.md`
 - `plans.md`
 - `code-review.md`
 
@@ -97,6 +98,7 @@ Required project directories:
 - `context/`
 - `memory/`
 - `tasks/`
+- `micro-tasks/`
 - `intake/`
 - `architecture/`
 - `planning/`
@@ -117,6 +119,8 @@ Required project directories:
 `plans.md` is the planning router. Canonical project planning artifacts belong in `planning/`.
 
 `tasks.md` is the task index/router. Optional detailed task cards belong in `tasks/`.
+
+`micro-tasks.md` is the project-local micro-task router. Detailed low-risk micro-task artifacts belong in `micro-tasks/`. Micro-task artifacts do not replace normal plan tasks, specs, quality evidence, distillations, or checkpoints when full workflow is required.
 
 `code-review.md` is the review checklist/router. Detailed review artifacts belong in `reviews/`, while QA gate evidence remains in `quality/`.
 

@@ -22,6 +22,7 @@ In that model, the target repository keeps its own application files and gets on
 - `docs/ai-workflow/ai/command-routing.md` - user-facing command aliases and safe interpretation rules.
 - `docs/ai-workflow/repo/` - target-repository runtime context, intake, status, and memory router/entries.
 - `docs/ai-workflow/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
+- `docs/ai-workflow/micro-projects/` - repo-level low-risk micro-project workspace.
 - `scripts/ai-workflow/` - validators for this workflow repository, run from `ai-workflow/`.
 
 ## How To Install In Another Repository
@@ -110,6 +111,8 @@ ai-workflow/scripts/ai-workflow/update-from-upstream
 ```
 
 This blocks dirty template-owned files, runs `git fetch` and `git merge --ff-only`, then restores repo runtime, real project/human workspaces, local external memory, and legacy source files.
+
+Real micro-projects under `docs/ai-workflow/micro-projects/` are also target-owned runtime and are protected by the update flow.
 
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.
 

@@ -153,7 +153,7 @@ Use:
 ai-workflow/scripts/ai-workflow/update-from-upstream
 ```
 
-The official update flow protects `docs/ai-workflow/repo/**`, real non-`EXAMPLE` project and human workspaces, local External Memory, and preserved legacy files. It blocks dirty template-owned files, fetches upstream, applies a fast-forward-only merge, restores protected runtime, and runs validators.
+The official update flow protects `docs/ai-workflow/repo/**`, real non-`EXAMPLE` micro-projects, real non-`EXAMPLE` project and human workspaces, local External Memory, and preserved legacy files. It blocks dirty template-owned files, fetches upstream, applies a fast-forward-only merge, restores protected runtime, and runs validators.
 
 Detailed rules live in `docs/ai-workflow/ai/update-from-upstream.md`.
 

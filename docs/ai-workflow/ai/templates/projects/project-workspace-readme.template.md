@@ -23,6 +23,8 @@ This directory contains project-scoped workflow artifacts for `<Project>`.
 - `plans.md` - planning router/index for `planning/`.
 - `tasks.md` - task index/router.
 - `tasks/` - optional task cards.
+- `micro-tasks.md` - project-local micro-task router/index.
+- `micro-tasks/` - low-risk micro-task artifacts.
 - `code-review.md` - project-local review checklist and router.
 - `reviews/` - detailed review artifacts.
 

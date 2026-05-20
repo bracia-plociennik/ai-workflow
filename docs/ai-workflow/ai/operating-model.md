@@ -84,6 +84,19 @@ Side tasks still require:
 - evidence in the final response;
 - no unrelated file changes.
 
+Project-local micro-tasks are side tasks with durable project-local artifacts. Store them in:
+
+- `docs/ai-workflow/projects/<project>/micro-tasks.md`
+- `docs/ai-workflow/projects/<project>/micro-tasks/`
+
+Micro-tasks do not update `tasks.md`, `planning/`, `quality/`, `distillations/`, or `checkpoints/` unless the owner or risk classification promotes them to the full workflow. Architecture, plan, spec QA, quality phase, distillation, and checkpoint artifacts are optional for micro-tasks.
+
+Repo-level micro-projects are small, self-contained, low-risk work items outside a full project workspace. Store them in:
+
+- `docs/ai-workflow/micro-projects/<micro-project>/`
+
+Micro-projects do not create `docs/ai-workflow/projects/<project>/` workspaces and do not use phase artifacts unless promoted to the normal workflow.
+
 Route to the full workflow when:
 
 - any side-task condition is false;

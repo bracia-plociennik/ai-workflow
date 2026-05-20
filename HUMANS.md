@@ -300,6 +300,20 @@ Krótkie:
 Side-task: popraw tekst CTA.
 ```
 
+### Micro-task i micro-project
+
+Micro-task w projekcie:
+
+```text
+Zrób micro-task w projekcie <project>: <opis>. Zapisz artefakt w docs/ai-workflow/projects/<project>/micro-tasks/. Jeśli to nie jest low-risk, zatrzymaj i zaproponuj normalny workflow.
+```
+
+Micro-project poza projektem:
+
+```text
+Utwórz micro-project: <opis>. Zapisz go w docs/ai-workflow/micro-projects/<slug>/. Jeśli wymaga architektury, planu, QA fazowego, migracji, auth, billing albo external effects, promuj go do normalnego workflow.
+```
+
 ### Autopilot / autonomous execution
 
 Pełne:
@@ -739,6 +753,18 @@ Side-task jest dopuszczalny, jeśli:
 
 Jeśli podczas side-taska okazuje się, że trzeba zmienić flow płatności, dodać pole do bazy, zmienić maila albo ruszyć panel admina, to przestaje być side-task. Wtedy wracasz do normalnego workflow: plan/spec/QA/implementation/quality.
 
+Jeśli chcesz zachować trwały zapis pobocznej pracy w ramach projektu, użyj micro-taska:
+
+```text
+Zrób micro-task w projekcie WorkshopHub: popraw opis CTA w sekcji hero. Zapisz artefakt w docs/ai-workflow/projects/workshophub/micro-tasks/. Nie aktualizuj tasks.md, planning/, quality/, distillations/ ani checkpoints/, chyba że ryzyko wymaga promocji do pełnego workflow.
+```
+
+Jeśli praca jest małym, samodzielnym zakresem na poziomie repo, a nie częścią konkretnego projektu, użyj micro-projectu:
+
+```text
+Utwórz micro-project: uporządkuj krótkie komunikaty błędów w formularzach. Zapisz go w docs/ai-workflow/micro-projects/form-error-copy/. Jeśli to nie jest low-risk, zatrzymaj i zaproponuj normalny workflow.
+```
+
 ### 10. Review decyzji AI i rollback jednej decyzji
 
 Po kilku taskach chcesz sprawdzić decyzje podjęte przez AI.
@@ -964,10 +990,12 @@ docs/ai-workflow/projects/<project>/
   memory.md
   plans.md
   tasks.md
+  micro-tasks.md
   code-review.md
   context/
   memory/
   tasks/
+  micro-tasks/
   intake/
   architecture/
   planning/
@@ -987,6 +1015,8 @@ Znaczenie katalogów:
 - `plans.md`: router do canonical planów w `planning/`.
 - `tasks.md`: indeks/router tasków.
 - `tasks/`: opcjonalne task cards z dodatkowymi szczegółami tasków.
+- `micro-tasks.md`: router/index project-local micro-tasków.
+- `micro-tasks/`: lekkie artefakty low-risk micro-tasków, poza pełnym planem i bez obowiązkowych faz quality/distillation/checkpoint.
 - `intake/`: walidacja pomysłu i project/context intake.
 - `architecture/`: decyzje architektoniczne i ich QA.
 - `planning/`: plan projektu i packaging.
@@ -1008,6 +1038,8 @@ W upstreamowym repo `ai-workflow` pliki `docs/ai-workflow/repo/context.md`, `doc
 `docs/ai-workflow/ai/external-memory.md` jest routerem, a `docs/ai-workflow/ai/external-memory/` miejscem na uniwersalne wnioski o naszym workflow: rekomendacje, antywzorce, zasady i pomysły do przeniesienia do template'u `ai-workflow`. Nie zapisuj tam faktów domenowych konkretnego repo.
 
 `docs/ai-workflow/humans/` nie jest miejscem na specs, QA evidence ani runtime. To miejsce na dokumenty dla ludzi.
+
+`docs/ai-workflow/micro-projects/` jest miejscem na repo-level micro-projecty: małe, samodzielne prace low-risk, które nie wymagają pełnego workspace'u projektu. Jeśli micro-project zaczyna wymagać architektury, planu, specyfikacji, migracji, auth, billing, security albo external effects, przestaje być micro-projectem i powinien zostać przeniesiony do normalnego workflow.
 
 ## Pełny Workflow
 

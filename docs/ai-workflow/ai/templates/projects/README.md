@@ -20,6 +20,12 @@ Templates for project-local support files, project context, project memory, plan
 - `tasks-readme.template.md` -> `docs/ai-workflow/projects/<project>/tasks/README.md`
 - `task-card.template.md` -> `docs/ai-workflow/projects/<project>/tasks/<task-id>.md`
 
+## Micro-task Templates
+
+- `micro-tasks.template.md` -> `docs/ai-workflow/projects/<project>/micro-tasks.md`
+- `micro-tasks-readme.template.md` -> `docs/ai-workflow/projects/<project>/micro-tasks/README.md`
+- `micro-task.template.md` -> `docs/ai-workflow/projects/<project>/micro-tasks/YYYY-MM-DD-short-kebab-title.md`
+
 ## Review Templates
 
 - `code-review.template.md` -> `docs/ai-workflow/projects/<project>/code-review.md`

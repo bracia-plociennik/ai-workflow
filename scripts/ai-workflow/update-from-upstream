@@ -92,6 +92,12 @@ is_protected_path() {
     docs/ai-workflow/ai/external-memory.md|docs/ai-workflow/ai/external-memory|docs/ai-workflow/ai/external-memory/*)
       return 0
       ;;
+    docs/ai-workflow/micro-projects/README.md|docs/ai-workflow/micro-projects/EXAMPLE|docs/ai-workflow/micro-projects/EXAMPLE/*)
+      return 1
+      ;;
+    docs/ai-workflow/micro-projects/*)
+      return 0
+      ;;
     docs/ai-workflow/projects/README.md|docs/ai-workflow/projects/EXAMPLE|docs/ai-workflow/projects/EXAMPLE/*)
       return 1
       ;;
@@ -122,6 +128,10 @@ protected_root_for_path() {
       ;;
     docs/ai-workflow/ai/external-memory|docs/ai-workflow/ai/external-memory/*)
       printf '%s\n' "docs/ai-workflow/ai/external-memory"
+      ;;
+    docs/ai-workflow/micro-projects/*)
+      IFS='/' read -r a b c d _ <<<"$path"
+      printf '%s/%s/%s/%s\n' "$a" "$b" "$c" "$d"
       ;;
     docs/ai-workflow/projects/*)
       IFS='/' read -r a b c d _ <<<"$path"
@@ -188,7 +198,7 @@ for root in \
   [[ -e "$root" ]] && add_unique "$root"
 done
 
-for workspace_root in docs/ai-workflow/projects docs/ai-workflow/humans; do
+for workspace_root in docs/ai-workflow/micro-projects docs/ai-workflow/projects docs/ai-workflow/humans; do
   if [[ -d "$workspace_root" ]]; then
     while IFS= read -r -d '' item; do
       name="$(basename "$item")"

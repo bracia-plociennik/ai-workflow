@@ -496,7 +496,7 @@ Routing notes:
 
 ### Side Task
 
-Route through side-task contract if all side-task conditions are true.
+Route through side-task, micro-task, or micro-project contract if all low-risk conditions are true.
 
 Polish variants:
 
@@ -504,6 +504,8 @@ Polish variants:
 - `Zrób szybki poboczny task poza aktywnym planem.`
 - `Potwierdź, że to low-risk side-task, a potem wykonaj.`
 - `Zrób małą lokalną zmianę bez naruszania workflow projektu.`
+- `Zrób micro-task w projekcie <project>: <opis>.`
+- `Utwórz micro-project: <opis>.`
 - `Jeśli to dotyka auth, billing, maili, migracji albo aktywnego planu, zatrzymaj.`
 
 English variants:
@@ -512,11 +514,16 @@ English variants:
 - `Do a quick side task outside the active plan.`
 - `Confirm this is a low-risk side-task, then implement it.`
 - `Make a small local change without disturbing the project workflow.`
+- `Create a micro-task in project <project>: <description>.`
+- `Create a micro-project: <description>.`
 - `If this touches auth, billing, mail, migrations, or the active plan, stop.`
 
 Routing notes:
 
 - Side tasks still need scope, low risk, no unresolved decisions, and evidence.
+- Project-local micro-tasks belong in `docs/ai-workflow/projects/<project>/micro-tasks.md` and `docs/ai-workflow/projects/<project>/micro-tasks/`.
+- Repo-level micro-projects belong in `docs/ai-workflow/micro-projects/<micro-project>/`.
+- Architecture, plan, spec QA, quality phase, distillation, and checkpoint artifacts are optional for micro-tasks and micro-projects, but evidence is required.
 - If any condition fails, route to the normal workflow.
 
 ### Supervised Autopilot And Autonomous Execution

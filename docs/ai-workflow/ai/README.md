@@ -34,6 +34,7 @@ In target repositories, this directory normally lives under `AI_WORKFLOW_HOME`, 
 
 - Repo-specific facts belong in `docs/ai-workflow/repo/`; detailed repo context belongs in `docs/ai-workflow/repo/context/` and is indexed by `docs/ai-workflow/repo/context.md`.
 - Project-specific facts belong in `docs/ai-workflow/projects/<project>/`, with accepted project context under `docs/ai-workflow/projects/<project>/context.md`.
+- Repo-level low-risk micro-projects belong in `docs/ai-workflow/micro-projects/`.
 - Human-facing coordination docs belong in `docs/ai-workflow/humans/<project>/`.
 - Template/process docs belong in `docs/ai-workflow/ai/`.
 - Template maintenance memory belongs in `docs/ai-workflow/ai/memory/` and is indexed by `docs/ai-workflow/ai/memory.md`.

@@ -14,7 +14,7 @@
 - Choose the highest applicable risk class.
 - Complexity alone does not make a task critical.
 - Critical risk requires material irreversibility, production impact, security exposure, legal/financial impact, or real external side effect.
-- High-risk and critical-risk tasks are not eligible for micro-task handling.
+- Medium-risk, high-risk, and critical-risk tasks are not eligible for micro-task or micro-project handling.
 
 ## Required Actions
 

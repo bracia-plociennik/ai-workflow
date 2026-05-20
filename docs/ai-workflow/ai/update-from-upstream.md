@@ -16,8 +16,9 @@ The update flow treats the nested clone as two layers:
 
 | Layer | Paths | Update Behavior |
 | --- | --- | --- |
-| Template-owned | `AGENTS.md`, `HUMANS.md`, `README.md`, `docs/ai-workflow/ai/**`, `scripts/**`, `.github/**`, `docs/ai-workflow/projects/EXAMPLE/**`, `docs/ai-workflow/humans/EXAMPLE/**` | Must be clean before update. Updated by upstream. |
+| Template-owned | `AGENTS.md`, `HUMANS.md`, `README.md`, `docs/ai-workflow/ai/**`, `scripts/**`, `.github/**`, `docs/ai-workflow/micro-projects/EXAMPLE/**`, `docs/ai-workflow/projects/EXAMPLE/**`, `docs/ai-workflow/humans/EXAMPLE/**` | Must be clean before update. Updated by upstream. |
 | Repo runtime | `docs/ai-workflow/repo/**` | Protected and restored after upstream update. |
+| Real micro-projects | `docs/ai-workflow/micro-projects/*` except `README.md` and `EXAMPLE` | Protected and restored after upstream update. |
 | Real project workspaces | `docs/ai-workflow/projects/*` except `README.md` and `EXAMPLE` | Protected and restored after upstream update. |
 | Real human workspaces | `docs/ai-workflow/humans/*` except `README.md` and `EXAMPLE` | Protected and restored after upstream update. |
 | Local external memory | `docs/ai-workflow/ai/external-memory.md`, `docs/ai-workflow/ai/external-memory/**` | Protected and restored after upstream update. |
@@ -71,6 +72,7 @@ After a successful update:
 
 - template-owned files reflect upstream;
 - repo runtime still describes the target repository;
+- real micro-projects are preserved;
 - real project and human workspaces are preserved;
 - local external memory is preserved;
 - legacy source filenames are unchanged;

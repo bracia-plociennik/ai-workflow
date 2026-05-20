@@ -40,6 +40,14 @@ mv "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md" "
 run_must_fail "missing-autopilot-readme-template" scripts/ai-workflow/check-required-artifacts
 mv "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md.bak" "$tmp/docs/ai-workflow/ai/templates/autopilot/autopilot-readme.template.md"
 
+mv "$tmp/docs/ai-workflow/ai/templates/projects/micro-task.template.md" "$tmp/docs/ai-workflow/ai/templates/projects/micro-task.template.md.bak"
+run_must_fail "missing-micro-task-template" scripts/ai-workflow/check-required-artifacts
+mv "$tmp/docs/ai-workflow/ai/templates/projects/micro-task.template.md.bak" "$tmp/docs/ai-workflow/ai/templates/projects/micro-task.template.md"
+
+mv "$tmp/docs/ai-workflow/ai/templates/micro-projects/micro-project.template.md" "$tmp/docs/ai-workflow/ai/templates/micro-projects/micro-project.template.md.bak"
+run_must_fail "missing-micro-project-template" scripts/ai-workflow/check-required-artifacts
+mv "$tmp/docs/ai-workflow/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/docs/ai-workflow/ai/templates/micro-projects/micro-project.template.md"
+
 cat > "$tmp/docs/ai-workflow/projects/EXAMPLE/tasks.md" <<'MD'
 # EXAMPLE Tasks Router
 
@@ -160,13 +168,22 @@ echo "dirty template blocker" >> "$target_work/AGENTS.md"
 run_must_fail "update-blocks-dirty-template" "$target_work/scripts/ai-workflow/update-from-upstream" --remote origin --branch main --skip-validation
 git -C "$target_work" checkout -q -- AGENTS.md
 
+echo "dirty example micro-project blocker" >> "$target_work/docs/ai-workflow/micro-projects/EXAMPLE/micro-project.md"
+run_must_fail "update-blocks-dirty-example-micro-project" "$target_work/scripts/ai-workflow/update-from-upstream" --remote origin --branch main --skip-validation
+git -C "$target_work" checkout -q -- docs/ai-workflow/micro-projects/EXAMPLE/micro-project.md
+
 echo "upstream update marker" >> "$remote_work/README.md"
 git -C "$remote_work" add README.md
 git -C "$remote_work" commit -q -m "upstream update"
 git -C "$remote_work" push -q origin main
 
 echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_work/docs/ai-workflow/repo/status.md"
-mkdir -p "$target_work/docs/ai-workflow/projects/my-project" "$target_work/docs/ai-workflow/humans/my-project" "$target_work/docs/ai-workflow/repo/legacy"
+mkdir -p "$target_work/docs/ai-workflow/micro-projects/my-micro-project" "$target_work/docs/ai-workflow/projects/my-project" "$target_work/docs/ai-workflow/humans/my-project" "$target_work/docs/ai-workflow/repo/legacy"
+cat > "$target_work/docs/ai-workflow/micro-projects/my-micro-project/micro-project.md" <<'MD'
+# My Micro-project
+
+LOCAL_MICRO_PROJECT_MARKER
+MD
 cat > "$target_work/docs/ai-workflow/projects/my-project/status.md" <<'MD'
 # My Project Status
 
@@ -192,6 +209,7 @@ MD
 run_must_pass "update-preserves-protected-runtime" "$target_work/scripts/ai-workflow/update-from-upstream" --remote origin --branch main --skip-validation
 grep -q "upstream update marker" "$target_work/README.md" || { echo "Update smoke missing upstream marker"; exit 1; }
 grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_work/docs/ai-workflow/repo/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
+grep -q "LOCAL_MICRO_PROJECT_MARKER" "$target_work/docs/ai-workflow/micro-projects/my-micro-project/micro-project.md" || { echo "Update smoke lost micro-project"; exit 1; }
 grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_work/docs/ai-workflow/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }
 grep -q "LOCAL_HUMAN_RUNTIME_MARKER" "$target_work/docs/ai-workflow/humans/my-project/summary.md" || { echo "Update smoke lost human workspace"; exit 1; }
 grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_work/docs/ai-workflow/ai/external-memory.md" || { echo "Update smoke lost external memory router"; exit 1; }
