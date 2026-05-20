@@ -466,6 +466,28 @@ Oczekiwany efekt:
 - `ai-workflow/docs/ai-workflow/repo/status.md` mówi, że repo jest gotowe albo blokuje dalszą pracę konkretnym powodem;
 - `ai-workflow/docs/ai-workflow/repo/memory.md` i `ai-workflow/docs/ai-workflow/repo/memory/` są puste albo zawierają wyłącznie repo-local memory dla `WorkshopHub`.
 
+### Aktualizacja AI Workflow z upstreamu
+
+Gdy AI Workflow jest zainstalowany jako nested clone w `ai-workflow/`, nie aktualizuj go zwykłym `git pull` wykonywanym ręcznie w ciemno. Użyj oficjalnego flow:
+
+```bash
+ai-workflow/scripts/ai-workflow/update-from-upstream
+```
+
+Ten flow blokuje dirty zmiany w template-owned plikach, robi `git fetch` i `ff-only merge`, a potem przywraca lokalne dane runtime: `ai-workflow/docs/ai-workflow/repo/`, realne workspace'y w `projects/` i `humans/`, lokalne `external-memory` oraz zachowane legacy materiały. Nazwy plików w `repo/legacy/` nie są normalizowane.
+
+Pełny prompt do Codexa:
+
+```text
+Update AI Workflow from upstream in this target repository. Use ai-workflow/scripts/ai-workflow/update-from-upstream. Protect ai-workflow/docs/ai-workflow/repo/**, real project and human workspaces, local external-memory, and repo/legacy filenames. Stop if template-owned files are dirty. Run validation after the update.
+```
+
+Krótki prompt:
+
+```text
+Zaktualizuj ai-workflow z upstreamu.
+```
+
 ### 2. Repo intake i bezpieczne komendy
 
 W repo Laravel typowe komendy mogą wyglądać tak:

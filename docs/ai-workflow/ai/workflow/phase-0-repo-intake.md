@@ -312,7 +312,7 @@ Klasyfikacja statusu:
 
 - `absent`: można utworzyć wymagany shim albo nested clone, jeśli owner to zatwierdza.
 - `current`: można użyć istniejącego nested clone albo aktualnego shima.
-- `outdated`: można zaproponować `git -C ai-workflow pull`.
+- `outdated`: można zaproponować `ai-workflow/scripts/ai-workflow/update-from-upstream`.
 - `conflicting`: STOP do decyzji ownera.
 - `target-owned`: nie nadpisywać.
 

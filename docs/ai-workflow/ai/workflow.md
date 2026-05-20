@@ -163,5 +163,6 @@ This table is a compact phase router only. Use `docs/ai-workflow/ai/command-rout
 | final check | `phase-8-final-check.md` |
 | side-task, micro-task | use side-task contract in `AGENTS.md` and `operating-model.md` |
 | autopilot, autonomous-execution | use `autopilot.md` plus current task/package gates |
+| update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `scripts/ai-workflow/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |
 | decision review, rollback, resume, skills check | use `command-routing.md` to choose the safe phase or stop condition |

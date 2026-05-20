@@ -12,7 +12,7 @@ This is the workflow status snapshot for this repository.
 | `workflow-scope` | `template-maintenance` |
 | `active-project` | `none` |
 | `active-plan-status` | `none` |
-| `current-task` | `legacy router, project context path simplification, and naming exemptions` |
+| `current-task` | `official update-from-upstream flow for target repos` |
 | `current-phase` | `phase-5-quality` |
 | `phase-result` | `completed` |
 | `next-phase` | `none` |

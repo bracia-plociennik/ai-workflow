@@ -9,6 +9,7 @@ Do not store target-repository-specific facts in `docs/ai-workflow/ai/`. Runtime
 - `operating-model.md` - primary operating contract behind the short `AGENTS.md` router.
 - `workflow.md` - phase router and canonical phase index.
 - `installation.md` - safe installation and collision policy for existing repositories.
+- `update-from-upstream.md` - safe upstream update policy for target repositories using the nested clone.
 - `autopilot.md` - autopilot launch and runtime rules.
 - `command-routing.md` - user-facing workflow command aliases and interpretation rules.
 - `guide.md` - orientation rules for lost, starting, next-step, and recovery prompts.

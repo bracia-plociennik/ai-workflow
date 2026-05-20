@@ -15,6 +15,7 @@
 - Default target-repository installation is a nested clone at `ai-workflow/` plus a root `AGENTS.md` shim from `docs/ai-workflow/ai/templates/root-agents.template.md`.
 - `docs/ai-workflow/` is the workflow-owned documentation namespace inside `AI_WORKFLOW_HOME`.
 - `docs/ai-workflow/ai/` is template-owned policy and workflow source.
+- `docs/ai-workflow/ai/update-from-upstream.md` defines the safe target-repository update flow for nested clones.
 - `docs/ai-workflow/ai/skills/` stores optional task-specific workflow skills.
 - `docs/ai-workflow/repo/` stores repo-specific runtime facts.
 - `docs/ai-workflow/repo/context.md` is the repo context router; detailed repo context lives in `docs/ai-workflow/repo/context/`.

@@ -140,4 +140,77 @@ perl -0pi -e 's/\\| `current-phase` \\| `phase-5-quality` \\|/| `current-phase` 
 perl -0pi -e 's/\\| `next-phase` \\| `none` \\|/| `next-phase` | `phase-8-final-check` |/' "$tmp/docs/ai-workflow/repo/status.md"
 run_must_fail "bad-phase-transition" scripts/ai-workflow/check-status-consistency
 
+update_fixture="$tmp/.update-smoke"
+remote_work="$update_fixture/remote-work"
+remote_bare="$update_fixture/remote.git"
+target_work="$update_fixture/target/ai-workflow"
+mkdir -p "$remote_work" "$update_fixture/target"
+(cd "$tmp" && tar --exclude='.git' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$remote_work"
+git -C "$remote_work" init -q
+git -C "$remote_work" checkout -q -b main
+git -C "$remote_work" config user.email "smoke@example.invalid"
+git -C "$remote_work" config user.name "AI Workflow Smoke"
+git -C "$remote_work" add -A
+git -C "$remote_work" commit -q -m "initial"
+git clone -q --bare "$remote_work" "$remote_bare"
+git clone -q "$remote_bare" "$target_work"
+git -C "$remote_work" remote add origin "$remote_bare"
+
+echo "dirty template blocker" >> "$target_work/AGENTS.md"
+run_must_fail "update-blocks-dirty-template" "$target_work/scripts/ai-workflow/update-from-upstream" --remote origin --branch main --skip-validation
+git -C "$target_work" checkout -q -- AGENTS.md
+
+echo "upstream update marker" >> "$remote_work/README.md"
+git -C "$remote_work" add README.md
+git -C "$remote_work" commit -q -m "upstream update"
+git -C "$remote_work" push -q origin main
+
+echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_work/docs/ai-workflow/repo/status.md"
+mkdir -p "$target_work/docs/ai-workflow/projects/my-project" "$target_work/docs/ai-workflow/humans/my-project" "$target_work/docs/ai-workflow/repo/legacy"
+cat > "$target_work/docs/ai-workflow/projects/my-project/status.md" <<'MD'
+# My Project Status
+
+LOCAL_PROJECT_RUNTIME_MARKER
+MD
+cat > "$target_work/docs/ai-workflow/humans/my-project/summary.md" <<'MD'
+# My Project Human Summary
+
+LOCAL_HUMAN_RUNTIME_MARKER
+MD
+echo "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" >> "$target_work/docs/ai-workflow/ai/external-memory.md"
+cat > "$target_work/docs/ai-workflow/ai/external-memory/2026-05-20-local-smoke.md" <<'MD'
+# Local Smoke External Memory
+
+LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER
+MD
+cat > "$target_work/docs/ai-workflow/repo/legacy/Old Prompt FINAL_v2.md" <<'MD'
+# Old Prompt
+
+LEGACY_ORIGINAL_FILENAME_MARKER
+MD
+
+run_must_pass "update-preserves-protected-runtime" "$target_work/scripts/ai-workflow/update-from-upstream" --remote origin --branch main --skip-validation
+grep -q "upstream update marker" "$target_work/README.md" || { echo "Update smoke missing upstream marker"; exit 1; }
+grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_work/docs/ai-workflow/repo/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
+grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_work/docs/ai-workflow/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }
+grep -q "LOCAL_HUMAN_RUNTIME_MARKER" "$target_work/docs/ai-workflow/humans/my-project/summary.md" || { echo "Update smoke lost human workspace"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_work/docs/ai-workflow/ai/external-memory.md" || { echo "Update smoke lost external memory router"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER" "$target_work/docs/ai-workflow/ai/external-memory/2026-05-20-local-smoke.md" || { echo "Update smoke lost external memory entry"; exit 1; }
+grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_work/docs/ai-workflow/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
+
+git -C "$target_work" config user.email "smoke@example.invalid"
+git -C "$target_work" config user.name "AI Workflow Smoke"
+echo "local divergent commit" >> "$target_work/README.md"
+git -C "$target_work" add README.md
+git -C "$target_work" commit -q -m "local divergence"
+
+echo "second upstream marker" >> "$remote_work/README.md"
+git -C "$remote_work" add README.md
+git -C "$remote_work" commit -q -m "second upstream update"
+git -C "$remote_work" push -q origin main
+
+echo "FF_ONLY_PROTECTED_MARKER" >> "$target_work/docs/ai-workflow/repo/status.md"
+run_must_fail "update-ff-only-failure-restores-protected" "$target_work/scripts/ai-workflow/update-from-upstream" --remote origin --branch main --skip-validation
+grep -q "FF_ONLY_PROTECTED_MARKER" "$target_work/docs/ai-workflow/repo/status.md" || { echo "Update smoke failed to restore protected files after ff-only failure"; exit 1; }
+
 echo "Validator smoke tests passed."

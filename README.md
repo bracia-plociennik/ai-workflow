@@ -103,11 +103,13 @@ ai-workflow/docs/ai-workflow/humans/<project>/
 
 ## Updating AI Workflow
 
-Because `ai-workflow/` is a nested clone, update it independently:
+Because `ai-workflow/` is a nested clone, update it with the protected upstream flow:
 
 ```bash
-git -C ai-workflow pull
+ai-workflow/scripts/ai-workflow/update-from-upstream
 ```
+
+This blocks dirty template-owned files, runs `git fetch` and `git merge --ff-only`, then restores repo runtime, real project/human workspaces, local external memory, and legacy source files.
 
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.
 

@@ -18,6 +18,8 @@ Use guide mode when the user says things like:
 - `what should I do next`
 - `how do I start`
 - `help me resume`
+- `jak zaktualizować ai-workflow`
+- `update workflow from upstream`
 
 ## Authority
 
@@ -44,13 +46,14 @@ Read the smallest set that can answer the user's question safely. Prefer this or
 3. `docs/ai-workflow/ai/workflow.md`
 4. `docs/ai-workflow/ai/command-routing.md`
 5. `docs/ai-workflow/ai/installation.md` when the workflow may be newly installed
-6. `docs/ai-workflow/repo/status.md`
-7. `docs/ai-workflow/repo/repo-intake.md`
-8. `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/`
-9. active `docs/ai-workflow/projects/<project>/status.md`
-10. active `docs/ai-workflow/projects/<project>/tasks.md`
-11. active project plan, task cards, spec, quality evidence, decisions, reviews, checkpoints, and autopilot run state when relevant
-12. `docs/ai-workflow/ai/external-memory.md` and `docs/ai-workflow/ai/external-memory/` when checking workflow improvement feedback or maintenance opportunities
+6. `docs/ai-workflow/ai/update-from-upstream.md` when the user asks how to update AI Workflow
+7. `docs/ai-workflow/repo/status.md`
+8. `docs/ai-workflow/repo/repo-intake.md`
+9. `docs/ai-workflow/repo/context.md` and `docs/ai-workflow/repo/context/`
+10. active `docs/ai-workflow/projects/<project>/status.md`
+11. active `docs/ai-workflow/projects/<project>/tasks.md`
+12. active project plan, task cards, spec, quality evidence, decisions, reviews, checkpoints, and autopilot run state when relevant
+13. `docs/ai-workflow/ai/external-memory.md` and `docs/ai-workflow/ai/external-memory/` when checking workflow improvement feedback or maintenance opportunities
 
 When running from a target repository, all `docs/ai-workflow/...` paths above resolve under `AI_WORKFLOW_HOME`, usually `ai-workflow/docs/ai-workflow/...`.
 
@@ -69,6 +72,7 @@ Use these locations when orienting the user:
 - Workflow router: `docs/ai-workflow/ai/workflow.md`.
 - Phase specs: `docs/ai-workflow/ai/workflow/`.
 - Command routing: `docs/ai-workflow/ai/command-routing.md`.
+- Update from upstream: `docs/ai-workflow/ai/update-from-upstream.md` and `scripts/ai-workflow/update-from-upstream`.
 - Policy docs: `docs/ai-workflow/ai/definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `rollback.md`, `dependencies.md`.
 - Template versioning: `docs/ai-workflow/ai/version.md` and `docs/ai-workflow/ai/changelog.md`.
 - Optional skills: `docs/ai-workflow/ai/skills/`.
@@ -110,6 +114,26 @@ Next prompt:
 ```
 
 Do not provide a long menu of options. If more possibilities exist, pick the safest recommendation and one meaningful alternative.
+
+## Update From Upstream Guidance
+
+When the user asks how to update AI Workflow in a target repository, recommend the official update flow instead of raw `git pull`.
+
+Recommended next prompt:
+
+```text
+Update AI Workflow from upstream using ai-workflow/scripts/ai-workflow/update-from-upstream. Protect repo runtime, real project and human workspaces, local external-memory, and legacy filenames. Stop if template-owned files are dirty.
+```
+
+Impact: updates the nested `ai-workflow/` clone while preserving target-owned runtime data and blocking unsafe template edits.
+
+Alternative:
+
+```text
+Run ai-workflow/scripts/ai-workflow/update-from-upstream --dry-run and report blockers only.
+```
+
+Impact: safer when the user wants to inspect dirty template-owned files or protected runtime before changing the nested clone.
 
 ## Fresh Repository Start
 

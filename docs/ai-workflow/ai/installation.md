@@ -66,7 +66,7 @@ git status --short
 If `ai-workflow/` already exists, classify it before continuing:
 
 - `current`: it is the expected AI Workflow nested clone.
-- `outdated`: update with `git -C ai-workflow pull`.
+- `outdated`: update with `ai-workflow/scripts/ai-workflow/update-from-upstream`.
 - `conflicting`: stop for owner decision.
 - `target-owned`: do not overwrite.
 
@@ -142,6 +142,20 @@ During `phase-0-repo-intake`, replace these runtime files with target-repository
 The paths above are relative to `AI_WORKFLOW_HOME`.
 
 If stale upstream runtime cannot be replaced, repo intake must report `STALE_RUNTIME_COPY` and stop before architecture, planning, specification, implementation, or autopilot.
+
+## Update From Upstream
+
+Do not run a raw pull inside the nested `ai-workflow/` clone in target repositories.
+
+Use:
+
+```bash
+ai-workflow/scripts/ai-workflow/update-from-upstream
+```
+
+The official update flow protects `docs/ai-workflow/repo/**`, real non-`EXAMPLE` project and human workspaces, local External Memory, and preserved legacy files. It blocks dirty template-owned files, fetches upstream, applies a fast-forward-only merge, restores protected runtime, and runs validators.
+
+Detailed rules live in `docs/ai-workflow/ai/update-from-upstream.md`.
 
 ## CI Policy
 

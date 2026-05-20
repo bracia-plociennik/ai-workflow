@@ -43,6 +43,8 @@ For implementation work, also read:
 
 For installing this workflow into a repository or running first repo intake, also read `docs/ai-workflow/ai/installation.md`.
 
+For updating a target repository's nested `ai-workflow/` clone from upstream, also read `docs/ai-workflow/ai/update-from-upstream.md`.
+
 ## Command Routing
 
 Use `docs/ai-workflow/ai/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, guide requests, and unsafe bypass requests.

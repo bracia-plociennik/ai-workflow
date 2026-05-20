@@ -618,6 +618,36 @@ Routing notes:
 - Resume only from the last stable `PASS` with evidence.
 - Drift requires escalation or fix loop.
 
+### Update From Upstream
+
+Route through `docs/ai-workflow/ai/update-from-upstream.md` and `scripts/ai-workflow/update-from-upstream`.
+
+Polish variants:
+
+- `Zaktualizuj ai-workflow z upstreamu.`
+- `Zaktualizuj AI Workflow w tym repo.`
+- `Uruchom update-from-upstream.`
+- `Pobierz najnowszy ai-workflow, ale nie ruszaj runtime repo i projektów.`
+- `Zrób bezpieczny update nested clone ai-workflow.`
+- `Sprawdź, czy można zaktualizować workflow bez konfliktów.`
+
+English variants:
+
+- `Update ai-workflow from upstream.`
+- `Update AI Workflow in this repository.`
+- `Run update-from-upstream.`
+- `Fetch the latest AI Workflow but preserve repo runtime and projects.`
+- `Run the safe nested clone update flow.`
+- `Check whether the workflow can be updated without conflicts.`
+
+Routing notes:
+
+- Use `scripts/ai-workflow/update-from-upstream` from `AI_WORKFLOW_HOME`, usually `ai-workflow/scripts/ai-workflow/update-from-upstream` from the target repository root.
+- Stop if template-owned files are dirty.
+- Protected local runtime includes `docs/ai-workflow/repo/**`, non-`EXAMPLE` project and human workspaces, and local external memory.
+- Do not normalize, rename, or rewrite files under `docs/ai-workflow/repo/legacy/`.
+- `--skip-validation` is only for emergency debugging and is not eligible for final PASS.
+
 ### Guide / Next Step / Lost / Getting Started
 
 Route through `docs/ai-workflow/ai/guide.md`.
