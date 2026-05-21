@@ -1,0 +1,23 @@
+# 2026-05-17 - Universal Workflow Memory Separate From Repo Memory
+
+- Date: 2026-05-17
+- Title: Universal Workflow Memory Separate From Repo Memory
+- Type: rule
+- Scope: workflow
+- Status: implemented
+- Source: need to develop `ai-workflow` generally without polluting repo-specific memory.
+- Recommendation: keep `workspace/external-memory/external-memory.md` as the router and `workspace/external-memory/memory/` as the detailed entry directory for universal recommendations, rules, and observations about the workflow system itself.
+- Why it matters: reusable workflow improvements can be collected and later promoted into the standalone `ai-workflow` template without mixing them with one repository's product/domain history.
+- What worked well: separating universal workflow learning from repo and project memory prevents local facts from becoming global rules.
+- What failed or was weak: a single memory namespace made it too easy to mix repo-specific observations with process improvements.
+- Suggested workflow improvement: keep external memory advisory and promote only reviewed entries into enforceable workflow contracts.
+- Suggested skills improvement: use external memory to collect reusable skill improvement ideas when project work reveals better AI operating patterns.
+- Applies to:
+  - `workspace/external-memory/memory/`
+  - `workspace/external-memory/external-memory.md`
+  - `.systems/ai/README.md`
+  - `workspace/repo/core/repo-intake.md`
+  - `.systems/ai/core/autopilot.md`
+- Promotion path: promote accepted entries into `AGENTS.md`, `HUMANS.md`, workflow docs, autopilot docs, templates, or skills.
+- Privacy check: contains no repo-specific product facts, secrets, client data, or task implementation details.
+- Notes: entries in external memory are advisory until promoted into an enforceable workflow contract.
