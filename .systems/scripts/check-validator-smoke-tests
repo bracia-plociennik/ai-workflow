@@ -144,8 +144,9 @@ can-proceed: true
 MD
 run_must_fail "pass-with-failed-command" .systems/scripts/check-qa-evidence
 
-perl -0pi -e 's/\\| `current-phase` \\| `phase-5-quality` \\|/| `current-phase` | `phase-1-architecture` |/' "$tmp/workspace/repo/core/status.md"
-perl -0pi -e 's/\\| `next-phase` \\| `none` \\|/| `next-phase` | `phase-8-final-check` |/' "$tmp/workspace/repo/core/status.md"
+perl -0pi -e 's/^\| `current-phase` \| `[^`]+` \|$/| `current-phase` | `phase-1-architecture` |/m' "$tmp/workspace/repo/core/status.md"
+perl -0pi -e 's/^\| `phase-result` \| `[^`]+` \|$/| `phase-result` | `PASS` |/m' "$tmp/workspace/repo/core/status.md"
+perl -0pi -e 's/^\| `next-phase` \| `[^`]+` \|$/| `next-phase` | `phase-8-final-check` |/m' "$tmp/workspace/repo/core/status.md"
 run_must_fail "bad-phase-transition" .systems/scripts/check-status-consistency
 
 update_fixture="$tmp/.update-smoke"
