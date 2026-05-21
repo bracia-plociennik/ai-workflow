@@ -15,6 +15,7 @@ Do not store target-repository-specific facts in `docs/ai/`. Runtime repo contex
 - `core/command-routing.md` - user-facing workflow command aliases and interpretation rules.
 - `core/guide.md` - orientation rules for lost, starting, next-step, and recovery prompts.
 - `core/response-contract.md` - required user-facing response footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
+- `core/change-requests.md` - owner change request policy before and after final owner approval.
 - `core/definition-of-done.md` - evidence-backed done criteria.
 - `core/risk-model.md` - risk classes and approval routing.
 - `core/commands.md` - verification command contract.

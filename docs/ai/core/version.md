@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.7.3` |
+| Workflow version | `0.7.4` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-05-20` |
 | Naming standard | lowercase kebab-case |
@@ -27,6 +27,7 @@
 - `docs/projects/<project>/` stores project-specific runtime facts.
 - `docs/projects/<project>/plans.md` routes to `planning/`, and `tasks.md` routes to task cards in `tasks/`.
 - `docs/projects/<project>/micro-tasks.md` routes to project-local low-risk micro-task artifacts in `micro-tasks/`.
+- `docs/projects/<project>/change-requests.md` routes owner change requests before and after `final-owner-yes` to durable entries in `change-requests/`.
 - `docs/micro-projects/` stores repo-level low-risk micro-projects.
 - Autopilot runtime is run-scoped under `docs/projects/<project>/autopilot/runs/`.
 - `scripts/` is the workflow-owned validator namespace inside `AI_WORKFLOW_HOME`.

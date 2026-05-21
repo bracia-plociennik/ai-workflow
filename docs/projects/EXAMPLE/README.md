@@ -5,10 +5,11 @@ It is not active workflow state and must not be used as the source of truth for 
 
 ## Included Artifact Types
 
-- Root support files: `status.md`, `memory.md`, `plans.md`, `tasks.md`, `code-review.md`
+- Root support files: `status.md`, `memory.md`, `plans.md`, `tasks.md`, `micro-tasks.md`, `change-requests.md`, `code-review.md`
 - Project memory entries: `memory/`
 - Task cards: `tasks/`
 - Micro-task router and entries: `micro-tasks.md`, `micro-tasks/2026-05-20-example-micro-task.md`
+- Change request router and entries: `change-requests.md`, `change-requests/`
 - Project context: `context.md` plus supporting materials in `context/`
 - Phase 0: `intake/phase-0-idea-validation.md`, `intake/phase-0-repo-intake.md`
 - Phase 1: `architecture/phase-1-architecture.md`

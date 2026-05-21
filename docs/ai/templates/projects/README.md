@@ -26,6 +26,12 @@ Templates for project-local support files, project context, project memory, plan
 - `micro-tasks-readme.template.md` -> `docs/projects/<project>/micro-tasks/README.md`
 - `micro-task.template.md` -> `docs/projects/<project>/micro-tasks/YYYY-MM-DD-short-kebab-title.md`
 
+## Change Request Templates
+
+- `change-requests.template.md` -> `docs/projects/<project>/change-requests.md`
+- `change-requests-readme.template.md` -> `docs/projects/<project>/change-requests/README.md`
+- `change-request.template.md` -> `docs/projects/<project>/change-requests/YYYY-MM-DD-<project>-cr-<nnn>-<slug>.md`
+
 ## Review Templates
 
 - `code-review.template.md` -> `docs/projects/<project>/code-review.md`

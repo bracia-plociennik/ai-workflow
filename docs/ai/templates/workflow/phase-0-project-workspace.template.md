@@ -30,6 +30,7 @@
 | `memory.md` | `<created|current|missing|blocked>` | |
 | `tasks.md` | `<created|current|missing|blocked>` | |
 | `micro-tasks.md` | `<created|current|missing|blocked>` | |
+| `change-requests.md` | `<created|current|missing|blocked>` | |
 | `plans.md` | `<created|current|missing|blocked>` | |
 | `code-review.md` | `<created|current|missing|blocked>` | |
 | `autopilot/README.md` | `<created|current|missing|blocked>` | |
@@ -42,6 +43,7 @@
 | `memory/` | `<created|current|missing|blocked>` | |
 | `tasks/` | `<created|current|missing|blocked>` | |
 | `micro-tasks/` | `<created|current|missing|blocked>` | |
+| `change-requests/` | `<created|current|missing|blocked>` | |
 | `intake/` | `<created|current|missing|blocked>` | |
 | `architecture/` | `<created|current|missing|blocked>` | |
 | `planning/` | `<created|current|missing|blocked>` | |

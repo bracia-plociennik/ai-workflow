@@ -13,8 +13,8 @@
 
 - `docs/projects/<project>/` exists or is classified as blocked.
 - `docs/humans/<project>/` exists or is classified as blocked.
-- Project support files exist or are classified: `README.md`, `status.md`, `memory.md`, `tasks.md`, `plans.md`, `code-review.md`.
-- Project directories exist or are classified: `context/`, `memory/`, `tasks/`, `intake/`, `architecture/`, `planning/`, `specs/`, `quality/`, `decisions/`, `reviews/`, `escalations/`, `distillations/`, `checkpoints/`, `autopilot/`, `autopilot/runs/`.
+- Project support files exist or are classified: `README.md`, `status.md`, `memory.md`, `tasks.md`, `micro-tasks.md`, `change-requests.md`, `plans.md`, `code-review.md`.
+- Project directories exist or are classified: `context/`, `memory/`, `tasks/`, `micro-tasks/`, `change-requests/`, `intake/`, `architecture/`, `planning/`, `specs/`, `quality/`, `decisions/`, `reviews/`, `escalations/`, `distillations/`, `checkpoints/`, `autopilot/`, `autopilot/runs/`.
 - Autopilot router `autopilot/README.md` exists or is classified.
 - Human directories exist or are classified: `approvals/`, `audits/`, `decisions/`, `plans/`, `runbooks/`, `summaries/`.
 - Repo status points to the active project workspace when the owner selects it as active.
@@ -90,6 +90,7 @@ Required project support files:
 - `memory.md`
 - `tasks.md`
 - `micro-tasks.md`
+- `change-requests.md`
 - `plans.md`
 - `code-review.md`
 
@@ -99,6 +100,7 @@ Required project directories:
 - `memory/`
 - `tasks/`
 - `micro-tasks/`
+- `change-requests/`
 - `intake/`
 - `architecture/`
 - `planning/`
@@ -121,6 +123,8 @@ Required project directories:
 `tasks.md` is the task index/router. Optional detailed task cards belong in `tasks/`.
 
 `micro-tasks.md` is the project-local micro-task router. Detailed low-risk micro-task artifacts belong in `micro-tasks/`. Micro-task artifacts do not replace normal plan tasks, specs, quality evidence, distillations, or checkpoints when full workflow is required.
+
+`change-requests.md` is the owner change request router. Detailed owner change requests before or after `final-owner-yes` belong in `change-requests/`. Change request triage does not replace workflow phase gates or permit product-code writes.
 
 `code-review.md` is the review checklist/router. Detailed review artifacts belong in `reviews/`, while QA gate evidence remains in `quality/`.
 

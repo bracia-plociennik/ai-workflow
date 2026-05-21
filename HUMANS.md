@@ -288,6 +288,18 @@ Zamknięcie po decyzji ownera:
 final-owner-yes: akceptuję zamknięcie zakresu projektu opisanego w final check.
 ```
 
+Jeśli masz uwagi przed `final-owner-yes`, nie zamykaj projektu. Zarejestruj change request:
+
+```text
+Nie daję final-owner-yes, mam uwagi: <opis>. Zarejestruj change request, zrób triage i powiedz, czy wracamy do fix loop, planu, specyfikacji, implementacji czy QA.
+```
+
+Jeśli projekt został już zamknięty przez `final-owner-yes`, nie przepisuj starego final checku. Zacznij od post-final change request:
+
+```text
+Po final-owner-yes chcę zmienić: <opis>. Zarejestruj post-final change request i powiedz, czy to micro-task, nowy task, nowa iteracja projektu, rollback decyzji czy nowy projekt.
+```
+
 ### Side-task
 
 Pełne:
@@ -823,10 +835,23 @@ Jawna zgoda ownera:
 final-owner-yes: I approve closing WorkshopHub project scope described in the final check.
 ```
 
+Jeśli owner ma uwagi przed zgodą:
+
+```text
+I do not give final-owner-yes yet. Register this as a pre-final change request: <description>. Triage it and route it to the narrowest valid fix loop or earlier phase. Do not implement until gates allow it.
+```
+
+Jeśli owner wraca po zamknięciu projektu:
+
+```text
+After final-owner-yes I want to change: <description>. Register a post-final change request, preserve the historical final approval, and route it as a micro-task, new task, new iteration, decision rollback, or new project.
+```
+
 Różnica jest ważna:
 
 - technical pass mówi, że repo, docs, evidence, memory i plan są spójne;
 - `final-owner-yes` mówi, że człowiek akceptuje zamknięcie zakresu projektu.
+- change request mówi, że owner chce zmienić albo zakwestionować zakres przed albo po tej akceptacji.
 
 Bez tej zgody workflow powinien zatrzymać się na `awaiting-owner-final-yes`.
 

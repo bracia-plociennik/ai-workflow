@@ -14,6 +14,7 @@ required=(
   "docs/ai/core/command-routing.md"
   "docs/ai/core/guide.md"
   "docs/ai/core/response-contract.md"
+  "docs/ai/core/change-requests.md"
   "docs/ai/core/definition-of-done.md"
   "docs/ai/core/permissions.md"
   "docs/ai/core/risk-model.md"
@@ -72,6 +73,9 @@ required=(
   "docs/ai/templates/projects/micro-tasks.template.md"
   "docs/ai/templates/projects/micro-tasks-readme.template.md"
   "docs/ai/templates/projects/micro-task.template.md"
+  "docs/ai/templates/projects/change-requests.template.md"
+  "docs/ai/templates/projects/change-requests-readme.template.md"
+  "docs/ai/templates/projects/change-request.template.md"
   "docs/ai/templates/projects/code-review.template.md"
   "docs/ai/templates/micro-projects/README.md"
   "docs/ai/templates/micro-projects/micro-project-readme.template.md"
@@ -101,6 +105,10 @@ required=(
   "scripts/check-status-consistency"
   "scripts/check-validator-smoke-tests"
   "scripts/update-from-upstream"
+  "docs/projects/EXAMPLE/change-requests.md"
+  "docs/projects/EXAMPLE/change-requests/README.md"
+  "docs/projects/EXAMPLE/change-requests/2026-05-21-example-cr-001-pre-final-copy-correction.md"
+  "docs/projects/EXAMPLE/change-requests/2026-05-21-example-cr-002-post-final-docs-note.md"
 )
 
 phases=(

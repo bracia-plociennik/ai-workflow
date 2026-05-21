@@ -13,6 +13,7 @@ Example project-local status snapshot.
 | `project-workspace` | `docs/projects/EXAMPLE` |
 | `active-plan-status` | `example-only` |
 | `current-task` | `EX-01 Example Task` |
+| `active-change-request` | `none` |
 | `current-phase` | `phase-4-implementation` |
 | `phase-result` | `not-started` |
 | `next-phase` | `phase-4-implementation` |

@@ -92,7 +92,7 @@ done
 
 workspace_phase="docs/ai/workflow/phase-0-project-workspace.md"
 workspace_template="docs/ai/templates/workflow/phase-0-project-workspace.template.md"
-for required_workspace_ref in 'tasks/' 'micro-tasks.md' 'micro-tasks/' 'reviews/' 'autopilot/README.md' 'autopilot/runs/'; do
+for required_workspace_ref in 'tasks/' 'micro-tasks.md' 'micro-tasks/' 'change-requests.md' 'change-requests/' 'reviews/' 'autopilot/README.md' 'autopilot/runs/'; do
   if ! rg -q "$required_workspace_ref" "$workspace_phase"; then
     echo "Project workspace phase missing required workspace ref: $required_workspace_ref"
     fail=1
@@ -100,6 +100,18 @@ for required_workspace_ref in 'tasks/' 'micro-tasks.md' 'micro-tasks/' 'reviews/
 
   if ! rg -q "$required_workspace_ref" "$workspace_template"; then
     echo "Project workspace template missing required workspace ref: $required_workspace_ref"
+    fail=1
+  fi
+done
+
+for required_change_ref in 'docs/ai/core/change-requests.md' 'change request' 'final-owner-yes'; do
+  if ! rg -q "$required_change_ref" docs/ai/workflow/phase-8-final-check.md; then
+    echo "Final check missing change request ref: $required_change_ref"
+    fail=1
+  fi
+
+  if ! rg -q "$required_change_ref" docs/ai/core/command-routing.md; then
+    echo "Command routing missing change request ref: $required_change_ref"
     fail=1
   fi
 done

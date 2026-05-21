@@ -4,6 +4,8 @@
 
 High-risk and production-impacting tasks must define how to recover safely.
 
+If rollback is requested before or after `final-owner-yes`, first capture the owner request as a change request under `docs/projects/<project>/change-requests/`, then route to the correct rollback, fix loop, or workflow phase.
+
 ## Required Rollback Notes
 
 Include rollback notes when a task touches:

@@ -21,6 +21,7 @@ In that model, the target repository keeps its own application files and gets on
 - `docs/ai/core/installation.md` - nested-clone installation and collision policy.
 - `docs/ai/core/command-routing.md` - user-facing command aliases and safe interpretation rules.
 - `docs/ai/core/response-contract.md` - required user-facing response footer with next-step recommendation, alternative, impacts, and copy-paste prompts.
+- `docs/ai/core/change-requests.md` - owner change request policy before and after final owner approval.
 - `docs/repo/` - target-repository runtime context, intake, status, and memory router/entries.
 - `docs/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
 - `docs/micro-projects/` - repo-level low-risk micro-project workspace.

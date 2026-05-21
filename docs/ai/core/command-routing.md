@@ -493,6 +493,43 @@ Routing notes:
 
 - Technical final pass and owner approval are separate.
 - Final check cannot close the project by itself.
+- If the owner has comments before `final-owner-yes`, route through `docs/ai/core/change-requests.md` instead of closing the project.
+- Open blocking pre-final change requests prevent `final-owner-yes`.
+
+### Change Requests Before Or After Final Approval
+
+Route through `docs/ai/core/change-requests.md`.
+
+Polish variants:
+
+- `Nie daję final-owner-yes, mam uwagi: <opis>.`
+- `Zarejestruj change request przed final approval.`
+- `Mam uwagi po final checku, ale przed final-owner-yes.`
+- `Po final-owner-yes chcę dodać <opis>.`
+- `Po final-owner-yes chcę usunąć <opis>.`
+- `Po final-owner-yes chcę poprawić <opis>.`
+- `Triage change request i powiedz, czy to micro-task, fix loop, nowy task czy nowa iteracja.`
+- `To jest post-final change request: <opis>.`
+
+English variants:
+
+- `I do not give final-owner-yes; I have comments: <description>.`
+- `Register a change request before final approval.`
+- `I have comments after final check but before final-owner-yes.`
+- `After final-owner-yes I want to add <description>.`
+- `After final-owner-yes I want to remove <description>.`
+- `After final-owner-yes I want to fix <description>.`
+- `Triage this change request and tell me whether it is a micro-task, fix loop, new task, or new iteration.`
+- `This is a post-final change request: <description>.`
+
+Routing notes:
+
+- Pre-final owner comments are blocking until triaged.
+- Pre-final change requests can route to the narrowest valid fix loop or earlier phase, then require quality/checkpoint/final check rerun as applicable.
+- Post-final change requests never rewrite historical final approval evidence.
+- Low-risk post-final work may route to a project-local micro-task linked to the change request.
+- Medium, high, critical, scope-changing, architectural, data, security, billing, permission, migration, production, or external-effect work must re-enter the full workflow.
+- Triage writes only change-request artifacts and status; product-code writes require the routed phase to allow them.
 
 ### Side Task
 

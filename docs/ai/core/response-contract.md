@@ -15,7 +15,7 @@ Substantive responses include:
 - completed phase summaries;
 - completed implementation or documentation work;
 - QA, audit, validation, review, and blocker reports;
-- guide, recovery, resume, decision review, rollback, side-task, micro-task, micro-project, and autopilot responses;
+- guide, recovery, resume, decision review, change request, rollback, side-task, micro-task, micro-project, and autopilot responses;
 - clarification responses when the user command is too short or ambiguous to execute safely.
 
 Do not append the footer inside strict machine-readable output such as JSON-only, patch-only, or exact-template output requested by the user. In that case, include the footer in the nearest surrounding normal human-facing response.
@@ -54,7 +54,7 @@ Choose the recommendation from the highest applicable source:
 2. The current phase file's `Next allowed phases`.
 3. `docs/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
 4. Stop conditions from `AGENTS.md`, `docs/ai/core/operating-model.md`, risk, permissions, commands, Definition of Done, and prompt-injection policy.
-5. `docs/ai/core/guide.md` and `docs/ai/core/command-routing.md` for lost-user, short-command, recovery, rollback, side-task, micro-task, micro-project, and autopilot routing.
+5. `docs/ai/core/guide.md`, `docs/ai/core/change-requests.md`, and `docs/ai/core/command-routing.md` for lost-user, short-command, recovery, owner change request, rollback, side-task, micro-task, micro-project, and autopilot routing.
 6. Fresh install defaults: if repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
 
 If these sources conflict, recommend recovery or reconciliation instead of guessing.

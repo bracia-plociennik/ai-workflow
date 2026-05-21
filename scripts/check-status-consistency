@@ -156,6 +156,15 @@ is_allowed_transition() {
     phase-7-checkpoint:PASS:phase-8-final-check|\
     phase-7-checkpoint:FAIL:none|\
     phase-8-final-check:awaiting-owner-final-yes:owner-final-approval|\
+    phase-8-final-check:FAIL:phase-1-architecture|\
+    phase-8-final-check:FAIL:phase-1-architecture-fix-loop|\
+    phase-8-final-check:FAIL:phase-2-project-plan|\
+    phase-8-final-check:FAIL:phase-2-plan-fix-loop|\
+    phase-8-final-check:FAIL:phase-3-specification|\
+    phase-8-final-check:FAIL:phase-3-spec-fix-loop|\
+    phase-8-final-check:FAIL:phase-4-implementation|\
+    phase-8-final-check:FAIL:phase-5-quality|\
+    phase-8-final-check:FAIL:phase-5-fix-loop|\
     phase-8-final-check:FAIL:none|\
     phase-8-final-check:PASS:owner-final-approval)
       return 0

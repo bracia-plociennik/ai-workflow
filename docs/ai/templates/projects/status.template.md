@@ -7,6 +7,7 @@
 | `project-workspace` | `docs/projects/<project>` |
 | `active-plan-status` | `<active|closed|none|other>` |
 | `current-task` | `<task>` |
+| `active-change-request` | `<none|PROJECT-CR-NNN-slug>` |
 | `current-phase` | `<phase|n/a>` |
 | `phase-result` | `<not-started|in-progress|PASS|FAIL|completed|blocked|n/a>` |
 | `next-phase` | `<phase|n/a>` |

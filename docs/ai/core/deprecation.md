@@ -4,6 +4,8 @@
 
 Old project artifacts are archived or superseded, not silently deleted.
 
+Post-final removals requested after `final-owner-yes` must be captured as change requests under `docs/projects/<project>/change-requests/` before artifacts are superseded, deprecated, or archived.
+
 ## Superseded Artifacts
 
 When an artifact is replaced:

@@ -25,6 +25,8 @@ This directory contains project-scoped workflow artifacts for `<Project>`.
 - `tasks/` - optional task cards.
 - `micro-tasks.md` - project-local micro-task router/index.
 - `micro-tasks/` - low-risk micro-task artifacts.
+- `change-requests.md` - owner change request router/index.
+- `change-requests/` - pre-final and post-final owner change request artifacts.
 - `code-review.md` - project-local review checklist and router.
 - `reviews/` - detailed review artifacts.
 

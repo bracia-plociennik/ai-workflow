@@ -106,6 +106,19 @@ Route to the full workflow when:
 - the task touches an active project deliverable;
 - verification is required but cannot be run safely.
 
+## Change Request Contract
+
+Use `docs/ai/core/change-requests.md` when the owner gives comments before `final-owner-yes` or asks for corrections, additions, removals, or decision changes after `final-owner-yes`.
+
+Change requests are durable project artifacts, not chat-only comments. Store them in:
+
+- `docs/projects/<project>/change-requests.md`
+- `docs/projects/<project>/change-requests/`
+
+Before `final-owner-yes`, blocking change requests keep the project open and prevent final approval. After `final-owner-yes`, the closed scope remains immutable history and new work must be routed as a micro-task, new task, new project iteration, decision rollback, or new project.
+
+Change request triage may write change-request artifacts and status only. Product-code writes require the routed phase, fix loop, micro-task, or project workflow to explicitly allow them.
+
 ## Definition Of Done
 
 Use `docs/ai/core/definition-of-done.md`. `PASS` is invalid without evidence.

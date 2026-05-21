@@ -34,10 +34,12 @@
 
 - Task index, quality artifacts, distillations, checkpoints, decisions, and memory reviewed.
 - Final findings, skipped checks, residual risk, and owner-approval state.
+- Open change requests reviewed through `docs/projects/<project>/change-requests.md` and `docs/projects/<project>/change-requests/`.
 
 ### Next allowed phases
 
 - `owner-final-approval` after technical pass.
+- Change request triage when the owner has comments before `final-owner-yes`.
 - Relevant fix loop or earlier phase on `FAIL`.
 - Stop when owner approval is missing.
 
@@ -111,6 +113,8 @@ Jeśli Final Check nie wykrył błędów, ale owner nie zatwierdził jeszcze zam
 - wynik techniczny = `awaiting-owner-final-yes`
 - aktywny plan nie jest jeszcze zamknięty
 - kolejne side taski nie stają się jeszcze automatycznie optional
+- owner może dać `final-owner-yes` albo zgłosić change request przez `docs/ai/core/change-requests.md`
+- otwarty blocking change request blokuje `final-owner-yes`
 
 Po PASS dla `8. FINAL CHECK`:
 
@@ -119,6 +123,8 @@ Po PASS dla `8. FINAL CHECK`:
 - pełny workflow staje się opcjonalny aż do pojawienia się nowego planu projektu lub jawnego żądania użytkownika
 - taski należące do etapu mają status zamknięty albo jawnie odroczony
 - brak otwartych blockerów wpływających na correctness etapu
+
+Po `final-owner-yes` zamknięty zakres jest historycznym faktem. Późniejsze poprawki, dodatki, usunięcia albo rollback decyzji muszą zostać zarejestrowane jako post-final change request i nie mogą przepisywać starego final check ani final owner approval.
 
 Bez spełnienia tych warunków:
 
@@ -233,6 +239,12 @@ Jeśli wynik = PASS:
 
 - etap może zostać zamknięty
 
+Jeśli wynik techniczny = `awaiting-owner-final-yes`:
+
+- można czekać na `final-owner-yes`
+- albo owner może zgłosić change request
+- nie wolno zamknąć projektu, dopóki blocking change request jest otwarty
+
 Jeśli wynik = FAIL:
 
 - należy wrócić do odpowiedniej fazy:
@@ -241,6 +253,14 @@ Jeśli wynik = FAIL:
   - specyfikacji
   - implementacji
   - QA
+
+Jeśli właściciel zgłosi change request przed `final-owner-yes`:
+
+- utwórz albo zaktualizuj `docs/projects/<project>/change-requests.md`
+- utwórz wpis w `docs/projects/<project>/change-requests/`
+- wykonaj triage bez product-code writes
+- wróć do najwęższej poprawnej fazy albo fix loop
+- po obsłudze wróć przez wymagane quality, checkpoint i final check
 
 Nie wolno:
 

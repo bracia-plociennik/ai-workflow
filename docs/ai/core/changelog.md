@@ -1,5 +1,11 @@
 # changelog.md
 
+## 0.7.4 - 2026-05-21
+
+- Added `docs/ai/core/change-requests.md` as the formal owner change request policy before and after `final-owner-yes`.
+- Added project-local change request router, directory templates, and EXAMPLE artifacts.
+- Updated final check, command routing, guide, workflow routing, and project workspace setup to block final approval on open pre-final change requests and route post-final changes safely.
+
 ## 0.7.3 - 2026-05-20
 
 - Added `docs/ai/core/response-contract.md` as the canonical user-facing response contract.

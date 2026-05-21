@@ -38,6 +38,7 @@ When AI Workflow is used as a nested clone in another repository, these paths ar
 - Project planning router: `docs/projects/<project>/plans.md`
 - Project task index: router `docs/projects/<project>/tasks.md`, optional task cards `docs/projects/<project>/tasks/`
 - Project micro-tasks: router `docs/projects/<project>/micro-tasks.md`, entries `docs/projects/<project>/micro-tasks/`
+- Project change requests: router `docs/projects/<project>/change-requests.md`, entries `docs/projects/<project>/change-requests/`
 - Project QA evidence: `docs/projects/<project>/quality/`
 - Project decisions: `docs/projects/<project>/decisions/`
 - Project reviews: `docs/projects/<project>/reviews/`
@@ -166,6 +167,7 @@ This table is a compact phase router only. Use `docs/ai/core/command-routing.md`
 | destylacja | `phase-6-distillation.md` |
 | checkpoint | `phase-7-checkpoint.md` |
 | final check | `phase-8-final-check.md` |
+| owner comments before final-owner-yes, post-final correction/addition/removal | use `change-requests.md` plus the routed phase, fix loop, micro-task, iteration, rollback, or new project |
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
 | micro-project | use `docs/micro-projects/` and the micro-project contract in `operating-model.md` |
 | autopilot, autonomous-execution | use `autopilot.md` plus current task/package gates |

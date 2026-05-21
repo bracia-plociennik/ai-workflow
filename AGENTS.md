@@ -24,7 +24,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `docs/ai/core/operating-model.md`
-3. Policy docs under `docs/ai/core/`, especially `command-routing.md`, `guide.md`, `response-contract.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
+3. Policy docs under `docs/ai/core/`, especially `command-routing.md`, `guide.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
 4. `docs/ai/core/workflow.md`
 5. The current phase file under `docs/ai/workflow/`
 6. Relevant skills under `docs/ai/skills/`, when a matching skill exists
@@ -55,6 +55,8 @@ If the user says `repo intake`, treat it as a request to run repo-level `phase-0
 
 If the user asks to create a project, create a project workspace, or start a named project such as `WorkshopHub`, route the request to `phase-0-project-workspace` before idea validation, architecture, planning, or implementation.
 
+If the user rejects final closure, gives comments before `final-owner-yes`, or asks for corrections/additions/removals after `final-owner-yes`, route through `docs/ai/core/change-requests.md`. Do not treat owner comments as chat-only scope changes.
+
 If the user gives a short command such as `Zaimplementuj taski 01-16`, first resolve the active project, task IDs, scope, risk, phase, safe environment, approval state, and required evidence from status, task index, plan, specs, and repo intake. If the command is clear and gates are satisfied, route it to the safest matching workflow phase or autopilot path.
 
 If a blocking detail is missing, ask before continuing. The clarification must include:
@@ -81,7 +83,7 @@ When sources disagree, use this repository-level order:
 2. Target root `AGENTS.md` shim when this workflow is installed as `ai-workflow/`.
 3. Internal `AGENTS.md` in `AI_WORKFLOW_HOME`.
 4. `docs/ai/core/operating-model.md`.
-5. Safety and policy docs in `docs/ai/core/`, especially command routing, guide, response contract, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
+5. Safety and policy docs in `docs/ai/core/`, especially command routing, guide, response contract, change requests, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
 6. `docs/ai/core/workflow.md`.
 7. Current phase file in `docs/ai/workflow/`.
 8. Relevant skills under `docs/ai/skills/`, as supporting execution guidance only.
@@ -226,6 +228,8 @@ Project-specific runtime:
 - `docs/projects/<project>/tasks/`
 - `docs/projects/<project>/micro-tasks.md`
 - `docs/projects/<project>/micro-tasks/`
+- `docs/projects/<project>/change-requests.md`
+- `docs/projects/<project>/change-requests/`
 - `docs/projects/<project>/context/`
 - `docs/projects/<project>/planning/`
 - `docs/projects/<project>/specs/`
