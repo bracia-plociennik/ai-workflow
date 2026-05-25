@@ -52,6 +52,8 @@ When AI Workflow is used as a nested clone in another repository, these paths ar
 
 Use `.systems/ai/core/command-routing.md` for the full Polish and English catalog of user-facing commands, aliases, short prompts, side-task prompts, autopilot prompts, rollback prompts, recovery prompts, and unsafe bypass requests.
 
+Use `.systems/ai/core/task-intake.md` as the mandatory pre-routing lens for new task, planning, approach, side-task, micro-task, change request, and autopilot requests. It is not a phase and does not grant write permission. Broad project ideas still route to `phase-0-idea-validation`.
+
 Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer after phase summaries, blocker reports, implementation summaries, QA reports, guide responses, side-task responses, micro-task responses, micro-project responses, and autopilot responses.
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
@@ -155,6 +157,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | repo intake, initial audit | `phase-0-repo-intake.md` |
 | create project, project workspace, utworz projekt, utwórz projekt | `phase-0-project-workspace.md` |
 | idea validation, brain dump, mam pomysl | `phase-0-idea-validation.md` |
+| mam nowe zadanie, trzeba zrobic, zaplanuj, nie wiem jak, new task, plan this | use `task-intake.md` first, then route to the safest matching phase or mode |
 | architektura | `phase-1-architecture.md` |
 | qa architektury | `phase-1-architecture-qa.md` |
 | plan projektu | `phase-2-project-plan.md` |
@@ -171,7 +174,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | owner comments before final-owner-yes, post-final correction/addition/removal | use `change-requests.md` plus the routed phase, fix loop, micro-task, iteration, rollback, or new project |
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
 | micro-project | use `workspace/micro-projects/` and the micro-project contract in `operating-model.md` |
-| autopilot, autonomous-execution | use `autopilot.md` plus current task/package gates |
+| autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |
 | decision review, rollback, resume, skills check | use `command-routing.md` to choose the safe phase or stop condition |

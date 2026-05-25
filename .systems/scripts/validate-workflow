@@ -131,6 +131,34 @@ for required_response_contract_ref in AGENTS.md .systems/ai/core/operating-model
   fi
 done
 
+for required_task_intake_ref in AGENTS.md .systems/ai/core/command-routing.md .systems/ai/core/operating-model.md .systems/ai/core/response-contract.md .systems/ai/core/workflow.md; do
+  if ! rg -q '.systems/ai/core/task-intake.md' "$required_task_intake_ref"; then
+    echo "Missing task intake reference in $required_task_intake_ref"
+    fail=1
+  fi
+done
+
+for required_task_intake_text in 'Co zostaje' 'Co jest słabe / do poprawy lub usunięcia' 'Czego brakuje' 'Blokery / decyzje' 'Rekomendowany routing'; do
+  if ! rg -q "$required_task_intake_text" .systems/ai/core/task-intake.md .systems/ai/core/command-routing.md .systems/ai/core/response-contract.md; then
+    echo "Missing task intake validation text: $required_task_intake_text"
+    fail=1
+  fi
+done
+
+for required_autopilot_readiness_ref in .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/templates/autopilot/run-readme.template.md .systems/ai/templates/autopilot/state.template.md; do
+  if ! rg -q 'readiness.md|readiness-result|readiness audit' "$required_autopilot_readiness_ref"; then
+    echo "Missing autopilot readiness reference in $required_autopilot_readiness_ref"
+    fail=1
+  fi
+done
+
+for required_autopilot_readiness_text in 'readiness-result: ready' 'blocked' 'awaiting-owner' 'owner-decisions' 'external-effects'; do
+  if ! rg -q "$required_autopilot_readiness_text" .systems/ai/core/autopilot.md .systems/ai/templates/autopilot/readiness.template.md; then
+    echo "Missing autopilot readiness text: $required_autopilot_readiness_text"
+    fail=1
+  fi
+done
+
 for required_ownership_ref in AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/operating-model.md; do
   if ! rg -q 'workspace/skills/' "$required_ownership_ref"; then
     echo "Missing workspace skills reference in $required_ownership_ref"

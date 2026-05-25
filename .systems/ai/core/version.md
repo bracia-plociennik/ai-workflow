@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.0` |
+| Workflow version | `0.8.2` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-05-21` |
+| Last process migration | `2026-05-25` |
 | Naming standard | lowercase kebab-case |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -18,7 +18,9 @@
 - `.systems/ai/` is system-owned policy and workflow source.
 - `.systems/ai/core/` stores canonical AI router and policy files.
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
+- `.systems/ai/core/task-intake.md` defines the required Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request.
 - `.systems/ai/core/update-from-upstream.md` defines the safe target-repository update flow for nested clones.
+- Autopilot requires a run-scoped readiness audit at `workspace/projects/<project>/autopilot/runs/<run-id>/readiness.md` before the run can enter `running`.
 - `.systems/ai/skills/` stores optional system-defined task-specific workflow skills.
 - `workspace/skills/` stores optional user-defined task-specific workflow skills and takes precedence as supporting guidance.
 - `workspace/external-memory/` stores target-owned External Memory improvement proposals.

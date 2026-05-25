@@ -13,6 +13,7 @@ Do not store target-repository-specific facts in `.systems/ai/`. Runtime repo co
 - `core/update-from-upstream.md` - safe upstream update policy for target repositories using the nested clone.
 - `core/autopilot.md` - autopilot launch and runtime rules.
 - `core/command-routing.md` - user-facing workflow command aliases and interpretation rules.
+- `core/task-intake.md` - required lightweight validation lens before planning or executing new tasks.
 - `core/guide.md` - orientation rules for lost, starting, next-step, and recovery prompts.
 - `core/response-contract.md` - required user-facing response footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
 - `core/change-requests.md` - owner change request policy before and after final owner approval.
@@ -52,7 +53,7 @@ Before installing into an existing repository, follow `core/installation.md`. Do
 
 For project-level workflow work, start from `core/workflow.md`, verify `workspace/repo/core/status.md`, then open the relevant phase file under `workflow/`.
 
-Before planning, specifying, implementing, or reviewing a task, check `workspace/skills/` first and `skills/` second for a relevant task-specific skill. If no matching skill exists, continue with the normal workflow.
+Before planning, specifying, implementing, or reviewing a task, apply `core/task-intake.md`, then check `workspace/skills/` first and `skills/` second for a relevant task-specific skill. If no matching skill exists, continue with the normal workflow.
 
 ## Autopilot Iterations
 

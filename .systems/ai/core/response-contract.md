@@ -51,11 +51,12 @@ Do not provide a long option menu. Include `Inny pomysł:` only when the user ex
 Choose the recommendation from the highest applicable source:
 
 1. The user's explicit intent, when it is safe and does not bypass gates.
-2. The current phase file's `Next allowed phases`.
-3. `workspace/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
-4. Stop conditions from `AGENTS.md`, `.systems/ai/core/operating-model.md`, risk, permissions, commands, Definition of Done, and prompt-injection policy.
-5. `.systems/ai/core/guide.md`, `.systems/ai/core/change-requests.md`, and `.systems/ai/core/command-routing.md` for lost-user, short-command, recovery, owner change request, rollback, side-task, micro-task, micro-project, and autopilot routing.
-6. Fresh install defaults: if repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
+2. Task intake result from `.systems/ai/core/task-intake.md` when the response handles a new task, planning request, approach request, side-task/micro-task, change request, or autopilot request.
+3. The current phase file's `Next allowed phases`.
+4. `workspace/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
+5. Stop conditions from `AGENTS.md`, `.systems/ai/core/operating-model.md`, risk, permissions, commands, Definition of Done, and prompt-injection policy.
+6. `.systems/ai/core/guide.md`, `.systems/ai/core/change-requests.md`, and `.systems/ai/core/command-routing.md` for lost-user, short-command, recovery, owner change request, rollback, side-task, micro-task, micro-project, and autopilot routing.
+7. Fresh install defaults: if repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
 
 If these sources conflict, recommend recovery or reconciliation instead of guessing.
 
@@ -72,6 +73,12 @@ The alternative must not suggest skipping tests, evidence, QA, approval, Definit
 Both `Napisz:` prompts must be directly usable by the user. If a prompt depends on a missing project, task, phase, or owner decision, make that missing value explicit instead of guessing.
 
 ## Common Cases
+
+### New Task, Plan, Or Approach Request
+
+Start with the Task Idea Validation summary from `.systems/ai/core/task-intake.md`: `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. Only then provide the plan, clarification, or implementation route.
+
+If a blocker exists, the recommendation must resolve the most important blocker. If the task is a new project idea, recommend formal `phase-0-idea-validation`. If the task is small and low-risk, the alternative may be normal workflow instead of side-task/micro-task.
 
 ### Completed Phase
 
@@ -103,7 +110,7 @@ Recommendation can close the micro artifact with evidence or perform the next lo
 
 ### Autopilot
 
-Recommendation can start or continue supervised autopilot only when gates allow it. Alternative should be manual execution or dry-run/status review. High-risk and critical-risk work must route to approval or human-led execution.
+Recommendation can start or continue supervised autopilot only when gates allow it and run-scoped readiness is `ready`. If readiness is missing, blocked, or awaiting owner decisions, recommendation must create/update `readiness.md` or resolve the top blocker before implementation. Alternative should be manual execution or dry-run/status review. High-risk and critical-risk work must route to approval or human-led execution.
 
 ## Quality Bar
 

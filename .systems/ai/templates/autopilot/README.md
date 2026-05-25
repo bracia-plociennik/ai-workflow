@@ -6,6 +6,7 @@ Suggested destinations:
 
 - `autopilot-readme.template.md` -> `workspace/projects/<project>/autopilot/README.md`
 - `run-readme.template.md` -> `workspace/projects/<project>/autopilot/runs/autopilot-001/README.md`
+- `readiness.template.md` -> `workspace/projects/<project>/autopilot/runs/autopilot-001/readiness.md`
 - `state.template.md` -> `workspace/projects/<project>/autopilot/runs/autopilot-001/state.md`
 - `ledger.template.md` -> `workspace/projects/<project>/autopilot/runs/autopilot-001/ledger.md`
 - `events.template.md` -> `workspace/projects/<project>/autopilot/runs/autopilot-001/events.md`
@@ -13,6 +14,6 @@ Suggested destinations:
 - `escalation.template.md` -> `workspace/projects/<project>/escalations/<task-or-workspace>-escalation-<YYYY-MM-DD>.md`
 - `task-decisions.template.md` -> `workspace/projects/<project>/decisions/<task-id>-decisions.md`
 
-Do not create runtime autopilot run files unless autopilot is active.
+Do not create runtime autopilot run files unless autopilot is requested or active. Always create or update `readiness.md` before `state.md` can move to `running`.
 
 Root-level `autopilot-state.md`, `autopilot-ledger.md`, and `autopilot-events.md` are not canonical in the run-based model.

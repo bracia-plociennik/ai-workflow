@@ -8,6 +8,8 @@ It covers natural-language prompts, not shell verification commands. Shell comma
 
 Use this file when a user gives a short command, phase alias, side-task request, autopilot request, rollback request, recovery request, guide request, or unsafe bypass request.
 
+Use `.systems/ai/core/task-intake.md` first when a user gives a new task, planning request, approach request, uncertainty request, side-task/micro-task request, change request, or autopilot request that introduces new scope.
+
 ## Authority
 
 Command routing must follow:
@@ -26,6 +28,7 @@ A user command can select a phase or mode. It cannot weaken risk policy, permiss
 
 - When AI Workflow is installed as a nested clone, `AI_WORKFLOW_HOME` is usually `ai-workflow/`. User-facing paths like `.systems/...` and `workspace/...` resolve under that directory from the target repository root.
 - Full commands with explicit project, task IDs, risk constraints, mode, and evidence policy may be executed if gates are satisfied.
+- New task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
 - If a command is clear but gates are not satisfied, route to the required predecessor phase or stop with the blocking gate.
@@ -74,6 +77,44 @@ Safe response:
 ## Command Families
 
 Each family below includes Polish and English variants. The examples are intentionally redundant so short user prompts can be routed consistently.
+
+### Task Idea Validation
+
+Use `.systems/ai/core/task-intake.md` as a pre-routing lens. This is not a new workflow phase and does not allow writes.
+
+Polish variants:
+
+- `Mam nowe zadanie: <opis>.`
+- `Trzeba zrobić <opis>.`
+- `Zaplanuj <opis>.`
+- `Nie wiem, jak to zrobić poprawnie.`
+- `Wymyśl podejście do <opis>.`
+- `Jak najlepiej zrobić <opis>?`
+- `Sprawdź, czy ten task ma sens, zanim go zaplanujesz.`
+- `Zaimplementuj <opis>, ale najpierw zweryfikuj zakres i routing.`
+- `Mam side-task: <opis>.`
+- `Uruchom autopilot dla tych tasków, jeśli to bezpieczne.`
+
+English variants:
+
+- `I have a new task: <description>.`
+- `We need to do <description>.`
+- `Plan <description>.`
+- `I am not sure how to do this correctly.`
+- `Figure out the right approach for <description>.`
+- `What is the best way to do <description>?`
+- `Check whether this task makes sense before planning it.`
+- `Implement <description>, but validate scope and routing first.`
+- `I have a side task: <description>.`
+- `Start autopilot for these tasks if it is safe.`
+
+Routing notes:
+
+- Output or record `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing` before presenting a plan.
+- If the request is a new project or broad product idea, route to `phase-0-idea-validation`.
+- If it belongs to an active project, resolve status, task index, plan, specs, current blockers, risk, and write gates before routing.
+- If it is small, local, and low-risk, it may route to side-task, micro-task, or micro-project.
+- If it touches auth, billing, permissions, migrations, security, secrets, production data, infrastructure, destructive operations, or real external side effects, stop for the required approval/routing.
 
 ### Repo Intake
 
@@ -565,7 +606,7 @@ Routing notes:
 
 ### Supervised Autopilot And Autonomous Execution
 
-Route through `.systems/ai/core/autopilot.md` and the current task/package gates.
+Route through `.systems/ai/core/autopilot.md`, the mandatory run-scoped readiness audit, and the current task/package gates.
 
 Polish variants:
 
@@ -573,6 +614,8 @@ Polish variants:
 - `Uruchom autonomous-execution dla tasków TASK-01..TASK-16 z aktywnego planu, sekwencyjnie, bez real external effects, z commitem dopiero po QUALITY PASS.`
 - `Zrób taski 01-16 na autopilocie, ale zatrzymaj high-risk i critical-risk.`
 - `Kontynuuj autopilot od ostatniego stabilnego PASS.`
+- `Sprawdź gotowość autopilota i wypisz decyzje ownera przed startem.`
+- `Co blokuje autopilota?`
 - `Nie commituj niczego przed QUALITY PASS.`
 
 English variants:
@@ -581,10 +624,15 @@ English variants:
 - `Run autonomous execution for TASK-01..TASK-16 from the active plan, sequentially, with no real external effects, committing only after QUALITY PASS.`
 - `Implement tasks 01-16 on autopilot, but stop high-risk and critical-risk work.`
 - `Continue autopilot from the last stable PASS.`
+- `Check autopilot readiness and list owner decisions before starting.`
+- `What blocks autopilot?`
 - `Do not commit anything before QUALITY PASS.`
 
 Routing notes:
 
+- Before implementation starts or resumes, create or update `workspace/projects/<project>/autopilot/runs/<run-id>/readiness.md`.
+- Autopilot can move to `running` only when `readiness-result` is `ready`.
+- If readiness is `blocked` or `awaiting-owner`, stop before implementation and present every required owner action.
 - Autopilot needs accepted architecture, plan, packaging/solo decision, spec, Spec QA, and safe env.
 - High-risk tasks require approval before implementation.
 - Critical-risk tasks remain human-led.

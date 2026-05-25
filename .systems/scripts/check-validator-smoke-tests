@@ -40,6 +40,10 @@ mv "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md" "$tmp/.sy
 run_must_fail "missing-autopilot-readme-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md.bak" "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md"
 
+mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md" "$tmp/.systems/ai/templates/autopilot/readiness.template.md.bak"
+run_must_fail "missing-autopilot-readiness-template" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md.bak" "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
+
 mv "$tmp/.systems/ai/templates/projects/micro-task.template.md" "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak"
 run_must_fail "missing-micro-task-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak" "$tmp/.systems/ai/templates/projects/micro-task.template.md"

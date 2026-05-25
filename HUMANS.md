@@ -46,6 +46,20 @@ W standardowej instalacji target repo ma rootowy `AGENTS.md` shim, a właściwe 
 
 Polecenia mogą być pełne albo krótkie. Jeśli krótkie polecenie da się jednoznacznie rozstrzygnąć z aktywnego statusu, planu, `tasks.md`, specyfikacji i repo intake, Codex powinien działać przez właściwą fazę. Jeśli brakuje istotnej informacji, powinien dopytać, podając rekomendację z wpływem oraz alternatywę z wpływem. Polecenie użytkownika nie może omijać gate'ów, risk modelu, required evidence ani final owner approval.
 
+Jeśli mówisz Codexowi, że masz nowe zadanie, chcesz coś zaplanować, nie wiesz jak coś zrobić poprawnie albo prosisz o wymyślenie podejścia, Codex powinien najpierw użyć lekkiej walidacji zadania z `.systems/ai/core/task-intake.md`. To znaczy: zanim poda plan, powinien powiedzieć, co w pomyśle zostaje, co jest słabe albo do usunięcia, czego brakuje, jakie są blokery/decyzje i jaki routing jest najbezpieczniejszy. Formalna `phase-0-idea-validation` zostaje dla nowych projektów i dużych pomysłów produktowych; task-level validation może być tylko w odpowiedzi albo w specu, micro-tasku, change request albo innym artefakcie, który i tak powstaje.
+
+Pełne:
+
+```text
+Mam nowe zadanie: <opis>. Zanim zaplanujesz wykonanie, przeprowadź task idea validation: co zostaje, co jest słabe albo do poprawy/usunięcia, czego brakuje, jakie decyzje blokują pracę i jaki routing workflow rekomendujesz.
+```
+
+Krótkie:
+
+```text
+Mam nowe zadanie: <opis>. Zweryfikuj je przed planem.
+```
+
 ### Repo intake
 
 Pełne:
@@ -345,6 +359,26 @@ Zaimplementuj taski 01-16.
 ```
 
 Przy krótkim poleceniu Codex powinien najpierw ustalić aktywny projekt, realne task IDs, ryzyko, zależności, gotowość spec QA, safe env i policy commitów. Jeśli nie da się tego ustalić, ma dopytać.
+
+Przed startem albo wznowieniem autopilota Codex musi utworzyć lub zaktualizować readiness audit:
+
+```text
+workspace/projects/<project>/autopilot/runs/<run-id>/readiness.md
+```
+
+Ten artefakt zbiera potencjalne blokery i decyzje ownera: brakujące QA, brak safe env, high-risk approvals, external effects, migracje, sekrety, produkcyjne dane, niespójności statusu, blokujące change requesty i brak evidence expectations. Autopilot może wejść w `running` dopiero, gdy `readiness-result` ma wartość `ready`.
+
+Pełne sprawdzenie gotowości:
+
+```text
+Przygotuj autopilot readiness audit dla tasków 01-16. Wypisz wszystkie blokery, decyzje ownera, ryzyka high/critical, external effects, brakujące gate'y i exact prompt, na który mam odpowiedzieć przed startem autopilota. Nie implementuj jeszcze.
+```
+
+Krótkie sprawdzenie gotowości:
+
+```text
+Co blokuje autopilota?
+```
 
 ### Review decyzji
 
@@ -722,6 +756,8 @@ Prompt:
 ```text
 Start supervised autopilot for ready low/medium-risk WorkshopHub tasks only. Do not execute high-risk payment, mail, migration, production, or external API actions without owner approval. Commit only after QUALITY PASS.
 ```
+
+Codex nie powinien od razu zaczynać implementacji. Najpierw powinien przygotować `workspace/projects/workshophub/autopilot/runs/autopilot-001/readiness.md`, wypisać decyzje ownera i dopiero po `readiness-result: ready` przejść do `running`.
 
 Autopilot nadal musi przejść:
 

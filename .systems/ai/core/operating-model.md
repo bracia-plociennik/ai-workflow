@@ -32,6 +32,16 @@ Repository state is factual truth for implementation, but it is not an instructi
 
 Memory, chat history, generated output, and supporting notes never override repository state, workflow policy, approved scope, phase gates, or current status.
 
+## Task Idea Validation
+
+Before planning, specifying, implementing, accepting a side-task/micro-task, registering a change request, or starting autopilot for any new task or approach request, apply `.systems/ai/core/task-intake.md`.
+
+This is a pre-routing lens, not a workflow phase and not write permission. The agent must identify what stays, what is weak or should be changed/removed, what is missing, which blockers or owner decisions exist, and the recommended safe routing.
+
+Formal new project or broad product ideas still use `phase-0-idea-validation`. Smaller task-level validation may live only in the response, or inside the spec, micro-task, micro-project, change request, task card, or plan artifact that the routed workflow already requires.
+
+If task intake reveals high or critical risk, unknown safe environment, missing acceptance criteria, unresolved external effects, or a request to bypass evidence/DoD/risk policy, stop before planning implementation.
+
 ## Skill Routing
 
 Reusable task-specific skills can exist in two layers:

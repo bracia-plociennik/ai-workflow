@@ -1,5 +1,17 @@
 # changelog.md
 
+## 0.8.2 - 2026-05-25
+
+- Added mandatory run-scoped Autopilot Readiness Audit before starting or resuming autopilot.
+- Added `.systems/ai/templates/autopilot/readiness.template.md` and connected it to autopilot runtime templates.
+- Updated autopilot routing, guide, response contract, workflow aliases, human docs, and validators so autopilot cannot enter `running` before readiness is `ready`.
+
+## 0.8.1 - 2026-05-25
+
+- Added `.systems/ai/core/task-intake.md` as the mandatory Task Idea Validation lens for new tasks, planning requests, approach requests, side-tasks, micro-tasks, change requests, and autopilot requests.
+- Required new task responses to identify what stays, what is weak or should change, what is missing, blockers/decisions, and recommended routing before presenting a plan.
+- Connected task intake to `AGENTS.md`, command routing, operating model, workflow routing, response contract, human documentation, and validators.
+
 ## 0.8.0 - 2026-05-21
 
 - Split the nested clone into system-owned `.systems/**` and target-owned `workspace/**`.

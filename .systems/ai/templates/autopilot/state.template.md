@@ -10,6 +10,9 @@ autopilot:
   mode: none # supervised | semi-autonomous | autonomous-execution
   status: not-running # not-running | running | stopped | awaiting-owner | completed
   active-project: <project>
+  readiness-artifact: null
+  readiness-result: draft # draft | blocked | awaiting-owner | ready | superseded
+  owner-actions-status: not-started # not-started | pending | resolved | not-applicable
   started-at: null
   updated-at: null
 
