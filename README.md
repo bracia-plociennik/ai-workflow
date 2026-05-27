@@ -139,10 +139,11 @@ The included `EXAMPLE` workspaces are illustrative only. Do not treat them as ac
 
 ## Branch Model
 
-- `main` is the public reusable template branch and must not track active `workspace/**`.
-- `dev` is the private development branch for this repository and may keep local runtime while improving the workflow.
+- `main` is the public reusable template branch and must not track active runtime under `workspace/**` or `ai-workflow-workspace/**`.
+- `dev` is the development branch for this repository and may track this repository's own runtime under `ai-workflow-workspace/**` while improving the workflow.
 - Target repositories should update nested clones from public `main`.
 - Target repositories should not commit `ai-workflow/` or root `AGENTS.md`; they should commit `ai-workflow-workspace/` when it contains useful repo/project runtime.
+- `.systems/scripts/check-branch-policy` enforces this split. `AI_WORKFLOW_BRANCH_POLICY=public` blocks both runtime directories; `AI_WORKFLOW_BRANCH_POLICY=dev` allows `ai-workflow-workspace/**` but still blocks legacy `workspace/**`.
 
 ## Validation Before Reuse
 

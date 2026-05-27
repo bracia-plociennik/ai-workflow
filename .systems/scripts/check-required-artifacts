@@ -101,6 +101,7 @@ required=(
   ".systems/ai/templates/humans/summary.template.md"
   ".github/workflows/ai-workflow-validate.yml"
   ".systems/scripts/validate-workflow"
+  ".systems/scripts/check-branch-policy"
   ".systems/scripts/check-naming"
   ".systems/scripts/check-qa-evidence"
   ".systems/scripts/check-required-artifacts"

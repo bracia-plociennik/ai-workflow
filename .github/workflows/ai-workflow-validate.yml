@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   validate:
@@ -22,6 +23,9 @@ jobs:
 
       - name: Check validator toolchain
         run: command -v rg
+
+      - name: Check branch policy
+        run: .systems/scripts/check-branch-policy
 
       - name: Validate workflow template
         run: .systems/scripts/validate-workflow
