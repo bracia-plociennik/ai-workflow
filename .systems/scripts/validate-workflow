@@ -7,6 +7,7 @@ if ! command -v rg >/dev/null 2>&1; then
 fi
 
 .systems/scripts/check-required-artifacts
+.systems/scripts/check-branch-policy
 .systems/scripts/check-naming
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
@@ -199,6 +200,13 @@ if rg -q 'printf "\\n# Local AI Workflow nested clone\\n/ai-workflow/\\n" >> \.g
   echo "Old committed .gitignore install flow remains"
   fail=1
 fi
+
+for required_branch_policy_ref in README.md .systems/ai/core/installation.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'check-branch-policy|AI_WORKFLOW_BRANCH_POLICY|ai-workflow-workspace' "$required_branch_policy_ref"; then
+    echo "Missing branch policy reference in $required_branch_policy_ref"
+    fail=1
+  fi
+done
 
 if [[ "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != "1" ]]; then
   .systems/scripts/check-validator-smoke-tests

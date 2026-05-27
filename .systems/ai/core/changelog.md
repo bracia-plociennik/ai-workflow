@@ -4,6 +4,7 @@
 
 - Split target runtime out of the nested clone: public `main` no longer tracks `workspace/**`.
 - Added `AI_WORKFLOW_WORKSPACE_HOME`, normally `ai-workflow-workspace/`, as the target-owned tracked runtime workspace.
+- Added `.systems/scripts/check-branch-policy` to block runtime workspace files on public `main` while allowing `ai-workflow-workspace/**` on `dev`.
 - Added `.systems/scripts/init-workspace` and workspace bootstrap templates.
 - Changed target root `AGENTS.md` shim handling to local-only via `.git/info/exclude` together with `/ai-workflow/`.
 - Updated `update-from-upstream` so it updates only the nested `ai-workflow/` clone and never touches `AI_WORKFLOW_WORKSPACE_HOME/**`.

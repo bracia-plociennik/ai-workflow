@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+repo_root="$(cd "$script_dir/../.." && pwd -P)"
+cd "$repo_root"
+
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  exit 0
+fi
+
+policy="${AI_WORKFLOW_BRANCH_POLICY:-auto}"
+
+resolve_auto_policy() {
+  local branch=""
+
+  if [[ -n "${GITHUB_BASE_REF:-}" ]]; then
+    branch="$GITHUB_BASE_REF"
+  elif [[ -n "${GITHUB_REF_NAME:-}" ]]; then
+    branch="$GITHUB_REF_NAME"
+  else
+    branch="$(git branch --show-current 2>/dev/null || true)"
+  fi
+
+  case "$branch" in
+    dev)
+      printf 'dev\n'
+      ;;
+    main|"")
+      printf 'public\n'
+      ;;
+    *)
+      printf 'public\n'
+      ;;
+  esac
+}
+
+case "$policy" in
+  auto)
+    policy="$(resolve_auto_policy)"
+    ;;
+  public|dev)
+    ;;
+  *)
+    echo "Invalid AI_WORKFLOW_BRANCH_POLICY: $policy"
+    echo "Allowed values: auto, public, dev"
+    exit 1
+    ;;
+esac
+
+tracked_legacy="$(git ls-files -- workspace || true)"
+tracked_dev_workspace="$(git ls-files -- ai-workflow-workspace || true)"
+fail=0
+
+if [[ -n "$tracked_legacy" ]]; then
+  echo "Branch policy violation: legacy workspace files are tracked under workspace/."
+  echo "Move runtime to ai-workflow-workspace/ on dev, or keep public main free of runtime."
+  printf '%s\n' "$tracked_legacy" | sed 's/^/ - /'
+  fail=1
+fi
+
+if [[ "$policy" == "public" && -n "$tracked_dev_workspace" ]]; then
+  echo "Branch policy violation: public template mode must not track ai-workflow-workspace/."
+  echo "Public main is reusable system/template only; runtime workspace belongs on dev or in target repositories."
+  printf '%s\n' "$tracked_dev_workspace" | sed 's/^/ - /'
+  fail=1
+fi
+
+exit "$fail"

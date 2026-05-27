@@ -52,6 +52,46 @@ fi
 test -f "$install_target/ai-workflow-workspace/repo/core/status.md" || { echo "init-workspace did not create repo status"; exit 1; }
 test -f "$install_target/AGENTS.md" || { echo "init-workspace did not create local AGENTS shim"; exit 1; }
 
+branch_policy_fixture="$tmp/.branch-policy-smoke"
+mkdir -p "$branch_policy_fixture/.systems/scripts"
+cp "$tmp/.systems/scripts/check-branch-policy" "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+git -C "$branch_policy_fixture" init -q
+git -C "$branch_policy_fixture" checkout -q -b main
+
+mkdir -p "$branch_policy_fixture/ai-workflow-workspace"
+cat > "$branch_policy_fixture/ai-workflow-workspace/runtime.md" <<'MD'
+# Runtime
+MD
+git -C "$branch_policy_fixture" add ai-workflow-workspace/runtime.md
+run_must_fail "branch-policy-public-blocks-dev-workspace" env AI_WORKFLOW_BRANCH_POLICY=public "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+git -C "$branch_policy_fixture" rm -q --cached ai-workflow-workspace/runtime.md
+rm -rf "$branch_policy_fixture/ai-workflow-workspace"
+
+mkdir -p "$branch_policy_fixture/workspace"
+cat > "$branch_policy_fixture/workspace/runtime.md" <<'MD'
+# Legacy Runtime
+MD
+git -C "$branch_policy_fixture" add workspace/runtime.md
+run_must_fail "branch-policy-public-blocks-legacy-workspace" env AI_WORKFLOW_BRANCH_POLICY=public "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+run_must_fail "branch-policy-dev-blocks-legacy-workspace" env AI_WORKFLOW_BRANCH_POLICY=dev "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+git -C "$branch_policy_fixture" rm -q --cached workspace/runtime.md
+rm -rf "$branch_policy_fixture/workspace"
+
+mkdir -p "$branch_policy_fixture/ai-workflow-workspace"
+cat > "$branch_policy_fixture/ai-workflow-workspace/runtime.md" <<'MD'
+# Runtime
+MD
+git -C "$branch_policy_fixture" add ai-workflow-workspace/runtime.md
+run_must_pass "branch-policy-dev-allows-dev-workspace" env AI_WORKFLOW_BRANCH_POLICY=dev "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+git -C "$branch_policy_fixture" rm -q --cached ai-workflow-workspace/runtime.md
+rm -rf "$branch_policy_fixture/ai-workflow-workspace"
+
+mkdir -p "$branch_policy_fixture/../ai-workflow-workspace"
+cat > "$branch_policy_fixture/../ai-workflow-workspace/runtime.md" <<'MD'
+# Sibling Runtime
+MD
+run_must_pass "branch-policy-public-ignores-untracked-sibling-workspace" env AI_WORKFLOW_BRANCH_POLICY=public "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+
 mv "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md" "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md.bak"
 run_must_fail "missing-autopilot-readme-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md.bak" "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md"

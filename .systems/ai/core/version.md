@@ -15,7 +15,8 @@
 - Default target-repository installation is a nested clone at `ai-workflow/`, a local-only root `AGENTS.md` shim, and a target-owned tracked workspace at `ai-workflow-workspace/`.
 - `.systems/` is the system-owned namespace inside `AI_WORKFLOW_HOME`.
 - `AI_WORKFLOW_WORKSPACE_HOME/` is the target-owned runtime/advisory namespace, normally `ai-workflow-workspace/` beside `AI_WORKFLOW_HOME`.
-- Public `main` does not track active `workspace/**`; private development branches may keep local runtime separately.
+- Public `main` does not track active `workspace/**` or `ai-workflow-workspace/**`; `dev` may track this repository's own `ai-workflow-workspace/**` runtime.
+- `.systems/scripts/check-branch-policy` enforces public/development runtime tracking rules. Use `AI_WORKFLOW_BRANCH_POLICY=public` or `AI_WORKFLOW_BRANCH_POLICY=dev` for explicit local validation.
 - `.systems/ai/` is system-owned policy and workflow source.
 - `.systems/ai/core/` stores canonical AI router and policy files.
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
