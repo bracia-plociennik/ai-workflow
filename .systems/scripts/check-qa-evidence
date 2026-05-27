@@ -3,18 +3,15 @@ set -euo pipefail
 
 fail=0
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-repo_root="$(cd "$script_dir/../.." && pwd -P)"
+source "$script_dir/resolve-workflow-env"
+repo_root="$AI_WORKFLOW_HOME"
+workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
 cd "$repo_root"
 
-if [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
-  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
-elif [[ -d "$repo_root/../ai-workflow-workspace" ]]; then
-  workspace_home="$repo_root/../ai-workflow-workspace"
+if [[ -d "$workspace_home" ]]; then
+  workspace_home="$(cd "$workspace_home" && pwd -P)"
 else
   workspace_home=""
-fi
-if [[ -n "$workspace_home" && -d "$workspace_home" ]]; then
-  workspace_home="$(cd "$workspace_home" && pwd -P)"
 fi
 
 has_pass_result() {

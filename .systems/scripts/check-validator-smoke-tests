@@ -52,6 +52,23 @@ fi
 test -f "$install_target/ai-workflow-workspace/repo/core/status.md" || { echo "init-workspace did not create repo status"; exit 1; }
 test -f "$install_target/AGENTS.md" || { echo "init-workspace did not create local AGENTS shim"; exit 1; }
 
+resolver_official_out="$tmp/resolve-official.out"
+tmp_real="$(cd "$tmp" && pwd -P)"
+(cd "$tmp" && env -u AI_WORKFLOW_MODE -u AI_WORKFLOW_WORKSPACE_HOME .systems/scripts/resolve-workflow-env) >"$resolver_official_out"
+grep -qxF "AI_WORKFLOW_MODE_RESOLVED=official" "$resolver_official_out" || { echo "Resolver did not select official mode"; exit 1; }
+grep -qxF "AI_WORKFLOW_HOME=$tmp_real" "$resolver_official_out" || { echo "Resolver official AI_WORKFLOW_HOME mismatch"; exit 1; }
+grep -qxF "TARGET_REPO_ROOT=$tmp_real" "$resolver_official_out" || { echo "Resolver official TARGET_REPO_ROOT mismatch"; exit 1; }
+grep -qxF "AI_WORKFLOW_WORKSPACE_HOME=$tmp_real/ai-workflow-workspace" "$resolver_official_out" || { echo "Resolver official workspace mismatch"; exit 1; }
+
+resolver_target_out="$tmp/resolve-target.out"
+install_ai_real="$(cd "$install_ai" && pwd -P)"
+install_target_real="$(cd "$install_target" && pwd -P)"
+(cd "$install_ai" && env -u AI_WORKFLOW_MODE -u AI_WORKFLOW_WORKSPACE_HOME .systems/scripts/resolve-workflow-env) >"$resolver_target_out"
+grep -qxF "AI_WORKFLOW_MODE_RESOLVED=target" "$resolver_target_out" || { echo "Resolver did not select target mode"; exit 1; }
+grep -qxF "AI_WORKFLOW_HOME=$install_ai_real" "$resolver_target_out" || { echo "Resolver target AI_WORKFLOW_HOME mismatch"; exit 1; }
+grep -qxF "TARGET_REPO_ROOT=$install_target_real" "$resolver_target_out" || { echo "Resolver target TARGET_REPO_ROOT mismatch"; exit 1; }
+grep -qxF "AI_WORKFLOW_WORKSPACE_HOME=$install_target_real/ai-workflow-workspace" "$resolver_target_out" || { echo "Resolver target workspace mismatch"; exit 1; }
+
 branch_policy_fixture="$tmp/.branch-policy-smoke"
 mkdir -p "$branch_policy_fixture/.systems/scripts"
 cp "$tmp/.systems/scripts/check-branch-policy" "$branch_policy_fixture/.systems/scripts/check-branch-policy"

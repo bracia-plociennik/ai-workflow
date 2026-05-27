@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+resolve_ai_workflow_env() {
+  local resolver_script_dir
+  local resolver_home
+  local requested_mode
+  local resolved_mode
+  local parent_root
+  local parent_git_root
+  local workspace_home
+
+  resolver_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+  resolver_home="$(cd "$resolver_script_dir/../.." && pwd -P)"
+  requested_mode="${AI_WORKFLOW_MODE:-auto}"
+
+  case "$requested_mode" in
+    auto|official|target)
+      ;;
+    *)
+      echo "Invalid AI_WORKFLOW_MODE: $requested_mode" >&2
+      echo "Allowed values: auto, official, target" >&2
+      return 2
+      ;;
+  esac
+
+  parent_root="$(cd "$resolver_home/.." && pwd -P)"
+  parent_git_root="$(git -C "$parent_root" rev-parse --show-toplevel 2>/dev/null || true)"
+
+  if [[ "$requested_mode" == "auto" ]]; then
+    if [[ -n "$parent_git_root" && "$parent_git_root" == "$parent_root" && "$(basename "$resolver_home")" == "ai-workflow" ]]; then
+      resolved_mode="target"
+    else
+      resolved_mode="official"
+    fi
+  else
+    resolved_mode="$requested_mode"
+  fi
+
+  export AI_WORKFLOW_MODE_RESOLVED="$resolved_mode"
+  export AI_WORKFLOW_HOME="$resolver_home"
+
+  if [[ "$resolved_mode" == "target" ]]; then
+    export TARGET_REPO_ROOT="$parent_root"
+  else
+    export TARGET_REPO_ROOT="$resolver_home"
+  fi
+
+  if [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
+    workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+    if [[ "$workspace_home" != /* ]]; then
+      workspace_home="$TARGET_REPO_ROOT/$workspace_home"
+    fi
+  elif [[ "$resolved_mode" == "target" ]]; then
+    workspace_home="$TARGET_REPO_ROOT/ai-workflow-workspace"
+  else
+    workspace_home="$AI_WORKFLOW_HOME/ai-workflow-workspace"
+  fi
+
+  export AI_WORKFLOW_WORKSPACE_HOME="$workspace_home"
+}
+
+if resolve_ai_workflow_env "$@"; then
+  status=0
+else
+  status=$?
+fi
+if [[ "$status" -ne 0 ]]; then
+  if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+    return "$status"
+  fi
+  exit "$status"
+fi
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  printf 'AI_WORKFLOW_MODE_RESOLVED=%s\n' "$AI_WORKFLOW_MODE_RESOLVED"
+  printf 'AI_WORKFLOW_HOME=%s\n' "$AI_WORKFLOW_HOME"
+  printf 'TARGET_REPO_ROOT=%s\n' "$TARGET_REPO_ROOT"
+  printf 'AI_WORKFLOW_WORKSPACE_HOME=%s\n' "$AI_WORKFLOW_WORKSPACE_HOME"
+fi

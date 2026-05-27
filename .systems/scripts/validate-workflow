@@ -189,6 +189,27 @@ for required_public_model_ref in README.md HUMANS.md AGENTS.md .systems/ai/core/
   fi
 done
 
+for required_repository_mode_ref in README.md HUMANS.md AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'repository-modes.md|official repo mode|target repo mode|AI_WORKFLOW_MODE' "$required_repository_mode_ref"; then
+    echo "Missing repository mode reference in $required_repository_mode_ref"
+    fail=1
+  fi
+done
+
+for required_repository_mode_text in 'Official Repo Mode' 'Target Repo Mode' 'AI_WORKFLOW_MODE=auto|official|target' 'There is no inner `ai-workflow/` directory' 'resolve-workflow-env'; do
+  if ! rg -q "$required_repository_mode_text" .systems/ai/core/repository-modes.md; then
+    echo "Repository modes doc missing required text: $required_repository_mode_text"
+    fail=1
+  fi
+done
+
+for required_resolver_ref in .systems/scripts/check-naming .systems/scripts/check-status-consistency .systems/scripts/check-qa-evidence; do
+  if ! rg -q 'resolve-workflow-env' "$required_resolver_ref"; then
+    echo "Validator missing workflow env resolver: $required_resolver_ref"
+    fail=1
+  fi
+done
+
 for required_install_ref in README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/templates/root-agents.template.md; do
   if ! rg -q '.git/info/exclude' "$required_install_ref"; then
     echo "Missing local-only .git/info/exclude install rule in $required_install_ref"

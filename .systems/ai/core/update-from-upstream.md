@@ -4,6 +4,8 @@
 
 This file defines the official update flow for target repositories that use AI Workflow as a nested clone in `ai-workflow/`.
 
+It is not the development flow for the upstream `ai-workflow` repository. In official repo mode, use normal git branch, merge, cherry-pick, and release procedures. Repository modes are defined in `.systems/ai/core/repository-modes.md`.
+
 Do not update target repositories with a raw pull inside the nested clone. Use:
 
 ```bash

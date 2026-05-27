@@ -22,7 +22,7 @@ If a shortcut here is insufficient, open the current phase file. If process docs
 
 ## Canonical Runtime Locations
 
-When AI Workflow is used as a nested clone in another repository, these paths are relative to `AI_WORKFLOW_HOME` (`ai-workflow/` by default). Product code, app commands, tests, builds, and migrations run from `TARGET_REPO_ROOT` unless repo intake records a different command working directory.
+Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo mode, `AI_WORKFLOW_HOME` is the upstream repository root and there is no inner `ai-workflow/` directory. In target repo mode, AI Workflow is a nested clone and paths are relative to `AI_WORKFLOW_HOME` (`ai-workflow/` by default). Product code, app commands, tests, builds, and migrations run from `TARGET_REPO_ROOT` unless repo intake records a different command working directory.
 
 - Target entrypoint shim: `<TARGET_REPO_ROOT>/AGENTS.md`
 - Internal execution contract: `<AI_WORKFLOW_HOME>/AGENTS.md`
