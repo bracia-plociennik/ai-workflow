@@ -42,7 +42,7 @@ install_ai="$install_target/ai-workflow"
 mkdir -p "$install_ai"
 (cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$install_ai"
 git -C "$install_target" init -q
-run_must_pass "init-workspace-creates-local-excludes" "$install_ai/.systems/scripts/init-workspace"
+run_must_pass "init-workspace-creates-local-excludes" env -u AI_WORKFLOW_WORKSPACE_HOME "$install_ai/.systems/scripts/init-workspace"
 grep -qxF "/AGENTS.md" "$install_target/.git/info/exclude" || { echo "init-workspace did not exclude root AGENTS.md"; exit 1; }
 grep -qxF "/ai-workflow/" "$install_target/.git/info/exclude" || { echo "init-workspace did not exclude nested ai-workflow"; exit 1; }
 if grep -qxF "/ai-workflow-workspace/" "$install_target/.git/info/exclude"; then
