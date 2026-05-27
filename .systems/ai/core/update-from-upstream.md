@@ -17,13 +17,13 @@ The update flow treats the nested clone as two layers:
 | Layer | Paths | Update Behavior |
 | --- | --- | --- |
 | System-owned | `AGENTS.md`, `HUMANS.md`, `README.md`, `.systems/**`, `.github/**` | Must be clean before update. Updated by upstream only. |
-| Workspace-owned | `workspace/**` | Protected and restored after upstream update. |
+| Target-owned workspace | `AI_WORKFLOW_WORKSPACE_HOME/**`, normally `../ai-workflow-workspace/**` | Outside the nested clone. The update script must not modify it. |
 
-Legacy filenames under `workspace/repo/legacy/` must not be normalized, renamed, or rewritten during update. They are preserved source context.
+Legacy filenames under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` must not be normalized, renamed, or rewritten during update. They are preserved source context outside the nested clone.
 
-User skills under `workspace/skills/` and External Memory under `workspace/external-memory/` are workspace-owned and must survive upstream updates.
+User skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/` and External Memory under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` are target-owned and must not be touched by upstream updates.
 
-Target repositories must not edit `.systems/**`. If a target-repository run reveals a workflow improvement, write it to `workspace/external-memory/` and promote it only through the official upstream `ai-workflow` repository.
+Target repositories must not edit `.systems/**`. If a target-repository run reveals a workflow improvement, write it to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` and promote it only through the official upstream `ai-workflow` repository.
 
 ## Procedure
 
@@ -36,13 +36,11 @@ ai-workflow/.systems/scripts/update-from-upstream
 The script:
 
 1. Resolves `AI_WORKFLOW_HOME`.
-2. Blocks if system-owned files are dirty.
-3. Backs up the protected `workspace/**` tree.
-4. Cleans protected paths only inside the nested clone working tree.
-5. Runs `git fetch`.
-6. Runs `git merge --ff-only`.
-7. Restores protected paths.
-8. Runs `.systems/scripts/validate-workflow`.
+2. Detects and warns about legacy `workspace/**` still inside the nested clone.
+3. Blocks if system-owned files are dirty.
+4. Runs `git fetch`.
+5. Runs `git merge --ff-only`.
+6. Runs `.systems/scripts/validate-workflow`.
 
 ## Options
 
@@ -59,21 +57,21 @@ ai-workflow/.systems/scripts/update-from-upstream --skip-validation
 The update must stop when:
 
 - any system-owned file is dirty;
+- legacy `workspace/**` inside the nested clone contains untracked or modified runtime that has not been migrated;
 - the target branch cannot be fetched;
 - the merge is not fast-forwardable;
-- protected paths cannot be restored;
-- validation fails after restore.
+- validation fails after the upstream update.
 
-Do not continue by manually pulling or overwriting protected paths.
+Do not continue by manually pulling, overwriting system files, or moving workspace data without an explicit migration decision.
 
 ## Expected Result
 
 After a successful update:
 
 - system-owned files reflect upstream;
-- workspace runtime still describes the target repository;
-- real micro-projects are preserved;
-- real project and human workspaces are preserved;
-- local external memory and user skills are preserved;
-- legacy source filenames are unchanged;
+- `AI_WORKFLOW_WORKSPACE_HOME/**` was not touched by the update script;
+- real micro-projects remain in the target-owned workspace;
+- real project and human workspaces remain in the target-owned workspace;
+- local external memory and user skills remain in the target-owned workspace;
+- legacy source filenames remain unchanged because the update does not edit workspace legacy files;
 - validators pass.

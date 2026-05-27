@@ -4,7 +4,7 @@
 
 `code-review.md` is the project-local review checklist and router.
 
-Detailed review artifacts live in `workspace/projects/<project>/reviews/`.
+Detailed review artifacts live in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/`.
 
 Review artifacts do not replace QA evidence in `quality/`.
 
@@ -24,4 +24,4 @@ Review artifacts do not replace QA evidence in `quality/`.
 
 | Date | Task | Result | Route |
 | --- | --- | --- | --- |
-| `<YYYY-MM-DD>` | `<task-id>` | `<PASS|FAIL|blocked>` | `workspace/projects/<project>/reviews/<YYYY-MM-DD-task-id-review>.md` |
+| `<YYYY-MM-DD>` | `<task-id>` | `<PASS|FAIL|blocked>` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/<YYYY-MM-DD-task-id-review>.md` |

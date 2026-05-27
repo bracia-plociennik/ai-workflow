@@ -28,23 +28,23 @@ When AI Workflow is used as a nested clone in another repository, these paths ar
 - Internal execution contract: `<AI_WORKFLOW_HOME>/AGENTS.md`
 - Installation policy: `.systems/ai/core/installation.md`
 - System workflow namespace: `.systems/`
-- Runtime workspace namespace: `workspace/`
+- Runtime workspace namespace: `AI_WORKFLOW_WORKSPACE_HOME/`
 - Workflow validator namespace: `.systems/scripts/`
-- Repo context: router `workspace/repo/core/context.md`, detailed entries `workspace/repo/context/`
-- Repo intake: `workspace/repo/core/repo-intake.md`
-- Repo status: `workspace/repo/core/status.md`
-- Repo memory: router `workspace/repo/core/memory.md`, detailed entries `workspace/repo/memory/`
-- Project status: `workspace/projects/<project>/status.md`
-- Project context: `workspace/projects/<project>/context.md`
-- Project planning router: `workspace/projects/<project>/plans.md`
-- Project task index: router `workspace/projects/<project>/tasks.md`, optional task cards `workspace/projects/<project>/tasks/`
-- Project micro-tasks: router `workspace/projects/<project>/micro-tasks.md`, entries `workspace/projects/<project>/micro-tasks/`
-- Project change requests: router `workspace/projects/<project>/change-requests.md`, entries `workspace/projects/<project>/change-requests/`
-- Project QA evidence: `workspace/projects/<project>/quality/`
-- Project decisions: `workspace/projects/<project>/decisions/`
-- Project reviews: `workspace/projects/<project>/reviews/`
-- Project autopilot runs: `workspace/projects/<project>/autopilot/runs/`
-- Repo-level micro-projects: `workspace/micro-projects/`
+- Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
+- Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
+- Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
+- Repo memory: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
+- Project status: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`
+- Project context: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`
+- Project planning router: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`
+- Project task index: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`, optional task cards `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks/`
+- Project micro-tasks: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks/`
+- Project change requests: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`
+- Project QA evidence: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/`
+- Project decisions: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/decisions/`
+- Project reviews: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/`
+- Project autopilot runs: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/`
+- Repo-level micro-projects: `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/`
 
 `.systems/ai/` is system-owned. Canonical policy/router files live in `.systems/ai/core/`. Do not store target-repository facts anywhere under `.systems/ai/`.
 
@@ -58,20 +58,20 @@ Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer 
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
-This shortcut is sufficient to bootstrap AI Workflow in a new target repository after AI Workflow has been cloned into `ai-workflow/` and the root `AGENTS.md` shim has been copied or merged. It must apply installation collision policy, replace stale `workspace/repo/core/*.md` runtime under `AI_WORKFLOW_HOME` when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
+This shortcut is sufficient to bootstrap AI Workflow in a new target repository after AI Workflow has been cloned into `ai-workflow/`, `.systems/scripts/init-workspace` has created or verified `AI_WORKFLOW_WORKSPACE_HOME`, and the local root `AGENTS.md` shim has been created or merged. It must apply installation collision policy, replace stale or incomplete `AI_WORKFLOW_WORKSPACE_HOME/repo/core/*.md` runtime when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
 
 ## Canonical Phase Order
 
 | Phase | Phase File | Required Output |
 | --- | --- | --- |
-| 0 repo intake | `.systems/ai/workflow/phase-0-repo-intake.md` | `workspace/repo/core/repo-intake.md` or `workspace/projects/<project>/intake/phase-0-repo-intake.md` |
-| 0 project workspace | `.systems/ai/workflow/phase-0-project-workspace.md` | `workspace/projects/<project>/` and `workspace/humans/<project>/` |
-| 0 idea validation | `.systems/ai/workflow/phase-0-idea-validation.md` | `workspace/projects/<project>/intake/phase-0-idea-validation.md` |
-| 1 architecture | `.systems/ai/workflow/phase-1-architecture.md` | `workspace/projects/<project>/architecture/phase-1-architecture.md` |
-| 1 architecture QA | `.systems/ai/workflow/phase-1-architecture-qa.md` | `workspace/projects/<project>/quality/phase-1-architecture-qa.md` |
+| 0 repo intake | `.systems/ai/workflow/phase-0-repo-intake.md` | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` or `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-repo-intake.md` |
+| 0 project workspace | `.systems/ai/workflow/phase-0-project-workspace.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` and `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/` |
+| 0 idea validation | `.systems/ai/workflow/phase-0-idea-validation.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-idea-validation.md` |
+| 1 architecture | `.systems/ai/workflow/phase-1-architecture.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md` |
+| 1 architecture QA | `.systems/ai/workflow/phase-1-architecture-qa.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-1-architecture-qa.md` |
 | 1 architecture fix loop | `.systems/ai/workflow/phase-1-architecture-fix-loop.md` | updated architecture plus fix evidence |
-| 2 project plan | `.systems/ai/workflow/phase-2-project-plan.md` | `workspace/projects/<project>/planning/phase-2-project-plan.md`, `plans.md`, and `tasks.md` |
-| 2 plan QA | `.systems/ai/workflow/phase-2-plan-qa.md` | `workspace/projects/<project>/quality/phase-2-plan-qa.md` |
+| 2 project plan | `.systems/ai/workflow/phase-2-project-plan.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`, `plans.md`, and `tasks.md` |
+| 2 plan QA | `.systems/ai/workflow/phase-2-plan-qa.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-plan-qa.md` |
 | 2 plan fix loop | `.systems/ai/workflow/phase-2-plan-fix-loop.md` | updated plan plus fix evidence |
 | 2 task packaging | `.systems/ai/workflow/phase-2-task-packaging.md` | packaging decision/evidence |
 | 2 packaging QA | `.systems/ai/workflow/phase-2-packaging-qa.md` | packaging QA evidence |
@@ -102,7 +102,7 @@ This shortcut is sufficient to bootstrap AI Workflow in a new target repository 
 repo-level phase 0 repo intake
 -> phase 0 project workspace
 -> phase 0 idea validation
--> project context in workspace/projects/<project>/context.md
+-> project context in AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md
 -> project/context phase 0 repo intake
 -> phase 1 architecture
 -> phase 1 architecture QA
@@ -173,7 +173,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | final check | `phase-8-final-check.md` |
 | owner comments before final-owner-yes, post-final correction/addition/removal | use `change-requests.md` plus the routed phase, fix loop, micro-task, iteration, rollback, or new project |
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
-| micro-project | use `workspace/micro-projects/` and the micro-project contract in `operating-model.md` |
+| micro-project | use `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/` and the micro-project contract in `operating-model.md` |
 | autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |

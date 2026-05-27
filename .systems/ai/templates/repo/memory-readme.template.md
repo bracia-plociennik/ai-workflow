@@ -2,9 +2,9 @@
 
 ## Purpose
 
-`workspace/repo/memory/` stores detailed memory entries for the current target repository.
+`AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` stores detailed memory entries for the current target repository.
 
-The router/index is `workspace/repo/core/memory.md`.
+The router/index is `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`.
 
 ## Entry Naming
 
@@ -33,4 +33,4 @@ Use `.systems/ai/templates/repo/date-memory-entry.template.md` for new entries.
 
 ## Router Rule
 
-After adding or updating an entry, update `workspace/repo/core/memory.md` with only date, topic, type, status, and route.
+After adding or updating an entry, update `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` with only date, topic, type, status, and route.

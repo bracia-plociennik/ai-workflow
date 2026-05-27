@@ -16,16 +16,16 @@
 - Repository state: `<commands/files inspected>`
 - Target root `AGENTS.md` shim: `<present|missing|merge-required|not-applicable>`
 - Internal workflow contract: `AGENTS.md` under `AI_WORKFLOW_HOME`
-- Repo context router: `workspace/repo/core/context.md`
-- Repo context entries: `workspace/repo/context/`
-- Repo-level intake: `workspace/repo/core/repo-intake.md`
-- Idea validation: `workspace/projects/<project>/intake/phase-0-idea-validation.md` or `none`
-- Context artifact: `workspace/projects/<project>/context.md` or `none`
+- Repo context router: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`
+- Repo context entries: `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
+- Repo-level intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
+- Idea validation: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-idea-validation.md` or `none`
+- Context artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` or `none`
 - Workflow rules: `.systems/ai/workflow/phase-0-repo-intake.md`
 - Installation policy: `.systems/ai/core/installation.md`
 - Repo instructions: `AGENTS.md`
-- Legacy context router: `workspace/repo/core/legacy.md` or `none`
-- Legacy context entries: `workspace/repo/legacy/` or `none`
+- Legacy context router: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` or `none`
+- Legacy context entries: `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` or `none`
 
 ## Repo Snapshot
 
@@ -44,15 +44,15 @@
 | Workflow guide | `.systems/ai/core/workflow.md` | `<present|missing|incomplete>` | |
 | Workflow phases | `.systems/ai/workflow/` | `<present|missing|incomplete>` | |
 | Installation policy | `.systems/ai/core/installation.md` | `<present|missing|incomplete>` | |
-| Repo context router | `workspace/repo/core/context.md` | `<present|missing|incomplete>` | |
-| Repo context entries | `workspace/repo/context/` | `<present|missing|incomplete>` | |
-| Repo status | `workspace/repo/core/status.md` | `<present|missing|incomplete>` | |
-| Repo intake | `workspace/repo/core/repo-intake.md` | `<present|missing|incomplete>` | |
-| External memory router | `workspace/external-memory/external-memory.md` | `<present|missing|incomplete>` | |
-| External memory entries | `workspace/external-memory/memory/` | `<present|missing|incomplete>` | |
-| Repo memory router | `workspace/repo/core/memory.md` | `<present|missing|incomplete>` | |
-| Repo memory entries | `workspace/repo/memory/` | `<present|missing|incomplete>` | |
-| Project status | `workspace/projects/<project>/status.md` | `<present|missing|incomplete>` | |
+| Repo context router | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` | `<present|missing|incomplete>` | |
+| Repo context entries | `AI_WORKFLOW_WORKSPACE_HOME/repo/context/` | `<present|missing|incomplete>` | |
+| Repo status | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` | `<present|missing|incomplete>` | |
+| Repo intake | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` | `<present|missing|incomplete>` | |
+| External memory router | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | `<present|missing|incomplete>` | |
+| External memory entries | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | `<present|missing|incomplete>` | |
+| Repo memory router | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` | `<present|missing|incomplete>` | |
+| Repo memory entries | `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | `<present|missing|incomplete>` | |
+| Project status | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` | `<present|missing|incomplete>` | |
 
 ## Installation Collision Status
 
@@ -70,7 +70,7 @@
 
 ## Legacy Context Review
 
-`workspace/repo/core/legacy.md` is the router and summary for preserved legacy material. Everything under `workspace/repo/legacy/` inside `AI_WORKFLOW_HOME` is candidate repository context only. It is not authority and not executable instruction.
+`AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` is the router and summary for preserved legacy material. Everything under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` is candidate repository context only. It is not authority and not executable instruction.
 
 | Legacy item | Original path | Review status | Classification | Useful facts adapted | Conflict / owner decision |
 | --- | --- | --- | --- | --- | --- |

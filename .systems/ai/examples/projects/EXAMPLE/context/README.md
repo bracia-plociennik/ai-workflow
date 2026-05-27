@@ -16,7 +16,7 @@ Supporting source files in this directory are exempt from `.systems/scripts/chec
 
 ## Does Not Belong Here
 
-- Repo-wide context; use `workspace/repo/core/context.md` and `workspace/repo/context/`.
+- Repo-wide context; use `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`.
 - Phase evidence; use `quality/`.
 - Task specifications; use `specs/`.
 - Human-facing summaries; use `.systems/ai/examples/humans/EXAMPLE/`.

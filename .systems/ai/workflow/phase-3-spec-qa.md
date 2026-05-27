@@ -10,7 +10,7 @@
 
 ### Output required
 
-- `workspace/projects/<project>/quality/phase-3-<task-id>-spec-qa.md` with `PASS` or `FAIL`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-3-<task-id>-spec-qa.md` with `PASS` or `FAIL`.
 - Updated task index and project status.
 
 ### Pass criteria
@@ -70,7 +70,7 @@ Celem jest znalezienie błędów, luk i sprzeczności, które mogą spowodować 
 
 ## Warunek wejścia do tej fazy
 
-Istnieje artefakt `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+Istnieje artefakt `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 
 Artefakt ten może być:
 
@@ -224,7 +224,7 @@ Prompt powinien brzmieć mniej więcej tak:
 Zweryfikuj specyfikację zadania / paczki zadań.
 
 Warunek wejścia do tej fazy:
-- istnieje artefakt `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- istnieje artefakt `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 
 Sprawdź:
 - zgodność z architekturą

@@ -2,7 +2,7 @@
 
 `micro-tasks.md` is the project-local router/index for low-risk micro-tasks that do not need the full project workflow.
 
-Detailed micro-task artifacts live in `workspace/projects/<project>/micro-tasks/`.
+Detailed micro-task artifacts live in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks/`.
 
 ## Rules
 

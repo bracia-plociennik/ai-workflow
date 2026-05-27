@@ -4,7 +4,7 @@
 
 - Project: `<project>`
 - Date: `<YYYY-MM-DD>`
-- Project plan: `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Workflow phase: `2.7. TASK PACKAGING`
 - Result: `<packages-created|no-packages-created|blocked>`
 

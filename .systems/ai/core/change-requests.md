@@ -21,9 +21,9 @@ Do not use change requests to bypass normal phase gates, risk policy, permission
 
 Project-local change requests are stored in:
 
-- router: `workspace/projects/<project>/change-requests.md`;
-- directory: `workspace/projects/<project>/change-requests/`;
-- entry: `workspace/projects/<project>/change-requests/YYYY-MM-DD-<project>-cr-<nnn>-<slug>.md`.
+- router: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md`;
+- directory: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`;
+- entry: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/YYYY-MM-DD-<project>-cr-<nnn>-<slug>.md`.
 
 The canonical ID inside an entry is:
 

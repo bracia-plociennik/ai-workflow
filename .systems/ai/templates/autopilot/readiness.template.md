@@ -18,23 +18,23 @@ readiness:
 
 scanned-sources:
   repo:
-    - workspace/repo/core/status.md
-    - workspace/repo/core/repo-intake.md
-    - workspace/repo/core/context.md
-    - workspace/repo/context/
+    - AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md
+    - AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md
+    - AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md
+    - AI_WORKFLOW_WORKSPACE_HOME/repo/context/
   project:
-    - workspace/projects/<project>/status.md
-    - workspace/projects/<project>/tasks.md
-    - workspace/projects/<project>/plans.md
-    - workspace/projects/<project>/planning/
-    - workspace/projects/<project>/specs/
-    - workspace/projects/<project>/quality/
-    - workspace/projects/<project>/decisions/
-    - workspace/projects/<project>/change-requests.md
-    - workspace/projects/<project>/change-requests/
-    - workspace/projects/<project>/escalations/
-    - workspace/projects/<project>/checkpoints/
-    - workspace/projects/<project>/autopilot/runs/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/decisions/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/escalations/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/checkpoints/
+    - AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/
   policy:
     - AGENTS.md
     - .systems/ai/core/autopilot.md
@@ -48,7 +48,7 @@ scanned-sources:
     - .systems/ai/core/prompt-injection.md
     - .systems/ai/core/task-intake.md
   skills:
-    - workspace/skills/
+    - AI_WORKFLOW_WORKSPACE_HOME/skills/
     - .systems/ai/skills/
 
 gate-matrix:

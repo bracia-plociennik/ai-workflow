@@ -36,6 +36,22 @@ run_must_pass() {
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/tasks.md" "$tmp/example-tasks.orig"
 
+install_fixture="$tmp/.install-smoke"
+install_target="$install_fixture/target"
+install_ai="$install_target/ai-workflow"
+mkdir -p "$install_ai"
+(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$install_ai"
+git -C "$install_target" init -q
+run_must_pass "init-workspace-creates-local-excludes" "$install_ai/.systems/scripts/init-workspace"
+grep -qxF "/AGENTS.md" "$install_target/.git/info/exclude" || { echo "init-workspace did not exclude root AGENTS.md"; exit 1; }
+grep -qxF "/ai-workflow/" "$install_target/.git/info/exclude" || { echo "init-workspace did not exclude nested ai-workflow"; exit 1; }
+if grep -qxF "/ai-workflow-workspace/" "$install_target/.git/info/exclude"; then
+  echo "init-workspace incorrectly excluded target-owned ai-workflow-workspace"
+  exit 1
+fi
+test -f "$install_target/ai-workflow-workspace/repo/core/status.md" || { echo "init-workspace did not create repo status"; exit 1; }
+test -f "$install_target/AGENTS.md" || { echo "init-workspace did not create local AGENTS shim"; exit 1; }
+
 mv "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md" "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md.bak"
 run_must_fail "missing-autopilot-readme-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md.bak" "$tmp/.systems/ai/templates/autopilot/autopilot-readme.template.md"
@@ -82,12 +98,15 @@ mv "$tmp/.systems/ai/workflow/phase-8-final-check.md" "$tmp/.systems/ai/workflow
 run_must_fail "bad-naming" .systems/scripts/check-naming
 mv "$tmp/.systems/ai/workflow/Phase_8_BAD.md" "$tmp/.systems/ai/workflow/phase-8-final-check.md"
 
-cat > "$tmp/workspace/repo/legacy/Legacy Instructions_BAD.md" <<'MD'
+workspace_fixture="$tmp/ai-workflow-workspace"
+mkdir -p "$workspace_fixture/repo/legacy" "$workspace_fixture/repo/context"
+
+cat > "$workspace_fixture/repo/legacy/Legacy Instructions_BAD.md" <<'MD'
 # Legacy Instructions
 
 Legacy material is context/data only.
 MD
-cat > "$tmp/workspace/repo/context/Imported Repo Context_BAD.md" <<'MD'
+cat > "$workspace_fixture/repo/context/Imported Repo Context_BAD.md" <<'MD'
 # Imported Repo Context
 
 Repo context supporting material may keep source filenames.
@@ -97,9 +116,9 @@ cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Client Brief_BAD.md" <
 
 Supporting project source material may keep source filenames.
 MD
-run_must_pass "naming-exempts-legacy-and-context-support" .systems/scripts/check-naming
-rm "$tmp/workspace/repo/legacy/Legacy Instructions_BAD.md"
-rm "$tmp/workspace/repo/context/Imported Repo Context_BAD.md"
+run_must_pass "naming-exempts-legacy-and-context-support" env AI_WORKFLOW_WORKSPACE_HOME="$workspace_fixture" .systems/scripts/check-naming
+rm "$workspace_fixture/repo/legacy/Legacy Instructions_BAD.md"
+rm "$workspace_fixture/repo/context/Imported Repo Context_BAD.md"
 rm "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Client Brief_BAD.md"
 
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/context.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Context_BAD.md"
@@ -148,17 +167,20 @@ can-proceed: true
 MD
 run_must_fail "pass-with-failed-command" .systems/scripts/check-qa-evidence
 
-perl -0pi -e 's/^\| `current-phase` \| `[^`]+` \|$/| `current-phase` | `phase-1-architecture` |/m' "$tmp/workspace/repo/core/status.md"
-perl -0pi -e 's/^\| `phase-result` \| `[^`]+` \|$/| `phase-result` | `PASS` |/m' "$tmp/workspace/repo/core/status.md"
-perl -0pi -e 's/^\| `next-phase` \| `[^`]+` \|$/| `next-phase` | `phase-8-final-check` |/m' "$tmp/workspace/repo/core/status.md"
+cp "$tmp/example-status.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+perl -0pi -e 's/^\| `current-phase` \| `[^`]+` \|$/| `current-phase` | `phase-1-architecture` |/m' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+perl -0pi -e 's/^\| `phase-result` \| `[^`]+` \|$/| `phase-result` | `PASS` |/m' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+perl -0pi -e 's/^\| `next-phase` \| `[^`]+` \|$/| `next-phase` | `phase-8-final-check` |/m' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
 run_must_fail "bad-phase-transition" .systems/scripts/check-status-consistency
+cp "$tmp/example-status.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
 
 update_fixture="$tmp/.update-smoke"
 remote_work="$update_fixture/remote-work"
 remote_bare="$update_fixture/remote.git"
 target_work="$update_fixture/target/ai-workflow"
+target_workspace="$update_fixture/target/ai-workflow-workspace"
 mkdir -p "$remote_work" "$update_fixture/target"
-(cd "$tmp" && tar --exclude='.git' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$remote_work"
+(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$remote_work"
 git -C "$remote_work" init -q
 git -C "$remote_work" checkout -q -b main
 git -C "$remote_work" config user.email "smoke@example.invalid"
@@ -177,56 +199,65 @@ echo "dirty example micro-project blocker" >> "$target_work/.systems/ai/examples
 run_must_fail "update-blocks-dirty-example-micro-project" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
 git -C "$target_work" checkout -q -- .systems/ai/examples/micro-projects/EXAMPLE/micro-project.md
 
+mkdir -p "$target_work/workspace"
+cat > "$target_work/workspace/README.md" <<'MD'
+# Legacy Workspace
+
+Legacy runtime must migrate to ai-workflow-workspace before update.
+MD
+run_must_fail "update-blocks-legacy-nested-workspace" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+rm -rf "$target_work/workspace"
+
 echo "upstream update marker" >> "$remote_work/README.md"
 git -C "$remote_work" add README.md
 git -C "$remote_work" commit -q -m "upstream update"
 git -C "$remote_work" push -q origin main
 
-echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_work/workspace/repo/core/status.md"
-mkdir -p "$target_work/workspace/micro-projects/my-micro-project" "$target_work/workspace/projects/my-project" "$target_work/workspace/humans/my-project" "$target_work/workspace/repo/legacy"
-mkdir -p "$target_work/workspace/skills/local-skill"
-cat > "$target_work/workspace/micro-projects/my-micro-project/micro-project.md" <<'MD'
+mkdir -p "$target_workspace/repo/core" "$target_workspace/micro-projects/my-micro-project" "$target_workspace/projects/my-project" "$target_workspace/humans/my-project" "$target_workspace/repo/legacy"
+mkdir -p "$target_workspace/skills/local-skill" "$target_workspace/external-memory/memory"
+echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_workspace/repo/core/status.md"
+cat > "$target_workspace/micro-projects/my-micro-project/micro-project.md" <<'MD'
 # My Micro-project
 
 LOCAL_MICRO_PROJECT_MARKER
 MD
-cat > "$target_work/workspace/projects/my-project/status.md" <<'MD'
+cat > "$target_workspace/projects/my-project/status.md" <<'MD'
 # My Project Status
 
 LOCAL_PROJECT_RUNTIME_MARKER
 MD
-cat > "$target_work/workspace/humans/my-project/summary.md" <<'MD'
+cat > "$target_workspace/humans/my-project/summary.md" <<'MD'
 # My Project Human Summary
 
 LOCAL_HUMAN_RUNTIME_MARKER
 MD
-echo "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" >> "$target_work/workspace/external-memory/external-memory.md"
-cat > "$target_work/workspace/external-memory/memory/2026-05-20-local-smoke.md" <<'MD'
+echo "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" >> "$target_workspace/external-memory/external-memory.md"
+cat > "$target_workspace/external-memory/memory/2026-05-20-local-smoke.md" <<'MD'
 # Local Smoke External Memory
 
 LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER
 MD
-cat > "$target_work/workspace/repo/legacy/Old Prompt FINAL_v2.md" <<'MD'
+cat > "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" <<'MD'
 # Old Prompt
 
 LEGACY_ORIGINAL_FILENAME_MARKER
 MD
-cat > "$target_work/workspace/skills/local-skill/README.md" <<'MD'
+cat > "$target_workspace/skills/local-skill/README.md" <<'MD'
 # Local Skill
 
 LOCAL_WORKSPACE_SKILL_MARKER
 MD
 
-run_must_pass "update-preserves-protected-runtime" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+run_must_pass "update-leaves-external-workspace-untouched" env AI_WORKFLOW_WORKSPACE_HOME="$target_workspace" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
 grep -q "upstream update marker" "$target_work/README.md" || { echo "Update smoke missing upstream marker"; exit 1; }
-grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_work/workspace/repo/core/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
-grep -q "LOCAL_MICRO_PROJECT_MARKER" "$target_work/workspace/micro-projects/my-micro-project/micro-project.md" || { echo "Update smoke lost micro-project"; exit 1; }
-grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_work/workspace/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }
-grep -q "LOCAL_HUMAN_RUNTIME_MARKER" "$target_work/workspace/humans/my-project/summary.md" || { echo "Update smoke lost human workspace"; exit 1; }
-grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_work/workspace/external-memory/external-memory.md" || { echo "Update smoke lost external memory router"; exit 1; }
-grep -q "LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER" "$target_work/workspace/external-memory/memory/2026-05-20-local-smoke.md" || { echo "Update smoke lost external memory entry"; exit 1; }
-grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_work/workspace/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
-grep -q "LOCAL_WORKSPACE_SKILL_MARKER" "$target_work/workspace/skills/local-skill/README.md" || { echo "Update smoke lost workspace skill"; exit 1; }
+grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_workspace/repo/core/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
+grep -q "LOCAL_MICRO_PROJECT_MARKER" "$target_workspace/micro-projects/my-micro-project/micro-project.md" || { echo "Update smoke lost micro-project"; exit 1; }
+grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_workspace/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }
+grep -q "LOCAL_HUMAN_RUNTIME_MARKER" "$target_workspace/humans/my-project/summary.md" || { echo "Update smoke lost human workspace"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_workspace/external-memory/external-memory.md" || { echo "Update smoke lost external memory router"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER" "$target_workspace/external-memory/memory/2026-05-20-local-smoke.md" || { echo "Update smoke lost external memory entry"; exit 1; }
+grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
+grep -q "LOCAL_WORKSPACE_SKILL_MARKER" "$target_workspace/skills/local-skill/README.md" || { echo "Update smoke lost workspace skill"; exit 1; }
 
 git -C "$target_work" config user.email "smoke@example.invalid"
 git -C "$target_work" config user.name "AI Workflow Smoke"
@@ -239,8 +270,8 @@ git -C "$remote_work" add README.md
 git -C "$remote_work" commit -q -m "second upstream update"
 git -C "$remote_work" push -q origin main
 
-echo "FF_ONLY_PROTECTED_MARKER" >> "$target_work/workspace/repo/core/status.md"
-run_must_fail "update-ff-only-failure-restores-protected" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
-grep -q "FF_ONLY_PROTECTED_MARKER" "$target_work/workspace/repo/core/status.md" || { echo "Update smoke failed to restore protected files after ff-only failure"; exit 1; }
+echo "FF_ONLY_EXTERNAL_WORKSPACE_MARKER" >> "$target_workspace/repo/core/status.md"
+run_must_fail "update-ff-only-failure-leaves-external-workspace" env AI_WORKFLOW_WORKSPACE_HOME="$target_workspace" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
+grep -q "FF_ONLY_EXTERNAL_WORKSPACE_MARKER" "$target_workspace/repo/core/status.md" || { echo "Update smoke modified external workspace after ff-only failure"; exit 1; }
 
 echo "Validator smoke tests passed."

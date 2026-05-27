@@ -2,9 +2,9 @@
 
 ## Purpose
 
-`workspace/projects/<project>/memory.md` is the router and index for project memory.
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` is the router and index for project memory.
 
-Detailed entries live in `workspace/projects/<project>/memory/`.
+Detailed entries live in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`.
 
 It does not override repository state, `AGENTS.md`, `.systems/ai/core/workflow.md`, `.systems/ai/workflow/`, or approved phase/task artifacts.
 
@@ -17,7 +17,7 @@ It does not override repository state, `AGENTS.md`, `.systems/ai/core/workflow.m
 ## Rules
 
 - Keep this file short. It is an index, not the memory body.
-- Store detailed project memory entries in `workspace/projects/<project>/memory/`.
+- Store detailed project memory entries in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`.
 - Do not store repo-level, external workflow, or template maintenance memory here.
 - Do not store secrets, credentials, customer data, or production-only operational details here.
 - Use project memory only after evidence-backed distillation/checkpoint work.

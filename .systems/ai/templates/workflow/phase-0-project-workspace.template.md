@@ -11,15 +11,15 @@
 
 ## Workspace Paths
 
-- Project workspace: `workspace/projects/<project>/`
-- Human workspace: `workspace/humans/<project>/`
+- Project workspace: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`
+- Human workspace: `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/`
 
 ## Existing Workspace Scan
 
 | Path | Status | Notes |
 | --- | --- | --- |
-| `workspace/projects/<project>/` | `<missing|current|incomplete|conflicting|duplicate>` | |
-| `workspace/humans/<project>/` | `<missing|current|incomplete|conflicting|duplicate>` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` | `<missing|current|incomplete|conflicting|duplicate>` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/` | `<missing|current|incomplete|conflicting|duplicate>` | |
 
 ## Created Or Classified Project Files
 

@@ -1,6 +1,6 @@
 # <task-id>-quality.md
 
-Purpose: standard evidence artifact for SPEC QA, QUALITY, final check, or other PASS/FAIL gates. Store project-specific copies under `workspace/projects/<project>/quality/`.
+Purpose: standard evidence artifact for SPEC QA, QUALITY, final check, or other PASS/FAIL gates. Store project-specific copies under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/`.
 
 ## Result
 

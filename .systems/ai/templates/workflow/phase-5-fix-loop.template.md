@@ -5,7 +5,7 @@
 - Project: `<project>`
 - Task/package ID:
 - Date: `<YYYY-MM-DD>`
-- Failed quality artifact: `workspace/projects/<project>/quality/phase-5-<task-id>-quality.md`
+- Failed quality artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-5-<task-id>-quality.md`
 - Workflow phase: `5.5. FIX LOOP`
 - Result: `<completed|blocked>`
 

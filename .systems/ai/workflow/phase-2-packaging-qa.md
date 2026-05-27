@@ -10,7 +10,7 @@
 
 ### Output required
 
-- `workspace/projects/<project>/quality/phase-2-packaging-qa.md` with `PASS`, `FAIL`, or `skipped` when no package exists.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-packaging-qa.md` with `PASS`, `FAIL`, or `skipped` when no package exists.
 - Updated project status.
 
 ### Pass criteria
@@ -77,9 +77,9 @@ Nie używaj odpowiedzi typu:
 Do tej fazy przechodzimy tylko wtedy, gdy:
 
 - istnieje artefakt:
-  `workspace/projects/<project>/planning/phase-2-project-plan.md`
+  `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - została wykonana faza 2.7.
-- istnieje output pakietyzacji, istnieje sekcja `Tasks package` w artefakcie `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- istnieje output pakietyzacji, istnieje sekcja `Tasks package` w artefakcie `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - sekcja `Tasks package` zawiera co najmniej jeden realny pakiet
 
 Brak outputu pakietyzacji:
@@ -89,7 +89,7 @@ Brak outputu pakietyzacji:
 
 ## Przypadek braku pakietów
 
-Jeśli wynik fazy 2.7. jest taki, że nie utworzono żadnych pakietów lub jeśli sekcja `Tasks package` w `workspace/projects/<project>/planning/phase-2-project-plan.md` wskazuje, że nie utworzono żadnych pakietów::
+Jeśli wynik fazy 2.7. jest taki, że nie utworzono żadnych pakietów lub jeśli sekcja `Tasks package` w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md` wskazuje, że nie utworzono żadnych pakietów::
 
 - nie wchodź w fazę 2.9.
 - przejdź bezpośrednio do fazy 3. dla kolejnego taska solo z planu projektu.
@@ -300,8 +300,8 @@ Prompt powinien brzmieć mniej więcej tak:
 Przeprowadź krytyczną walidację task packaging (2.9.).
 
 Wejście:
-- workspace/projects/<project>/planning/phase-2-project-plan.md
-- output fazy 2.7. Task Packaging, sekcja `Tasks package` z `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md
+- output fazy 2.7. Task Packaging, sekcja `Tasks package` z `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Twoim celem nie jest poprawianie pakietów.
 Twoim celem jest sprawdzenie, czy pakiety przechodzą Packaging Gate.

@@ -19,7 +19,7 @@
 
 ## Changed Files
 
-- `workspace/micro-projects/README.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/README.md`
 - `.systems/ai/examples/micro-projects/EXAMPLE/README.md`
 - `.systems/ai/examples/micro-projects/EXAMPLE/micro-project.md`
 

@@ -5,13 +5,13 @@
 ### Input required
 
 - Packaging QA result is `FAIL`.
-- `workspace/projects/<project>/quality/phase-2-packaging-qa.md` lists findings.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-packaging-qa.md` lists findings.
 - Packaging decision, plan, and task index are available.
 
 ### Output required
 
 - Updated packaging decision/evidence.
-- Fix evidence in `workspace/projects/<project>/quality/phase-2-package-fix-loop.md`.
+- Fix evidence in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-package-fix-loop.md`.
 - Updated project status.
 
 ### Pass criteria
@@ -67,7 +67,7 @@ Do tej fazy przechodzimy tylko wtedy, gdy:
 - faza 2.9 zakończyła się wynikiem FAIL
 - istnieje raport z 2.9 zawierający listę problemów
 - istnieje sekcja `Tasks package` w artefakcie:
-  `workspace/projects/<project>/planning/phase-2-project-plan.md`
+  `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Brak wyniku FAIL albo brak raportu z 2.9:
 
@@ -102,7 +102,7 @@ Fix może obejmować wyłącznie:
 - brakujące taski w paczkach
 - błędne przypisanie tasków do paczek
 - brakujące lub błędne Definition of Done
-- aktualizację sekcji `Tasks package` w `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- aktualizację sekcji `Tasks package` w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Fix nie może obejmować:
 
@@ -173,7 +173,7 @@ Codex musi zwrócić:
 - limit retry
 - czy można wrócić do 2.9
 - czy fix ujawnił problem poza zakresem 2.9.1
-- potwierdzenie aktualizacji sekcji `Tasks package` w `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- potwierdzenie aktualizacji sekcji `Tasks package` w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 ## Reguła PASS tej fazy
 
@@ -203,7 +203,7 @@ Napraw tylko błędy wykryte w fazie 2.9. FAZA TASK PACKAGING QA.
 
 Wejście:
 - raport z 2.9 z wynikiem FAIL
-- aktualny task packaging, sekcja `Tasks package` z `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- aktualny task packaging, sekcja `Tasks package` z `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - retry count
 - poziom ryzyka
 - decyzje użytkownika

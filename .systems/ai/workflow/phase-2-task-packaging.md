@@ -5,12 +5,12 @@
 ### Input required
 
 - Plan QA has `PASS`.
-- `workspace/projects/<project>/tasks.md` identifies ready tasks and dependencies; optional task cards in `tasks/` are reviewed when present.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` identifies ready tasks and dependencies; optional task cards in `tasks/` are reviewed when present.
 - Parallel/package candidates are known or the work is explicitly solo-task execution.
 
 ### Output required
 
-- Packaging decision/evidence in `workspace/projects/<project>/quality/phase-2-task-packaging.md` or equivalent planning artifact.
+- Packaging decision/evidence in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-task-packaging.md` or equivalent planning artifact.
 - Updated project status and task/package readiness.
 
 ### Pass criteria
@@ -66,7 +66,7 @@ Do tej fazy przechodzimy tylko wtedy, gdy:
 
 - plan przeszedł 2.5 (PASS)
 - istnieje artefakt:
-  `workspace/projects/<project>/planning/phase-2-project-plan.md`
+  `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Brak PASS w 2.5:
 
@@ -195,7 +195,7 @@ Codex musi zwrócić:
   - lista tasków w pakiecie
 - listę tasków niepakietyzowalnych
 - listę wykrytych konfliktów lub none
-- potwierdzenie aktualizacji sekcji `Tasks package` w pliku `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- potwierdzenie aktualizacji sekcji `Tasks package` w pliku `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 ## Reguła STOP
 
@@ -226,7 +226,7 @@ Faza 2.7 nie tworzy osobnego artefaktu packagingu.
 
 Wynik fazy 2.7 musi zostać zapisany przez aktualizację pliku:
 
-- `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Aktualizacja musi dodać lub zaktualizować sekcję:
 
@@ -242,7 +242,7 @@ Sekcja `Tasks package` musi zawierać:
 - listę tasków niepakietyzowalnych
 - listę wykrytych konfliktów lub none
 
-Brak aktualizacji sekcji `Tasks package` w `workspace/projects/<project>/planning/phase-2-project-plan.md`:
+Brak aktualizacji sekcji `Tasks package` w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`:
 
 - blokuje przejście dalej z fazy 2.7.
 
@@ -264,7 +264,7 @@ Prompt powinien brzmieć mniej więcej tak:
 Przeprowadź task packaging (2.7.).
 
 Wejście:
-- workspace/projects/<project>/planning/phase-2-project-plan.md
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md
 
 Twoim celem nie jest zmiana planu.
 Twoim celem jest bezpieczne pogrupowanie tasków w pakiety.

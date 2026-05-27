@@ -9,12 +9,12 @@
 
 ## Sources
 
-- Architecture: `workspace/projects/<project>/architecture/phase-1-architecture.md`
-- Architecture QA: `workspace/projects/<project>/quality/phase-1-architecture-qa.md`
-- Initial audit: `workspace/projects/<project>/intake/phase-0-repo-intake.md`
-- Context: `workspace/projects/<project>/context.md` or `none`
-- Planning router: `workspace/projects/<project>/plans.md`
-- Task index: `workspace/projects/<project>/tasks.md`
+- Architecture: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
+- Architecture QA: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-1-architecture-qa.md`
+- Initial audit: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-repo-intake.md`
+- Context: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` or `none`
+- Planning router: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`
+- Task index: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
 - Workflow rules: `.systems/ai/workflow/phase-2-project-plan.md`
 
 ## Planning Constraints
@@ -31,7 +31,7 @@
 
 Each task must contain: ID in `<PROJECT>-<AREA>-<NNN>-<slug>` format, name, goal, scope, out-of-scope, DoD, dependencies, risk type, main risk, start condition, end condition, readiness status, and user-decision flag.
 
-The same task IDs must be present in `workspace/projects/<project>/tasks.md`. Optional task cards may be created under `workspace/projects/<project>/tasks/` when additional task-level context is useful.
+The same task IDs must be present in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`. Optional task cards may be created under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks/` when additional task-level context is useful.
 
 ## Tasks
 
@@ -89,8 +89,8 @@ The same task IDs must be present in `workspace/projects/<project>/tasks.md`. Op
 ## Plan Gate Decision
 
 - All tasks have full contract: `<yes|no>`
-- `workspace/projects/<project>/plans.md` routes to this plan: `<yes|no>`
-- `workspace/projects/<project>/tasks.md` exists and matches the plan: `<yes|no>`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md` routes to this plan: `<yes|no>`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` exists and matches the plan: `<yes|no>`
 - Dependencies are labeled: `<yes|no>`
 - Blocking decisions resolved or task marked conditional/blocked: `<yes|no>`
 - Ready for Plan QA: `<yes|no>`

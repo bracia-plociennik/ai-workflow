@@ -4,7 +4,7 @@
 
 High-risk and production-impacting tasks must define how to recover safely.
 
-If rollback is requested before or after `final-owner-yes`, first capture the owner request as a change request under `workspace/projects/<project>/change-requests/`, then route to the correct rollback, fix loop, or workflow phase.
+If rollback is requested before or after `final-owner-yes`, first capture the owner request as a change request under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`, then route to the correct rollback, fix loop, or workflow phase.
 
 ## Required Rollback Notes
 

@@ -7,7 +7,7 @@
 | Task | `<task-id>` |
 | Result | `<PASS|FAIL|blocked>` |
 | Reviewer | `<human|agent|pair>` |
-| Quality evidence | `workspace/projects/<project>/quality/<quality-file>.md` |
+| Quality evidence | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/<quality-file>.md` |
 
 ## Findings
 

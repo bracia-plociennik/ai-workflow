@@ -62,11 +62,11 @@ Choose the safest workflow path:
 
 ### Project Idea
 
-If the request is a new product/project idea, a broad feature concept, or a brain dump that should create project context, route to `phase-0-idea-validation`. The validation must use both chat input and raw source materials under `workspace/projects/<project>/context/` when present.
+If the request is a new product/project idea, a broad feature concept, or a brain dump that should create project context, route to `phase-0-idea-validation`. The validation must use both chat input and raw source materials under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/` when present.
 
 ### Task In Active Project
 
-If the request belongs to an active project, validate the task against `workspace/projects/<project>/status.md`, `tasks.md`, `plans.md`, accepted architecture, accepted spec, and current blockers before routing. The result may be response-only or recorded in the next spec, task card, quality artifact, or change request.
+If the request belongs to an active project, validate the task against `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`, `tasks.md`, `plans.md`, accepted architecture, accepted spec, and current blockers before routing. The result may be response-only or recorded in the next spec, task card, quality artifact, or change request.
 
 ### Side Task Or Micro-task
 
@@ -100,7 +100,7 @@ Task Idea Validation may be:
 
 Do not create a separate artifact just to satisfy this lens unless the routed workflow path already requires one.
 
-Do not store task-level validation in `.systems/**`. Target-specific validation belongs under `workspace/**`.
+Do not store task-level validation in `.systems/**`. Target-specific validation belongs under `AI_WORKFLOW_WORKSPACE_HOME/**`.
 
 ## Stop Conditions
 

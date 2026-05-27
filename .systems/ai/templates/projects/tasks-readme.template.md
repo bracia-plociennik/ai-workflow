@@ -4,7 +4,7 @@
 
 This directory stores optional detailed task cards for `<Project>`.
 
-The canonical task index/router is `workspace/projects/<project>/tasks.md`.
+The canonical task index/router is `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`.
 
 ## Rules
 

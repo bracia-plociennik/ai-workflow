@@ -17,28 +17,28 @@ It does not replace:
 Autopilot may start only when:
 
 - the user explicitly requests autonomous execution or project status says autopilot is active;
-- run-scoped readiness audit exists at `workspace/projects/<project>/autopilot/runs/<run-id>/readiness.md`;
+- run-scoped readiness audit exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md`;
 - readiness audit has `readiness-result: ready`;
-- `workspace/repo/core/context.md`, `workspace/repo/context/`, `workspace/repo/core/repo-intake.md`, and `workspace/repo/core/status.md` exist;
-- active project status exists at `workspace/projects/<project>/status.md`;
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` exist;
+- active project status exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`;
 - architecture and Architecture QA have `PASS`;
 - project plan and Plan QA have `PASS`;
 - task packaging is complete or explicitly skipped;
 - the next task/package spec exists;
 - Spec QA has `PASS`;
 - risk class permits autopilot under `.systems/ai/core/risk-model.md`;
-- required commands are known through `workspace/repo/core/repo-intake.md` and `.systems/ai/core/commands.md`.
+- required commands are known through `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` and `.systems/ai/core/commands.md`.
 
 ## Runtime Files
 
-Runtime files live under run directories in `workspace/projects/<project>/autopilot/runs/`.
+Runtime files live under run directories in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/`.
 
 Each run uses a monotonic ID such as `autopilot-001`:
 
-- `workspace/projects/<project>/autopilot/runs/autopilot-001/readiness.md`
-- `workspace/projects/<project>/autopilot/runs/autopilot-001/state.md`
-- `workspace/projects/<project>/autopilot/runs/autopilot-001/ledger.md`
-- `workspace/projects/<project>/autopilot/runs/autopilot-001/events.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/autopilot-001/readiness.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/autopilot-001/state.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/autopilot-001/ledger.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/autopilot-001/events.md`
 
 Root-level `autopilot-state.md`, `autopilot-ledger.md`, and `autopilot-events.md` are not canonical.
 
@@ -49,7 +49,7 @@ Templates live under `.systems/ai/templates/autopilot/`.
 Before starting or resuming autopilot, Codex must create or update the run-scoped readiness artifact:
 
 ```text
-workspace/projects/<project>/autopilot/runs/<run-id>/readiness.md
+AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md
 ```
 
 The readiness audit checks every likely blocker before implementation begins:

@@ -6,7 +6,7 @@ Skills are reusable task-specific guidance for how to perform a class of work in
 
 No concrete system skills are included by default.
 
-Target repositories must not edit this directory. Local user-defined skills belong in `workspace/skills/`.
+Target repositories must not edit this directory. Local user-defined skills belong in `AI_WORKFLOW_WORKSPACE_HOME/skills/`.
 
 ## Intended Layout
 
@@ -28,7 +28,7 @@ Skill names must use lowercase kebab-case.
 
 ## When Agents Must Check Skills
 
-Before planning or implementing a task, the agent must check whether a relevant user skill exists under `workspace/skills/`, then check this directory for a system skill.
+Before planning or implementing a task, the agent must check whether a relevant user skill exists under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, then check this directory for a system skill.
 
 Examples:
 

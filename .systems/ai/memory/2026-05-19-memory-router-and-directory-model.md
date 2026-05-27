@@ -9,18 +9,18 @@
 - Evidence:
   - `.systems/ai/core/memory.md`
   - `.systems/ai/memory/README.md`
-  - `workspace/repo/core/memory.md`
-  - `workspace/repo/memory/README.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/README.md`
 - Summary: Template, repo, project, and external memory keep stable `.md` router entrypoints, while detailed memory entries are stored as dated files in sibling directories.
 - Applies to:
   - `.systems/ai/core/memory.md`
   - `.systems/ai/memory/`
-  - `workspace/repo/core/memory.md`
-  - `workspace/repo/memory/`
-  - `workspace/projects/<project>/memory.md`
-  - `workspace/projects/<project>/memory/`
-  - `workspace/external-memory/external-memory.md`
-  - `workspace/external-memory/memory/`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
+  - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`
+  - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`
   - memory templates
 - Rule: Do not store long memory bodies in `memory.md` router files. Add a dated detailed entry and route to it from the index.
 - Review trigger: update if router validation is automated or if memory entry schemas change.

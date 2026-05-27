@@ -2,7 +2,7 @@
 
 This directory contains system-owned AI operational knowledge and workflow infrastructure.
 
-Do not store target-repository-specific facts in `.systems/ai/`. Runtime repo context, intake, status, and aggregate memory belong in `workspace/repo/`.
+Do not store target-repository-specific facts in `.systems/ai/`. Runtime repo context, intake, status, and aggregate memory belong in `AI_WORKFLOW_WORKSPACE_HOME/repo/`.
 
 ## Contents
 
@@ -35,28 +35,28 @@ Do not store target-repository-specific facts in `.systems/ai/`. Runtime repo co
 
 In target repositories, this directory normally lives under `AI_WORKFLOW_HOME`, usually `ai-workflow/.systems/ai/`. Product files, app commands, tests, builds, migrations, and target-owned root docs remain in `TARGET_REPO_ROOT`.
 
-- Repo-specific facts belong in `workspace/repo/`; detailed repo context belongs in `workspace/repo/context/` and is indexed by `workspace/repo/core/context.md`.
-- Project-specific facts belong in `workspace/projects/<project>/`, with accepted project context under `workspace/projects/<project>/context.md`.
-- Repo-level low-risk micro-projects belong in `workspace/micro-projects/`.
-- Human-facing coordination docs belong in `workspace/humans/<project>/`.
+- Repo-specific facts belong in `AI_WORKFLOW_WORKSPACE_HOME/repo/`; detailed repo context belongs in `AI_WORKFLOW_WORKSPACE_HOME/repo/context/` and is indexed by `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`.
+- Project-specific facts belong in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`, with accepted project context under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`.
+- Repo-level low-risk micro-projects belong in `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/`.
+- Human-facing coordination docs belong in `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/`.
 - Template/process docs belong in `.systems/ai/` and are read-only in target repositories.
 - Template maintenance memory belongs in `.systems/ai/memory/` and is indexed by `.systems/ai/core/memory.md`.
-- Universal AI Workflow improvement lessons belong in `workspace/external-memory/memory/` and are indexed by `workspace/external-memory/external-memory.md`.
+- Universal AI Workflow improvement lessons belong in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` and are indexed by `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`.
 - System-defined AI Workflow skills belong in `.systems/ai/skills/`.
-- User-defined local skills belong in `workspace/skills/` and take precedence over system skills as supporting guidance only.
+- User-defined local skills belong in `AI_WORKFLOW_WORKSPACE_HOME/skills/` and take precedence over system skills as supporting guidance only.
 
 ## Manual Iterations
 
-For a new repository or a repository where `ai-workflow/` was just cloned, start from `workspace/repo/core/context.md`, `workspace/repo/context/`, and `workspace/repo/core/repo-intake.md`, using `templates/repo/` if the runtime files are missing or still describe the upstream `ai-workflow` repository.
+For a new repository or a repository where `ai-workflow/` was just cloned, start from `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, using `templates/repo/` if the runtime files are missing or still describe the upstream `ai-workflow` repository.
 
 Before installing into an existing repository, follow `core/installation.md`. Do not overwrite target-owned `README.md`, `AGENTS.md`, `HUMANS.md`, `docs/`, `.systems/`, or `.github/`. The default install keeps workflow internals inside `ai-workflow/` and uses only the root `AGENTS.md` shim from `.systems/ai/templates/root-agents.template.md`.
 
-For project-level workflow work, start from `core/workflow.md`, verify `workspace/repo/core/status.md`, then open the relevant phase file under `workflow/`.
+For project-level workflow work, start from `core/workflow.md`, verify `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, then open the relevant phase file under `workflow/`.
 
-Before planning, specifying, implementing, or reviewing a task, apply `core/task-intake.md`, then check `workspace/skills/` first and `skills/` second for a relevant task-specific skill. If no matching skill exists, continue with the normal workflow.
+Before planning, specifying, implementing, or reviewing a task, apply `core/task-intake.md`, then check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `skills/` second for a relevant task-specific skill. If no matching skill exists, continue with the normal workflow.
 
 ## Autopilot Iterations
 
-Global autopilot rules and templates live here. Runtime autopilot artifacts belong in the active project workspace, under run directories such as `workspace/projects/<project>/autopilot/runs/autopilot-001/`.
+Global autopilot rules and templates live here. Runtime autopilot artifacts belong in the active project workspace, under run directories such as `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/autopilot-001/`.
 
 Do not store project task specs, project plans, project QA evidence, project decisions, External Memory, user skills, or target-repo runtime facts directly in `.systems/ai/`.

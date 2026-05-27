@@ -2,9 +2,9 @@
 
 ## Purpose
 
-`workspace/projects/<project>/memory/` stores detailed project memory entries.
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` stores detailed project memory entries.
 
-The router/index is `workspace/projects/<project>/memory.md`.
+The router/index is `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`.
 
 ## Entry Naming
 
@@ -33,4 +33,4 @@ Use `.systems/ai/templates/projects/date-memory-entry.template.md` for new entri
 
 ## Router Rule
 
-After adding or updating an entry, update `workspace/projects/<project>/memory.md` with only date, topic, type, status, and route.
+After adding or updating an entry, update `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` with only date, topic, type, status, and route.

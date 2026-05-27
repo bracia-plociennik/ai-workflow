@@ -26,7 +26,7 @@ autopilot/
 | Latest run | `<none|autopilot-001>` |
 | Status | `<not-running|running|stopped|awaiting-owner|completed>` |
 | Readiness | `<draft|blocked|awaiting-owner|ready|superseded>` |
-| Route | `workspace/projects/<project>/autopilot/runs/<run-id>/` |
+| Route | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/` |
 
 ## Rules
 

@@ -4,7 +4,7 @@
 
 `change-requests.md` is the canonical router/index for owner change requests before or after `final-owner-yes`.
 
-Detailed change request entries live in `workspace/projects/<project>/change-requests/`.
+Detailed change request entries live in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`.
 
 Use `.systems/ai/core/change-requests.md` for policy.
 

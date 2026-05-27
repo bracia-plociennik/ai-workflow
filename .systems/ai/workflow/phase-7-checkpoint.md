@@ -10,9 +10,9 @@
 
 ### Output required
 
-- Checkpoint artifact under `workspace/projects/<project>/checkpoints/`.
-- Updated project memory router `workspace/projects/<project>/memory.md` and detailed entries under `workspace/projects/<project>/memory/` when applicable.
-- Updated repo memory router `workspace/repo/core/memory.md` and detailed entries under `workspace/repo/memory/` when applicable.
+- Checkpoint artifact under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/checkpoints/`.
+- Updated project memory router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` and detailed entries under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` when applicable.
+- Updated repo memory router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` and detailed entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` when applicable.
 - Updated task index/status and project status.
 
 ### Pass criteria
@@ -123,7 +123,7 @@ To jest miękki obowiązek z przypomnieniem:
 
 Checkpoint artifact should be written under:
 
-`workspace/projects/<project>/checkpoints/phase-7-checkpoint-<date>-<scope>.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/checkpoints/phase-7-checkpoint-<date>-<scope>.md`
 
 Do not store checkpoint artifacts in `distillations/`; distillations are inputs to checkpoint, while checkpoints are synchronization evidence.
 
@@ -131,8 +131,8 @@ Do not store checkpoint artifacts in `distillations/`; distillations are inputs 
 
 Checkpoint powinien pracować na następujących źródłach:
 
-- `workspace/projects/<project>/memory.md`
-- `workspace/repo/core/memory.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
 - wszystkie pliki `phase-6-<task-id>-distillation.md`, w których:
   - `memory-in-repo-memory: false`
 - aktualny stan repo
@@ -144,7 +144,7 @@ Checkpoint powinien pracować na następujących źródłach:
 Checkpoint musi wykonać trzy rzeczy:
 
 1. przetworzyć nową wiedzę z niezsynchronizowanych distillation
-2. zaktualizować project memory przez wpis w `workspace/projects/<project>/memory/` i router `workspace/projects/<project>/memory.md`
+2. zaktualizować project memory przez wpis w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` i router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
 3. sprawdzić spójność między:
    - architekturą
    - implementacją
@@ -152,19 +152,19 @@ Checkpoint musi wykonać trzy rzeczy:
    - repo memory
    - external workflow memory, jeśli checkpoint wykrył uniwersalną lekcję o procesie
 
-`workspace/repo/core/memory.md` jest routerem pamięci repo-level. Szczegółowe wpisy zapisuj w `workspace/repo/memory/`. Aktualizuj repo memory tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
+`AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` jest routerem pamięci repo-level. Szczegółowe wpisy zapisuj w `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`. Aktualizuj repo memory tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
 
-`workspace/projects/<project>/memory.md` jest routerem pamięci projektu. Szczegółowe wpisy zapisuj w `workspace/projects/<project>/memory/`. Aktualizuj project memory tylko wtedy, gdy wiedza dotyczy tego projektu i będzie potrzebna w kolejnych taskach, planach, QA albo checkpointach.
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` jest routerem pamięci projektu. Szczegółowe wpisy zapisuj w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`. Aktualizuj project memory tylko wtedy, gdy wiedza dotyczy tego projektu i będzie potrzebna w kolejnych taskach, planach, QA albo checkpointach.
 
-`workspace/external-memory/external-memory.md` jest routerem pamięci uniwersalnej, a `workspace/external-memory/memory/` przechowuje szczegółowe wpisy. Aktualizuj je tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
+`AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` jest routerem pamięci uniwersalnej, a `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` przechowuje szczegółowe wpisy. Aktualizuj je tylko wtedy, gdy checkpoint wykrywa lekcję przenośną między repozytoriami, np. o bramkach, autopilocie, evidence, recovery, template'ach albo pracy człowieka z Codexem.
 
-Nowy wpis External Memory twórz jako osobny plik `workspace/external-memory/memory/YYYY-MM-DD-short-kebab-title.md` z template'u `.systems/ai/templates/external-memory/date-external-memory.template.md`. Następnie zaktualizuj router `workspace/external-memory/external-memory.md` tylko o datę, temat, typ, status i route.
+Nowy wpis External Memory twórz jako osobny plik `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/YYYY-MM-DD-short-kebab-title.md` z template'u `.systems/ai/templates/external-memory/date-external-memory.template.md`. Następnie zaktualizuj router `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` tylko o datę, temat, typ, status i route.
 
 ## **Minimalny kontrakt project, repo i external memory**
 
 Project Memory powinno zawierać wiedzę istotną dla danego projektu. `memory.md` jest tylko routerem, a szczegóły trafiają do `memory/`.
 
-Repo Memory powinno zawierać tylko rzeczy globalnie istotne dla całego repo. `workspace/repo/core/memory.md` jest tylko routerem, a szczegóły trafiają do `workspace/repo/memory/`.
+Repo Memory powinno zawierać tylko rzeczy globalnie istotne dla całego repo. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` jest tylko routerem, a szczegóły trafiają do `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`.
 
 External Memory powinno zawierać tylko rzeczy globalnie istotne dla `ai-workflow` jako systemu, nie dla konkretnego repo.
 
@@ -311,27 +311,27 @@ To jest źródło prawdy o tym, czy dana destylacja została już zsynchronizowa
 
 ## **Reguła tworzenia memory files**
 
-Jeśli `workspace/projects/<project>/memory.md` nie istnieje:
+Jeśli `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` nie istnieje:
 
 - checkpoint powinien go utworzyć
 - nie traktuj tego jako błędu
 
-Jeśli `workspace/projects/<project>/memory/` nie istnieje:
+Jeśli `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` nie istnieje:
 
 - checkpoint powinien go utworzyć, gdy zapisuje project memory
 - każdy nowy wpis project memory musi być osobnym plikiem datowanym i zapisanym według template'u project memory
 
-Jeśli `workspace/repo/core/memory.md` nie istnieje:
+Jeśli `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` nie istnieje:
 
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
 - nie zapisuj lokalnej wiedzy projektowej do repo memory tylko dlatego, że repo memory istnieje
 
-Jeśli `workspace/repo/memory/` nie istnieje:
+Jeśli `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` nie istnieje:
 
 - checkpoint może zaproponować jego utworzenie albo utworzyć go, jeśli checkpoint dotyczy wiedzy repo-level
 - każdy nowy wpis repo memory musi być osobnym plikiem datowanym i zapisanym według template'u repo memory
 
-Jeśli `workspace/external-memory/external-memory.md` albo `workspace/external-memory/memory/` nie istnieje:
+Jeśli `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` albo `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` nie istnieje:
 
 - checkpoint może zaproponować ich utworzenie albo utworzyć je, jeśli checkpoint dotyczy uniwersalnej wiedzy workflow
 - nie zapisuj repo-specific ani project-specific wiedzy do external memory
@@ -352,7 +352,7 @@ Na końcu checkpointu Codex powinien krótko wypisać:
 - które distillation zostały przetworzone
 - które checkboxy zostały zmienione na true
 - jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `memory.md`
-- jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `workspace/repo/core/memory.md`, jeśli dotyczy
+- jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, jeśli dotyczy
 - czy wykryto drift
 - klasyfikację driftu:
   - critical
@@ -372,12 +372,12 @@ Prompt checkpointu powinien brzmieć mniej więcej tak:
 Wykonaj checkpoint projektu.
 
 Wejście:
-- workspace/projects/<project>/memory.md
-- workspace/projects/<project>/memory/
-- workspace/repo/core/memory.md
-- workspace/repo/memory/
-- workspace/external-memory/memory/
-- workspace/external-memory/external-memory.md
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/
+- AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md
+- AI_WORKFLOW_WORKSPACE_HOME/repo/memory/
+- AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/
+- AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md
 - wszystkie phase-6-<task-id>-distillation.md z memory-in-repo-memory: false
 - aktualny stan repo
 - aktualna architektura
@@ -386,9 +386,9 @@ Wejście:
 Wykonaj:
 - agregację nowej wiedzy z distillation
 - kompresję i deduplikację informacji
-- aktualizację workspace/projects/<project>/memory.md i workspace/projects/<project>/memory/ tylko dla wiedzy project-level
-- aktualizację workspace/repo/core/memory.md i workspace/repo/memory/ tylko dla wiedzy repo-level
-- aktualizację workspace/external-memory/external-memory.md i workspace/external-memory/memory/ tylko dla uniwersalnej wiedzy workflow
+- aktualizację AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md i AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/ tylko dla wiedzy project-level
+- aktualizację AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md i AI_WORKFLOW_WORKSPACE_HOME/repo/memory/ tylko dla wiedzy repo-level
+- aktualizację AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md i AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/ tylko dla uniwersalnej wiedzy workflow
 - walidację zgodności między:
   - architekturą
   - implementacją

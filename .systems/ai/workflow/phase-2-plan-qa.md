@@ -4,14 +4,14 @@
 
 ### Input required
 
-- `workspace/projects/<project>/planning/phase-2-project-plan.md` exists.
-- `workspace/projects/<project>/plans.md` exists and routes to the plan under review.
-- `workspace/projects/<project>/tasks.md` exists and is current.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md` exists.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md` exists and routes to the plan under review.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` exists and is current.
 - Architecture QA result is `PASS`.
 
 ### Output required
 
-- `workspace/projects/<project>/quality/phase-2-plan-qa.md` with `PASS` or `FAIL`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-plan-qa.md` with `PASS` or `FAIL`.
 - Updated project status and blocker reason when failed.
 
 ### Pass criteria
@@ -77,11 +77,11 @@ Nie używaj odpowiedzi typu:
 
 Do tej fazy przechodzimy tylko wtedy, gdy istnieje artefakt:
 
-`workspace/projects/<project>/planning/phase-2-project-plan.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 oraz istnieje aktualny task index:
 
-`workspace/projects/<project>/tasks.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
 
 Brak artefaktu:
 
@@ -234,7 +234,7 @@ Błędny status wpływający na przejście dalej:
 
 ### 8. Task index consistency
 
-Sprawdź, czy `workspace/projects/<project>/tasks.md` jest kompletnym operacyjnym indeksem planu.
+Sprawdź, czy `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` jest kompletnym operacyjnym indeksem planu.
 
 Task index musi zgadzać się z planem dla:
 
@@ -333,8 +333,8 @@ Prompt powinien brzmieć mniej więcej tak:
 Przeprowadź krytyczną walidację planu projektu (2.5.).
 
 Wejście:
-- workspace/projects/<project>/planning/phase-2-project-plan.md
-- workspace/projects/<project>/architecture/phase-1-architecture.md
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md
 
 Twoim celem nie jest poprawianie planu.
 Twoim celem jest sprawdzenie, czy plan przechodzi Plan Gate.

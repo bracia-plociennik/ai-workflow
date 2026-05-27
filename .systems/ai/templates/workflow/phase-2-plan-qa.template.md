@@ -4,9 +4,9 @@
 
 - Project: `<project>`
 - Date: `<YYYY-MM-DD>`
-- Artifact under review: `workspace/projects/<project>/planning/phase-2-project-plan.md`
-- Planning router under review: `workspace/projects/<project>/plans.md`
-- Task index under review: `workspace/projects/<project>/tasks.md`
+- Artifact under review: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
+- Planning router under review: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`
+- Task index under review: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
 - Workflow phase: `2.5. PLAN QA`
 - Result: `<PASS|FAIL>`
 

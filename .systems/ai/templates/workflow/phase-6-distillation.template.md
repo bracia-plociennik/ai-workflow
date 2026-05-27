@@ -7,7 +7,7 @@
 - Date: `<YYYY-MM-DD>`
 - Workflow phase: `6. FAZA DESTYLACJI`
 - Artifact naming: use the same task/package prefix as the specification, for example `phase-6-ex-01-example-task-distillation.md`.
-- Quality artifact: `workspace/projects/<project>/quality/phase-5-<task-id>-quality.md`
+- Quality artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-5-<task-id>-quality.md`
 - memory-in-repo-memory: false
 
 ## What Was Done
@@ -38,10 +38,10 @@
 
 ## External Workflow Memory Candidate
 
-- Should sync to `workspace/external-memory/memory/`: `<yes|no>`
+- Should sync to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`: `<yes|no>`
 - Reason:
-- Suggested external memory entry file: `workspace/external-memory/memory/<YYYY-MM-DD-short-kebab-title>.md`
-- Suggested external memory router update: `workspace/external-memory/external-memory.md`
+- Suggested external memory entry file: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/<YYYY-MM-DD-short-kebab-title>.md`
+- Suggested external memory router update: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
 - Suggested external memory entry summary:
 
 ## Artifacts Updated

@@ -4,14 +4,14 @@
 
 ### Input required
 
-- A ready task or approved package is selected from `workspace/projects/<project>/tasks.md`.
+- A ready task or approved package is selected from `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`.
 - Plan QA has `PASS`; Packaging QA has `PASS` or valid skipped status when applicable.
 - Architecture, plan, task index, optional task card, and dependency outputs needed by the task are available.
 
 ### Output required
 
-- Task or package specification under `workspace/projects/<project>/specs/`.
-- Updated `workspace/projects/<project>/tasks.md` spec path/status and optional `tasks/<task-id>.md` when a task card exists.
+- Task or package specification under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/`.
+- Updated `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` spec path/status and optional `tasks/<task-id>.md` when a task card exists.
 - Updated project status and decisions when needed.
 
 ### Pass criteria
@@ -117,7 +117,7 @@ To oznacza:
 - plan z `/plan` nie jest planem utworzenia pliku specyfikacji
 - plan z `/plan` jest operacyjnym planem implementacji taska / package
 - plan z `/plan` ma opisywać krok po kroku, jak wdrożyć zadanie, a nie jak zapisać artefakt
-- artefakt `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md` zapisuje wynik tego planowania 1:1
+- artefakt `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md` zapisuje wynik tego planowania 1:1
 - artefakt specyfikacji jest efektem ubocznym procesu planowania, a nie jego głównym celem
 - artefakt specyfikacji ma być kopią 1:1 speca powstałego w `/plan`
 - artefakt specyfikacji nie może być parafrazą, streszczeniem, reinterpretacją ani przepisaniem na inną strukturę bez jawnej zgody użytkownika
@@ -345,7 +345,7 @@ Specyfikacja jest wystarczająca, jeśli:
 
 Faza 3 musi zakończyć się istnieniem artefaktu:
 
-- `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 
 Jeśli artefakt nie istnieje:
 
@@ -420,7 +420,7 @@ To jest Implementation Gate.
 
 DoD:
 - Codex przygotował plan wykonania i potwierdził gotowość do implementacji
-- Istnieje artefakt workspace/projects/<project>/specs/phase-3-<task-id>-specification.md
+- Istnieje artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md
 - jeśli artefakt istniał wcześniej:
   - został użyty zamiast tworzenia nowego
   - został uzupełniony lub skorygowany tylko tam, gdzie było to potrzebne

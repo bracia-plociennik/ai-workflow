@@ -2,7 +2,25 @@
 set -euo pipefail
 
 fail=0
-status="workspace/repo/core/status.md"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+repo_root="$(cd "$script_dir/../.." && pwd -P)"
+cd "$repo_root"
+
+if [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
+  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+elif [[ -d "$repo_root/../ai-workflow-workspace" ]]; then
+  workspace_home="$repo_root/../ai-workflow-workspace"
+else
+  workspace_home=""
+fi
+if [[ -n "$workspace_home" && -d "$workspace_home" ]]; then
+  workspace_home="$(cd "$workspace_home" && pwd -P)"
+fi
+
+status=""
+if [[ -n "$workspace_home" && -f "$workspace_home/repo/core/status.md" ]]; then
+  status="$workspace_home/repo/core/status.md"
+fi
 
 phases=(
   phase-0-repo-intake
@@ -42,6 +60,34 @@ value_for() {
       exit
     }
   ' "$file"
+}
+
+display_path() {
+  local path="$1"
+  if [[ -n "${workspace_home:-}" && "$path" == "$workspace_home"* ]]; then
+    printf 'AI_WORKFLOW_WORKSPACE_HOME%s\n' "${path#"$workspace_home"}"
+  else
+    printf '%s\n' "${path#./}"
+  fi
+}
+
+resolve_artifact_path() {
+  local path="$1"
+  case "$path" in
+    AI_WORKFLOW_WORKSPACE_HOME/*)
+      if [[ -n "${workspace_home:-}" ]]; then
+        printf '%s\n' "$workspace_home/${path#AI_WORKFLOW_WORKSPACE_HOME/}"
+      else
+        printf '%s\n' "$path"
+      fi
+      ;;
+    ai-workflow-workspace/*)
+      printf '%s\n' "$repo_root/../$path"
+      ;;
+    *)
+      printf '%s\n' "$path"
+      ;;
+  esac
 }
 
 require_key() {
@@ -316,61 +362,64 @@ validate_tasks_file() {
 
     for path in "$task_card_path" "$spec_path" "$quality_path"; do
       [[ -z "$path" || "$path" == "none" || "$path" == \<* ]] && continue
-      if [[ ! -f "$path" ]]; then
-        echo "${file#./} references missing task artifact for $task_id: $path"
+      resolved_path="$(resolve_artifact_path "$path")"
+      if [[ ! -f "$resolved_path" ]]; then
+        echo "$(display_path "$file") references missing task artifact for $task_id: $path"
         fail=1
       fi
     done
   done < "$file"
 
   if [[ "$saw_task" -eq 0 ]] && tasks_required_for_status "$current_phase" "$phase_result"; then
-    echo "${file#./} has no concrete task rows"
+    echo "$(display_path "$file") has no concrete task rows"
     fail=1
   fi
 }
 
-if [[ ! -f "$status" ]]; then
-  echo "Missing repo status: $status"
-  exit 1
-fi
+if [[ -n "$status" ]]; then
+  validate_status_file "$status"
+  require_key active-project "$status"
 
-validate_status_file "$status"
-require_key active-project "$status"
+  activeProject="$(value_for active-project "$status")"
 
-activeProject="$(value_for active-project "$status")"
-
-if [[ -n "${activeProject:-}" && "$activeProject" != "none" && "$activeProject" != "not-applicable" ]]; then
-  if [[ ! -f "workspace/projects/$activeProject/status.md" ]]; then
-    echo "Active project status missing: workspace/projects/$activeProject/status.md"
-    fail=1
-  else
-    validate_status_file "workspace/projects/$activeProject/status.md"
-  fi
-
-  if [[ ! -f "workspace/projects/$activeProject/tasks.md" ]]; then
-    echo "Active project task index missing: workspace/projects/$activeProject/tasks.md"
-    fail=1
-  else
-    project_status="workspace/projects/$activeProject/status.md"
-    if [[ -f "$project_status" ]]; then
-      validate_tasks_file \
-        "workspace/projects/$activeProject/tasks.md" \
-        "$(value_for current-phase "$project_status")" \
-        "$(value_for phase-result "$project_status")"
+  if [[ -n "${activeProject:-}" && "$activeProject" != "none" && "$activeProject" != "not-applicable" ]]; then
+    if [[ ! -f "$workspace_home/projects/$activeProject/status.md" ]]; then
+      echo "Active project status missing: AI_WORKFLOW_WORKSPACE_HOME/projects/$activeProject/status.md"
+      fail=1
     else
-      validate_tasks_file "workspace/projects/$activeProject/tasks.md" phase-8-final-check PASS
+      validate_status_file "$workspace_home/projects/$activeProject/status.md"
+    fi
+
+    if [[ ! -f "$workspace_home/projects/$activeProject/tasks.md" ]]; then
+      echo "Active project task index missing: AI_WORKFLOW_WORKSPACE_HOME/projects/$activeProject/tasks.md"
+      fail=1
+    else
+      project_status="$workspace_home/projects/$activeProject/status.md"
+      if [[ -f "$project_status" ]]; then
+        validate_tasks_file \
+          "$workspace_home/projects/$activeProject/tasks.md" \
+          "$(value_for current-phase "$project_status")" \
+          "$(value_for phase-result "$project_status")"
+      else
+        validate_tasks_file "$workspace_home/projects/$activeProject/tasks.md" phase-8-final-check PASS
+      fi
+    fi
+
+    if [[ -f "$workspace_home/projects/$activeProject/status.md" ]]; then
+      validate_project_context \
+        "$workspace_home/projects/$activeProject" \
+        "$(value_for current-phase "$workspace_home/projects/$activeProject/status.md")" \
+        "$(value_for phase-result "$workspace_home/projects/$activeProject/status.md")"
     fi
   fi
-
-  if [[ -f "workspace/projects/$activeProject/status.md" ]]; then
-    validate_project_context \
-      "workspace/projects/$activeProject" \
-      "$(value_for current-phase "workspace/projects/$activeProject/status.md")" \
-      "$(value_for phase-result "workspace/projects/$activeProject/status.md")"
-  fi
 fi
 
-for project_root in workspace/projects .systems/ai/examples/projects; do
+project_roots=(".systems/ai/examples/projects")
+if [[ -n "$workspace_home" && -d "$workspace_home/projects" ]]; then
+  project_roots+=("$workspace_home/projects")
+fi
+
+for project_root in "${project_roots[@]}"; do
   while IFS= read -r -d '' project_status; do
     validate_status_file "$project_status"
     project_dir="${project_status%/status.md}"

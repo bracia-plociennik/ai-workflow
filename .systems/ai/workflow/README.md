@@ -14,7 +14,7 @@ Use:
 - Phase files in this directory define phase-specific gates.
 - Policy rules live in `.systems/ai/core/*.md`.
 - Templates live in `.systems/ai/templates/`.
-- Runtime facts live in `workspace/repo/`, `workspace/projects/<project>/`, and `workspace/humans/<project>/`.
+- Runtime facts live in `AI_WORKFLOW_WORKSPACE_HOME/repo/`, `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`, and `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/`.
 
 ## Phase Files
 

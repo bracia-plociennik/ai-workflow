@@ -4,7 +4,7 @@
 
 Old project artifacts are archived or superseded, not silently deleted.
 
-Post-final removals requested after `final-owner-yes` must be captured as change requests under `workspace/projects/<project>/change-requests/` before artifacts are superseded, deprecated, or archived.
+Post-final removals requested after `final-owner-yes` must be captured as change requests under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/` before artifacts are superseded, deprecated, or archived.
 
 ## Superseded Artifacts
 

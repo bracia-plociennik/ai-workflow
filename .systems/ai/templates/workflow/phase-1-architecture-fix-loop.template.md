@@ -4,8 +4,8 @@
 
 - Project: `<project>`
 - Date: `<YYYY-MM-DD>`
-- Failed QA artifact: `workspace/projects/<project>/quality/phase-1-architecture-qa.md`
-- Fixed architecture artifact: `workspace/projects/<project>/architecture/phase-1-architecture.md`
+- Failed QA artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-1-architecture-qa.md`
+- Fixed architecture artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
 - Workflow phase: `1.7. ARCHITECTURE FIX LOOP`
 - Result: `<completed|blocked>`
 

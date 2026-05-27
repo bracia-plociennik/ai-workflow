@@ -81,42 +81,8 @@ remote="${remote:-origin}"
 branch="${branch:-main}"
 target_ref="$remote/$branch"
 
-is_protected_path() {
-  local path="${1#./}"
-  path="${path%/}"
-
-  case "$path" in
-    workspace|workspace/*)
-      return 0
-      ;;
-  esac
-
-  return 1
-}
-
-protected_root_for_path() {
-  local path="${1#./}"
-  path="${path%/}"
-
-  case "$path" in
-    workspace|workspace/*)
-      printf '%s\n' "workspace"
-      ;;
-  esac
-}
-
-add_unique() {
-  local item="$1"
-  local existing
-  for existing in "${unique_items[@]:-}"; do
-    [[ "$existing" == "$item" ]] && return 0
-  done
-  unique_items+=("$item")
-}
-
 template_blockers=()
-protected_dirty=()
-deleted_protected=()
+legacy_workspace_dirty=()
 
 classify_status_path() {
   local status="$1"
@@ -124,15 +90,36 @@ classify_status_path() {
 
   [[ -n "$path" ]] || return 0
 
-  if is_protected_path "$path"; then
-    protected_dirty+=("$status"$'\t'"$path")
-    if [[ "$status" == *D* ]]; then
-      deleted_protected+=("$path")
-    fi
-  else
-    template_blockers+=("$status $path")
-  fi
+  case "${path#./}" in
+    workspace|workspace/*)
+      legacy_workspace_dirty+=("$status $path")
+      return 0
+      ;;
+  esac
+
+  template_blockers+=("$status $path")
 }
+
+if [[ -e "workspace" ]]; then
+  echo "STOP: legacy workspace found inside AI_WORKFLOW_HOME: $ai_workflow_home/workspace"
+  echo "Migrate runtime to AI_WORKFLOW_WORKSPACE_HOME, normally the sibling target-owned ai-workflow-workspace/ directory, before updating."
+  echo "The update flow does not backup, restore, normalize, or modify legacy workspace data inside the nested clone."
+  exit 1
+fi
+
+workspace_home="${AI_WORKFLOW_WORKSPACE_HOME:-}"
+if [[ -z "$workspace_home" ]]; then
+  parent_root="$(cd "$ai_workflow_home/.." && pwd -P)"
+  workspace_home="$parent_root/ai-workflow-workspace"
+fi
+
+if [[ -e "$workspace_home" ]]; then
+  echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home"
+  echo "Target-owned workspace is outside the nested clone and will not be touched."
+else
+  echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home (not found)"
+  echo "Continuing because update-from-upstream only updates the nested clone. Run .systems/scripts/init-workspace if this is a fresh install."
+fi
 
 while IFS= read -r -d '' entry; do
   status="${entry:0:2}"
@@ -145,90 +132,29 @@ while IFS= read -r -d '' entry; do
   fi
 done < <(git status --porcelain -z)
 
+if [[ "${#legacy_workspace_dirty[@]}" -gt 0 ]]; then
+  echo "STOP: legacy workspace changes detected inside the nested clone. Migrate them to AI_WORKFLOW_WORKSPACE_HOME before updating:"
+  printf ' - %s\n' "${legacy_workspace_dirty[@]}"
+  exit 1
+fi
+
 if [[ "${#template_blockers[@]}" -gt 0 ]]; then
   echo "STOP: system-owned files are dirty. Commit, stash, or discard these before update-from-upstream:"
   printf ' - %s\n' "${template_blockers[@]}"
   exit 1
 fi
 
-unique_items=()
-[[ -e "workspace" ]] && add_unique "workspace"
-
-for line in "${protected_dirty[@]}"; do
-  path="${line#*$'\t'}"
-  root="$(protected_root_for_path "$path" || true)"
-  [[ -n "${root:-}" ]] && add_unique "$root"
-done
-
 echo "AI_WORKFLOW_HOME: $ai_workflow_home"
 echo "Update target: $target_ref"
-echo "Protected paths:"
-if [[ "${#unique_items[@]}" -eq 0 ]]; then
-  echo " - none"
-else
-  printf ' - %s\n' "${unique_items[@]}"
-fi
+echo "Protected external workspace: $workspace_home"
 
 if [[ "$dry_run" -eq 1 ]]; then
-  echo "Dry run only. No fetch, merge, restore, or validation was performed."
+  echo "Dry run only. No fetch, merge, or validation was performed."
   exit 0
-fi
-
-tmp="$(mktemp -d "${TMPDIR:-/tmp}/ai-workflow-update.XXXXXX")"
-backup_dir="$tmp/protected"
-deleted_file="$tmp/deleted-protected.txt"
-mkdir -p "$backup_dir"
-restore_needed=0
-restore_done=0
-
-restore_protected() {
-  [[ "$restore_needed" -eq 1 && "$restore_done" -eq 0 ]] || return 0
-
-  if [[ -n "$(find "$backup_dir" -mindepth 1 -print -quit 2>/dev/null || true)" ]]; then
-    (cd "$backup_dir" && tar -cf - .) | tar -xf - -C "$ai_workflow_home"
-  fi
-
-  if [[ -f "$deleted_file" ]]; then
-    while IFS= read -r path; do
-      [[ -n "$path" ]] || continue
-      rm -rf "$ai_workflow_home/$path"
-    done < "$deleted_file"
-  fi
-
-  restore_done=1
-}
-
-cleanup() {
-  local status=$?
-  if [[ "$status" -ne 0 ]]; then
-    restore_protected || true
-  fi
-  rm -rf "$tmp"
-  exit "$status"
-}
-trap cleanup EXIT
-
-for path in "${unique_items[@]}"; do
-  [[ -e "$path" ]] || continue
-  mkdir -p "$backup_dir/$(dirname "$path")"
-  cp -a "$path" "$backup_dir/$path"
-done
-: > "$deleted_file"
-if [[ "${#deleted_protected[@]}" -gt 0 ]]; then
-  printf '%s\n' "${deleted_protected[@]}" > "$deleted_file"
-fi
-restore_needed=1
-
-if [[ "${#unique_items[@]}" -gt 0 ]]; then
-  git reset -q HEAD -- "${unique_items[@]}" || true
-  git checkout -q -- "${unique_items[@]}" || true
-  git clean -fd -- "${unique_items[@]}" >/dev/null 2>&1 || true
 fi
 
 git fetch "$remote" "$branch"
 git merge --ff-only FETCH_HEAD
-
-restore_protected
 
 if [[ "$skip_validation" -eq 1 ]]; then
   echo "WARNING: validation skipped. This update result is not eligible for final PASS."

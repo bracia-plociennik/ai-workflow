@@ -5,14 +5,14 @@
 ### Input required
 
 - Architecture QA has `PASS`.
-- `workspace/projects/<project>/architecture/phase-1-architecture.md` and project context are available.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md` and project context are available.
 - Blocking decisions that affect sequencing or task boundaries are resolved.
 
 ### Output required
 
-- `workspace/projects/<project>/planning/phase-2-project-plan.md`.
-- `workspace/projects/<project>/plans.md` updated as the planning router.
-- `workspace/projects/<project>/tasks.md` updated with every planned task.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md` updated as the planning router.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` updated with every planned task.
 - Updated project status and decision artifacts when needed.
 
 ### Pass criteria
@@ -53,7 +53,7 @@
 
 ### Writes allowed
 
-- Project plan, `workspace/projects/<project>/plans.md`, `workspace/projects/<project>/tasks.md`, optional task cards in `tasks/`, project status, decisions/escalations.
+- Project plan, `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`, `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`, optional task cards in `tasks/`, project status, decisions/escalations.
 - No product-code writes.
 
 Ta faza służy do stworzenia planu tasków, który nadaje się do realnego wykonania i minimalizuje ryzyko reworku.
@@ -106,9 +106,9 @@ Każdy task w planie projektu musi zawierać co najmniej:
 
 Faza 2 musi utworzyć albo zaktualizować:
 
-`workspace/projects/<project>/tasks.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
 
-Task index jest operacyjną mapą tasków dla statusu, specyfikacji, QA, autopilota i checkpointów. `tasks.md` jest routerem/indexem, a opcjonalne szczegółowe task cards mogą trafić do `workspace/projects/<project>/tasks/`.
+Task index jest operacyjną mapą tasków dla statusu, specyfikacji, QA, autopilota i checkpointów. `tasks.md` jest routerem/indexem, a opcjonalne szczegółowe task cards mogą trafić do `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks/`.
 
 Każdy task z planu musi mieć odpowiadający wiersz w `tasks.md`.
 
@@ -142,7 +142,7 @@ Jeśli `tasks.md` jest brakujący, nieaktualny albo niespójny z planem:
 
 Faza 2 musi zaktualizować:
 
-`workspace/projects/<project>/plans.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`
 
 `plans.md` jest routerem do canonical planning artifacts w `planning/`. Nie przechowuje luźnych notatek planistycznych i nie zastępuje `planning/phase-2-project-plan.md`.
 
@@ -363,7 +363,7 @@ Na końcu podaj:
 - informację, czy plan pozwala przejść do specyfikacji tasków bez doprecyzowywania w trakcie implementacji
 
 DoD fazy:
-powstał artefakt workspace/projects/<project>/planning/phase-2-project-plan.md
+powstał artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md
 ```
 
 ---

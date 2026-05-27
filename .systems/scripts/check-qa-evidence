@@ -2,6 +2,20 @@
 set -euo pipefail
 
 fail=0
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+repo_root="$(cd "$script_dir/../.." && pwd -P)"
+cd "$repo_root"
+
+if [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
+  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+elif [[ -d "$repo_root/../ai-workflow-workspace" ]]; then
+  workspace_home="$repo_root/../ai-workflow-workspace"
+else
+  workspace_home=""
+fi
+if [[ -n "$workspace_home" && -d "$workspace_home" ]]; then
+  workspace_home="$(cd "$workspace_home" && pwd -P)"
+fi
 
 has_pass_result() {
   local file="$1"
@@ -66,7 +80,12 @@ validate_evidence_file() {
   fi
 }
 
-for project_root in workspace/projects .systems/ai/examples/projects; do
+project_roots=(".systems/ai/examples/projects")
+if [[ -n "$workspace_home" && -d "$workspace_home/projects" ]]; then
+  project_roots+=("$workspace_home/projects")
+fi
+
+for project_root in "${project_roots[@]}"; do
   while IFS= read -r -d '' file; do
     validate_evidence_file "$file"
   done < <(find "$project_root" -path '*/quality/*' -type f -name '*.md' -print0 2>/dev/null || true)

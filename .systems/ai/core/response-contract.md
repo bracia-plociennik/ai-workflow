@@ -53,7 +53,7 @@ Choose the recommendation from the highest applicable source:
 1. The user's explicit intent, when it is safe and does not bypass gates.
 2. Task intake result from `.systems/ai/core/task-intake.md` when the response handles a new task, planning request, approach request, side-task/micro-task, change request, or autopilot request.
 3. The current phase file's `Next allowed phases`.
-4. `workspace/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
+4. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
 5. Stop conditions from `AGENTS.md`, `.systems/ai/core/operating-model.md`, risk, permissions, commands, Definition of Done, and prompt-injection policy.
 6. `.systems/ai/core/guide.md`, `.systems/ai/core/change-requests.md`, and `.systems/ai/core/command-routing.md` for lost-user, short-command, recovery, owner change request, rollback, side-task, micro-task, micro-project, and autopilot routing.
 7. Fresh install defaults: if repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.

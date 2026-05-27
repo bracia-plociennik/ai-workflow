@@ -4,7 +4,7 @@
 | --- | --- |
 | `workflow-requirement` | `<mandatory|optional>` |
 | `workflow-scope` | `<plan-derived|side-task|micro-task>` |
-| `project-workspace` | `workspace/projects/<project>` |
+| `project-workspace` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>` |
 | `active-plan-status` | `<active|closed|none|other>` |
 | `current-task` | `<task>` |
 | `active-change-request` | `<none|PROJECT-CR-NNN-slug>` |

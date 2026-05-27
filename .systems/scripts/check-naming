@@ -2,6 +2,20 @@
 set -euo pipefail
 
 fail=0
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+repo_root="$(cd "$script_dir/../.." && pwd -P)"
+cd "$repo_root"
+
+if [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
+  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+elif [[ -d "$repo_root/../ai-workflow-workspace" ]]; then
+  workspace_home="$repo_root/../ai-workflow-workspace"
+else
+  workspace_home=""
+fi
+if [[ -n "$workspace_home" && -d "$workspace_home" ]]; then
+  workspace_home="$(cd "$workspace_home" && pwd -P)"
+fi
 
 is_exempt_markdown_path() {
   local path="$1"
@@ -35,6 +49,25 @@ is_exempt_supporting_path() {
       ;;
   esac
 
+  if [[ -n "$workspace_home" ]]; then
+    local absolute_path="$path"
+    [[ "$absolute_path" = /* ]] || absolute_path="$repo_root/$absolute_path"
+    case "$absolute_path" in
+      "$workspace_home"/repo/legacy/*)
+        return 0
+        ;;
+      "$workspace_home"/repo/context/*)
+        return 0
+        ;;
+      "$workspace_home"/projects/*/context.md)
+        return 1
+        ;;
+      "$workspace_home"/projects/*/context/*)
+        return 0
+        ;;
+    esac
+  fi
+
   return 1
 }
 
@@ -67,7 +100,13 @@ check_markdown_path() {
 
 while IFS= read -r -d '' file; do
   check_markdown_path "$file" "filesystem"
-done < <(find . -path ./.git -prune -o -type f -name '*.md' -print0)
+done < <(find . -path ./.git -prune -o -path ./workspace -prune -o -path ./.install-smoke -prune -o -path ./.update-smoke -prune -o -type f -name '*.md' -print0)
+
+if [[ -n "$workspace_home" && -d "$workspace_home" ]]; then
+  while IFS= read -r -d '' file; do
+    check_markdown_path "$file" "workspace-filesystem"
+  done < <(find "$workspace_home" -type f -name '*.md' -print0)
+fi
 
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   while IFS= read -r -d '' file; do

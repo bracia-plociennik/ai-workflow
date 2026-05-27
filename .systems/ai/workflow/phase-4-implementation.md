@@ -6,12 +6,12 @@
 
 - Spec QA has `PASS` for the selected task/package, or manual workflow explicitly accepts the spec and risk model permits implementation.
 - Required approvals for high-risk work are recorded.
-- Safe verification commands and environment from `workspace/repo/core/repo-intake.md` are known.
+- Safe verification commands and environment from `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` are known.
 
 ### Output required
 
 - Implementation changes limited to the accepted spec.
-- `workspace/projects/<project>/quality/phase-4-<task-id>-implementation-result.md`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-4-<task-id>-implementation-result.md`.
 - Updated task index/status, optional task card, and project status.
 
 ### Pass criteria

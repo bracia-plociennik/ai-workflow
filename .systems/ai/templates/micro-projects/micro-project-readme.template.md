@@ -2,7 +2,7 @@
 
 This directory stores one repo-level low-risk micro-project.
 
-Micro-projects do not require a full `workspace/projects/<project>/` workspace unless risk, scope, or owner decision promotes them to the normal workflow.
+Micro-projects do not require a full `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` workspace unless risk, scope, or owner decision promotes them to the normal workflow.
 
 ## Files
 

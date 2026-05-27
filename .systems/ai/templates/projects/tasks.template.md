@@ -4,7 +4,7 @@
 
 `tasks.md` is the canonical task index and router for this project.
 
-Detailed task cards live in `workspace/projects/<project>/tasks/`.
+Detailed task cards live in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks/`.
 
 Task cards do not replace specifications in `specs/` or QA evidence in `quality/`.
 

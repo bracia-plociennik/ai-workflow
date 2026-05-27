@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: .systems/scripts/init-workspace [options]
+
+Options:
+  --workspace <path>     workspace path (default: ../ai-workflow-workspace)
+  --no-root-agents       do not create target root AGENTS.md shim
+  -h, --help             show this help
+EOF
+}
+
+workspace_arg=""
+create_root_agents=1
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --workspace)
+      workspace_arg="${2:-}"
+      [[ -n "$workspace_arg" ]] || { echo "Missing value for --workspace"; exit 2; }
+      shift 2
+      ;;
+    --no-root-agents)
+      create_root_agents=0
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      usage
+      exit 2
+      ;;
+  esac
+done
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+ai_workflow_home="$(cd "$script_dir/../.." && pwd -P)"
+target_repo_root="$(cd "$ai_workflow_home/.." && pwd -P)"
+templates="$ai_workflow_home/.systems/ai/templates"
+
+if [[ -n "$workspace_arg" ]]; then
+  workspace_home="$workspace_arg"
+elif [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
+  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+else
+  workspace_home="$target_repo_root/ai-workflow-workspace"
+fi
+
+mkdir -p "$workspace_home"
+workspace_home="$(cd "$workspace_home" && pwd -P)"
+
+copy_template() {
+  local source="$1"
+  local destination="$2"
+
+  if [[ -e "$destination" ]]; then
+    echo "kept existing: ${destination#$target_repo_root/}"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$destination")"
+  cp "$source" "$destination"
+  echo "created: ${destination#$target_repo_root/}"
+}
+
+append_exclude_once() {
+  local pattern="$1"
+  local git_root="$2"
+  local exclude_file="$git_root/.git/info/exclude"
+
+  [[ -d "$git_root/.git" ]] || return 0
+  mkdir -p "$(dirname "$exclude_file")"
+  touch "$exclude_file"
+
+  if ! grep -qxF "$pattern" "$exclude_file"; then
+    printf '%s\n' "$pattern" >> "$exclude_file"
+    echo "excluded locally: $pattern"
+  fi
+}
+
+mkdir -p \
+  "$workspace_home/repo/core" \
+  "$workspace_home/repo/context" \
+  "$workspace_home/repo/legacy" \
+  "$workspace_home/repo/memory" \
+  "$workspace_home/projects" \
+  "$workspace_home/humans" \
+  "$workspace_home/micro-projects" \
+  "$workspace_home/external-memory/memory" \
+  "$workspace_home/skills"
+
+copy_template "$templates/workspace/workspace-readme.template.md" "$workspace_home/README.md"
+copy_template "$templates/workspace/repo/README.md" "$workspace_home/repo/README.md"
+copy_template "$templates/repo/context.template.md" "$workspace_home/repo/core/context.md"
+copy_template "$templates/repo/context-readme.template.md" "$workspace_home/repo/context/README.md"
+copy_template "$templates/repo/legacy.template.md" "$workspace_home/repo/core/legacy.md"
+copy_template "$templates/workspace/repo/legacy-readme.template.md" "$workspace_home/repo/legacy/README.md"
+copy_template "$templates/repo/repo-intake.template.md" "$workspace_home/repo/core/repo-intake.md"
+copy_template "$templates/repo/status.template.md" "$workspace_home/repo/core/status.md"
+copy_template "$templates/repo/memory.template.md" "$workspace_home/repo/core/memory.md"
+copy_template "$templates/repo/memory-readme.template.md" "$workspace_home/repo/memory/README.md"
+copy_template "$templates/workspace/projects/README.md" "$workspace_home/projects/README.md"
+copy_template "$templates/workspace/humans/README.md" "$workspace_home/humans/README.md"
+copy_template "$templates/workspace/micro-projects/README.md" "$workspace_home/micro-projects/README.md"
+copy_template "$templates/workspace/external-memory/README.md" "$workspace_home/external-memory/README.md"
+copy_template "$templates/workspace/external-memory/external-memory.template.md" "$workspace_home/external-memory/external-memory.md"
+copy_template "$templates/workspace/external-memory/memory-readme.template.md" "$workspace_home/external-memory/memory/README.md"
+copy_template "$templates/workspace/skills/README.md" "$workspace_home/skills/README.md"
+
+if [[ "$create_root_agents" -eq 1 ]]; then
+  root_agents="$target_repo_root/AGENTS.md"
+  if [[ -e "$root_agents" ]]; then
+    echo "AGENTS.md exists: not overwritten; owner merge required."
+    legacy_agents="$workspace_home/repo/legacy/agents.legacy.md"
+    if [[ ! -e "$legacy_agents" ]]; then
+      cp "$root_agents" "$legacy_agents"
+      echo "preserved legacy AGENTS.md as: ${legacy_agents#$target_repo_root/}"
+    fi
+  else
+    copy_template "$templates/root-agents.template.md" "$root_agents"
+  fi
+fi
+
+if git -C "$target_repo_root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  append_exclude_once "/AGENTS.md" "$target_repo_root"
+  append_exclude_once "/ai-workflow/" "$target_repo_root"
+fi
+
+echo
+echo "AI_WORKFLOW_HOME: $ai_workflow_home"
+echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home"
+echo
+echo "Next prompt:"
+echo "Run repo intake using AI_WORKFLOW_WORKSPACE_HOME=${workspace_home#$target_repo_root/}. Do not touch product code."

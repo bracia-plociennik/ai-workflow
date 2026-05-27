@@ -10,7 +10,7 @@ It is not a loose planning notes file. Operational project plans belong in `plan
 
 | Plan | Status | Route | Notes |
 | --- | --- | --- | --- |
-| `<plan name>` | `<draft|active|passed|superseded|blocked>` | `workspace/projects/<project>/planning/<plan-file>.md` | `<notes>` |
+| `<plan name>` | `<draft|active|passed|superseded|blocked>` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/<plan-file>.md` | `<notes>` |
 
 ## Rules
 

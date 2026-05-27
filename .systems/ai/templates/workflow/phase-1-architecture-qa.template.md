@@ -4,7 +4,7 @@
 
 - Project: `<project>`
 - Date: `<YYYY-MM-DD>`
-- Artifact under review: `workspace/projects/<project>/architecture/phase-1-architecture.md`
+- Artifact under review: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
 - Workflow phase: `1.5. FAZA ARCHITEKTURY QA`
 - Result: `<PASS|FAIL>`
 

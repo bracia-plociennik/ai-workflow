@@ -5,7 +5,7 @@
 - Project: `<project>`
 - Task/package ID:
 - Date: `<YYYY-MM-DD>`
-- Specification: `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- Specification: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 - Workflow phase: `4. FAZA IMPLEMENTACJI`
 - Result: `<completed|blocked>`
 

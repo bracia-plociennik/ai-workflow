@@ -10,7 +10,7 @@
 
 ### Output required
 
-- `workspace/projects/<project>/quality/phase-5-<task-id>-quality.md` with `PASS` or `FAIL`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-5-<task-id>-quality.md` with `PASS` or `FAIL`.
 - Updated task index/status, optional task card, and project status.
 
 ### Pass criteria

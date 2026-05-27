@@ -46,16 +46,16 @@ If task intake reveals high or critical risk, unknown safe environment, missing 
 
 Reusable task-specific skills can exist in two layers:
 
-- user-defined local skills in `workspace/skills/`;
+- user-defined local skills in `AI_WORKFLOW_WORKSPACE_HOME/skills/`;
 - system-defined official skills in `.systems/ai/skills/`.
 
-Before planning, specifying, implementing, or reviewing a task, the agent checks `workspace/skills/` first and `.systems/ai/skills/` second. If both layers define a matching skill, the workspace skill takes precedence as local guidance, while the system skill remains fallback context.
+Before planning, specifying, implementing, or reviewing a task, the agent checks `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `.systems/ai/skills/` second. If both layers define a matching skill, the workspace skill takes precedence as local guidance, while the system skill remains fallback context.
 
 Skills may add stricter standards, conventions, checks, or review criteria. They must not override source-of-truth order, workflow policy, phase gates, approved scope, owner approvals, risk model, permissions, Definition of Done, or evidence requirements.
 
 If no matching skill exists, continue with the normal workflow and do not create a skill unless the user explicitly asks for one.
 
-Target repositories must not edit `.systems/ai/skills/`. New local skills belong in `workspace/skills/`. Improvements to system skills belong in `workspace/external-memory/` until they are promoted through the official upstream `ai-workflow` repository.
+Target repositories must not edit `.systems/ai/skills/`. New local skills belong in `AI_WORKFLOW_WORKSPACE_HOME/skills/`. Improvements to system skills belong in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` until they are promoted through the official upstream `ai-workflow` repository.
 
 ## Approval Policy
 
@@ -70,9 +70,9 @@ Use `.systems/ai/core/risk-model.md` for classification.
 
 When adding AI Workflow to an existing repository, follow `.systems/ai/core/installation.md`.
 
-Default installation is a nested clone at `ai-workflow/` plus a root `AGENTS.md` shim copied or merged from `ai-workflow/.systems/ai/templates/root-agents.template.md`. Do not copy workflow internals into target-owned `docs/`, `.systems/`, or `.github/`.
+Default installation is a nested clone at `ai-workflow/`, a local-only root `AGENTS.md` shim created by `.systems/scripts/init-workspace`, and a target-owned tracked workspace at `ai-workflow-workspace/`. Do not copy workflow internals into target-owned `docs/`, `.systems/`, or `.github/`.
 
-Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, `.github/`, or product code. If the target repo already has `AGENTS.md`, preserve it as legacy context under `ai-workflow/workspace/repo/legacy/` and merge the shim manually with owner approval.
+Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, `.github/`, or product code. If the target repo already has `AGENTS.md`, preserve it as legacy context under `ai-workflow-workspace/repo/legacy/` and merge the shim manually with owner approval. The local shim and `ai-workflow/` clone belong in `.git/info/exclude`; `ai-workflow-workspace/` is the commit-friendly runtime.
 
 Unresolved installation collisions block repo intake, architecture, planning, implementation, and autopilot.
 
@@ -101,16 +101,16 @@ Side tasks still require:
 
 Project-local micro-tasks are side tasks with durable project-local artifacts. Store them in:
 
-- `workspace/projects/<project>/micro-tasks.md`
-- `workspace/projects/<project>/micro-tasks/`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks/`
 
 Micro-tasks do not update `tasks.md`, `planning/`, `quality/`, `distillations/`, or `checkpoints/` unless the owner or risk classification promotes them to the full workflow. Architecture, plan, spec QA, quality phase, distillation, and checkpoint artifacts are optional for micro-tasks.
 
 Repo-level micro-projects are small, self-contained, low-risk work items outside a full project workspace. Store them in:
 
-- `workspace/micro-projects/<micro-project>/`
+- `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<micro-project>/`
 
-Micro-projects do not create `workspace/projects/<project>/` workspaces and do not use phase artifacts unless promoted to the normal workflow.
+Micro-projects do not create `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` workspaces and do not use phase artifacts unless promoted to the normal workflow.
 
 Route to the full workflow when:
 
@@ -127,8 +127,8 @@ Use `.systems/ai/core/change-requests.md` when the owner gives comments before `
 
 Change requests are durable project artifacts, not chat-only comments. Store them in:
 
-- `workspace/projects/<project>/change-requests.md`
-- `workspace/projects/<project>/change-requests/`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`
 
 Before `final-owner-yes`, blocking change requests keep the project open and prevent final approval. After `final-owner-yes`, the closed scope remains immutable history and new work must be routed as a micro-task, new task, new project iteration, decision rollback, or new project.
 

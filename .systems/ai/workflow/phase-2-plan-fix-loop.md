@@ -5,13 +5,13 @@
 ### Input required
 
 - Plan QA result is `FAIL`.
-- `workspace/projects/<project>/quality/phase-2-plan-qa.md` lists findings.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-plan-qa.md` lists findings.
 - Project plan, `plans.md`, and `tasks.md` are available.
 
 ### Output required
 
-- Updated project plan, `workspace/projects/<project>/plans.md`, and `workspace/projects/<project>/tasks.md` when findings require it.
-- Fix evidence in `workspace/projects/<project>/quality/phase-2-plan-fix-loop.md`.
+- Updated project plan, `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`, and `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` when findings require it.
+- Fix evidence in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-plan-fix-loop.md`.
 - Updated project status.
 
 ### Pass criteria
@@ -67,7 +67,7 @@ Do tej fazy przechodzimy tylko wtedy, gdy:
 - faza 2.5 zakończyła się wynikiem FAIL
 - istnieje raport z 2.5 zawierający listę problemów
 - istnieje artefakt:
-  `workspace/projects/<project>/planning/phase-2-project-plan.md`
+  `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Brak wyniku FAIL albo brak raportu z 2.5:
 

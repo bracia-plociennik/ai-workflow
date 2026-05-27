@@ -10,7 +10,7 @@
 
 ### Output required
 
-- `workspace/projects/<project>/architecture/phase-1-architecture.md`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`.
 - Decision artifacts for high-impact architecture choices.
 - Updated project status.
 
@@ -89,7 +89,7 @@ AI ma zobaczyć system lub właściwy wycinek systemu, zanim zacznie dzielić pr
 
 Bez tego często powstają taski, które później trzeba zmieniać, scalać albo odwracać.
 
-## **Minimalny zakres artefaktu workspace/projects/<project>/architecture/phase-1-architecture.md**
+## **Minimalny zakres artefaktu AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md**
 
 Dokument architektury powinien zawierać co najmniej:
 
@@ -228,7 +228,7 @@ Na końcu podaj:
 - informację, czy można przejść do planu projektu bez ryzyka reworku
 
 DoD fazy:
-powstał artefakt workspace/projects/<project>/architecture/phase-1-architecture.md
+powstał artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md
 ```
 
 ---

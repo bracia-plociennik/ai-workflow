@@ -10,15 +10,15 @@
 
 ## Inputs
 
-- Repo memory router: `workspace/repo/core/memory.md`
-- Repo memory entries: `workspace/repo/memory/`
-- External workflow memory router: `workspace/external-memory/external-memory.md`
-- External workflow memory entries: `workspace/external-memory/memory/`
-- Project memory router: `workspace/projects/<project>/memory.md`
-- Project memory entries: `workspace/projects/<project>/memory/`
+- Repo memory router: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
+- Repo memory entries: `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
+- External workflow memory router: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
+- External workflow memory entries: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`
+- Project memory router: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
+- Project memory entries: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`
 - Distillations processed:
-- Architecture: `workspace/projects/<project>/architecture/phase-1-architecture.md`
-- Project plan: `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- Architecture: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
+- Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Repo state checked:
 
 ## Distillations Processed
@@ -31,30 +31,30 @@
 
 | Memory File | Update Summary |
 | --- | --- |
-| `workspace/repo/core/memory.md` | |
-| `workspace/repo/memory/` | |
-| `workspace/external-memory/external-memory.md` | |
-| `workspace/external-memory/memory/` | |
-| `workspace/projects/<project>/memory.md` | |
-| `workspace/projects/<project>/memory/` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` | |
 
 ## Project Memory Entries
 
 | Entry File | Type | Scope | Status | Router Updated |
 | --- | --- | --- | --- | --- |
-| `workspace/projects/<project>/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<project-decision|project-constraint|project-risk|implementation-note|testing-note|drift-note|watch-item>` | `<scope>` | `<active|superseded|deprecated>` | `<yes|no>` |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<project-decision|project-constraint|project-risk|implementation-note|testing-note|drift-note|watch-item>` | `<scope>` | `<active|superseded|deprecated>` | `<yes|no>` |
 
 ## Repo Memory Entries
 
 | Entry File | Type | Scope | Status | Router Updated |
 | --- | --- | --- | --- | --- |
-| `workspace/repo/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<repo-fact|repo-rule|repo-constraint|repo-risk|command-note|integration-note|testing-note|deployment-note>` | `repo-wide` | `<active|superseded|deprecated>` | `<yes|no>` |
+| `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<repo-fact|repo-rule|repo-constraint|repo-risk|command-note|integration-note|testing-note|deployment-note>` | `repo-wide` | `<active|superseded|deprecated>` | `<yes|no>` |
 
 ## External Memory Entries
 
 | Entry File | Type | Scope | Privacy Check | Promotion Path |
 | --- | --- | --- | --- | --- |
-| `workspace/external-memory/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<recommendation|rule|anti-pattern|template-change|skill-improvement|open-question>` | `<scope>` | `<pass|fail|n/a>` | `<target|n/a>` |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<recommendation|rule|anti-pattern|template-change|skill-improvement|open-question>` | `<scope>` | `<pass|fail|n/a>` | `<target|n/a>` |
 
 ## Drift Review
 

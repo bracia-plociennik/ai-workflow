@@ -10,8 +10,8 @@
 ## Sources
 
 - Repo state:
-- Initial audit: `workspace/projects/<project>/intake/phase-0-repo-intake.md`
-- Context: `workspace/projects/<project>/context.md` or `none`
+- Initial audit: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-repo-intake.md`
+- Context: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` or `none`
 - Workflow rules: `.systems/ai/workflow/phase-1-architecture.md`
 - Supporting sources:
 

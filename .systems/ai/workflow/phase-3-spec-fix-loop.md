@@ -11,7 +11,7 @@
 ### Output required
 
 - Updated task/package spec.
-- Fix evidence in `workspace/projects/<project>/quality/phase-3-<task-id>-spec-fix-loop.md`.
+- Fix evidence in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-3-<task-id>-spec-fix-loop.md`.
 - Updated task index and project status.
 
 ### Pass criteria
@@ -98,7 +98,7 @@ Fix może obejmować wyłącznie:
 - błędy w Definition of Done
 - brak oznaczeń niepewności (blocking / non-blocking)
 - brak decyzji użytkownika
-- aktualizacja artefaktu `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- aktualizacja artefaktu `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 - uzupełnienie wcześniej istniejącego artefaktu specyfikacji bez przepisywania go od zera
 
 Fix nie może obejmować:
@@ -168,7 +168,7 @@ Codex musi zwrócić:
 - limit retry
 - czy można wrócić do 3.5
 - czy pojawił się problem poza zakresem
-- potwierdzenie aktualizacji artefaktu `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- potwierdzenie aktualizacji artefaktu `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 
 ## Reguła PASS tej fazy
 
@@ -215,7 +215,7 @@ Na końcu zwróć:
 - retry count
 - limit retry
 - czy można wrócić do QA
-- potwierdzenie aktualizacji artefaktu `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- potwierdzenie aktualizacji artefaktu `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 
 DoD:
 - tylko fix błędów z QA

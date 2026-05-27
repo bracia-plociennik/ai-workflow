@@ -4,9 +4,9 @@
 
 This directory stores detailed global context for the current repository.
 
-The router/index is `workspace/repo/core/context.md`.
+The router/index is `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`.
 
-Files in this directory are supporting repo context entries and are exempt from `.systems/scripts/check-naming`. The canonical router is still `workspace/repo/core/context.md` and should remain lowercase kebab-case.
+Files in this directory are supporting repo context entries and are exempt from `.systems/scripts/check-naming`. The canonical router is still `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and should remain lowercase kebab-case.
 
 ## Entry Types
 
@@ -20,6 +20,6 @@ Files in this directory are supporting repo context entries and are exempt from 
 
 - Treat this directory as repo-specific runtime context.
 - Do not store target-repository facts in `.systems/ai/`.
-- Do not store project-specific context here; use `workspace/projects/<project>/context/`.
+- Do not store project-specific context here; use `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/`.
 - Do not store secrets, credentials, private customer data, or production-only operational details.
-- Update `workspace/repo/core/context.md` when adding, renaming, or superseding an entry.
+- Update `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` when adding, renaming, or superseding an entry.

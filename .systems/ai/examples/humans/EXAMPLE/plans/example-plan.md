@@ -16,7 +16,7 @@ Track the example workflow sequence for a human owner/operator.
 ## Owner Actions
 
 - Confirm that EXAMPLE remains documentation-only.
-- Use a real `workspace/projects/<project>/` workspace for real work.
+- Use a real `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` workspace for real work.
 
 ## External Tools
 

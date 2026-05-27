@@ -31,9 +31,9 @@ Use `.systems/ai/templates/memory/date-memory-entry.template.md` for new entries
 - universal workflow recommendations that should travel between repositories;
 - secrets, credentials, client data, or production-only operational details.
 
-Universal workflow recommendations belong in `workspace/external-memory/memory/` and are indexed by `workspace/external-memory/external-memory.md`.
+Universal workflow recommendations belong in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` and are indexed by `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`.
 
-Repo-local facts belong in `workspace/repo/memory/` and are indexed by `workspace/repo/core/memory.md`.
+Repo-local facts belong in `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` and are indexed by `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`.
 
 ## Router Rule
 

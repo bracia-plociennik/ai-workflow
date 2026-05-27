@@ -4,7 +4,7 @@
 
 Human-facing plan for owners and operators who need to follow progress, make decisions, or coordinate external work.
 
-This artifact is not the canonical execution plan. Canonical project planning and task state belong under `workspace/projects/<project>/`.
+This artifact is not the canonical execution plan. Canonical project planning and task state belong under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`.
 
 ## Metadata
 
@@ -12,8 +12,8 @@ This artifact is not the canonical execution plan. Canonical project planning an
 | --- | --- |
 | Project | `<project>` |
 | Plan name | `<human-readable plan name>` |
-| Related project plan | `workspace/projects/<project>/planning/<plan>.md` |
-| Related task index | `workspace/projects/<project>/tasks.md` |
+| Related project plan | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/<plan>.md` |
+| Related task index | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` |
 | Owner | `<owner>` |
 | Status | `<draft|active|blocked|completed|superseded>` |
 | Updated at | `<YYYY-MM-DD>` |

@@ -1,6 +1,6 @@
 # <task-or-workspace>-escalation-<YYYY-MM-DD>.md
 
-Purpose: required artifact when autopilot cannot safely continue. Store project-specific copies under `workspace/projects/<project>/escalations/`.
+Purpose: required artifact when autopilot cannot safely continue. Store project-specific copies under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/escalations/`.
 
 ```yaml
 escalation:

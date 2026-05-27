@@ -14,12 +14,12 @@ Use this router only for date, topic, type, status, and route to the detailed me
 | --- | --- | --- |
 | `.systems/ai/core/memory.md` | this workflow template | router/index for template maintenance memory |
 | `.systems/ai/memory/` | this workflow template | detailed template maintenance memory entries |
-| `workspace/external-memory/external-memory.md` | universal workflow/process memory | router/index for reusable lessons to promote into future versions |
-| `workspace/external-memory/memory/` | universal workflow/process memory | detailed reusable lesson entries |
-| `workspace/repo/core/memory.md` | target repository | router/index for repo-local memory |
-| `workspace/repo/memory/` | target repository | detailed repo-local memory entries |
-| `workspace/projects/<project>/memory.md` | one project workspace | router/index for project-specific memory |
-| `workspace/projects/<project>/memory/` | one project workspace | detailed project-specific memory entries |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | universal workflow/process memory | router/index for reusable lessons to promote into future versions |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | universal workflow/process memory | detailed reusable lesson entries |
+| `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` | target repository | router/index for repo-local memory |
+| `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | target repository | detailed repo-local memory entries |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` | one project workspace | router/index for project-specific memory |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` | one project workspace | detailed project-specific memory entries |
 
 ## Memory Index
 
@@ -34,4 +34,4 @@ Use this router only for date, topic, type, status, and route to the detailed me
 - Do not store target-repo facts here.
 - Do not store project-specific task implementation details here.
 - Do not store secrets, credentials, customer data, or production-only operational details.
-- Promote reusable workflow lessons to `workspace/external-memory/memory/` and index them in `workspace/external-memory/external-memory.md` when they should affect future template versions.
+- Promote reusable workflow lessons to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` and index them in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` when they should affect future template versions.

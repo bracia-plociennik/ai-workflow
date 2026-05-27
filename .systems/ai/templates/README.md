@@ -7,7 +7,8 @@ Use these as starting points when a target repository needs repo runtime files, 
 ## Template Groups
 
 - `root-agents.template.md` - target-repository root `AGENTS.md` shim that delegates to `ai-workflow/AGENTS.md`.
-- `repo/` - templates for target-repo runtime files under `workspace/repo/`.
+- `workspace/` - bootstrap templates used by `.systems/scripts/init-workspace` to create `AI_WORKFLOW_WORKSPACE_HOME`.
+- `repo/` - templates for target-repo runtime files under `AI_WORKFLOW_WORKSPACE_HOME/repo/`.
 - `workflow/` - templates for artifacts produced by `.systems/ai/workflow/*` phases.
 - `autopilot/` - runtime autopilot, QA evidence, escalation, and decision templates.
 - `projects/` - project workspace support-file, context, memory, planning router, task, micro-task, and review router templates.
@@ -17,6 +18,6 @@ Use these as starting points when a target repository needs repo runtime files, 
 - `memory/` - template maintenance memory templates.
 - `external-memory/` - universal AI Workflow improvement memory templates.
 
-Project-specific copies should be written under the relevant `workspace/projects/<project>/...` or `workspace/humans/<project>/...` directory, not edited in place here.
+Project-specific copies should be written under the relevant `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/...` or `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/...` directory, not edited in place here.
 
-Repo-specific copies should be written under `workspace/repo/`, not edited into `.systems/ai/`.
+Repo-specific copies should be written under `AI_WORKFLOW_WORKSPACE_HOME/repo/`, not edited into `.systems/ai/`.

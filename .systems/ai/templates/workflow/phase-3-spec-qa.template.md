@@ -5,7 +5,7 @@
 - Project: `<project>`
 - Task/package ID:
 - Date: `<YYYY-MM-DD>`
-- Artifact under review: `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- Artifact under review: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 - Workflow phase: `3.5. SPEC QA`
 - Result: `<PASS|FAIL>`
 

@@ -10,7 +10,7 @@
 
 ### Output required
 
-- `workspace/projects/<project>/quality/phase-8-final-check.md` with technical `PASS`, `FAIL`, or `awaiting-owner-final-yes`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-8-final-check.md` with technical `PASS`, `FAIL`, or `awaiting-owner-final-yes`.
 - Updated project status and final owner approval state.
 
 ### Pass criteria
@@ -34,7 +34,7 @@
 
 - Task index, quality artifacts, distillations, checkpoints, decisions, and memory reviewed.
 - Final findings, skipped checks, residual risk, and owner-approval state.
-- Open change requests reviewed through `workspace/projects/<project>/change-requests.md` and `workspace/projects/<project>/change-requests/`.
+- Open change requests reviewed through `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md` and `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`.
 
 ### Next allowed phases
 
@@ -139,9 +139,9 @@ Final Check musi zweryfikować:
 - brak sprzeczności między:
   - repo
   - architekturą
-  - project memory router `workspace/projects/<project>/memory.md` and entries under `workspace/projects/<project>/memory/`
-  - repo memory router `workspace/repo/core/memory.md` and entries under `workspace/repo/memory/`
-  - external memory router `workspace/external-memory/external-memory.md` and entries under `workspace/external-memory/memory/`, jeśli etap promował uniwersalne lekcje workflow
+  - project memory router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`
+  - repo memory router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
+  - external memory router `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`, jeśli etap promował uniwersalne lekcje workflow
   - checkpointami
 - czy rzeczywisty system odpowiada deklarowanemu stanowi
 - czy etap realizuje zamierzony cel systemowy
@@ -178,9 +178,9 @@ FAIL jeśli:
 Final Check zakłada, że:
 
 - checkpoint został wykonany
-- `workspace/projects/<project>/memory.md` i `workspace/projects/<project>/memory/` są zsynchronizowane
-- `workspace/repo/core/memory.md` i `workspace/repo/memory/` są zsynchronizowane, jeśli checkpoint dotyczył wiedzy repo-level
-- `workspace/external-memory/external-memory.md` i `workspace/external-memory/memory/` są zsynchronizowane, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow, a użyte wpisy są osobnymi plikami z privacy check
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` są zsynchronizowane
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` są zsynchronizowane, jeśli checkpoint dotyczył wiedzy repo-level
+- `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` są zsynchronizowane, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow, a użyte wpisy są osobnymi plikami z privacy check
 
 Jeśli checkpoint nie istnieje:
 
@@ -256,8 +256,8 @@ Jeśli wynik = FAIL:
 
 Jeśli właściciel zgłosi change request przed `final-owner-yes`:
 
-- utwórz albo zaktualizuj `workspace/projects/<project>/change-requests.md`
-- utwórz wpis w `workspace/projects/<project>/change-requests/`
+- utwórz albo zaktualizuj `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md`
+- utwórz wpis w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`
 - wykonaj triage bez product-code writes
 - wróć do najwęższej poprawnej fazy albo fix loop
 - po obsłudze wróć przez wymagane quality, checkpoint i final check

@@ -11,9 +11,9 @@
 
 ## Sources
 
-- Project plan: `workspace/projects/<project>/planning/phase-2-project-plan.md`
-- Architecture: `workspace/projects/<project>/architecture/phase-1-architecture.md`
-- Intake: `workspace/projects/<project>/intake/phase-0-repo-intake.md`
+- Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
+- Architecture: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
+- Intake: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-repo-intake.md`
 - Decisions:
 - Existing dependency outputs:
 

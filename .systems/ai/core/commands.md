@@ -2,11 +2,11 @@
 
 ## Purpose
 
-Codex must know how to verify work. Repository-specific commands live in `workspace/repo/core/repo-intake.md`. This file defines the required command categories and workflow-template checks.
+Codex must know how to verify work. Repository-specific commands live in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`. This file defines the required command categories and workflow-template checks.
 
 ## Required Command Categories
 
-Each target repository should define these in `workspace/repo/core/repo-intake.md`:
+Each target repository should define these in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`:
 
 - Install
 - Development server

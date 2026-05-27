@@ -10,7 +10,7 @@
 
 ### Output required
 
-- Distillation artifact under `workspace/projects/<project>/distillations/`.
+- Distillation artifact under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/distillations/`.
 - Updated project memory when task-local learning affects future tasks.
 - Updated task index/status and project status.
 
@@ -96,7 +96,7 @@ To jest:
 
 Destylacja powinna powstać jako plik:
 
-`workspace/projects/<project>/distillations/phase-6-<task-id>-distillation.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/distillations/phase-6-<task-id>-distillation.md`
 
 gdzie:
 
@@ -189,7 +189,7 @@ Agregacja do memory odbywa się dopiero przez checkpoint projektu.
 
 Podczas `6. FAZA DESTYLACJI` Codex musi zsynchronizować wynik taska / tasks package także z:
 
-- `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 
 Jeśli task albo package:
 
@@ -316,7 +316,7 @@ Ustaw:
 - memory-in-repo-memory: false
 
 DoD fazy:
-powstał artefakt workspace/projects/<project>/distillations/phase-6-<task-id>-distillation.md
+powstał artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/distillations/phase-6-<task-id>-distillation.md
 ```
 
 ---

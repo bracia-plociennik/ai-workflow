@@ -4,8 +4,8 @@
 
 - Project: `<project>`
 - Date: `<YYYY-MM-DD>`
-- Failed QA artifact: `workspace/projects/<project>/quality/phase-2-packaging-qa.md`
-- Fixed plan artifact: `workspace/projects/<project>/planning/phase-2-project-plan.md`
+- Failed QA artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-2-packaging-qa.md`
+- Fixed plan artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Workflow phase: `2.9.1. PACKAGE FIX LOOP`
 - Result: `<completed|blocked>`
 

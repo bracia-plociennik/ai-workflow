@@ -12,11 +12,11 @@
 
 | Source | Type | Status | Notes |
 | --- | --- | --- | --- |
-| `workspace/projects/<project>/context/<file>` | `<brief|spec|pdf|image|brand|client-doc|other>` | `<reviewed|skipped|unreadable>` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/<file>` | `<brief|spec|pdf|image|brand|client-doc|other>` | `<reviewed|skipped|unreadable>` | |
 
 ## Raw Idea Summary
 
-Briefly summarize the owner's idea in plain language, using both the chat prompt and reviewed source materials from `workspace/projects/<project>/context/`.
+Briefly summarize the owner's idea in plain language, using both the chat prompt and reviewed source materials from `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/`.
 
 ## What Should Stay
 
@@ -44,7 +44,7 @@ Briefly summarize the owner's idea in plain language, using both the chat prompt
 
 ## Recommended Idea Shape
 
-Write the validated version of the idea that should become the basis for `workspace/projects/<project>/context.md`.
+Write the validated version of the idea that should become the basis for `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`.
 
 ## Gate Decision
 

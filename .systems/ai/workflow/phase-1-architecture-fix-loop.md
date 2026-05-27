@@ -5,13 +5,13 @@
 ### Input required
 
 - Architecture QA result is `FAIL`.
-- `workspace/projects/<project>/quality/phase-1-architecture-qa.md` lists findings.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-1-architecture-qa.md` lists findings.
 - Current architecture artifact is available.
 
 ### Output required
 
-- Updated `workspace/projects/<project>/architecture/phase-1-architecture.md`.
-- Fix evidence in `workspace/projects/<project>/quality/phase-1-architecture-fix-loop.md`.
+- Updated `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`.
+- Fix evidence in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-1-architecture-fix-loop.md`.
 - Updated project status.
 
 ### Pass criteria
@@ -67,7 +67,7 @@ Do tej fazy przechodzimy tylko wtedy, gdy:
 - faza 1.5 zakończyła się wynikiem FAIL
 - istnieje raport z 1.5 zawierający listę problemów
 - istnieje artefakt:
-  `workspace/projects/<project>/architecture/phase-1-architecture.md`
+  `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
 
 Brak wyniku FAIL albo brak raportu z 1.5:
 

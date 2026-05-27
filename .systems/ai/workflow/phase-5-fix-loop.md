@@ -11,7 +11,7 @@
 ### Output required
 
 - Product-code fixes limited to Quality findings.
-- Fix evidence in `workspace/projects/<project>/quality/phase-5-<task-id>-fix-loop.md`.
+- Fix evidence in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-5-<task-id>-fix-loop.md`.
 - Updated task index/status and project status.
 
 ### Pass criteria

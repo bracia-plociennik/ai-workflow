@@ -83,7 +83,7 @@ for phase in "${phases[@]}"; do
 done
 
 root_agents_template=".systems/ai/templates/root-agents.template.md"
-for required_root_ref in 'ai-workflow/AGENTS.md' 'AI_WORKFLOW_HOME' 'TARGET_REPO_ROOT' 'cd ai-workflow'; do
+for required_root_ref in 'ai-workflow/AGENTS.md' 'AI_WORKFLOW_HOME' 'AI_WORKFLOW_WORKSPACE_HOME' 'TARGET_REPO_ROOT' 'cd ai-workflow'; do
   if ! rg -q "$required_root_ref" "$root_agents_template"; then
     echo "Root AGENTS template missing required nested-clone ref: $required_root_ref"
     fail=1
@@ -160,12 +160,12 @@ for required_autopilot_readiness_text in 'readiness-result: ready' 'blocked' 'aw
 done
 
 for required_ownership_ref in AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/operating-model.md; do
-  if ! rg -q 'workspace/skills/' "$required_ownership_ref"; then
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/skills/' "$required_ownership_ref"; then
     echo "Missing workspace skills reference in $required_ownership_ref"
     fail=1
   fi
 
-  if ! rg -q 'workspace/external-memory/' "$required_ownership_ref"; then
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/external-memory/' "$required_ownership_ref"; then
     echo "Missing workspace external memory reference in $required_ownership_ref"
     fail=1
   fi
@@ -176,8 +176,27 @@ if ! rg -q 'Do not edit `.systems/\*\*`' AGENTS.md; then
   fail=1
 fi
 
-if ! rg -q 'workspace/\*\*' .systems/ai/core/update-from-upstream.md; then
-  echo "Update policy missing workspace-wide protection"
+if ! rg -q 'must not modify it|does not touch `AI_WORKFLOW_WORKSPACE_HOME/\*\*`|does not edit workspace legacy files' .systems/ai/core/update-from-upstream.md; then
+  echo "Update policy missing external workspace no-touch rule"
+  fail=1
+fi
+
+for required_public_model_ref in README.md HUMANS.md AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/core/repo-intake.md; do
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME|ai-workflow-workspace' "$required_public_model_ref"; then
+    echo "Missing AI_WORKFLOW_WORKSPACE_HOME reference in $required_public_model_ref"
+    fail=1
+  fi
+done
+
+for required_install_ref in README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/templates/root-agents.template.md; do
+  if ! rg -q '.git/info/exclude' "$required_install_ref"; then
+    echo "Missing local-only .git/info/exclude install rule in $required_install_ref"
+    fail=1
+  fi
+done
+
+if rg -q 'printf "\\n# Local AI Workflow nested clone\\n/ai-workflow/\\n" >> \.gitignore' README.md HUMANS.md .systems/ai/core/installation.md; then
+  echo "Old committed .gitignore install flow remains"
   fail=1
 fi
 

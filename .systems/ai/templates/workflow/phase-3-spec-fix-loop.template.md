@@ -5,8 +5,8 @@
 - Project: `<project>`
 - Task/package ID:
 - Date: `<YYYY-MM-DD>`
-- Failed QA artifact: `workspace/projects/<project>/quality/phase-3-<task-id>-spec-qa.md`
-- Fixed spec artifact: `workspace/projects/<project>/specs/phase-3-<task-id>-specification.md`
+- Failed QA artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-3-<task-id>-spec-qa.md`
+- Fixed spec artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 - Workflow phase: `3.7. SPEC FIX LOOP`
 - Result: `<completed|blocked>`
 

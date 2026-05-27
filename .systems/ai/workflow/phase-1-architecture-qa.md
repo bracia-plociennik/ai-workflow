@@ -4,13 +4,13 @@
 
 ### Input required
 
-- `workspace/projects/<project>/architecture/phase-1-architecture.md` exists.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md` exists.
 - Repo intake, context, and decisions referenced by architecture are available.
 - Project status points to architecture QA or is updated before QA closes.
 
 ### Output required
 
-- `workspace/projects/<project>/quality/phase-1-architecture-qa.md` with `PASS` or `FAIL`.
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-1-architecture-qa.md` with `PASS` or `FAIL`.
 - Updated project status and blocker reason when failed.
 
 ### Pass criteria
@@ -76,7 +76,7 @@ Nie używaj odpowiedzi typu:
 
 Do tej fazy przechodzimy tylko wtedy, gdy istnieje artefakt:
 
-`workspace/projects/<project>/architecture/phase-1-architecture.md`
+`AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md`
 
 Brak artefaktu:
 
@@ -286,7 +286,7 @@ Prompt powinien brzmieć mniej więcej tak:
 Przeprowadź krytyczną walidację architektury (1.).
 
 Wejście:
-- workspace/projects/<project>/architecture/phase-1-architecture.md
+- AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/phase-1-architecture.md
 
 Twoim celem nie jest poprawianie architektury.
 Twoim celem jest sprawdzenie, czy architektura przechodzi Architecture Gate.

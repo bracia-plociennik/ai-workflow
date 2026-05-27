@@ -12,8 +12,8 @@
 | Title | `<title>` |
 | Risk | `<low|medium|high|critical>` |
 | Status | `<ready|conditional|blocked|done>` |
-| Spec | `workspace/projects/<project>/specs/<spec-file>.md` |
-| Quality | `workspace/projects/<project>/quality/<quality-file>.md` |
+| Spec | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/<spec-file>.md` |
+| Quality | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/<quality-file>.md` |
 
 ## Notes
 

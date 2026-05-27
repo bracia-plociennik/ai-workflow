@@ -2,7 +2,7 @@
 
 Templates for documents intended for owners, operators, or non-agent readers.
 
-Use these only when the artifact is meant for `workspace/humans/<project>/...`. Workflow execution artifacts belong in `workspace/projects/<project>/...`.
+Use these only when the artifact is meant for `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/...`. Workflow execution artifacts belong in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/...`.
 
 ## Templates
 
