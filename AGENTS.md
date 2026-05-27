@@ -10,6 +10,8 @@ When this repository is cloned into a target repository as `ai-workflow/`, the t
 
 ## Path Resolution
 
+AI Workflow has two repository modes. In the official upstream repository, `AI_WORKFLOW_HOME` is the repository root and there is no inner `ai-workflow/` directory. In target repositories, AI Workflow is a nested clone at `ai-workflow/`. See `.systems/ai/core/repository-modes.md`.
+
 When AI Workflow is used as a nested clone:
 
 - `AI_WORKFLOW_HOME` is the `ai-workflow/` directory.
@@ -26,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `command-routing.md`, `task-intake.md`, `guide.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, when a matching skill exists

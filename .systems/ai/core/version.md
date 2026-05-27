@@ -13,6 +13,8 @@
 - `AGENTS.md` is a short router.
 - `HUMANS.md` is the long human runbook.
 - Default target-repository installation is a nested clone at `ai-workflow/`, a local-only root `AGENTS.md` shim, and a target-owned tracked workspace at `ai-workflow-workspace/`.
+- Official repo mode uses the upstream repository root as `AI_WORKFLOW_HOME`; there is no inner `ai-workflow/` directory.
+- `.systems/ai/core/repository-modes.md` defines official repo mode, target repo mode, and shared path resolution.
 - `.systems/` is the system-owned namespace inside `AI_WORKFLOW_HOME`.
 - `AI_WORKFLOW_WORKSPACE_HOME/` is the target-owned runtime/advisory namespace, normally `ai-workflow-workspace/` beside `AI_WORKFLOW_HOME`.
 - Public `main` does not track active `workspace/**` or `ai-workflow-workspace/**`; `dev` may track this repository's own `ai-workflow-workspace/**` runtime.

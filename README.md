@@ -12,23 +12,31 @@ git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
 
 In that model, the target repository keeps its own application files, uses a local-only root `AGENTS.md` shim, and commits repo-specific runtime in `ai-workflow-workspace/`. The complete workflow system stays inside `ai-workflow/`.
 
-## Contents
+This upstream repository itself uses official repo mode: there is no inner `ai-workflow/` directory. Here, `AI_WORKFLOW_HOME` is the repository root. See `.systems/ai/core/repository-modes.md`.
+
+## Repository Contents
 
 - `AGENTS.md` - internal AI Workflow execution contract.
 - `.systems/ai/templates/root-agents.template.md` - root target-repository shim that delegates to `ai-workflow/AGENTS.md`.
 - `HUMANS.md` - practical runbook for owners, operators, and engineers.
+- `.systems/ai/core/repository-modes.md` - official repo vs target repo path resolution contract.
 - `.systems/ai/core/workflow.md` - workflow router and phase index.
 - `.systems/ai/core/installation.md` - nested-clone installation and collision policy.
 - `.systems/ai/core/command-routing.md` - user-facing command aliases and safe interpretation rules.
 - `.systems/ai/core/task-intake.md` - required lightweight validation lens before planning or executing new tasks.
 - `.systems/ai/core/response-contract.md` - required user-facing response footer with next-step recommendation, alternative, impacts, and copy-paste prompts.
 - `.systems/ai/core/change-requests.md` - owner change request policy before and after final owner approval.
+- `.systems/ai/examples/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
+- `.systems/scripts/` - validators for this workflow repository, run from `ai-workflow/`.
+
+## Target Workspace Paths
+
+After installation in a target repository, runtime lives outside the nested clone:
+
 - `ai-workflow-workspace/repo/` - target-repository runtime context, intake, status, and memory router/entries.
 - `ai-workflow-workspace/external-memory/` - target-owned advisory memory for workflow improvement proposals.
 - `ai-workflow-workspace/skills/` - target-owned user skills that can take precedence over system skills as supporting guidance.
-- `.systems/ai/examples/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
 - `ai-workflow-workspace/micro-projects/` - repo-level low-risk micro-project workspace.
-- `.systems/scripts/` - validators for this workflow repository, run from `ai-workflow/`.
 
 ## How To Install In Another Repository
 
@@ -66,6 +74,7 @@ AI Workflow uses two roots:
 - `TARGET_REPO_ROOT`: the parent application repository, for example a Laravel repo.
 - `AI_WORKFLOW_HOME`: the nested clone directory, normally `ai-workflow/`.
 - `AI_WORKFLOW_WORKSPACE_HOME`: the target-owned workspace, normally `ai-workflow-workspace/`.
+- In official repo mode, `AI_WORKFLOW_HOME` and `TARGET_REPO_ROOT` are this repository root, and the optional dev workspace is `./ai-workflow-workspace/`.
 
 Rules:
 

@@ -26,7 +26,7 @@ A user command can select a phase or mode. It cannot weaken risk policy, permiss
 
 ## Interpretation Rules
 
-- When AI Workflow is installed as a nested clone, `AI_WORKFLOW_HOME` is usually `ai-workflow/` and `AI_WORKFLOW_WORKSPACE_HOME` is usually `ai-workflow-workspace/`. User-facing `.systems/...` paths resolve under `AI_WORKFLOW_HOME`; runtime paths resolve under `AI_WORKFLOW_WORKSPACE_HOME`.
+- Resolve repository mode using `.systems/ai/core/repository-modes.md`. In official repo mode, `AI_WORKFLOW_HOME` is the upstream repository root. In target repo mode, `AI_WORKFLOW_HOME` is usually `ai-workflow/` and `AI_WORKFLOW_WORKSPACE_HOME` is usually `ai-workflow-workspace/`. User-facing `.systems/...` paths resolve under `AI_WORKFLOW_HOME`; runtime paths resolve under `AI_WORKFLOW_WORKSPACE_HOME`.
 - Full commands with explicit project, task IDs, risk constraints, mode, and evidence policy may be executed if gates are satisfied.
 - New task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.

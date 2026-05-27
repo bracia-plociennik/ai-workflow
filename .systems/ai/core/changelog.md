@@ -2,6 +2,7 @@
 
 ## 0.8.3 - 2026-05-27
 
+- Added `.systems/ai/core/repository-modes.md` and `.systems/scripts/resolve-workflow-env` to formalize official repo mode versus target repo mode.
 - Split target runtime out of the nested clone: public `main` no longer tracks `workspace/**`.
 - Added `AI_WORKFLOW_WORKSPACE_HOME`, normally `ai-workflow-workspace/`, as the target-owned tracked runtime workspace.
 - Added `.systems/scripts/check-branch-policy` to block runtime workspace files on public `main` while allowing `ai-workflow-workspace/**` on `dev`.

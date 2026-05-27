@@ -2,7 +2,9 @@
 
 This file is the canonical policy for installing AI Workflow into an existing repository.
 
-The default installation model is a nested clone plus a separate target-owned workspace. Keep the whole workflow system inside `ai-workflow/`, use a local-only root `AGENTS.md` shim, and commit runtime facts in `ai-workflow-workspace/`.
+The default target-repository installation model is a nested clone plus a separate target-owned workspace. Keep the whole workflow system inside `ai-workflow/`, use a local-only root `AGENTS.md` shim, and commit runtime facts in `ai-workflow-workspace/`.
+
+The upstream `ai-workflow` repository itself uses official repo mode: `AI_WORKFLOW_HOME` is the repository root and there is no inner `ai-workflow/` directory. See `.systems/ai/core/repository-modes.md`.
 
 ## Install Command
 
