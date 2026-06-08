@@ -10,6 +10,7 @@
 - Result: `<PASS|FAIL|blocked|completed>`
 - Target repo root: `<absolute-or-relative TARGET_REPO_ROOT>`
 - AI Workflow home: `<absolute-or-relative AI_WORKFLOW_HOME, usually ai-workflow/>`
+- Phase 0 init: `<ready-for-repo-intake|blocked-owner-merge|blocked-conflicting-install|blocked-unsafe-legacy|not-run>`
 
 ## Sources
 
@@ -17,6 +18,7 @@
 - Target root `AGENTS.md` shim: `<present|missing|merge-required|not-applicable>`
 - Internal workflow contract: `AGENTS.md` under `AI_WORKFLOW_HOME`
 - Repo context router: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`
+- Phase 0 init artifact: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`
 - Repo context entries: `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo-level intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Idea validation: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-idea-validation.md` or `none`

@@ -4,7 +4,7 @@
 
 Full project workspaces live here.
 
-Create projects through `phase-0-project-workspace` or `.systems/scripts/init-workspace` followed by repo/project intake.
+Create projects through `phase-0-project-workspace` after `phase-0-init` and repo/project intake.
 
 Project paths:
 

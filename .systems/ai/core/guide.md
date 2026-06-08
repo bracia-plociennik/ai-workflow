@@ -156,23 +156,23 @@ Impact: safer when the user wants to inspect dirty system-owned files or confirm
 
 ## Fresh Repository Start
 
-When AI Workflow appears newly cloned into `ai-workflow/` and repo intake is missing, stale, or still describes the upstream `ai-workflow` template, recommend repo-level intake. If the root `AGENTS.md` shim is missing or does not delegate to `ai-workflow/AGENTS.md`, recommend installing or merging the shim before workflow execution.
+When AI Workflow appears newly cloned into `ai-workflow/` and `AI_WORKFLOW_WORKSPACE_HOME` is missing, incomplete, or not yet checked, recommend `phase-0-init`. If phase 0 init is complete and repo intake is missing, stale, or still describes the upstream `ai-workflow` template, recommend repo-level intake. If the root `AGENTS.md` shim is missing or does not delegate to `ai-workflow/AGENTS.md`, phase 0 init should create it when absent or preserve the existing file as legacy context and report `blocked-owner-merge`.
 
 Recommended next prompt:
 
 ```text
-repo intake
+Zrób phase 0 init dla tego repo. Utwórz ai-workflow-workspace, zachowaj legacy artifacts jako context only, nie dotykaj product code, a potem powiedz co blokuje repo intake.
 ```
 
-Impact: repo intake replaces stale runtime facts, records safe commands, detects install collisions, and prevents later phases from guessing.
+Impact: phase 0 init creates the workspace, preserves legacy context safely, sets up the local execution entrypoint when possible, and prevents repo intake from starting with missing bootstrap state.
 
 Alternative:
 
 ```text
-Sprawdź instalację AI Workflow, root AGENTS shim i powiedz, czy można uruchomić repo intake.
+Jeśli phase 0 init jest już gotowe, uruchom repo intake. Jeśli nie, najpierw pokaż brakujące elementy init.
 ```
 
-Impact: slower, but useful when the user is worried that the workflow was cloned into a repo with existing `docs/`, `.systems/`, `.github/`, `AGENTS.md`, or `HUMANS.md`.
+Impact: useful when the user believes bootstrap already happened and wants to avoid repeating legacy preservation or shim setup.
 
 ## Active Project Guidance
 

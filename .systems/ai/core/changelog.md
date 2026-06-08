@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.4 - 2026-06-08
+
+- Added `phase-0-init` as the first bootstrap phase after cloning AI Workflow into a target repository.
+- Extended `.systems/scripts/init-workspace` to create `repo/core/init.md`, preserve safe legacy context, and write `repo/legacy/legacy-index.md`.
+- Updated install, guide, command routing, repo intake, workflow routing, templates, and validators so fresh target repos route through init before repo intake.
+- Added smoke coverage for fresh workspace init, legacy preservation, root `AGENTS.md` owner-merge blocking, and `.env` non-copy behavior.
+
 ## 0.8.3 - 2026-05-27
 
 - Added `.systems/ai/core/repository-modes.md` and `.systems/scripts/resolve-workflow-env` to formalize official repo mode versus target repo mode.

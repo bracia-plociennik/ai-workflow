@@ -70,11 +70,11 @@ Use `.systems/ai/core/risk-model.md` for classification.
 
 When adding AI Workflow to an existing repository, follow `.systems/ai/core/installation.md`.
 
-Default installation is a nested clone at `ai-workflow/`, a local-only root `AGENTS.md` shim created by `.systems/scripts/init-workspace`, and a target-owned tracked workspace at `ai-workflow-workspace/`. Do not copy workflow internals into target-owned `docs/`, `.systems/`, or `.github/`.
+Default installation is a nested clone at `ai-workflow/`, a `phase-0-init` bootstrap that may use `.systems/scripts/init-workspace`, a local-only root `AGENTS.md` shim, and a target-owned tracked workspace at `ai-workflow-workspace/`. Do not copy workflow internals into target-owned `docs/`, `.systems/`, or `.github/`.
 
-Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, `.github/`, or product code. If the target repo already has `AGENTS.md`, preserve it as legacy context under `ai-workflow-workspace/repo/legacy/` and merge the shim manually with owner approval. The local shim and `ai-workflow/` clone belong in `.git/info/exclude`; `ai-workflow-workspace/` is the commit-friendly runtime.
+Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, `.github/`, or product code. If the target repo already has `AGENTS.md`, `phase-0-init` preserves it as legacy context under `ai-workflow-workspace/repo/legacy/`, records it in `legacy-index.md`, and blocks on owner-approved merge. The local shim and `ai-workflow/` clone belong in `.git/info/exclude`; `ai-workflow-workspace/` is the commit-friendly runtime.
 
-Unresolved installation collisions block repo intake, architecture, planning, implementation, and autopilot.
+Unresolved `phase-0-init` blockers or installation collisions block repo intake, architecture, planning, implementation, and autopilot.
 
 ## Side Task / Micro-task Contract
 

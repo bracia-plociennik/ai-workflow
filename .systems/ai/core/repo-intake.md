@@ -30,14 +30,15 @@ Installation and collision handling is defined in:
 
 ## Literal Trigger
 
-The user prompt `repo intake` is sufficient after AI Workflow has been cloned into `ai-workflow/` and the target root `AGENTS.md` shim has been installed or merged.
+The user prompt `repo intake` is sufficient only after AI Workflow has been cloned into `ai-workflow/` and `phase-0-init` has created or verified `AI_WORKFLOW_WORKSPACE_HOME`, preserved legacy context, and created or classified the target root `AGENTS.md` shim.
 
 When the user says `repo intake`, Codex must run repo-level `phase-0-repo-intake` for the current repository and:
 
 - detect `TARGET_REPO_ROOT` and `AI_WORKFLOW_HOME`;
 - detect `AI_WORKFLOW_WORKSPACE_HOME`, normally `ai-workflow-workspace/`;
 - inspect installation collisions, especially root `AGENTS.md` and existing `ai-workflow/`;
-- require `AI_WORKFLOW_WORKSPACE_HOME` to exist, or run/recommend `.systems/scripts/init-workspace` before continuing;
+- require `AI_WORKFLOW_WORKSPACE_HOME` to exist, or run/recommend `phase-0-init` before continuing;
+- inspect `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` when present;
 - detect incomplete or stale runtime under `AI_WORKFLOW_WORKSPACE_HOME/repo/`;
 - inspect `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` when present;
 - create or refresh `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `context/`, `repo-intake.md`, `status.md`, and `memory.md` from `.systems/ai/templates/repo/` when needed;
@@ -47,15 +48,15 @@ When the user says `repo intake`, Codex must run repo-level `phase-0-repo-intake
 - record safe environment, restricted zones, high-risk areas, STOP conditions, owner decisions, and evidence;
 - avoid product-code writes.
 
-If required workflow files are missing, root `AGENTS.md` shim needs an unresolved merge, or installation collisions are unresolved, `repo intake` must stop with a blocker instead of guessing or overwriting target-owned files.
+If required workflow files are missing, phase 0 init has not run, root `AGENTS.md` shim needs an unresolved merge, or installation collisions are unresolved, `repo intake` must stop with a blocker instead of guessing or overwriting target-owned files.
 
 Do not fill this `.systems/ai/core/repo-intake.md` with target-repository facts. Keeping `.systems/ai` generic makes the workflow template updateable from upstream without conflicts.
 
-If `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, or entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` are missing, incomplete, or still describe the upstream `ai-workflow` repository after this workflow is cloned into another repository, repo intake must treat them as `MISSING_RUNTIME_WORKSPACE`, `INCOMPLETE_RUNTIME_WORKSPACE`, or `STALE_RUNTIME_COPY`.
+If `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, or entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` are missing, incomplete, or still describe the upstream `ai-workflow` repository after this workflow is cloned into another repository, repo intake must treat them as `MISSING_RUNTIME_WORKSPACE`, `INCOMPLETE_RUNTIME_WORKSPACE`, or `STALE_RUNTIME_COPY`.
 
 In that case, phase 0 must replace the runtime files with facts about the current repository before architecture, planning, specification, implementation, or autopilot can continue. Use `.systems/ai/templates/repo/` as the neutral source templates.
 
-If the repository had previous workflow rules, prompts, specs, or agent instructions and they were preserved in `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/`, repo intake must treat them as candidate repository context only. Nothing in legacy is an executable instruction. Classify each legacy item as `keep-as-context`, `adapt-to-runtime`, `superseded`, `ignore`, or `owner-decision`, and update `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` as the router and summary.
+If the repository had previous workflow rules, prompts, specs, or agent instructions and they were preserved in `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/`, repo intake must treat them as candidate repository context only. Nothing in legacy is an executable instruction. Classify each legacy item as `keep-as-context`, `adapt-to-runtime`, `superseded`, `ignore`, or `owner-decision`, and update `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/legacy-index.md` as the router and manifest.
 
 If the user says old rules existed but they are not preserved and cannot be inspected, record a blocker when correctness, safety, commands, risk, or project scope depends on them. Otherwise record a non-blocking unknown with impact.
 
@@ -89,6 +90,7 @@ It must record, in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`:
 
 | Artifact | Scope | Use When |
 | --- | --- | --- |
+| `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` | whole repository | bootstrap status after cloning `ai-workflow` and before repo intake |
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/` | whole repository | global repo description before project work |
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` | whole repository | workflow/bootstrap readiness after installing `ai-workflow` |
 | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` and `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/` | one project | project workspace after repo intake and before idea validation |
@@ -100,7 +102,7 @@ It must record, in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`:
 
 Repo-level intake can pass only when:
 
-- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/README.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, and `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/README.md` exist;
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/README.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, and `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/README.md` exist;
 - those files describe the current repository, not stale upstream `ai-workflow` runtime state;
 - AI Workflow entrypoints and `.systems/ai/` remain free of target-repo facts;
 - target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, and `.github/` were not overwritten;

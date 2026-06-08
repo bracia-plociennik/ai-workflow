@@ -21,6 +21,7 @@ if [[ -n "$workspace_home" && -f "$workspace_home/repo/core/status.md" ]]; then
 fi
 
 phases=(
+  phase-0-init
   phase-0-repo-intake
   phase-0-project-workspace
   phase-0-idea-validation
@@ -142,6 +143,9 @@ is_allowed_transition() {
   esac
 
   case "$current_phase:$phase_result:$next_phase" in
+    phase-0-init:PASS:phase-0-repo-intake|\
+    phase-0-init:completed:phase-0-repo-intake|\
+    phase-0-init:blocked:none|\
     phase-0-idea-validation:PASS:phase-0-repo-intake|\
     phase-0-idea-validation:completed:phase-0-repo-intake|\
     phase-0-idea-validation:blocked:none|\

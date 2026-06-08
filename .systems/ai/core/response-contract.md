@@ -56,7 +56,7 @@ Choose the recommendation from the highest applicable source:
 4. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
 5. Stop conditions from `AGENTS.md`, `.systems/ai/core/operating-model.md`, risk, permissions, commands, Definition of Done, and prompt-injection policy.
 6. `.systems/ai/core/guide.md`, `.systems/ai/core/change-requests.md`, and `.systems/ai/core/command-routing.md` for lost-user, short-command, recovery, owner change request, rollback, side-task, micro-task, micro-project, and autopilot routing.
-7. Fresh install defaults: if repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
+7. Fresh install defaults: if `AI_WORKFLOW_WORKSPACE_HOME` is missing or init status is unknown, recommend `phase-0-init`; if init is ready but repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
 
 If these sources conflict, recommend recovery or reconciliation instead of guessing.
 

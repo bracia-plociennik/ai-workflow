@@ -28,7 +28,7 @@ Use `target-repo` mode when AI Workflow is cloned into another repository as a n
 - `AI_WORKFLOW_HOME` is `<TARGET_REPO_ROOT>/ai-workflow`.
 - `TARGET_REPO_ROOT` is the parent application repository.
 - `AI_WORKFLOW_WORKSPACE_HOME` is normally `<TARGET_REPO_ROOT>/ai-workflow-workspace`.
-- The target root may have a local-only `AGENTS.md` shim created by `.systems/scripts/init-workspace`.
+- The target root may have a local-only `AGENTS.md` shim created by `phase-0-init`.
 - The target repository should not commit `ai-workflow/` or the root shim.
 - The target repository may commit `ai-workflow-workspace/` when it contains repo/project runtime facts.
 

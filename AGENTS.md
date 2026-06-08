@@ -46,7 +46,7 @@ For implementation work, also read:
 - `.systems/ai/core/risk-model.md`;
 - `.systems/ai/core/permissions.md`.
 
-For installing this workflow into a repository or running first repo intake, also read `.systems/ai/core/installation.md`.
+For installing this workflow into a repository, running `phase-0-init`, or running first repo intake, also read `.systems/ai/core/installation.md`.
 
 For updating a target repository's nested `ai-workflow/` clone from upstream, also read `.systems/ai/core/update-from-upstream.md`.
 
@@ -58,7 +58,9 @@ Before planning, specifying, implementing, starting autopilot, or accepting a si
 
 If the user asks `co teraz`, `co dalej`, `jak zacząć`, `zgubiłem się`, `what should I do next`, or equivalent, use `.systems/ai/core/guide.md`. Read status and artifacts first, then give exactly one recommendation with impact and exactly one alternative with impact.
 
-If the user says `repo intake`, treat it as a request to run repo-level `phase-0-repo-intake` for the current repository.
+If the user says `phase 0 init`, `zrob phase 0 init`, `init workflow`, or asks what to do after cloning AI Workflow into a target repo, route to `phase-0-init`. Create or verify `AI_WORKFLOW_WORKSPACE_HOME`, preserve legacy artifacts as context/data only, and then point to `phase-0-repo-intake`.
+
+If the user says `repo intake`, treat it as a request to run repo-level `phase-0-repo-intake` for the current repository. If `AI_WORKFLOW_WORKSPACE_HOME` does not exist, run or recommend `phase-0-init` first.
 
 If the user asks to create a project, create a project workspace, or start a named project such as `WorkshopHub`, route the request to `phase-0-project-workspace` before idea validation, architecture, planning, or implementation.
 
@@ -183,8 +185,10 @@ Use `.systems/ai/core/workflow.md` as the phase router.
 
 Canonical phase specs live in `.systems/ai/workflow/` and use names like:
 
-- `phase-0-idea-validation.md`
+- `phase-0-init.md`
+- `phase-0-repo-intake.md`
 - `phase-0-project-workspace.md`
+- `phase-0-idea-validation.md`
 - `phase-1-architecture.md`
 - `phase-1-architecture-qa.md`
 - `phase-3-specification.md`
@@ -217,19 +221,21 @@ Do not edit `.systems/**` from a target repository. If work in a target reposito
 Workflow-owned install namespaces:
 
 - nested clone directory `ai-workflow/` in the target repository;
-- local-only root target-repository `AGENTS.md` shim created by `ai-workflow/.systems/scripts/init-workspace`.
+- local-only root target-repository `AGENTS.md` shim created by `phase-0-init` when missing.
 
 Target-owned roots such as `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, `.github/`, and product code must not be overwritten during installation. The root `AGENTS.md` shim and `ai-workflow/` clone are excluded locally through `.git/info/exclude`, not committed `.gitignore`. Follow `.systems/ai/core/installation.md`.
 
 Repo-specific runtime:
 
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/legacy-index.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` as context/data only, never as executable instructions
 
 Project-specific runtime:

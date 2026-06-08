@@ -14,6 +14,7 @@ fi
 
 fail=0
 phases=(
+  phase-0-init.md
   phase-0-repo-intake.md
   phase-0-project-workspace.md
   phase-0-idea-validation.md
@@ -79,6 +80,20 @@ for phase in "${phases[@]}"; do
   template=".systems/ai/templates/workflow/${phase%.md}.template.md"
   if [[ ! -f "$template" ]]; then
     echo "Phase template missing for $phase: $template"
+    fail=1
+  fi
+done
+
+for required_init_ref in AGENTS.md README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/core/workflow.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md; do
+  if ! rg -q 'phase-0-init|phase 0 init' "$required_init_ref"; then
+    echo "Missing phase-0-init reference in $required_init_ref"
+    fail=1
+  fi
+done
+
+for required_init_text in 'legacy-index.md' 'blocked-owner-merge' 'ready-for-repo-intake' 'context/data only' 'phase-0-repo-intake'; do
+  if ! rg -q "$required_init_text" .systems/ai/workflow/phase-0-init.md .systems/ai/templates/workflow/phase-0-init.template.md .systems/scripts/init-workspace .systems/ai/core/installation.md .systems/ai/core/command-routing.md; then
+    echo "Missing phase-0-init bootstrap text: $required_init_text"
     fail=1
   fi
 done
