@@ -124,6 +124,12 @@ phase 0 init after cloning AI Workflow into a target repo
 -> owner final approval
 ```
 
+Autopilot does not replace this route. It may execute only declared ranges from `.systems/ai/core/autopilot.md`:
+
+- `planning-range`: phase 1 architecture through phase 3 Spec QA, then stop before implementation.
+- `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8.
+- `phase-8-final-check` is owner-triggered only and must not be started automatically by autopilot.
+
 ## Phase File Contract
 
 Each phase file must include this exact gate block:
@@ -179,7 +185,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | owner comments before final-owner-yes, post-final correction/addition/removal | use `change-requests.md` plus the routed phase, fix loop, micro-task, iteration, rollback, or new project |
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
 | micro-project | use `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/` and the micro-project contract in `operating-model.md` |
-| autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, and current task/package gates |
+| autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, declared `planning-range` or `implementation-range`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |
 | decision review, rollback, resume, skills check | use `command-routing.md` to choose the safe phase or stop condition |

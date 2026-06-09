@@ -364,6 +364,13 @@ Utwórz micro-project: <opis>. Zapisz go w AI_WORKFLOW_WORKSPACE_HOME/micro-proj
 
 ### Autopilot / autonomous execution
 
+Autopilot ma dwa formalne zakresy:
+
+- `planning-range`: od phase 1 architecture do phase 3 Spec QA dla wszystkich tasków/paczek, potem stop przed implementacją.
+- `implementation-range`: od phase 4 implementation do wymaganego phase 7 checkpoint, potem stop przed phase 8.
+
+`phase-8-final-check` odpala tylko owner. Autopilot nie powinien sam uruchamiać final checku.
+
 Pełne:
 
 ```text
@@ -385,6 +392,18 @@ AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.
 ```
 
 Ten artefakt zbiera potencjalne blokery i decyzje ownera: brakujące QA, brak safe env, high-risk approvals, external effects, migracje, sekrety, produkcyjne dane, niespójności statusu, blokujące change requesty i brak evidence expectations. Autopilot może wejść w `running` dopiero, gdy `readiness-result` ma wartość `ready`.
+
+Planning autopilot:
+
+```text
+Uruchom planning autopilot dla WorkshopHub od phase 1 architecture do phase 3 Spec QA dla wszystkich tasków z planu. Najpierw przygotuj readiness audit, wypisz blokery i decyzje ownera, nie implementuj kodu produktu i zatrzymaj się przed phase 4.
+```
+
+Implementation autopilot:
+
+```text
+Uruchom implementation autopilot dla WorkshopHub od phase 4 do phase 7. Najpierw przygotuj readiness audit, po każdej implementacji uruchom quality/fix/distillation, przed kolejnym taskiem odśwież spec QA jeśli poprzedni task zmienił założenia, wykonaj checkpoint po każdych 3 taskach i po ostatnim tasku, a potem zatrzymaj się przed phase 8.
+```
 
 Pełne sprawdzenie gotowości:
 
@@ -764,7 +783,13 @@ To nadal nie oznacza, że wolno oznaczyć `PASS` bez evidence. Jeśli `npm run b
 
 Innego dnia się spieszysz i chcesz, żeby Codex wykonał serię gotowych tasków.
 
-Prompt:
+Planning autopilot prompt:
+
+```text
+Start planning autopilot for WorkshopHub from phase 1 architecture through phase 3 Spec QA for all planned tasks. First create readiness.md, list blockers and owner decisions, do not write product code, and stop before implementation.
+```
+
+Implementation autopilot prompt:
 
 ```text
 Start supervised autopilot for ready low/medium-risk WorkshopHub tasks only. Do not execute high-risk payment, mail, migration, production, or external API actions without owner approval. Commit only after QUALITY PASS.
@@ -772,7 +797,20 @@ Start supervised autopilot for ready low/medium-risk WorkshopHub tasks only. Do 
 
 Codex nie powinien od razu zaczynać implementacji. Najpierw powinien przygotować `AI_WORKFLOW_WORKSPACE_HOME/projects/workshophub/autopilot/runs/autopilot-001/readiness.md`, wypisać decyzje ownera i dopiero po `readiness-result: ready` przejść do `running`.
 
-Autopilot nadal musi przejść:
+Planning autopilot przechodzi przez:
+
+```text
+architecture
+-> architecture QA / fix loop
+-> plan
+-> plan QA / fix loop
+-> packaging
+-> packaging QA / fix loop
+-> spec + Spec QA / fix loop dla wszystkich tasków
+-> stop przed implementation
+```
+
+Implementation autopilot przechodzi przez:
 
 ```text
 spec refresh/create
@@ -781,8 +819,8 @@ spec refresh/create
 -> quality
 -> fix loop, jeśli FAIL
 -> distillation
--> checkpoint, jeśli wypada
--> next task
+-> checkpoint po każdych 3 taskach i po ostatnim tasku
+-> stop przed phase 8
 ```
 
 Autopilot powinien zrobić STOP, jeśli trafi na:
@@ -1236,8 +1274,26 @@ Autopilot to nie jest tryb "rób wszystko bez zasad". To deterministyczna pętla
 
 Typowy cykl autopilota:
 
+Planning autopilot:
+
 ```text
-preflight
+readiness
+-> owner decisions, jeśli potrzebne
+-> phase 1 architecture
+-> architecture QA / fix loop
+-> phase 2 project plan
+-> plan QA / fix loop
+-> task packaging
+-> packaging QA / fix loop
+-> phase 3 specification + Spec QA / fix loop dla wszystkich tasków
+-> stop przed implementacją
+```
+
+Implementation autopilot:
+
+```text
+readiness
+-> owner decisions, jeśli potrzebne
 -> spec refresh/create
 -> spec QA
 -> spec fix loop, jeśli FAIL
@@ -1245,11 +1301,12 @@ preflight
 -> quality
 -> fix loop, jeśli FAIL
 -> distillation
--> checkpoint, jeśli wypada
+-> checkpoint po każdych 3 taskach i po ostatnim tasku
 -> next task
--> final check
--> awaiting-owner-final-yes
+-> stop przed phase 8
 ```
+
+Final check jest osobną owner-triggered fazą. Owner odpala go dopiero po zakończonym implementation autopilocie i finalnym checkpointcie.
 
 Przed każdą fazą Codex powinien sprawdzić:
 
@@ -1424,7 +1481,9 @@ Przed pierwszym autopilotem w nowym repo trzeba ustalić:
 - retry budget;
 - final owner approval protocol.
 
-Nie startuj autopilota w nowym repo bez intake, architektury, Architecture QA, planu, Plan QA, packaging decision, specs i Spec QA.
+Nie startuj `planning-range` bez repo intake, zaakceptowanego project contextu, safe commands i readiness audit.
+
+Nie startuj `implementation-range` bez intake, architektury, Architecture QA, planu, Plan QA, packaging decision, specs, Spec QA i readiness audit.
 
 ## Antywzorce
 

@@ -4,6 +4,8 @@
 
 This repository is a portable workflow system for AI-assisted planning, gated implementation, QA evidence, distillation, checkpoints, and optional autopilot execution.
 
+Autopilot has two formal ranges: `planning-range` for phase 1 architecture through phase 3 Spec QA, and `implementation-range` for phase 4 implementation through required phase 7 checkpoint. `phase-8-final-check` is owner-triggered only.
+
 The recommended installation model is a nested clone inside a target repository:
 
 ```bash

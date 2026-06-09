@@ -8,11 +8,15 @@ This file records state. It does not replace `status.md`, `.systems/ai/workflow/
 autopilot:
   run-id: <autopilot-001>
   mode: none # supervised | semi-autonomous | autonomous-execution
+  range: none # planning-range | implementation-range | none
   status: not-running # not-running | running | stopped | awaiting-owner | completed
   active-project: <project>
   readiness-artifact: null
   readiness-result: draft # draft | blocked | awaiting-owner | ready | superseded
   owner-actions-status: not-started # not-started | pending | resolved | not-applicable
+  start-phase: null
+  stop-phase: null
+  stop-condition: null
   started-at: null
   updated-at: null
 
@@ -41,8 +45,10 @@ budget:
 progress:
   completed-tasks: []
   completed-distillations-since-checkpoint: 0
+  checkpoint-required-now: false
   last-checkpoint: null
   final-checkpoint-required: true
+  final-check-owner-only: true
 
 blockers: []
 

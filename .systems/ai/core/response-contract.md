@@ -110,7 +110,13 @@ Recommendation can close the micro artifact with evidence or perform the next lo
 
 ### Autopilot
 
-Recommendation can start or continue supervised autopilot only when gates allow it and run-scoped readiness is `ready`. If readiness is missing, blocked, or awaiting owner decisions, recommendation must create/update `readiness.md` or resolve the top blocker before implementation. Alternative should be manual execution or dry-run/status review. High-risk and critical-risk work must route to approval or human-led execution.
+Recommendation can start or continue supervised autopilot only when gates allow it, the requested range is clear, and run-scoped readiness is `ready`. If readiness is missing, blocked, or awaiting owner decisions, recommendation must create/update `readiness.md` or resolve the top blocker before the requested range. Alternative should be manual execution or dry-run/status review. High-risk and critical-risk work must route to approval or human-led execution.
+
+For autopilot, the footer must distinguish:
+
+- `planning-range`: phase 1 architecture through phase 3 Spec QA, then stop before implementation;
+- `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8;
+- owner-triggered `phase-8-final-check`, which must not be recommended as an automatic autopilot step.
 
 ## Quality Bar
 

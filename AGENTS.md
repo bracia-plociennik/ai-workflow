@@ -68,6 +68,13 @@ If the user rejects final closure, gives comments before `final-owner-yes`, or a
 
 If the user gives a short command such as `Zaimplementuj taski 01-16`, first resolve the active project, task IDs, scope, risk, phase, safe environment, approval state, and required evidence from status, task index, plan, specs, and repo intake. If the command is clear and gates are satisfied, route it to the safest matching workflow phase or autopilot path.
 
+If the user asks for autopilot, resolve the requested range before execution:
+
+- `planning-range`: phase 1 architecture through phase 3 Spec QA, then stop before implementation;
+- `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8.
+
+Autopilot must not run `phase-8-final-check`; final check is owner-triggered only.
+
 If a blocking detail is missing, ask before continuing. The clarification must include:
 
 - recommended interpretation and its impact;

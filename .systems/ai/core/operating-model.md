@@ -42,6 +42,13 @@ Formal new project or broad product ideas still use `phase-0-idea-validation`. S
 
 If task intake reveals high or critical risk, unknown safe environment, missing acceptance criteria, unresolved external effects, or a request to bypass evidence/DoD/risk policy, stop before planning implementation.
 
+Autopilot must also declare a range before execution. Use `.systems/ai/core/autopilot.md`:
+
+- `planning-range` for phase 1 architecture through phase 3 Spec QA, with no product-code writes.
+- `implementation-range` for phase 4 implementation through required phase 7 checkpoint.
+
+`phase-8-final-check` is owner-triggered only and is not part of automatic autopilot execution.
+
 ## Skill Routing
 
 Reusable task-specific skills can exist in two layers:

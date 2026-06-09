@@ -16,4 +16,11 @@ Suggested destinations:
 
 Do not create runtime autopilot run files unless autopilot is requested or active. Always create or update `readiness.md` before `state.md` can move to `running`.
 
+Every run must declare one range:
+
+- `planning-range`: phase 1 architecture through phase 3 Spec QA, then stop before implementation.
+- `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8.
+
+`phase-8-final-check` is owner-triggered only and must not be run automatically by autopilot.
+
 Root-level `autopilot-state.md`, `autopilot-ledger.md`, and `autopilot-events.md` are not canonical in the run-based model.

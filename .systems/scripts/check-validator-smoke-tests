@@ -154,6 +154,10 @@ mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md" "$tmp/.systems/a
 run_must_fail "missing-autopilot-readiness-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md.bak" "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
 
+perl -0pi -e 's/planning-range/planning_range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
+run_must_fail "missing-autopilot-range-in-readiness" .systems/scripts/validate-workflow
+perl -0pi -e 's/planning_range/planning-range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
+
 mv "$tmp/.systems/ai/templates/projects/micro-task.template.md" "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak"
 run_must_fail "missing-micro-task-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak" "$tmp/.systems/ai/templates/projects/micro-task.template.md"

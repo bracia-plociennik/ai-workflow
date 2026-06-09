@@ -175,6 +175,25 @@ for required_autopilot_readiness_text in 'readiness-result: ready' 'blocked' 'aw
   fi
 done
 
+for required_autopilot_range_ref in .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/core/guide.md .systems/ai/templates/autopilot/readiness.template.md .systems/ai/templates/autopilot/state.template.md .systems/ai/templates/autopilot/run-readme.template.md; do
+  if ! rg -q 'planning-range' "$required_autopilot_range_ref"; then
+    echo "Missing planning-range reference in $required_autopilot_range_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'implementation-range' "$required_autopilot_range_ref"; then
+    echo "Missing implementation-range reference in $required_autopilot_range_ref"
+    fail=1
+  fi
+done
+
+for required_autopilot_owner_only_text in 'owner-triggered only' 'must not automatically run `phase-8-final-check`' 'stop before phase 8'; do
+  if ! rg -q "$required_autopilot_owner_only_text" .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/templates/autopilot/readiness.template.md; then
+    echo "Missing owner-only final check text: $required_autopilot_owner_only_text"
+    fail=1
+  fi
+done
+
 for required_ownership_ref in AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/operating-model.md; do
   if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/skills/' "$required_ownership_ref"; then
     echo "Missing workspace skills reference in $required_ownership_ref"
