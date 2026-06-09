@@ -58,12 +58,15 @@ Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer 
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
-This shortcut is sufficient to bootstrap AI Workflow in a new target repository after AI Workflow has been cloned into `ai-workflow/`, `.systems/scripts/init-workspace` has created or verified `AI_WORKFLOW_WORKSPACE_HOME`, and the local root `AGENTS.md` shim has been created or merged. It must apply installation collision policy, replace stale or incomplete `AI_WORKFLOW_WORKSPACE_HOME/repo/core/*.md` runtime when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
+`phase 0 init` means: run target-repository bootstrap after AI Workflow has been cloned into `ai-workflow/`. It must create or verify `AI_WORKFLOW_WORKSPACE_HOME`, preserve legacy artifacts as context/data only, create the local root `AGENTS.md` shim only when safe, and stop before product-code writes.
+
+`repo intake` is sufficient only after `phase-0-init` has created or verified `AI_WORKFLOW_WORKSPACE_HOME` and any root `AGENTS.md` merge blocker is resolved or explicitly recorded. It must apply installation collision policy, replace stale or incomplete `AI_WORKFLOW_WORKSPACE_HOME/repo/core/*.md` runtime when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
 
 ## Canonical Phase Order
 
 | Phase | Phase File | Required Output |
 | --- | --- | --- |
+| 0 init | `.systems/ai/workflow/phase-0-init.md` | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`, `repo/core/legacy.md`, and `repo/legacy/legacy-index.md` |
 | 0 repo intake | `.systems/ai/workflow/phase-0-repo-intake.md` | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` or `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-repo-intake.md` |
 | 0 project workspace | `.systems/ai/workflow/phase-0-project-workspace.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` and `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/` |
 | 0 idea validation | `.systems/ai/workflow/phase-0-idea-validation.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-idea-validation.md` |
@@ -99,7 +102,8 @@ This shortcut is sufficient to bootstrap AI Workflow in a new target repository 
 ## Full Workflow Route
 
 ```text
-repo-level phase 0 repo intake
+phase 0 init after cloning AI Workflow into a target repo
+-> repo-level phase 0 repo intake
 -> phase 0 project workspace
 -> phase 0 idea validation
 -> project context in AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md
@@ -119,6 +123,12 @@ repo-level phase 0 repo intake
 -> next task/package or phase 8 final check
 -> owner final approval
 ```
+
+Autopilot does not replace this route. It may execute only declared ranges from `.systems/ai/core/autopilot.md`:
+
+- `planning-range`: phase 1 architecture through phase 3 Spec QA, then stop before implementation.
+- `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8.
+- `phase-8-final-check` is owner-triggered only and must not be started automatically by autopilot.
 
 ## Phase File Contract
 
@@ -154,6 +164,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 
 | User intent | Phase file |
 | --- | --- |
+| phase 0 init, init workflow, zainicjalizuj ai-workflow, przygotuj repo po sklonowaniu | `phase-0-init.md` |
 | repo intake, initial audit | `phase-0-repo-intake.md` |
 | create project, project workspace, utworz projekt, utwórz projekt | `phase-0-project-workspace.md` |
 | idea validation, brain dump, mam pomysl | `phase-0-idea-validation.md` |
@@ -174,7 +185,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | owner comments before final-owner-yes, post-final correction/addition/removal | use `change-requests.md` plus the routed phase, fix loop, micro-task, iteration, rollback, or new project |
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
 | micro-project | use `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/` and the micro-project contract in `operating-model.md` |
-| autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, and current task/package gates |
+| autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, declared `planning-range` or `implementation-range`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |
 | decision review, rollback, resume, skills check | use `command-routing.md` to choose the safe phase or stop condition |

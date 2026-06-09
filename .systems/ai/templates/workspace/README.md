@@ -4,7 +4,7 @@
 
 These templates create the target-owned `AI_WORKFLOW_WORKSPACE_HOME` directory, normally `ai-workflow-workspace/` beside the nested `ai-workflow/` clone.
 
-The public `ai-workflow` template does not track active runtime workspace files on `main`. Use `.systems/scripts/init-workspace` to create a fresh workspace in a target repository.
+The public `ai-workflow` template does not track active runtime workspace files on `main`. Use `phase-0-init`, backed by `.systems/scripts/init-workspace`, to create a fresh workspace in a target repository.
 
 ## Template Families
 

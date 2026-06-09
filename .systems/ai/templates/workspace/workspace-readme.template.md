@@ -14,7 +14,7 @@ The nested `ai-workflow/` clone is system-owned and should stay local to the tar
 
 ## Layout
 
-- `repo/` - repository-level context, status, intake, memory, and legacy context.
+- `repo/` - repository-level init, context, status, intake, memory, and legacy context.
 - `projects/` - full project workspaces.
 - `humans/` - owner-facing project artifacts.
 - `micro-projects/` - small low-risk repo-level work items.
@@ -27,3 +27,5 @@ The nested `ai-workflow/` clone is system-owned and should stay local to the tar
 - Do not edit `ai-workflow/.systems/**` from a target repository.
 - If the workflow itself needs an improvement, record it in `external-memory/`.
 - Do not store secrets, credentials, production data dumps, build caches, dependencies, or generated artifacts here.
+- `repo/core/init.md` records phase 0 init status.
+- `repo/legacy/legacy-index.md` records preserved legacy context from target-owned files.

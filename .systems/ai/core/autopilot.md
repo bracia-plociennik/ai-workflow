@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file defines how Codex may run implementation-stage workflow autonomously after required gates pass.
+This file defines how Codex may run workflow ranges autonomously after the matching readiness gates pass.
 
 It does not replace:
 
@@ -12,6 +12,66 @@ It does not replace:
 - `.systems/ai/core/risk-model.md`
 - current phase files under `.systems/ai/workflow/`
 
+## Autopilot Ranges
+
+Autopilot has explicit ranges. A run must declare exactly one range in `readiness.md` before it can enter `running`.
+
+### `planning-range`
+
+`planning-range` covers pre-implementation project design work:
+
+```text
+phase-1-architecture
+-> phase-1-architecture-qa
+-> phase-1-architecture-fix-loop when needed
+-> phase-2-project-plan
+-> phase-2-plan-qa
+-> phase-2-plan-fix-loop when needed
+-> phase-2-task-packaging
+-> phase-2-packaging-qa when packages exist
+-> phase-2-package-fix-loop when needed
+-> phase-3-specification for every planned task/package
+-> phase-3-spec-qa for every planned task/package
+-> phase-3-spec-fix-loop when needed
+-> stop before implementation
+```
+
+`planning-range` may write workflow artifacts only. It must not write product code. Its output is a project state that is ready or not ready for implementation-range.
+
+### `implementation-range`
+
+`implementation-range` covers task execution after planning gates are satisfied:
+
+```text
+phase-3-specification refresh for current task/package when needed
+-> phase-3-spec-qa
+-> phase-3-spec-fix-loop when needed
+-> phase-4-implementation
+-> phase-5-quality
+-> phase-5-fix-loop when needed
+-> phase-6-distillation
+-> phase-7-checkpoint when checkpoint cadence requires it
+-> next task/package
+-> final phase-7-checkpoint after the last task/package
+-> stop before phase 8
+```
+
+Before implementing task/package `N+1`, Codex must review the previous implementation result, quality evidence, distillation, checkpoint state, project memory, repo memory, decisions, and drift findings. If task/package `N` changed assumptions for `N+1`, Codex must refresh the `N+1` spec and rerun Spec QA before implementation.
+
+For implementation-range, checkpoint after every 3 completed tasks/packages and after the final task/package is a hard autopilot gate. Autopilot must stop or run `phase-7-checkpoint` before continuing when the checkpoint cadence is reached.
+
+### Owner-only `phase-8-final-check`
+
+`phase-8-final-check` is owner-triggered only.
+
+Autopilot must not automatically run `phase-8-final-check`.
+
+After planning-range, autopilot stops before implementation.
+
+After implementation-range, autopilot stops after the final required `phase-7-checkpoint` and reports whether the project appears ready for owner-triggered final check.
+
+Only the owner can start `phase-8-final-check` with an explicit request. Technical final check still cannot close the project without `final-owner-yes`.
+
 ## Start Conditions
 
 Autopilot may start only when:
@@ -19,15 +79,27 @@ Autopilot may start only when:
 - the user explicitly requests autonomous execution or project status says autopilot is active;
 - run-scoped readiness audit exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md`;
 - readiness audit has `readiness-result: ready`;
+- readiness audit declares `requested-range` as `planning-range` or `implementation-range`;
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` exist;
 - active project status exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`;
+- risk class permits autopilot under `.systems/ai/core/risk-model.md`;
+- required commands are known through `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` and `.systems/ai/core/commands.md`.
+
+Additional `planning-range` start conditions:
+
+- accepted project context exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`;
+- project/context repo intake is complete enough to identify safe commands, restricted zones, and external-effect policy;
+- missing architecture, plan, packaging, and specs are expected outputs of the range and must be listed as planned writes, not blockers;
+- owner decisions needed before architecture or planning are resolved or listed as `awaiting-owner`.
+
+Additional `implementation-range` start conditions:
+
 - architecture and Architecture QA have `PASS`;
 - project plan and Plan QA have `PASS`;
 - task packaging is complete or explicitly skipped;
-- the next task/package spec exists;
-- Spec QA has `PASS`;
-- risk class permits autopilot under `.systems/ai/core/risk-model.md`;
-- required commands are known through `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` and `.systems/ai/core/commands.md`.
+- the first task/package spec exists;
+- Spec QA for the first task/package has `PASS`;
+- implementation write scope is limited to the accepted spec and approved task/package range.
 
 ## Runtime Files
 
@@ -52,7 +124,7 @@ Before starting or resuming autopilot, Codex must create or update the run-scope
 AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md
 ```
 
-The readiness audit checks every likely blocker before implementation begins:
+The readiness audit checks every likely blocker before the requested range begins:
 
 - repo context, repo intake, repo status, command map, safe environment, restricted zones, and git policy;
 - active project status, project context, architecture, plan, packaging, tasks, specs, quality expectations, decisions, change requests, escalations, checkpoints, and previous autopilot runs;
@@ -73,22 +145,7 @@ If no run exists, create the next `autopilot-XXX` directory and fill `readiness.
 
 ## State Machine
 
-```text
-readiness audit
--> owner decisions when needed
--> readiness ready
--> spec refresh/create
--> spec QA
--> spec fix loop when needed
--> implementation
--> quality
--> fix loop when needed
--> distillation
--> checkpoint when cadence requires it
--> next task/package
--> final check
--> awaiting owner final approval
-```
+Use the range state machines above. Do not run `phase-8-final-check` from autopilot.
 
 ## Default Execution Rules
 
@@ -106,6 +163,7 @@ readiness audit
 - Max 2 Quality fix loops per task/package.
 - Max 32 total retries per 16-task autopilot run unless a project decision overrides it.
 - Checkpoint after every 3 completed tasks/packages and after the final task/package.
+- In `implementation-range`, checkpoint cadence is a hard gate. Do not continue to the next task/package when the cadence is reached until `phase-7-checkpoint` is complete or the owner explicitly stops autopilot.
 
 ## Git Policy
 

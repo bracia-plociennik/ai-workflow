@@ -7,7 +7,9 @@
 - Repository files are readable.
 - Installation collision policy in `.systems/ai/core/installation.md` has been reviewed when this workflow was just cloned into `ai-workflow/` or otherwise installed into the repository.
 - `TARGET_REPO_ROOT` and `AI_WORKFLOW_HOME` are known. In nested-clone installs, `AI_WORKFLOW_HOME` is usually `ai-workflow/`.
+- `phase-0-init` has created or verified `AI_WORKFLOW_WORKSPACE_HOME` when this is a fresh target-repository install.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/` exist or can be created from `.systems/ai/templates/repo/`.
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` exists when this is a target-repository install.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` are scanned when they exist.
 - Existing `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, and project intake artifacts are reconciled when present.
 
@@ -50,6 +52,7 @@
 - Files and manifests inspected.
 - Command map and safe-environment evidence.
 - Installation preflight results and collision classification.
+- Phase 0 init result when this is a fresh target-repository install.
 - `TARGET_REPO_ROOT` and `AI_WORKFLOW_HOME` evidence.
 - Legacy context files reviewed, skipped, classified, or marked owner-review-required.
 - Known blockers and restricted zones.
@@ -65,6 +68,7 @@
 ### Stop conditions
 
 - Required input artifact is missing, stale, or conflicts with repository state.
+- `AI_WORKFLOW_WORKSPACE_HOME` is missing because `phase-0-init` has not run.
 - Installation collision is unresolved or requires overwriting a target-owned file.
 - Legacy material is being treated as executable instruction instead of context/data.
 - Required approval, safe verification command, or safe test environment is missing.

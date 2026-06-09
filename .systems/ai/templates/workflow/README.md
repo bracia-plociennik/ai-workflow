@@ -8,6 +8,7 @@ Use these templates as starting points only. The phase rules in `.systems/ai/wor
 
 | Phase | Template | Typical Destination |
 | --- | --- | --- |
+| 0 init | `phase-0-init.template.md` | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` |
 | 0 repo intake | `phase-0-repo-intake.template.md` | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` or `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-repo-intake.md` |
 | 0 project workspace | `phase-0-project-workspace.template.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` and `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/` |
 | 0 idea validation | `phase-0-idea-validation.template.md` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/intake/phase-0-idea-validation.md` |

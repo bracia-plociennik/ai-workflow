@@ -118,7 +118,7 @@ if [[ -e "$workspace_home" ]]; then
   echo "Target-owned workspace is outside the nested clone and will not be touched."
 else
   echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home (not found)"
-  echo "Continuing because update-from-upstream only updates the nested clone. Run .systems/scripts/init-workspace if this is a fresh install."
+  echo "Continuing because update-from-upstream only updates the nested clone. Run phase-0-init if this is a fresh install."
 fi
 
 while IFS= read -r -d '' entry; do

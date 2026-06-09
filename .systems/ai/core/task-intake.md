@@ -84,7 +84,9 @@ If the request changes, corrects, removes, or adds scope before or after `final-
 
 ### Autopilot
 
-If the request starts or resumes autopilot, validate the task set before execution. Autopilot is allowed only when tasks, risk classes, safe environment, approvals, gates, evidence, and stop conditions are clear.
+If the request starts or resumes autopilot, validate the requested range and task set before execution. Autopilot is allowed only when the range, tasks, risk classes, safe environment, approvals, gates, evidence, and stop conditions are clear.
+
+Use `planning-range` when the owner wants Codex to run phase 1 architecture through phase 3 Spec QA and then stop before implementation. Use `implementation-range` when the owner wants Codex to run phase 4 implementation through required phase 7 checkpoint and then stop before owner-triggered final check.
 
 ### High Or Critical Risk
 

@@ -56,7 +56,7 @@ Choose the recommendation from the highest applicable source:
 4. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, active project `status.md`, `tasks.md`, current plan, spec, quality evidence, decisions, checkpoint, or autopilot run state.
 5. Stop conditions from `AGENTS.md`, `.systems/ai/core/operating-model.md`, risk, permissions, commands, Definition of Done, and prompt-injection policy.
 6. `.systems/ai/core/guide.md`, `.systems/ai/core/change-requests.md`, and `.systems/ai/core/command-routing.md` for lost-user, short-command, recovery, owner change request, rollback, side-task, micro-task, micro-project, and autopilot routing.
-7. Fresh install defaults: if repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
+7. Fresh install defaults: if `AI_WORKFLOW_WORKSPACE_HOME` is missing or init status is unknown, recommend `phase-0-init`; if init is ready but repo runtime is missing or stale, recommend repo intake; if repo intake is complete but no project workspace exists, recommend project workspace creation.
 
 If these sources conflict, recommend recovery or reconciliation instead of guessing.
 
@@ -110,7 +110,13 @@ Recommendation can close the micro artifact with evidence or perform the next lo
 
 ### Autopilot
 
-Recommendation can start or continue supervised autopilot only when gates allow it and run-scoped readiness is `ready`. If readiness is missing, blocked, or awaiting owner decisions, recommendation must create/update `readiness.md` or resolve the top blocker before implementation. Alternative should be manual execution or dry-run/status review. High-risk and critical-risk work must route to approval or human-led execution.
+Recommendation can start or continue supervised autopilot only when gates allow it, the requested range is clear, and run-scoped readiness is `ready`. If readiness is missing, blocked, or awaiting owner decisions, recommendation must create/update `readiness.md` or resolve the top blocker before the requested range. Alternative should be manual execution or dry-run/status review. High-risk and critical-risk work must route to approval or human-led execution.
+
+For autopilot, the footer must distinguish:
+
+- `planning-range`: phase 1 architecture through phase 3 Spec QA, then stop before implementation;
+- `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8;
+- owner-triggered `phase-8-final-check`, which must not be recommended as an automatic autopilot step.
 
 ## Quality Bar
 

@@ -94,12 +94,23 @@ mkdir -p \
   "$workspace_home/external-memory/memory" \
   "$workspace_home/skills"
 
+legacy_dir="$workspace_home/repo/legacy"
+legacy_router="$workspace_home/repo/core/legacy.md"
+legacy_index="$legacy_dir/legacy-index.md"
+init_artifact="$workspace_home/repo/core/init.md"
+legacy_preserved_count=0
+legacy_skipped_count=0
+legacy_owner_review_count=0
+root_agents_status="unknown"
+
 copy_template "$templates/workspace/workspace-readme.template.md" "$workspace_home/README.md"
 copy_template "$templates/workspace/repo/README.md" "$workspace_home/repo/README.md"
+copy_template "$templates/repo/init.template.md" "$init_artifact"
 copy_template "$templates/repo/context.template.md" "$workspace_home/repo/core/context.md"
 copy_template "$templates/repo/context-readme.template.md" "$workspace_home/repo/context/README.md"
 copy_template "$templates/repo/legacy.template.md" "$workspace_home/repo/core/legacy.md"
 copy_template "$templates/workspace/repo/legacy-readme.template.md" "$workspace_home/repo/legacy/README.md"
+copy_template "$templates/workspace/repo/legacy-index.template.md" "$legacy_index"
 copy_template "$templates/repo/repo-intake.template.md" "$workspace_home/repo/core/repo-intake.md"
 copy_template "$templates/repo/status.template.md" "$workspace_home/repo/core/status.md"
 copy_template "$templates/repo/memory.template.md" "$workspace_home/repo/core/memory.md"
@@ -112,18 +123,247 @@ copy_template "$templates/workspace/external-memory/external-memory.template.md"
 copy_template "$templates/workspace/external-memory/memory-readme.template.md" "$workspace_home/external-memory/memory/README.md"
 copy_template "$templates/workspace/skills/README.md" "$workspace_home/skills/README.md"
 
+perl -0pi -e 's/^\| `<original path or source>` \|.*\n//m' "$legacy_router"
+
+sanitize_table_cell() {
+  local value="$1"
+  value="${value//$'\n'/ }"
+  value="${value//|/-}"
+  printf '%s\n' "$value"
+}
+
+append_legacy_entry_once() {
+  local source="$1"
+  local preserved="$2"
+  local classification="$3"
+  local status="$4"
+  local notes="$5"
+  local row
+
+  source="$(sanitize_table_cell "$source")"
+  preserved="$(sanitize_table_cell "$preserved")"
+  classification="$(sanitize_table_cell "$classification")"
+  status="$(sanitize_table_cell "$status")"
+  notes="$(sanitize_table_cell "$notes")"
+  row="| \`$source\` | \`$preserved\` | \`$classification\` | \`$status\` | $notes |"
+
+  append_row_before_heading_once "$legacy_index" "## Safety Rules" "$source" "$row"
+  append_row_before_heading_once "$legacy_router" "## Classification Values" "$source" "$row"
+}
+
+append_row_before_heading_once() {
+  local file="$1"
+  local heading="$2"
+  local source="$3"
+  local row="$4"
+  local tmp_file
+
+  if grep -Fq "| \`$source\` |" "$file"; then
+    return 0
+  fi
+
+  tmp_file="$(mktemp "${TMPDIR:-/tmp}/ai-workflow-legacy-row.XXXXXX")"
+  awk -v heading="$heading" -v row="$row" '
+    $0 == heading && inserted == 0 {
+      print row
+      inserted=1
+    }
+    { print }
+    END {
+      if (inserted == 0) {
+        print row
+      }
+    }
+  ' "$file" > "$tmp_file"
+  mv "$tmp_file" "$file"
+}
+
+is_path_inside() {
+  local path="$1"
+  local root="$2"
+  [[ "$path" == "$root" || "$path" == "$root/"* ]]
+}
+
+is_sensitive_path() {
+  local rel="$1"
+  local base
+  base="$(basename "$rel")"
+
+  case "$base" in
+    .env|.env.*|id_rsa|id_dsa|id_ecdsa|id_ed25519|*.pem|*.key|*.p12|*.pfx)
+      return 0
+      ;;
+  esac
+
+  case "$rel" in
+    *secret*|*Secret*|*SECRET*|*credential*|*Credential*|*CREDENTIAL*|*token*|*Token*|*TOKEN*|*private-key*|*private_key*)
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
+is_generated_or_dependency_path() {
+  local rel="$1"
+  case "$rel" in
+    .git/*|ai-workflow/*|ai-workflow-workspace/*|workspace/*|node_modules/*|vendor/*|dist/*|build/*|coverage/*|.next/*|.cache/*|cache/*|tmp/*|temp/*|logs/*|storage/logs/*)
+      return 0
+      ;;
+  esac
+  return 1
+}
+
+is_legacy_text_candidate() {
+  local path="$1"
+  local base
+  base="$(basename "$path")"
+
+  case "$base" in
+    AGENTS.md|HUMANS.md|README.md|WORKFLOW.md|workflow.md|*.md|*.markdown|*.mdx|*.txt|*.rst|*.adoc|*.yaml|*.yml|*.json|*.toml|*.ini|*.conf|*.cfg|*.prompt|*.prompts|*.rules)
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
+record_skipped_legacy() {
+  local source="$1"
+  local status="$2"
+  local notes="$3"
+
+  append_legacy_entry_once "$source" "not-copied" "owner-decision" "$status" "$notes"
+  legacy_skipped_count=$((legacy_skipped_count + 1))
+  if [[ "$status" == "owner-review-required" ]]; then
+    legacy_owner_review_count=$((legacy_owner_review_count + 1))
+  fi
+}
+
+preserve_legacy_file() {
+  local source="$1"
+  local classification="${2:-keep-as-context}"
+  local status="${3:-pending}"
+  local notes="${4:-preserved during phase-0-init}"
+  local source_real rel destination size_bytes preserved_route
+
+  [[ -f "$source" ]] || return 0
+  source_real="$(cd "$(dirname "$source")" && pwd -P)/$(basename "$source")"
+
+  if is_path_inside "$source_real" "$ai_workflow_home" || is_path_inside "$source_real" "$workspace_home"; then
+    return 0
+  fi
+
+  rel="${source_real#$target_repo_root/}"
+  [[ "$rel" != "$source_real" ]] || return 0
+
+  if is_generated_or_dependency_path "$rel"; then
+    return 0
+  fi
+
+  if is_sensitive_path "$rel"; then
+    record_skipped_legacy "$rel" "owner-review-required" "not copied because path may contain secrets or credentials"
+    return 0
+  fi
+
+  if ! is_legacy_text_candidate "$source_real"; then
+    return 0
+  fi
+
+  size_bytes="$(wc -c < "$source_real" | tr -d ' ')"
+  if [[ "$size_bytes" -gt 1048576 ]]; then
+    record_skipped_legacy "$rel" "owner-review-required" "not copied because file is larger than 1 MiB"
+    return 0
+  fi
+
+  destination="$legacy_dir/$rel"
+  preserved_route="AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/$rel"
+
+  if [[ -e "$destination" ]]; then
+    echo "kept legacy: ${destination#$target_repo_root/}"
+  else
+    mkdir -p "$(dirname "$destination")"
+    cp -p "$source_real" "$destination"
+    echo "preserved legacy: $rel -> ${destination#$target_repo_root/}"
+  fi
+
+  append_legacy_entry_once "$rel" "$preserved_route" "$classification" "$status" "$notes"
+  legacy_preserved_count=$((legacy_preserved_count + 1))
+}
+
+scan_legacy_candidates() {
+  local root_files=(
+    AGENTS.md
+    HUMANS.md
+    README.md
+    WORKFLOW.md
+    workflow.md
+  )
+  local dirs=(
+    docs
+    .agents
+    .codex
+    .github
+    .systems
+  )
+  local file rel
+
+  for rel in "${root_files[@]}"; do
+    if [[ "$rel" == "AGENTS.md" ]]; then
+      preserve_legacy_file "$target_repo_root/$rel" "owner-decision" "pending" "existing root AGENTS.md requires owner merge with AI Workflow shim"
+    else
+      preserve_legacy_file "$target_repo_root/$rel" "keep-as-context" "pending" "target-owned root file preserved as legacy context"
+    fi
+  done
+
+  for rel in "${dirs[@]}"; do
+    [[ -d "$target_repo_root/$rel" ]] || continue
+    while IFS= read -r -d '' file; do
+      preserve_legacy_file "$file" "keep-as-context" "pending" "target-owned legacy directory entry preserved as context"
+    done < <(find "$target_repo_root/$rel" -maxdepth 5 -type f -print0)
+  done
+
+  while IFS= read -r -d '' file; do
+    preserve_legacy_file "$file" "keep-as-context" "pending" "matched legacy workflow/prompt/spec/runbook filename"
+  done < <(find "$target_repo_root" -maxdepth 3 -type f \( -iname '*workflow*' -o -iname '*prompt*' -o -iname '*spec*' -o -iname '*runbook*' -o -iname '*agent*' \) -print0)
+}
+
+record_init_summary() {
+  local status="$1"
+  local today
+  today="$(date +%F)"
+
+  cat >> "$init_artifact" <<EOF
+
+## Script Run $today
+
+| Field | Value |
+| --- | --- |
+| Init status | \`$status\` |
+| Target repo root | \`$target_repo_root\` |
+| AI Workflow home | \`$ai_workflow_home\` |
+| Workspace home | \`$workspace_home\` |
+| Root AGENTS status | \`$root_agents_status\` |
+| Legacy items preserved | \`$legacy_preserved_count\` |
+| Legacy items skipped | \`$legacy_skipped_count\` |
+| Legacy owner-review items | \`$legacy_owner_review_count\` |
+| Next phase | \`phase-0-repo-intake\` |
+EOF
+}
+
+scan_legacy_candidates
+
 if [[ "$create_root_agents" -eq 1 ]]; then
   root_agents="$target_repo_root/AGENTS.md"
   if [[ -e "$root_agents" ]]; then
     echo "AGENTS.md exists: not overwritten; owner merge required."
-    legacy_agents="$workspace_home/repo/legacy/agents.legacy.md"
-    if [[ ! -e "$legacy_agents" ]]; then
-      cp "$root_agents" "$legacy_agents"
-      echo "preserved legacy AGENTS.md as: ${legacy_agents#$target_repo_root/}"
-    fi
+    root_agents_status="owner-merge-required"
   else
     copy_template "$templates/root-agents.template.md" "$root_agents"
+    root_agents_status="created"
   fi
+else
+  root_agents_status="not-requested"
 fi
 
 if git -C "$target_repo_root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -131,9 +371,23 @@ if git -C "$target_repo_root" rev-parse --is-inside-work-tree >/dev/null 2>&1; t
   append_exclude_once "/ai-workflow/" "$target_repo_root"
 fi
 
+init_status="ready-for-repo-intake"
+if [[ "$root_agents_status" == "owner-merge-required" ]]; then
+  init_status="blocked-owner-merge"
+elif [[ "$legacy_owner_review_count" -gt 0 ]]; then
+  init_status="blocked-unsafe-legacy"
+fi
+
+record_init_summary "$init_status"
+
 echo
 echo "AI_WORKFLOW_HOME: $ai_workflow_home"
 echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home"
+echo "phase-0-init result: $init_status"
 echo
 echo "Next prompt:"
-echo "Run repo intake using AI_WORKFLOW_WORKSPACE_HOME=${workspace_home#$target_repo_root/}. Do not touch product code."
+if [[ "$init_status" == "ready-for-repo-intake" ]]; then
+  echo "Run repo intake using AI_WORKFLOW_WORKSPACE_HOME=${workspace_home#$target_repo_root/}. Do not touch product code."
+else
+  echo "Resolve phase-0-init blocker, then run repo intake using AI_WORKFLOW_WORKSPACE_HOME=${workspace_home#$target_repo_root/}. Do not touch product code."
+fi

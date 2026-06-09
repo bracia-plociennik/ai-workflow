@@ -9,6 +9,10 @@ readiness:
   run-id: <autopilot-001>
   project: <project>
   requested-mode: <supervised|semi-autonomous|autonomous-execution>
+  requested-range: <planning-range|implementation-range>
+  start-phase: <phase-1-architecture|phase-4-implementation|current-stable-phase>
+  stop-phase: <phase-3-spec-qa|phase-7-checkpoint>
+  stop-condition: <all-planned-specs-pass|final-checkpoint-complete|owner-stop|blocked>
   requested-scope: <task|task-range|package|remaining-ready-tasks>
   requested-by: <owner|operator|agent>
   created-at: null
@@ -52,15 +56,35 @@ scanned-sources:
     - .systems/ai/skills/
 
 gate-matrix:
+  project-context: <present|missing|stale|not-applicable>
+  project-context-intake: <pass|fail|missing|not-applicable>
   architecture-qa: <pass|fail|missing|not-applicable>
   project-plan-qa: <pass|fail|missing|not-applicable>
   task-packaging: <complete|skipped-with-reason|missing|not-applicable>
   spec-qa: <pass|fail|missing|not-applicable>
+  implementation-write-scope: <clear|blocked|not-applicable>
+  checkpoint-cadence: <clear|required|blocked|not-applicable>
+  final-check-owner-only: <confirmed|blocked>
   command-map: <known|missing|unsafe>
   safe-environment: <known|missing|unsafe>
   git-branch-policy: <clear|blocked|not-applicable>
   dirty-state-policy: <clear|blocked|not-applicable>
   evidence-expectations: <clear|missing|blocked>
+
+range-readiness:
+  planning-range:
+    accepted-project-context: <present|missing|not-applicable>
+    missing-architecture-plan-packaging-specs-are-expected-outputs: <yes|no|not-applicable>
+    product-code-writes: forbidden
+    stop-before-implementation: <confirmed|blocked|not-applicable>
+  implementation-range:
+    architecture-qa-pass: <yes|no|not-applicable>
+    plan-qa-pass: <yes|no|not-applicable>
+    first-spec-qa-pass: <yes|no|not-applicable>
+    spec-refresh-before-each-next-task: <confirmed|blocked|not-applicable>
+    hard-checkpoint-after-every-3-tasks: <confirmed|blocked|not-applicable>
+    final-checkpoint-after-last-task: <confirmed|blocked|not-applicable>
+    stop-before-phase-8: <confirmed|blocked|not-applicable>
 
 blockers:
   - id: <blocker-id>
@@ -102,4 +126,10 @@ owner-prompt:
 
 ## Readiness Decision
 
-`ready` is allowed only when every blocking item is `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, and command/safe-env/evidence gates are clear.
+`ready` is allowed only when every blocking item is `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied.
+
+For `planning-range`, missing architecture, plan, packaging, and specs are not blockers when they are explicit outputs of the run. Product-code writes are always forbidden.
+
+For `implementation-range`, missing Architecture QA PASS, Plan QA PASS, packaging decision, first Spec QA PASS, safe implementation write scope, or checkpoint policy is blocking.
+
+Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`.

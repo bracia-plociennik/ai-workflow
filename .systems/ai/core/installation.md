@@ -12,10 +12,21 @@ Run from the target repository root:
 
 ```bash
 git clone https://github.com/bracia-plociennik/ai-workflow.git ai-workflow
+```
+
+Then ask Codex to run phase 0 init:
+
+```text
+Zrób phase 0 init dla tego repo. Utwórz ai-workflow-workspace, zachowaj legacy artifacts jako context only, nie dotykaj product code, a potem powiedz co blokuje repo intake.
+```
+
+Codex may use:
+
+```bash
 ai-workflow/.systems/scripts/init-workspace
 ```
 
-The bootstrap script writes local-only install exclusions to `.git/info/exclude`, not to committed `.gitignore`.
+The bootstrap script creates `ai-workflow-workspace/`, preserves safe legacy context, and writes local-only install exclusions to `.git/info/exclude`, not to committed `.gitignore`.
 
 ## Path Resolution Contract
 
@@ -80,6 +91,23 @@ If root `AGENTS.md` already exists, preserve it as legacy context and merge the 
 
 The root `AGENTS.md` shim created by the bootstrap script is local-only by default. It is added to `.git/info/exclude` along with `/ai-workflow/`. Do not commit it unless the owner explicitly adopts that shim as target-owned repository policy.
 
+## Phase 0 Init
+
+`phase-0-init` is the first workflow step after cloning AI Workflow into a target repository.
+
+It must:
+
+- create or verify `AI_WORKFLOW_WORKSPACE_HOME`, normally `ai-workflow-workspace/`;
+- create `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`;
+- create or verify `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md`;
+- create or verify `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/legacy-index.md`;
+- preserve safe legacy artifacts as context/data only;
+- create the root `AGENTS.md` shim only when missing;
+- stop with `blocked-owner-merge` when root `AGENTS.md` already exists and owner merge is required;
+- route to `phase-0-repo-intake` only after bootstrap blockers are resolved or explicitly recorded.
+
+Allowed writes are limited to `AI_WORKFLOW_WORKSPACE_HOME/**`, target `.git/info/exclude`, and root `AGENTS.md` only when it does not already exist. Product-code writes are forbidden.
+
 ## Legacy Workflow Preservation
 
 Some target repositories already have agent instructions, workflow notes, prompt files, project specs, coding guidelines, architecture notes, or runbooks.
@@ -90,14 +118,16 @@ Preserve useful legacy material under:
 ai-workflow-workspace/repo/legacy/
 ```
 
-Example:
+Manual example:
 
 ```bash
 mkdir -p ai-workflow-workspace/repo/legacy
-[ -f AGENTS.md ] && cp AGENTS.md ai-workflow-workspace/repo/legacy/agents.legacy.md
-[ -f HUMANS.md ] && cp HUMANS.md ai-workflow-workspace/repo/legacy/humans.legacy.md
-[ -f README.md ] && cp README.md ai-workflow-workspace/repo/legacy/readme.legacy.md
+[ -f AGENTS.md ] && cp AGENTS.md ai-workflow-workspace/repo/legacy/AGENTS.md
+[ -f HUMANS.md ] && cp HUMANS.md ai-workflow-workspace/repo/legacy/HUMANS.md
+[ -f README.md ] && cp README.md ai-workflow-workspace/repo/legacy/README.md
 ```
+
+Prefer `phase-0-init` for normal installation because it creates the workspace, preserves legacy context, records `legacy-index.md`, and avoids copying sensitive or generated files.
 
 Preserved legacy files under `repo/legacy/` are exempt from `check-naming` because they are source context, not workflow authority. Keep original filenames when that preserves provenance. Record original paths in repo intake when filenames are changed for safety, clarity, or secret handling.
 
@@ -140,6 +170,7 @@ After installation, files under `ai-workflow-workspace/repo/` are created from n
 
 During `phase-0-repo-intake`, replace these runtime files with target-repository facts using templates from `ai-workflow/.systems/ai/templates/repo/`:
 
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
@@ -149,7 +180,7 @@ During `phase-0-repo-intake`, replace these runtime files with target-repository
 
 The paths above are relative to `AI_WORKFLOW_HOME`.
 
-If the workspace does not exist, repo intake must stop and run or recommend `ai-workflow/.systems/scripts/init-workspace` before architecture, planning, specification, implementation, or autopilot.
+If the workspace does not exist, repo intake must stop and run or recommend `phase-0-init` before architecture, planning, specification, implementation, or autopilot.
 
 ## Update From Upstream
 

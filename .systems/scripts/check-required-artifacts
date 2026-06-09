@@ -43,10 +43,12 @@ required=(
   ".systems/ai/examples/micro-projects/EXAMPLE/micro-project.md"
   ".systems/ai/templates/workspace/repo/README.md"
   ".systems/ai/templates/workspace/repo/legacy-readme.template.md"
+  ".systems/ai/templates/workspace/repo/legacy-index.template.md"
   ".systems/ai/templates/workspace/projects/README.md"
   ".systems/ai/templates/workspace/humans/README.md"
   ".systems/ai/templates/workspace/skills/README.md"
   ".systems/ai/templates/repo/README.md"
+  ".systems/ai/templates/repo/init.template.md"
   ".systems/ai/templates/repo/context.template.md"
   ".systems/ai/templates/repo/context-readme.template.md"
   ".systems/ai/templates/repo/context-entry.template.md"
@@ -118,6 +120,7 @@ required=(
 )
 
 phases=(
+  "phase-0-init.md"
   "phase-0-repo-intake.md"
   "phase-0-project-workspace.md"
   "phase-0-idea-validation.md"
