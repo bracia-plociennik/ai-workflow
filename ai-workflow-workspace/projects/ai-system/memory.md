@@ -11,10 +11,10 @@ Detailed entries live in `AI_WORKFLOW_WORKSPACE_HOME/projects/ai-system/memory/`
 | Date | Topic | Type | Status | Route |
 | --- | --- | --- | --- | --- |
 | 2026-06-09 | Local workspace architecture decisions | project-decision | active | `AI_WORKFLOW_WORKSPACE_HOME/projects/ai-system/memory/2026-06-09-local-workspace-architecture-decisions.md` |
+| 2026-06-09 | AI System moved to separate repository | project-status | active | `AI_WORKFLOW_WORKSPACE_HOME/projects/ai-system/memory/2026-06-09-ai-system-moved-to-separate-repository.md` |
 
 ## Rules
 
 - Project memory records durable project facts only.
 - Future `system-insights` entries must be anonymized.
 - Do not store real customer data or secrets here.
-

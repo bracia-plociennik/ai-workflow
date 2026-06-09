@@ -2,24 +2,25 @@
 
 | Field | Value |
 | --- | --- |
-| `workflow-requirement` | `mandatory` |
-| `workflow-scope` | `plan-derived` |
+| `workflow-requirement` | `not-applicable` |
+| `workflow-scope` | `transferred-out` |
 | `project-workspace` | `AI_WORKFLOW_WORKSPACE_HOME/projects/ai-system` |
-| `active-plan-status` | `active` |
-| `current-task` | `ai-system implementation package` |
+| `active-plan-status` | `closed-transferred` |
+| `current-task` | `none` |
 | `active-change-request` | `none` |
-| `current-phase` | `phase-5-quality` |
-| `phase-result` | `PASS` |
-| `next-phase` | `phase-6-distillation` |
+| `current-phase` | `not-applicable` |
+| `phase-result` | `skipped` |
+| `next-phase` | `none` |
 | `next-task` | `n/a` |
-| `blocking-reason` | `none` |
+| `blocking-reason` | `project moved to a separate repository; no further ai-system workflow phases run inside ai-workflow` |
 | `updated-at` | `2026-06-09` |
-| `autopilot-mode` | `supervised` |
-| `autopilot-state` | `stopped` |
+| `autopilot-mode` | `not-active` |
+| `autopilot-state` | `stopped-transferred` |
 | `autopilot-run` | `autopilot-001` |
 
 ## Notes
 
-- Phase 5 quality passed for the implementation package.
-- Next required phase is `phase-6-distillation`.
-- Final branch migration to `ai-system` is post-final release work, not part of the implementation package.
+- Phase 5 quality passed for the implementation package before transfer.
+- The temporary `ai-system` branch was removed locally and remotely.
+- `ai-system` is no longer an active project in this repository. Future work belongs in a separate `ai-system` repository.
+- These artifacts are retained as historical project context only.

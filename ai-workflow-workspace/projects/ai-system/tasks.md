@@ -27,5 +27,6 @@ Task index state: `phase-2-project-plan-pass`
 
 ## Post-final Release Work
 
-- `ASYS-RELEASE-POST-branch-ai-system`: deferred until final check and owner approval.
-- This release item is intentionally outside the current implementation task index.
+- `ASYS-RELEASE-POST-branch-ai-system`: canceled in this repository.
+- The temporary `ai-system` branch was removed locally and remotely.
+- Future release/setup work belongs in a separate `ai-system` repository.
