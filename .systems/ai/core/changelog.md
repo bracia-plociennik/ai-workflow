@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.7 - 2026-06-10
+
+- Added `.systems/ai/core/parallel-work-policy.md` as the formal status-only coordination policy for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads.
+- Clarified that `repo/core/status.md` is a repo focus snapshot, while each `projects/<project>/status.md` owns project execution state.
+- Added command routing, guide, human runbook, and validator references for parallel work questions.
+- Kept v1 parallel coordination lock-free: no new lock files, scheduler state, or status fields.
+
 ## 0.8.6 - 2026-06-10
 
 - Removed the tracked runtime exception for `ai-workflow-workspace/**` in the official workflow repository.

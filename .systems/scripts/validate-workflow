@@ -161,6 +161,26 @@ for required_task_intake_text in 'Co zostaje' 'Co jest słabe / do poprawy lub u
   fi
 done
 
+parallel_policy=".systems/ai/core/parallel-work-policy.md"
+if [[ ! -f "$parallel_policy" ]]; then
+  echo "Missing parallel work policy: $parallel_policy"
+  fail=1
+fi
+
+for required_parallel_ref in AGENTS.md HUMANS.md .systems/ai/core/operating-model.md .systems/ai/core/workflow.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md; do
+  if ! rg -q 'parallel-work-policy.md' "$required_parallel_ref"; then
+    echo "Missing parallel work policy reference in $required_parallel_ref"
+    fail=1
+  fi
+done
+
+for required_parallel_text in 'status-only' 'write set' 'repo focus snapshot' 'Project status' 'memory router'; do
+  if ! rg -qi "$required_parallel_text" "$parallel_policy"; then
+    echo "Parallel work policy missing required text: $required_parallel_text"
+    fail=1
+  fi
+done
+
 for required_autopilot_readiness_ref in .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/templates/autopilot/run-readme.template.md .systems/ai/templates/autopilot/state.template.md; do
   if ! rg -q 'readiness.md|readiness-result|readiness audit' "$required_autopilot_readiness_ref"; then
     echo "Missing autopilot readiness reference in $required_autopilot_readiness_ref"

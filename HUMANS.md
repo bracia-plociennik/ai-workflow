@@ -1218,6 +1218,27 @@ Najważniejsze pola:
 
 Jeśli status mówi, że następna faza to `phase-4-implementation`, ale spec nie ma PASS albo nie ma evidence, nie startuj implementacji. Najpierw poproś Codexa o reconciliation.
 
+## Praca Równoległa
+
+Formalna polityka jest w `.systems/ai/core/parallel-work-policy.md`.
+
+Model v1 jest status-only:
+
+- jeden main chat koordynuje target repo, repo status, konflikty, decyzje ownera, repo memory i cross-project write-sety;
+- osobny project chat pracuje tylko w jednym `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` i na jednym zatwierdzonym tasku, paczce albo fazie naraz;
+- osobny micro-project chat pracuje tylko w `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<slug>/` i tylko dla low-risk pracy repo-level;
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` jest repo focus/snapshotem, nie pełnym schedulerem wielu projektów;
+- właściwy stan projektu jest w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`.
+
+Równoległość jest bezpieczna tylko wtedy, gdy nie ma wspólnych blocking dependencies, shared risky integration, nierozwiązanych decyzji ownera, overlapu write-setów ani próby aktualizacji tych samych status albo memory routerów.
+
+Zatrzymaj równoległą pracę i wróć do main chat, jeśli:
+
+- `git status` pokazuje niezrozumiały dirty worktree;
+- dwa wątki mogą pisać w te same pliki;
+- dwa implementation/autopilot runy dotyczą tego samego projektu;
+- status, memory, checkpoint albo evidence zaczynają sobie przeczyć.
+
 ## Jak Pracować Z Codexem
 
 Najbezpieczniej wydawać polecenia fazami:

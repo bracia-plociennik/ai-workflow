@@ -1,5 +1,7 @@
 # Repo Status Template
 
+`active-project` is the current repo focus/snapshot for coordination. It is not a complete scheduler and does not mean other project workspaces do not exist. Use `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` for each project's execution state.
+
 | Field | Value |
 | --- | --- |
 | `workflow-requirement` | `<mandatory|optional>` |

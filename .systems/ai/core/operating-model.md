@@ -49,6 +49,14 @@ Autopilot must also declare a range before execution. Use `.systems/ai/core/auto
 
 `phase-8-final-check` is owner-triggered only and is not part of automatic autopilot execution.
 
+## Parallel Work Policy
+
+Use `.systems/ai/core/parallel-work-policy.md` whenever multiple Codex threads, project workspaces, task/package runs, micro-tasks, or micro-projects may be active in the same target repository.
+
+The v1 coordination model is status-only. It does not add lock files, scheduler state, or new status fields. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` is a repo focus snapshot, not a complete multi-project dashboard. Project-specific execution state belongs in each `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`.
+
+Parallel work is allowed only when dependencies, owner decisions, risky integrations, status routers, memory routers, and product-code write sets do not overlap. If overlap is possible, stop and route through the main repo coordination thread for an owner decision or safe sequence.
+
 ## Skill Routing
 
 Reusable task-specific skills can exist in two layers:
@@ -95,6 +103,7 @@ A side task is allowed only when all conditions are true:
 - no product, architecture, data, integration, security, legal, financial, or operational decision is required;
 - no auth, billing, permissions, migrations, secrets, infrastructure, production data, destructive command, or real external side effect is involved;
 - the change does not conflict with active project status, task dependencies, or another write set;
+- the change does not violate `.systems/ai/core/parallel-work-policy.md`;
 - relevant checks can be run, or skipped checks can be justified without affecting `PASS`.
 
 Side tasks still require:

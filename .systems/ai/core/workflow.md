@@ -45,6 +45,7 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Project reviews: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/`
 - Project autopilot runs: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/`
 - Repo-level micro-projects: `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/`
+- Parallel work policy: `.systems/ai/core/parallel-work-policy.md`
 
 `.systems/ai/` is system-owned. Canonical policy/router files live in `.systems/ai/core/`. Do not store target-repository facts anywhere under `.systems/ai/`.
 
@@ -55,6 +56,8 @@ Use `.systems/ai/core/command-routing.md` for the full Polish and English catalo
 Use `.systems/ai/core/task-intake.md` as the mandatory pre-routing lens for new task, planning, approach, side-task, micro-task, change request, and autopilot requests. It is not a phase and does not grant write permission. Broad project ideas still route to `phase-0-idea-validation`.
 
 Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer after phase summaries, blocker reports, implementation summaries, QA reports, guide responses, side-task responses, micro-task responses, micro-project responses, and autopilot responses.
+
+Use `.systems/ai/core/parallel-work-policy.md` when the user asks about working on multiple projects, tasks, Codex threads, micro-tasks, micro-projects, or autopilot runs in parallel. Parallel work is status-only in v1 and must stop on write-set, status-router, memory-router, dependency, or active-run conflicts.
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
@@ -185,6 +188,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | owner comments before final-owner-yes, post-final correction/addition/removal | use `change-requests.md` plus the routed phase, fix loop, micro-task, iteration, rollback, or new project |
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
 | micro-project | use `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/` and the micro-project contract in `operating-model.md` |
+| parallel work, kilka projektów naraz, kilka tasków naraz | use `.systems/ai/core/parallel-work-policy.md` plus `guide.md` and current repo/project statuses |
 | autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, declared `planning-range` or `implementation-range`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |

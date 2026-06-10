@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, when a matching skill exists
@@ -52,7 +52,7 @@ For updating a target repository's nested `ai-workflow/` clone from upstream, al
 
 ## Command Routing
 
-Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, guide requests, and unsafe bypass requests.
+Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, parallel work questions, guide requests, and unsafe bypass requests.
 
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
@@ -99,7 +99,7 @@ When sources disagree, use this repository-level order:
 2. Target root `AGENTS.md` shim when this workflow is installed as `ai-workflow/`.
 3. Internal `AGENTS.md` in `AI_WORKFLOW_HOME`.
 4. `.systems/ai/core/operating-model.md`.
-5. Safety and policy docs in `.systems/ai/core/`, especially command routing, task intake, guide, response contract, change requests, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
+5. Safety and policy docs in `.systems/ai/core/`, especially command routing, task intake, guide, parallel work policy, response contract, change requests, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
 6. `.systems/ai/core/workflow.md`.
 7. Current phase file in `.systems/ai/workflow/`.
 8. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, as supporting execution guidance only.
@@ -133,6 +133,7 @@ Stop before continuing when:
 - a critical-risk action would be needed;
 - the safe test environment is unknown;
 - the command required to verify work is missing or unsafe;
+- parallel work would overlap write sets, status routers, memory routers, or active implementation/autopilot runs without owner-approved coordination;
 - an instruction conflict cannot be resolved by source-of-truth order.
 
 Do not mark `PASS` without evidence.
@@ -160,6 +161,7 @@ Use `.systems/ai/core/operating-model.md` for the side-task, micro-task, and mic
 - no high-risk or critical-risk area;
 - no architecture, migration, external-effect, secret, production, billing, auth, permissions, or security impact;
 - no conflict with active project status, task index, or write set;
+- no conflict with `.systems/ai/core/parallel-work-policy.md`;
 - relevant validation evidence or a recorded reason why validation is not applicable.
 
 If any condition is false, route the work into the normal workflow phase instead of treating it as a side task.

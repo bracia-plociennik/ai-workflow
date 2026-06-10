@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.6` |
+| Workflow version | `0.8.7` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-06-10` |
 | Naming standard | lowercase kebab-case |
@@ -24,6 +24,7 @@
 - `.systems/ai/core/` stores canonical AI router and policy files.
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
 - `.systems/ai/core/task-intake.md` defines the required Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request.
+- `.systems/ai/core/parallel-work-policy.md` defines status-only coordination for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads without adding lock files or scheduler state.
 - `.systems/ai/core/update-from-upstream.md` defines the safe target-repository update flow for nested clones. It does not touch `AI_WORKFLOW_WORKSPACE_HOME/**`.
 - Autopilot requires a run-scoped readiness audit at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md` before the run can enter `running`.
 - Autopilot must declare `planning-range` for phase 1 through phase 3 Spec QA or `implementation-range` for phase 4 through phase 7 checkpoint. `phase-8-final-check` is owner-triggered only and is not run automatically by autopilot.

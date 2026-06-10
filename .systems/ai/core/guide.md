@@ -24,6 +24,9 @@ Use guide mode when the user says things like:
 - `co blokuje autopilota`
 - `can I start autopilot`
 - `what blocks autopilot`
+- `czy mogę pracować równolegle`
+- `czy mogę mieć kilka projektów naraz`
+- `can I work on multiple projects in parallel`
 
 ## Authority
 
@@ -49,16 +52,17 @@ Read the smallest set that can answer the user's question safely. Prefer this or
 2. Internal `AGENTS.md` under `AI_WORKFLOW_HOME`, usually `ai-workflow/AGENTS.md`.
 3. `.systems/ai/core/workflow.md`
 4. `.systems/ai/core/command-routing.md`
-5. `.systems/ai/core/installation.md` when the workflow may be newly installed
-6. `.systems/ai/core/repository-modes.md` when paths or repository mode are unclear
-7. `.systems/ai/core/update-from-upstream.md` when the user asks how to update AI Workflow
-8. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
-9. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
-10. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
-11. active `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`
-12. active `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
-13. active project plan, task cards, spec, quality evidence, decisions, reviews, checkpoints, autopilot readiness, and autopilot run state when relevant
-14. `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` and `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` when checking workflow improvement feedback or maintenance opportunities
+5. `.systems/ai/core/parallel-work-policy.md` when parallel work, multiple projects, multiple tasks, micro-projects, or multiple Codex threads are involved
+6. `.systems/ai/core/installation.md` when the workflow may be newly installed
+7. `.systems/ai/core/repository-modes.md` when paths or repository mode are unclear
+8. `.systems/ai/core/update-from-upstream.md` when the user asks how to update AI Workflow
+9. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
+10. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
+11. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
+12. active `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`
+13. active `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
+14. active project plan, task cards, spec, quality evidence, decisions, reviews, checkpoints, autopilot readiness, and autopilot run state when relevant
+15. `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` and `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` when checking workflow improvement feedback or maintenance opportunities
 
 When running from a target repository, `.systems/...` paths resolve under `AI_WORKFLOW_HOME`, usually `ai-workflow/.systems/...`; `AI_WORKFLOW_WORKSPACE_HOME/...` paths resolve to the target-owned workspace, usually `ai-workflow-workspace/...`. When running inside the official upstream repository, `AI_WORKFLOW_HOME` is the repository root and there is no inner `ai-workflow/` directory.
 
@@ -81,6 +85,7 @@ Use these locations when orienting the user:
 - Workflow router: `.systems/ai/core/workflow.md`.
 - Phase specs: `.systems/ai/workflow/`.
 - Command routing: `.systems/ai/core/command-routing.md`.
+- Parallel work policy: `.systems/ai/core/parallel-work-policy.md`.
 - Update from upstream: `.systems/ai/core/update-from-upstream.md` and `.systems/scripts/update-from-upstream`.
 - Policy docs: `.systems/ai/core/definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `rollback.md`, `dependencies.md`.
 - Template versioning: `.systems/ai/core/version.md` and `.systems/ai/core/changelog.md`.
@@ -194,6 +199,20 @@ If required evidence is missing, recommend the matching QA, fix loop, recovery, 
 
 If the project is waiting for `final-owner-yes` and the owner has comments, recommend creating or triaging a change request instead of closing the project. If the project is already closed and the owner asks for a correction, addition, removal, or decision change, recommend post-final change request triage before routing the work.
 
+## Parallel Work Guidance
+
+When the user asks whether multiple projects, tasks, micro-tasks, micro-projects, Codex threads, or autopilot runs can proceed in parallel, use `.systems/ai/core/parallel-work-policy.md`.
+
+Guide mode should identify:
+
+- the main repo coordination thread or repo focus;
+- each project or micro-project workspace involved;
+- whether `repo/core/status.md` is only a focus snapshot or indicates a blocking global conflict;
+- each project status, active task/package, active change request, and autopilot run when relevant;
+- whether write sets, status routers, memory routers, dependencies, risky integrations, or owner decisions overlap.
+
+Recommend parallel execution only when independence is explicit. If overlap is unknown, recommend a read-only coordination check before implementation. If overlap is known, recommend linear sequencing or owner-approved coordination.
+
 ## External Memory Sharing Opportunity
 
 When guide mode checks maintenance state and `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` contains roughly 10 or more dated memory entry files, suggest that the user may zip the folder and send it to `ai@onlinen.tech`.
@@ -254,6 +273,7 @@ Stop and ask before recommending execution when:
 - safe commands are not known;
 - high-risk work lacks approval;
 - critical-risk work would be needed;
+- parallel work has unresolved write-set, status-router, memory-router, dependency, or active-run conflicts;
 - the user asks to skip gates, tests, evidence, or owner approval.
 
 The clarification must include one recommendation with impact and one alternative with impact.

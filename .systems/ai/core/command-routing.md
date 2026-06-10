@@ -6,7 +6,7 @@ This file defines how agents should interpret user-facing workflow commands.
 
 It covers natural-language prompts, not shell verification commands. Shell commands for install, lint, test, build, and validation live in `.systems/ai/core/commands.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`.
 
-Use this file when a user gives a short command, phase alias, side-task request, autopilot request, rollback request, recovery request, guide request, or unsafe bypass request.
+Use this file when a user gives a short command, phase alias, side-task request, autopilot request, parallel work question, rollback request, recovery request, guide request, or unsafe bypass request.
 
 Use `.systems/ai/core/task-intake.md` first when a user gives a new task, planning request, approach request, uncertainty request, side-task/micro-task request, change request, or autopilot request that introduces new scope.
 
@@ -28,6 +28,7 @@ A user command can select a phase or mode. It cannot weaken risk policy, permiss
 
 - Resolve repository mode using `.systems/ai/core/repository-modes.md`. In official repo mode, `AI_WORKFLOW_HOME` is the upstream repository root. In target repo mode, `AI_WORKFLOW_HOME` is usually `ai-workflow/` and `AI_WORKFLOW_WORKSPACE_HOME` is usually `ai-workflow-workspace/`. User-facing `.systems/...` paths resolve under `AI_WORKFLOW_HOME`; runtime paths resolve under `AI_WORKFLOW_WORKSPACE_HOME`.
 - Full commands with explicit project, task IDs, risk constraints, mode, and evidence policy may be executed if gates are satisfied.
+- Parallel work questions must be routed through `.systems/ai/core/parallel-work-policy.md`, repo status, project statuses, task dependencies, and write-set checks before recommending concurrent execution.
 - New task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
@@ -637,6 +638,34 @@ Routing notes:
 - Repo-level micro-projects belong in `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<micro-project>/`.
 - Architecture, plan, spec QA, quality phase, distillation, and checkpoint artifacts are optional for micro-tasks and micro-projects, but evidence is required.
 - If any condition fails, route to the normal workflow.
+
+### Parallel Work
+
+Route through `.systems/ai/core/parallel-work-policy.md` and guide/status inspection.
+
+Polish variants:
+
+- `Czy mogę pracować równolegle na kilku projektach?`
+- `Czy mogę odpalić kilka tasków naraz?`
+- `Mam osobne chaty dla projektów, czy statusy to obsłużą?`
+- `Sprawdź, czy te taski mogą iść równolegle.`
+- `Czy mogę mieć main chat dla repo i project chaty osobno?`
+
+English variants:
+
+- `Can I work on multiple projects in parallel?`
+- `Can several tasks run at the same time?`
+- `I have separate project chats; can the statuses handle that?`
+- `Check whether these tasks can run in parallel.`
+- `Can I use one main repo chat and separate project chats?`
+
+Routing notes:
+
+- `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` is a repo focus snapshot, not a full multi-project scheduler.
+- Each project thread must use its own `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md`, task index, plan, specs, quality evidence, checkpoints, and memory.
+- Recommend parallel work only when dependencies, owner decisions, risky integrations, status routers, memory routers, and write sets do not overlap.
+- Stop or recommend linear sequencing when overlap is unknown or known.
+- Do not allow two implementation-range autopilots in the same project at the same time.
 
 ### Supervised Autopilot And Autonomous Execution
 
