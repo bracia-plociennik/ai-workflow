@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.5` |
+| Workflow version | `0.8.6` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-06-09` |
+| Last process migration | `2026-06-10` |
 | Naming standard | lowercase kebab-case |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -18,8 +18,8 @@
 - `.systems/ai/core/repository-modes.md` defines official repo mode, target repo mode, and shared path resolution.
 - `.systems/` is the system-owned namespace inside `AI_WORKFLOW_HOME`.
 - `AI_WORKFLOW_WORKSPACE_HOME/` is the target-owned runtime/advisory namespace, normally `ai-workflow-workspace/` beside `AI_WORKFLOW_HOME`.
-- Public `main` does not track active `workspace/**` or `ai-workflow-workspace/**`; `dev` may track this repository's own `ai-workflow-workspace/**` runtime.
-- `.systems/scripts/check-branch-policy` enforces public/development runtime tracking rules. Use `AI_WORKFLOW_BRANCH_POLICY=public` or `AI_WORKFLOW_BRANCH_POLICY=dev` for explicit local validation.
+- The official workflow repository must not track active `workspace/**` or `ai-workflow-workspace/**` on any branch.
+- `.systems/scripts/check-branch-policy` blocks tracked `workspace/**` and `ai-workflow-workspace/**` inside the official repository. Local official `ai-workflow-workspace/` may exist only as ignored, untracked private runtime.
 - `.systems/ai/` is system-owned policy and workflow source.
 - `.systems/ai/core/` stores canonical AI router and policy files.
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.

@@ -12,8 +12,8 @@ Use `official-repo` mode when working inside the upstream `ai-workflow` reposito
 - `TARGET_REPO_ROOT` is the repository root.
 - `.systems/`, `.github/`, `AGENTS.md`, `HUMANS.md`, and `README.md` live directly in the repository root.
 - There is no inner `ai-workflow/` directory. This is expected and valid.
-- On public `main`, no active runtime workspace may be tracked.
-- On `dev`, this repository may track its own runtime under `AI_WORKFLOW_HOME/ai-workflow-workspace/`.
+- No active runtime workspace may be tracked inside the official `ai-workflow` repository on any branch.
+- A local `AI_WORKFLOW_HOME/ai-workflow-workspace/` may exist for private development, but it must remain ignored and untracked.
 
 Default official workspace:
 
@@ -46,8 +46,8 @@ Use `.systems/scripts/resolve-workflow-env` for shell scripts that need path res
 - `AI_WORKFLOW_WORKSPACE_HOME` overrides the default workspace path.
 - In `official` mode, default workspace is inside `AI_WORKFLOW_HOME`.
 - In `target` mode, default workspace is beside `AI_WORKFLOW_HOME`.
-- Validators must not require a workspace to exist on public `main`.
-- If the official `dev` workspace exists, validators should read it automatically.
+- Validators must not require a workspace to exist in the official repository.
+- If an ignored local official workspace exists, validators may read it when a check needs runtime context, but branch policy still blocks tracking it.
 
 The resolver exports:
 
@@ -62,8 +62,8 @@ AI_WORKFLOW_WORKSPACE_HOME
 
 `.systems/scripts/check-branch-policy` enforces runtime tracking rules:
 
-- `public` mode blocks `workspace/**` and `ai-workflow-workspace/**`.
-- `dev` mode allows `ai-workflow-workspace/**`.
-- all modes block legacy `workspace/**`.
+- all modes block legacy `workspace/**`;
+- all modes block `ai-workflow-workspace/**` inside the official repository;
+- target repositories may commit their sibling `ai-workflow-workspace/**` in the parent application repository, not inside the nested `ai-workflow/` clone.
 
 The absence of an inner `ai-workflow/` directory in the upstream repository is not a branch policy violation.

@@ -201,11 +201,10 @@ Detailed rules live in `.systems/ai/core/update-from-upstream.md`.
 ## Branch Policy
 
 - Public reusable template: `main`.
-- Development branch for the official `ai-workflow` repository: `dev`.
-- Public `main` must not track active runtime under `workspace/**` or `ai-workflow-workspace/**`.
-- `dev` may track this repository's own runtime under `ai-workflow-workspace/**`.
+- The official `ai-workflow` repository must not track active runtime under `workspace/**` or `ai-workflow-workspace/**` on any branch.
+- A local official `ai-workflow-workspace/` may exist for private development, but it must remain ignored and untracked.
 - No branch may track the legacy nested runtime directory `workspace/**`.
-- `.systems/scripts/check-branch-policy` enforces this split. Use `AI_WORKFLOW_BRANCH_POLICY=public` for public template validation and `AI_WORKFLOW_BRANCH_POLICY=dev` for official development runtime validation.
+- `.systems/scripts/check-branch-policy` enforces this rule.
 - Target repositories update nested clones from public `main`.
 - Target repositories commit `AI_WORKFLOW_WORKSPACE_HOME/**`, normally `ai-workflow-workspace/**`, when it contains useful runtime facts.
 - Target repositories do not commit `ai-workflow/` or the local root `AGENTS.md` shim unless the owner intentionally adopts a target-owned policy file.

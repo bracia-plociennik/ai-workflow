@@ -23,9 +23,6 @@ resolve_auto_policy() {
   fi
 
   case "$branch" in
-    dev)
-      printf 'dev\n'
-      ;;
     main|"")
       printf 'public\n'
       ;;
@@ -44,25 +41,26 @@ case "$policy" in
   *)
     echo "Invalid AI_WORKFLOW_BRANCH_POLICY: $policy"
     echo "Allowed values: auto, public, dev"
+    echo "Note: dev is a compatibility alias and does not allow tracked runtime workspace files."
     exit 1
     ;;
 esac
 
 tracked_legacy="$(git ls-files -- workspace || true)"
-tracked_dev_workspace="$(git ls-files -- ai-workflow-workspace || true)"
+tracked_local_workspace="$(git ls-files -- ai-workflow-workspace || true)"
 fail=0
 
 if [[ -n "$tracked_legacy" ]]; then
   echo "Branch policy violation: legacy workspace files are tracked under workspace/."
-  echo "Move runtime to ai-workflow-workspace/ on dev, or keep public main free of runtime."
+  echo "Runtime workspace must stay local-only and untracked."
   printf '%s\n' "$tracked_legacy" | sed 's/^/ - /'
   fail=1
 fi
 
-if [[ "$policy" == "public" && -n "$tracked_dev_workspace" ]]; then
-  echo "Branch policy violation: public template mode must not track ai-workflow-workspace/."
-  echo "Public main is reusable system/template only; runtime workspace belongs on dev or in target repositories."
-  printf '%s\n' "$tracked_dev_workspace" | sed 's/^/ - /'
+if [[ -n "$tracked_local_workspace" ]]; then
+  echo "Branch policy violation: ai-workflow-workspace/ is tracked."
+  echo "ai-workflow-workspace/ must remain local-only and ignored in this repository."
+  printf '%s\n' "$tracked_local_workspace" | sed 's/^/ - /'
   fail=1
 fi
 

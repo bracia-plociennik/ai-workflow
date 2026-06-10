@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.6 - 2026-06-10
+
+- Removed the tracked runtime exception for `ai-workflow-workspace/**` in the official workflow repository.
+- Updated `.systems/scripts/check-branch-policy` so tracked `workspace/**` and `ai-workflow-workspace/**` fail in every policy mode.
+- Updated validator smoke coverage so `AI_WORKFLOW_BRANCH_POLICY=dev` cannot bypass the `ai-workflow-workspace/**` tracking block.
+- Clarified that target repositories may commit their sibling `ai-workflow-workspace/**`, while the official nested `ai-workflow/` clone must not track runtime.
+
 ## 0.8.5 - 2026-06-09
 
 - Added formal Autopilot Range Model with `planning-range` for phase 1 through phase 3 Spec QA and `implementation-range` for phase 4 through phase 7 checkpoint.
@@ -19,7 +26,7 @@
 - Added `.systems/ai/core/repository-modes.md` and `.systems/scripts/resolve-workflow-env` to formalize official repo mode versus target repo mode.
 - Split target runtime out of the nested clone: public `main` no longer tracks `workspace/**`.
 - Added `AI_WORKFLOW_WORKSPACE_HOME`, normally `ai-workflow-workspace/`, as the target-owned tracked runtime workspace.
-- Added `.systems/scripts/check-branch-policy` to block runtime workspace files on public `main` while allowing `ai-workflow-workspace/**` on `dev`.
+- Added `.systems/scripts/check-branch-policy` to block runtime workspace files on public `main`; this rule was later tightened in `0.8.6` to block tracked `ai-workflow-workspace/**` in every policy mode.
 - Added `.systems/scripts/init-workspace` and workspace bootstrap templates.
 - Changed target root `AGENTS.md` shim handling to local-only via `.git/info/exclude` together with `/ai-workflow/`.
 - Updated `update-from-upstream` so it updates only the nested `ai-workflow/` clone and never touches `AI_WORKFLOW_WORKSPACE_HOME/**`.

@@ -123,7 +123,7 @@ cat > "$branch_policy_fixture/workspace/runtime.md" <<'MD'
 MD
 git -C "$branch_policy_fixture" add workspace/runtime.md
 run_must_fail "branch-policy-public-blocks-legacy-workspace" env AI_WORKFLOW_BRANCH_POLICY=public "$branch_policy_fixture/.systems/scripts/check-branch-policy"
-run_must_fail "branch-policy-dev-blocks-legacy-workspace" env AI_WORKFLOW_BRANCH_POLICY=dev "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+run_must_fail "branch-policy-compat-dev-blocks-legacy-workspace" env AI_WORKFLOW_BRANCH_POLICY=dev "$branch_policy_fixture/.systems/scripts/check-branch-policy"
 git -C "$branch_policy_fixture" rm -q --cached workspace/runtime.md
 rm -rf "$branch_policy_fixture/workspace"
 
@@ -132,7 +132,7 @@ cat > "$branch_policy_fixture/ai-workflow-workspace/runtime.md" <<'MD'
 # Runtime
 MD
 git -C "$branch_policy_fixture" add ai-workflow-workspace/runtime.md
-run_must_pass "branch-policy-dev-allows-dev-workspace" env AI_WORKFLOW_BRANCH_POLICY=dev "$branch_policy_fixture/.systems/scripts/check-branch-policy"
+run_must_fail "branch-policy-compat-dev-blocks-local-workspace" env AI_WORKFLOW_BRANCH_POLICY=dev "$branch_policy_fixture/.systems/scripts/check-branch-policy"
 git -C "$branch_policy_fixture" rm -q --cached ai-workflow-workspace/runtime.md
 rm -rf "$branch_policy_fixture/ai-workflow-workspace"
 

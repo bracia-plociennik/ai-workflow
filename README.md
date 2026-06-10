@@ -78,7 +78,7 @@ AI Workflow uses two roots:
 - `TARGET_REPO_ROOT`: the parent application repository, for example a Laravel repo.
 - `AI_WORKFLOW_HOME`: the nested clone directory, normally `ai-workflow/`.
 - `AI_WORKFLOW_WORKSPACE_HOME`: the target-owned workspace, normally `ai-workflow-workspace/`.
-- In official repo mode, `AI_WORKFLOW_HOME` and `TARGET_REPO_ROOT` are this repository root, and the optional dev workspace is `./ai-workflow-workspace/`.
+- In official repo mode, `AI_WORKFLOW_HOME` and `TARGET_REPO_ROOT` are this repository root. A local `./ai-workflow-workspace/` may exist for private work, but it must remain ignored and untracked.
 
 Rules:
 
@@ -158,11 +158,12 @@ The included `EXAMPLE` workspaces are illustrative only. Do not treat them as ac
 
 ## Branch Model
 
-- `main` is the public reusable template branch and must not track active runtime under `workspace/**` or `ai-workflow-workspace/**`.
-- `dev` is the development branch for this repository and may track this repository's own runtime under `ai-workflow-workspace/**` while improving the workflow.
+- `main` is the public reusable template branch.
+- This repository must not track active runtime under `workspace/**` or `ai-workflow-workspace/**` on any branch.
+- A local `ai-workflow-workspace/` may exist while developing the workflow, but it stays local-only through `.gitignore`.
 - Target repositories should update nested clones from public `main`.
-- Target repositories should not commit `ai-workflow/` or root `AGENTS.md`; they should commit `ai-workflow-workspace/` when it contains useful repo/project runtime.
-- `.systems/scripts/check-branch-policy` enforces this split. `AI_WORKFLOW_BRANCH_POLICY=public` blocks both runtime directories; `AI_WORKFLOW_BRANCH_POLICY=dev` allows `ai-workflow-workspace/**` but still blocks legacy `workspace/**`.
+- Target repositories should not commit `ai-workflow/` or root `AGENTS.md`; they should commit their sibling `ai-workflow-workspace/` when it contains useful repo/project runtime.
+- `.systems/scripts/check-branch-policy` enforces that the official workflow repository never tracks `workspace/**` or `ai-workflow-workspace/**`.
 
 ## Validation Before Reuse
 
