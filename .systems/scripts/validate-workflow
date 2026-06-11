@@ -7,6 +7,7 @@ if ! command -v rg >/dev/null 2>&1; then
 fi
 
 .systems/scripts/check-required-artifacts
+.systems/scripts/check-prompt-composition
 .systems/scripts/check-branch-policy
 .systems/scripts/check-naming
 .systems/scripts/check-status-consistency
