@@ -49,6 +49,7 @@ scan_roots=(
   "README.md"
   ".systems/ai/core"
   ".systems/ai/templates/prompting"
+  ".systems/ai/examples/prompting"
 )
 
 reject_unsafe_pattern() {

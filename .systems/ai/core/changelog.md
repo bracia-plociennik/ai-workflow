@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.8.8 - 2026-06-11
+
+- Added `.systems/ai/core/prompt-composition.md` for advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority boundaries.
+- Added reusable prompt composition templates under `.systems/ai/templates/prompting/`.
+- Routed prompt composition questions through `AGENTS.md`, workflow routing, and command routing without changing phase gates or approval rules.
+- Added `.systems/scripts/check-prompt-composition` plus required artifact and smoke coverage for prompt composition files and unsafe-authority grant patterns.
+- Added human guidance and documentation-only examples under `.systems/ai/examples/prompting/`.
+
 ## 0.8.7 - 2026-06-10
 
 - Added `.systems/ai/core/parallel-work-policy.md` as the formal status-only coordination policy for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads.
