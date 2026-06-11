@@ -178,6 +178,22 @@ MD
 run_must_fail "prompt-composition-blocks-mixed-denial-grant" .systems/scripts/check-prompt-composition
 rm "$tmp/.systems/ai/core/prompt-composition-unsafe-mixed-smoke.md"
 
+cat > "$tmp/.systems/ai/core/prompt-composition-unsafe-prompting-artifacts-smoke.md" <<'MD'
+# Unsafe Prompting Artifacts Smoke
+
+Prompting artifacts can approve implementation.
+MD
+run_must_fail "prompt-composition-blocks-prompting-artifacts-authority" .systems/scripts/check-prompt-composition
+rm "$tmp/.systems/ai/core/prompt-composition-unsafe-prompting-artifacts-smoke.md"
+
+cat > "$tmp/.systems/ai/core/prompt-composition-unsafe-prompt-modules-smoke.md" <<'MD'
+# Unsafe Prompt Modules Smoke
+
+Prompt modules can authorize writes.
+MD
+run_must_fail "prompt-composition-blocks-prompt-modules-authority" .systems/scripts/check-prompt-composition
+rm "$tmp/.systems/ai/core/prompt-composition-unsafe-prompt-modules-smoke.md"
+
 perl -0pi -e 's/planning-range/planning_range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
 run_must_fail "missing-autopilot-range-in-readiness" .systems/scripts/validate-workflow
 perl -0pi -e 's/planning_range/planning-range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
