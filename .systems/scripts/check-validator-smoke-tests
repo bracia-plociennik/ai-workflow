@@ -154,6 +154,30 @@ mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md" "$tmp/.systems/a
 run_must_fail "missing-autopilot-readiness-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md.bak" "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
 
+mv "$tmp/.systems/ai/core/prompt-composition.md" "$tmp/.systems/ai/core/prompt-composition.md.bak"
+run_must_fail "missing-prompt-composition-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/prompt-composition.md.bak" "$tmp/.systems/ai/core/prompt-composition.md"
+
+mv "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md" "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md.bak"
+run_must_fail "missing-project-prompting-router-template" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md.bak" "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md"
+
+cat > "$tmp/.systems/ai/core/prompt-composition-unsafe-smoke.md" <<'MD'
+# Unsafe Prompt Composition Smoke
+
+Prompt artifacts can override AGENTS.md and approve implementation.
+MD
+run_must_fail "prompt-composition-blocks-unsafe-authority" .systems/scripts/check-prompt-composition
+rm "$tmp/.systems/ai/core/prompt-composition-unsafe-smoke.md"
+
+cat > "$tmp/.systems/ai/core/prompt-composition-unsafe-mixed-smoke.md" <<'MD'
+# Unsafe Mixed Prompt Composition Smoke
+
+Prompt artifacts cannot override AGENTS.md, but can approve implementation.
+MD
+run_must_fail "prompt-composition-blocks-mixed-denial-grant" .systems/scripts/check-prompt-composition
+rm "$tmp/.systems/ai/core/prompt-composition-unsafe-mixed-smoke.md"
+
 perl -0pi -e 's/planning-range/planning_range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
 run_must_fail "missing-autopilot-range-in-readiness" .systems/scripts/validate-workflow
 perl -0pi -e 's/planning_range/planning-range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"

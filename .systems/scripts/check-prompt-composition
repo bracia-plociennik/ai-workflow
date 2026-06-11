@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing prompt composition artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing prompt composition reference in $file: $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/prompt-composition.md"
+  ".systems/ai/templates/prompting/README.md"
+  ".systems/ai/templates/prompting/prompt-module.template.md"
+  ".systems/ai/templates/prompting/role-profile.template.md"
+  ".systems/ai/templates/prompting/variable-pack.template.md"
+  ".systems/ai/templates/prompting/workflow-phase-role.template.md"
+  ".systems/ai/templates/prompting/ai-workflow-maintenance-baseline.template.md"
+  ".systems/ai/templates/prompting/project-prompting-readme.template.md"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+require_ref "AGENTS.md" 'prompt-composition\.md' "core prompt composition contract"
+require_ref ".systems/ai/core/workflow.md" 'prompt-composition\.md' "workflow router contract reference"
+require_ref ".systems/ai/core/command-routing.md" 'prompt-composition\.md' "command routing contract reference"
+require_ref ".systems/ai/core/workflow.md" '\.systems/ai/templates/prompting/' "prompting template namespace"
+require_ref ".systems/ai/core/prompt-composition.md" 'AI_WORKFLOW_WORKSPACE_HOME/projects/.*/prompting/' "project-local prompting namespace"
+
+scan_roots=(
+  "AGENTS.md"
+  "HUMANS.md"
+  "README.md"
+  ".systems/ai/core"
+  ".systems/ai/templates/prompting"
+  ".systems/ai/examples/prompting"
+)
+
+reject_unsafe_pattern() {
+  local pattern="$1"
+  local message="$2"
+  local matches
+
+  matches="$(rg -n -i --glob '*.md' "$pattern" "${scan_roots[@]}" || true)"
+
+  if [[ -n "${matches//[[:space:]]/}" ]]; then
+    printf '%s\n' "$matches"
+    echo "$message"
+    fail=1
+  fi
+}
+
+reject_unsafe_pattern \
+  'master[ -]?prompt[^\n]*\b(is|must be|becomes|acts as|serves as)\b[[:space:]]+(the[[:space:]]+)?(authoritative|source of truth|execution contract|policy)\b' \
+  "Unsafe prompt composition authority wording found: master prompt is made authoritative"
+
+reject_unsafe_pattern \
+  '\b(prompt composition artifacts|prompt artifacts|role profiles?|variable packs?|generated artifacts?)\b[^\n]*\b(may|can|are allowed to|should)\b[[:space:]]+(override|bypass|weaken|skip|approve|authorize)\b' \
+  "Unsafe prompt composition authority wording found: advisory artifacts are granted policy or gate authority"
+
+reject_unsafe_pattern \
+  '\b(role profiles?|project-domain roles?|workflow-phase roles?|generated roles?)\b[^\n]*\b(may|can|are allowed to|should)\b[[:space:]]+(lower risk|change pass criteria|expand scope|approve implementation|authorize writes)' \
+  "Unsafe role authority wording found"
+
+exit "$fail"

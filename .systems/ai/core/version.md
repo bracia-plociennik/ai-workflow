@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.7` |
+| Workflow version | `0.8.8` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-06-10` |
+| Last process migration | `2026-06-11` |
 | Naming standard | lowercase kebab-case |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -25,6 +25,10 @@
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
 - `.systems/ai/core/task-intake.md` defines the required Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request.
 - `.systems/ai/core/parallel-work-policy.md` defines status-only coordination for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads without adding lock files or scheduler state.
+- `.systems/ai/core/prompt-composition.md` defines advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority limits.
+- `.systems/ai/templates/prompting/` stores reusable prompt composition templates, while `.systems/ai/examples/prompting/` stores documentation-only examples.
+- Project-local prompting artifacts belong under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/` when a project explicitly creates them.
+- `.systems/scripts/check-prompt-composition` validates required prompt composition artifacts, router references, and deterministic unsafe-authority grant patterns.
 - `.systems/ai/core/update-from-upstream.md` defines the safe target-repository update flow for nested clones. It does not touch `AI_WORKFLOW_WORKSPACE_HOME/**`.
 - Autopilot requires a run-scoped readiness audit at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md` before the run can enter `running`.
 - Autopilot must declare `planning-range` for phase 1 through phase 3 Spec QA or `implementation-range` for phase 4 through phase 7 checkpoint. `phase-8-final-check` is owner-triggered only and is not run automatically by autopilot.

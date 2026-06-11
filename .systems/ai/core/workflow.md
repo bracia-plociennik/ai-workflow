@@ -30,6 +30,8 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - System workflow namespace: `.systems/`
 - Runtime workspace namespace: `AI_WORKFLOW_WORKSPACE_HOME/`
 - Workflow validator namespace: `.systems/scripts/`
+- Prompt composition contract: `.systems/ai/core/prompt-composition.md`
+- Prompt composition templates: `.systems/ai/templates/prompting/`
 - Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
@@ -40,6 +42,7 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Project task index: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`, optional task cards `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks/`
 - Project micro-tasks: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks/`
 - Project change requests: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`
+- Project prompting artifacts: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/README.md`, with local `roles/`, `variables/`, `modules/`, and `archive/` entries when generated or accepted for that project
 - Project QA evidence: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/`
 - Project decisions: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/decisions/`
 - Project reviews: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/`
@@ -58,6 +61,8 @@ Use `.systems/ai/core/task-intake.md` as the mandatory pre-routing lens for new 
 Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer after phase summaries, blocker reports, implementation summaries, QA reports, guide responses, side-task responses, micro-task responses, micro-project responses, and autopilot responses.
 
 Use `.systems/ai/core/parallel-work-policy.md` when the user asks about working on multiple projects, tasks, Codex threads, micro-tasks, micro-projects, or autopilot runs in parallel. Parallel work is status-only in v1 and must stop on write-set, status-router, memory-router, dependency, or active-run conflicts.
+
+Use `.systems/ai/core/prompt-composition.md` when the user asks about master prompts, prompt modules, role profiles, generated variables, project-domain roles, workflow-phase roles, or AI Workflow maintenance baseline. Prompt composition is advisory only: current phase files still define pass criteria, fail criteria, evidence required, writes allowed, and stop conditions.
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
@@ -189,6 +194,7 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | side-task, micro-task | use side-task and micro-task contract in `AGENTS.md` and `operating-model.md` |
 | micro-project | use `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/` and the micro-project contract in `operating-model.md` |
 | parallel work, kilka projektów naraz, kilka tasków naraz | use `.systems/ai/core/parallel-work-policy.md` plus `guide.md` and current repo/project statuses |
+| prompt composition, master prompt, role profile, generated variables, zmienne, rola fazy, rola projektu | use `.systems/ai/core/prompt-composition.md`, `.systems/ai/templates/prompting/`, and project-local prompting artifacts only as advisory context |
 | autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, declared `planning-range` or `implementation-range`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |

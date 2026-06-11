@@ -38,6 +38,28 @@ zip -r ai-workflow-external-memory.zip ai-workflow-workspace/external-memory/
 
 Przed wysłaniem sprawdź, czy archiwum nie zawiera danych repo-specific, project-specific, klienta, sekretów ani informacji, których nie chcesz udostępniać.
 
+## Role, Zmienne I Prompt Composition
+
+AI Workflow może używać ról, zmiennych i prompt modules jako pomocniczego framingu pracy. To pomaga ustawić specjalistyczny kontekst, na przykład `web-application-specialist`, `architecture-critic`, `idea-validator` albo baseline dla utrzymania samego AI Workflow.
+
+To jest guidance dla rozmowy i jakości pracy, nie approval. Role i zmienne nie zmieniają `AGENTS.md`, phase files, risk modelu, permissions, evidence, stop conditions ani decyzji ownera. Jeśli chcesz, żeby Codex użył roli albo variable packa, poproś go o routing przez `.systems/ai/core/prompt-composition.md`.
+
+Praktyczne prompty:
+
+```text
+Przygotuj project-local role i variable pack dla projektu <project> jako advisory context. Oprzyj je tylko na zaakceptowanym context, statusie, planie/spec i decyzjach ownera. Nie zmieniaj gate'ów ani approval.
+```
+
+```text
+Użyj roli architecture-critic dla phase-1-architecture-qa, ale zachowaj pass/fail criteria z phase file jako źródło prawdy.
+```
+
+```text
+Wypisz zmienne, które możesz bezpiecznie wywnioskować, oraz te, o które musisz mnie zapytać, bo wpływają na scope, risk, approval, external effects albo acceptance criteria.
+```
+
+Jeśli projekt tworzy lokalne artefakty prompting, trzymaj je pod `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`. Materialne użycie roli albo variable packa powinno być wymienione w evidence odpowiedniej fazy. Przykłady bezpiecznych artefaktów są w `.systems/ai/examples/prompting/`.
+
 ## Przykłady poleceń
 
 Poniżej są krótkie, praktyczne przykłady poleceń dla Codexa. Pełny katalog wariantów po polsku i angielsku, razem z regułami interpretacji skrótów, jest w `.systems/ai/core/command-routing.md`.
