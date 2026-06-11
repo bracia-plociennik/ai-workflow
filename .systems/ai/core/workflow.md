@@ -42,7 +42,7 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Project task index: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`, optional task cards `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks/`
 - Project micro-tasks: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks/`
 - Project change requests: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`
-- Project prompting artifacts: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when generated or accepted for that project
+- Project prompting artifacts: router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/README.md`, with local `roles/`, `variables/`, `modules/`, and `archive/` entries when generated or accepted for that project
 - Project QA evidence: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/`
 - Project decisions: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/decisions/`
 - Project reviews: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/`
