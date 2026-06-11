@@ -60,4 +60,3 @@ Refresh this variable pack when:
 ## Forbidden Overrides
 
 Variable packs must not override workflow policy, accepted scope, implementation gates, owner approvals, or evidence requirements.
-

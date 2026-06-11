@@ -58,7 +58,6 @@ reject_unsafe_pattern() {
   local matches
 
   matches="$(rg -n -i --glob '*.md' "$pattern" "${scan_roots[@]}" || true)"
-  matches="$(printf '%s\n' "$matches" | rg -v -i '\b(cannot|must not|do not|not allowed|forbidden|rejected|invalid)\b' || true)"
 
   if [[ -n "${matches//[[:space:]]/}" ]]; then
     printf '%s\n' "$matches"
@@ -68,15 +67,15 @@ reject_unsafe_pattern() {
 }
 
 reject_unsafe_pattern \
-  'master[ -]?prompt[^.\n]*(is|must be|becomes|acts as|serves as)[^.\n]*(authoritative|source of truth|execution contract|policy)' \
+  'master[ -]?prompt[^\n]*\b(is|must be|becomes|acts as|serves as)\b[[:space:]]+(the[[:space:]]+)?(authoritative|source of truth|execution contract|policy)\b' \
   "Unsafe prompt composition authority wording found: master prompt is made authoritative"
 
 reject_unsafe_pattern \
-  '\b(prompt composition artifacts|prompt artifacts|role profiles?|variable packs?|generated artifacts?)\b[^.\n]*\b(may|can|are allowed to|should)\b[^.\n]*\b(override|bypass|weaken|skip|approve|authorize)\b[^.\n]*(AGENTS|policy|phase|gate|evidence|approval|risk|implementation|writes?)' \
+  '\b(prompt composition artifacts|prompt artifacts|role profiles?|variable packs?|generated artifacts?)\b[^\n]*\b(may|can|are allowed to|should)\b[[:space:]]+(override|bypass|weaken|skip|approve|authorize)\b' \
   "Unsafe prompt composition authority wording found: advisory artifacts are granted policy or gate authority"
 
 reject_unsafe_pattern \
-  '\b(role profiles?|project-domain roles?|workflow-phase roles?|generated roles?)\b[^.\n]*\b(may|can|are allowed to|should)\b[^.\n]*(lower risk|change pass criteria|expand scope|approve implementation|authorize writes)' \
+  '\b(role profiles?|project-domain roles?|workflow-phase roles?|generated roles?)\b[^\n]*\b(may|can|are allowed to|should)\b[[:space:]]+(lower risk|change pass criteria|expand scope|approve implementation|authorize writes)' \
   "Unsafe role authority wording found"
 
 exit "$fail"

@@ -69,4 +69,3 @@ Refresh this baseline when:
 - validator policy changes;
 - runtime workspace ownership changes;
 - autopilot range policy changes.
-

@@ -72,4 +72,3 @@ Refresh this phase role when:
 - core policy changes;
 - project risk changes;
 - accepted architecture, plan, or spec changes.
-

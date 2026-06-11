@@ -170,6 +170,14 @@ MD
 run_must_fail "prompt-composition-blocks-unsafe-authority" .systems/scripts/check-prompt-composition
 rm "$tmp/.systems/ai/core/prompt-composition-unsafe-smoke.md"
 
+cat > "$tmp/.systems/ai/core/prompt-composition-unsafe-mixed-smoke.md" <<'MD'
+# Unsafe Mixed Prompt Composition Smoke
+
+Prompt artifacts cannot override AGENTS.md, but can approve implementation.
+MD
+run_must_fail "prompt-composition-blocks-mixed-denial-grant" .systems/scripts/check-prompt-composition
+rm "$tmp/.systems/ai/core/prompt-composition-unsafe-mixed-smoke.md"
+
 perl -0pi -e 's/planning-range/planning_range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
 run_must_fail "missing-autopilot-range-in-readiness" .systems/scripts/validate-workflow
 perl -0pi -e 's/planning_range/planning-range/g' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"

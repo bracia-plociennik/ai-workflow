@@ -70,4 +70,3 @@ Required labels for role inputs:
 ## Conflict Handling
 
 If role guidance conflicts with `AGENTS.md`, core policy, a phase file, accepted spec, status, or owner decision, the higher-priority source wins and the role profile must be refreshed or ignored.
-
