@@ -71,7 +71,7 @@ reject_unsafe_pattern \
   "Unsafe prompt composition authority wording found: master prompt is made authoritative"
 
 reject_unsafe_pattern \
-  '\b(prompt composition artifacts|prompt artifacts|role profiles?|variable packs?|generated artifacts?)\b[^\n]*\b(may|can|are allowed to|should)\b[[:space:]]+(override|bypass|weaken|skip|approve|authorize)\b' \
+  '\b(prompt composition artifacts|prompt artifacts|prompting artifacts?|prompt modules?|role profiles?|variable packs?|generated artifacts?)\b[^\n]*\b(may|can|are allowed to|should)\b[[:space:]]+(override|bypass|weaken|skip|approve|authorize)\b' \
   "Unsafe prompt composition authority wording found: advisory artifacts are granted policy or gate authority"
 
 reject_unsafe_pattern \

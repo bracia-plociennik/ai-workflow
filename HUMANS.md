@@ -44,6 +44,10 @@ AI Workflow może używać ról, zmiennych i prompt modules jako pomocniczego fr
 
 To jest guidance dla rozmowy i jakości pracy, nie approval. Role i zmienne nie zmieniają `AGENTS.md`, phase files, risk modelu, permissions, evidence, stop conditions ani decyzji ownera. Jeśli chcesz, żeby Codex użył roli albo variable packa, poproś go o routing przez `.systems/ai/core/prompt-composition.md`.
 
+Domyślny model proaktywności to `suggest-only`. Codex może sam zaproponować przydatną rolę, zmienne albo prompt module w phase 0-3, QA/review, guide mode albo task-intake, jeśli to poprawia jakość pracy. Nie powinien jednak tworzyć trwałych artefaktów w `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/**` bez Twojej jawnej zgody i fazy albo taska, który pozwala na taki zapis.
+
+Niskiego ryzyka zmienne wywnioskowane z zaakceptowanych artefaktów mogą być proponowane i zapisywane jako assumptions tylko wtedy, gdy aktywny routing pozwala zapisywać assumptions. Jeśli wartość wpływa na scope, risk, architecture, acceptance criteria, permissions, external effects, security, billing, migrations, production albo final acceptance, Codex powinien zapytać ownera zamiast zgadywać.
+
 Praktyczne prompty:
 
 ```text
