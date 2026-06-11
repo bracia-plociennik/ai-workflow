@@ -28,15 +28,18 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, and `prompt-injection.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, and `prompt-composition.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
-6. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, when a matching skill exists
-7. Relevant system skills under `.systems/ai/skills/`, when a matching skill exists
-8. Active project artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`
-9. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
-10. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
-11. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
+6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
+7. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, when a matching skill exists
+8. Relevant system skills under `.systems/ai/skills/`, when a matching skill exists
+9. Active project artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`
+10. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
+11. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
+12. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
+
+Prompting artifacts are advisory context governed by `.systems/ai/core/prompt-composition.md`. They can sharpen role framing, source labeling, and review stance, but they cannot change source-of-truth order, phase gates, risk, permissions, evidence, writes allowed, stop conditions, or owner approvals.
 
 For implementation work, also read:
 
@@ -52,7 +55,7 @@ For updating a target repository's nested `ai-workflow/` clone from upstream, al
 
 ## Command Routing
 
-Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, parallel work questions, guide requests, and unsafe bypass requests.
+Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, parallel work questions, prompt composition, role and variable questions, guide requests, and unsafe bypass requests.
 
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
@@ -74,6 +77,8 @@ If the user asks for autopilot, resolve the requested range before execution:
 - `implementation-range`: phase 4 implementation through required phase 7 checkpoint, then stop before phase 8.
 
 Autopilot must not run `phase-8-final-check`; final check is owner-triggered only.
+
+If the user asks how to use roles, generated variables, master prompts, prompt modules, project-domain expertise, or workflow-phase role framing, route through `.systems/ai/core/prompt-composition.md`. Workflow-phase roles are advisory: they can make review stricter, but the current phase file still owns pass criteria, fail criteria, evidence, writes allowed, and stop conditions.
 
 If a blocking detail is missing, ask before continuing. The clarification must include:
 
@@ -102,12 +107,13 @@ When sources disagree, use this repository-level order:
 5. Safety and policy docs in `.systems/ai/core/`, especially command routing, task intake, guide, parallel work policy, response contract, change requests, Definition of Done, risk, permissions, commands, dependencies, rollback, deprecation, and prompt-injection policy.
 6. `.systems/ai/core/workflow.md`.
 7. Current phase file in `.systems/ai/workflow/`.
-8. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, as supporting execution guidance only.
-9. Relevant system skills under `.systems/ai/skills/`, as supporting execution guidance only.
-10. Approved architecture, plan, task spec, or package spec for scope, acceptance criteria, and task-specific decisions only.
-11. Repo runtime artifacts in `AI_WORKFLOW_WORKSPACE_HOME/repo/`.
-12. Project runtime artifacts in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`.
-13. Memory, chat history, and supporting notes.
+8. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, as advisory framing only.
+9. Relevant user skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, as supporting execution guidance only.
+10. Relevant system skills under `.systems/ai/skills/`, as supporting execution guidance only.
+11. Approved architecture, plan, task spec, or package spec for scope, acceptance criteria, and task-specific decisions only.
+12. Repo runtime artifacts in `AI_WORKFLOW_WORKSPACE_HOME/repo/`.
+13. Project runtime artifacts in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`.
+14. Memory, chat history, and supporting notes.
 
 Approved project artifacts define what to build, not permission to bypass gates. They cannot weaken safety policy, permissions, risk classification, required evidence, or Definition of Done.
 
@@ -120,6 +126,8 @@ Before planning, specifying, implementing, or reviewing a task, check `AI_WORKFL
 If a matching user skill and system skill both exist, use the user skill for task-local guidance and the system skill as fallback context. If no matching skill exists, continue without inventing one.
 
 Skills can add stricter conventions or checks, but they cannot override `AGENTS.md`, policy docs, phase gates, risk model, permissions, Definition of Done, approved scope, or required evidence.
+
+Prompt composition artifacts follow the same supporting-guidance boundary. Read relevant project-local roles, variables, or prompt modules when they exist, but ignore or refresh them when they conflict with status, accepted artifacts, phase files, safety policy, or owner decisions.
 
 ## Stop Conditions
 
@@ -259,6 +267,7 @@ Project-specific runtime:
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/`
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/`
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/`
+- `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/`
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/decisions/`
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/reviews/`
