@@ -20,7 +20,7 @@ When AI Workflow is used as a nested clone:
 - Paths in this file such as `.systems/ai/core/workflow.md` are relative to `AI_WORKFLOW_HOME`.
 - Product code, application commands, framework commands, tests, builds, migrations, and git state are resolved against `TARGET_REPO_ROOT` unless repo intake records a different safe command directory.
 - System workflow docs, templates, validators, and system skills are resolved against `AI_WORKFLOW_HOME/.systems/`.
-- Runtime status, repo/project/human artifacts, external memory, and user skills are resolved against `AI_WORKFLOW_WORKSPACE_HOME/`.
+- Runtime status, repo/project/human artifacts, external memory, system insights, and user skills are resolved against `AI_WORKFLOW_WORKSPACE_HOME/`.
 
 ## Always Read First
 
@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, and `prompt-composition.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, and `system-insights.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -79,6 +79,8 @@ If the user asks for autopilot, resolve the requested range before execution:
 Autopilot must not run `phase-8-final-check`; final check is owner-triggered only.
 
 If the user asks how to use roles, generated variables, master prompts, prompt modules, project-domain expertise, or workflow-phase role framing, route through `.systems/ai/core/prompt-composition.md`. Workflow-phase roles are advisory: they can make review stricter, but the current phase file still owns pass criteria, fail criteria, evidence, writes allowed, and stop conditions.
+
+If the user asks to capture anonymized lessons, System Insights, cross-project best practices, skill candidates, or lessons about frontend, backend, smart contracts, SEO, ads, offer, process, quality, client work, or product, route through `.systems/ai/core/system-insights.md`. External Memory remains only for AI Workflow improvement proposals. System Insights are advisory and cannot change source-of-truth order, phase gates, risk, permissions, evidence, writes allowed, stop conditions, or owner approvals.
 
 If a blocking detail is missing, ask before continuing. The clarification must include:
 
@@ -277,6 +279,8 @@ Workspace-owned advisory/supporting artifacts:
 
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/`
 
 ## Commands

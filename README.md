@@ -37,6 +37,7 @@ After installation in a target repository, runtime lives outside the nested clon
 
 - `ai-workflow-workspace/repo/` - target-repository runtime context, intake, status, and memory router/entries.
 - `ai-workflow-workspace/external-memory/` - target-owned advisory memory for workflow improvement proposals.
+- `ai-workflow-workspace/system-insights/` - target-owned advisory memory for anonymized cross-project operating lessons and skill candidates.
 - `ai-workflow-workspace/skills/` - target-owned user skills that can take precedence over system skills as supporting guidance.
 - `ai-workflow-workspace/micro-projects/` - repo-level low-risk micro-project workspace.
 
@@ -84,7 +85,7 @@ Rules:
 
 - Product code, app commands, framework commands, tests, builds, migrations, and target git state are handled from `TARGET_REPO_ROOT`.
 - Workflow docs, templates, validators, and system examples live under `AI_WORKFLOW_HOME`.
-- Runtime facts, project artifacts, memory, human artifacts, external memory, and user skills live under `AI_WORKFLOW_WORKSPACE_HOME`.
+- Runtime facts, project artifacts, memory, human artifacts, external memory, system insights, and user skills live under `AI_WORKFLOW_WORKSPACE_HOME`.
 - A workflow path like `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` means `ai-workflow-workspace/repo/core/status.md` from the target repo root.
 - Run workflow validators from inside `ai-workflow/`:
 
@@ -138,7 +139,7 @@ ai-workflow/.systems/scripts/update-from-upstream
 
 This blocks dirty system-owned files in the nested clone, runs `git fetch` and `git merge --ff-only`, then validates the updated system. It does not read, backup, modify, or restore `ai-workflow-workspace/`.
 
-Do not edit `.systems/**` in a target repository. Workflow improvement ideas discovered during target work belong in `ai-workflow-workspace/external-memory/` and should be promoted through the official upstream repository.
+Do not edit `.systems/**` in a target repository. Workflow improvement ideas discovered during target work belong in `ai-workflow-workspace/external-memory/` and should be promoted through the official upstream repository. Anonymized project lessons about frontend, backend, smart contracts, SEO, ads, offers, process, quality, client work, product, or skills belong in `ai-workflow-workspace/system-insights/` after checkpoint/final-check routing or explicit owner-approved capture.
 
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.
 
@@ -176,6 +177,7 @@ git diff --check
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-system-insights
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

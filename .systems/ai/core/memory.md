@@ -14,8 +14,10 @@ Use this router only for date, topic, type, status, and route to the detailed me
 | --- | --- | --- |
 | `.systems/ai/core/memory.md` | this workflow template | router/index for template maintenance memory |
 | `.systems/ai/memory/` | this workflow template | detailed template maintenance memory entries |
-| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | universal workflow/process memory | router/index for reusable lessons to promote into future versions |
-| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | universal workflow/process memory | detailed reusable lesson entries |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | AI Workflow improvement memory | router/index for proposed workflow, gate, template, validator, autopilot, recovery, or system-skill improvements |
+| `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | AI Workflow improvement memory | detailed workflow improvement proposals |
+| `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` | anonymized cross-project operating lessons | router/index for reusable frontend, backend, smart-contract, SEO, ads, offer, process, quality, client-work, product, and skills insights |
+| `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` | anonymized cross-project operating lessons | detailed System Insight entries |
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` | target repository | router/index for repo-local memory |
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | target repository | detailed repo-local memory entries |
 | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` | one project workspace | router/index for project-specific memory |
@@ -34,4 +36,5 @@ Use this router only for date, topic, type, status, and route to the detailed me
 - Do not store target-repo facts here.
 - Do not store project-specific task implementation details here.
 - Do not store secrets, credentials, customer data, or production-only operational details.
-- Promote reusable workflow lessons to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` and index them in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` when they should affect future template versions.
+- Promote reusable workflow-system improvement proposals to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` and index them in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` when they should affect future template versions.
+- Promote anonymized operating lessons from projects to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` and index them in `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` only through checkpoint/final-check routing or explicit owner-approved capture.

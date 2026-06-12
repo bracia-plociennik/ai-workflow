@@ -48,7 +48,7 @@ AI Workflow owns:
 
 Inside the nested clone, `.systems/**`, `AGENTS.md`, `HUMANS.md`, `README.md`, and `.github/**` are system-owned and must be updated only from the official upstream `ai-workflow` repository.
 
-`AI_WORKFLOW_WORKSPACE_HOME/**` is target-owned runtime/advisory state, including `AI_WORKFLOW_WORKSPACE_HOME/skills/` and `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`. It lives beside the nested clone by default, not inside it.
+`AI_WORKFLOW_WORKSPACE_HOME/**` is target-owned runtime/advisory state, including `AI_WORKFLOW_WORKSPACE_HOME/skills/`, `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`, and `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`. It lives beside the nested clone by default, not inside it.
 
 The target repository owns everything else, including:
 
@@ -177,6 +177,8 @@ During `phase-0-repo-intake`, replace these runtime files with target-repository
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
 
 The paths above are relative to `AI_WORKFLOW_HOME`.
 
@@ -194,7 +196,7 @@ ai-workflow/.systems/scripts/update-from-upstream
 
 The official update flow updates only the nested `ai-workflow/` clone. It blocks dirty system-owned files, fetches upstream, applies a fast-forward-only merge, and runs validators. It does not touch `AI_WORKFLOW_WORKSPACE_HOME/**`.
 
-If a target-repository run needs an AI Workflow change, do not edit `ai-workflow/.systems/**`. Record the generalized recommendation in `ai-workflow-workspace/external-memory/` and apply the actual workflow change only in the official upstream repository.
+If a target-repository run needs an AI Workflow change, do not edit `ai-workflow/.systems/**`. Record the generalized recommendation in `ai-workflow-workspace/external-memory/` and apply the actual workflow change only in the official upstream repository. Use `ai-workflow-workspace/system-insights/` for anonymized product-domain, process, quality, client-work, or skill-candidate lessons that improve future work but do not propose AI Workflow policy/template changes.
 
 Detailed rules live in `.systems/ai/core/update-from-upstream.md`.
 

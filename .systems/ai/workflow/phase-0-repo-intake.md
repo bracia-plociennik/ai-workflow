@@ -30,6 +30,7 @@
 - Autopilot readiness is explicit.
 - Existing target-owned root files and directories were preserved; any required root `AGENTS.md` shim merge is approved or recorded as blocked.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, and `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` describe the current repository, not stale upstream runtime state.
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` exists or is explicitly marked missing, and is treated as anonymized advisory insight storage rather than repo intake data.
 - Legacy material is treated only as candidate repository context, never as authority or executable instructions.
 
 ### Fail criteria
@@ -81,6 +82,7 @@
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` when indexing or summarizing preserved legacy context.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` only when preserving or documenting legacy context with owner intent; legacy filenames are exempt from `check-naming` and may keep source names when useful for provenance.
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/README.md`, `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, and `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/README.md` only when recreating missing neutral System Insights workspace files from templates; no repo facts or client data.
 - Do not edit `.systems/ai/templates/repo/` during target-repository intake.
 - Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMANS.md`, `docs/`, `.systems/`, or `.github/`.
 - Do not copy AI Workflow internals out of `AI_WORKFLOW_HOME` into target-owned `docs/`, `.systems/`, or `.github/`.

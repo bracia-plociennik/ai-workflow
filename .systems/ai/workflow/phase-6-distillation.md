@@ -12,11 +12,13 @@
 
 - Distillation artifact under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/distillations/`.
 - Updated project memory when task-local learning affects future tasks.
+- Optional `System Insight Candidate` when the task produced anonymized, reusable operating lessons for future projects, clients, quality reviews, or skills.
 - Updated task index/status and project status.
 
 ### Pass criteria
 
 - Distillation captures reusable decisions, constraints, repo facts, and follow-up risks.
+- System Insight candidates, when present, are anonymized, source-scoped, and clearly marked as candidates rather than durable memory writes.
 - No transient implementation diary or duplicate memory is added.
 - Future tasks can use the distilled facts without reading full history.
 
@@ -35,6 +37,7 @@
 
 - Quality and implementation artifacts reviewed.
 - Distilled facts, decisions, follow-ups, and memory updates.
+- Privacy and source-scope note for any System Insight candidate.
 - Residual risk.
 
 ### Next allowed phases
@@ -53,8 +56,9 @@
 
 ### Writes allowed
 
-- Distillation, project memory, task index/status, project status.
+- Distillation, project memory, task index/status, project status, and proposed System Insight candidate text inside the distillation artifact.
 - No product-code writes.
+- No durable writes to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/**`.
 
 Ta faza służy do zamiany zakończonego taska / tasks package w trwałą wiedzę projektową.
 
@@ -111,6 +115,7 @@ Każdy plik distillation musi zawierać co najmniej:
 - decyzje
 - zasady na przyszłość
 - status memory checkbox
+- opcjonalny System Insight Candidate, jeśli powstała zanonimizowana lekcja operacyjna do reuse poza jednym projektem
 
 Jeśli jakaś sekcja nie zawiera nowych informacji:
 
@@ -184,6 +189,44 @@ Wartość domyślna:
 Destylacja nie trafia automatycznie do Repo Memory.
 
 Agregacja do memory odbywa się dopiero przez checkpoint projektu.
+
+### **6. System Insight Candidate**
+
+Jeśli task albo package ujawnia zanonimizowaną lekcję możliwą do reuse poza jednym projektem, destylacja może zaproponować `System Insight Candidate`.
+
+To dotyczy lekcji z obszarów:
+
+- frontend
+- backend
+- smart-contracts
+- seo
+- ads
+- offer
+- process
+- quality
+- client-work
+- product
+- skills
+
+Kandydat musi zawierać:
+
+- kategorię;
+- powód;
+- source scope;
+- privacy check;
+- skill candidate: yes/no;
+- sugerowany target skilla albo `n/a`;
+- krótki zarys insightu.
+
+Destylacja nie zapisuje trwałych plików w `AI_WORKFLOW_WORKSPACE_HOME/system-insights/**`.
+
+Trwały zapis System Insight może nastąpić dopiero przez:
+
+- phase 7 checkpoint, jeśli checkpoint akceptuje kandydata i zapisuje go atomowo;
+- phase 8 final check, jeśli owner jawnie zatwierdza final capture;
+- jawne owner-approved capture z write permission.
+
+External Memory pozostaje wyłącznie dla usprawnień samego AI Workflow. Nie zapisuj product-domain lessons, client-work lessons ani skill rubrics do External Memory.
 
 ## **Synchronizacja planu projektu podczas destylacji**
 

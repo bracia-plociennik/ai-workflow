@@ -29,6 +29,7 @@
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`;
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md`;
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` when present;
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` and `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` when present;
 - existing project artifacts when present.
 
 ## Installation Collision Status

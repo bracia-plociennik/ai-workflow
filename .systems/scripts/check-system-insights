@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$script_dir/resolve-workflow-env"
+repo_root="$AI_WORKFLOW_HOME"
+workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+cd "$repo_root"
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing System Insights artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for System Insights reference check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing System Insights reference in $file: $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/system-insights.md"
+  ".systems/ai/templates/system-insights/README.md"
+  ".systems/ai/templates/system-insights/system-insights-readme.template.md"
+  ".systems/ai/templates/system-insights/system-insights.template.md"
+  ".systems/ai/templates/system-insights/insights-readme.template.md"
+  ".systems/ai/templates/system-insights/system-insight.template.md"
+  ".systems/ai/templates/workspace/system-insights/README.md"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+require_ref "AGENTS.md" 'system-insights\.md' "core System Insights contract"
+require_ref "HUMANS.md" 'System Insights' "human System Insights guidance"
+require_ref ".systems/ai/core/workflow.md" 'system-insights\.md' "workflow router System Insights reference"
+require_ref ".systems/ai/core/command-routing.md" 'System Insights' "command routing System Insights reference"
+require_ref ".systems/ai/core/system-insights.md" 'AI_WORKFLOW_WORKSPACE_HOME/system-insights/' "workspace namespace"
+require_ref ".systems/ai/core/system-insights.md" 'External Memory' "external memory distinction"
+require_ref ".systems/ai/core/system-insights.md" '8\. WALIDACJA OPERACYJNA' "operational validation section"
+require_ref ".systems/ai/templates/workspace/external-memory/external-memory.template.md" 'system-insights' "external memory excludes system insights"
+require_ref ".systems/ai/templates/external-memory/date-external-memory.template.md" 'Scope check' "external memory scope check"
+
+required_sections=(
+  "## TEMAT"
+  "## 0. SYGNAŁY"
+  "## 1. CO ZOSTAŁO FAKTYCZNIE ZROBIONE"
+  "## 2. PROBLEMY \\(→ KONWERSJA\\)"
+  "## 3. WZORCE"
+  "## 4. DECYZJE"
+  "## 5. ZASADY NA PRZYSZŁOŚĆ"
+  "## 6. OTWARTE LUKI"
+  "## 7. ODRZUCONE JAKO SZUM"
+  "## 8. WALIDACJA OPERACYJNA"
+)
+
+raw_data_pattern='(client[ _-]?name[[:space:]]*[:=]|customer[ _-]?name[[:space:]]*[:=]|\bemail[[:space:]]*[:=]|\bphone[[:space:]]*[:=]|[[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|\+[0-9][0-9 .()-]{7,}[0-9]|\([0-9]{2,4}\)[0-9 .-]{5,}[0-9]|[0-9]{3}[ .][0-9]{3}[ .][0-9]{3,4}|\b0x[0-9a-f]{40}\b|\.env\b|api[ _-]?key[[:space:]]*[:=]|private[ _-]?key[[:space:]]*[:=]|wallet[ _-]?private[ _-]?key|production[ _-]?credentials[[:space:]]*[:=]|secret[ _-]?token[[:space:]]*[:=]|\b(sk|pk|ghp|gho|github_pat)_[[:alnum:]_=-]{20,})'
+external_product_pattern='\b(frontend|backend|smart[ -]?contracts?|seo|ads|advertising|paid[ -]?media|offer|client[ -]?work|product)\b[^\n]{0,80}\b(lesson|lessons|insight|insights|practice|practices|rubric|checklist|heuristic|zasada|lekcja|wniosek)\b'
+
+check_insight_entry() {
+  local file="$1"
+
+  for section in "${required_sections[@]}"; do
+    if ! rg -q "^${section}$" "$file"; then
+      echo "System Insight entry missing required section '$section': ${file#./}"
+      fail=1
+    fi
+  done
+
+  for required in 'Privacy check:' 'Source scope:' 'Skill candidate:' 'Suggested skill target:'; do
+    if ! rg -q "$required" "$file"; then
+      echo "System Insight entry missing required metadata '$required': ${file#./}"
+      fail=1
+    fi
+  done
+
+  for subsection in '### co zostaje' '### co poprawić / usunąć' '### czego brakuje'; do
+    if ! rg -q "^${subsection}$" "$file"; then
+      echo "System Insight entry missing operational validation subsection '$subsection': ${file#./}"
+      fail=1
+    fi
+  done
+
+  if ! rg -q 'Privacy check:[[:space:]]*`?confirmed no raw client data' "$file"; then
+    echo "System Insight entry privacy check is missing or not confirmed: ${file#./}"
+    fail=1
+  fi
+
+  if rg -n -i "$raw_data_pattern" "$file"; then
+    echo "System Insight entry appears to contain raw client data or secret markers: ${file#./}"
+    fail=1
+  fi
+}
+
+while IFS= read -r -d '' file; do
+  check_insight_entry "$file"
+done < <(find .systems/ai/examples/system-insights -maxdepth 1 -type f -name '*.md' ! -name 'README.md' -print0 2>/dev/null || true)
+
+if [[ -d "$workspace_home/system-insights/insights" ]]; then
+  while IFS= read -r -d '' file; do
+    check_insight_entry "$file"
+  done < <(find "$workspace_home/system-insights/insights" -maxdepth 1 -type f -name '*.md' ! -name 'README.md' -print0)
+fi
+
+if [[ -d "$workspace_home/external-memory/memory" ]]; then
+  while IFS= read -r -d '' file; do
+    if rg -n -i "$external_product_pattern" "$file"; then
+      echo "External Memory contains product-domain or System Insight lesson; use AI_WORKFLOW_WORKSPACE_HOME/system-insights/: ${file#./}"
+      fail=1
+    fi
+  done < <(find "$workspace_home/external-memory/memory" -maxdepth 1 -type f -name '*.md' ! -name 'README.md' -print0)
+fi
+
+exit "$fail"

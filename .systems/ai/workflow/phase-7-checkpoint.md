@@ -13,12 +13,14 @@
 - Checkpoint artifact under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/checkpoints/`.
 - Updated project memory router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` and detailed entries under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` when applicable.
 - Updated repo memory router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` and detailed entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` when applicable.
+- Updated System Insights router `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` and detailed entries under `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` when a source-backed, anonymized System Insight candidate is accepted.
 - Updated task index/status and project status.
 
 ### Pass criteria
 
 - Drift between repo, status, architecture, plan, specs, quality, and memory is detected and resolved or escalated.
 - Memory updates are concise and source-backed.
+- System Insight writes, when present, are anonymized, privacy-checked, and separated from External Memory.
 - Next task or final check state is unambiguous.
 
 ### Fail criteria
@@ -26,6 +28,8 @@
 - Drift remains unresolved.
 - Checkpoint rewrites source-of-truth artifacts without proper phase routing.
 - Memory records unsupported or conflicting facts.
+- System Insights contain raw client data, repo-specific facts, project-specific details, or secrets.
+- Product-domain lessons are written to External Memory instead of System Insights.
 
 ### Who can approve
 
@@ -36,6 +40,7 @@
 
 - Artifacts compared.
 - Drift findings, memory updates, checkpoint decision, and next state.
+- Privacy/scope validation for any accepted System Insight.
 - Residual risk.
 
 ### Next allowed phases
@@ -54,7 +59,7 @@
 
 ### Writes allowed
 
-- Checkpoint, project memory, repo memory, task index/status, project status, escalations.
+- Checkpoint, project memory, repo memory, accepted System Insights, task index/status, project status, escalations.
 - No product-code writes.
 
 Ta faza służy do synchronizacji stanu wiedzy projektowej, architektury i realnego stanu repo.
@@ -70,6 +75,7 @@ Celem jest:
   - implementacją
   - project memory
   - repo memory
+  - system insights privacy/scope, jeśli użyte
 
 ## Zasada ogólna
 
@@ -133,6 +139,7 @@ Checkpoint powinien pracować na następujących źródłach:
 
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, jeśli checkpoint przetwarza zaakceptowane System Insight candidates
 - wszystkie pliki `phase-6-<task-id>-distillation.md`, w których:
   - `memory-in-repo-memory: false`
 - aktualny stan repo
@@ -151,6 +158,7 @@ Checkpoint musi wykonać trzy rzeczy:
    - project memory
    - repo memory
    - external workflow memory, jeśli checkpoint wykrył uniwersalną lekcję o procesie
+   - system insights, jeśli checkpoint akceptuje zanonimizowaną lekcję operacyjną
 
 `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` jest routerem pamięci repo-level. Szczegółowe wpisy zapisuj w `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`. Aktualizuj repo memory tylko wtedy, gdy checkpoint wykrywa wiedzę globalnie istotną dla całego repo, a nie lokalny detal jednego projektu.
 
@@ -160,6 +168,12 @@ Checkpoint musi wykonać trzy rzeczy:
 
 Nowy wpis External Memory twórz jako osobny plik `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/YYYY-MM-DD-short-kebab-title.md` z template'u `.systems/ai/templates/external-memory/date-external-memory.template.md`. Następnie zaktualizuj router `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` tylko o datę, temat, typ, status i route.
 
+`AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` jest routerem zanonimizowanych lekcji operacyjnych, a `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` przechowuje szczegółowe wpisy. Aktualizuj je tylko wtedy, gdy checkpoint akceptuje `System Insight Candidate` z distillation albo owner jawnie zatwierdził capture.
+
+System Insights są dla lekcji domenowych i operacyjnych: frontend, backend, smart kontrakty, SEO, reklamy, oferta, proces, jakość, współpraca z klientem, produkt i kandydaci na skille. Nie zapisuj tam raw client data, nazw klientów, sekretów, repo-specific faktów ani project-specific szczegółów.
+
+Nowy wpis System Insight twórz jako osobny plik `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/YYYY-MM-DD-short-kebab-title.md` z template'u `.systems/ai/templates/system-insights/system-insight.template.md`. Następnie zaktualizuj router `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` tylko o datę, temat, kategorię, status, skill candidate i route.
+
 ## **Minimalny kontrakt project, repo i external memory**
 
 Project Memory powinno zawierać wiedzę istotną dla danego projektu. `memory.md` jest tylko routerem, a szczegóły trafiają do `memory/`.
@@ -167,6 +181,8 @@ Project Memory powinno zawierać wiedzę istotną dla danego projektu. `memory.m
 Repo Memory powinno zawierać tylko rzeczy globalnie istotne dla całego repo. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` jest tylko routerem, a szczegóły trafiają do `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`.
 
 External Memory powinno zawierać tylko rzeczy globalnie istotne dla `ai-workflow` jako systemu, nie dla konkretnego repo.
+
+System Insights powinny zawierać tylko zanonimizowane lekcje operacyjne możliwe do reuse w przyszłych projektach, klientach, review, ofertach albo skillach. Nie są pamięcią repo ani projektu i nie mogą przenosić danych klienta.
 
 Nie zapisuj wszystkiego z distillation.
 
@@ -337,6 +353,13 @@ Jeśli `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` albo `AI_
 - nie zapisuj repo-specific ani project-specific wiedzy do external memory
 - każdy nowy wpis musi być osobnym plikiem datowanym i zapisanym według template'u external memory oraz wpisem w routerze `external-memory.md`
 
+Jeśli `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` albo `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` nie istnieje:
+
+- checkpoint może zaproponować ich utworzenie albo utworzyć je, jeśli checkpoint akceptuje zanonimizowany System Insight
+- nie zapisuj raw client data, nazw klientów, sekretów, repo-specific faktów ani project-specific szczegółów
+- nie zapisuj AI Workflow improvement proposals do System Insights; użyj External Memory
+- każdy nowy wpis musi być osobnym plikiem datowanym i zapisanym według template'u System Insight oraz wpisem w routerze `system-insights.md`
+
 ## **Zakaz mechanicznego merge**
 
 Nie wolno:
@@ -353,6 +376,7 @@ Na końcu checkpointu Codex powinien krótko wypisać:
 - które checkboxy zostały zmienione na true
 - jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `memory.md`
 - jakie decyzje, zasady lub constraints dodano albo zaktualizowano w `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`, jeśli dotyczy
+- jakie System Insights dodano albo odrzucono, jeśli distillation zawierał kandydatów
 - czy wykryto drift
 - klasyfikację driftu:
   - critical
@@ -378,6 +402,8 @@ Wejście:
 - AI_WORKFLOW_WORKSPACE_HOME/repo/memory/
 - AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/
 - AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md
+- AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md
+- AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/
 - wszystkie phase-6-<task-id>-distillation.md z memory-in-repo-memory: false
 - aktualny stan repo
 - aktualna architektura
@@ -389,6 +415,7 @@ Wykonaj:
 - aktualizację AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md i AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/ tylko dla wiedzy project-level
 - aktualizację AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md i AI_WORKFLOW_WORKSPACE_HOME/repo/memory/ tylko dla wiedzy repo-level
 - aktualizację AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md i AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/ tylko dla uniwersalnej wiedzy workflow
+- aktualizację AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md i AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/ tylko dla zaakceptowanych, zanonimizowanych lekcji operacyjnych
 - walidację zgodności między:
   - architekturą
   - implementacją
@@ -407,6 +434,7 @@ Po poprawnym przetworzeniu distillation:
 Na końcu zwróć:
 - które distillation zostały przetworzone
 - jakie decyzje lub zasady dodano albo zaktualizowano
+- jakie System Insights dodano albo odrzucono
 - czy wykryto drift
 - klasyfikację driftu
 - czy projekt pozostaje spójny

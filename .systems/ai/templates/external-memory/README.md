@@ -1,6 +1,6 @@
 # external-memory templates
 
-Templates for universal External Memory entries.
+Templates for universal External Memory entries about AI Workflow improvements.
 
 Use these templates when a checkpoint, final check, or workflow review produces a reusable lesson for improving AI Workflow itself.
 
@@ -16,7 +16,7 @@ The router/index is:
 AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md
 ```
 
-Do not use these templates for repository facts, project decisions, task implementation notes, secrets, client data, or product-domain knowledge.
+Do not use these templates for repository facts, project decisions, task implementation notes, secrets, client data, product-domain knowledge, client-work lessons, or skill rubrics. Use System Insights for anonymized operating lessons.
 
 ## Templates
 

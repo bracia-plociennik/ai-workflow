@@ -24,6 +24,7 @@
 | Checkpoint complete | `<PASS|FAIL>` | |
 | Repo/memory/status consistent | `<PASS|FAIL>` | |
 | External workflow memory consistent, if used | `<PASS|FAIL|n/a>` | |
+| System insights anonymized and scope-correct, if used | `<PASS|FAIL|n/a>` | |
 | No unresolved blocking decisions | `<PASS|FAIL>` | |
 | No open blocking change requests | `<PASS|FAIL>` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md` |
 

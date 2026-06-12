@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.8` |
+| Workflow version | `0.8.9` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-06-11` |
+| Last process migration | `2026-06-12` |
 | Naming standard | lowercase kebab-case |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -26,6 +26,7 @@
 - `.systems/ai/core/task-intake.md` defines the required Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request.
 - `.systems/ai/core/parallel-work-policy.md` defines status-only coordination for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads without adding lock files or scheduler state.
 - `.systems/ai/core/prompt-composition.md` defines advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority limits.
+- `.systems/ai/core/system-insights.md` defines advisory anonymized System Insights, privacy rules, allowed categories, status lifecycle, write routing, and skill-candidate boundaries.
 - `.systems/ai/templates/prompting/` stores reusable prompt composition templates, while `.systems/ai/examples/prompting/` stores documentation-only examples.
 - Project-local prompting artifacts belong under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/` when a project explicitly creates them.
 - `.systems/scripts/check-prompt-composition` validates required prompt composition artifacts, router references, and deterministic unsafe-authority grant patterns.
@@ -35,6 +36,7 @@
 - `.systems/ai/skills/` stores optional system-defined task-specific workflow skills.
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/` stores optional user-defined task-specific workflow skills and takes precedence as supporting guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` stores target-owned External Memory improvement proposals.
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` stores target-owned anonymized cross-project operating lessons and skill candidates.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/` stores repo-specific runtime facts.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/` stores canonical repo runtime routers.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` records target-repository bootstrap status.

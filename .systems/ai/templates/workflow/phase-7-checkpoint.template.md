@@ -14,6 +14,8 @@
 - Repo memory entries: `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
 - External workflow memory router: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
 - External workflow memory entries: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`
+- System insights router: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`
+- System insight entries: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
 - Project memory router: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
 - Project memory entries: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`
 - Distillations processed:
@@ -35,6 +37,8 @@
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | |
 | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | |
 | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` | |
+| `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` | |
 | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` | |
 | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` | |
 
@@ -56,6 +60,12 @@
 | --- | --- | --- | --- | --- |
 | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/<YYYY-MM-DD-short-kebab-title>.md` | `<recommendation|rule|anti-pattern|template-change|skill-improvement|open-question>` | `<scope>` | `<pass|fail|n/a>` | `<target|n/a>` |
 
+## System Insight Entries
+
+| Entry File | Category | Status | Privacy Check | Skill Candidate |
+| --- | --- | --- | --- | --- |
+| `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/<YYYY-MM-DD-short-kebab-title>.md` | `<frontend|backend|smart-contracts|seo|ads|offer|process|quality|client-work|product|skills>` | `<proposed|accepted|promoted-to-skill|superseded|rejected>` | `<pass|fail>` | `<yes|no>` |
+
 ## Drift Review
 
 | Drift | Classification | Impact | Required Action |
@@ -67,6 +77,7 @@
 - Repo vs architecture: `<PASS|FAIL>`
 - Repo vs plan/specs: `<PASS|FAIL>`
 - Memory vs repo: `<PASS|FAIL>`
+- System insights privacy/scope, if used: `<PASS|FAIL|n/a>`
 - Status vs artifacts: `<PASS|FAIL>`
 
 ## Checkpoint Gate

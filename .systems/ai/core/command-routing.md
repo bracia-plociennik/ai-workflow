@@ -32,6 +32,7 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Full commands with explicit project, task IDs, risk constraints, mode, and evidence policy may be executed if gates are satisfied.
 - Parallel work questions must be routed through `.systems/ai/core/parallel-work-policy.md`, repo status, project statuses, task dependencies, and write-set checks before recommending concurrent execution.
 - Prompt composition, role, and variable questions must be routed through `.systems/ai/core/prompt-composition.md`; any project-local prompting artifacts are read after canonical policy and the current phase file.
+- System insight, anonymized lesson, skill-candidate lesson, client-work lesson, frontend/backend/SEO/ads/smart-contract lesson, and cross-project best-practice capture requests must be routed through `.systems/ai/core/system-insights.md`.
 - New task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
@@ -540,6 +541,7 @@ Polish variants:
 
 - `Zrób distillation po tasku.`
 - `Zapisz reusable lessons z ukończonego taska.`
+- `Zaproponuj System Insight Candidate, jeśli task dał zanonimizowaną lekcję do reuse.`
 - `Przenieś tylko trwałe decyzje i constraints do memory.`
 - `Nie zapisuj tymczasowego szumu do memory.`
 - `Zrób fazę 6 dla zakończonego taska.`
@@ -548,6 +550,7 @@ English variants:
 
 - `Run distillation after the task.`
 - `Capture reusable lessons from the completed task.`
+- `Propose a System Insight Candidate if the task produced an anonymized reusable lesson.`
 - `Promote only durable decisions and constraints to memory.`
 - `Do not store temporary noise in memory.`
 - `Run phase 6 for the completed task.`
@@ -556,6 +559,37 @@ Routing notes:
 
 - Distillation follows quality.
 - It does not replace status or evidence.
+- Distillation may propose a `System Insight Candidate`, but it must not write durable `AI_WORKFLOW_WORKSPACE_HOME/system-insights/**` files.
+
+### System Insights
+
+Route through `.systems/ai/core/system-insights.md` and then to phase 6, phase 7, phase 8, or owner-approved capture depending on source and write permission.
+
+Polish variants:
+
+- `Zapisz system insight z tej lekcji.`
+- `Zrób zanonimizowaną lekcję z projektu.`
+- `Wyciągnij insight frontend/backend/SEO/reklamy/smart kontrakty z projektu.`
+- `Czy to powinno zostać skillem?`
+- `Przygotuj skill candidate z tej lekcji.`
+- `Nie zapisuj tego w External Memory, to jest lekcja domenowa.`
+
+English variants:
+
+- `Capture a system insight from this lesson.`
+- `Create an anonymized project lesson.`
+- `Extract a frontend/backend/SEO/ads/smart-contract insight from the project.`
+- `Should this become a skill?`
+- `Prepare a skill candidate from this lesson.`
+- `Do not store this in External Memory; it is a product-domain lesson.`
+
+Routing notes:
+
+- System Insights are for anonymized cross-project operating lessons: frontend, backend, smart contracts, SEO, ads, offer, process, quality, client-work, product, and skills.
+- External Memory remains only for AI Workflow improvement proposals.
+- Durable System Insight writes require phase 7 checkpoint, phase 8 final-check capture, or explicit owner-approved capture with write permission.
+- Every entry needs privacy check, source scope, required distillation sections, `8. WALIDACJA OPERACYJNA`, skill candidate, and suggested skill target.
+- If raw client data, client names, repo-specific facts, project-specific details, secrets, production identifiers, or credentials are needed to preserve meaning, do not write the insight.
 
 ### Checkpoint
 
@@ -567,6 +601,7 @@ Polish variants:
 - `Porównaj repo, status, taski, decyzje, quality i memory.`
 - `Sprawdź drift po zakończonych taskach.`
 - `Zaktualizuj checkpoint i memory po cadence.`
+- `Zapisz zaakceptowane System Insights z distillation.`
 - `Wznów od ostatniego stabilnego PASS.`
 
 English variants:
@@ -575,12 +610,14 @@ English variants:
 - `Compare repo, status, tasks, decisions, quality, and memory.`
 - `Check drift after completed tasks.`
 - `Update checkpoint and memory after cadence.`
+- `Write accepted System Insights from distillation.`
 - `Resume from the last stable PASS.`
 
 Routing notes:
 
 - Checkpoint cannot hide drift.
 - If status, repo, and artifacts conflict, stop or escalate.
+- Checkpoint may atomically write accepted System Insights after privacy and scope validation.
 
 ### Final Check And Owner Approval
 
@@ -608,6 +645,7 @@ Routing notes:
 - Final check cannot close the project by itself.
 - If the owner has comments before `final-owner-yes`, route through `.systems/ai/core/change-requests.md` instead of closing the project.
 - Open blocking pre-final change requests prevent `final-owner-yes`.
+- Final check must verify System Insights privacy and scope when the project promoted anonymized operating lessons.
 
 ### Change Requests Before Or After Final Approval
 
