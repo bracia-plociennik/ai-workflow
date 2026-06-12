@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.10` |
+| Workflow version | `0.8.11` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-06-12` |
 | Naming standard | lowercase kebab-case |
@@ -25,6 +25,7 @@
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
 - `.systems/ai/core/task-intake.md` defines the required Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request.
 - `.systems/ai/core/parallel-work-policy.md` defines status-only coordination for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads without adding lock files or scheduler state.
+- `.systems/ai/core/contract-compliance.md` defines advisory work mode compliance and commit readiness knowledge capture decisions.
 - `.systems/ai/core/prompt-composition.md` defines advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority limits.
 - `.systems/ai/core/system-insights.md` defines advisory anonymized System Insights, privacy rules, allowed categories, status lifecycle, write routing, and skill-candidate boundaries.
 - `.systems/ai/templates/prompting/` stores reusable prompt composition templates, while `.systems/ai/examples/prompting/` stores documentation-only examples.

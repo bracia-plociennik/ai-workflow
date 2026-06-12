@@ -644,6 +644,17 @@ ai-workflow/.systems/scripts/update-workspace
 
 Ten skrypt dopisuje tylko brakujące neutralne katalogi, routery i README w `AI_WORKFLOW_WORKSPACE_HOME`, np. nowy bootstrap `system-insights/`. Nie nadpisuje istniejących runtime artifacts, nie skanuje legacy, nie tworzy root `AGENTS.md` i nie zmienia `.git/info/exclude`.
 
+### Contract Compliance I Knowledge Capture Przed Commitem
+
+Przed commitem pracy zarządzanej przez AI Workflow użyj `.systems/ai/core/contract-compliance.md`. To jest advisory-only gate: nie wymusza memory przy każdym commicie, ale wymaga jawnej decyzji:
+
+- `Work mode compliance: pass|warning|blocked`
+- `Work mode: full-project|project-local-micro-task|repo-level-micro-project|side-task|workflow-maintenance`
+- `Knowledge capture: required|not-required`
+- capture target albo powód, dlaczego capture nie jest wymagany
+
+Jeśli capture jest wymagany, użyj właściwego miejsca: micro-task artifact, micro-project artifact, status/evidence, phase-6 distillation, phase-7 checkpoint, project memory, repo memory, External Memory albo System Insights.
+
 Pełny prompt do Codexa:
 
 ```text

@@ -14,6 +14,7 @@ A task is done only when all applicable items are true:
 - no unrelated files changed;
 - status files are updated;
 - decision log is updated when assumptions changed;
+- contract compliance and knowledge capture decisions are stated before commit or handoff;
 - QA evidence is attached in the project quality artifact;
 - security-sensitive changes have required approval;
 - rollback notes exist for production-impacting work.
@@ -21,6 +22,18 @@ A task is done only when all applicable items are true:
 ## PASS Rule
 
 `PASS` requires explicit evidence. A declaration without evidence is `FAIL`.
+
+## Commit Readiness
+
+Before commit or handoff, apply `.systems/ai/core/contract-compliance.md`.
+
+The commit readiness decision must state:
+
+- `Work mode compliance: pass|warning|blocked`;
+- `Knowledge capture: required|not-required`;
+- capture target and reason.
+
+This is advisory-only for git commits, but it does not weaken phase gates, risk approvals, status updates, QA evidence, distillation, checkpoint, or memory requirements when those are otherwise required.
 
 ## FAIL Rule
 

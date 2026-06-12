@@ -902,6 +902,34 @@ Routing notes:
 - Do not normalize, rename, or rewrite files under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/`.
 - `--skip-validation` is only for emergency debugging and is not eligible for final PASS.
 
+### Contract Compliance / Commit Readiness / Knowledge Capture
+
+Route through `.systems/ai/core/contract-compliance.md`.
+
+Polish variants:
+
+- `Sprawdź contract compliance.`
+- `Sprawdź gotowość do commita.`
+- `Czy trzeba zapisać pamięć przed commitem?`
+- `Zrób knowledge capture decision.`
+- `Zacommituj po sprawdzeniu memory/checkpoint.`
+
+English variants:
+
+- `Check contract compliance.`
+- `Check commit readiness.`
+- `Do we need memory before commit?`
+- `Make the knowledge capture decision.`
+- `Commit after memory/checkpoint check.`
+
+Routing notes:
+
+- This gate is advisory-only, but every commit-ready summary should state work mode compliance and knowledge capture decision.
+- Work mode must be one of `full-project`, `project-local-micro-task`, `repo-level-micro-project`, `side-task`, or `workflow-maintenance`.
+- Knowledge capture is `required` when status, evidence, micro-task/micro-project artifacts, phase 6 distillation, phase 7 checkpoint, memory, External Memory, or System Insights must be updated by existing workflow rules.
+- If capture is `not-required`, state the reason.
+- This gate does not bypass phase gates, risk, permissions, evidence, writes allowed, stop conditions, owner approvals, distillation, checkpoint, or memory scope boundaries.
+
 ### Guide / Next Step / Lost / Getting Started
 
 Route through `.systems/ai/core/guide.md` and the global response contract in `.systems/ai/core/response-contract.md`.

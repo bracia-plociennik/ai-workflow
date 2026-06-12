@@ -13,6 +13,7 @@ fi
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
 .systems/scripts/check-system-insights
+.systems/scripts/check-contract-compliance
 
 fail=0
 phases=(
@@ -236,6 +237,18 @@ done
 for required_system_insights_ref in AGENTS.md HUMANS.md README.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md .systems/ai/core/guide.md .systems/ai/core/memory.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
   if ! rg -q 'System Insights|system-insights' "$required_system_insights_ref"; then
     echo "Missing System Insights reference in $required_system_insights_ref"
+    fail=1
+  fi
+done
+
+for required_contract_ref in AGENTS.md HUMANS.md README.md .systems/ai/core/operating-model.md .systems/ai/core/definition-of-done.md .systems/ai/core/commands.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'contract-compliance|Contract Compliance|contract compliance' "$required_contract_ref"; then
+    echo "Missing contract compliance reference in $required_contract_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'Knowledge capture|knowledge capture' "$required_contract_ref"; then
+    echo "Missing knowledge capture reference in $required_contract_ref"
     fail=1
   fi
 done

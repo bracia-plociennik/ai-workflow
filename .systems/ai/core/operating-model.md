@@ -57,6 +57,20 @@ The v1 coordination model is status-only. It does not add lock files, scheduler 
 
 Parallel work is allowed only when dependencies, owner decisions, risky integrations, status routers, memory routers, and product-code write sets do not overlap. If overlap is possible, stop and route through the main repo coordination thread for an owner decision or safe sequence.
 
+## Contract Compliance And Commit Readiness
+
+Use `.systems/ai/core/contract-compliance.md` before committing, preparing a commit summary, or closing work.
+
+The gate is advisory-only, but every work item should have an explicit work mode and knowledge capture decision:
+
+- work mode: `full-project`, `project-local-micro-task`, `repo-level-micro-project`, `side-task`, or `workflow-maintenance`;
+- compliance: `pass`, `warning`, or `blocked`;
+- knowledge capture: `required` or `not-required`;
+- capture target: status/evidence, micro-task artifact, micro-project artifact, phase-6 distillation, phase-7 checkpoint, project memory, repo memory, External Memory, System Insights, or not applicable;
+- reason.
+
+If compliance is blocked, stop before commit unless the current phase explicitly allows recording the blocker. If knowledge capture is required, use the scope boundaries in `.systems/ai/core/memory.md`, `.systems/ai/workflow/phase-6-distillation.md`, `.systems/ai/workflow/phase-7-checkpoint.md`, and `.systems/ai/core/system-insights.md`.
+
 ## Skill Routing
 
 Reusable task-specific skills can exist in two layers:

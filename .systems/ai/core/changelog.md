@@ -1,5 +1,11 @@
 # changelog.md
 
+## 0.8.11 - 2026-06-12
+
+- Added `.systems/ai/core/contract-compliance.md` for advisory work mode compliance and commit readiness knowledge capture decisions.
+- Added `.systems/scripts/check-contract-compliance` plus validator/smoke coverage for the contract references and micro-task/micro-project template hints.
+- Updated DoD, command routing, workflow routing, human docs, and micro-task/micro-project templates to require explicit `Knowledge capture: required|not-required` decisions before commit or handoff.
+
 ## 0.8.10 - 2026-06-12
 
 - Added `.systems/scripts/update-workspace` as an idempotent workspace schema backfill for existing target-owned workspaces after upstream updates.

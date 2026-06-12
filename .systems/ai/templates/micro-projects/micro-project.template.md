@@ -18,9 +18,22 @@
 - Manual checks:
   - `<manual check or not-applicable with reason>`
 
+## Contract Compliance
+
+- Work mode compliance: `<pass|warning|blocked>`
+- Scope/acceptance clear: `<yes|no>`
+- Risk allowed for mode: `<yes|no>`
+- Write-set conflicts: `<none|warning|blocked>`
+
 ## Changed Files
 
 - `<path>`
+
+## Knowledge Capture
+
+- Knowledge capture: `<required|not-required>`
+- Capture target: `<status/evidence|micro-project-artifact|repo-memory|external-memory|system-insights|not-applicable>`
+- Reason: `<short reason>`
 
 ## Follow-up / Promote Decision
 

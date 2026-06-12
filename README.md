@@ -149,6 +149,8 @@ This is idempotent. It creates only missing neutral workspace directories, route
 
 Do not edit `.systems/**` in a target repository. Workflow improvement ideas discovered during target work belong in `ai-workflow-workspace/external-memory/` and should be promoted through the official upstream repository. Anonymized project lessons about frontend, backend, smart contracts, SEO, ads, offers, process, quality, client work, product, or skills belong in `ai-workflow-workspace/system-insights/` after checkpoint/final-check routing or explicit owner-approved capture.
 
+Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
+
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.
 
 ## Template Boundaries
@@ -186,6 +188,7 @@ git diff --check
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
 .systems/scripts/check-system-insights
+.systems/scripts/check-contract-compliance
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

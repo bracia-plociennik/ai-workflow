@@ -205,6 +205,28 @@ mv "$tmp/.systems/ai/core/system-insights.md" "$tmp/.systems/ai/core/system-insi
 run_must_fail "missing-system-insights-contract" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/core/system-insights.md.bak" "$tmp/.systems/ai/core/system-insights.md"
 
+mv "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
+run_must_fail "missing-contract-compliance-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/contract-compliance.md.bak" "$tmp/.systems/ai/core/contract-compliance.md"
+
+cp "$tmp/.systems/ai/templates/projects/micro-task.template.md" "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak"
+cat > "$tmp/.systems/ai/templates/projects/micro-task.template.md" <<'MD'
+# <Micro-task Title>
+
+## Summary
+
+- Date: `<YYYY-MM-DD>`
+- Project: `<project>`
+- Risk: `low`
+
+## Follow-up / Promote Decision
+
+- Promote to full workflow: `<yes|no>`
+- Reason: `<why>`
+MD
+run_must_fail "contract-compliance-requires-micro-task-knowledge-capture" .systems/scripts/check-contract-compliance
+mv "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak" "$tmp/.systems/ai/templates/projects/micro-task.template.md"
+
 mv "$tmp/.systems/scripts/update-workspace" "$tmp/.systems/scripts/update-workspace.bak"
 run_must_fail "missing-update-workspace-script" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/update-workspace.bak" "$tmp/.systems/scripts/update-workspace"
