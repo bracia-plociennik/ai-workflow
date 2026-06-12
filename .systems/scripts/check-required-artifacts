@@ -139,6 +139,7 @@ required=(
   ".systems/scripts/check-status-consistency"
   ".systems/scripts/check-validator-smoke-tests"
   ".systems/scripts/init-workspace"
+  ".systems/scripts/update-workspace"
   ".systems/scripts/update-from-upstream"
   ".systems/ai/examples/projects/EXAMPLE/change-requests.md"
   ".systems/ai/examples/projects/EXAMPLE/change-requests/README.md"

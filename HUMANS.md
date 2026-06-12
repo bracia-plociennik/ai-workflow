@@ -636,10 +636,18 @@ ai-workflow/.systems/scripts/update-from-upstream
 
 Ten flow blokuje dirty zmiany w system-owned plikach nested clone, robi `git fetch` i `ff-only merge`, a potem uruchamia walidację systemu. Nie czyta, nie backupuje, nie przywraca i nie modyfikuje `ai-workflow-workspace/`; repo runtime, project/human workspaces, micro-projects, lokalne `external-memory`, user skills oraz legacy materiały są target-owned i leżą poza aktualizowanym clone.
 
+Po udanym update uruchom osobny, idempotentny sync schematu workspace:
+
+```bash
+ai-workflow/.systems/scripts/update-workspace
+```
+
+Ten skrypt dopisuje tylko brakujące neutralne katalogi, routery i README w `AI_WORKFLOW_WORKSPACE_HOME`, np. nowy bootstrap `system-insights/`. Nie nadpisuje istniejących runtime artifacts, nie skanuje legacy, nie tworzy root `AGENTS.md` i nie zmienia `.git/info/exclude`.
+
 Pełny prompt do Codexa:
 
 ```text
-Update AI Workflow from upstream in this target repository. Use ai-workflow/.systems/scripts/update-from-upstream. Do not touch ai-workflow-workspace/**. Stop if system-owned files in ai-workflow/ are dirty. Warn if legacy ai-workflow/workspace/** still exists and require migration before update. Run validation after the update.
+Update AI Workflow from upstream in this target repository. Use ai-workflow/.systems/scripts/update-from-upstream. Do not touch ai-workflow-workspace/** during upstream update. Stop if system-owned files in ai-workflow/ are dirty. Warn if legacy ai-workflow/workspace/** still exists and require migration before update. Run validation after the update. Then run ai-workflow/.systems/scripts/update-workspace to backfill missing workspace schema files without overwriting existing runtime artifacts.
 ```
 
 Krótki prompt:

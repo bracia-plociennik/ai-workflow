@@ -196,6 +196,14 @@ ai-workflow/.systems/scripts/update-from-upstream
 
 The official update flow updates only the nested `ai-workflow/` clone. It blocks dirty system-owned files, fetches upstream, applies a fast-forward-only merge, and runs validators. It does not touch `AI_WORKFLOW_WORKSPACE_HOME/**`.
 
+After updating the nested clone, run the workspace schema backfill when the target workspace may predate newer runtime namespaces:
+
+```bash
+ai-workflow/.systems/scripts/update-workspace
+```
+
+This script is idempotent and writes only missing neutral workspace files under `AI_WORKFLOW_WORKSPACE_HOME/**`. It does not overwrite existing runtime, does not preserve or scan legacy input, does not create or merge the root `AGENTS.md` shim, and does not edit `.git/info/exclude`. Fresh installations still use `phase-0-init`; `update-workspace` is for existing workspaces after upstream updates.
+
 If a target-repository run needs an AI Workflow change, do not edit `ai-workflow/.systems/**`. Record the generalized recommendation in `ai-workflow-workspace/external-memory/` and apply the actual workflow change only in the official upstream repository. Use `ai-workflow-workspace/system-insights/` for anonymized product-domain, process, quality, client-work, or skill-candidate lessons that improve future work but do not propose AI Workflow policy/template changes.
 
 Detailed rules live in `.systems/ai/core/update-from-upstream.md`.
