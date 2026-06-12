@@ -70,7 +70,7 @@ Skills may add stricter standards, conventions, checks, or review criteria. They
 
 If no matching skill exists, continue with the normal workflow and do not create a skill unless the user explicitly asks for one.
 
-Target repositories must not edit `.systems/ai/skills/`. New local skills belong in `AI_WORKFLOW_WORKSPACE_HOME/skills/`. Improvements to system skills belong in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` until they are promoted through the official upstream `ai-workflow` repository.
+Target repositories must not edit `.systems/ai/skills/`. New local skills belong in `AI_WORKFLOW_WORKSPACE_HOME/skills/`. Improvements to system skills belong in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` until they are promoted through the official upstream `ai-workflow` repository. Anonymized repeatable work lessons that may become local skills belong in `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` until the owner approves skill creation.
 
 ## Approval Policy
 

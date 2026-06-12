@@ -32,6 +32,8 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Workflow validator namespace: `.systems/scripts/`
 - Prompt composition contract: `.systems/ai/core/prompt-composition.md`
 - Prompt composition templates: `.systems/ai/templates/prompting/`
+- System Insights contract: `.systems/ai/core/system-insights.md`
+- System Insights router: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
 - Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
@@ -63,6 +65,8 @@ Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer 
 Use `.systems/ai/core/parallel-work-policy.md` when the user asks about working on multiple projects, tasks, Codex threads, micro-tasks, micro-projects, or autopilot runs in parallel. Parallel work is status-only in v1 and must stop on write-set, status-router, memory-router, dependency, or active-run conflicts.
 
 Use `.systems/ai/core/prompt-composition.md` when the user asks about master prompts, prompt modules, role profiles, generated variables, project-domain roles, workflow-phase roles, or AI Workflow maintenance baseline. Prompt composition is advisory only: current phase files still define pass criteria, fail criteria, evidence required, writes allowed, and stop conditions.
+
+Use `.systems/ai/core/system-insights.md` when work produces anonymized, reusable lessons about frontend, backend, smart contracts, SEO, ads, offer, process, quality, client work, product, or skill candidates. System Insights are advisory only and must not be mixed with External Memory, which remains only for AI Workflow improvement proposals.
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 

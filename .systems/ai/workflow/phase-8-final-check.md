@@ -33,6 +33,7 @@
 ### Evidence required
 
 - Task index, quality artifacts, distillations, checkpoints, decisions, and memory reviewed.
+- System Insights reviewed for privacy and scope when used.
 - Final findings, skipped checks, residual risk, and owner-approval state.
 - Open change requests reviewed through `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md` and `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests/`.
 
@@ -54,6 +55,7 @@
 ### Writes allowed
 
 - Final-check evidence, project status, task index/status, decisions/escalations.
+- Owner-approved final System Insight capture under `AI_WORKFLOW_WORKSPACE_HOME/system-insights/**` only when privacy/scope checks pass and the final-check artifact records source scope and owner approval.
 - No product-code writes.
 
 Ta faza służy do końcowej walidacji całego etapu.
@@ -142,6 +144,7 @@ Final Check musi zweryfikować:
   - project memory router `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`
   - repo memory router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
   - external memory router `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`, jeśli etap promował uniwersalne lekcje workflow
+  - system insights router `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` and entries under `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`, jeśli etap promował zanonimizowane lekcje operacyjne
   - checkpointami
 - czy rzeczywisty system odpowiada deklarowanemu stanowi
 - czy etap realizuje zamierzony cel systemowy
@@ -171,6 +174,9 @@ FAIL jeśli:
 - szczegółowy wpis project albo repo memory utrwala wiedzę z niewłaściwego scope'u
 - external memory utrwala repo-specific albo project-specific wiedzę jako uniwersalną zasadę workflow
 - external memory zawiera wpis bez privacy check albo wpis zapisany jako repo/project-specific fact
+- system insights zawierają raw client data, nazwy klientów, sekrety, repo-specific facts, project-specific details albo production identifiers
+- system insights nie zawierają wymaganej sekcji `8. WALIDACJA OPERACYJNA` albo privacy check
+- product-domain lessons zapisano w External Memory zamiast System Insights
 - istnieją niespójności między komponentami wpływające na correctness
 
 ## Relacja do checkpointu
@@ -181,6 +187,7 @@ Final Check zakłada, że:
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/` są zsynchronizowane
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` są zsynchronizowane, jeśli checkpoint dotyczył wiedzy repo-level
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` są zsynchronizowane, jeśli checkpoint dotyczył uniwersalnej wiedzy workflow, a użyte wpisy są osobnymi plikami z privacy check
+- `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` i `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` są zsynchronizowane, jeśli checkpoint dotyczył zanonimizowanych lekcji operacyjnych, a użyte wpisy są osobnymi plikami z privacy check i wymaganymi sekcjami destylacyjnymi
 
 Jeśli checkpoint nie istnieje:
 
@@ -227,6 +234,7 @@ Output musi zawierać:
 - zgodność z architekturą: PASS / FAIL
 - zgodność z planem etapu: PASS / FAIL
 - spójność repo / memory / checkpointów: PASS / FAIL
+- prywatność i scope System Insights, jeśli użyte: PASS / FAIL / n/a
 - lista sprzeczności lub none
 - lista warningów lub none
 - decyzja:
@@ -308,6 +316,7 @@ Na końcu zwróć:
 - zgodność z architekturą: PASS / FAIL
 - zgodność z planem: PASS / FAIL
 - spójność repo / memory / checkpointów: PASS / FAIL
+- prywatność i scope System Insights, jeśli użyte: PASS / FAIL / n/a
 - lista sprzeczności lub none
 - lista warningów lub none
 - decyzja: czy etap może zostać zamknięty

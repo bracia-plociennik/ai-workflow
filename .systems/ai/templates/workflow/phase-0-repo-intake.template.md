@@ -52,6 +52,8 @@
 | Repo intake | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` | `<present|missing|incomplete>` | |
 | External memory router | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` | `<present|missing|incomplete>` | |
 | External memory entries | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | `<present|missing|incomplete>` | |
+| System insights router | `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` | `<present|missing|incomplete>` | |
+| System insight entries | `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` | `<present|missing|incomplete>` | |
 | Repo memory router | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` | `<present|missing|incomplete>` | |
 | Repo memory entries | `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | `<present|missing|incomplete>` | |
 | Project status | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` | `<present|missing|incomplete>` | |

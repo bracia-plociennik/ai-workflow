@@ -10,7 +10,7 @@ This is a status-only coordination policy for v1. It does not introduce lock fil
 
 Use one main repo coordination thread for repository-wide state and one focused thread per project, task/package, micro-task, or micro-project.
 
-- Main repo thread: coordinates repo-level status, global blockers, owner decisions, repo memory, external memory, and cross-project write-set conflicts.
+- Main repo thread: coordinates repo-level status, global blockers, owner decisions, repo memory, external memory, system insights, and cross-project write-set conflicts.
 - Project thread: works within exactly one `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` workspace and one approved task/package or phase at a time.
 - Micro-task thread: works within one project-local micro-task when the work is small, local, low-risk, and outside the active plan or explicitly marked as a micro-task.
 - Micro-project thread: works within one `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<slug>/` workspace and only for low-risk repo-level work.
@@ -50,9 +50,10 @@ When a repo-level micro-project is the current repo focus, use existing repo sta
 
 - Project memory stores durable knowledge for one project only.
 - Repo memory stores repo-wide facts, constraints, command notes, and risks only.
-- External memory stores universal workflow/process lessons only and is advisory until promoted.
+- External memory stores AI Workflow improvement proposals only and is advisory until promoted.
+- System Insights store anonymized cross-project operating lessons and skill candidates only and are advisory until accepted or promoted.
 
-Parallel threads must not update project memory, repo memory, or external memory ad hoc unless the owner explicitly approves that memory update, or the routed checkpoint/final-check phase permits it.
+Parallel threads must not update project memory, repo memory, external memory, or system insights ad hoc unless the owner explicitly approves that memory update, or the routed checkpoint/final-check phase permits it.
 
 When several threads produce related lessons, aggregate them through checkpoint or an owner-approved memory task instead of duplicating entries.
 

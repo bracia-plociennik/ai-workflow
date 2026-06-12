@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.8.9 - 2026-06-12
+
+- Added `.systems/ai/core/system-insights.md` for anonymized cross-project operating lessons, privacy rules, categories, status lifecycle, write routing, and skill-candidate boundaries.
+- Added `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` bootstrap templates and documentation examples for frontend, backend, client-work/process, and skill-candidate insights.
+- Kept External Memory scoped to AI Workflow improvement proposals and routed product-domain lessons to System Insights instead.
+- Connected System Insights to phase 6 candidates, phase 7 checkpoint writes, phase 8 privacy/scope checks, command routing, guide mode, human docs, and repo intake.
+- Added `.systems/scripts/check-system-insights` plus validator smoke coverage for missing privacy checks, missing operational validation, raw client data, and product-domain lessons in External Memory.
+
 ## 0.8.8 - 2026-06-11
 
 - Added `.systems/ai/core/prompt-composition.md` for advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority boundaries.

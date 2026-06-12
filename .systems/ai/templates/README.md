@@ -1,6 +1,6 @@
 # Templates
 
-Reusable templates for repo runtime, workflow, project, micro-project, human, autopilot, memory, and external memory artifacts.
+Reusable templates for repo runtime, workflow, project, micro-project, human, autopilot, memory, external memory, and system insights artifacts.
 
 Use these as starting points when a target repository needs repo runtime files, project phase artifacts, QA evidence, escalation records, ledgers, decisions, or human-facing docs.
 
@@ -16,7 +16,8 @@ Use these as starting points when a target repository needs repo runtime files, 
 - `reviews/` - project-local review artifact templates.
 - `humans/` - owner/operator-facing document templates.
 - `memory/` - template maintenance memory templates.
-- `external-memory/` - universal AI Workflow improvement memory templates.
+- `external-memory/` - AI Workflow improvement memory templates.
+- `system-insights/` - anonymized cross-project operating insight templates.
 
 Project-specific copies should be written under the relevant `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/...` or `AI_WORKFLOW_WORKSPACE_HOME/humans/<project>/...` directory, not edited in place here.
 

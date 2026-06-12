@@ -16,4 +16,5 @@
   - `<AGENTS.md|HUMANS.md|.systems/ai/core/workflow.md|.systems/ai/workflow/|.systems/ai/templates/|.systems/ai/skills/|other>`
 - Promotion path: `<where this should be made enforceable, if accepted>`
 - Privacy check: `<confirmed no repo-specific facts, project-specific facts, secrets, client data, or proprietary product details>`
+- Scope check: `<confirmed this is an AI Workflow improvement proposal, not a product-domain lesson or System Insight>`
 - Notes: `<short supporting context>`

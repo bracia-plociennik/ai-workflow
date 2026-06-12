@@ -26,7 +26,44 @@ To są uniwersalne lekcje dla rozwoju samego `ai-workflow`: rekomendacje, antywz
 
 W target repo nie edytuj `ai-workflow/.systems/**`. Wszystkie zmiany systemowego workflowa, templatek, policy docs albo system skills muszą wejść przez oficjalne repo `ai-workflow`. Jeśli podczas pracy pojawi się pomysł na zmianę, zapisz go jako External Memory.
 
-Jeśli Codex wykryje lekcję, która może pomóc w wielu repozytoriach, powinien zaproponować albo utworzyć osobny wpis External Memory z template'u `.systems/ai/templates/external-memory/date-external-memory.template.md`. Taki wpis jest advisory: nie zmienia zasad workflow, dopóki nie zostanie ręcznie promowany do `AGENTS.md`, `HUMANS.md`, workflow docs, template'ów albo skills.
+Jeśli Codex wykryje lekcję, która może poprawić sam AI Workflow w wielu repozytoriach, powinien zaproponować albo utworzyć osobny wpis External Memory z template'u `.systems/ai/templates/external-memory/date-external-memory.template.md`. Taki wpis jest advisory: nie zmienia zasad workflow, dopóki nie zostanie ręcznie promowany do `AGENTS.md`, `HUMANS.md`, workflow docs, template'ów albo skills.
+
+External Memory nie jest miejscem na lekcje frontendowe, backendowe, smart contract, SEO, reklamowe, ofertowe, procesowe, jakościowe, produktowe ani na wnioski ze współpracy z klientem. Takie zanonimizowane lekcje trafiają do System Insights.
+
+## System Insights I Skille
+
+System Insights żyją w `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`, indeksowane przez router `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, a szczegółowe wpisy są w `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`.
+
+Jeśli używasz standardowej instalacji nested clone, z root aplikacji ta ścieżka to zwykle `ai-workflow-workspace/system-insights/`.
+
+System Insights to zanonimizowane, operacyjne lekcje z projektów i pracy z klientami. Używaj ich dla:
+
+- frontend, backend, smart contracts, SEO, ads;
+- oferta, proces, jakość, client-work, product;
+- kandydatów na skille i checklisty jakości.
+
+Nie zapisuj tam:
+
+- surowych danych klienta;
+- nazw klientów, domen, emaili, telefonów, kont, walletów, ticketów albo identyfikatorów produkcyjnych;
+- `.env`, API keys, private keys, seed phrases, access tokens, production credentials, internal URLs;
+- repo-specific faktów albo project-specific szczegółów, które należą do Repo Memory albo Project Memory.
+
+Trwały zapis System Insight powinien powstać tylko przez:
+
+- phase 7 checkpoint, gdy distillation zawiera zaakceptowany `System Insight Candidate`;
+- phase 8 final check, jeśli owner jawnie zatwierdza final capture;
+- jawne owner-approved capture z write permission.
+
+W trakcie pracy Codex może zaproponować insight, ale nie powinien zapisywać trwałych plików w `system-insights/**` ad hoc.
+
+Insight powinien zostać promowany do skilla, gdy opisuje powtarzalną metodę, checklistę, review heuristic, rubric albo procedurę, która realnie poprawi przyszłe wykonanie. Sam insight nie tworzy skilla automatycznie. Najpierw zapisz go jako skill candidate, potem użyj normalnego procesu tworzenia lub aktualizacji skilla.
+
+Praktyczny prompt:
+
+```text
+Przeanalizuj ostatnie distillation/checkpoint i zaproponuj System Insight Candidates. Zanonimizuj dane, nie używaj nazw klienta ani project-specific szczegółów, rozdziel External Memory od System Insights i wskaż, które insighty są skill candidates.
+```
 
 Kiedy uzbierasz sensowną paczkę, na przykład 10-20-30 wpisów, możesz spakować katalog i wysłać go na `ai@onlinen.tech`. To pomoże rozwijać narzędzie.
 
@@ -1101,6 +1138,7 @@ System działa dobrze tylko wtedy, gdy rozdzielamy kilka warstw:
 - **Repo runtime docs**: `AI_WORKFLOW_WORKSPACE_HOME/repo/`, czyli globalny context repo, repo intake, status i repo memory.
 - **Project docs**: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/`, czyli aktywna przestrzeń projektu: intake, architektura, plan, specs, quality, decisions, distillations, checkpoints, autopilot.
 - **Human docs**: `AI_WORKFLOW_WORKSPACE_HOME/humans/`, czyli artefakty pisane dla człowieka: runbooki, audyty, decyzje, podsumowania, zgody.
+- **System Insights**: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`, czyli zanonimizowane lekcje operacyjne i skill candidates; advisory, nie źródło zgody ani bramek.
 - **System-owned docs**: `.systems/**`, których nie edytujesz w target repo.
 
 Najważniejsza zasada: **repo state jest prawdą o tym, co faktycznie istnieje, a docs są kontraktem i pamięcią procesu**. Jeśli dokumentacja mówi jedno, a repo pokazuje drugie, to jest drift i trzeba go rozwiązać przed dalszą implementacją.
@@ -1117,9 +1155,10 @@ Kiedy nie wiesz, co wolno zrobić albo jaka faza jest aktualna, czytaj źródła
 6. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` i `AI_WORKFLOW_WORKSPACE_HOME/repo/context/` - router i szczegółowy globalny opis repo.
 7. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` - repo-level bootstrap/intake, szczególnie przed utworzeniem pierwszego projektu.
 8. `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` i `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` - uniwersalna pamięć rekomendacji i ulepszeń workflow, nie repo-specific.
-9. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` - repo-level status bieżącej pracy.
-10. `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` - project-local status bieżącej pracy.
-11. `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
+9. `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` i `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` - zanonimizowane lekcje operacyjne i skill candidates jako advisory context.
+10. `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md` - repo-level status bieżącej pracy.
+11. `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` - project-local status bieżącej pracy.
+12. `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/...` - artefakty projektu: plan, specyfikacje, evidence, decyzje, checkpointy, runtime.
 
 Jeśli źródła są sprzeczne, nie proś Codexa o zgadywanie. Poproś o reconciliation albo escalation.
 

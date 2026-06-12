@@ -34,6 +34,7 @@ git diff --check
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-system-insights
 ```
 
 ## Skipped Checks

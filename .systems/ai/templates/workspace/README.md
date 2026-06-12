@@ -14,6 +14,7 @@ The public `ai-workflow` template does not track active runtime workspace files 
 - `humans/` -> `AI_WORKFLOW_WORKSPACE_HOME/humans/README.md`
 - `micro-projects/` -> `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/README.md`
 - `external-memory/` -> `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`
+- `system-insights/` -> `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`
 - `skills/` -> `AI_WORKFLOW_WORKSPACE_HOME/skills/README.md`
 
 Do not edit these templates from a target repository. Target-specific facts belong in `AI_WORKFLOW_WORKSPACE_HOME`.

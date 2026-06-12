@@ -23,9 +23,9 @@ The update flow treats the nested clone as two layers:
 
 Legacy filenames under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` must not be normalized, renamed, or rewritten during update. They are preserved source context outside the nested clone.
 
-User skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/` and External Memory under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` are target-owned and must not be touched by upstream updates.
+User skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, External Memory under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`, and System Insights under `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` are target-owned and must not be touched by upstream updates.
 
-Target repositories must not edit `.systems/**`. If a target-repository run reveals a workflow improvement, write it to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` and promote it only through the official upstream `ai-workflow` repository.
+Target repositories must not edit `.systems/**`. If a target-repository run reveals a workflow improvement, write it to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` and promote it only through the official upstream `ai-workflow` repository. If it reveals an anonymized operating lesson, write it to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` only through checkpoint/final-check routing or explicit owner-approved capture.
 
 ## Procedure
 
@@ -74,6 +74,6 @@ After a successful update:
 - `AI_WORKFLOW_WORKSPACE_HOME/**` was not touched by the update script;
 - real micro-projects remain in the target-owned workspace;
 - real project and human workspaces remain in the target-owned workspace;
-- local external memory and user skills remain in the target-owned workspace;
+- local external memory, system insights, and user skills remain in the target-owned workspace;
 - legacy source filenames remain unchanged because the update does not edit workspace legacy files;
 - validators pass.

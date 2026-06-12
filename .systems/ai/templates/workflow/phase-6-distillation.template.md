@@ -44,6 +44,18 @@
 - Suggested external memory router update: `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
 - Suggested external memory entry summary:
 
+## System Insight Candidate
+
+- Should sync to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`: `<yes|no>`
+- Category: `<frontend|backend|smart-contracts|seo|ads|offer|process|quality|client-work|product|skills|n/a>`
+- Reason:
+- Source scope: `<project distillation|QA review|owner-approved capture|other anonymized source>`
+- Privacy check: `<confirmed no raw client data, client names, secrets, repo-specific facts, project-specific details, or production identifiers|n/a>`
+- Skill candidate: `<yes|no>`
+- Suggested system insight entry file: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/<YYYY-MM-DD-short-kebab-title>.md`
+- Suggested system insights router update: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`
+- Suggested insight summary:
+
 ## Artifacts Updated
 
 | Artifact | Update |

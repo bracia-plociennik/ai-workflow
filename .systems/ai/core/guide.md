@@ -63,6 +63,7 @@ Read the smallest set that can answer the user's question safely. Prefer this or
 13. active `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`
 14. active project plan, task cards, spec, quality evidence, decisions, reviews, checkpoints, autopilot readiness, and autopilot run state when relevant
 15. `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` and `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` when checking workflow improvement feedback or maintenance opportunities
+16. `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` and `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` when checking anonymized operating lessons or skill candidates
 
 When running from a target repository, `.systems/...` paths resolve under `AI_WORKFLOW_HOME`, usually `ai-workflow/.systems/...`; `AI_WORKFLOW_WORKSPACE_HOME/...` paths resolve to the target-owned workspace, usually `ai-workflow-workspace/...`. When running inside the official upstream repository, `AI_WORKFLOW_HOME` is the repository root and there is no inner `ai-workflow/` directory.
 
@@ -92,6 +93,7 @@ Use these locations when orienting the user:
 - User skills: `AI_WORKFLOW_WORKSPACE_HOME/skills/`.
 - System skills: `.systems/ai/skills/`.
 - External workflow improvement memory: router `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`.
+- System Insights: router `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, entries `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`.
 
 ## Response Contract
 
@@ -229,7 +231,7 @@ Impact: helps improve the reusable AI Workflow template and skills from real-wor
 
 If there is an active workflow step, mention the export only as a short note after the main recommendation, not as a second recommendation.
 
-Before suggesting export, remind the user to verify that the archive contains no repo-specific facts, project-specific facts, client data, secrets, credentials, personal data, or proprietary product details.
+Before suggesting export, remind the user to verify that the archive contains no repo-specific facts, project-specific facts, client data, secrets, credentials, personal data, proprietary product details, or System Insight entries that have not passed anonymization.
 
 ## Drift And Conflict Handling
 

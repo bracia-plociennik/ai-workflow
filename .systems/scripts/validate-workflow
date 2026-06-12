@@ -12,6 +12,7 @@ fi
 .systems/scripts/check-naming
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-system-insights
 
 fail=0
 phases=(
@@ -223,6 +224,18 @@ for required_ownership_ref in AGENTS.md .systems/ai/core/installation.md .system
 
   if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/external-memory/' "$required_ownership_ref"; then
     echo "Missing workspace external memory reference in $required_ownership_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/system-insights/' "$required_ownership_ref"; then
+    echo "Missing workspace system insights reference in $required_ownership_ref"
+    fail=1
+  fi
+done
+
+for required_system_insights_ref in AGENTS.md HUMANS.md README.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md .systems/ai/core/guide.md .systems/ai/core/memory.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'System Insights|system-insights' "$required_system_insights_ref"; then
+    echo "Missing System Insights reference in $required_system_insights_ref"
     fail=1
   fi
 done

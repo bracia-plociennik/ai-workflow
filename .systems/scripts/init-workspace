@@ -92,6 +92,7 @@ mkdir -p \
   "$workspace_home/humans" \
   "$workspace_home/micro-projects" \
   "$workspace_home/external-memory/memory" \
+  "$workspace_home/system-insights/insights" \
   "$workspace_home/skills"
 
 legacy_dir="$workspace_home/repo/legacy"
@@ -121,6 +122,9 @@ copy_template "$templates/workspace/micro-projects/README.md" "$workspace_home/m
 copy_template "$templates/workspace/external-memory/README.md" "$workspace_home/external-memory/README.md"
 copy_template "$templates/workspace/external-memory/external-memory.template.md" "$workspace_home/external-memory/external-memory.md"
 copy_template "$templates/workspace/external-memory/memory-readme.template.md" "$workspace_home/external-memory/memory/README.md"
+copy_template "$templates/system-insights/system-insights-readme.template.md" "$workspace_home/system-insights/README.md"
+copy_template "$templates/system-insights/system-insights.template.md" "$workspace_home/system-insights/system-insights.md"
+copy_template "$templates/system-insights/insights-readme.template.md" "$workspace_home/system-insights/insights/README.md"
 copy_template "$templates/workspace/skills/README.md" "$workspace_home/skills/README.md"
 
 perl -0pi -e 's/^\| `<original path or source>` \|.*\n//m' "$legacy_router"

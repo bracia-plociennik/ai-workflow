@@ -52,6 +52,8 @@ fi
 test -f "$install_target/ai-workflow-workspace/repo/core/status.md" || { echo "init-workspace did not create repo status"; exit 1; }
 test -f "$install_target/ai-workflow-workspace/repo/core/init.md" || { echo "init-workspace did not create repo init artifact"; exit 1; }
 test -f "$install_target/ai-workflow-workspace/repo/legacy/legacy-index.md" || { echo "init-workspace did not create legacy index"; exit 1; }
+test -f "$install_target/ai-workflow-workspace/system-insights/system-insights.md" || { echo "init-workspace did not create system insights router"; exit 1; }
+test -f "$install_target/ai-workflow-workspace/system-insights/insights/README.md" || { echo "init-workspace did not create system insights entries README"; exit 1; }
 test -f "$install_target/AGENTS.md" || { echo "init-workspace did not create local AGENTS shim"; exit 1; }
 grep -q "phase-0-init result: ready-for-repo-intake" "$tmp/init-workspace-creates-local-excludes.out" || { echo "init-workspace did not report ready-for-repo-intake"; exit 1; }
 
@@ -161,6 +163,304 @@ mv "$tmp/.systems/ai/core/prompt-composition.md.bak" "$tmp/.systems/ai/core/prom
 mv "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md" "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md.bak"
 run_must_fail "missing-project-prompting-router-template" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md.bak" "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md"
+
+mv "$tmp/.systems/ai/core/system-insights.md" "$tmp/.systems/ai/core/system-insights.md.bak"
+run_must_fail "missing-system-insights-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/system-insights.md.bak" "$tmp/.systems/ai/core/system-insights.md"
+
+cat > "$tmp/.systems/ai/examples/system-insights/bad-missing-privacy.md" <<'MD'
+# 2026-06-12 - Bad Missing Privacy
+
+- Date: `2026-06-12`
+- Category: `frontend`
+- Status: `proposed`
+- Source scope: `QA review`
+- Skill candidate: `no`
+- Suggested skill target: `n/a`
+
+## TEMAT
+
+- `Frontend - quality`
+
+## 0. SYGNAŁY
+
+- Reusable signal.
+
+## 1. CO ZOSTAŁO FAKTYCZNIE ZROBIONE
+
+- Reusable action.
+
+## 2. PROBLEMY (→ KONWERSJA)
+
+| Problem | Przyczyna | Konwersja |
+| --- | --- | --- |
+| issue | cause | rule |
+
+## 3. WZORCE
+
+- Pattern.
+
+## 4. DECYZJE
+
+| Treść | Wpływ |
+| --- | --- |
+| Decision | Impact |
+
+## 5. ZASADY NA PRZYSZŁOŚĆ
+
+| Zasada | Kiedy stosować |
+| --- | --- |
+| Rule | Future work |
+
+## 6. OTWARTE LUKI
+
+- None.
+
+## 7. ODRZUCONE JAKO SZUM
+
+| Pominięte | Dlaczego |
+| --- | --- |
+| none | n/a |
+
+## 8. WALIDACJA OPERACYJNA
+
+### co zostaje
+
+- Keep rule.
+
+### co poprawić / usunąć
+
+- None.
+
+### czego brakuje
+
+- None.
+MD
+run_must_fail "system-insights-missing-privacy-check" .systems/scripts/check-system-insights
+rm "$tmp/.systems/ai/examples/system-insights/bad-missing-privacy.md"
+
+cat > "$tmp/.systems/ai/examples/system-insights/bad-missing-operational-validation.md" <<'MD'
+# 2026-06-12 - Bad Missing Operational Validation
+
+- Date: `2026-06-12`
+- Category: `backend`
+- Status: `proposed`
+- Source scope: `QA review`
+- Privacy check: `confirmed no raw client data, client names, secrets, repo-specific facts, project-specific details, or production identifiers`
+- Skill candidate: `no`
+- Suggested skill target: `n/a`
+
+## TEMAT
+
+- `Backend - architecture`
+
+## 0. SYGNAŁY
+
+- Reusable signal.
+
+## 1. CO ZOSTAŁO FAKTYCZNIE ZROBIONE
+
+- Reusable action.
+
+## 2. PROBLEMY (→ KONWERSJA)
+
+| Problem | Przyczyna | Konwersja |
+| --- | --- | --- |
+| issue | cause | rule |
+
+## 3. WZORCE
+
+- Pattern.
+
+## 4. DECYZJE
+
+| Treść | Wpływ |
+| --- | --- |
+| Decision | Impact |
+
+## 5. ZASADY NA PRZYSZŁOŚĆ
+
+| Zasada | Kiedy stosować |
+| --- | --- |
+| Rule | Future work |
+
+## 6. OTWARTE LUKI
+
+- None.
+
+## 7. ODRZUCONE JAKO SZUM
+
+| Pominięte | Dlaczego |
+| --- | --- |
+| none | n/a |
+MD
+run_must_fail "system-insights-missing-operational-validation" .systems/scripts/check-system-insights
+rm "$tmp/.systems/ai/examples/system-insights/bad-missing-operational-validation.md"
+
+cat > "$tmp/.systems/ai/examples/system-insights/bad-raw-client-data.md" <<'MD'
+# 2026-06-12 - Bad Raw Client Data
+
+- Date: `2026-06-12`
+- Category: `client-work`
+- Status: `proposed`
+- Source scope: `owner-approved capture`
+- Privacy check: `confirmed no raw client data, client names, secrets, repo-specific facts, project-specific details, or production identifiers`
+- Skill candidate: `no`
+- Suggested skill target: `n/a`
+- Contact value person@example.invalid
+- Wallet value 0x1111111111111111111111111111111111111111
+
+## TEMAT
+
+- `Client Work - process`
+
+## 0. SYGNAŁY
+
+- Reusable signal.
+
+## 1. CO ZOSTAŁO FAKTYCZNIE ZROBIONE
+
+- Reusable action.
+
+## 2. PROBLEMY (→ KONWERSJA)
+
+| Problem | Przyczyna | Konwersja |
+| --- | --- | --- |
+| issue | cause | rule |
+
+## 3. WZORCE
+
+- Pattern.
+
+## 4. DECYZJE
+
+| Treść | Wpływ |
+| --- | --- |
+| Decision | Impact |
+
+## 5. ZASADY NA PRZYSZŁOŚĆ
+
+| Zasada | Kiedy stosować |
+| --- | --- |
+| Rule | Future work |
+
+## 6. OTWARTE LUKI
+
+- None.
+
+## 7. ODRZUCONE JAKO SZUM
+
+| Pominięte | Dlaczego |
+| --- | --- |
+| none | n/a |
+
+## 8. WALIDACJA OPERACYJNA
+
+### co zostaje
+
+- Keep rule.
+
+### co poprawić / usunąć
+
+- Remove raw data.
+
+### czego brakuje
+
+- None.
+MD
+run_must_fail "system-insights-blocks-raw-client-data" .systems/scripts/check-system-insights
+rm "$tmp/.systems/ai/examples/system-insights/bad-raw-client-data.md"
+
+system_insights_workspace="$tmp/system-insights-smoke-workspace"
+mkdir -p "$system_insights_workspace/external-memory/memory" "$system_insights_workspace/system-insights/insights"
+cat > "$system_insights_workspace/external-memory/memory/2026-06-12-frontend-lesson.md" <<'MD'
+# Frontend Lesson
+
+Frontend lesson insight about component quality belongs in System Insights.
+MD
+run_must_fail "system-insights-blocks-product-domain-external-memory" env AI_WORKFLOW_WORKSPACE_HOME="$system_insights_workspace" .systems/scripts/check-system-insights
+rm "$system_insights_workspace/external-memory/memory/2026-06-12-frontend-lesson.md"
+
+cat > "$system_insights_workspace/external-memory/memory/2026-06-12-ad-hoc-workflow-note.md" <<'MD'
+# Ad Hoc Workflow Note
+
+Avoid ad hoc capture of workflow improvement proposals without owner-approved routing.
+MD
+run_must_pass "system-insights-allows-ad-hoc-external-memory-note" env AI_WORKFLOW_WORKSPACE_HOME="$system_insights_workspace" .systems/scripts/check-system-insights
+rm "$system_insights_workspace/external-memory/memory/2026-06-12-ad-hoc-workflow-note.md"
+
+for category in frontend backend seo; do
+  cat > "$system_insights_workspace/system-insights/insights/2026-06-12-valid-${category}.md" <<MD
+# 2026-06-12 - Valid ${category}
+
+- Date: \`2026-06-12\`
+- Category: \`${category}\`
+- Status: \`accepted\`
+- Source scope: \`checkpoint\`
+- Privacy check: \`confirmed no raw client data, client names, secrets, repo-specific facts, project-specific details, or production identifiers\`
+- Skill candidate: \`no\`
+- Suggested skill target: \`n/a\`
+
+## TEMAT
+
+- \`Quality - ${category}\`
+
+## 0. SYGNAŁY
+
+- Reusable signal without client data.
+
+## 1. CO ZOSTAŁO FAKTYCZNIE ZROBIONE
+
+- Captured anonymized operating lesson.
+
+## 2. PROBLEMY (→ KONWERSJA)
+
+| Problem | Przyczyna | Konwersja |
+| --- | --- | --- |
+| Repeated issue | Missing checklist | Use reusable review rule |
+
+## 3. WZORCE
+
+- Repeated review pattern.
+
+## 4. DECYZJE
+
+| Treść | Wpływ |
+| --- | --- |
+| Keep anonymized review rule | Improves future checks |
+
+## 5. ZASADY NA PRZYSZŁOŚĆ
+
+| Zasada | Kiedy stosować |
+| --- | --- |
+| Use the review rule | Similar future work |
+
+## 6. OTWARTE LUKI
+
+- None.
+
+## 7. ODRZUCONE JAKO SZUM
+
+| Pominięte | Dlaczego |
+| --- | --- |
+| Project-specific details | Not reusable |
+
+## 8. WALIDACJA OPERACYJNA
+
+### co zostaje
+
+- Keep reusable review rule.
+
+### co poprawić / usunąć
+
+- Remove local implementation details.
+
+### czego brakuje
+
+- None.
+MD
+done
+run_must_pass "system-insights-valid-anonymized-insights" env AI_WORKFLOW_WORKSPACE_HOME="$system_insights_workspace" .systems/scripts/check-system-insights
 
 cat > "$tmp/.systems/ai/core/prompt-composition-unsafe-smoke.md" <<'MD'
 # Unsafe Prompt Composition Smoke
@@ -353,6 +653,7 @@ git -C "$remote_work" push -q origin main
 
 mkdir -p "$target_workspace/repo/core" "$target_workspace/micro-projects/my-micro-project" "$target_workspace/projects/my-project" "$target_workspace/humans/my-project" "$target_workspace/repo/legacy"
 mkdir -p "$target_workspace/skills/local-skill" "$target_workspace/external-memory/memory"
+mkdir -p "$target_workspace/system-insights/insights"
 echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_workspace/repo/core/status.md"
 cat > "$target_workspace/micro-projects/my-micro-project/micro-project.md" <<'MD'
 # My Micro-project
@@ -375,6 +676,12 @@ cat > "$target_workspace/external-memory/memory/2026-05-20-local-smoke.md" <<'MD
 
 LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER
 MD
+echo "LOCAL_SYSTEM_INSIGHTS_ROUTER_MARKER" >> "$target_workspace/system-insights/system-insights.md"
+cat > "$target_workspace/system-insights/insights/2026-06-12-local-system-insight.md" <<'MD'
+# Local Smoke System Insight
+
+LOCAL_SYSTEM_INSIGHT_ENTRY_MARKER
+MD
 cat > "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" <<'MD'
 # Old Prompt
 
@@ -394,6 +701,8 @@ grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_workspace/projects/my-project/st
 grep -q "LOCAL_HUMAN_RUNTIME_MARKER" "$target_workspace/humans/my-project/summary.md" || { echo "Update smoke lost human workspace"; exit 1; }
 grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_workspace/external-memory/external-memory.md" || { echo "Update smoke lost external memory router"; exit 1; }
 grep -q "LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER" "$target_workspace/external-memory/memory/2026-05-20-local-smoke.md" || { echo "Update smoke lost external memory entry"; exit 1; }
+grep -q "LOCAL_SYSTEM_INSIGHTS_ROUTER_MARKER" "$target_workspace/system-insights/system-insights.md" || { echo "Update smoke lost system insights router"; exit 1; }
+grep -q "LOCAL_SYSTEM_INSIGHT_ENTRY_MARKER" "$target_workspace/system-insights/insights/2026-06-12-local-system-insight.md" || { echo "Update smoke lost system insight entry"; exit 1; }
 grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
 grep -q "LOCAL_WORKSPACE_SKILL_MARKER" "$target_workspace/skills/local-skill/README.md" || { echo "Update smoke lost workspace skill"; exit 1; }
 
