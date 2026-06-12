@@ -43,6 +43,15 @@ The script:
 4. Runs `git fetch`.
 5. Runs `git merge --ff-only`.
 6. Runs `.systems/scripts/validate-workflow`.
+7. Prints a copy-paste `update-workspace` command for optional target-owned workspace schema backfill.
+
+The update script does not run `update-workspace` automatically because `AI_WORKFLOW_WORKSPACE_HOME/**` is target-owned. Schema backfill is a separate explicit step:
+
+```bash
+ai-workflow/.systems/scripts/update-workspace
+```
+
+`update-workspace` creates only missing neutral workspace directories, routers, and README files. It does not overwrite existing runtime artifacts, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
 
 ## Options
 
@@ -72,6 +81,7 @@ After a successful update:
 
 - system-owned files reflect upstream;
 - `AI_WORKFLOW_WORKSPACE_HOME/**` was not touched by the update script;
+- the script printed an `update-workspace` command for safe workspace schema backfill;
 - real micro-projects remain in the target-owned workspace;
 - real project and human workspaces remain in the target-owned workspace;
 - local external memory, system insights, and user skills remain in the target-owned workspace;

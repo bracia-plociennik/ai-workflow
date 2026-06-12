@@ -139,6 +139,14 @@ ai-workflow/.systems/scripts/update-from-upstream
 
 This blocks dirty system-owned files in the nested clone, runs `git fetch` and `git merge --ff-only`, then validates the updated system. It does not read, backup, modify, or restore `ai-workflow-workspace/`.
 
+After the upstream update, sync missing target-owned workspace schema files with:
+
+```bash
+ai-workflow/.systems/scripts/update-workspace
+```
+
+This is idempotent. It creates only missing neutral workspace directories, routers, and README files such as new `system-insights/` bootstrap files. It does not overwrite existing runtime artifacts, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
+
 Do not edit `.systems/**` in a target repository. Workflow improvement ideas discovered during target work belong in `ai-workflow-workspace/external-memory/` and should be promoted through the official upstream repository. Anonymized project lessons about frontend, backend, smart contracts, SEO, ads, offers, process, quality, client work, product, or skills belong in `ai-workflow-workspace/system-insights/` after checkpoint/final-check routing or explicit owner-approved capture.
 
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.

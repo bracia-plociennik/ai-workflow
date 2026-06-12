@@ -240,6 +240,13 @@ for required_system_insights_ref in AGENTS.md HUMANS.md README.md .systems/ai/co
   fi
 done
 
+for required_update_workspace_ref in README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/command-routing.md; do
+  if ! rg -q 'update-workspace' "$required_update_workspace_ref"; then
+    echo "Missing update-workspace reference in $required_update_workspace_ref"
+    fail=1
+  fi
+done
+
 if ! rg -q 'Do not edit `.systems/\*\*`' AGENTS.md; then
   echo "AGENTS.md missing target-repo .systems read-only rule"
   fail=1

@@ -874,8 +874,10 @@ Polish variants:
 - `Zaktualizuj ai-workflow z upstreamu.`
 - `Zaktualizuj AI Workflow w tym repo.`
 - `Uruchom update-from-upstream.`
+- `Uruchom update-workspace po update z upstreamu.`
 - `Pobierz najnowszy ai-workflow, ale nie ruszaj ai-workflow-workspace.`
 - `Zrób bezpieczny update nested clone ai-workflow.`
+- `Dopisz brakujące pliki schematu ai-workflow-workspace.`
 - `Sprawdź, czy można zaktualizować workflow bez konfliktów.`
 
 English variants:
@@ -883,15 +885,19 @@ English variants:
 - `Update ai-workflow from upstream.`
 - `Update AI Workflow in this repository.`
 - `Run update-from-upstream.`
+- `Run update-workspace after upstream update.`
 - `Fetch the latest AI Workflow but do not touch ai-workflow-workspace.`
 - `Run the safe nested clone update flow.`
+- `Backfill missing AI Workflow workspace schema.`
 - `Check whether the workflow can be updated without conflicts.`
 
 Routing notes:
 
 - Use `.systems/scripts/update-from-upstream` from `AI_WORKFLOW_HOME`, usually `ai-workflow/.systems/scripts/update-from-upstream` from the target repository root.
+- After successful upstream update, propose `.systems/scripts/update-workspace`, usually `ai-workflow/.systems/scripts/update-workspace`, as the separate idempotent workspace schema backfill.
 - Stop if system-owned files are dirty.
 - `AI_WORKFLOW_WORKSPACE_HOME/**` is outside the nested clone and must not be read, backed up, restored, normalized, or modified by the update script.
+- `update-workspace` may create missing neutral directories, routers, and README files under `AI_WORKFLOW_WORKSPACE_HOME/**`, but it must not overwrite existing runtime, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
 - If legacy `ai-workflow/workspace/**` still exists inside the nested clone, stop and require migration to `AI_WORKFLOW_WORKSPACE_HOME` before update.
 - Do not normalize, rename, or rewrite files under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/`.
 - `--skip-validation` is only for emergency debugging and is not eligible for final PASS.

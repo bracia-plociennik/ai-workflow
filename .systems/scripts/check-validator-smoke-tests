@@ -87,6 +87,43 @@ test ! -e "$legacy_install_target/ai-workflow-workspace/repo/legacy/.env" || { e
 grep -q "docs/workflow.md" "$legacy_install_target/ai-workflow-workspace/repo/legacy/legacy-index.md" || { echo "legacy index missing docs workflow"; exit 1; }
 grep -q "phase-0-init result: blocked-owner-merge" "$tmp/init-workspace-preserves-legacy-context.out" || { echo "init-workspace did not report owner merge blocker"; exit 1; }
 
+workspace_update_target="$install_fixture/workspace-update-target"
+workspace_update_ai="$workspace_update_target/ai-workflow"
+mkdir -p "$workspace_update_ai" "$workspace_update_target/ai-workflow-workspace/repo/core" "$workspace_update_target/ai-workflow-workspace/external-memory/memory"
+(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$workspace_update_ai"
+git -C "$workspace_update_target" init -q
+cat > "$workspace_update_target/ai-workflow-workspace/repo/core/status.md" <<'MD'
+# Existing Repo Status
+
+LOCAL_STATUS_MARKER
+MD
+cat > "$workspace_update_target/ai-workflow-workspace/external-memory/external-memory.md" <<'MD'
+# Existing External Memory
+
+LOCAL_EXTERNAL_MEMORY_MARKER
+MD
+run_must_pass "update-workspace-backfills-schema" env -u AI_WORKFLOW_WORKSPACE_HOME "$workspace_update_ai/.systems/scripts/update-workspace"
+test -f "$workspace_update_target/ai-workflow-workspace/system-insights/system-insights.md" || { echo "update-workspace did not create system insights router"; exit 1; }
+test -f "$workspace_update_target/ai-workflow-workspace/system-insights/insights/README.md" || { echo "update-workspace did not create system insights entries README"; exit 1; }
+grep -q "LOCAL_STATUS_MARKER" "$workspace_update_target/ai-workflow-workspace/repo/core/status.md" || { echo "update-workspace overwrote repo status"; exit 1; }
+grep -q "LOCAL_EXTERNAL_MEMORY_MARKER" "$workspace_update_target/ai-workflow-workspace/external-memory/external-memory.md" || { echo "update-workspace overwrote external memory router"; exit 1; }
+test ! -e "$workspace_update_target/AGENTS.md" || { echo "update-workspace created root AGENTS.md"; exit 1; }
+if grep -qxF "/AGENTS.md" "$workspace_update_target/.git/info/exclude"; then
+  echo "update-workspace modified .git/info/exclude"
+  exit 1
+fi
+grep -q "No existing workspace files were overwritten." "$tmp/update-workspace-backfills-schema.out" || { echo "update-workspace did not report overwrite boundary"; exit 1; }
+
+workspace_update_dry_target="$install_fixture/workspace-update-dry-target"
+workspace_update_dry_ai="$workspace_update_dry_target/ai-workflow"
+mkdir -p "$workspace_update_dry_ai" "$workspace_update_dry_target/ai-workflow-workspace/repo/core"
+(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$workspace_update_dry_ai"
+git -C "$workspace_update_dry_target" init -q
+run_must_pass "update-workspace-dry-run-no-writes" env -u AI_WORKFLOW_WORKSPACE_HOME "$workspace_update_dry_ai/.systems/scripts/update-workspace" --dry-run
+test ! -e "$workspace_update_dry_target/ai-workflow-workspace/system-insights" || { echo "update-workspace dry run wrote system insights"; exit 1; }
+grep -q "would create directory: ai-workflow-workspace/system-insights/insights" "$tmp/update-workspace-dry-run-no-writes.out" || { echo "update-workspace dry run did not report planned system insights directory"; exit 1; }
+grep -q "update-workspace dry run completed. No files were modified." "$tmp/update-workspace-dry-run-no-writes.out" || { echo "update-workspace dry run did not report no writes"; exit 1; }
+
 resolver_official_out="$tmp/resolve-official.out"
 tmp_real="$(cd "$tmp" && pwd -P)"
 (cd "$tmp" && env -u AI_WORKFLOW_MODE -u AI_WORKFLOW_WORKSPACE_HOME .systems/scripts/resolve-workflow-env) >"$resolver_official_out"
@@ -167,6 +204,10 @@ mv "$tmp/.systems/ai/templates/prompting/project-prompting-readme.template.md.ba
 mv "$tmp/.systems/ai/core/system-insights.md" "$tmp/.systems/ai/core/system-insights.md.bak"
 run_must_fail "missing-system-insights-contract" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/core/system-insights.md.bak" "$tmp/.systems/ai/core/system-insights.md"
+
+mv "$tmp/.systems/scripts/update-workspace" "$tmp/.systems/scripts/update-workspace.bak"
+run_must_fail "missing-update-workspace-script" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/update-workspace.bak" "$tmp/.systems/scripts/update-workspace"
 
 cat > "$tmp/.systems/ai/examples/system-insights/bad-missing-privacy.md" <<'MD'
 # 2026-06-12 - Bad Missing Privacy
@@ -695,6 +736,7 @@ MD
 
 run_must_pass "update-leaves-external-workspace-untouched" env AI_WORKFLOW_WORKSPACE_HOME="$target_workspace" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
 grep -q "upstream update marker" "$target_work/README.md" || { echo "Update smoke missing upstream marker"; exit 1; }
+grep -q "ai-workflow/.systems/scripts/update-workspace" "$tmp/update-leaves-external-workspace-untouched.out" || { echo "Update smoke did not print update-workspace recommendation"; exit 1; }
 grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_workspace/repo/core/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
 grep -q "LOCAL_MICRO_PROJECT_MARKER" "$target_workspace/micro-projects/my-micro-project/micro-project.md" || { echo "Update smoke lost micro-project"; exit 1; }
 grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_workspace/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }

@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.10 - 2026-06-12
+
+- Added `.systems/scripts/update-workspace` as an idempotent workspace schema backfill for existing target-owned workspaces after upstream updates.
+- Updated `update-from-upstream` to print a copy-paste `update-workspace` command after successful completion without modifying `AI_WORKFLOW_WORKSPACE_HOME/**` itself.
+- Documented the split between fresh `phase-0-init` bootstrap and existing-workspace schema backfill.
+- Added validator and smoke coverage for the new workspace update path.
+
 ## 0.8.9 - 2026-06-12
 
 - Added `.systems/ai/core/system-insights.md` for anonymized cross-project operating lessons, privacy rules, categories, status lifecycle, write routing, and skill-candidate boundaries.

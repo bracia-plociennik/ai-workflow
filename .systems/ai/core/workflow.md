@@ -201,5 +201,6 @@ This table is a compact phase router only. Use `.systems/ai/core/command-routing
 | prompt composition, master prompt, role profile, generated variables, zmienne, rola fazy, rola projektu | use `.systems/ai/core/prompt-composition.md`, `.systems/ai/templates/prompting/`, and project-local prompting artifacts only as advisory context |
 | autopilot, autonomous-execution | use `autopilot.md`, mandatory `readiness.md`, declared `planning-range` or `implementation-range`, and current task/package gates |
 | update ai-workflow, zaktualizuj workflow | use `update-from-upstream.md` and `.systems/scripts/update-from-upstream` |
+| update workspace, backfill workspace schema, dopisz brakujące pliki workspace | use `.systems/scripts/update-workspace` after upstream update or when neutral runtime namespace files are missing |
 | guide, co dalej, jak zacząć, zgubiłem się, what next | use `guide.md` plus `command-routing.md` to choose the safe next step |
 | decision review, rollback, resume, skills check | use `command-routing.md` to choose the safe phase or stop condition |

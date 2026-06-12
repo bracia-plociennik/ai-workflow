@@ -107,16 +107,18 @@ if [[ -e "workspace" ]]; then
   exit 1
 fi
 
+parent_root="$(cd "$ai_workflow_home/.." && pwd -P)"
 workspace_home="${AI_WORKFLOW_WORKSPACE_HOME:-}"
 if [[ -z "$workspace_home" ]]; then
-  parent_root="$(cd "$ai_workflow_home/.." && pwd -P)"
   workspace_home="$parent_root/ai-workflow-workspace"
 fi
 
 if [[ -e "$workspace_home" ]]; then
+  workspace_exists=1
   echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home"
   echo "Target-owned workspace is outside the nested clone and will not be touched."
 else
+  workspace_exists=0
   echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home (not found)"
   echo "Continuing because update-from-upstream only updates the nested clone. Run phase-0-init if this is a fresh install."
 fi
@@ -163,3 +165,14 @@ else
 fi
 
 echo "update-from-upstream completed."
+echo
+echo "Workspace schema was not modified by update-from-upstream."
+echo "Recommended next command to backfill missing target-owned workspace schema files without overwriting existing runtime:"
+if [[ "$workspace_home" == "$parent_root/ai-workflow-workspace" ]]; then
+  echo "  ai-workflow/.systems/scripts/update-workspace"
+else
+  printf '  AI_WORKFLOW_WORKSPACE_HOME=%q ai-workflow/.systems/scripts/update-workspace\n' "$workspace_home"
+fi
+if [[ "$workspace_exists" -eq 0 ]]; then
+  echo "If this is a fresh install, run phase-0-init before repo intake."
+fi

@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: .systems/scripts/update-workspace [options]
+
+Options:
+  --workspace <path>     workspace path (default: resolved AI_WORKFLOW_WORKSPACE_HOME)
+  --dry-run              print missing workspace schema files without writing
+  -h, --help             show this help
+EOF
+}
+
+dry_run=0
+workspace_arg=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --workspace)
+      workspace_arg="${2:-}"
+      [[ -n "$workspace_arg" ]] || { echo "Missing value for --workspace"; exit 2; }
+      shift 2
+      ;;
+    --dry-run)
+      dry_run=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      usage
+      exit 2
+      ;;
+  esac
+done
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$script_dir/resolve-workflow-env"
+
+templates="$AI_WORKFLOW_HOME/.systems/ai/templates"
+
+if [[ -n "$workspace_arg" ]]; then
+  case "$workspace_arg" in
+    /*) workspace_home="$workspace_arg" ;;
+    *) workspace_home="$TARGET_REPO_ROOT/$workspace_arg" ;;
+  esac
+else
+  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+fi
+
+display_path() {
+  local path="$1"
+
+  case "$path" in
+    "$TARGET_REPO_ROOT"/*)
+      printf '%s\n' "${path#$TARGET_REPO_ROOT/}"
+      ;;
+    *)
+      printf '%s\n' "$path"
+      ;;
+  esac
+}
+
+require_template() {
+  local source="$1"
+
+  if [[ ! -f "$source" ]]; then
+    echo "STOP: missing workspace template: ${source#$AI_WORKFLOW_HOME/}"
+    exit 1
+  fi
+}
+
+ensure_dir() {
+  local destination="$1"
+
+  if [[ -d "$destination" ]]; then
+    echo "kept directory: $(display_path "$destination")"
+    return 0
+  fi
+
+  if [[ "$dry_run" -eq 1 ]]; then
+    echo "would create directory: $(display_path "$destination")"
+    return 0
+  fi
+
+  mkdir -p "$destination"
+  echo "created directory: $(display_path "$destination")"
+}
+
+copy_template() {
+  local source="$1"
+  local destination="$2"
+
+  require_template "$source"
+
+  if [[ -e "$destination" ]]; then
+    echo "kept existing: $(display_path "$destination")"
+    return 0
+  fi
+
+  if [[ "$dry_run" -eq 1 ]]; then
+    echo "would create file: $(display_path "$destination")"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$destination")"
+  cp "$source" "$destination"
+  echo "created file: $(display_path "$destination")"
+}
+
+workspace_dirs=(
+  "$workspace_home/repo/core"
+  "$workspace_home/repo/context"
+  "$workspace_home/repo/legacy"
+  "$workspace_home/repo/memory"
+  "$workspace_home/projects"
+  "$workspace_home/humans"
+  "$workspace_home/micro-projects"
+  "$workspace_home/external-memory/memory"
+  "$workspace_home/system-insights/insights"
+  "$workspace_home/skills"
+)
+
+for dir in "${workspace_dirs[@]}"; do
+  ensure_dir "$dir"
+done
+
+copy_template "$templates/workspace/workspace-readme.template.md" "$workspace_home/README.md"
+copy_template "$templates/workspace/repo/README.md" "$workspace_home/repo/README.md"
+copy_template "$templates/repo/init.template.md" "$workspace_home/repo/core/init.md"
+copy_template "$templates/repo/context.template.md" "$workspace_home/repo/core/context.md"
+copy_template "$templates/repo/context-readme.template.md" "$workspace_home/repo/context/README.md"
+copy_template "$templates/repo/legacy.template.md" "$workspace_home/repo/core/legacy.md"
+copy_template "$templates/workspace/repo/legacy-readme.template.md" "$workspace_home/repo/legacy/README.md"
+copy_template "$templates/workspace/repo/legacy-index.template.md" "$workspace_home/repo/legacy/legacy-index.md"
+copy_template "$templates/repo/repo-intake.template.md" "$workspace_home/repo/core/repo-intake.md"
+copy_template "$templates/repo/status.template.md" "$workspace_home/repo/core/status.md"
+copy_template "$templates/repo/memory.template.md" "$workspace_home/repo/core/memory.md"
+copy_template "$templates/repo/memory-readme.template.md" "$workspace_home/repo/memory/README.md"
+copy_template "$templates/workspace/projects/README.md" "$workspace_home/projects/README.md"
+copy_template "$templates/workspace/humans/README.md" "$workspace_home/humans/README.md"
+copy_template "$templates/workspace/micro-projects/README.md" "$workspace_home/micro-projects/README.md"
+copy_template "$templates/workspace/external-memory/README.md" "$workspace_home/external-memory/README.md"
+copy_template "$templates/workspace/external-memory/external-memory.template.md" "$workspace_home/external-memory/external-memory.md"
+copy_template "$templates/workspace/external-memory/memory-readme.template.md" "$workspace_home/external-memory/memory/README.md"
+copy_template "$templates/system-insights/system-insights-readme.template.md" "$workspace_home/system-insights/README.md"
+copy_template "$templates/system-insights/system-insights.template.md" "$workspace_home/system-insights/system-insights.md"
+copy_template "$templates/system-insights/insights-readme.template.md" "$workspace_home/system-insights/insights/README.md"
+copy_template "$templates/workspace/skills/README.md" "$workspace_home/skills/README.md"
+
+echo
+echo "AI_WORKFLOW_HOME: $AI_WORKFLOW_HOME"
+echo "AI_WORKFLOW_WORKSPACE_HOME: $workspace_home"
+if [[ "$dry_run" -eq 1 ]]; then
+  echo "update-workspace dry run completed. No files were modified."
+else
+  echo "update-workspace completed."
+fi
+echo "No existing workspace files were overwritten."
