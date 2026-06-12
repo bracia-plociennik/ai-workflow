@@ -44,6 +44,7 @@ required_contract_terms=(
   "full-project"
   "project-local-micro-task"
   "repo-level-micro-project"
+  "side-task"
   "workflow-maintenance"
   "phase-6-distillation"
   "phase-7-checkpoint"

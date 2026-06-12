@@ -209,6 +209,11 @@ mv "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contrac
 run_must_fail "missing-contract-compliance-contract" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/core/contract-compliance.md.bak" "$tmp/.systems/ai/core/contract-compliance.md"
 
+cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
+perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
+run_must_fail "contract-compliance-requires-side-task-mode" .systems/scripts/check-contract-compliance
+mv "$tmp/.systems/ai/core/contract-compliance.md.bak" "$tmp/.systems/ai/core/contract-compliance.md"
+
 cp "$tmp/.systems/ai/templates/projects/micro-task.template.md" "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak"
 cat > "$tmp/.systems/ai/templates/projects/micro-task.template.md" <<'MD'
 # <Micro-task Title>
