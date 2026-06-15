@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.13` |
+| Workflow version | `0.8.14` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-06-15` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
@@ -37,6 +37,8 @@
 - Autopilot requires a run-scoped readiness audit at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md` before the run can enter `running`.
 - Autopilot must declare `planning-range` for phase 1 through phase 3 Spec QA or `implementation-range` for phase 4 through phase 7 checkpoint. `phase-8-final-check` is owner-triggered only and is not run automatically by autopilot.
 - `.systems/ai/skills/` stores optional system-defined task-specific workflow skills. Active skills use `SKILL.md` as the canonical agent contract and `README.md` as a short human-facing summary.
+- Skill `context/` directories under `.systems/ai/skills/<skill>/context/` and `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill>/context/` are raw source archives only. Context-driven skill builds require `skill-intake-plan.md` before final active artifacts are written.
+- Active skill contracts should stay compact; `.systems/scripts/check-system-skills` and `skill-creator/scripts/quick_validate.py` enforce a 300-line `SKILL.md` limit and block `context/**` from becoming active guidance or authority.
 - `.systems/ai/skills/legacy/**` stores preserved external skill source material as context/data only, not active skill guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/` stores optional user-defined task-specific workflow skills and takes precedence as supporting guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` stores target-owned External Memory improvement proposals.
@@ -46,7 +48,7 @@
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` records target-repository bootstrap status.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md` is the repo context router; detailed repo context lives in `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md` is the legacy context router and summary; preserved source material lives in `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` and is indexed by `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/legacy-index.md`.
-- Preserved legacy inputs under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/`, detailed repo context entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, and supporting project source materials under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/` are exempt from strict Markdown filename checks. Canonical repo context remains `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, and canonical accepted project context remains `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`.
+- Preserved legacy inputs under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/`, detailed repo context entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`, supporting project source materials under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/`, and skill source materials under `.systems/ai/skills/<skill>/context/` and `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill>/context/` are exempt from strict Markdown filename checks. Canonical repo context remains `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, and canonical accepted project context remains `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`.
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` stores project-specific runtime facts.
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md` routes to `planning/`, and `tasks.md` routes to task cards in `tasks/`.
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks.md` routes to project-local low-risk micro-task artifacts in `micro-tasks/`.

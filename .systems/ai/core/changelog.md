@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.8.14 - 2026-06-15
+
+- Added context-intake routing for system and workspace skills: `<skill>/context/**` is raw source data, not active guidance.
+- Required `skill-intake-plan.md` before context-driven skill builds write final `SKILL.md`, `README.md`, or resource artifacts.
+- Added `.systems/ai/templates/workspace/skills/skill-intake-plan.template.md` for reviewed sources, trigger fit, keep/fix/missing/blockers, artifact map, approval, validation, and residual risk.
+- Extended skill validators and smoke tests to enforce compact `SKILL.md` contracts, block `context/**` authority grants, require intake plans when context and active artifacts coexist, and allow source-like filenames under system skill `context/**`.
+- Updated `skill-creator` scaffolding so `--resources context` creates a raw source directory plus an intake plan skeleton.
+
 ## 0.8.13 - 2026-06-15
 
 - Added phase-level `Optional Knowledge Capture` to every workflow phase and workflow phase template.

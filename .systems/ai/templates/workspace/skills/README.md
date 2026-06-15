@@ -10,8 +10,12 @@ Preferred skill path:
 
 ```text
 AI_WORKFLOW_WORKSPACE_HOME/skills/<skill-name>/
+  context/
+  skill-intake-plan.md
   SKILL.md
   README.md
 ```
 
 `SKILL.md` is the canonical agent contract. `README.md` is a short human-facing summary.
+
+Use `context/` for raw source materials while creating or updating a skill. `context/` is not active guidance. If `context/` exists beside active skill artifacts, create `skill-intake-plan.md` before writing the final skill contract and resources.

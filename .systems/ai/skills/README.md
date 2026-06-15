@@ -12,6 +12,8 @@ Use one directory per active skill:
 
 ```text
 .systems/ai/skills/<skill-name>/
+  context/
+  skill-intake-plan.md
   SKILL.md
   README.md
   agents/
@@ -26,6 +28,8 @@ Only `SKILL.md` and `README.md` are required. Optional directories should exist 
 `SKILL.md` is the canonical agent contract. It must include frontmatter with `name` and `description`, task guidance, authority boundaries, required checks, output expectations, and stop conditions.
 
 `README.md` is a short human-facing overview. It must point to `SKILL.md` and must not duplicate the full operational contract.
+
+`context/` is raw source input for creating or updating a skill. It is not active guidance. If `context/` exists beside active skill artifacts, `skill-intake-plan.md` must record reviewed sources, trigger/non-trigger cases, keep/fix/missing/blockers, artifact map, approval state, validation plan, and residual risk.
 
 Skill names must use lowercase kebab-case.
 

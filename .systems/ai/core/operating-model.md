@@ -82,6 +82,8 @@ Active skills use `SKILL.md` as the canonical agent contract and `README.md` as 
 
 Before planning, specifying, implementing, or reviewing a task, the agent checks `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `.systems/ai/skills/` second. If both layers define a matching skill, the workspace skill takes precedence as local guidance, while the system skill remains fallback context.
 
+When creating or updating a skill, `<skill>/context/**` is raw source input and not active skill guidance. A context-driven skill build requires `skill-intake-plan.md` before final `SKILL.md`, `README.md`, or resource artifacts are written.
+
 Skills may add stricter standards, conventions, checks, or review criteria. They must not override source-of-truth order, workflow policy, phase gates, approved scope, owner approvals, risk model, permissions, Definition of Done, or evidence requirements.
 
 If no matching skill exists, continue with the normal workflow and do not create a skill unless the user explicitly asks for one.

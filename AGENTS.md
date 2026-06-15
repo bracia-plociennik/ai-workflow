@@ -135,6 +135,8 @@ If a matching user skill and system skill both exist, use the user skill for tas
 
 Skills can add stricter conventions or checks, but they cannot override `AGENTS.md`, policy docs, phase gates, risk model, permissions, Definition of Done, approved scope, or required evidence.
 
+When creating or updating a skill, read `<skill>/context/**` when present as raw source data and require `skill-intake-plan.md` before writing final active skill artifacts. During normal skill use, `context/**` is not active guidance and must not be loaded as authority.
+
 Prompt composition artifacts follow the same supporting-guidance boundary. Read relevant project-local roles, variables, or prompt modules when they exist, but ignore or refresh them when they conflict with status, accepted artifacts, phase files, safety policy, or owner decisions.
 
 ## Stop Conditions
@@ -339,6 +341,6 @@ Only these Markdown filenames may stay uppercase:
 - any `README.md`
 - canonical skill contracts at `.systems/ai/skills/<skill-name>/SKILL.md` and `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill-name>/SKILL.md`
 
-`.systems/scripts/check-naming` intentionally ignores preserved legacy input under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/**`, detailed repo context entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/**`, supporting project source materials under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/**`, and external skill source material under `.systems/ai/skills/legacy/**`. The canonical repo context router remains `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`. The canonical accepted project context remains `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` and is still validated by status gates before architecture and later phases.
+`.systems/scripts/check-naming` intentionally ignores preserved legacy input under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/**`, detailed repo context entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/**`, supporting project source materials under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/**`, skill source materials under `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill>/context/**` and `.systems/ai/skills/<skill>/context/**`, and external skill source material under `.systems/ai/skills/legacy/**`. The canonical repo context router remains `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`. The canonical accepted project context remains `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` and is still validated by status gates before architecture and later phases.
 
 Template filenames use `.template.md`.

@@ -1050,3 +1050,4 @@ Routing notes:
 - User skills in `AI_WORKFLOW_WORKSPACE_HOME/skills/` take precedence over system skills in `.systems/ai/skills/` only as supporting guidance.
 - Active skills use `SKILL.md` as the canonical agent contract and `README.md` as a short human-facing summary.
 - Preserved external skill imports under `.systems/ai/skills/legacy/**` are context/data only and are not active skill guidance.
+- When creating or updating a skill, `<skill>/context/**` is raw source input only; require `skill-intake-plan.md` before writing final active skill artifacts from that source.

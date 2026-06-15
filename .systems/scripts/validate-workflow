@@ -243,6 +243,18 @@ for required_skill_contract_ref in AGENTS.md .systems/ai/core/operating-model.md
   fi
 done
 
+for required_skill_context_ref in AGENTS.md .systems/ai/core/operating-model.md .systems/ai/core/command-routing.md .systems/ai/skills/README.md .systems/ai/skills/skill-creator/SKILL.md .systems/ai/templates/workspace/skills/README.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'skill-intake-plan\.md' "$required_skill_context_ref"; then
+    echo "Missing skill context intake reference in $required_skill_context_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'context/' "$required_skill_context_ref"; then
+    echo "Missing skill context source reference in $required_skill_context_ref"
+    fail=1
+  fi
+done
+
 for required_skill_validator_ref in .systems/scripts/check-required-artifacts .systems/scripts/check-validator-smoke-tests .systems/ai/core/commands.md; do
   if ! rg -q 'check-system-skills' "$required_skill_validator_ref"; then
     echo "Missing check-system-skills validator chain reference in $required_skill_validator_ref"
