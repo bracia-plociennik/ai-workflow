@@ -37,7 +37,10 @@ git diff --check
 .systems/scripts/check-system-insights
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
+.systems/scripts/check-knowledge-capture-gate
 ```
+
+`check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 

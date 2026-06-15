@@ -67,3 +67,14 @@
 - Captures reusable knowledge: `<yes|no>`
 - Avoids local noise: `<yes|no>`
 - Ready for checkpoint processing: `<yes|no>`
+
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:

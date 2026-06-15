@@ -70,6 +70,8 @@ Use `.systems/ai/core/prompt-composition.md` when the user asks about master pro
 
 Use `.systems/ai/core/system-insights.md` when work produces anonymized, reusable lessons about frontend, backend, smart contracts, SEO, ads, offer, process, quality, client work, product, or skill candidates. System Insights are advisory only and must not be mixed with External Memory, which remains only for AI Workflow improvement proposals.
 
+Every workflow phase and phase artifact includes `Optional Knowledge Capture`. This soft gate records whether the phase produced reusable knowledge, the proposed target, and whether owner approval is required now. It does not require durable memory writes and must not block the next phase when `Capture recommended: <no>` or `Owner decision: <defer-to-distillation|defer-to-checkpoint|reject|not-requested>` is valid for the situation.
+
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.
 
 `phase 0 init` means: run target-repository bootstrap after AI Workflow has been cloned into `ai-workflow/`. It must create or verify `AI_WORKFLOW_WORKSPACE_HOME`, preserve legacy artifacts as context/data only, create the local root `AGENTS.md` shim only when safe, and stop before product-code writes.
@@ -171,6 +173,23 @@ Each phase file must include this exact gate block:
 ```
 
 `.systems/scripts/validate-workflow` must fail if any phase file lacks the block.
+
+Each phase file and workflow phase template must also include:
+
+```md
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+```
+
+This section is a decision record. It may create candidate text inside the phase artifact, but durable memory writes remain governed by the phase file's `Writes allowed`, `.systems/ai/core/memory.md`, `.systems/ai/core/system-insights.md`, owner approvals, and checkpoint/final-check routing.
 
 ## Command Aliases
 

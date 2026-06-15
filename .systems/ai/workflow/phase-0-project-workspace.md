@@ -69,6 +69,17 @@
 - No product-code writes.
 - No writes outside the AI Workflow project and human namespaces unless separately approved by the owner.
 
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+
 ## Purpose
 
 This phase creates or reconciles the documentation workspace for a project before idea validation, project context, architecture, planning, or implementation.

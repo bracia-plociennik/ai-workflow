@@ -61,6 +61,17 @@
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` and decision artifacts required by this phase.
 - No product-code writes.
 
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+
 ## Purpose
 
 This phase turns a raw owner brain dump into a validated project idea before `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` exists.

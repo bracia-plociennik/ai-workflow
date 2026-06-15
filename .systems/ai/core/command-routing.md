@@ -561,6 +561,34 @@ Routing notes:
 - It does not replace status or evidence.
 - Distillation may propose a `System Insight Candidate`, but it must not write durable `AI_WORKFLOW_WORKSPACE_HOME/system-insights/**` files.
 
+### Optional Phase Knowledge Capture
+
+Route through `.systems/ai/core/memory.md`, the current phase file, and the current phase artifact template. Use this when the user asks whether to capture memory/insights after a phase without explicitly asking for phase 6 distillation, phase 7 checkpoint, or commit readiness.
+
+Polish variants:
+
+- `Zaproponuj knowledge capture po tej fazie.`
+- `Czy po tej fazie trzeba coś zapisać do pamięci?`
+- `Zrób optional knowledge capture decision.`
+- `Zdecyduj: memory, distillation, checkpoint czy nic.`
+- `Nie zapisuj automatycznie, tylko zaproponuj capture.`
+
+English variants:
+
+- `Propose knowledge capture after this phase.`
+- `Do we need to capture anything from this phase?`
+- `Make the optional knowledge capture decision.`
+- `Decide: memory, distillation, checkpoint, or nothing.`
+- `Do not write automatically; only propose capture.`
+
+Routing notes:
+
+- `Optional Knowledge Capture` is a soft phase decision, not a hard gate and not a durable write permission.
+- Valid targets are `project-memory`, `repo-memory`, `external-memory`, `system-insights`, `decision-artifact`, `status`, and `none`.
+- `Capture recommended: <no>`, `Target: <none>`, `Owner decision: <reject>`, `Owner decision: <defer-to-distillation>`, and `Owner decision: <defer-to-checkpoint>` are valid outcomes.
+- Durable writes still require the current phase's `Writes allowed`, memory scope boundaries, privacy/scope checks, risk policy, and owner approvals.
+- System Insight targets are candidates unless routed through phase 7 checkpoint, phase 8 final-check capture, or explicit owner-approved capture.
+
 ### System Insights
 
 Route through `.systems/ai/core/system-insights.md` and then to phase 6, phase 7, phase 8, or owner-approved capture depending on source and write permission.
@@ -925,6 +953,7 @@ English variants:
 Routing notes:
 
 - This gate is advisory-only, but every commit-ready summary should state work mode compliance and knowledge capture decision.
+- This is separate from phase-level `Optional Knowledge Capture`; use the phase decision as evidence, but do not duplicate durable memory when the phase decision defers to distillation or checkpoint.
 - Work mode must be one of `full-project`, `project-local-micro-task`, `repo-level-micro-project`, `side-task`, or `workflow-maintenance`.
 - Knowledge capture is `required` when status, evidence, micro-task/micro-project artifacts, phase 6 distillation, phase 7 checkpoint, memory, External Memory, or System Insights must be updated by existing workflow rules.
 - If capture is `not-required`, state the reason.

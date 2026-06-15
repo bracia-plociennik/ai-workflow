@@ -6,11 +6,15 @@ This policy defines the advisory work-mode compliance check and the commit readi
 
 It exists to make every commit decision explicit without creating a mechanical requirement to write memory, distillation, or checkpoint artifacts for every commit.
 
+It is separate from the phase-level `Optional Knowledge Capture` block. Phase capture records whether a phase produced candidate knowledge; commit readiness records whether a commit or handoff still needs a durable synchronization step.
+
 ## Advisory Only
 
 This gate is advisory-only. It does not replace phase gates, risk policy, permissions, Definition of Done, required evidence, stop conditions, or owner approvals.
 
 Agents should run the check before committing or preparing a commit summary. A missing runtime capture decision is not a validator hard stop by itself, but the final response or commit-ready summary should state the decision.
+
+If the relevant phase artifact already contains `Optional Knowledge Capture`, use it as evidence for this gate. If the phase decision says `defer-to-distillation` or `defer-to-checkpoint`, do not duplicate durable memory before the routed phase unless the owner explicitly approves capture now and permissions allow it.
 
 ## Work Mode Compliance
 
@@ -46,6 +50,8 @@ If any answer is `blocked` or `no` for a required item, stop before commit unles
 ## Knowledge Capture Decision
 
 Do not write memory automatically for every commit. Capture is required only when the work produced durable knowledge or closed a workflow unit that requires synchronization.
+
+Do not write memory automatically after every phase. The phase-level `Optional Knowledge Capture` block may recommend capture, defer capture, reject capture, or record that no capture is needed.
 
 Capture is required when any of these are true:
 

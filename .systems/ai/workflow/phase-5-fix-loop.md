@@ -60,6 +60,17 @@ Ta faza służy do naprawy błędów wykrytych w fazie jakości.
 Celem nie jest ponowna implementacja od zera.
 Celem jest poprawienie wyłącznie tych błędów, które zostały wskazane przez QA.
 
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+
 ## Warunek wejścia do tej fazy
 
 Do tej fazy przechodzimy tylko wtedy, gdy:

@@ -86,6 +86,8 @@ If the user asks to capture anonymized lessons, System Insights, cross-project b
 
 Before committing, preparing a commit summary, or closing work, apply `.systems/ai/core/contract-compliance.md`. The gate is advisory-only, but the agent should explicitly state work mode compliance and the knowledge capture decision: `required` with the correct target, or `not-required` with a reason.
 
+Every workflow phase artifact should include `Optional Knowledge Capture`: a soft decision about whether the phase produced reusable knowledge and where it belongs. This does not require memory after every phase and does not grant durable write permission outside the current phase's `Writes allowed`, memory policy, System Insights policy, risk policy, or owner approvals.
+
 If a blocking detail is missing, ask before continuing. The clarification must include:
 
 - recommended interpretation and its impact;
@@ -306,6 +308,7 @@ git diff --check
 .systems/scripts/check-system-insights
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
+.systems/scripts/check-knowledge-capture-gate
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

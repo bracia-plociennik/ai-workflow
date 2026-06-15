@@ -209,6 +209,10 @@ mv "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contrac
 run_must_fail "missing-contract-compliance-contract" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/ai/core/contract-compliance.md.bak" "$tmp/.systems/ai/core/contract-compliance.md"
 
+mv "$tmp/.systems/scripts/check-knowledge-capture-gate" "$tmp/.systems/scripts/check-knowledge-capture-gate.bak"
+run_must_fail "missing-knowledge-capture-gate-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-knowledge-capture-gate.bak" "$tmp/.systems/scripts/check-knowledge-capture-gate"
+
 cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
 perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
 run_must_fail "contract-compliance-requires-side-task-mode" .systems/scripts/check-contract-compliance
@@ -747,6 +751,29 @@ mv "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Context_BAD.md" "$tmp/.sy
 perl -0pi -e 's/^### Evidence required$/### Evidence missing/m' "$tmp/.systems/ai/workflow/phase-8-final-check.md"
 run_must_fail "missing-gate-heading" env AI_WORKFLOW_SKIP_SMOKE_TESTS=1 .systems/scripts/validate-workflow
 perl -0pi -e 's/^### Evidence missing$/### Evidence required/m' "$tmp/.systems/ai/workflow/phase-8-final-check.md"
+
+run_must_pass "knowledge-capture-gate-valid" .systems/scripts/check-knowledge-capture-gate
+
+cp "$tmp/.systems/ai/workflow/phase-0-idea-validation.md" "$tmp/.systems/ai/workflow/phase-0-idea-validation.md.bak"
+perl -0pi -e 's/\n## Optional Knowledge Capture\n\n- Capture recommended:.*?- Suggested entry summary:\n//s' "$tmp/.systems/ai/workflow/phase-0-idea-validation.md"
+run_must_fail "knowledge-capture-requires-phase-block" .systems/scripts/check-knowledge-capture-gate
+mv "$tmp/.systems/ai/workflow/phase-0-idea-validation.md.bak" "$tmp/.systems/ai/workflow/phase-0-idea-validation.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md" "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md.bak"
+perl -0pi -e 's/^- Owner decision required:.*\n//m' "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md"
+run_must_fail "knowledge-capture-requires-template-field" .systems/scripts/check-knowledge-capture-gate
+mv "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md"
+
+cp "$tmp/.systems/ai/core/memory.md" "$tmp/.systems/ai/core/memory.md.bak"
+printf '\nAgents must write memory after every phase.\n' >> "$tmp/.systems/ai/core/memory.md"
+run_must_fail "knowledge-capture-blocks-hard-gate-wording" .systems/scripts/check-knowledge-capture-gate
+mv "$tmp/.systems/ai/core/memory.md.bak" "$tmp/.systems/ai/core/memory.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md" "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md.bak"
+perl -0pi -e 's/- Capture recommended: `<yes\|no>`/- Capture recommended: `<no>`/' "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md"
+perl -0pi -e 's/- Target: `<project-memory\|repo-memory\|external-memory\|system-insights\|decision-artifact\|status\|none>`/- Target: `<none>`/' "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md"
+run_must_pass "knowledge-capture-allows-no-target-none" .systems/scripts/check-knowledge-capture-gate
+mv "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

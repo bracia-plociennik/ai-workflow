@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.13 - 2026-06-15
+
+- Added phase-level `Optional Knowledge Capture` to every workflow phase and workflow phase template.
+- Defined the soft capture taxonomy for project memory, repo memory, External Memory, System Insights, decision artifacts, status, and none.
+- Added `.systems/scripts/check-knowledge-capture-gate` with smoke coverage for missing blocks, missing fields, hard-gate regressions, and valid no-capture decisions.
+- Clarified that phase capture is advisory and does not create automatic durable memory writes or replace phase 6 distillation, phase 7 checkpoint, phase 8 final-check capture, owner approvals, or memory scope boundaries.
+
 ## 0.8.12 - 2026-06-15
 
 - Defined the system skill layout contract with canonical `SKILL.md` agent contracts and short `README.md` human summaries.

@@ -159,6 +159,7 @@ required=(
   ".systems/scripts/check-system-insights"
   ".systems/scripts/check-system-skills"
   ".systems/scripts/check-contract-compliance"
+  ".systems/scripts/check-knowledge-capture-gate"
   ".systems/scripts/check-required-artifacts"
   ".systems/scripts/check-status-consistency"
   ".systems/scripts/check-validator-smoke-tests"

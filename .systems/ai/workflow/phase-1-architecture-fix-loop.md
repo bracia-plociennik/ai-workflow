@@ -60,6 +60,17 @@ Ta faza służy do naprawy problemów wykrytych w fazie 1.5. FAZA ARCHITEKTURY Q
 Celem nie jest stworzenie nowej architektury od zera.
 Celem jest poprawienie dokładnie tych luk, ryzyk, sprzeczności i błędów, które zostały wykryte przez Architecture QA, tak aby architektura mogła ponownie przejść przez gate.
 
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+
 ## Warunek wejścia do tej fazy
 
 Do tej fazy przechodzimy tylko wtedy, gdy:

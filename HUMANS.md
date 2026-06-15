@@ -657,6 +657,20 @@ Przed commitem pracy zarządzanej przez AI Workflow użyj `.systems/ai/core/cont
 
 Jeśli capture jest wymagany, użyj właściwego miejsca: micro-task artifact, micro-project artifact, status/evidence, phase-6 distillation, phase-7 checkpoint, project memory, repo memory, External Memory albo System Insights.
 
+### Optional Knowledge Capture Po Fazach
+
+Każdy artefakt fazy ma miękką sekcję `Optional Knowledge Capture`. To jest decyzja, czy dana faza wytworzyła wiedzę wartą zapisu, i gdzie ta wiedza należy:
+
+- `project-memory`
+- `repo-memory`
+- `external-memory`
+- `system-insights`
+- `decision-artifact`
+- `status`
+- `none`
+
+To nie jest wymóg zapisywania pamięci po każdej fazie. Poprawne decyzje to także `defer-to-distillation`, `defer-to-checkpoint`, `reject` albo `not-requested`. Trwały zapis nadal wymaga właściwej fazy, zgody ownera, privacy/scope check i zgodności z `Writes allowed`.
+
 Pełny prompt do Codexa:
 
 ```text

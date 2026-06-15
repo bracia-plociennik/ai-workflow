@@ -64,3 +64,14 @@
 - Explicit evidence attached: `<yes|no>`
 - Quality result: `<PASS|FAIL>`
 - Required next phase: `<6. FAZA DESTYLACJI|5.5. FIX LOOP>`
+
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:

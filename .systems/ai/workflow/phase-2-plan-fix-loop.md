@@ -60,6 +60,17 @@ Ta faza służy do naprawy problemów wykrytych w fazie 2.5. FAZA PLANU PROJEKTU
 Celem nie jest stworzenie nowego planu od zera.
 Celem jest poprawienie dokładnie tych błędów, braków, niespójności i ryzyk, które zostały wykryte przez Plan QA, tak aby plan projektu mógł przejść gate.
 
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+
 ## Warunek wejścia do tej fazy
 
 Do tej fazy przechodzimy tylko wtedy, gdy:

@@ -65,6 +65,17 @@ Ta faza służy do zamiany zakończonego taska / tasks package w trwałą wiedz�
 Celem nie jest opis przebiegu pracy.
 Celem jest zapisanie tylko tych informacji, które mają wartość operacyjną i mogą zostać użyte w kolejnych taskach lub checkpointach.
 
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:
+
 ## Warunek wejścia do tej fazy
 
 Do tej fazy może przejść tylko task / tasks package, który przeszedł fazę jakości z wynikiem:

@@ -97,6 +97,10 @@ cd ai-workflow
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-system-insights
+.systems/scripts/check-system-skills
+.systems/scripts/check-contract-compliance
+.systems/scripts/check-knowledge-capture-gate
 ```
 
 ## First-Time Use
@@ -152,6 +156,8 @@ Do not edit `.systems/**` in a target repository. Workflow improvement ideas dis
 
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
+Every workflow phase artifact also includes `Optional Knowledge Capture`, a soft decision about whether the phase produced reusable knowledge and whether to capture it now, defer to distillation/checkpoint, reject it, or record `none`. This does not automatically write memory and does not block the next phase when no capture is needed.
+
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.
 
 ## Template Boundaries
@@ -191,6 +197,7 @@ git diff --check
 .systems/scripts/check-system-insights
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
+.systems/scripts/check-knowledge-capture-gate
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:
