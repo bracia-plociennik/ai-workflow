@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.8.12 - 2026-06-15
+
+- Defined the system skill layout contract with canonical `SKILL.md` agent contracts and short `README.md` human summaries.
+- Added `.systems/scripts/check-system-skills` plus validator smoke coverage for skill frontmatter, authority boundaries, unsafe external-model markers, undeclared YAML imports, and external CDN resources.
+- Exempted `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill>/context/**` supporting source materials from strict Markdown filename checks.
+- Preserved the imported Anthropic `skill-creator` under `.systems/ai/skills/legacy/skill-creator-old/` as context/data only.
+- Added the active `.systems/ai/skills/skill-creator/` system skill contract with AI Workflow-native resource routing, A/B eval schemas, expectation-level grading, timing/metrics benchmark aggregation, trigger-description review, grader/analyzer/comparator rubrics, offline review templates, and stdlib-only scaffold/validation/eval/report/packaging helpers.
+
 ## 0.8.11 - 2026-06-12
 
 - Added `.systems/ai/core/contract-compliance.md` for advisory work mode compliance and commit readiness knowledge capture decisions.

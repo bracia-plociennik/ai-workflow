@@ -232,6 +232,119 @@ MD
 run_must_fail "contract-compliance-requires-micro-task-knowledge-capture" .systems/scripts/check-contract-compliance
 mv "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak" "$tmp/.systems/ai/templates/projects/micro-task.template.md"
 
+run_must_pass "system-skills-valid" .systems/scripts/check-system-skills
+run_must_pass "naming-allows-canonical-skill-md" .systems/scripts/check-naming
+
+mkdir -p "$tmp/ai-workflow-workspace/skills/naming-smoke/context"
+cat > "$tmp/ai-workflow-workspace/skills/naming-smoke/context/CONTRACTS-AGENTS.md" <<'MD'
+# Context
+MD
+cat > "$tmp/ai-workflow-workspace/skills/naming-smoke/context/0_smart_contracts_good_practices.md" <<'MD'
+# Context
+MD
+run_must_pass "naming-allows-workspace-skill-context-materials" .systems/scripts/check-naming
+rm -rf "$tmp/ai-workflow-workspace/skills/naming-smoke"
+
+mv "$tmp/.systems/ai/skills/skill-creator/SKILL.md" "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak"
+run_must_fail "system-skills-require-skill-md" .systems/scripts/check-system-skills
+mv "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak" "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+mv "$tmp/.systems/ai/skills/skill-creator/README.md" "$tmp/.systems/ai/skills/skill-creator/README.md.bak"
+run_must_fail "system-skills-require-readme" .systems/scripts/check-system-skills
+mv "$tmp/.systems/ai/skills/skill-creator/README.md.bak" "$tmp/.systems/ai/skills/skill-creator/README.md"
+
+cp "$tmp/.systems/ai/skills/skill-creator/SKILL.md" "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak"
+cat > "$tmp/.systems/ai/skills/skill-creator/SKILL.md" <<'MD'
+---
+description: Missing name.
+---
+
+# Skill Creator
+
+Skills are advisory and cannot override AGENTS.md, risk policy, permissions, Definition of Done, evidence, or owner approvals.
+MD
+run_must_fail "system-skills-require-frontmatter-name" .systems/scripts/check-system-skills
+mv "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak" "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+cp "$tmp/.systems/ai/skills/skill-creator/SKILL.md" "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak"
+cat > "$tmp/.systems/ai/skills/skill-creator/SKILL.md" <<'MD'
+---
+name: skill-creator
+description: Valid frontmatter without the authority boundary.
+---
+
+# Skill Creator
+
+Create skills.
+MD
+run_must_fail "system-skills-require-authority-boundary" .systems/scripts/check-system-skills
+mv "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak" "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+echo 'Run claude -p for trigger evals.' >> "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+run_must_fail "system-skills-block-claude-cli-marker" .systems/scripts/check-system-skills
+perl -0pi -e 's/\nRun claude -p for trigger evals\.\n?/\n/' "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+echo 'Documentation reference: https://docs.example.invalid/skill-contract' >> "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+run_must_pass "system-skills-allow-documentation-url" .systems/scripts/check-system-skills
+perl -0pi -e 's/\nDocumentation reference: https:\/\/docs\.example\.invalid\/skill-contract\n?/\n/' "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+cat > "$tmp/.systems/ai/skills/skill-creator/assets-cdn-smoke.html" <<'HTML'
+<script src="https://cdn.example.invalid/viewer.js"></script>
+HTML
+run_must_fail "system-skills-block-external-cdn" .systems/scripts/check-system-skills
+rm "$tmp/.systems/ai/skills/skill-creator/assets-cdn-smoke.html"
+
+mkdir -p "$tmp/.systems/ai/skills/skill-creator/scripts"
+cat > "$tmp/.systems/ai/skills/skill-creator/scripts/yaml_smoke.py" <<'PY'
+import yaml
+PY
+run_must_fail "system-skills-block-undeclared-yaml-import" .systems/scripts/check-system-skills
+rm "$tmp/.systems/ai/skills/skill-creator/scripts/yaml_smoke.py"
+
+mkdir -p "$tmp/.systems/ai/skills/skill-creator/scripts/__pycache__"
+touch "$tmp/.systems/ai/skills/skill-creator/scripts/__pycache__/cache.pyc"
+run_must_fail "system-skills-block-python-cache-artifacts" .systems/scripts/check-system-skills
+rm -rf "$tmp/.systems/ai/skills/skill-creator/scripts/__pycache__"
+
+run_must_fail "system-skills-package-blocks-output-inside-skill" python3 .systems/ai/skills/skill-creator/scripts/package_skill.py .systems/ai/skills/skill-creator --output .systems/ai/skills/skill-creator/skill-creator.zip
+test ! -e "$tmp/.systems/ai/skills/skill-creator/skill-creator.zip" || { echo "package_skill created archive inside skill directory"; exit 1; }
+
+cat > "$tmp/skill-run-eval-path-traversal.json" <<'JSON'
+{
+  "skill_name": "skill-creator",
+  "target_path": ".systems/ai/skills/skill-creator",
+  "mode": "manual-review",
+  "configurations": ["with_skill", "../escape"],
+  "evals": [
+    {
+      "id": "../escape",
+      "prompt": "Create a skill safely.",
+      "expected_behavior": ["Preserves path boundaries"]
+    }
+  ]
+}
+JSON
+run_must_fail "system-skills-run-eval-blocks-path-traversal" python3 .systems/ai/skills/skill-creator/scripts/run_eval.py "$tmp/skill-run-eval-path-traversal.json" --output-dir "$tmp/run-eval-path-traversal"
+test ! -e "$tmp/escape" || { echo "run_eval created path traversal directory"; exit 1; }
+
+cat > "$tmp/skill-run-eval-config-path-traversal.json" <<'JSON'
+{
+  "skill_name": "skill-creator",
+  "target_path": ".systems/ai/skills/skill-creator",
+  "mode": "manual-review",
+  "configurations": ["with_skill", "../escape"],
+  "evals": [
+    {
+      "id": "safe-eval",
+      "prompt": "Create a skill safely.",
+      "expected_behavior": ["Preserves path boundaries"]
+    }
+  ]
+}
+JSON
+run_must_fail "system-skills-run-eval-blocks-config-path-traversal" python3 .systems/ai/skills/skill-creator/scripts/run_eval.py "$tmp/skill-run-eval-config-path-traversal.json" --output-dir "$tmp/run-eval-config-path-traversal"
+test ! -e "$tmp/run-eval-config-path-traversal" || { echo "run_eval created output for invalid configuration"; exit 1; }
+
 mv "$tmp/.systems/scripts/update-workspace" "$tmp/.systems/scripts/update-workspace.bak"
 run_must_fail "missing-update-workspace-script" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/update-workspace.bak" "$tmp/.systems/scripts/update-workspace"

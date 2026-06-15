@@ -13,6 +13,7 @@ fi
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
 .systems/scripts/check-system-insights
+.systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
 
 fail=0
@@ -230,6 +231,20 @@ for required_ownership_ref in AGENTS.md .systems/ai/core/installation.md .system
 
   if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/system-insights/' "$required_ownership_ref"; then
     echo "Missing workspace system insights reference in $required_ownership_ref"
+    fail=1
+  fi
+done
+
+for required_skill_contract_ref in AGENTS.md .systems/ai/core/operating-model.md .systems/ai/skills/README.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'SKILL\.md' "$required_skill_contract_ref"; then
+    echo "Missing system skill SKILL.md contract reference in $required_skill_contract_ref"
+    fail=1
+  fi
+done
+
+for required_skill_validator_ref in .systems/scripts/check-required-artifacts .systems/scripts/check-validator-smoke-tests .systems/ai/core/commands.md; do
+  if ! rg -q 'check-system-skills' "$required_skill_validator_ref"; then
+    echo "Missing check-system-skills validator chain reference in $required_skill_validator_ref"
     fail=1
   fi
 done

@@ -35,6 +35,7 @@ git diff --check
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
 .systems/scripts/check-system-insights
+.systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
 ```
 

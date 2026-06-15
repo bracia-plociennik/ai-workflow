@@ -1,30 +1,43 @@
 # Skills
 
-This directory is reserved for system-defined AI Workflow skills.
+This directory stores system-defined AI Workflow skills.
 
 Skills are reusable task-specific guidance for how to perform a class of work inside the workflow. They can describe domain standards, implementation preferences, UX rules, review checklists, testing expectations, or other execution guidance.
 
-No concrete system skills are included by default.
-
 Target repositories must not edit this directory. Local user-defined skills belong in `AI_WORKFLOW_WORKSPACE_HOME/skills/`.
 
-## Intended Layout
+## Active Skill Layout
 
-Use one directory per skill:
-
-```text
-.systems/ai/skills/<skill-name>/README.md
-```
-
-Example future skill paths:
+Use one directory per active skill:
 
 ```text
-.systems/ai/skills/frontend-dev/README.md
-.systems/ai/skills/backend-api/README.md
-.systems/ai/skills/database-migrations/README.md
+.systems/ai/skills/<skill-name>/
+  SKILL.md
+  README.md
+  agents/
+  references/
+  scripts/
+  assets/
+  eval-viewer/
 ```
+
+Only `SKILL.md` and `README.md` are required. Optional directories should exist only when they directly support the skill.
+
+`SKILL.md` is the canonical agent contract. It must include frontmatter with `name` and `description`, task guidance, authority boundaries, required checks, output expectations, and stop conditions.
+
+`README.md` is a short human-facing overview. It must point to `SKILL.md` and must not duplicate the full operational contract.
 
 Skill names must use lowercase kebab-case.
+
+## Legacy Source Material
+
+External or superseded skill imports can be preserved under:
+
+```text
+.systems/ai/skills/legacy/<source-name>/
+```
+
+Legacy entries are context/data only. They are not active system skills, are not loaded by skill routing, and may contain source-system conventions that fail current AI Workflow validation.
 
 ## When Agents Must Check Skills
 
@@ -36,10 +49,11 @@ Examples:
 - API, endpoint, request validation, serialization -> check for a backend/API skill.
 - schema, migration, data model, rollback -> check for a database/migration skill.
 - tests, QA, review, release, observability -> check for a matching quality or operations skill.
+- skill creation, skill updates, skill evals, or skill safety review -> check `skill-creator`.
 
 If both a user skill and a system skill match, the user skill takes precedence as local task guidance and the system skill remains fallback context.
 
-If a relevant skill exists, read it before producing the plan, specification, implementation, or QA result.
+If a relevant skill exists, read its `SKILL.md` before producing the plan, specification, implementation, or QA result.
 
 If no relevant skill exists, continue with the normal workflow and do not invent one.
 
@@ -64,15 +78,3 @@ They must not:
 - redefine project scope, acceptance criteria, owner approvals, or final owner approval.
 
 When a skill conflicts with a higher-priority source, follow the higher-priority source and record the conflict.
-
-## Skill README Minimum Content
-
-Each future skill README should define:
-
-- purpose;
-- when to use it;
-- when not to use it;
-- required checks;
-- output expectations;
-- stop conditions;
-- examples of acceptable and unacceptable work.

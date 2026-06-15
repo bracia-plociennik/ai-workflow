@@ -1,3 +1,6 @@
 /workspace/
 .DS_Store
 /ai-workflow-workspace/
+__pycache__/
+*.pyc
+*.pyo

@@ -2,10 +2,10 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.11` |
+| Workflow version | `0.8.12` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-06-12` |
-| Naming standard | lowercase kebab-case |
+| Last process migration | `2026-06-15` |
+| Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
 | Phase file standard | `phase-<number>-<name>.md` |
 
 ## Compatibility Notes
@@ -35,7 +35,8 @@
 - `.systems/scripts/update-workspace` backfills missing neutral `AI_WORKFLOW_WORKSPACE_HOME/**` schema files after upstream updates without overwriting existing runtime artifacts.
 - Autopilot requires a run-scoped readiness audit at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md` before the run can enter `running`.
 - Autopilot must declare `planning-range` for phase 1 through phase 3 Spec QA or `implementation-range` for phase 4 through phase 7 checkpoint. `phase-8-final-check` is owner-triggered only and is not run automatically by autopilot.
-- `.systems/ai/skills/` stores optional system-defined task-specific workflow skills.
+- `.systems/ai/skills/` stores optional system-defined task-specific workflow skills. Active skills use `SKILL.md` as the canonical agent contract and `README.md` as a short human-facing summary.
+- `.systems/ai/skills/legacy/**` stores preserved external skill source material as context/data only, not active skill guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/` stores optional user-defined task-specific workflow skills and takes precedence as supporting guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` stores target-owned External Memory improvement proposals.
 - `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` stores target-owned anonymized cross-project operating lessons and skill candidates.

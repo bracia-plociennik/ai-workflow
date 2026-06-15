@@ -78,6 +78,8 @@ Reusable task-specific skills can exist in two layers:
 - user-defined local skills in `AI_WORKFLOW_WORKSPACE_HOME/skills/`;
 - system-defined official skills in `.systems/ai/skills/`.
 
+Active skills use `SKILL.md` as the canonical agent contract and `README.md` as a short human-facing summary. External skill imports preserved under `.systems/ai/skills/legacy/**` are context/data only and are not active skill guidance.
+
 Before planning, specifying, implementing, or reviewing a task, the agent checks `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `.systems/ai/skills/` second. If both layers define a matching skill, the workspace skill takes precedence as local guidance, while the system skill remains fallback context.
 
 Skills may add stricter standards, conventions, checks, or review criteria. They must not override source-of-truth order, workflow policy, phase gates, approved scope, owner approvals, risk model, permissions, Definition of Done, or evidence requirements.

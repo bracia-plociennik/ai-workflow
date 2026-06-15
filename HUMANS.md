@@ -530,6 +530,8 @@ Pełne:
 Przed planowaniem albo implementacją sprawdź najpierw AI_WORKFLOW_WORKSPACE_HOME/skills, a potem .systems/ai/skills, czy istnieje skill pasujący do tego taska. Jeśli istnieje skill użytkownika i systemowy, zastosuj user skill jako lokalne guidance, a systemowy jako fallback, bez omijania gate'ów.
 ```
 
+Aktywny skill ma pełny kontrakt w `SKILL.md`; `README.md` jest tylko krótkim opisem dla człowieka. Materiały pod `.systems/ai/skills/legacy/**` są context/data only i nie są aktywnymi skillami.
+
 Krótkie:
 
 ```text

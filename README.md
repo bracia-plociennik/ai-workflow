@@ -28,6 +28,7 @@ This upstream repository itself uses official repo mode: there is no inner `ai-w
 - `.systems/ai/core/task-intake.md` - required lightweight validation lens before planning or executing new tasks.
 - `.systems/ai/core/response-contract.md` - required user-facing response footer with next-step recommendation, alternative, impacts, and copy-paste prompts.
 - `.systems/ai/core/change-requests.md` - owner change request policy before and after final owner approval.
+- `.systems/ai/skills/` - system skills using `SKILL.md` as the canonical contract and short `README.md` summaries.
 - `.systems/ai/examples/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
 - `.systems/scripts/` - validators for this workflow repository, run from `ai-workflow/`.
 
@@ -188,6 +189,7 @@ git diff --check
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
 .systems/scripts/check-system-insights
+.systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
 ```
 
