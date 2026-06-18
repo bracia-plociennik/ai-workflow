@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_literal() {
+  local literal="$1"
+  shift
+  if ! rg -F -q -- "$literal" "$@"; then
+    echo "Missing default quality chaining text: $literal"
+    fail=1
+  fi
+}
+
+require_literal_in_file() {
+  local literal="$1"
+  local file="$2"
+  if ! rg -F -q -- "$literal" "$file"; then
+    echo "Missing default quality chaining text in ${file#./}: $literal"
+    fail=1
+  fi
+}
+
+require_literal "Default Phase Quality Chaining" .systems/ai/core/workflow.md .systems/ai/core/command-routing.md
+require_literal 'Default phase quality chaining pairs:' .systems/ai/core/command-routing.md
+
+for pair in \
+  '`phase-1-architecture` -> `phase-1-architecture-qa`' \
+  '`phase-2-project-plan` -> `phase-2-plan-qa`' \
+  '`phase-3-specification` -> `phase-3-spec-qa`' \
+  '`phase-4-implementation` -> `phase-5-quality`'
+do
+  require_literal_in_file "$pair" .systems/ai/core/command-routing.md
+  require_literal_in_file "$pair" .systems/ai/core/workflow.md
+  require_literal_in_file "$pair" HUMANS.md
+done
+
+require_literal_in_file '`phase-2-task-packaging` -> `phase-2-packaging-qa` when the owner explicitly requests task packaging' .systems/ai/core/command-routing.md
+require_literal_in_file '`phase-2-task-packaging` -> `phase-2-packaging-qa` when the owner explicitly requests task packaging' .systems/ai/core/workflow.md
+
+require_literal 'bez QA' .systems/ai/core/workflow.md .systems/ai/core/command-routing.md HUMANS.md
+require_literal 'without QA' .systems/ai/core/workflow.md .systems/ai/core/command-routing.md HUMANS.md
+require_literal_in_file 'This opt-out does not approve moving to the next phase when QA/Quality PASS is required.' .systems/ai/core/workflow.md
+require_literal_in_file 'This opt-out does not approve moving to the next phase when QA/Quality PASS is required.' .systems/ai/core/command-routing.md
+
+if rg -i -q 'without QA may continue to next phase|without QA can continue to next phase|without QA may proceed to next phase|without QA can proceed to next phase|bez QA.*moze przejsc do kolejnej fazy|bez QA.*może przejść do kolejnej fazy|bez QA.*moze kontynuowac|bez QA.*może kontynuować' .systems/ai/core .systems/ai/workflow .systems/ai/templates HUMANS.md; then
+  echo "Unsafe opt-out wording suggests progression without required QA"
+  fail=1
+fi
+
+if rg -i -q 'default phase quality chaining.*(run|start).*phase-8-final-check.*automatic|phase-8-final-check.*automatic.*default phase quality chaining|phase 8.*automatic.*default phase quality chaining' .systems/ai/core .systems/ai/workflow .systems/ai/templates HUMANS.md; then
+  echo "Unsafe wording suggests phase 8 can be started by default quality chaining"
+  fail=1
+fi
+
+require_literal_in_file 'optional owner-requested' .systems/ai/core/command-routing.md
+require_literal_in_file 'optional owner-requested' .systems/ai/workflow/phase-2-task-packaging.md
+require_literal_in_file 'optional owner-requested' .systems/ai/templates/workflow/phase-2-task-packaging.template.md
+require_literal_in_file 'Do not run or propose task packaging as the default route after Plan QA.' .systems/ai/core/command-routing.md
+require_literal_in_file 'Do not run or propose task packaging as the default route after Plan QA.' .systems/ai/workflow/phase-2-task-packaging.md
+require_literal_in_file 'Do not run or propose task packaging as the default route after Plan QA.' .systems/ai/templates/workflow/phase-2-task-packaging.template.md
+require_literal '`phase-3-specification` on `PASS` by default for the selected task.' .systems/ai/workflow/phase-2-plan-qa.md
+require_literal '`phase-2-task-packaging` on `PASS` only when the owner explicitly requests optional task packaging.' .systems/ai/workflow/phase-2-plan-qa.md
+require_literal 'Default next phase: `<3. FAZA SPECYFIKACJI|2.6. PLAN FIX LOOP>`' .systems/ai/templates/workflow/phase-2-plan-qa.template.md
+require_literal 'Optional owner-requested task packaging: `<requested|not-requested>`' .systems/ai/templates/workflow/phase-2-plan-qa.template.md
+require_literal_in_file 'phase-3-specification for every planned task by default' .systems/ai/core/autopilot.md
+require_literal_in_file 'optional owner-requested phase-2-task-packaging' .systems/ai/core/autopilot.md
+require_literal_in_file 'task packaging is complete, explicitly skipped, or not requested for solo-by-default execution' .systems/ai/core/autopilot.md
+require_literal_in_file 'packaging decision or solo-by-default/not-requested packaging decision' .systems/ai/templates/autopilot/readiness.template.md
+
+if rg -q '^- `phase-2-task-packaging` on `PASS`\.$' .systems/ai/workflow/phase-2-plan-qa.md; then
+  echo "Plan QA still routes unconditionally to task packaging"
+  fail=1
+fi
+
+if rg -q '^- Can proceed to task packaging:' .systems/ai/templates/workflow/phase-2-plan-qa.template.md; then
+  echo "Plan QA template still presents task packaging as the default next step"
+  fail=1
+fi
+
+require_literal '`phase-8-final-check` is owner-triggered only and is never part of default phase quality chaining.' .systems/ai/core/workflow.md
+require_literal '`phase-8-final-check` remains owner-triggered only and must never be started by default phase quality chaining.' .systems/ai/core/command-routing.md
+
+exit "$fail"

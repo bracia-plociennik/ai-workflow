@@ -1014,6 +1014,12 @@ run_must_fail "later-phase-empty-tasks" .systems/scripts/check-status-consistenc
 cp "$tmp/example-status.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
 cp "$tmp/example-tasks.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/tasks.md"
 
+perl -0pi -e 's/\| `current-phase` \| `[^`]+` \|/| `current-phase` | `phase-2-plan-qa` |/' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `phase-result` \| `[^`]+` \|/| `phase-result` | `PASS` |/' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+perl -0pi -e 's/\| `next-phase` \| `[^`]+` \|/| `next-phase` | `phase-3-specification` |/' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+run_must_pass "plan-qa-defaults-to-specification" .systems/scripts/check-status-consistency
+cp "$tmp/example-status.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
+
 mv "$tmp/.systems/ai/workflow/phase-8-final-check.md" "$tmp/.systems/ai/workflow/Phase_8_BAD.md"
 run_must_fail "bad-naming" .systems/scripts/check-naming
 mv "$tmp/.systems/ai/workflow/Phase_8_BAD.md" "$tmp/.systems/ai/workflow/phase-8-final-check.md"
@@ -1071,6 +1077,42 @@ perl -0pi -e 's/- Capture recommended: `<yes\|no>`/- Capture recommended: `<no>`
 perl -0pi -e 's/- Target: `<project-memory\|repo-memory\|external-memory\|system-insights\|decision-artifact\|status\|none>`/- Target: `<none>`/' "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md"
 run_must_pass "knowledge-capture-allows-no-target-none" .systems/scripts/check-knowledge-capture-gate
 mv "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-2-project-plan.template.md"
+
+run_must_pass "default-quality-chain-valid" .systems/scripts/check-default-quality-phase-chaining
+
+cp "$tmp/.systems/ai/core/command-routing.md" "$tmp/.systems/ai/core/command-routing.md.bak"
+perl -0pi -e 's/- `phase-1-architecture` -> `phase-1-architecture-qa`\n//' "$tmp/.systems/ai/core/command-routing.md"
+run_must_fail "default-quality-chain-requires-architecture-mapping" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/core/command-routing.md.bak" "$tmp/.systems/ai/core/command-routing.md"
+
+cp "$tmp/.systems/ai/core/workflow.md" "$tmp/.systems/ai/core/workflow.md.bak"
+cp "$tmp/.systems/ai/core/command-routing.md" "$tmp/.systems/ai/core/command-routing.md.bak"
+cp "$tmp/HUMANS.md" "$tmp/HUMANS.md.bak"
+perl -0pi -e 's/bez QA/bez-qx/g' "$tmp/.systems/ai/core/workflow.md" "$tmp/.systems/ai/core/command-routing.md" "$tmp/HUMANS.md"
+run_must_fail "default-quality-chain-requires-bez-qa-opt-out" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/core/workflow.md.bak" "$tmp/.systems/ai/core/workflow.md"
+mv "$tmp/.systems/ai/core/command-routing.md.bak" "$tmp/.systems/ai/core/command-routing.md"
+mv "$tmp/HUMANS.md.bak" "$tmp/HUMANS.md"
+
+cp "$tmp/.systems/ai/core/workflow.md" "$tmp/.systems/ai/core/workflow.md.bak"
+printf '\nWithout QA may continue to next phase.\n' >> "$tmp/.systems/ai/core/workflow.md"
+run_must_fail "default-quality-chain-blocks-unsafe-opt-out-wording" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/core/workflow.md.bak" "$tmp/.systems/ai/core/workflow.md"
+
+cp "$tmp/.systems/ai/workflow/phase-2-plan-qa.md" "$tmp/.systems/ai/workflow/phase-2-plan-qa.md.bak"
+printf '\n- `phase-2-task-packaging` on `PASS`.\n' >> "$tmp/.systems/ai/workflow/phase-2-plan-qa.md"
+run_must_fail "default-quality-chain-blocks-default-task-packaging" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/workflow/phase-2-plan-qa.md.bak" "$tmp/.systems/ai/workflow/phase-2-plan-qa.md"
+
+cp "$tmp/.systems/ai/workflow/phase-2-task-packaging.md" "$tmp/.systems/ai/workflow/phase-2-task-packaging.md.bak"
+perl -0pi -e 's/optional owner-requested/optional/g' "$tmp/.systems/ai/workflow/phase-2-task-packaging.md"
+run_must_fail "default-quality-chain-requires-owner-only-packaging" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/workflow/phase-2-task-packaging.md.bak" "$tmp/.systems/ai/workflow/phase-2-task-packaging.md"
+
+cp "$tmp/.systems/ai/core/command-routing.md" "$tmp/.systems/ai/core/command-routing.md.bak"
+printf '\nDefault phase quality chaining may run phase-8-final-check automatically.\n' >> "$tmp/.systems/ai/core/command-routing.md"
+run_must_fail "default-quality-chain-blocks-phase-8-auto-chain" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/core/command-routing.md.bak" "$tmp/.systems/ai/core/command-routing.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

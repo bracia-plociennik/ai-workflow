@@ -27,10 +27,8 @@ phase-1-architecture
 -> phase-2-project-plan
 -> phase-2-plan-qa
 -> phase-2-plan-fix-loop when needed
--> phase-2-task-packaging
--> phase-2-packaging-qa when packages exist
--> phase-2-package-fix-loop when needed
--> phase-3-specification for every planned task/package
+-> phase-3-specification for every planned task by default
+   or optional owner-requested phase-2-task-packaging -> phase-2-packaging-qa when packages exist -> phase-2-package-fix-loop when needed -> phase-3-specification for every planned package
 -> phase-3-spec-qa for every planned task/package
 -> phase-3-spec-fix-loop when needed
 -> stop before implementation
@@ -89,14 +87,14 @@ Additional `planning-range` start conditions:
 
 - accepted project context exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`;
 - project/context repo intake is complete enough to identify safe commands, restricted zones, and external-effect policy;
-- missing architecture, plan, packaging, and specs are expected outputs of the range and must be listed as planned writes, not blockers;
+- missing architecture, plan, optional owner-requested packaging, and specs are expected outputs of the range and must be listed as planned writes, not blockers;
 - owner decisions needed before architecture or planning are resolved or listed as `awaiting-owner`.
 
 Additional `implementation-range` start conditions:
 
 - architecture and Architecture QA have `PASS`;
 - project plan and Plan QA have `PASS`;
-- task packaging is complete or explicitly skipped;
+- task packaging is complete, explicitly skipped, or not requested for solo-by-default execution;
 - the first task/package spec exists;
 - Spec QA for the first task/package has `PASS`;
 - implementation write scope is limited to the accepted spec and approved task/package range.

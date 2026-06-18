@@ -115,6 +115,26 @@ Every workflow phase and phase artifact includes `Optional Knowledge Capture`. T
 - Final check cannot close with full `PASS` without explicit owner approval.
 - User-facing phase responses must end with one recommended next step and one safe alternative under `Co dalej?`; choose them from this transition model, the current phase file, status, evidence, and blockers. Each path must include `Napisz:` with a direct copy-paste prompt.
 
+## Default Phase Quality Chaining
+
+Phase transition is the status-level move after a phase result. Single command chained execution is the default way to handle short owner commands for working phases: run the requested working phase, then immediately run its paired QA/Quality phase before reporting the final result to the owner.
+
+Default chained pairs:
+
+- `phase-1-architecture` -> `phase-1-architecture-qa`
+- `phase-2-project-plan` -> `phase-2-plan-qa`
+- `phase-2-task-packaging` -> `phase-2-packaging-qa` when the owner explicitly requests task packaging
+- `phase-3-specification` -> `phase-3-spec-qa`
+- `phase-4-implementation` -> `phase-5-quality`
+
+If the working phase does not meet its pass criteria, do not run the paired QA/Quality phase. Stop with the blocker, missing evidence, or owner decision.
+
+If the paired QA/Quality phase returns `FAIL`, stop at the matching fix loop. Do not continue to the next planning, specification, implementation, distillation, checkpoint, or final-check phase.
+
+Owner opt-out grammar such as `bez QA`, `bez quality`, `without QA`, `without quality`, `tylko faza`, or `only this phase` runs only the requested working phase and then stops. This opt-out does not approve moving to the next phase when QA/Quality PASS is required.
+
+`phase-8-final-check` is owner-triggered only and is never part of default phase quality chaining.
+
 ## Full Workflow Route
 
 ```text
@@ -128,9 +148,8 @@ phase 0 init after cloning AI Workflow into a target repo
 -> phase 1 architecture QA
 -> phase 2 project plan
 -> phase 2 plan QA
--> phase 2 task packaging
--> phase 2 packaging QA when packages exist
--> phase 3 specification
+-> phase 3 specification by default
+   or owner-requested phase 2 task packaging -> phase 2 packaging QA when packages exist -> phase 3 specification
 -> phase 3 spec QA
 -> phase 4 implementation
 -> phase 5 quality

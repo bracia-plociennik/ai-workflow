@@ -39,7 +39,8 @@
 
 ### Next allowed phases
 
-- `phase-2-task-packaging` on `PASS`.
+- `phase-3-specification` on `PASS` by default for the selected task.
+- `phase-2-task-packaging` on `PASS` only when the owner explicitly requests optional task packaging.
 - `phase-2-plan-fix-loop` on `FAIL`.
 - Stop for owner decision when required.
 

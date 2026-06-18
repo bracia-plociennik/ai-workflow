@@ -197,6 +197,19 @@ Krótkie:
 Utwórz context projektu.
 ```
 
+### Domyślne QA po fazach roboczych
+
+Krótkie komendy do faz roboczych domyślnie uruchamiają fazę roboczą i jej QA/Quality przed zwróceniem wyniku:
+
+- `phase-1-architecture` -> `phase-1-architecture-qa`
+- `phase-2-project-plan` -> `phase-2-plan-qa`
+- `phase-3-specification` -> `phase-3-spec-qa`
+- `phase-4-implementation` -> `phase-5-quality`
+
+Jeśli chcesz uruchomić tylko fazę roboczą, użyj `bez QA`, `bez quality`, `without QA`, `without quality`, `tylko faza` albo `only this phase`. Taki opt-out zatrzymuje Codexa po fazie roboczej i nie oznacza zgody na przejście dalej bez wymaganego QA PASS.
+
+`phase-2-task-packaging` jest opcjonalne i owner-requested. Codex nie powinien proponować packagingu jako domyślnego kroku po Plan QA; poproś o niego jawnie, gdy chcesz grupować niezależne taski.
+
 ### Architektura
 
 Pełne:
@@ -254,6 +267,8 @@ Zrób QA planu.
 ```
 
 ### Task packaging
+
+Ta faza jest opcjonalna i uruchamiana tylko na jawne polecenie ownera. Domyślnie po Plan QA przechodzimy do specyfikacji wybranego taska, bez proponowania packagingu.
 
 Pełne:
 
@@ -1604,7 +1619,7 @@ Przed pierwszym autopilotem w nowym repo trzeba ustalić:
 
 Nie startuj `planning-range` bez repo intake, zaakceptowanego project contextu, safe commands i readiness audit.
 
-Nie startuj `implementation-range` bez intake, architektury, Architecture QA, planu, Plan QA, packaging decision, specs, Spec QA i readiness audit.
+Nie startuj `implementation-range` bez intake, architektury, Architecture QA, planu, Plan QA, decyzji packaging albo solo-by-default/not-requested packaging, specs, Spec QA i readiness audit.
 
 ## Antywzorce
 

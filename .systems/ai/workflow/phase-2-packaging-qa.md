@@ -4,7 +4,7 @@
 
 ### Input required
 
-- Packaging decision exists and packages were created.
+- Owner-requested packaging decision exists and packages were created.
 - Plan QA has `PASS` and task index is current.
 - Architecture and plan artifacts are available.
 

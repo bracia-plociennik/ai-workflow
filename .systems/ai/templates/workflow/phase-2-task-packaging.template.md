@@ -1,5 +1,7 @@
 # 2.7 Task Packaging
 
+This phase is optional owner-requested work. Do not run or propose task packaging as the default route after Plan QA.
+
 ## Metadata
 
 - Project: `<project>`
@@ -7,6 +9,7 @@
 - Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Workflow phase: `2.7. TASK PACKAGING`
 - Result: `<packages-created|no-packages-created|blocked>`
+- Owner explicitly requested packaging: `<yes|no>`
 
 ## Packaging Analysis
 

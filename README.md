@@ -101,6 +101,7 @@ cd ai-workflow
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
+.systems/scripts/check-default-quality-phase-chaining
 ```
 
 ## First-Time Use
@@ -198,6 +199,7 @@ git diff --check
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
+.systems/scripts/check-default-quality-phase-chaining
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

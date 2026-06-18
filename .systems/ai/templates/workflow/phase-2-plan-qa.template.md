@@ -37,8 +37,10 @@
 ## Gate Decision
 
 - Plan QA result: `<PASS|FAIL>`
-- Can proceed to task packaging: `<yes|no>`
-- Required next phase: `<2.7. TASK PACKAGING|2.6. PLAN FIX LOOP>`
+- Default next phase: `<3. FAZA SPECYFIKACJI|2.6. PLAN FIX LOOP>`
+- Optional owner-requested task packaging: `<requested|not-requested>`
+- Can proceed to optional task packaging: `<yes|no|not-requested>`
+- Required next phase: `<3. FAZA SPECYFIKACJI|2.7. TASK PACKAGING|2.6. PLAN FIX LOOP>`
 
 ## Optional Knowledge Capture
 

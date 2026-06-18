@@ -128,8 +128,8 @@ owner-prompt:
 
 `ready` is allowed only when every blocking item is `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied.
 
-For `planning-range`, missing architecture, plan, packaging, and specs are not blockers when they are explicit outputs of the run. Product-code writes are always forbidden.
+For `planning-range`, missing architecture, plan, optional owner-requested packaging, and specs are not blockers when they are explicit outputs of the run. Product-code writes are always forbidden.
 
-For `implementation-range`, missing Architecture QA PASS, Plan QA PASS, packaging decision, first Spec QA PASS, safe implementation write scope, or checkpoint policy is blocking.
+For `implementation-range`, missing Architecture QA PASS, Plan QA PASS, packaging decision or solo-by-default/not-requested packaging decision, first Spec QA PASS, safe implementation write scope, or checkpoint policy is blocking.
 
 Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`.

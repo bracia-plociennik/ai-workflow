@@ -1,10 +1,13 @@
 # 2.7. FAZA TASK PACKAGING - Codex
 
+This phase is optional owner-requested work. Do not run or propose task packaging as the default route after Plan QA.
+
 ## Gate Conditions
 
 ### Input required
 
 - Plan QA has `PASS`.
+- The owner explicitly requested task packaging.
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md` identifies ready tasks and dependencies; optional task cards in `tasks/` are reviewed when present.
 - Parallel/package candidates are known or the work is explicitly solo-task execution.
 
@@ -55,7 +58,7 @@
 - Packaging evidence, project status, and task/package metadata.
 - No product-code writes.
 
-Ta faza służy do grupowania tasków w pakiety przed specyfikacją.
+Ta faza służy do grupowania tasków w pakiety przed specyfikacją, ale tylko na jawne polecenie ownera.
 
 Celem nie jest zmiana planu.
 Celem jest przyspieszenie specyfikacji poprzez bezpieczne grupowanie tasków.

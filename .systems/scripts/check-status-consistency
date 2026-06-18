@@ -167,6 +167,8 @@ is_allowed_transition() {
     phase-1-architecture-fix-loop:PASS:phase-1-architecture-qa|\
     phase-2-project-plan:PASS:phase-2-plan-qa|\
     phase-2-project-plan:completed:phase-2-plan-qa|\
+    phase-2-plan-qa:PASS:phase-3-specification|\
+    phase-2-plan-qa:completed:phase-3-specification|\
     phase-2-plan-qa:PASS:phase-2-task-packaging|\
     phase-2-plan-qa:FAIL:phase-2-plan-fix-loop|\
     phase-2-plan-fix-loop:completed:phase-2-plan-qa|\

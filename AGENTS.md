@@ -311,6 +311,7 @@ git diff --check
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
+.systems/scripts/check-default-quality-phase-chaining
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

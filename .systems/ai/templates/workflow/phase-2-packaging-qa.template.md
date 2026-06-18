@@ -7,6 +7,7 @@
 - Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Workflow phase: `2.9. PACKAGING QA`
 - Result: `<PASS|FAIL|skipped>`
+- Owner-requested packaging: `<yes|no>`
 
 ## Skip Check
 
