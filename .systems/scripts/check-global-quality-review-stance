@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing global quality review artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for global quality review check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing global quality review reference in $file: $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/quality-review.md"
+  ".systems/scripts/check-global-quality-review-stance"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+quality_contract=".systems/ai/core/quality-review.md"
+
+for term in \
+  'global-quality-review-stance' \
+  'read-only review' \
+  'advisory review' \
+  'formal phase-5-quality' \
+  'fix-loop candidate' \
+  'findings-first' \
+  'severity' \
+  'blockers' \
+  'evidence reviewed' \
+  'skipped/unreadable areas' \
+  'residual risk' \
+  'formal gate eligibility' \
+  'Definition of Done' \
+  'edge cases' \
+  'regression' \
+  'architecture alignment' \
+  'known bugs' \
+  'mark formal `PASS` or `FAIL`' \
+  'phase-8-final-check'
+do
+  require_ref "$quality_contract" "$term" "$term"
+done
+
+require_ref "AGENTS.md" 'quality-review\.md' "AGENTS routing"
+require_ref "HUMANS.md" 'Global Quality Review' "human guidance"
+require_ref "README.md" 'quality-review\.md' "README guidance"
+require_ref ".systems/ai/core/workflow.md" 'quality-review\.md' "workflow router"
+require_ref ".systems/ai/core/command-routing.md" 'global-quality-review-stance' "command routing stance"
+require_ref ".systems/ai/core/command-routing.md" 'find blockers' "find blockers routing"
+require_ref ".systems/ai/core/command-routing.md" 'find findings' "find findings routing"
+require_ref ".systems/ai/core/command-routing.md" 'final review' "final review routing"
+require_ref ".systems/ai/core/command-routing.md" 'code review' "code review routing"
+require_ref ".systems/ai/core/command-routing.md" 'does not trigger `phase-8-final-check`' "final check boundary"
+require_ref ".systems/ai/workflow/phase-5-quality.md" 'quality-review\.md' "formal phase separation"
+require_ref ".systems/ai/core/contract-compliance.md" 'global-quality-review-stance' "contract compliance integration"
+require_ref ".systems/ai/core/commands.md" 'check-global-quality-review-stance' "commands validator list"
+require_ref "AGENTS.md" 'check-global-quality-review-stance' "AGENTS validator list"
+require_ref "README.md" 'check-global-quality-review-stance' "README validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-global-quality-review-stance' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-global-quality-review-stance' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'global-quality-review' "smoke coverage"
+
+for output_field in \
+  'findings ordered by severity' \
+  'blockers called out separately' \
+  'evidence reviewed' \
+  'skipped/unreadable areas' \
+  'residual risk' \
+  'formal gate eligibility'
+do
+  require_ref "$quality_contract" "$output_field" "findings-first output: $output_field"
+done
+
+require_ref ".systems/ai/workflow/phase-5-quality.md" 'PASS' "formal quality PASS remains"
+require_ref ".systems/ai/workflow/phase-5-quality.md" 'FAIL' "formal quality FAIL remains"
+require_ref ".systems/ai/workflow/phase-5-quality.md" 'quality/phase-5-<task-id>-quality.md' "formal quality artifact remains"
+
+unsafe_patterns=(
+  '(advisory|read-only|global[ -]?quality[ -]?review|review stance)[^.\n]{0,80}\b(may|can|could|should|is allowed to|allows?|produces?|returns?|marks?|sets?|gives?|grants?)\b[^.\n]{0,80}\b(PASS|FAIL|PASS/FAIL|formal PASS|formal FAIL)\b'
+  '\b(PASS|FAIL|PASS/FAIL|formal PASS|formal FAIL)\b[^.\n]{0,80}\b(may|can|could|should|is allowed to|allows?|produces?|returns?|marks?|sets?|gives?|grants?)\b[^.\n]{0,80}\b(advisory|read-only|global[ -]?quality[ -]?review|review stance)\b'
+  'final review[^.\n]{0,80}\b(runs?|starts?|triggers?|launches?|executes?|may run|may start|may trigger|can run|can start|can trigger)\b[^.\n]{0,80}\bphase-8-final-check\b'
+  '\bphase-8-final-check\b[^.\n]{0,80}\b(runs?|starts?|triggers?|launches?|executes?|may run|may start|may trigger|can run|can start|can trigger)\b[^.\n]{0,80}final review'
+  'review stance updates status automatically'
+  'review stance creates quality artifacts automatically'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'cannot|does not|must not|never|not trigger|not run|not start|not mark|not create|not update|prompt-composition|Workflow-phase roles|role framing|nie może|nie uruchamia|nie tworzy|nie aktualizuje'; then
+    echo "Unsafe global quality review wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

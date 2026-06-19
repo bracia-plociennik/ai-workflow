@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.16 - 2026-06-19
+
+- Added `.systems/ai/core/quality-review.md` for read-only/advisory global quality review stance.
+- Routed review, code review, final review, findings, blockers, and generic quality-check prompts through the global review stance unless formal `phase-5-quality` is resolvable.
+- Clarified that advisory review is findings-first and cannot mark formal `PASS`/`FAIL`, create quality artifacts, update status, or trigger `phase-8-final-check`.
+- Added `.systems/scripts/check-global-quality-review-stance` with smoke coverage for routing, unsafe PASS/final-check wording, and findings-first output fields.
+
 ## 0.8.15 - 2026-06-19
 
 - Added `.systems/ai/core/dreaming-mode.md` for advisory-only AFK/nightly Dream Reports.

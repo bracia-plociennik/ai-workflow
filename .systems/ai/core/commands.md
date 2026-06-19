@@ -40,6 +40,7 @@ git diff --check
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
+.systems/scripts/check-global-quality-review-stance
 ```
 
 `check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
@@ -47,6 +48,8 @@ git diff --check
 `check-default-quality-phase-chaining` validates default working-phase to QA/Quality chaining, owner opt-out wording, and owner-requested task packaging boundaries.
 
 `check-dreaming-mode` validates the advisory-only Dreaming Mode contract, report templates, workspace bootstrap namespace, privacy boundaries, and the split between `workflow-artifacts-only` and `full-repo` reports.
+
+`check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 

@@ -57,6 +57,8 @@
 
 Ta faza służy do twardej walidacji, czy task / tasks package rzeczywiście spełnia warunki zakończenia.
 
+Globalne komendy review, code review, final review, find findings, find blockers i ogólne quality-check poza formalnym taskiem używają `.systems/ai/core/quality-review.md`. Ten globalny review stance może korzystać z modelu jakości tej fazy, ale jest read-only/advisory i nie tworzy formalnego `PASS`/`FAIL`, quality artifactu ani status update.
+
 Celem nie jest szukanie kolejnych ulepszeń.
 Celem jest jednoznaczna odpowiedź, czy rozwiązanie przechodzi kontrolę jakości.
 

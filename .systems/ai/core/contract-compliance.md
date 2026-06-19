@@ -29,6 +29,8 @@ Before implementation, commit, or handoff, classify the work mode:
 | `side-task` | one-off small local low-risk change with no durable project record needed | risk classification, evidence, no conflicts, final response record |
 | `workflow-maintenance` | changes to AI Workflow system docs, templates, validators, scripts, or examples in the official repo | changelog/version/docs/validator evidence, branch policy, no runtime tracking |
 
+`global-quality-review-stance` from `.systems/ai/core/quality-review.md` can be used inside any work mode as read-only/advisory quality review. It does not create a formal quality artifact and does not replace work mode compliance, evidence, risk, write permissions, or formal phase gates.
+
 The selected mode must match risk, scope, approvals, write set, and artifacts. If the mode does not fit, route to the safer workflow path before continuing.
 
 ## Compliance Questions

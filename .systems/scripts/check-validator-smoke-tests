@@ -233,6 +233,14 @@ mv "$tmp/.systems/scripts/check-dreaming-mode" "$tmp/.systems/scripts/check-drea
 run_must_fail "missing-dreaming-mode-validator" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/check-dreaming-mode.bak" "$tmp/.systems/scripts/check-dreaming-mode"
 
+mv "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+run_must_fail "missing-quality-review-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+mv "$tmp/.systems/scripts/check-global-quality-review-stance" "$tmp/.systems/scripts/check-global-quality-review-stance.bak"
+run_must_fail "missing-global-quality-review-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-global-quality-review-stance.bak" "$tmp/.systems/scripts/check-global-quality-review-stance"
+
 cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
 perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
 run_must_fail "contract-compliance-requires-side-task-mode" .systems/scripts/check-contract-compliance
@@ -1363,6 +1371,43 @@ cp "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-repo
 perl -0pi -e 's/\| `.systems\/ai\/core\/workflow.md` \| `Quality routing is explicit.` \| `system-insights` \| `Reusable workflow design pattern.` \| `safe` \| `capture` \|/\| `not-applicable` \| `not-applicable` \| `none` \| `full-repo skipped` \| `safe` \| `defer` \|/' "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md"
 run_must_fail "dreaming-mode-blocks-full-repo-not-applicable-report" .systems/scripts/check-dreaming-mode
 mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md.bak" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md"
+
+run_must_pass "global-quality-review-valid" .systems/scripts/check-global-quality-review-stance
+
+cp "$tmp/.systems/ai/core/command-routing.md" "$tmp/.systems/ai/core/command-routing.md.bak"
+perl -0pi -e 's/find blockers/find bx/g; s/Find blockers/Find bx/g' "$tmp/.systems/ai/core/command-routing.md"
+run_must_fail "global-quality-review-requires-find-blockers-routing" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/command-routing.md.bak" "$tmp/.systems/ai/core/command-routing.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nadvisory review may mark PASS\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-advisory-pass-wording" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nadvisory review may produce PASS\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-advisory-produce-pass-wording" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nfinal review runs phase-8-final-check\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-final-review-final-check-wording" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nfinal review starts phase-8-final-check\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-final-review-starts-final-check-wording" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/- formal gate eligibility\.//' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-requires-formal-gate-eligibility-field" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/workflow/phase-5-quality.md" "$tmp/.systems/ai/workflow/phase-5-quality.md.bak"
+perl -0pi -e 's/PASS/OK/g; s/FAIL/BLOCKED/g' "$tmp/.systems/ai/workflow/phase-5-quality.md"
+run_must_fail "global-quality-review-preserves-formal-phase5-pass-fail" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/workflow/phase-5-quality.md.bak" "$tmp/.systems/ai/workflow/phase-5-quality.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

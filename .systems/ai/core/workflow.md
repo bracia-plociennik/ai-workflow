@@ -74,6 +74,8 @@ Use `.systems/ai/core/system-insights.md` when work produces anonymized, reusabl
 
 Use `.systems/ai/core/dreaming-mode.md` for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams requests. Dreaming Mode is advisory-only: it writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**` and cannot automatically promote memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
+Use `.systems/ai/core/quality-review.md` for review, code review, final review, findings, blockers, and generic quality-check requests that are not clearly formal workflow phase runs. The global quality review stance is read-only/advisory by default and cannot mark formal `PASS`/`FAIL`, update quality artifacts, or trigger `phase-8-final-check`.
+
 Every workflow phase and phase artifact includes `Optional Knowledge Capture`. This soft gate records whether the phase produced reusable knowledge, the proposed target, and whether owner approval is required now. It does not require durable memory writes and must not block the next phase when `Capture recommended: <no>` or `Owner decision: <defer-to-distillation|defer-to-checkpoint|reject|not-requested>` is valid for the situation.
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.

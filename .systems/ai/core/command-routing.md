@@ -575,26 +575,46 @@ Routing notes:
 
 ### Quality And Fix Loop
 
-Route to `phase-5-quality.md` or `phase-5-fix-loop.md`.
+Route to `.systems/ai/core/quality-review.md`, `phase-5-quality.md`, or `phase-5-fix-loop.md` depending on context.
 
 Polish variants:
 
+- `Zrob review.`
+- `Zrob final review.`
+- `Find findings.`
+- `Find blockers.`
+- `Zrob code review.`
+- `Sprawdz ryzyka.`
 - `Zrób quality dla taska <task-id>.`
 - `Uruchom fazę jakości.`
 - `Sprawdź testy, lint, build, manual QA i evidence.`
+- `Zrob review i popraw znalezione problemy.`
 - `Napraw wynik FAIL i uruchom quality ponownie.`
 - `Nie dawaj PASS bez evidence.`
 
 English variants:
 
+- `Run review.`
+- `Run final review.`
+- `Find findings.`
+- `Find blockers.`
+- `Run code review.`
+- `Check risks.`
 - `Run quality for task <task-id>.`
 - `Run the quality phase.`
 - `Check tests, lint, build, manual QA, and evidence.`
+- `Review and fix the found issues.`
 - `Fix the FAIL result and rerun quality.`
 - `Do not mark PASS without evidence.`
 
 Routing notes:
 
+- Review, code review, final review, find findings, find blockers, and generic quality-check prompts use `global-quality-review-stance` unless the current project state clearly satisfies formal `phase-5-quality` routing.
+- `global-quality-review-stance` is read-only/advisory by default, findings-first, and reports severity, blockers, evidence reviewed, skipped/unreadable areas, residual risk, and formal gate eligibility.
+- Advisory review cannot mark formal `PASS` or `FAIL`, create quality artifacts, update status, or bypass QA/Quality gates.
+- `final review` does not trigger `phase-8-final-check`.
+- `review i popraw` runs review first; fixes require a separate allowed write path, risk gates, and owner approval when required.
+- `Uruchom phase-5-quality dla <task-id>` or an implementation state ready for `phase-5-quality` uses the formal phase and may produce `PASS` or `FAIL` only with required evidence and allowed artifact writes.
 - `PASS bez evidence` and `PASS without evidence` are invalid.
 - Failed or skipped checks that affect acceptance criteria mean `FAIL`.
 

@@ -104,6 +104,7 @@ cd ai-workflow
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
+.systems/scripts/check-global-quality-review-stance
 ```
 
 ## First-Time Use
@@ -159,6 +160,8 @@ Do not edit `.systems/**` in a target repository. Workflow improvement ideas dis
 
 Dreaming Mode reports belong in `ai-workflow-workspace/dreams/runs/**`. They are advisory-only recommendation queues and do not automatically write memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
+Global quality review uses `.systems/ai/core/quality-review.md` for read-only/advisory review, code review, final review, findings, blockers, and generic quality-check prompts. It is findings-first and does not create formal `PASS`/`FAIL`, quality artifacts, status updates, or final-check approval.
+
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
 Every workflow phase artifact also includes `Optional Knowledge Capture`, a soft decision about whether the phase produced reusable knowledge and whether to capture it now, defer to distillation/checkpoint, reject it, or record `none`. This does not automatically write memory and does not block the next phase when no capture is needed.
@@ -205,6 +208,7 @@ git diff --check
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
+.systems/scripts/check-global-quality-review-stance
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:
