@@ -17,6 +17,7 @@ fi
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
+.systems/scripts/check-dreaming-mode
 
 fail=0
 phases=(

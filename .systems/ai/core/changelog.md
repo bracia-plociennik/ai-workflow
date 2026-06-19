@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.15 - 2026-06-19
+
+- Added `.systems/ai/core/dreaming-mode.md` for advisory-only AFK/nightly Dream Reports.
+- Added the target-owned `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/` namespace and bootstrap templates for Dream Reports.
+- Defined `workflow-artifacts-only` and owner-requested `full-repo` Dreaming Mode variants, with prompt-injection, privacy, full-repo exclusion, and no-scheduler boundaries.
+- Added `.systems/scripts/check-dreaming-mode` plus smoke coverage for missing policy/template fields, unsafe automatic-write wording, raw client data, invalid full-repo reports, and workspace update preservation.
+
 ## 0.8.14 - 2026-06-15
 
 - Added context-intake routing for system and workspace skills: `<skill>/context/**` is raw source data, not active guidance.

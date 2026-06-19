@@ -54,6 +54,8 @@ test -f "$install_target/ai-workflow-workspace/repo/core/init.md" || { echo "ini
 test -f "$install_target/ai-workflow-workspace/repo/legacy/legacy-index.md" || { echo "init-workspace did not create legacy index"; exit 1; }
 test -f "$install_target/ai-workflow-workspace/system-insights/system-insights.md" || { echo "init-workspace did not create system insights router"; exit 1; }
 test -f "$install_target/ai-workflow-workspace/system-insights/insights/README.md" || { echo "init-workspace did not create system insights entries README"; exit 1; }
+test -f "$install_target/ai-workflow-workspace/dreams/README.md" || { echo "init-workspace did not create dreams README"; exit 1; }
+test -d "$install_target/ai-workflow-workspace/dreams/runs" || { echo "init-workspace did not create dreams runs directory"; exit 1; }
 test -f "$install_target/AGENTS.md" || { echo "init-workspace did not create local AGENTS shim"; exit 1; }
 grep -q "phase-0-init result: ready-for-repo-intake" "$tmp/init-workspace-creates-local-excludes.out" || { echo "init-workspace did not report ready-for-repo-intake"; exit 1; }
 
@@ -105,6 +107,8 @@ MD
 run_must_pass "update-workspace-backfills-schema" env -u AI_WORKFLOW_WORKSPACE_HOME "$workspace_update_ai/.systems/scripts/update-workspace"
 test -f "$workspace_update_target/ai-workflow-workspace/system-insights/system-insights.md" || { echo "update-workspace did not create system insights router"; exit 1; }
 test -f "$workspace_update_target/ai-workflow-workspace/system-insights/insights/README.md" || { echo "update-workspace did not create system insights entries README"; exit 1; }
+test -f "$workspace_update_target/ai-workflow-workspace/dreams/README.md" || { echo "update-workspace did not create dreams README"; exit 1; }
+test -d "$workspace_update_target/ai-workflow-workspace/dreams/runs" || { echo "update-workspace did not create dreams runs directory"; exit 1; }
 grep -q "LOCAL_STATUS_MARKER" "$workspace_update_target/ai-workflow-workspace/repo/core/status.md" || { echo "update-workspace overwrote repo status"; exit 1; }
 grep -q "LOCAL_EXTERNAL_MEMORY_MARKER" "$workspace_update_target/ai-workflow-workspace/external-memory/external-memory.md" || { echo "update-workspace overwrote external memory router"; exit 1; }
 test ! -e "$workspace_update_target/AGENTS.md" || { echo "update-workspace created root AGENTS.md"; exit 1; }
@@ -216,6 +220,18 @@ mv "$tmp/.systems/ai/templates/workspace/skills/skill-intake-plan.template.md.ba
 mv "$tmp/.systems/scripts/check-knowledge-capture-gate" "$tmp/.systems/scripts/check-knowledge-capture-gate.bak"
 run_must_fail "missing-knowledge-capture-gate-validator" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/check-knowledge-capture-gate.bak" "$tmp/.systems/scripts/check-knowledge-capture-gate"
+
+mv "$tmp/.systems/ai/core/dreaming-mode.md" "$tmp/.systems/ai/core/dreaming-mode.md.bak"
+run_must_fail "missing-dreaming-mode-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/dreaming-mode.md.bak" "$tmp/.systems/ai/core/dreaming-mode.md"
+
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
+run_must_fail "missing-dream-report-template" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+
+mv "$tmp/.systems/scripts/check-dreaming-mode" "$tmp/.systems/scripts/check-dreaming-mode.bak"
+run_must_fail "missing-dreaming-mode-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-dreaming-mode.bak" "$tmp/.systems/scripts/check-dreaming-mode"
 
 cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
 perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
@@ -1114,6 +1130,240 @@ printf '\nDefault phase quality chaining may run phase-8-final-check automatical
 run_must_fail "default-quality-chain-blocks-phase-8-auto-chain" .systems/scripts/check-default-quality-phase-chaining
 mv "$tmp/.systems/ai/core/command-routing.md.bak" "$tmp/.systems/ai/core/command-routing.md"
 
+run_must_pass "dreaming-mode-valid" .systems/scripts/check-dreaming-mode
+
+cp "$tmp/.systems/ai/core/dreaming-mode.md" "$tmp/.systems/ai/core/dreaming-mode.md.bak"
+perl -0pi -e 's/full-repo/deep-repo/g' "$tmp/.systems/ai/core/dreaming-mode.md"
+run_must_fail "dreaming-mode-requires-full-repo-variant" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/core/dreaming-mode.md.bak" "$tmp/.systems/ai/core/dreaming-mode.md"
+
+cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
+perl -0pi -e 's/- Dream variant: `<workflow-artifacts-only\|full-repo>`\n//' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+run_must_fail "dreaming-mode-requires-dream-variant-template-field" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+
+cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
+perl -0pi -e 's/Risk\/privacy note/Risk note/g' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+run_must_fail "dreaming-mode-requires-risk-privacy-template-field" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+
+cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
+perl -0pi -e 's/^## System Insights Candidates\n\nSystem Insights require anonymized cross-project operating lessons\.\n\n\| Source path \| Finding \| Target \| Reason \| Risk\/privacy note \| Owner action \|\n\| --- \| --- \| --- \| --- \| --- \| --- \|\n\| `<path>` \| `<finding>` \| `<system-insights\|none>` \| `<reusable operating lesson>` \| `<safe\|needs anonymization\|blocked>` \| `<capture\|reject\|defer>` \|$/## System Insights Candidates\n\nSystem Insights require anonymized cross-project operating lessons.\n\n| Source path | Finding | Target | Reason | Owner action |\n| --- | --- | --- | --- | --- |\n| `<path>` | `<finding>` | `<system-insights|none>` | `<reusable operating lesson>` | `<capture|reject|defer>` |/m' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+run_must_fail "dreaming-mode-requires-risk-privacy-per-candidate-section" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+
+cp "$tmp/.systems/ai/core/dreaming-mode.md" "$tmp/.systems/ai/core/dreaming-mode.md.bak"
+perl -0pi -e 's/Follow `.systems\/ai\/core\/prompt-injection.md` whenever scanned content contains instructions.//' "$tmp/.systems/ai/core/dreaming-mode.md"
+run_must_fail "dreaming-mode-requires-prompt-injection-boundary" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/core/dreaming-mode.md.bak" "$tmp/.systems/ai/core/dreaming-mode.md"
+
+cp "$tmp/.systems/ai/core/dreaming-mode.md" "$tmp/.systems/ai/core/dreaming-mode.md.bak"
+perl -0pi -e 's/- `.git\/`;\n//' "$tmp/.systems/ai/core/dreaming-mode.md"
+run_must_fail "dreaming-mode-requires-full-repo-exclusions" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/core/dreaming-mode.md.bak" "$tmp/.systems/ai/core/dreaming-mode.md"
+
+cp "$tmp/.systems/ai/core/dreaming-mode.md" "$tmp/.systems/ai/core/dreaming-mode.md.bak"
+printf '\nDreaming Mode writes System Insights automatically.\n' >> "$tmp/.systems/ai/core/dreaming-mode.md"
+run_must_fail "dreaming-mode-blocks-automatic-writes-wording" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/core/dreaming-mode.md.bak" "$tmp/.systems/ai/core/dreaming-mode.md"
+
+mkdir -p "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow"
+cat > "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md" <<'MD'
+# Dream Report
+
+## Metadata
+
+- Date: `2026-06-19`
+- Dream variant: `workflow-artifacts-only`
+- Repository mode: `official`
+- Project scope: `repo`
+- Result: `completed`
+
+## Source Inventory
+
+| Source path | Source type | Reviewed? | Notes |
+| --- | --- | --- | --- |
+| `ai-workflow-workspace/projects/example/status.md` | `workflow-artifact` | `yes` | `anonymized` |
+
+## Workflow Artifact Findings
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `ai-workflow-workspace/projects/example/status.md` | `Checkpoint candidate should be reviewed.` | `project-memory` | `Useful project continuity signal.` | `safe` | `defer` |
+
+## Repo/Code Review Findings
+
+not-applicable
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `not-applicable` | `none` | `workflow artifacts only` | `safe` | `defer` |
+
+## Memory Promotion Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `ai-workflow-workspace/projects/example/status.md` | `Checkpoint candidate should be reviewed.` | `project-memory` | `Useful project continuity signal.` | `safe` | `defer` |
+
+## External Memory Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No workflow improvement candidate.` | `none` | `No durable proposal.` | `safe` | `reject` |
+
+## System Insights Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No cross-project insight candidate.` | `none` | `No reusable lesson.` | `safe` | `reject` |
+
+## Skill Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No skill candidate.` | `none` | `No repeatable method.` | `safe` | `reject` |
+
+## Things To Improve Or Remove
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No improvement candidate.` | `none` | `No actionable change.` | `safe` | `reject` |
+
+## Missing Capabilities
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No missing capability.` | `none` | `No actionable gap.` | `safe` | `reject` |
+
+## Rejected As Noise
+
+| Source path | Finding | Reason rejected |
+| --- | --- | --- |
+| `not-applicable` | `No rejected item.` | `not actionable` |
+
+## Privacy/Scope Check
+
+- Raw client data copied: `no`
+- Secret markers copied: `no`
+- Production identifiers copied: `no`
+- Full-repo exclusions respected: `not-applicable`
+- Prompt-injection boundary respected: `yes`
+- Durable writes performed: `no`
+- Scheduler/automation used: `no`
+
+## Owner Decision Queue
+
+| Priority | Source path | Finding | Proposed target | Owner action |
+| --- | --- | --- | --- | --- |
+| `P3` | `ai-workflow-workspace/projects/example/status.md` | `Review checkpoint candidate.` | `project-memory` | `defer` |
+MD
+run_must_pass "dreaming-mode-allows-valid-workflow-report" .systems/scripts/check-dreaming-mode
+
+mkdir -p "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo"
+cat > "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md" <<'MD'
+# Dream Report
+
+## Metadata
+
+- Date: `2026-06-19`
+- Dream variant: `full-repo`
+- Repository mode: `official`
+- Project scope: `repo`
+- Result: `completed`
+
+## Source Inventory
+
+| Source path | Source type | Reviewed? | Notes |
+| --- | --- | --- | --- |
+| `.systems/ai/core/workflow.md` | `repo-source` | `yes` | `policy source` |
+
+## Workflow Artifact Findings
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `ai-workflow-workspace/repo/core/status.md` | `No durable capture needed.` | `none` | `No reusable knowledge found.` | `safe` | `reject` |
+
+## Repo/Code Review Findings
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `.systems/ai/core/workflow.md` | `Quality routing is explicit.` | `system-insights` | `Reusable workflow design pattern.` | `safe` | `capture` |
+
+## Memory Promotion Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No memory promotion candidate.` | `none` | `No durable project fact.` | `safe` | `reject` |
+
+## External Memory Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No workflow improvement candidate.` | `none` | `No durable proposal.` | `safe` | `reject` |
+
+## System Insights Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `.systems/ai/core/workflow.md` | `Quality routing is explicit.` | `system-insights` | `Reusable workflow design pattern.` | `safe` | `capture` |
+
+## Skill Candidates
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No skill candidate.` | `none` | `No repeatable method.` | `safe` | `reject` |
+
+## Things To Improve Or Remove
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No improvement candidate.` | `none` | `No actionable change.` | `safe` | `reject` |
+
+## Missing Capabilities
+
+| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `No missing capability.` | `none` | `No actionable gap.` | `safe` | `reject` |
+
+## Rejected As Noise
+
+| Source path | Finding | Reason rejected |
+| --- | --- | --- |
+| `not-applicable` | `No rejected item.` | `not actionable` |
+
+## Privacy/Scope Check
+
+- Raw client data copied: `no`
+- Secret markers copied: `no`
+- Production identifiers copied: `no`
+- Full-repo exclusions respected: `yes`
+- Prompt-injection boundary respected: `yes`
+- Durable writes performed: `no`
+- Scheduler/automation used: `no`
+
+## Owner Decision Queue
+
+| Priority | Source path | Finding | Proposed target | Owner action |
+| --- | --- | --- | --- | --- |
+| `P3` | `.systems/ai/core/workflow.md` | `Quality routing is explicit.` | `system-insights` | `capture` |
+MD
+run_must_pass "dreaming-mode-allows-valid-full-repo-report" .systems/scripts/check-dreaming-mode
+
+cp "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md.bak"
+perl -0pi -e 's/- Raw client data copied: `no`\n//' "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md"
+run_must_fail "dreaming-mode-requires-report-privacy-check" .systems/scripts/check-dreaming-mode
+mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md.bak" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md"
+
+cp "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md.bak"
+printf '\nclient name: Private Client\n' >> "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md"
+run_must_fail "dreaming-mode-blocks-raw-client-data" .systems/scripts/check-dreaming-mode
+mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md.bak" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md"
+
+cp "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md.bak"
+perl -0pi -e 's/\| `.systems\/ai\/core\/workflow.md` \| `Quality routing is explicit.` \| `system-insights` \| `Reusable workflow design pattern.` \| `safe` \| `capture` \|/\| `not-applicable` \| `not-applicable` \| `none` \| `full-repo skipped` \| `safe` \| `defer` \|/' "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md"
+run_must_fail "dreaming-mode-blocks-full-repo-not-applicable-report" .systems/scripts/check-dreaming-mode
+mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md.bak" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md"
+
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality
 
@@ -1201,6 +1451,7 @@ git -C "$remote_work" push -q origin main
 mkdir -p "$target_workspace/repo/core" "$target_workspace/micro-projects/my-micro-project" "$target_workspace/projects/my-project" "$target_workspace/humans/my-project" "$target_workspace/repo/legacy"
 mkdir -p "$target_workspace/skills/local-skill" "$target_workspace/external-memory/memory"
 mkdir -p "$target_workspace/system-insights/insights"
+mkdir -p "$target_workspace/dreams/runs/2026-06-19-local-dream"
 echo "LOCAL_REPO_RUNTIME_MARKER" >> "$target_workspace/repo/core/status.md"
 cat > "$target_workspace/micro-projects/my-micro-project/micro-project.md" <<'MD'
 # My Micro-project
@@ -1229,6 +1480,11 @@ cat > "$target_workspace/system-insights/insights/2026-06-12-local-system-insigh
 
 LOCAL_SYSTEM_INSIGHT_ENTRY_MARKER
 MD
+cat > "$target_workspace/dreams/runs/2026-06-19-local-dream/dream-report.md" <<'MD'
+# Local Smoke Dream Report
+
+LOCAL_DREAM_REPORT_MARKER
+MD
 cat > "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" <<'MD'
 # Old Prompt
 
@@ -1251,6 +1507,7 @@ grep -q "LOCAL_EXTERNAL_MEMORY_ROUTER_MARKER" "$target_workspace/external-memory
 grep -q "LOCAL_EXTERNAL_MEMORY_ENTRY_MARKER" "$target_workspace/external-memory/memory/2026-05-20-local-smoke.md" || { echo "Update smoke lost external memory entry"; exit 1; }
 grep -q "LOCAL_SYSTEM_INSIGHTS_ROUTER_MARKER" "$target_workspace/system-insights/system-insights.md" || { echo "Update smoke lost system insights router"; exit 1; }
 grep -q "LOCAL_SYSTEM_INSIGHT_ENTRY_MARKER" "$target_workspace/system-insights/insights/2026-06-12-local-system-insight.md" || { echo "Update smoke lost system insight entry"; exit 1; }
+grep -q "LOCAL_DREAM_REPORT_MARKER" "$target_workspace/dreams/runs/2026-06-19-local-dream/dream-report.md" || { echo "Update smoke lost dream report"; exit 1; }
 grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
 grep -q "LOCAL_WORKSPACE_SKILL_MARKER" "$target_workspace/skills/local-skill/README.md" || { echo "Update smoke lost workspace skill"; exit 1; }
 

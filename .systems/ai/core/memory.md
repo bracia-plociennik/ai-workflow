@@ -18,6 +18,7 @@ Use this router only for date, topic, type, status, and route to the detailed me
 | `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` | AI Workflow improvement memory | detailed workflow improvement proposals |
 | `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` | anonymized cross-project operating lessons | router/index for reusable frontend, backend, smart-contract, SEO, ads, offer, process, quality, client-work, product, and skills insights |
 | `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` | anonymized cross-project operating lessons | detailed System Insight entries |
+| `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/` | advisory Dreaming Mode reports | source-backed recommendation queues for owner decisions |
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md` | target repository | router/index for repo-local memory |
 | `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/` | target repository | detailed repo-local memory entries |
 | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md` | one project workspace | router/index for project-specific memory |
@@ -59,3 +60,4 @@ The phase capture decision may propose memory or insight content inside the phas
 - Treat `Optional Knowledge Capture` as a candidate/proposal mechanism unless a phase explicitly permits durable writes.
 - Promote reusable workflow-system improvement proposals to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/` and index them in `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md` when they should affect future template versions.
 - Promote anonymized operating lessons from projects to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/` and index them in `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md` only through checkpoint/final-check routing or explicit owner-approved capture.
+- Treat Dream Reports as advisory recommendation queues, not memory entries. Promotion from `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**` to durable memory, External Memory, System Insights, skills, status, or source changes requires a later owner-approved route.

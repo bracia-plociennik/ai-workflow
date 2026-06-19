@@ -23,7 +23,7 @@ The update flow treats the nested clone as two layers:
 
 Legacy filenames under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/` must not be normalized, renamed, or rewritten during update. They are preserved source context outside the nested clone.
 
-User skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, External Memory under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`, and System Insights under `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` are target-owned and must not be touched by upstream updates.
+User skills under `AI_WORKFLOW_WORKSPACE_HOME/skills/`, External Memory under `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`, System Insights under `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`, and Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/` are target-owned and must not be touched by upstream updates.
 
 Target repositories must not edit `.systems/**`. If a target-repository run reveals a workflow improvement, write it to `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` and promote it only through the official upstream `ai-workflow` repository. If it reveals an anonymized operating lesson, write it to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` only through checkpoint/final-check routing or explicit owner-approved capture.
 
@@ -51,7 +51,7 @@ The update script does not run `update-workspace` automatically because `AI_WORK
 ai-workflow/.systems/scripts/update-workspace
 ```
 
-`update-workspace` creates only missing neutral workspace directories, routers, and README files. It does not overwrite existing runtime artifacts, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
+`update-workspace` creates only missing neutral workspace directories, routers, and README files, including `dreams/` bootstrap files when missing. It does not overwrite existing runtime artifacts, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
 
 ## Options
 
@@ -85,5 +85,6 @@ After a successful update:
 - real micro-projects remain in the target-owned workspace;
 - real project and human workspaces remain in the target-owned workspace;
 - local external memory, system insights, and user skills remain in the target-owned workspace;
+- local Dream Reports remain in the target-owned workspace;
 - legacy source filenames remain unchanged because the update does not edit workspace legacy files;
 - validators pass.

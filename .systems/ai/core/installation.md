@@ -48,7 +48,7 @@ AI Workflow owns:
 
 Inside the nested clone, `.systems/**`, `AGENTS.md`, `HUMANS.md`, `README.md`, and `.github/**` are system-owned and must be updated only from the official upstream `ai-workflow` repository.
 
-`AI_WORKFLOW_WORKSPACE_HOME/**` is target-owned runtime/advisory state, including `AI_WORKFLOW_WORKSPACE_HOME/skills/`, `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`, and `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`. It lives beside the nested clone by default, not inside it.
+`AI_WORKFLOW_WORKSPACE_HOME/**` is target-owned runtime/advisory state, including `AI_WORKFLOW_WORKSPACE_HOME/skills/`, `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`, `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`, and `AI_WORKFLOW_WORKSPACE_HOME/dreams/`. It lives beside the nested clone by default, not inside it.
 
 The target repository owns everything else, including:
 
@@ -101,6 +101,7 @@ It must:
 - create `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md`;
 - create or verify `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy.md`;
 - create or verify `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/legacy-index.md`;
+- create or verify neutral advisory workspace namespaces such as `external-memory/`, `system-insights/`, `dreams/`, and `skills/`;
 - preserve safe legacy artifacts as context/data only;
 - create the root `AGENTS.md` shim only when missing;
 - stop with `blocked-owner-merge` when root `AGENTS.md` already exists and owner merge is required;
@@ -202,7 +203,7 @@ After updating the nested clone, run the workspace schema backfill when the targ
 ai-workflow/.systems/scripts/update-workspace
 ```
 
-This script is idempotent and writes only missing neutral workspace files under `AI_WORKFLOW_WORKSPACE_HOME/**`. It does not overwrite existing runtime, does not preserve or scan legacy input, does not create or merge the root `AGENTS.md` shim, and does not edit `.git/info/exclude`. Fresh installations still use `phase-0-init`; `update-workspace` is for existing workspaces after upstream updates.
+This script is idempotent and writes only missing neutral workspace files under `AI_WORKFLOW_WORKSPACE_HOME/**`, including bootstrap files for `dreams/` when missing. It does not overwrite existing runtime, does not preserve or scan legacy input, does not create or merge the root `AGENTS.md` shim, and does not edit `.git/info/exclude`. Fresh installations still use `phase-0-init`; `update-workspace` is for existing workspaces after upstream updates.
 
 If a target-repository run needs an AI Workflow change, do not edit `ai-workflow/.systems/**`. Record the generalized recommendation in `ai-workflow-workspace/external-memory/` and apply the actual workflow change only in the official upstream repository. Use `ai-workflow-workspace/system-insights/` for anonymized product-domain, process, quality, client-work, or skill-candidate lessons that improve future work but do not propose AI Workflow policy/template changes.
 

@@ -25,6 +25,7 @@ Before implementation, commit, or handoff, classify the work mode:
 | `full-project` | work belongs to an active project plan/task/package | project status, task/spec/quality gates, distillation/checkpoint when required |
 | `project-local-micro-task` | small low-risk work inside one project but outside full phase flow | `micro-tasks.md` or detailed micro-task artifact when durable, evidence, promote decision |
 | `repo-level-micro-project` | small low-risk repo-level work outside a project workspace | `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<micro-project>/micro-project.md`, evidence, promote decision |
+| `dreaming-mode` | advisory AFK/nightly analysis that writes only Dream Reports | `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`, privacy/scope check, owner decision queue |
 | `side-task` | one-off small local low-risk change with no durable project record needed | risk classification, evidence, no conflicts, final response record |
 | `workflow-maintenance` | changes to AI Workflow system docs, templates, validators, scripts, or examples in the official repo | changelog/version/docs/validator evidence, branch policy, no runtime tracking |
 
@@ -80,6 +81,7 @@ When capture is not required, state `Knowledge capture: not-required` with a sho
 | `full-project` | status/evidence, then `phase-6-distillation` or `phase-7-checkpoint` when gates require it |
 | `project-local-micro-task` | micro-task artifact or final response evidence; promote to full workflow if risk/scope grows |
 | `repo-level-micro-project` | `micro-project.md` evidence/update; promote if risk/scope grows |
+| `dreaming-mode` | Dream Report evidence only; promote candidates through later owner-approved memory, insight, skill, status, task, or workflow route |
 | `side-task` | final response evidence unless the owner requested durable capture |
 | `workflow-maintenance` | changelog/version/docs/validator evidence; External Memory only for reusable workflow improvement proposals |
 

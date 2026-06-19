@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.14` |
+| Workflow version | `0.8.15` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-06-15` |
+| Last process migration | `2026-06-19` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -29,6 +29,7 @@
 - Each workflow phase artifact includes `Optional Knowledge Capture` as a soft phase-level decision for memory, decision, status, External Memory, and System Insights candidates.
 - `.systems/ai/core/prompt-composition.md` defines advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority limits.
 - `.systems/ai/core/system-insights.md` defines advisory anonymized System Insights, privacy rules, allowed categories, status lifecycle, write routing, and skill-candidate boundaries.
+- `.systems/ai/core/dreaming-mode.md` defines advisory-only Dreaming Mode reports for AFK/nightly analysis. Dream Reports live under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/`, default to `workflow-artifacts-only`, require explicit owner request for `full-repo`, and never perform durable writes, scheduler setup, memory promotion, status mutation, commits, or source changes.
 - `.systems/ai/templates/prompting/` stores reusable prompt composition templates, while `.systems/ai/examples/prompting/` stores documentation-only examples.
 - Project-local prompting artifacts belong under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/` when a project explicitly creates them.
 - `.systems/scripts/check-prompt-composition` validates required prompt composition artifacts, router references, and deterministic unsafe-authority grant patterns.
@@ -43,6 +44,7 @@
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/` stores optional user-defined task-specific workflow skills and takes precedence as supporting guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` stores target-owned External Memory improvement proposals.
 - `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` stores target-owned anonymized cross-project operating lessons and skill candidates.
+- `AI_WORKFLOW_WORKSPACE_HOME/dreams/` stores target-owned advisory Dream Reports and owner decision queues.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/` stores repo-specific runtime facts.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/` stores canonical repo runtime routers.
 - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/init.md` records target-repository bootstrap status.

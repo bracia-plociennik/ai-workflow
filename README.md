@@ -41,6 +41,7 @@ After installation in a target repository, runtime lives outside the nested clon
 - `ai-workflow-workspace/system-insights/` - target-owned advisory memory for anonymized cross-project operating lessons and skill candidates.
 - `ai-workflow-workspace/skills/` - target-owned user skills that can take precedence over system skills as supporting guidance.
 - `ai-workflow-workspace/micro-projects/` - repo-level low-risk micro-project workspace.
+- `ai-workflow-workspace/dreams/` - advisory-only Dreaming Mode reports and owner decision queues.
 
 ## How To Install In Another Repository
 
@@ -102,6 +103,7 @@ cd ai-workflow
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
+.systems/scripts/check-dreaming-mode
 ```
 
 ## First-Time Use
@@ -151,9 +153,11 @@ After the upstream update, sync missing target-owned workspace schema files with
 ai-workflow/.systems/scripts/update-workspace
 ```
 
-This is idempotent. It creates only missing neutral workspace directories, routers, and README files such as new `system-insights/` bootstrap files. It does not overwrite existing runtime artifacts, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
+This is idempotent. It creates only missing neutral workspace directories, routers, and README files such as new `system-insights/` and `dreams/` bootstrap files. It does not overwrite existing runtime artifacts, scan legacy files, edit root `AGENTS.md`, or modify `.git/info/exclude`.
 
 Do not edit `.systems/**` in a target repository. Workflow improvement ideas discovered during target work belong in `ai-workflow-workspace/external-memory/` and should be promoted through the official upstream repository. Anonymized project lessons about frontend, backend, smart contracts, SEO, ads, offers, process, quality, client work, product, or skills belong in `ai-workflow-workspace/system-insights/` after checkpoint/final-check routing or explicit owner-approved capture.
+
+Dreaming Mode reports belong in `ai-workflow-workspace/dreams/runs/**`. They are advisory-only recommendation queues and do not automatically write memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
@@ -200,6 +204,7 @@ git diff --check
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
+.systems/scripts/check-dreaming-mode
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

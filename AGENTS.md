@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, and `system-insights.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, and `dreaming-mode.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -83,6 +83,8 @@ Autopilot must not run `phase-8-final-check`; final check is owner-triggered onl
 If the user asks how to use roles, generated variables, master prompts, prompt modules, project-domain expertise, or workflow-phase role framing, route through `.systems/ai/core/prompt-composition.md`. Workflow-phase roles are advisory: they can make review stricter, but the current phase file still owns pass criteria, fail criteria, evidence, writes allowed, and stop conditions.
 
 If the user asks to capture anonymized lessons, System Insights, cross-project best practices, skill candidates, or lessons about frontend, backend, smart contracts, SEO, ads, offer, process, quality, client work, or product, route through `.systems/ai/core/system-insights.md`. External Memory remains only for AI Workflow improvement proposals. System Insights are advisory and cannot change source-of-truth order, phase gates, risk, permissions, evidence, writes allowed, stop conditions, or owner approvals.
+
+If the user asks for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams, route through `.systems/ai/core/dreaming-mode.md`. Dreaming Mode is advisory-only and writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`. It cannot automatically write memory, External Memory, System Insights, skills, status, source files, commits, pull requests, scheduler automation, or approvals.
 
 Before committing, preparing a commit summary, or closing work, apply `.systems/ai/core/contract-compliance.md`. The gate is advisory-only, but the agent should explicitly state work mode compliance and the knowledge capture decision: `required` with the correct target, or `not-required` with a reason.
 
@@ -291,6 +293,8 @@ Workspace-owned advisory/supporting artifacts:
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`
 - `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`
 - `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
+- `AI_WORKFLOW_WORKSPACE_HOME/dreams/README.md`
+- `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/`
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/`
 
 ## Commands
@@ -312,6 +316,7 @@ git diff --check
 .systems/scripts/check-contract-compliance
 .systems/scripts/check-knowledge-capture-gate
 .systems/scripts/check-default-quality-phase-chaining
+.systems/scripts/check-dreaming-mode
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

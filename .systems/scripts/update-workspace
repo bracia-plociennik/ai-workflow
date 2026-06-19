@@ -122,6 +122,7 @@ workspace_dirs=(
   "$workspace_home/micro-projects"
   "$workspace_home/external-memory/memory"
   "$workspace_home/system-insights/insights"
+  "$workspace_home/dreams/runs"
   "$workspace_home/skills"
 )
 
@@ -150,6 +151,7 @@ copy_template "$templates/workspace/external-memory/memory-readme.template.md" "
 copy_template "$templates/system-insights/system-insights-readme.template.md" "$workspace_home/system-insights/README.md"
 copy_template "$templates/system-insights/system-insights.template.md" "$workspace_home/system-insights/system-insights.md"
 copy_template "$templates/system-insights/insights-readme.template.md" "$workspace_home/system-insights/insights/README.md"
+copy_template "$templates/workspace/dreams/dreams-readme.template.md" "$workspace_home/dreams/README.md"
 copy_template "$templates/workspace/skills/README.md" "$workspace_home/skills/README.md"
 
 echo

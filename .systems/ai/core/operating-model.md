@@ -63,7 +63,7 @@ Use `.systems/ai/core/contract-compliance.md` before committing, preparing a com
 
 The gate is advisory-only, but every work item should have an explicit work mode and knowledge capture decision:
 
-- work mode: `full-project`, `project-local-micro-task`, `repo-level-micro-project`, `side-task`, or `workflow-maintenance`;
+- work mode: `full-project`, `project-local-micro-task`, `repo-level-micro-project`, `side-task`, `workflow-maintenance`, or `dreaming-mode`;
 - compliance: `pass`, `warning`, or `blocked`;
 - knowledge capture: `required` or `not-required`;
 - capture target: status/evidence, micro-task artifact, micro-project artifact, phase-6 distillation, phase-7 checkpoint, project memory, repo memory, External Memory, System Insights, or not applicable;

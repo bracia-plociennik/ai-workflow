@@ -34,6 +34,8 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Prompt composition templates: `.systems/ai/templates/prompting/`
 - System Insights contract: `.systems/ai/core/system-insights.md`
 - System Insights router: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
+- Dreaming Mode contract: `.systems/ai/core/dreaming-mode.md`
+- Dream Reports: `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`
 - Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
@@ -69,6 +71,8 @@ Use `.systems/ai/core/contract-compliance.md` before commit, handoff, or work cl
 Use `.systems/ai/core/prompt-composition.md` when the user asks about master prompts, prompt modules, role profiles, generated variables, project-domain roles, workflow-phase roles, or AI Workflow maintenance baseline. Prompt composition is advisory only: current phase files still define pass criteria, fail criteria, evidence required, writes allowed, and stop conditions.
 
 Use `.systems/ai/core/system-insights.md` when work produces anonymized, reusable lessons about frontend, backend, smart contracts, SEO, ads, offer, process, quality, client work, product, or skill candidates. System Insights are advisory only and must not be mixed with External Memory, which remains only for AI Workflow improvement proposals.
+
+Use `.systems/ai/core/dreaming-mode.md` for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams requests. Dreaming Mode is advisory-only: it writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**` and cannot automatically promote memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
 Every workflow phase and phase artifact includes `Optional Knowledge Capture`. This soft gate records whether the phase produced reusable knowledge, the proposed target, and whether owner approval is required now. It does not require durable memory writes and must not block the next phase when `Capture recommended: <no>` or `Owner decision: <defer-to-distillation|defer-to-checkpoint|reject|not-requested>` is valid for the situation.
 

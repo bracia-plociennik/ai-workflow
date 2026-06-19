@@ -1,0 +1,261 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$script_dir/resolve-workflow-env"
+repo_root="$AI_WORKFLOW_HOME"
+workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+cd "$repo_root"
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing Dreaming Mode artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for Dreaming Mode reference check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing Dreaming Mode reference in $file: $label"
+    fail=1
+  fi
+}
+
+require_section_table_columns() {
+  local file="$1"
+  local section="$2"
+  shift 2
+
+  local header_line
+  header_line="$(
+    awk -v heading="## $section" '
+      $0 == heading { in_section = 1; next }
+      in_section && /^## / { exit }
+      in_section && /^\|/ { print; exit }
+    ' "$file"
+  )"
+
+  if [[ -z "$header_line" ]]; then
+    echo "Missing table header in section '$section': ${file#./}"
+    fail=1
+    return 0
+  fi
+
+  local normalized_header
+  normalized_header="$(printf '%s' "$header_line" | tr -d '[:space:]')"
+
+  local column
+  for column in "$@"; do
+    local normalized_column
+    normalized_column="$(printf '%s' "$column" | tr -d '[:space:]')"
+    if [[ "$normalized_header" != *"|$normalized_column|"* ]]; then
+      echo "Section '$section' missing required table column '$column': ${file#./}"
+      fail=1
+    fi
+  done
+}
+
+required_files=(
+  ".systems/ai/core/dreaming-mode.md"
+  ".systems/ai/templates/dreaming/README.md"
+  ".systems/ai/templates/dreaming/dream-report.template.md"
+  ".systems/ai/templates/workspace/dreams/README.md"
+  ".systems/ai/templates/workspace/dreams/dreams-readme.template.md"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+require_ref "AGENTS.md" 'dreaming-mode\.md' "core Dreaming Mode contract"
+require_ref "HUMANS.md" 'Dreaming Mode' "human Dreaming Mode guidance"
+require_ref "README.md" 'dreams/' "workspace dreams namespace"
+require_ref ".systems/ai/core/workflow.md" 'dreaming-mode\.md' "workflow Dreaming Mode router"
+require_ref ".systems/ai/core/command-routing.md" 'Dreaming Mode' "command routing Dreaming Mode section"
+require_ref ".systems/ai/core/memory.md" 'Dream Reports' "memory boundary"
+require_ref ".systems/ai/core/system-insights.md" 'Dream Reports' "system insights boundary"
+require_ref ".systems/ai/core/contract-compliance.md" 'dreaming-mode' "contract compliance work mode"
+require_ref ".systems/ai/core/installation.md" 'dreams/' "installation bootstrap namespace"
+require_ref ".systems/ai/core/update-from-upstream.md" 'Dream Reports|dreams/' "update preservation boundary"
+require_ref ".systems/ai/core/commands.md" 'check-dreaming-mode' "validator command"
+require_ref ".systems/scripts/init-workspace" 'dreams/runs' "init-workspace dreams bootstrap"
+require_ref ".systems/scripts/update-workspace" 'dreams/runs' "update-workspace dreams bootstrap"
+require_ref ".systems/ai/templates/workspace/workspace-readme.template.md" 'dreams/' "workspace README dreams namespace"
+
+dream_policy=".systems/ai/core/dreaming-mode.md"
+dream_template=".systems/ai/templates/dreaming/dream-report.template.md"
+
+for required in \
+  'advisory-only' \
+  'workflow-artifacts-only' \
+  'full-repo' \
+  'AI_WORKFLOW_WORKSPACE_HOME/dreams/' \
+  'prompt-injection.md' \
+  '\.git/' \
+  'node_modules/' \
+  'vendor/' \
+  'dist/' \
+  'build/' \
+  '\.env' \
+  'V1 has no scheduler'
+do
+  if ! rg -q "$required" "$dream_policy"; then
+    echo "Dreaming Mode policy missing required boundary text: $required"
+    fail=1
+  fi
+done
+
+for required in \
+  'Dream variant: `<workflow-artifacts-only\|full-repo>`' \
+  '^## Source Inventory$' \
+  '^## Workflow Artifact Findings$' \
+  '^## Repo/Code Review Findings$' \
+  '^## Memory Promotion Candidates$' \
+  '^## External Memory Candidates$' \
+  '^## System Insights Candidates$' \
+  '^## Skill Candidates$' \
+  '^## Things To Improve Or Remove$' \
+  '^## Missing Capabilities$' \
+  '^## Rejected As Noise$' \
+  '^## Privacy/Scope Check$' \
+  '^## Owner Decision Queue$' \
+  'Durable writes performed: `no`' \
+  'Scheduler/automation used: `no`'
+do
+  if ! rg -q "$required" "$dream_template"; then
+    echo "Dream report template missing required field or section: $required"
+    fail=1
+  fi
+done
+
+recommendation_sections=(
+  "Workflow Artifact Findings"
+  "Repo/Code Review Findings"
+  "Memory Promotion Candidates"
+  "External Memory Candidates"
+  "System Insights Candidates"
+  "Skill Candidates"
+  "Things To Improve Or Remove"
+  "Missing Capabilities"
+)
+
+for section in "${recommendation_sections[@]}"; do
+  require_section_table_columns "$dream_template" "$section" "Source path" "Finding" "Target" "Reason" "Risk/privacy note" "Owner action"
+done
+
+require_section_table_columns "$dream_template" "Owner Decision Queue" "Priority" "Source path" "Finding" "Proposed target" "Owner action"
+
+unsafe_patterns=(
+  'Dreaming Mode writes System Insights automatically'
+  'Dreaming Mode writes External Memory automatically'
+  'Dreaming Mode writes memory automatically'
+  'Dreaming Mode automatically writes'
+  'Dream Reports write System Insights automatically'
+  'Dream Reports write External Memory automatically'
+  'Dreaming Mode may commit'
+  'Dreaming Mode may push'
+  'Dreaming Mode may create pull requests'
+  'Dreaming Mode scheduler is enabled'
+  'Dreaming Mode cron is enabled'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/templates; then
+    echo "Dreaming Mode unsafe hard-action wording found: $pattern"
+    fail=1
+  fi
+done
+
+raw_data_pattern='(client[ _-]?name[[:space:]]*[:=]|customer[ _-]?name[[:space:]]*[:=]|\bemail[[:space:]]*[:=]|\bphone[[:space:]]*[:=]|[[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|\+[0-9][0-9 .()-]{7,}[0-9]|\([0-9]{2,4}\)[0-9 .-]{5,}[0-9]|[0-9]{3}[ .][0-9]{3}[ .][0-9]{3,4}|\b0x[0-9a-f]{40}\b|\.env\b|api[ _-]?key[[:space:]]*[:=]|private[ _-]?key[[:space:]]*[:=]|wallet[ _-]?private[ _-]?key|production[ _-]?credentials[[:space:]]*[:=]|secret[ _-]?token[[:space:]]*[:=]|\b(sk|pk|ghp|gho|github_pat)_[[:alnum:]_=-]{20,})'
+
+check_dream_report() {
+  local file="$1"
+
+  for required in \
+    '^## Metadata$' \
+    'Dream variant:' \
+    '^## Source Inventory$' \
+    '^## Workflow Artifact Findings$' \
+    '^## Repo/Code Review Findings$' \
+    '^## Memory Promotion Candidates$' \
+    '^## External Memory Candidates$' \
+    '^## System Insights Candidates$' \
+    '^## Skill Candidates$' \
+    '^## Things To Improve Or Remove$' \
+    '^## Missing Capabilities$' \
+    '^## Rejected As Noise$' \
+    '^## Privacy/Scope Check$' \
+    '^## Owner Decision Queue$' \
+    'Raw client data copied:' \
+    'Secret markers copied:' \
+    'Production identifiers copied:' \
+    'Full-repo exclusions respected:' \
+    'Prompt-injection boundary respected:' \
+    'Durable writes performed: `no`' \
+    'Scheduler/automation used: `no`'
+  do
+    if ! rg -q "$required" "$file"; then
+      echo "Dream Report missing required section or field '$required': ${file#./}"
+      fail=1
+    fi
+  done
+
+  for section in "${recommendation_sections[@]}"; do
+    require_section_table_columns "$file" "$section" "Source path" "Finding" "Target" "Reason" "Risk/privacy note" "Owner action"
+  done
+
+  require_section_table_columns "$file" "Owner Decision Queue" "Priority" "Source path" "Finding" "Proposed target" "Owner action"
+
+  if rg -q 'Dream variant:[[:space:]]*`?full-repo`?' "$file"; then
+    if rg -A8 '^## Repo/Code Review Findings$' "$file" | rg -q 'not-applicable'; then
+      echo "Full-repo Dream Report cannot mark repo/code review findings not-applicable: ${file#./}"
+      fail=1
+    fi
+  fi
+
+  if ! rg -q 'Raw client data copied:[[:space:]]*`?no`?' "$file"; then
+    echo "Dream Report privacy check must confirm no raw client data copied: ${file#./}"
+    fail=1
+  fi
+
+  if ! rg -q 'Secret markers copied:[[:space:]]*`?no`?' "$file"; then
+    echo "Dream Report privacy check must confirm no secret markers copied: ${file#./}"
+    fail=1
+  fi
+
+  if ! rg -q 'Durable writes performed:[[:space:]]*`?no`?' "$file"; then
+    echo "Dream Report must confirm no durable writes were performed: ${file#./}"
+    fail=1
+  fi
+
+  if ! rg -q 'Scheduler/automation used:[[:space:]]*`?no`?' "$file"; then
+    echo "Dream Report must confirm no scheduler or automation was used: ${file#./}"
+    fail=1
+  fi
+
+  if rg -n -i "$raw_data_pattern" "$file"; then
+    echo "Dream Report appears to contain raw client data or secret markers: ${file#./}"
+    fail=1
+  fi
+}
+
+if [[ -d "$workspace_home/dreams/runs" ]]; then
+  while IFS= read -r -d '' file; do
+    check_dream_report "$file"
+  done < <(find "$workspace_home/dreams/runs" -type f -name 'dream-report.md' -print0)
+fi
+
+exit "$fail"
