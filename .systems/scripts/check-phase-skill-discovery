@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for phase skill discovery check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing phase skill discovery reference in $file: $label"
+    fail=1
+  fi
+}
+
+for file in \
+  ".systems/ai/core/operating-model.md" \
+  ".systems/ai/core/workflow.md" \
+  ".systems/ai/core/command-routing.md"
+do
+  require_ref "$file" 'Phase Skill Discovery' "phase skill discovery"
+done
+
+for term in \
+  'AI_WORKFLOW_WORKSPACE_HOME/skills/' \
+  '.systems/ai/skills/' \
+  'SKILL.md' \
+  'Skills used: none' \
+  'frontend' \
+  'backend' \
+  'blockchain' \
+  'smart contracts' \
+  'SEO' \
+  'security' \
+  'testing' \
+  'documentation'
+do
+  require_ref ".systems/ai/core/operating-model.md" "$term" "$term"
+done
+
+require_ref ".systems/ai/core/operating-model.md" 'check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first' "workspace skills first"
+require_ref ".systems/ai/core/operating-model.md" 'check `.systems/ai/skills/` second' "system skills second"
+require_ref ".systems/ai/core/operating-model.md" 'V1 does not create phase-dedicated skills' "no phase skills"
+require_ref ".systems/ai/core/command-routing.md" 'workspace skill|AI_WORKFLOW_WORKSPACE_HOME/skills/' "command routing workspace skill"
+require_ref "HUMANS.md" 'Phase Skill Discovery' "human guidance"
+require_ref "README.md" 'check-phase-skill-discovery' "README validator list"
+require_ref ".systems/ai/core/commands.md" 'check-phase-skill-discovery' "commands validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-phase-skill-discovery' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-phase-skill-discovery' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'phase-skill-discovery' "smoke coverage"
+
+unsafe_patterns=(
+  'skill may approve implementation'
+  'skill can approve implementation'
+  'skill may skip gates'
+  'skill can skip gates'
+  'skill may change risk'
+  'skill can change permissions'
+  'skill replaces phase file'
+  'system skill before workspace skill'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'must not|cannot|does not|forbidden|invalid|blocks?|without bypassing|nie może'; then
+    echo "Unsafe phase skill discovery wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

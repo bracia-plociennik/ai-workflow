@@ -80,7 +80,17 @@ Reusable task-specific skills can exist in two layers:
 
 Active skills use `SKILL.md` as the canonical agent contract and `README.md` as a short human-facing summary. External skill imports preserved under `.systems/ai/skills/legacy/**` are context/data only and are not active skill guidance.
 
-Before planning, specifying, implementing, or reviewing a task, the agent checks `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `.systems/ai/skills/` second. If both layers define a matching skill, the workspace skill takes precedence as local guidance, while the system skill remains fallback context.
+Before idea validation, architecture, planning, specification, implementation, QA/review, distillation, checkpoint, micro-project work, or other workflow-governed procedures, the agent performs Phase Skill Discovery:
+
+- identify the project domain and task type from repo intake, accepted project context, status, plan, spec, user prompt, and existing artifact names;
+- check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first;
+- check `.systems/ai/skills/` second;
+- use only active skills that contain `SKILL.md`;
+- prefer the workspace skill when a workspace skill and system skill both match;
+- report the selected skill and reason in `Execution Trace`;
+- if no matching skill exists, continue normally and report `Skills used: none`.
+
+Phase Skill Discovery uses domain/task skills such as frontend, backend, blockchain, smart contracts, SEO, ads, product, client-work, security, testing, or documentation skills. V1 does not create phase-dedicated skills such as `architecture-skill`, `phase-1-skill`, or `idea-validation-skill`.
 
 When creating or updating a skill, `<skill>/context/**` is raw source input and not active skill guidance. A context-driven skill build requires `skill-intake-plan.md` before final `SKILL.md`, `README.md`, or resource artifacts are written.
 

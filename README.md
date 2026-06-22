@@ -107,6 +107,9 @@ cd ai-workflow
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-request-batch-triage
+.systems/scripts/check-response-evidence-trace
+.systems/scripts/check-phase-skill-discovery
+.systems/scripts/check-default-quality-closure
 ```
 
 ## First-Time Use
@@ -212,6 +215,9 @@ git diff --check
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-request-batch-triage
+.systems/scripts/check-response-evidence-trace
+.systems/scripts/check-phase-skill-discovery
+.systems/scripts/check-default-quality-closure
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

@@ -79,6 +79,8 @@ Use `.systems/ai/core/dreaming-mode.md` for Dreaming Mode, nightly analysis, AFK
 
 Use `.systems/ai/core/quality-review.md` for review, code review, final review, findings, blockers, and generic quality-check requests that are not clearly formal workflow phase runs. The global quality review stance is read-only/advisory by default and cannot mark formal `PASS`/`FAIL`, update quality artifacts, or trigger `phase-8-final-check`.
 
+Use Phase Skill Discovery from `.systems/ai/core/operating-model.md` before idea validation, architecture, planning, specification, implementation, QA/review, distillation, checkpoint, and micro-project work. Match existing domain/task skills from `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `.systems/ai/skills/` second. If no matching active `SKILL.md` exists, continue normally and report `Skills used: none`.
+
 Every workflow phase and phase artifact includes `Optional Knowledge Capture`. This soft gate records whether the phase produced reusable knowledge, the proposed target, and whether owner approval is required now. It does not require durable memory writes and must not block the next phase when `Capture recommended: <no>` or `Owner decision: <defer-to-distillation|defer-to-checkpoint|reject|not-requested>` is valid for the situation.
 
 `repo intake` means: run repo-level `phase-0-repo-intake` for the current repository.

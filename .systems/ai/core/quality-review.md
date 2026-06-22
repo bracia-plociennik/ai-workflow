@@ -29,6 +29,28 @@ Use formal `phase-5-quality` only for prompts that identify a task/package quali
 
 `final review` does not trigger `phase-8-final-check`. Final closure remains owner-triggered only.
 
+## Default Quality Closure
+
+Every substantive work item should end with a clear quality/review closure unless the owner explicitly opts out.
+
+Default behavior:
+
+- after write or implementation work, use the formal QA/Quality phase when the active workflow defines and permits it;
+- for side tasks, micro-tasks, micro-projects, advisory work, docs-only workflow maintenance, and read-only audits, use `global-quality-review-stance` as advisory quality closure;
+- report findings, blockers, evidence reviewed, skipped checks, residual risk, and whether a formal gate can be used;
+- include the result in the user-facing response and `Execution Trace`.
+
+Owner opt-out grammar:
+
+- `bez QA`
+- `bez review`
+- `bez quality`
+- `without QA`
+- `without review`
+- `fast path no review`
+
+When the owner opts out, the response must state `Quality skipped by owner opt-out` and report residual risk. Opt-out does not allow continuing as `PASS`, does not satisfy a required QA/Quality gate, and does not allow moving to the next phase when QA PASS is required.
+
 ## Review Procedure
 
 Apply the same quality lenses as `phase-5-quality` where relevant:

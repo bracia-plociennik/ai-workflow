@@ -16,6 +16,8 @@ Jeśli w dowolnym momencie nie wiesz, co zrobić dalej, możesz napisać do Code
 
 Każda merytoryczna odpowiedź Codexa w tym workflow powinna kończyć się sekcją `Co dalej?`. To nie jest nowa faza ani dodatkowa praca do wykonania automatycznie. To krótki drogowskaz: jedna rekomendacja z wpływem oraz jedna bezpieczna alternatywa z wpływem, wybrane na podstawie statusu, aktualnej fazy, gate'ów, ryzyka, evidence i Twojej intencji. Każda ścieżka powinna zawierać `Napisz:` z gotowym promptem do wklejenia. Szczegółowy kontrakt odpowiedzi jest w `.systems/ai/core/response-contract.md`.
 
+Merytoryczna odpowiedź powinna też zawierać `Execution Trace` bezpośrednio przed `Co dalej?`. To krótki audyt: źródła, evidence, użyte procedury workflow, skills/roles, komendy/checki, pominięte albo nieczytelne źródła oraz residual uncertainty. Dzięki temu widzisz, czy Codex pracował na deklarowanych procedurach i jaką wiedzę faktycznie wykorzystał.
+
 ## External Memory I Rozwój Workflow
 
 Podczas pracy z AI Workflow mogą powstawać wpisy External Memory w `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`, indeksowane przez router `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`.
@@ -106,6 +108,10 @@ Wynik ma być findings-first: severity, blockers, evidence reviewed, skipped/unr
 
 Formalne `phase-5-quality` uruchamiaj tylko wtedy, gdy istnieje task/package po implementacji, znane są wymagane wejścia, można zapisać quality evidence i spełnione są gates.
 
+Domyślnie każde merytoryczne wykonanie pracy powinno kończyć się quality/review closure. Po implementacji używaj formalnej QA/Quality fazy, jeśli workflow ją definiuje. Dla side-tasków, micro-tasków, micro-projectów i advisory work wystarczy advisory `global-quality-review-stance`.
+
+Możesz jawnie pominąć review dla szybkiej ścieżki, pisząc `bez QA`, `bez review`, `bez quality`, `without QA`, `without review` albo `fast path no review`. Codex powinien wtedy napisać `Quality skipped by owner opt-out` i residual risk. To nie daje zgody na przejście przez wymagany QA PASS.
+
 Praktyczne prompty:
 
 ```text
@@ -169,6 +175,14 @@ Wypisz zmienne, które możesz bezpiecznie wywnioskować, oraz te, o które musi
 ```
 
 Jeśli projekt tworzy lokalne artefakty prompting, trzymaj je pod `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`. Materialne użycie roli albo variable packa powinno być wymienione w evidence odpowiedniej fazy. Przykłady bezpiecznych artefaktów są w `.systems/ai/examples/prompting/`.
+
+## Phase Skill Discovery
+
+Fazy i procedury workflow powinny rozpoznawać istniejące pomocnicze skille domenowe albo taskowe. Przykłady: frontend, backend, blockchain, smart contracts, SEO, ads, product, client-work, security, testing albo documentation.
+
+AI Workflow nie wymaga tworzenia dedykowanych skilli per faza, takich jak `architecture-skill` albo `phase-1-skill`. Zamiast tego faza identyfikuje domenę projektu/taska, sprawdza najpierw `AI_WORKFLOW_WORKSPACE_HOME/skills/`, potem `.systems/ai/skills/`, i używa tylko aktywnych skilli z `SKILL.md`. Jeśli nic nie pasuje, kontynuuje normalnie i raportuje `Skills used: none`.
+
+Skill jest supporting guidance: może zaostrzyć checklistę i review lens, ale nie może zmieniać source-of-truth order, scope, risk, permissions, phase gates, evidence, approval ani final owner approval.
 
 ## Przykłady poleceń
 

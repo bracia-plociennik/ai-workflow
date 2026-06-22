@@ -249,6 +249,18 @@ mv "$tmp/.systems/scripts/check-request-batch-triage" "$tmp/.systems/scripts/che
 run_must_fail "missing-request-batch-triage-validator" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/check-request-batch-triage.bak" "$tmp/.systems/scripts/check-request-batch-triage"
 
+mv "$tmp/.systems/scripts/check-response-evidence-trace" "$tmp/.systems/scripts/check-response-evidence-trace.bak"
+run_must_fail "missing-response-evidence-trace-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-response-evidence-trace.bak" "$tmp/.systems/scripts/check-response-evidence-trace"
+
+mv "$tmp/.systems/scripts/check-phase-skill-discovery" "$tmp/.systems/scripts/check-phase-skill-discovery.bak"
+run_must_fail "missing-phase-skill-discovery-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-phase-skill-discovery.bak" "$tmp/.systems/scripts/check-phase-skill-discovery"
+
+mv "$tmp/.systems/scripts/check-default-quality-closure" "$tmp/.systems/scripts/check-default-quality-closure.bak"
+run_must_fail "missing-default-quality-closure-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-default-quality-closure.bak" "$tmp/.systems/scripts/check-default-quality-closure"
+
 cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
 perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
 run_must_fail "contract-compliance-requires-side-task-mode" .systems/scripts/check-contract-compliance
@@ -1448,6 +1460,67 @@ cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/reques
 perl -0pi -e 's/High-risk and critical-risk items must route to `owner-decision-required` or `full-workflow-required`\./High-risk items can be reviewed later./' "$tmp/.systems/ai/core/request-batch-triage.md"
 run_must_fail "request-batch-triage-requires-high-risk-owner-decision" .systems/scripts/check-request-batch-triage
 mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+run_must_pass "response-evidence-trace-valid" .systems/scripts/check-response-evidence-trace
+
+cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
+perl -0pi -e 's/## Execution Trace/## Trace/g' "$tmp/.systems/ai/core/response-contract.md"
+run_must_fail "response-evidence-trace-requires-section" .systems/scripts/check-response-evidence-trace
+mv "$tmp/.systems/ai/core/response-contract.md.bak" "$tmp/.systems/ai/core/response-contract.md"
+
+cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
+perl -0pi -e 's/Skills\/roles used:\n//' "$tmp/.systems/ai/core/response-contract.md"
+run_must_fail "response-evidence-trace-requires-skills-field" .systems/scripts/check-response-evidence-trace
+mv "$tmp/.systems/ai/core/response-contract.md.bak" "$tmp/.systems/ai/core/response-contract.md"
+
+cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
+printf '\nno sources needed\n' >> "$tmp/.systems/ai/core/response-contract.md"
+run_must_fail "response-evidence-trace-blocks-no-sources-needed" .systems/scripts/check-response-evidence-trace
+mv "$tmp/.systems/ai/core/response-contract.md.bak" "$tmp/.systems/ai/core/response-contract.md"
+
+cp "$tmp/AGENTS.md" "$tmp/AGENTS.md.bak"
+perl -0pi -e 's/Every substantive response must include `Execution Trace` immediately before `Co dalej\?`, with sources used, evidence reviewed, workflow procedures used, skills\/roles used, commands\/checks run, skipped\/unreadable sources, and limits\/residual uncertainty\.\n\n//' "$tmp/AGENTS.md"
+run_must_fail "response-evidence-trace-requires-agents-routing" .systems/scripts/check-response-evidence-trace
+mv "$tmp/AGENTS.md.bak" "$tmp/AGENTS.md"
+
+run_must_pass "phase-skill-discovery-valid" .systems/scripts/check-phase-skill-discovery
+
+cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
+perl -0pi -e 's/Phase Skill Discovery/Phase Skill Lookup/g' "$tmp/.systems/ai/core/operating-model.md"
+run_must_fail "phase-skill-discovery-requires-operating-model" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/.systems/ai/core/operating-model.md.bak" "$tmp/.systems/ai/core/operating-model.md"
+
+cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
+perl -0pi -e 's/check `AI_WORKFLOW_WORKSPACE_HOME\/skills\/` first/check `.systems\/ai\/skills\/` first/' "$tmp/.systems/ai/core/operating-model.md"
+run_must_fail "phase-skill-discovery-requires-workspace-first" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/.systems/ai/core/operating-model.md.bak" "$tmp/.systems/ai/core/operating-model.md"
+
+cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
+perl -0pi -e 's/Skills used: none/Skills unavailable/g' "$tmp/.systems/ai/core/operating-model.md"
+run_must_fail "phase-skill-discovery-requires-none-fallback" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/.systems/ai/core/operating-model.md.bak" "$tmp/.systems/ai/core/operating-model.md"
+
+cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
+printf '\nskill may approve implementation\n' >> "$tmp/.systems/ai/core/operating-model.md"
+run_must_fail "phase-skill-discovery-blocks-skill-approval" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/.systems/ai/core/operating-model.md.bak" "$tmp/.systems/ai/core/operating-model.md"
+
+run_must_pass "default-quality-closure-valid" .systems/scripts/check-default-quality-closure
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/Default Quality Closure/Default Review Close/g' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "default-quality-closure-requires-contract" .systems/scripts/check-default-quality-closure
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/Quality skipped by owner opt-out/Quality omitted by owner/g' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "default-quality-closure-requires-opt-out-report" .systems/scripts/check-default-quality-closure
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nbez QA may continue as PASS\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "default-quality-closure-blocks-opt-out-pass" .systems/scripts/check-default-quality-closure
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

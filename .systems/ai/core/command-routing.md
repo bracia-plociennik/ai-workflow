@@ -32,6 +32,7 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Full commands with explicit project, task IDs, risk constraints, mode, and evidence policy may be executed if gates are satisfied.
 - Parallel work questions must be routed through `.systems/ai/core/parallel-work-policy.md`, repo status, project statuses, task dependencies, and write-set checks before recommending concurrent execution.
 - Prompt composition, role, and variable questions must be routed through `.systems/ai/core/prompt-composition.md`; any project-local prompting artifacts are read after canonical policy and the current phase file.
+- Before workflow-governed planning or execution, run Phase Skill Discovery from `.systems/ai/core/operating-model.md`: infer the project domain/task type, check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first, check `.systems/ai/skills/` second, use only active `SKILL.md` contracts, and report `Skills used: none` when no matching skill exists.
 - System insight, anonymized lesson, skill-candidate lesson, client-work lesson, frontend/backend/SEO/ads/smart-contract lesson, and cross-project best-practice capture requests must be routed through `.systems/ai/core/system-insights.md`.
 - Requests with `2+ owner items`, checklists, brain dumps, `lista rzeczy`, or mixed improvements must pass through `.systems/ai/core/request-batch-triage.md` before ordinary Task Idea Validation, plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - New single task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
@@ -654,6 +655,9 @@ Routing notes:
 - `Uruchom phase-5-quality dla <task-id>` or an implementation state ready for `phase-5-quality` uses the formal phase and may produce `PASS` or `FAIL` only with required evidence and allowed artifact writes.
 - `PASS bez evidence` and `PASS without evidence` are invalid.
 - Failed or skipped checks that affect acceptance criteria mean `FAIL`.
+- Every substantive work item should end with Default Quality Closure: formal QA/Quality when the phase path defines it, otherwise advisory `global-quality-review-stance`.
+- Owner opt-out grammar includes `bez QA`, `bez review`, `bez quality`, `without QA`, `without review`, and `fast path no review`.
+- Opt-out must report `Quality skipped by owner opt-out` and residual risk; it does not allow continuing as `PASS` or bypassing required QA/Quality gates.
 
 ### Distillation
 
@@ -1171,5 +1175,9 @@ Routing notes:
 - Skills cannot override safety, risk, permissions, DoD, scope, or evidence.
 - User skills in `AI_WORKFLOW_WORKSPACE_HOME/skills/` take precedence over system skills in `.systems/ai/skills/` only as supporting guidance.
 - Active skills use `SKILL.md` as the canonical agent contract and `README.md` as a short human-facing summary.
+- Phase Skill Discovery runs before idea validation, architecture, planning, specification, implementation, QA/review, distillation, checkpoint, and micro-project work.
+- Match domain/task skills such as frontend, backend, blockchain, smart contracts, SEO, ads, product, client-work, security, testing, or documentation skills.
+- V1 does not create phase-dedicated skills such as `architecture-skill`, `phase-1-skill`, or `idea-validation-skill`.
+- If no matching active skill exists, continue normally and report `Skills used: none`.
 - Preserved external skill imports under `.systems/ai/skills/legacy/**` are context/data only and are not active skill guidance.
 - When creating or updating a skill, `<skill>/context/**` is raw source input only; require `skill-intake-plan.md` before writing final active skill artifacts from that source.

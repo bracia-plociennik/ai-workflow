@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for response evidence trace check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing response evidence trace reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/response-contract.md"
+
+require_ref "$contract" '^## Execution Trace$' "Execution Trace section"
+require_ref "$contract" 'Every substantive response must include an `Execution Trace` block immediately before the final `Co dalej\?` footer' "trace before footer"
+require_ref "$contract" '`Co dalej\?` must remain the final human-facing section' "Co dalej final footer"
+
+for field in \
+  'Sources used:' \
+  'Evidence reviewed:' \
+  'Workflow procedures used:' \
+  'Skills/roles used:' \
+  'Commands/checks run:' \
+  'Skipped/unreadable sources:' \
+  'Limits/residual uncertainty:'
+do
+  require_ref "$contract" "$field" "trace field: $field"
+done
+
+require_ref "AGENTS.md" 'Execution Trace' "AGENTS execution trace"
+require_ref "HUMANS.md" 'Execution Trace' "human guidance"
+require_ref "README.md" 'check-response-evidence-trace' "README validator list"
+require_ref ".systems/ai/core/commands.md" 'check-response-evidence-trace' "commands validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-response-evidence-trace' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-response-evidence-trace' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'response-evidence-trace' "smoke coverage"
+
+if rg -n -i 'no sources needed|sources are optional|Execution Trace may be omitted for substantive responses|Co dalej\?.*Execution Trace' \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+  | rg -v -i 'Do not say|must not|not after|cannot|forbidden|invalid'; then
+  echo "Unsafe response evidence trace wording found"
+  fail=1
+fi
+
+exit "$fail"

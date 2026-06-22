@@ -20,6 +20,43 @@ Substantive responses include:
 
 Do not append the footer inside strict machine-readable output such as JSON-only, patch-only, or exact-template output requested by the user. In that case, include the footer in the nearest surrounding normal human-facing response.
 
+## Execution Trace
+
+Every substantive response must include an `Execution Trace` block immediately before the final `Co dalej?` footer.
+
+The block is an audit summary for the owner. It does not create a new gate and does not replace phase evidence, quality artifacts, status, approvals, or Definition of Done.
+
+Use this exact field set:
+
+```text
+Execution Trace
+
+Sources used:
+- <files/artifacts/chats/tools used as source>
+
+Evidence reviewed:
+- <repo state, diffs, phase artifacts, logs, screenshots, command output, or n/a>
+
+Workflow procedures used:
+- <task-intake|request-batch-triage|phase file|global-quality-review-stance|contract-compliance|none>
+
+Skills/roles used:
+- <skill name and source path, role/lens, or none>
+
+Commands/checks run:
+- <command: result, or not-run with reason>
+
+Skipped/unreadable sources:
+- <source and reason, or none>
+
+Limits/residual uncertainty:
+- <remaining uncertainty or none>
+```
+
+Keep the trace concise. For very small substantive answers, each field may be a single line. For strict JSON-only, patch-only, or exact-template output, include the trace in the nearest surrounding human-facing response instead of inside the constrained payload.
+
+Do not say `no sources needed` for a substantive response. If no files, tools, or artifacts were needed, write `Sources used: owner prompt only` and explain the limit under `Limits/residual uncertainty`.
+
 ## Required Footer
 
 Use this exact section shape:
@@ -45,6 +82,8 @@ Napisz:
 ````
 
 Do not provide a long option menu. Include `Inny pomysł:` only when the user explicitly asks for extra ideas or when the current interaction is brainstorming.
+
+`Co dalej?` must remain the final human-facing section of every substantive response. `Execution Trace` must appear before it, not after it.
 
 ## Recommendation Sources
 

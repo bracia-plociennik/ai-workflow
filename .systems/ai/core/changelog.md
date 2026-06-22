@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.18 - 2026-06-22
+
+- Added `Execution Trace` for substantive responses with sources, evidence, workflow procedures, skills/roles, commands/checks, skipped sources, and residual uncertainty before the final `Co dalej?` footer.
+- Added Phase Skill Discovery so phases and procedures check existing workspace skills before system skills and report `Skills used: none` when no matching active `SKILL.md` exists.
+- Added Default Quality Closure for substantive work, using formal QA/Quality where available and advisory global quality review otherwise, with owner opt-out reporting and residual risk.
+- Added validators and smoke tests for response trace, phase skill discovery, and default quality closure.
+
 ## 0.8.17 - 2026-06-22
 
 - Added `.systems/ai/core/request-batch-triage.md` for owner-provided lists, checklists, brain dumps, mixed improvements, and `2+ owner items`.

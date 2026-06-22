@@ -33,6 +33,8 @@ Before implementation, commit, or handoff, classify the work mode:
 
 `request-batch-triage` from `.systems/ai/core/request-batch-triage.md` can precede any work mode when the owner provides multiple items. It classifies and recommends routes only. It is not itself commit-ready evidence for implementation and does not create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests without the separately approved routed work mode.
 
+Default Quality Closure from `.systems/ai/core/quality-review.md` applies before handoff or commit for substantive work. Use formal QA/Quality when the active workflow defines it; otherwise use advisory `global-quality-review-stance`. If the owner opts out with `bez QA`, `bez review`, `without QA`, `without review`, or `fast path no review`, record `Quality skipped by owner opt-out` plus residual risk. Opt-out does not satisfy required QA PASS.
+
 The selected mode must match risk, scope, approvals, write set, and artifacts. If the mode does not fit, route to the safer workflow path before continuing.
 
 ## Compliance Questions
@@ -46,6 +48,7 @@ Answer these before commit or handoff:
 - `Required artifacts current: yes|no|not-applicable`
 - `Write-set conflicts: none|warning|blocked`
 - `Evidence available: yes|no`
+- `Quality closure: formal|advisory|skipped-owner-opt-out|not-applicable`
 - `Knowledge capture: required|not-required`
 - `Knowledge capture target: <status/evidence|micro-task-artifact|micro-project-artifact|phase-6-distillation|phase-7-checkpoint|project-memory|repo-memory|external-memory|system-insights|not-applicable>`
 - `Reason: <short evidence-backed reason>`

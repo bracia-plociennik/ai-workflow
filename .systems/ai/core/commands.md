@@ -42,6 +42,9 @@ git diff --check
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-request-batch-triage
+.systems/scripts/check-response-evidence-trace
+.systems/scripts/check-phase-skill-discovery
+.systems/scripts/check-default-quality-closure
 ```
 
 `check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
@@ -53,6 +56,12 @@ git diff --check
 `check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
 
 `check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
+
+`check-response-evidence-trace` validates the required `Execution Trace` for substantive responses and preserves `Co dalej?` as the final footer.
+
+`check-phase-skill-discovery` validates phase/procedure skill discovery, workspace-before-system skill precedence, `Skills used: none` fallback, and skill authority boundaries.
+
+`check-default-quality-closure` validates default quality/review closure for substantive work, owner opt-out grammar, and the rule that opt-out cannot satisfy required QA PASS.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 

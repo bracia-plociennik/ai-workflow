@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for default quality closure check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing default quality closure reference in $file: $label"
+    fail=1
+  fi
+}
+
+for file in \
+  ".systems/ai/core/quality-review.md" \
+  ".systems/ai/core/command-routing.md" \
+  ".systems/ai/core/contract-compliance.md"
+do
+  require_ref "$file" 'Default Quality Closure' "default quality closure"
+done
+
+for term in \
+  'Every substantive work item should end with a clear quality/review closure' \
+  'formal QA/Quality' \
+  'global-quality-review-stance' \
+  'side tasks' \
+  'micro-tasks' \
+  'micro-projects' \
+  'advisory work' \
+  'Quality skipped by owner opt-out' \
+  'residual risk' \
+  'does not satisfy a required QA/Quality gate'
+do
+  require_ref ".systems/ai/core/quality-review.md" "$term" "$term"
+done
+
+for opt_out in \
+  'bez QA' \
+  'bez review' \
+  'bez quality' \
+  'without QA' \
+  'without review' \
+  'fast path no review'
+do
+  require_ref ".systems/ai/core/quality-review.md" "$opt_out" "opt-out: $opt_out"
+  require_ref ".systems/ai/core/command-routing.md" "$opt_out" "routing opt-out: $opt_out"
+done
+
+require_ref ".systems/ai/core/contract-compliance.md" 'Quality closure: formal\|advisory\|skipped-owner-opt-out\|not-applicable' "contract compliance field"
+require_ref "HUMANS.md" 'Quality skipped by owner opt-out' "human guidance"
+require_ref "README.md" 'check-default-quality-closure' "README validator list"
+require_ref ".systems/ai/core/commands.md" 'check-default-quality-closure' "commands validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-default-quality-closure' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-default-quality-closure' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'default-quality-closure' "smoke coverage"
+
+if rg -n -i '(bez QA|without QA|bez review|without review|fast path no review)[^.\n]{0,120}\b(may|can|allows?|continues?|continue|mark|marks?)\b[^.\n]{0,120}\b(PASS|QA PASS|continue as PASS)\b' \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+  | rg -v -i 'does not|must not|cannot|not allow|invalid|nie daje|nie oznacza'; then
+  echo "Unsafe default quality closure opt-out wording found"
+  fail=1
+fi
+
+exit "$fail"
