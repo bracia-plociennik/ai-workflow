@@ -63,6 +63,8 @@ If the owner provides a list, checklist, brain dump, mixed improvements, or `2+ 
 
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
+Default Idea Validation applies to new work unless the owner explicitly opts out. Single new work uses Task Idea Validation, new or broad project ideas use formal `phase-0-idea-validation`, and batch/list/checklist input uses `request-batch-triage` plus the selected validation route. Owner opt-out grammar is `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`. Opt-out skips only the idea/task validation lens output and must report `Idea validation skipped by owner opt-out` plus residual risk in `Execution Trace`. It must not bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, Definition of Done, or stop conditions. If acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence remains unclear, stop and ask.
+
 If the user asks `co teraz`, `co dalej`, `jak zacząć`, `zgubiłem się`, `what should I do next`, or equivalent, use `.systems/ai/core/guide.md`. Read status and artifacts first, then give exactly one recommendation with impact and exactly one alternative with impact.
 
 If the user says `phase 0 init`, `zrob phase 0 init`, `init workflow`, or asks what to do after cloning AI Workflow into a target repo, route to `phase-0-init`. Create or verify `AI_WORKFLOW_WORKSPACE_HOME`, preserve legacy artifacts as context/data only, and then point to `phase-0-repo-intake`.
@@ -330,6 +332,7 @@ git diff --check
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
+.systems/scripts/check-default-idea-validation-opt-out
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

@@ -175,6 +175,7 @@ required=(
   ".systems/scripts/check-response-evidence-trace"
   ".systems/scripts/check-phase-skill-discovery"
   ".systems/scripts/check-default-quality-closure"
+  ".systems/scripts/check-default-idea-validation-opt-out"
   ".systems/scripts/check-required-artifacts"
   ".systems/scripts/check-status-consistency"
   ".systems/scripts/check-validator-smoke-tests"

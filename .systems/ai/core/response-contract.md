@@ -57,6 +57,8 @@ Keep the trace concise. For very small substantive answers, each field may be a 
 
 Do not say `no sources needed` for a substantive response. If no files, tools, or artifacts were needed, write `Sources used: owner prompt only` and explain the limit under `Limits/residual uncertainty`.
 
+If the owner explicitly opts out of Default Idea Validation with `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`, the trace must include `Idea validation skipped by owner opt-out` and residual risk. This reports only the skipped idea/task validation lens; it does not waive source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, or final owner approval.
+
 ## Required Footer
 
 Use this exact section shape:

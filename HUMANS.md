@@ -196,6 +196,10 @@ Polecenia mogą być pełne albo krótkie. Jeśli krótkie polecenie da się jed
 
 Jeśli mówisz Codexowi, że masz nowe zadanie, chcesz coś zaplanować, nie wiesz jak coś zrobić poprawnie albo prosisz o wymyślenie podejścia, Codex powinien najpierw użyć lekkiej walidacji zadania z `.systems/ai/core/task-intake.md`. To znaczy: zanim poda plan, powinien powiedzieć, co w pomyśle zostaje, co jest słabe albo do usunięcia, czego brakuje, jakie są blokery/decyzje i jaki routing jest najbezpieczniejszy. Formalna `phase-0-idea-validation` zostaje dla nowych projektów i dużych pomysłów produktowych; task-level validation może być tylko w odpowiedzi albo w specu, micro-tasku, change request albo innym artefakcie, który i tak powstaje.
 
+Domyślnie działa Default Idea Validation. Pojedyncza nowa praca używa Task Idea Validation, nowy lub szeroki projekt używa formalnej `phase-0-idea-validation`, a lista/checklista/`2+ owner items` najpierw przechodzi przez `request-batch-triage`, potem przez wybraną validation route. Jeśli naprawdę chcesz pominąć tę soczewkę, napisz jawnie: `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation` albo `fast path no idea validation`. Codex powinien wtedy wpisać w `Execution Trace`: `Idea validation skipped by owner opt-out` oraz residual risk.
+
+Ten opt-out nie pomija source-of-truth order, risk modelu, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing ani final owner approval. Jeśli po opt-oucie nadal brakuje acceptance criteria, target project/workspace, risk, safe environment albo write permission, Codex powinien zatrzymać się i dopytać.
+
 Pełne:
 
 ```text

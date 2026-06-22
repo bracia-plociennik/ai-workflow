@@ -35,7 +35,9 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Before workflow-governed planning or execution, run Phase Skill Discovery from `.systems/ai/core/operating-model.md`: infer the project domain/task type, check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first, check `.systems/ai/skills/` second, use only active `SKILL.md` contracts, and report `Skills used: none` when no matching skill exists.
 - System insight, anonymized lesson, skill-candidate lesson, client-work lesson, frontend/backend/SEO/ads/smart-contract lesson, and cross-project best-practice capture requests must be routed through `.systems/ai/core/system-insights.md`.
 - Requests with `2+ owner items`, checklists, brain dumps, `lista rzeczy`, or mixed improvements must pass through `.systems/ai/core/request-batch-triage.md` before ordinary Task Idea Validation, plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
-- New single task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
+- Default Idea Validation applies to all new work unless the owner explicitly opts out: single new work uses Task Idea Validation, new or broad project ideas use formal `phase-0-idea-validation`, and batch/list input uses request batch triage plus the selected validation route.
+- New single task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing unless the owner explicitly says `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`.
+- Idea-validation opt-out must report `Idea validation skipped by owner opt-out` and residual risk in `Execution Trace`, and it must not bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, or final owner approval.
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
 - If a command is clear but gates are not satisfied, route to the required predecessor phase or stop with the blocking gate.
@@ -88,6 +90,18 @@ Each family below includes Polish and English variants. The examples are intenti
 ### Task Idea Validation
 
 Use `.systems/ai/core/task-intake.md` as a pre-routing lens. This is not a new workflow phase and does not allow writes.
+
+This is the default for single new work. New or broad project ideas route to formal `phase-0-idea-validation`; batches route to `.systems/ai/core/request-batch-triage.md` first and then to the selected validation route.
+
+Owner opt-out grammar:
+
+- `bez idea validation`;
+- `bez walidacji pomysłu`;
+- `without idea validation`;
+- `skip idea validation`;
+- `fast path no idea validation`.
+
+Opt-out skips only the idea/task validation lens output. It does not skip source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, or any stop condition. If acceptance criteria, target project, risk, safe environment, or write permission remains unclear, stop and ask for the missing decision.
 
 Polish variants:
 

@@ -25,6 +25,20 @@ Run request batch triage when the owner says or implies:
 
 Single-item requests continue through `.systems/ai/core/task-intake.md` without this batch layer.
 
+## Default Idea Validation Relationship
+
+Batch triage runs before Task Idea Validation for lists and mixed batches. It is classification and safety routing, not the idea validation itself.
+
+After triage, the selected item or selected group must continue through the appropriate validation route unless the owner explicitly opts out:
+
+- scoped single work -> Task Idea Validation;
+- new or broad project idea -> formal `phase-0-idea-validation`;
+- mixed routes -> one validation route per selected route.
+
+Owner opt-out phrases are `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, and `fast path no idea validation`. On a batch request, those phrases skip only the validation lens after triage when safe; opt-out does not skip request batch triage. The response must report `Idea validation skipped by owner opt-out` and residual risk in `Execution Trace`.
+
+Opt-out must not bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, or any stop condition.
+
 ## Required Output
 
 The response or routed artifact must include a triage matrix with exactly these fields:
@@ -113,7 +127,7 @@ It must not weaken source-of-truth order, risk classification, permissions, Defi
 
 ## Relationship To Task Intake
 
-Batch triage runs before Task Idea Validation when the raw input has multiple items. After triage, each selected route still uses the normal contract:
+Batch triage runs before Task Idea Validation when the raw input has multiple items. After triage, each selected route still uses the normal validation route unless the owner explicitly uses a safe idea-validation opt-out:
 
 - new project or broad product idea -> `phase-0-project-workspace` and `phase-0-idea-validation`;
 - active project work -> project status, plan, task index, spec, and phase routing;

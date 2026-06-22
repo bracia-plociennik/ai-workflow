@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.18` |
+| Workflow version | `0.8.19` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-06-19` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
@@ -23,7 +23,7 @@
 - `.systems/ai/` is system-owned policy and workflow source.
 - `.systems/ai/core/` stores canonical AI router and policy files.
 - `.systems/ai/core/response-contract.md` defines the required user-facing `Co dalej?` footer with one recommendation, one safe alternative, impacts, and copy-paste prompts.
-- `.systems/ai/core/task-intake.md` defines the required Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request.
+- `.systems/ai/core/task-intake.md` defines the default Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request. Owner opt-out requires explicit wording and cannot bypass risk, permissions, evidence, QA/Quality, phase gates, or approvals.
 - `.systems/ai/core/parallel-work-policy.md` defines status-only coordination for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads without adding lock files or scheduler state.
 - `.systems/ai/core/contract-compliance.md` defines advisory work mode compliance and commit readiness knowledge capture decisions.
 - Each workflow phase artifact includes `Optional Knowledge Capture` as a soft phase-level decision for memory, decision, status, External Memory, and System Insights candidates.

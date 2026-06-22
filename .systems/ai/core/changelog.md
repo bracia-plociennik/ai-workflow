@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.19 - 2026-06-22
+
+- Added Default Idea Validation routing: single new work uses Task Idea Validation, broad project ideas use formal `phase-0-idea-validation`, and owner lists use request batch triage plus the selected validation route.
+- Added explicit owner opt-out grammar for idea validation and required `Idea validation skipped by owner opt-out` reporting with residual risk in `Execution Trace`.
+- Clarified that idea-validation opt-out cannot bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, or final owner approval.
+- Added `.systems/scripts/check-default-idea-validation-opt-out` with smoke coverage for default validation routing, opt-out reporting, and unsafe bypass wording.
+
 ## 0.8.18 - 2026-06-22
 
 - Added `Execution Trace` for substantive responses with sources, evidence, workflow procedures, skills/roles, commands/checks, skipped sources, and residual uncertainty before the final `Co dalej?` footer.

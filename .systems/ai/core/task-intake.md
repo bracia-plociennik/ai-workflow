@@ -2,11 +2,33 @@
 
 ## Purpose
 
-Task Idea Validation is the mandatory pre-routing lens for any single new task, new idea, planning request, approach request, uncertainty request, side task, micro-task, change request, or autopilot request.
+Task Idea Validation is the default pre-routing lens for any single new task, new idea, planning request, approach request, uncertainty request, side task, micro-task, change request, or autopilot request.
 
 It is not a workflow phase and it does not grant write permission. It decides whether the user's raw request is clear, safe, complete, and routed to the correct workflow path before planning, specification, implementation, or automation begins.
 
 Formal project-level brain dumps still use `.systems/ai/workflow/phase-0-idea-validation.md`. Multi-item owner lists first use `.systems/ai/core/request-batch-triage.md`. Task Idea Validation applies to smaller or already scoped work where creating a full project idea-validation artifact would be too heavy.
+
+## Default Idea Validation And Owner Opt-Out
+
+Default Idea Validation is required unless the owner explicitly opts out.
+
+- Single new work defaults to Task Idea Validation before planning, specification, implementation, side-task, micro-task, micro-project, change request, or autopilot routing.
+- New or broad project ideas default to formal `phase-0-idea-validation`.
+- Batch/list/checklist input with `2+ owner items` defaults to `.systems/ai/core/request-batch-triage.md` first, then the selected item or group uses the appropriate validation route: Task Idea Validation for scoped work or formal `phase-0-idea-validation` for broad project ideas.
+
+Owner opt-out grammar:
+
+- `bez idea validation`;
+- `bez walidacji pomysłu`;
+- `without idea validation`;
+- `skip idea validation`;
+- `fast path no idea validation`.
+
+When the owner uses one of these phrases, skip only the Task Idea Validation or idea-validation lens output. The response must report `Idea validation skipped by owner opt-out` and residual risk in `Execution Trace`.
+
+The opt-out must not skip source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, Definition of Done, prompt-injection policy, or status/evidence reconciliation.
+
+If the opt-out leaves acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence unclear, stop and ask for the missing decision instead of planning or executing.
 
 ## When To Use
 
@@ -23,7 +45,7 @@ Use this lens before acting on user requests such as:
 - `autopilot` or `autonomous-execution` for a new task set;
 - a change request before or after `final-owner-yes`.
 
-If the user provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, run request batch triage first through `.systems/ai/core/request-batch-triage.md`. After the batch is split and routed, apply Task Idea Validation to the selected single route or routed item when needed.
+If the user provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, run request batch triage first through `.systems/ai/core/request-batch-triage.md`. After the batch is split and routed, apply the validation route to the selected single route or routed item unless the owner explicitly opts out and the remaining gates are clear.
 
 If the user asks only for factual status, command output, or a narrow clarification that does not introduce new work, use guide or normal command routing instead.
 

@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for default idea validation check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing default idea validation reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/task-intake.md"
+batch_contract=".systems/ai/core/request-batch-triage.md"
+
+for file in \
+  "$contract" \
+  "$batch_contract" \
+  ".systems/ai/core/command-routing.md" \
+  ".systems/ai/core/workflow.md" \
+  ".systems/ai/core/response-contract.md" \
+  "AGENTS.md" \
+  "HUMANS.md"
+do
+  require_ref "$file" 'Default Idea Validation' "default idea validation"
+done
+
+for term in \
+  'Single new work defaults to Task Idea Validation' \
+  'New or broad project ideas default to formal `phase-0-idea-validation`' \
+  'validation route' \
+  'Task Idea Validation' \
+  'phase-0-idea-validation' \
+  'request-batch-triage'
+do
+  require_ref "$contract" "$term" "$term"
+done
+
+for term in \
+  'Batch triage runs before Task Idea Validation' \
+  'validation route' \
+  'request batch triage' \
+  'does not skip request batch triage'
+do
+  require_ref "$batch_contract" "$term" "$term"
+done
+
+for opt_out in \
+  'bez idea validation' \
+  'bez walidacji pomysłu' \
+  'without idea validation' \
+  'skip idea validation' \
+  'fast path no idea validation'
+do
+  require_ref "$contract" "$opt_out" "task intake opt-out: $opt_out"
+  require_ref ".systems/ai/core/command-routing.md" "$opt_out" "routing opt-out: $opt_out"
+  require_ref ".systems/ai/core/response-contract.md" "$opt_out" "response opt-out: $opt_out"
+done
+
+for file in \
+  "$contract" \
+  "$batch_contract" \
+  ".systems/ai/core/command-routing.md" \
+  ".systems/ai/core/workflow.md" \
+  ".systems/ai/core/response-contract.md" \
+  "AGENTS.md" \
+  "HUMANS.md"
+do
+  require_ref "$file" 'Idea validation skipped by owner opt-out' "required opt-out reporting phrase"
+  require_ref "$file" 'residual risk' "residual risk reporting"
+done
+
+for boundary in \
+  'source-of-truth order' \
+  'risk model' \
+  'permissions' \
+  'safe environment' \
+  'required evidence' \
+  'QA/Quality' \
+  'owner approvals' \
+  'phase gates' \
+  'change-request routing' \
+  'final owner approval'
+do
+  require_ref "$contract" "$boundary" "opt-out boundary: $boundary"
+  require_ref ".systems/ai/core/command-routing.md" "$boundary" "routing opt-out boundary: $boundary"
+done
+
+for integration in \
+  "README.md:check-default-idea-validation-opt-out" \
+  ".systems/ai/core/commands.md:check-default-idea-validation-opt-out" \
+  "AGENTS.md:check-default-idea-validation-opt-out" \
+  ".systems/scripts/validate-workflow:check-default-idea-validation-opt-out" \
+  ".systems/scripts/check-required-artifacts:check-default-idea-validation-opt-out" \
+  ".systems/scripts/check-validator-smoke-tests:default-idea-validation-opt-out"
+do
+  file="${integration%%:*}"
+  pattern="${integration#*:}"
+  require_ref "$file" "$pattern" "integration: $pattern"
+done
+
+unsafe_patterns=(
+  'without idea validation may bypass risk checks'
+  '(bez idea validation|bez walidacji pomysłu|without idea validation|skip idea validation|fast path no idea validation)[^.\n]{0,120}\b(may|can|allows?|continues?|continue|bypass|skip|satisfy|mark|marks?)\b[^.\n]{0,120}\b(risk|risk checks|permissions|evidence|required evidence|QA|Quality|phase gates|approval|approvals|PASS)\b'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'does not|must not|cannot|not allow|do not|invalid|only.*lens|nie może|nie daje|nie omija|nie pozwala|Ten opt-out nie pomija'; then
+    echo "Unsafe default idea validation opt-out wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

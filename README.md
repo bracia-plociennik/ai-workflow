@@ -110,6 +110,7 @@ cd ai-workflow
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
+.systems/scripts/check-default-idea-validation-opt-out
 ```
 
 ## First-Time Use
@@ -218,6 +219,7 @@ git diff --check
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
+.systems/scripts/check-default-idea-validation-opt-out
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:
