@@ -6,7 +6,7 @@ This file defines how agents should interpret user-facing workflow commands.
 
 It covers natural-language prompts, not shell verification commands. Shell commands for install, lint, test, build, and validation live in `.systems/ai/core/commands.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`.
 
-Use this file when a user gives a short command, phase alias, side-task request, autopilot request, parallel work question, rollback request, recovery request, guide request, or unsafe bypass request.
+Use this file when a user gives a short command, phase alias, owner request batch, side-task request, autopilot request, parallel work question, rollback request, recovery request, guide request, or unsafe bypass request.
 
 Use `.systems/ai/core/task-intake.md` first when a user gives a new task, planning request, approach request, uncertainty request, side-task/micro-task request, change request, or autopilot request that introduces new scope.
 
@@ -33,7 +33,8 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Parallel work questions must be routed through `.systems/ai/core/parallel-work-policy.md`, repo status, project statuses, task dependencies, and write-set checks before recommending concurrent execution.
 - Prompt composition, role, and variable questions must be routed through `.systems/ai/core/prompt-composition.md`; any project-local prompting artifacts are read after canonical policy and the current phase file.
 - System insight, anonymized lesson, skill-candidate lesson, client-work lesson, frontend/backend/SEO/ads/smart-contract lesson, and cross-project best-practice capture requests must be routed through `.systems/ai/core/system-insights.md`.
-- New task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
+- Requests with `2+ owner items`, checklists, brain dumps, `lista rzeczy`, or mixed improvements must pass through `.systems/ai/core/request-batch-triage.md` before ordinary Task Idea Validation, plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
+- New single task, planning, approach, and implementation requests that introduce new scope must pass through Task Idea Validation before plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
 - If a command is clear but gates are not satisfied, route to the required predecessor phase or stop with the blocking gate.
@@ -120,6 +121,42 @@ Routing notes:
 - If it belongs to an active project, resolve status, task index, plan, specs, current blockers, risk, and write gates before routing.
 - If it is small, local, and low-risk, it may route to side-task, micro-task, or micro-project.
 - If it touches auth, billing, permissions, migrations, security, secrets, production data, infrastructure, destructive operations, or real external side effects, stop for the required approval/routing.
+
+### Owner Request Batch Triage
+
+Route to `.systems/ai/core/request-batch-triage.md`.
+
+Polish variants:
+
+- `Mam listę rzeczy do zrobienia: <lista>.`
+- `Oto kilka pomysłów na usprawnienia.`
+- `Pogrupuj te zadania.`
+- `Sklasyfikuj tę listę.`
+- `Rozdziel to między projekty, micro-projecty, taski i change requesty.`
+- `Mam 5 zadań, zdecyduj, które są projektem, mikroprojektem, taskiem albo change requestem.`
+- `Zrób batch triage tej listy.`
+
+English variants:
+
+- `I have a list of things to do: <list>.`
+- `Here are several improvement ideas.`
+- `Group these requests.`
+- `Classify this list.`
+- `Split this into projects, micro-projects, tasks, and change requests.`
+- `I have 5 items; decide which are projects, micro-projects, tasks, or change requests.`
+- `Run batch triage for this list.`
+
+Routing notes:
+
+- Default to request batch triage for `2+ owner items`, checklists, brain dumps, mixed improvements, and explicit batch triage requests.
+- Single-item flow remains normal Task Idea Validation.
+- Output the triage matrix fields from `.systems/ai/core/request-batch-triage.md`: `item`, `group`, `theme`, `risk`, `routing`, `target project/workspace`, `dependencies`, `owner decision`, and `reason`.
+- Group only items with a shared goal, similar write-set/risk, the same workflow target, and no dependency conflict.
+- Split mixed active-project and repo-level items into separate routes.
+- Split new feature ideas from workflow-maintenance improvements.
+- Route pre-final and post-final owner comments as `change-request-candidate`.
+- Route high-risk or critical-risk items to `owner-decision-required` or `full-workflow-required`.
+- Batch triage does not grant write permission and does not automatically implement, commit, open pull requests, create projects, create tasks, create micro-tasks, create micro-projects, or create change requests.
 
 ### Phase 0 Init
 

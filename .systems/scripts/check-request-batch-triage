@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing request batch triage artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for request batch triage check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing request batch triage reference in $file: $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/request-batch-triage.md"
+  ".systems/scripts/check-request-batch-triage"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+contract=".systems/ai/core/request-batch-triage.md"
+
+for term in \
+  'request-batch-triage' \
+  '2\+ owner items' \
+  'checklist' \
+  'brain dump' \
+  'lista rzeczy' \
+  'mixed improvements' \
+  'triage matrix' \
+  'Grouping Rules' \
+  'Split Rules' \
+  'owner-decision-required' \
+  'change-request-candidate' \
+  'repo-level-micro-project' \
+  'project-local-micro-task' \
+  'new-project' \
+  'full-workflow-required' \
+  'does not grant write permission' \
+  'does not implement work'
+do
+  require_ref "$contract" "$term" "$term"
+done
+
+for field in \
+  'item' \
+  'group' \
+  'theme' \
+  'risk' \
+  'routing' \
+  'target project/workspace' \
+  'dependencies' \
+  'owner decision' \
+  'reason'
+do
+  require_ref "$contract" "\\|[^\\n]*$field[^\\n]*\\|" "triage matrix field: $field"
+done
+
+if ! awk '
+  /^\| item \| group \| theme \| risk \| routing \| target project\/workspace \| dependencies \| owner decision \| reason \|$/ {
+    in_table=1
+  }
+  in_table && /^\|/ {
+    columns=split($0, parts, /\|/) - 2
+    if (columns != 9) {
+      printf("Invalid triage matrix column count at line %d: expected 9, got %d\n", NR, columns)
+      bad=1
+    }
+    next
+  }
+  in_table && !/^\|/ {
+    in_table=0
+  }
+  END {
+    exit bad
+  }
+' "$contract"; then
+  echo "Invalid request batch triage matrix shape"
+  fail=1
+fi
+
+for mixed_term in \
+  'active project and another repo-level item' \
+  'workflow-improvements' \
+  'standalone-new-feature' \
+  'standalone-change-request' \
+  'post-final correction' \
+  'new feature idea'
+do
+  require_ref "$contract" "$mixed_term" "mixed-list routing: $mixed_term"
+done
+
+require_ref "$contract" 'High-risk and critical-risk items must route to `owner-decision-required` or `full-workflow-required`' "high-risk routing boundary"
+
+require_ref "AGENTS.md" 'request-batch-triage\.md' "AGENTS routing"
+require_ref "HUMANS.md" 'Owner Request Batch Triage' "human guidance"
+require_ref "README.md" 'request-batch-triage\.md' "README guidance"
+require_ref ".systems/ai/core/task-intake.md" 'request-batch-triage\.md' "task intake integration"
+require_ref ".systems/ai/core/command-routing.md" 'Owner Request Batch Triage' "command routing section"
+require_ref ".systems/ai/core/command-routing.md" 'findings|batch triage|2\+ owner items' "command routing trigger"
+require_ref ".systems/ai/core/workflow.md" 'request-batch-triage\.md' "workflow shortcut"
+require_ref ".systems/ai/core/contract-compliance.md" 'request-batch-triage' "contract compliance integration"
+require_ref ".systems/ai/core/commands.md" 'check-request-batch-triage' "commands validator list"
+require_ref "AGENTS.md" 'check-request-batch-triage' "AGENTS validator list"
+require_ref "README.md" 'check-request-batch-triage' "README validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-request-batch-triage' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-request-batch-triage' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'request-batch-triage' "smoke coverage"
+
+unsafe_patterns=(
+  'batch triage may implement all items automatically'
+  '(request[ -]?batch[ -]?triage|batch[ -]?triage)[^.\n]{0,120}\b(may|can|should|will|automatically|is allowed to|allows?)\b[^.\n]{0,120}\b(implement|commit|open pull requests|create projects|create tasks|create micro-tasks|create micro-projects|create change requests|write files)\b'
+  '\b(implement|commit|open pull requests|create projects|create tasks|create micro-tasks|create micro-projects|create change requests|write files)\b[^.\n]{0,120}\b(may|can|should|will|automatically|is allowed to|allows?)\b[^.\n]{0,120}(request[ -]?batch[ -]?triage|batch[ -]?triage)'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'does not|do not|must not|cannot|not grant|not automatically|without.*approval|unless.*approv|nie daje|nie tworzy|nie uruchamia|nie może'; then
+    echo "Unsafe request batch triage wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

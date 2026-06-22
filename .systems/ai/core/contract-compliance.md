@@ -31,6 +31,8 @@ Before implementation, commit, or handoff, classify the work mode:
 
 `global-quality-review-stance` from `.systems/ai/core/quality-review.md` can be used inside any work mode as read-only/advisory quality review. It does not create a formal quality artifact and does not replace work mode compliance, evidence, risk, write permissions, or formal phase gates.
 
+`request-batch-triage` from `.systems/ai/core/request-batch-triage.md` can precede any work mode when the owner provides multiple items. It classifies and recommends routes only. It is not itself commit-ready evidence for implementation and does not create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests without the separately approved routed work mode.
+
 The selected mode must match risk, scope, approvals, write set, and artifacts. If the mode does not fit, route to the safer workflow path before continuing.
 
 ## Compliance Questions

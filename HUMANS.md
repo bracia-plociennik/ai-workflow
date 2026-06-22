@@ -116,6 +116,34 @@ Zrób review diffu w global-quality-review-stance. Findings first, wskaż blocke
 Uruchom phase-5-quality dla <task-id>. Zapisz quality artifact, evidence i jednoznaczne PASS albo FAIL.
 ```
 
+## Owner Request Batch Triage
+
+Jeśli podajesz Codexowi listę kilku rzeczy do zrobienia, AI Workflow powinien najpierw wykonać `request-batch-triage` z `.systems/ai/core/request-batch-triage.md`. To jest klasyfikacja przed pracą: rozbija listę na itemy, grupuje podobne, ocenia ryzyko, zależności, scope i routing.
+
+Batch triage przydaje się dla promptów typu:
+
+```text
+Mam listę rzeczy do zrobienia. Pogrupuj je i zdecyduj, co jest projektem, mikroprojektem, taskiem, micro-taskiem, change requestem albo STOP.
+```
+
+```text
+Oto kilka pomysłów na usprawnienia. Zrób request batch triage, rozdziel aktywny projekt od repo-level zmian i wskaż decyzje ownera.
+```
+
+Wynik powinien zawierać triage matrix z polami: `item`, `group`, `theme`, `risk`, `routing`, `target project/workspace`, `dependencies`, `owner decision`, `reason`.
+
+Różnice routingowe:
+
+- `project` - duży lub nowy kierunek produktowy, zwykle przez project workspace i formalną idea validation.
+- `repo-level micro-project` - mały, self-contained low-risk rozwój workflow lub repo poza pełnym projektem.
+- `project-local micro-task` - mała low-risk praca w obrębie istniejącego projektu, poza pełnym phase flow.
+- `side-task` - jednorazowa mała lokalna praca bez potrzeby trwałego projektu.
+- `task` - praca w aktywnym projekcie, zgodna z planem/specem/task index.
+- `change request` - korekta lub zmiana scope przed albo po `final-owner-yes`.
+- `STOP` - brak decyzji, za duże ryzyko, brak acceptance criteria, konflikt źródeł prawdy albo nieznane safe environment.
+
+Batch triage nie daje zgody na implementację i nie tworzy automatycznie projektów, tasków, micro-tasków, micro-projectów, change requestów, commitów ani pull requestów. Po triage owner wybiera route, a dopiero potem system uruchamia właściwy workflow.
+
 ## Role, Zmienne I Prompt Composition
 
 AI Workflow może używać ról, zmiennych i prompt modules jako pomocniczego framingu pracy. To pomaga ustawić specjalistyczny kontekst, na przykład `web-application-specialist`, `architecture-critic`, `idea-validator` albo baseline dla utrzymania samego AI Workflow.

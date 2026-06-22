@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.17 - 2026-06-22
+
+- Added `.systems/ai/core/request-batch-triage.md` for owner-provided lists, checklists, brain dumps, mixed improvements, and `2+ owner items`.
+- Required a triage matrix with item, group, theme, risk, routing, target project/workspace, dependencies, owner decision, and reason before ordinary task intake for multi-item requests.
+- Clarified grouping, split, high-risk, mixed active-project/repo-level, and change-request-candidate rules.
+- Added `.systems/scripts/check-request-batch-triage` with smoke coverage for missing contract, missing matrix fields, mixed-list splitting, unsafe automatic implementation wording, and high-risk routing.
+
 ## 0.8.16 - 2026-06-19
 
 - Added `.systems/ai/core/quality-review.md` for read-only/advisory global quality review stance.

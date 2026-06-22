@@ -2,11 +2,11 @@
 
 ## Purpose
 
-Task Idea Validation is the mandatory pre-routing lens for any new task, new idea, planning request, approach request, uncertainty request, side task, micro-task, change request, or autopilot request.
+Task Idea Validation is the mandatory pre-routing lens for any single new task, new idea, planning request, approach request, uncertainty request, side task, micro-task, change request, or autopilot request.
 
 It is not a workflow phase and it does not grant write permission. It decides whether the user's raw request is clear, safe, complete, and routed to the correct workflow path before planning, specification, implementation, or automation begins.
 
-Formal project-level brain dumps still use `.systems/ai/workflow/phase-0-idea-validation.md`. Task Idea Validation applies to smaller or already scoped work where creating a full project idea-validation artifact would be too heavy.
+Formal project-level brain dumps still use `.systems/ai/workflow/phase-0-idea-validation.md`. Multi-item owner lists first use `.systems/ai/core/request-batch-triage.md`. Task Idea Validation applies to smaller or already scoped work where creating a full project idea-validation artifact would be too heavy.
 
 ## When To Use
 
@@ -22,6 +22,8 @@ Use this lens before acting on user requests such as:
 - `side-task`, `micro-task`, or `micro-project`;
 - `autopilot` or `autonomous-execution` for a new task set;
 - a change request before or after `final-owner-yes`.
+
+If the user provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, run request batch triage first through `.systems/ai/core/request-batch-triage.md`. After the batch is split and routed, apply Task Idea Validation to the selected single route or routed item when needed.
 
 If the user asks only for factual status, command output, or a narrow clarification that does not introduce new work, use guide or normal command routing instead.
 
@@ -59,6 +61,16 @@ Choose the safest workflow path:
 - STOP for missing approvals, unresolved high/critical risk, unsafe commands, or unknown safe environment.
 
 ## Modes
+
+### Owner Request Batch
+
+If the request contains `2+ owner items`, a checklist, a `lista rzeczy`, a mixed improvement list, or an explicit batch triage request, route to `.systems/ai/core/request-batch-triage.md` before ordinary Task Idea Validation.
+
+The batch result must classify each item by group, theme, risk, routing, target project/workspace, dependencies, owner decision, and reason. It must split active-project work from repo-level work, split new project ideas from small workflow improvements, and route pre-final or post-final owner comments as change request candidates.
+
+Batch triage is advisory and classificatory only. It does not grant write permission, does not start implementation, and does not automatically create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests.
+
+After the owner chooses a route, continue with the normal single-item or single-group Task Idea Validation, workflow phase, change request, micro-task, micro-project, or project setup path.
 
 ### Project Idea
 

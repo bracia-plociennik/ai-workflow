@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, and `quality-review.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, and `quality-review.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -57,7 +57,9 @@ For updating a target repository's nested `ai-workflow/` clone from upstream, al
 
 ## Command Routing
 
-Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, side tasks, autopilot, decision review, rollback, recovery, parallel work questions, prompt composition, role and variable questions, guide requests, and unsafe bypass requests.
+Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, owner request batches, side tasks, autopilot, decision review, rollback, recovery, parallel work questions, prompt composition, role and variable questions, guide requests, and unsafe bypass requests.
+
+If the owner provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, route through `.systems/ai/core/request-batch-triage.md` before ordinary task intake, planning, specification, implementation, task creation, change request creation, or autopilot. Batch triage groups, splits, classifies risk, and recommends routes only. It does not grant write permission and does not automatically create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests.
 
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
@@ -320,6 +322,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-request-batch-triage
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

@@ -25,6 +25,7 @@ This upstream repository itself uses official repo mode: there is no inner `ai-w
 - `.systems/ai/core/workflow.md` - workflow router and phase index.
 - `.systems/ai/core/installation.md` - nested-clone installation and collision policy.
 - `.systems/ai/core/command-routing.md` - user-facing command aliases and safe interpretation rules.
+- `.systems/ai/core/request-batch-triage.md` - owner list/checklist triage before routing mixed work.
 - `.systems/ai/core/task-intake.md` - required lightweight validation lens before planning or executing new tasks.
 - `.systems/ai/core/response-contract.md` - required user-facing response footer with next-step recommendation, alternative, impacts, and copy-paste prompts.
 - `.systems/ai/core/change-requests.md` - owner change request policy before and after final owner approval.
@@ -105,6 +106,7 @@ cd ai-workflow
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-request-batch-triage
 ```
 
 ## First-Time Use
@@ -209,6 +211,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-request-batch-triage
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

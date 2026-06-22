@@ -241,6 +241,14 @@ mv "$tmp/.systems/scripts/check-global-quality-review-stance" "$tmp/.systems/scr
 run_must_fail "missing-global-quality-review-validator" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/check-global-quality-review-stance.bak" "$tmp/.systems/scripts/check-global-quality-review-stance"
 
+mv "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+run_must_fail "missing-request-batch-triage-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+mv "$tmp/.systems/scripts/check-request-batch-triage" "$tmp/.systems/scripts/check-request-batch-triage.bak"
+run_must_fail "missing-request-batch-triage-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-request-batch-triage.bak" "$tmp/.systems/scripts/check-request-batch-triage"
+
 cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
 perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
 run_must_fail "contract-compliance-requires-side-task-mode" .systems/scripts/check-contract-compliance
@@ -1408,6 +1416,38 @@ cp "$tmp/.systems/ai/workflow/phase-5-quality.md" "$tmp/.systems/ai/workflow/pha
 perl -0pi -e 's/PASS/OK/g; s/FAIL/BLOCKED/g' "$tmp/.systems/ai/workflow/phase-5-quality.md"
 run_must_fail "global-quality-review-preserves-formal-phase5-pass-fail" .systems/scripts/check-global-quality-review-stance
 mv "$tmp/.systems/ai/workflow/phase-5-quality.md.bak" "$tmp/.systems/ai/workflow/phase-5-quality.md"
+
+run_must_pass "request-batch-triage-valid" .systems/scripts/check-request-batch-triage
+
+cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+perl -0pi -e 's/ \| routing \|/ | /g; s/ routing, / /g; s/`routing`, //' "$tmp/.systems/ai/core/request-batch-triage.md"
+run_must_fail "request-batch-triage-requires-routing-field" .systems/scripts/check-request-batch-triage
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+perl -0pi -e 's/ \| risk \|/ | /g; s/ risk, / /g; s/`risk`, //' "$tmp/.systems/ai/core/request-batch-triage.md"
+run_must_fail "request-batch-triage-requires-risk-field" .systems/scripts/check-request-batch-triage
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+perl -0pi -e 's/\| new feature idea \| standalone-new-feature \| product feature \| unknown \| new-project \| unresolved \| none \| idea validation decision \| Needs project workspace and formal idea validation\. \|/\| new feature idea \| standalone-new-feature \| product feature \| unknown \| new-project \| unresolved \| idea validation decision \| Needs project workspace and formal idea validation. \|/' "$tmp/.systems/ai/core/request-batch-triage.md"
+run_must_fail "request-batch-triage-requires-nine-column-matrix" .systems/scripts/check-request-batch-triage
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+perl -0pi -e 's/active project and another repo-level item/active project plus repo item/g; s/workflow-improvements/workflow_updates/g; s/standalone-new-feature/standalone_feature/g; s/standalone-change-request/standalone_change/g' "$tmp/.systems/ai/core/request-batch-triage.md"
+run_must_fail "request-batch-triage-requires-mixed-list-split" .systems/scripts/check-request-batch-triage
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+printf '\nbatch triage may implement all items automatically\n' >> "$tmp/.systems/ai/core/request-batch-triage.md"
+run_must_fail "request-batch-triage-blocks-automatic-implementation-wording" .systems/scripts/check-request-batch-triage
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
+
+cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
+perl -0pi -e 's/High-risk and critical-risk items must route to `owner-decision-required` or `full-workflow-required`\./High-risk items can be reviewed later./' "$tmp/.systems/ai/core/request-batch-triage.md"
+run_must_fail "request-batch-triage-requires-high-risk-owner-decision" .systems/scripts/check-request-batch-triage
+mv "$tmp/.systems/ai/core/request-batch-triage.md.bak" "$tmp/.systems/ai/core/request-batch-triage.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

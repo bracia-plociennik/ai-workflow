@@ -19,6 +19,7 @@ fi
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-request-batch-triage
 
 fail=0
 phases=(

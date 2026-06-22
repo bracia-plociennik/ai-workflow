@@ -36,6 +36,7 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - System Insights router: `AI_WORKFLOW_WORKSPACE_HOME/system-insights/system-insights.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/system-insights/insights/`
 - Dreaming Mode contract: `.systems/ai/core/dreaming-mode.md`
 - Dream Reports: `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`
+- Owner request batch triage contract: `.systems/ai/core/request-batch-triage.md`
 - Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
@@ -59,6 +60,8 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 ## Shortcut Prompts
 
 Use `.systems/ai/core/command-routing.md` for the full Polish and English catalog of user-facing commands, aliases, short prompts, side-task prompts, autopilot prompts, rollback prompts, recovery prompts, and unsafe bypass requests.
+
+Use `.systems/ai/core/request-batch-triage.md` before ordinary task intake when the owner provides `2+ owner items`, a checklist, brain dump, `lista rzeczy`, or mixed improvements. Batch triage groups, splits, classifies risk, and recommends routing only; it does not grant write permission or automatically create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests.
 
 Use `.systems/ai/core/task-intake.md` as the mandatory pre-routing lens for new task, planning, approach, side-task, micro-task, change request, and autopilot requests. It is not a phase and does not grant write permission. Broad project ideas still route to `phase-0-idea-validation`.
 

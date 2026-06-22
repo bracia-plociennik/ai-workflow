@@ -41,6 +41,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-request-batch-triage
 ```
 
 `check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
@@ -50,6 +51,8 @@ git diff --check
 `check-dreaming-mode` validates the advisory-only Dreaming Mode contract, report templates, workspace bootstrap namespace, privacy boundaries, and the split between `workflow-artifacts-only` and `full-repo` reports.
 
 `check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
+
+`check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 
