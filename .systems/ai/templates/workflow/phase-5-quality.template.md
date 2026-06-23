@@ -15,6 +15,25 @@
 | --- | --- | --- |
 | | `<PASS|FAIL>` | |
 
+## Intent / Plan / Spec Compliance
+
+- Result: `<PASS|FAIL>`
+- Owner instruction reviewed: `<yes|no|missing>`
+- Accepted plan reviewed: `<yes|no|missing|not-applicable>`
+- Accepted spec reviewed: `<yes|no|missing|not-applicable>`
+- Scope/out-of-scope reviewed: `<yes|no|missing|not-applicable>`
+- Acceptance criteria reviewed: `<yes|no|missing>`
+- Compliance status: `<aligned|partial|mismatch|unknown>`
+- Wrong problem solved: `<yes|no>`
+- Owner instruction mismatch: `<yes|no>`
+- Accepted plan mismatch: `<yes|no|not-applicable>`
+- Accepted spec mismatch: `<yes|no|not-applicable>`
+- Acceptance criteria gap: `<yes|no>`
+- Scope creep: `<yes|no>`
+- Underbuild: `<yes|no>`
+- Overbuild: `<yes|no>`
+- Evidence:
+
 ## Commands
 
 | Command | Result | Notes |
@@ -57,6 +76,7 @@
 
 ## Quality Gate
 
+- Intent / Plan / Spec Compliance PASS: `<yes|no>`
 - 100% DoD satisfied: `<yes|no>`
 - No known bug in scope: `<yes|no>`
 - No regression in changed/direct paths: `<yes|no>`

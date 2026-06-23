@@ -41,6 +41,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -56,6 +57,8 @@ git diff --check
 `check-dreaming-mode` validates the advisory-only Dreaming Mode contract, report templates, workspace bootstrap namespace, privacy boundaries, and the split between `workflow-artifacts-only` and `full-repo` reports.
 
 `check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
+
+`check-intent-plan-spec-compliance-review` validates the shared review/quality lens that compares implementation against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria, and blocks technical-only PASS/review wording.
 
 `check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
 

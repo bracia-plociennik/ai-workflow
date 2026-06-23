@@ -662,13 +662,14 @@ English variants:
 Routing notes:
 
 - Review, code review, final review, find findings, find blockers, and generic quality-check prompts use `global-quality-review-stance` unless the current project state clearly satisfies formal `phase-5-quality` routing.
-- `global-quality-review-stance` is read-only/advisory by default, findings-first, and reports severity, blockers, evidence reviewed, skipped/unreadable areas, residual risk, and formal gate eligibility.
+- `global-quality-review-stance` is read-only/advisory by default, findings-first, and reports severity, blockers, Intent / Plan / Spec Compliance, evidence reviewed, skipped/unreadable areas, residual risk, and formal gate eligibility.
+- Review and quality commands compare implementation against owner instruction, accepted plan, accepted spec, approved scope, and acceptance criteria when those sources exist. Technical checks are not enough if the work solves the wrong problem, misses accepted scope, or adds unapproved scope creep.
 - Advisory review cannot mark formal `PASS` or `FAIL`, create quality artifacts, update status, or bypass QA/Quality gates.
 - `final review` does not trigger `phase-8-final-check`.
 - `review i popraw` runs review first; fixes require a separate allowed write path, risk gates, and owner approval when required.
 - `Uruchom phase-5-quality dla <task-id>` or an implementation state ready for `phase-5-quality` uses the formal phase and may produce `PASS` or `FAIL` only with required evidence and allowed artifact writes.
 - `PASS bez evidence` and `PASS without evidence` are invalid.
-- Failed or skipped checks that affect acceptance criteria mean `FAIL`.
+- Failed or skipped checks that affect acceptance criteria or Intent / Plan / Spec Compliance mean `FAIL`.
 - Every substantive work item should end with Default Quality Closure: formal QA/Quality when the phase path defines it, otherwise advisory `global-quality-review-stance`.
 - Owner opt-out grammar includes `bez QA`, `bez review`, `bez quality`, `without QA`, `without review`, and `fast path no review`.
 - Opt-out must report `Quality skipped by owner opt-out` and residual risk; it does not allow continuing as `PASS` or bypassing required QA/Quality gates.

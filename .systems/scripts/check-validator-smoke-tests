@@ -1445,6 +1445,33 @@ perl -0pi -e 's/PASS/OK/g; s/FAIL/BLOCKED/g' "$tmp/.systems/ai/workflow/phase-5-
 run_must_fail "global-quality-review-preserves-formal-phase5-pass-fail" .systems/scripts/check-global-quality-review-stance
 mv "$tmp/.systems/ai/workflow/phase-5-quality.md.bak" "$tmp/.systems/ai/workflow/phase-5-quality.md"
 
+run_must_pass "intent-plan-spec-compliance-valid" .systems/scripts/check-intent-plan-spec-compliance-review
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/Intent \/ Plan \/ Spec Compliance/Conceptual Compliance/g' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "intent-plan-spec-compliance-requires-global-review-lens" .systems/scripts/check-intent-plan-spec-compliance-review
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/workflow/phase-5-quality.md" "$tmp/.systems/ai/workflow/phase-5-quality.md.bak"
+perl -0pi -e 's/Intent \/ Plan \/ Spec Compliance/Conceptual Compliance/g' "$tmp/.systems/ai/workflow/phase-5-quality.md"
+run_must_fail "intent-plan-spec-compliance-requires-phase5-lens" .systems/scripts/check-intent-plan-spec-compliance-review
+mv "$tmp/.systems/ai/workflow/phase-5-quality.md.bak" "$tmp/.systems/ai/workflow/phase-5-quality.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/- Compliance status: `<aligned\|partial\|mismatch\|unknown>`\n//' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "intent-plan-spec-compliance-requires-template-status" .systems/scripts/check-intent-plan-spec-compliance-review
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
+cp "$tmp/.systems/ai/workflow/phase-5-quality.md" "$tmp/.systems/ai/workflow/phase-5-quality.md.bak"
+printf '\nQA may pass without checking acceptance criteria\n' >> "$tmp/.systems/ai/workflow/phase-5-quality.md"
+run_must_fail "intent-plan-spec-compliance-blocks-qa-pass-without-ac" .systems/scripts/check-intent-plan-spec-compliance-review
+mv "$tmp/.systems/ai/workflow/phase-5-quality.md.bak" "$tmp/.systems/ai/workflow/phase-5-quality.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nscope creep is acceptable if tests pass\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "intent-plan-spec-compliance-blocks-scope-creep-tests-pass" .systems/scripts/check-intent-plan-spec-compliance-review
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
 run_must_pass "request-batch-triage-valid" .systems/scripts/check-request-batch-triage
 
 cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"

@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing intent/plan/spec compliance artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for intent/plan/spec compliance check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing intent/plan/spec compliance reference in $file: $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/quality-review.md"
+  ".systems/ai/workflow/phase-5-quality.md"
+  ".systems/ai/templates/workflow/phase-5-quality.template.md"
+  ".systems/scripts/check-intent-plan-spec-compliance-review"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+quality_contract=".systems/ai/core/quality-review.md"
+quality_phase=".systems/ai/workflow/phase-5-quality.md"
+quality_template=".systems/ai/templates/workflow/phase-5-quality.template.md"
+
+for term in \
+  'Intent / Plan / Spec Compliance' \
+  'owner instruction' \
+  'accepted plan' \
+  'accepted spec' \
+  'scope' \
+  'acceptance criteria' \
+  'scope creep' \
+  'wrong problem' \
+  'underbuild' \
+  'overbuild' \
+  'aligned' \
+  'partial' \
+  'mismatch' \
+  'unknown'
+do
+  require_ref "$quality_contract" "$term" "global review lens: $term"
+done
+
+for term in \
+  'Intent / Plan / Spec Compliance' \
+  'owner instruction' \
+  'accepted plan' \
+  'accepted spec' \
+  'approved scope' \
+  'acceptance criteria' \
+  'scope creep' \
+  'wrong problem' \
+  'PASS' \
+  'FAIL'
+do
+  require_ref "$quality_phase" "$term" "formal quality lens: $term"
+done
+
+for term in \
+  '## Intent / Plan / Spec Compliance' \
+  'Owner instruction reviewed' \
+  'Accepted plan reviewed' \
+  'Accepted spec reviewed' \
+  'Scope/out-of-scope reviewed' \
+  'Acceptance criteria reviewed' \
+  'Compliance status' \
+  '<aligned|partial|mismatch|unknown>' \
+  'Intent / Plan / Spec Compliance PASS'
+do
+  require_ref "$quality_template" "$term" "quality template field: $term"
+done
+
+require_ref ".systems/ai/core/command-routing.md" 'Intent / Plan / Spec Compliance' "command routing quality lens"
+require_ref ".systems/ai/core/workflow.md" 'Intent / Plan / Spec Compliance' "workflow quality lens"
+require_ref "AGENTS.md" 'Intent / Plan / Spec Compliance' "AGENTS quality lens"
+require_ref "HUMANS.md" 'Intent / Plan / Spec Compliance' "human guidance quality lens"
+require_ref "README.md" 'Intent / Plan / Spec Compliance' "README quality lens"
+require_ref ".systems/ai/core/commands.md" 'check-intent-plan-spec-compliance-review' "commands validator list"
+require_ref "AGENTS.md" 'check-intent-plan-spec-compliance-review' "AGENTS validator list"
+require_ref "README.md" 'check-intent-plan-spec-compliance-review' "README validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-intent-plan-spec-compliance-review' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-intent-plan-spec-compliance-review' "required artifacts list"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'intent-plan-spec-compliance' "smoke coverage"
+
+unsafe_patterns=(
+  'technical checks are enough'
+  'technical tests are enough'
+  'tests are enough without (intent|scope|acceptance criteria)'
+  'QA may pass without checking acceptance criteria'
+  'quality may pass without checking acceptance criteria'
+  'review does not need owner instruction'
+  'missing spec can be ignored'
+  'scope creep is acceptable if tests pass'
+  'PASS without Intent / Plan / Spec Compliance'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'not enough|not sufficient|cannot|must not|do not|does not|nie wystarcz|nie wolno|nie może|blocked|invalid|unsafe|blok'; then
+    echo "Unsafe intent/plan/spec compliance wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

@@ -55,6 +55,7 @@ When the owner opts out, the response must state `Quality skipped by owner opt-o
 
 Apply the same quality lenses as `phase-5-quality` where relevant:
 
+- Intent / Plan / Spec Compliance;
 - Definition of Done fit;
 - edge cases;
 - regression risk;
@@ -64,10 +65,46 @@ Apply the same quality lenses as `phase-5-quality` where relevant:
 - skipped checks and their impact;
 - prompt-injection or instruction-conflict risk.
 
+### Intent / Plan / Spec Compliance
+
+Every global quality review must explicitly compare the reviewed work against the owner instruction and the accepted scope sources that are available.
+
+Review sources, when present:
+
+- owner instruction;
+- accepted plan;
+- accepted spec;
+- task card or task/package plan;
+- scope and out-of-scope notes;
+- acceptance criteria;
+- changed implementation, diff, evidence, or delivered artifact.
+
+Report the result as:
+
+- `aligned`: implementation matches the owner instruction, accepted plan, accepted spec, scope, and acceptance criteria.
+- `partial`: implementation satisfies part of the accepted intent or acceptance criteria, but a gap remains.
+- `mismatch`: implementation solves the wrong problem, contradicts the accepted plan/spec, misses required scope, or introduces unapproved scope creep.
+- `unknown`: required comparison sources are missing, stale, unreadable, or conflicting.
+
+Findings must call out:
+
+- wrong problem solved;
+- owner instruction mismatch;
+- accepted plan mismatch;
+- accepted spec mismatch;
+- acceptance criteria gap;
+- scope creep;
+- underbuild;
+- overbuild.
+
+If a required source is unavailable, list it under skipped/unreadable areas and include the impact in residual risk. Do not invent missing acceptance criteria or silently downgrade a material intent/scope gap to a technical warning.
+
 The default output is findings-first:
 
 - findings ordered by severity;
 - blockers called out separately;
+- intent/plan/spec compliance: `<aligned|partial|mismatch|unknown>`;
+- compared against: `<owner instruction|accepted plan|accepted spec|scope|acceptance criteria|none>`;
 - evidence reviewed;
 - skipped/unreadable areas;
 - residual risk;
