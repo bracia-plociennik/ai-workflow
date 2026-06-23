@@ -265,6 +265,18 @@ mv "$tmp/.systems/scripts/check-default-idea-validation-opt-out" "$tmp/.systems/
 run_must_fail "missing-default-idea-validation-opt-out-validator" .systems/scripts/check-required-artifacts
 mv "$tmp/.systems/scripts/check-default-idea-validation-opt-out.bak" "$tmp/.systems/scripts/check-default-idea-validation-opt-out"
 
+mv "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+run_must_fail "missing-end-of-task-capture-contract" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+mv "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.bak"
+run_must_fail "missing-end-of-task-capture-template" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.bak" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+
+mv "$tmp/.systems/scripts/check-end-of-task-capture" "$tmp/.systems/scripts/check-end-of-task-capture.bak"
+run_must_fail "missing-end-of-task-capture-validator" .systems/scripts/check-required-artifacts
+mv "$tmp/.systems/scripts/check-end-of-task-capture.bak" "$tmp/.systems/scripts/check-end-of-task-capture"
+
 cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
 perl -0pi -e 's/side-task/side_task/g' "$tmp/.systems/ai/core/contract-compliance.md"
 run_must_fail "contract-compliance-requires-side-task-mode" .systems/scripts/check-contract-compliance
@@ -1552,6 +1564,63 @@ cp "$tmp/.systems/ai/core/task-intake.md" "$tmp/.systems/ai/core/task-intake.md.
 printf '\nwithout idea validation may bypass risk checks\n' >> "$tmp/.systems/ai/core/task-intake.md"
 run_must_fail "default-idea-validation-blocks-risk-bypass-wording" .systems/scripts/check-default-idea-validation-opt-out
 mv "$tmp/.systems/ai/core/task-intake.md.bak" "$tmp/.systems/ai/core/task-intake.md"
+
+run_must_pass "end-of-task-capture-valid" .systems/scripts/check-end-of-task-capture
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+perl -0pi -e 's/Trigger Grammar/Trigger List/g' "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-requires-trigger-grammar" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+perl -0pi -e 's/Precedence Rules/Routing Order/g' "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-requires-precedence" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.bak"
+perl -0pi -e 's/- Privacy\/scope check:\n//' "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+run_must_fail "end-of-task-capture-requires-privacy-field" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.bak" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+perl -0pi -e 's/`Zrób distillation` and `Run phase 6` route to `phase-6-distillation`\./`Zrób distillation` routes to End-of-Task Capture./' "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-preserves-distillation-route" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+perl -0pi -e 's/`Zrób checkpoint` and `Run checkpoint` route to `phase-7-checkpoint`\./`Zrób checkpoint` routes to End-of-Task Capture./' "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-preserves-checkpoint-route" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nfinal review runs phase-8-final-check\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-final-review-final-check" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nend task may mark PASS automatically\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-auto-pass" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nend task runs phase-8-final-check\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-auto-final-check" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nend task may close project without final-owner-yes\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-project-close" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nSystem Insights may include client names\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-client-names" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nExternal Memory stores frontend lessons\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-external-memory-domain-lessons" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

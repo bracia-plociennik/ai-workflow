@@ -673,6 +673,37 @@ Routing notes:
 - Owner opt-out grammar includes `bez QA`, `bez review`, `bez quality`, `without QA`, `without review`, and `fast path no review`.
 - Opt-out must report `Quality skipped by owner opt-out` and residual risk; it does not allow continuing as `PASS` or bypassing required QA/Quality gates.
 
+### End-of-Task Capture
+
+Route through `.systems/ai/core/end-of-task-capture.md` only when the owner includes completion/capture intent.
+
+Polish variants:
+
+- `To koniec zadania.`
+- `Koniec taska.`
+- `Kończymy ten task.`
+- `Zamykamy ten task.`
+- `Dziękuję, utrwal wiedzę.`
+- `Utrwal wiedzę z tej rozmowy.`
+- `Zrób końcowe utrwalenie wiedzy.`
+
+English variants:
+
+- `End task and capture knowledge.`
+- `Done, capture learnings.`
+- `Finish this task and preserve learnings.`
+
+Routing notes:
+
+- Precedence order is: `final-owner-yes` and change requests; explicit formal phase commands; `final review`/code review/findings/blockers; commit readiness and contract compliance; End-of-Task Capture.
+- `Zrób distillation` and `Run phase 6` still route to `phase-6-distillation`.
+- `Zrób checkpoint` and `Run checkpoint` still route to `phase-7-checkpoint`.
+- `Zrób final check` still routes to `phase-8-final-check`.
+- `Zrób final review` still routes to `global-quality-review-stance`, not final check.
+- If a command includes both completion wording and explicit phase wording, route by the explicit phase first and include the End-of-Task Capture decision as supporting output only.
+- Default output is capture review/proposal. Durable writes require explicit owner capture intent plus clear target, scope, privacy, evidence, and write permission.
+- End-of-Task Capture cannot mark `PASS`, run `phase-8-final-check`, close a project without `final-owner-yes`, update status from chat-only claims, store raw client data in System Insights, or store product/domain lessons in External Memory.
+
 ### Distillation
 
 Route to `phase-6-distillation.md`.

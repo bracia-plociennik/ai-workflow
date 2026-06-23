@@ -35,6 +35,8 @@ Before implementation, commit, or handoff, classify the work mode:
 
 Default Quality Closure from `.systems/ai/core/quality-review.md` applies before handoff or commit for substantive work. Use formal QA/Quality when the active workflow defines it; otherwise use advisory `global-quality-review-stance`. If the owner opts out with `bez QA`, `bez review`, `without QA`, `without review`, or `fast path no review`, record `Quality skipped by owner opt-out` plus residual risk. Opt-out does not satisfy required QA PASS.
 
+End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` can precede handoff when the owner says the task is done and asks to preserve learnings. It is capture review/proposal by default. It does not replace this compliance gate, and it does not grant permission to skip evidence, quality, risk, phase gates, memory scope boundaries, or owner approvals.
+
 The selected mode must match risk, scope, approvals, write set, and artifacts. If the mode does not fit, route to the safer workflow path before continuing.
 
 ## Compliance Questions
@@ -93,6 +95,8 @@ When capture is not required, state `Knowledge capture: not-required` with a sho
 | `workflow-maintenance` | changelog/version/docs/validator evidence; External Memory only for reusable workflow improvement proposals |
 
 Project Memory, Repo Memory, External Memory, and System Insights keep their existing scope boundaries. This gate does not grant permission to write the wrong memory type.
+
+End-of-Task Capture may be used to decide this target at handoff, but it must not duplicate an existing phase `Optional Knowledge Capture`, distillation, checkpoint, or commit-readiness decision.
 
 ## Commit Summary Requirement
 

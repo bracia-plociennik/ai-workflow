@@ -467,6 +467,24 @@ Krótkie:
 Zrób checkpoint.
 ```
 
+### End-of-Task Capture
+
+Użyj tego, gdy kończysz iterację w czacie i chcesz, żeby workflow nie zgubił wartościowej wiedzy.
+
+Pełne:
+
+```text
+To koniec zadania. Zrób End-of-Task Capture: sprawdź, czy trzeba utrwalić project memory, repo memory, External Memory, System Insights, status/evidence, distillation albo checkpoint. Nie oznaczaj PASS bez evidence i nie uruchamiaj final check.
+```
+
+Krótkie:
+
+```text
+Dziękuję, utrwal wiedzę z tej rozmowy.
+```
+
+Ten tryb nie zastępuje `Zrób distillation`, `Zrób checkpoint`, `Zrób final review`, `Zrób final check`, `final-owner-yes`, change requestów ani commit readiness. Jeśli polecenie zawiera jednocześnie jawny formalny etap i `koniec zadania`, formalny etap ma pierwszeństwo, a End-of-Task Capture jest tylko decyzją wspierającą.
+
 ### Final check i final-owner-yes
 
 Pełne:
@@ -758,6 +776,8 @@ Przed commitem pracy zarządzanej przez AI Workflow użyj `.systems/ai/core/cont
 - capture target albo powód, dlaczego capture nie jest wymagany
 
 Jeśli capture jest wymagany, użyj właściwego miejsca: micro-task artifact, micro-project artifact, status/evidence, phase-6 distillation, phase-7 checkpoint, project memory, repo memory, External Memory albo System Insights.
+
+End-of-Task Capture może pomóc podjąć tę decyzję przy zakończeniu rozmowy lub zadania, ale nie pozwala pominąć QA, evidence, risk, permissions, phase gates, memory scope boundaries ani owner approvals.
 
 ### Optional Knowledge Capture Po Fazach
 

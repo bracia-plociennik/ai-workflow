@@ -44,6 +44,20 @@ Allowed targets are:
 
 The phase capture decision may propose memory or insight content inside the phase artifact. It must not create durable memory entries unless the current phase's `Writes allowed` permits that target and the required owner approval is present.
 
+## End-of-Task Capture
+
+`.systems/ai/core/end-of-task-capture.md` handles chat-end prompts such as `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`.
+
+It uses the same memory scope boundaries as this router:
+
+- project memory for one-project facts;
+- repo memory for repo-wide facts;
+- External Memory only for AI Workflow improvement proposals;
+- System Insights only for anonymized cross-project operating lessons and skill candidates;
+- status/evidence only for source-backed state synchronization.
+
+Default End-of-Task Capture output is proposal-only. Durable memory writes require explicit owner capture intent plus clear target, scope, privacy, evidence, and write permission.
+
 ## Memory Index
 
 | Date | Topic | Type | Status | Route |

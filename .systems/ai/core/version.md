@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.19` |
+| Workflow version | `0.8.20` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-06-19` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
@@ -32,6 +32,7 @@
 - `.systems/ai/core/dreaming-mode.md` defines advisory-only Dreaming Mode reports for AFK/nightly analysis. Dream Reports live under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/`, default to `workflow-artifacts-only`, require explicit owner request for `full-repo`, and never perform durable writes, scheduler setup, memory promotion, status mutation, commits, or source changes.
 - `.systems/ai/core/quality-review.md` defines read-only/advisory global quality review stance for review, code review, final review, findings, blockers, and generic quality-check prompts that are not formal workflow phase runs.
 - `.systems/ai/core/request-batch-triage.md` defines advisory pre-routing for owner lists, checklists, brain dumps, mixed improvements, and `2+ owner items` before ordinary task intake or implementation routing.
+- `.systems/ai/core/end-of-task-capture.md` defines chat-end knowledge capture for prompts such as `to koniec zadania`, while preserving formal distillation, checkpoint, final review, final check, final-owner-yes, change request, and commit-readiness routing.
 - Substantive responses include `Execution Trace` before the final `Co dalej?` footer, Phase Skill Discovery checks existing domain/task skills before workflow-governed procedures, and Default Quality Closure reports formal or advisory review status unless the owner opts out.
 - `.systems/ai/templates/prompting/` stores reusable prompt composition templates, while `.systems/ai/examples/prompting/` stores documentation-only examples.
 - Project-local prompting artifacts belong under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/` when a project explicitly creates them.

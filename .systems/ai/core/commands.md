@@ -46,6 +46,7 @@ git diff --check
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
+.systems/scripts/check-end-of-task-capture
 ```
 
 `check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
@@ -65,6 +66,8 @@ git diff --check
 `check-default-quality-closure` validates default quality/review closure for substantive work, owner opt-out grammar, and the rule that opt-out cannot satisfy required QA PASS.
 
 `check-default-idea-validation-opt-out` validates Default Idea Validation for single new work, broad project ideas, and batch validation routes, plus owner opt-out grammar and the boundary that opt-out cannot bypass safety gates.
+
+`check-end-of-task-capture` validates chat-end knowledge capture routing, conflict-free precedence against formal phase/review/final commands, required output fields, and safety boundaries for memory, System Insights, External Memory, status, and final approval.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 

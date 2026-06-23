@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, and `quality-review.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, and `end-of-task-capture.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -91,6 +91,8 @@ If the user asks to capture anonymized lessons, System Insights, cross-project b
 If the user asks for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams, route through `.systems/ai/core/dreaming-mode.md`. Dreaming Mode is advisory-only and writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`. It cannot automatically write memory, External Memory, System Insights, skills, status, source files, commits, pull requests, scheduler automation, or approvals.
 
 If the user asks for review, code review, final review, findings, blockers, or a quality check outside a clearly resolvable formal phase, route through `.systems/ai/core/quality-review.md`. The global quality review stance is read-only/advisory by default, findings-first, and cannot mark formal `PASS` or `FAIL`, update quality artifacts, or trigger `phase-8-final-check`.
+
+If the user says the task is done and asks to preserve learnings, for example `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`, route through `.systems/ai/core/end-of-task-capture.md`. Apply its precedence first: final-owner-yes/change requests, explicit formal phases, global review, and commit readiness keep priority. End-of-Task Capture is capture review/proposal by default. It must not mark `PASS`, run `phase-8-final-check`, close a project, update status from chat-only claims, or write durable memory/insights unless target, scope, privacy, evidence, and write permission are clear.
 
 Before committing, preparing a commit summary, or closing work, apply `.systems/ai/core/contract-compliance.md`. The gate is advisory-only, but the agent should explicitly state work mode compliance and the knowledge capture decision: `required` with the correct target, or `not-required` with a reason.
 
@@ -333,6 +335,7 @@ git diff --check
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
+.systems/scripts/check-end-of-task-capture
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

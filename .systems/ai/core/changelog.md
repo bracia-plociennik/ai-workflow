@@ -1,5 +1,11 @@
 # changelog.md
 
+## 0.8.20 - 2026-06-23
+
+- Added `.systems/ai/core/end-of-task-capture.md` for chat-end knowledge capture prompts such as `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`.
+- Preserved precedence for `final-owner-yes`, change requests, explicit formal phases, global quality review, and commit readiness before End-of-Task Capture.
+- Added `.systems/ai/templates/capture/end-of-task-capture.template.md` plus validator and smoke coverage for required fields, routing conflicts, unsafe PASS/final-check/project-close wording, raw client System Insights, and product-domain External Memory misuse.
+
 ## 0.8.19 - 2026-06-22
 
 - Added Default Idea Validation routing: single new work uses Task Idea Validation, broad project ideas use formal `phase-0-idea-validation`, and owner lists use request batch triage plus the selected validation route.

@@ -37,6 +37,7 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Dreaming Mode contract: `.systems/ai/core/dreaming-mode.md`
 - Dream Reports: `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`
 - Owner request batch triage contract: `.systems/ai/core/request-batch-triage.md`
+- End-of-Task Capture contract: `.systems/ai/core/end-of-task-capture.md`
 - Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
@@ -78,6 +79,8 @@ Use `.systems/ai/core/system-insights.md` when work produces anonymized, reusabl
 Use `.systems/ai/core/dreaming-mode.md` for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams requests. Dreaming Mode is advisory-only: it writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**` and cannot automatically promote memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
 Use `.systems/ai/core/quality-review.md` for review, code review, final review, findings, blockers, and generic quality-check requests that are not clearly formal workflow phase runs. The global quality review stance is read-only/advisory by default and cannot mark formal `PASS`/`FAIL`, update quality artifacts, or trigger `phase-8-final-check`.
+
+Use `.systems/ai/core/end-of-task-capture.md` when the owner says the work is done and asks to preserve learnings, for example `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`. Explicit formal phase commands, `final review`, `final check`, `final-owner-yes`, change requests, and commit-readiness prompts keep precedence. End-of-Task Capture is capture review/proposal by default and cannot mark `PASS`, run `phase-8-final-check`, close a project, or write durable memory without clear target, scope, privacy, evidence, and write permission.
 
 Use Phase Skill Discovery from `.systems/ai/core/operating-model.md` before idea validation, architecture, planning, specification, implementation, QA/review, distillation, checkpoint, and micro-project work. Match existing domain/task skills from `AI_WORKFLOW_WORKSPACE_HOME/skills/` first and `.systems/ai/skills/` second. If no matching active `SKILL.md` exists, continue normally and report `Skills used: none`.
 

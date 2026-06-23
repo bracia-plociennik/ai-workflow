@@ -111,6 +111,7 @@ cd ai-workflow
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
+.systems/scripts/check-end-of-task-capture
 ```
 
 ## First-Time Use
@@ -170,6 +171,8 @@ Global quality review uses `.systems/ai/core/quality-review.md` for read-only/ad
 
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
+End-of-Task Capture uses `.systems/ai/core/end-of-task-capture.md` for chat-end prompts such as `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`. It preserves existing `distillation`, `checkpoint`, `final review`, `final check`, `final-owner-yes`, change-request, and commit-readiness routing, then produces capture review/proposal unless durable capture is explicitly approved and safe.
+
 Every workflow phase artifact also includes `Optional Knowledge Capture`, a soft decision about whether the phase produced reusable knowledge and whether to capture it now, defer to distillation/checkpoint, reject it, or record `none`. This does not automatically write memory and does not block the next phase when no capture is needed.
 
 If the target repository tracks `ai-workflow/` by accident, remove it from the target index and keep it as a local nested clone.
@@ -220,6 +223,7 @@ git diff --check
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
+.systems/scripts/check-end-of-task-capture
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

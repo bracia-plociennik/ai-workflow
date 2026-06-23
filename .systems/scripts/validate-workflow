@@ -24,6 +24,7 @@ fi
 .systems/scripts/check-phase-skill-discovery
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
+.systems/scripts/check-end-of-task-capture
 
 fail=0
 phases=(

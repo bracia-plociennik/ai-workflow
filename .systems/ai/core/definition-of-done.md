@@ -15,6 +15,7 @@ A task is done only when all applicable items are true:
 - status files are updated;
 - decision log is updated when assumptions changed;
 - contract compliance and knowledge capture decisions are stated before commit or handoff;
+- end-of-task capture decision is stated when the owner explicitly ends the task and asks to preserve learnings;
 - each completed workflow phase artifact records its optional knowledge capture decision when that phase template applies;
 - QA evidence is attached in the project quality artifact;
 - security-sensitive changes have required approval;
@@ -37,6 +38,8 @@ The commit readiness decision must state:
 This is advisory-only for git commits, but it does not weaken phase gates, risk approvals, status updates, QA evidence, distillation, checkpoint, or memory requirements when those are otherwise required.
 
 Phase-level `Optional Knowledge Capture` is also advisory. A `no`, `none`, `reject`, `defer-to-distillation`, or `defer-to-checkpoint` decision can be sufficient when supported by the phase evidence.
+
+End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` is also advisory unless the owner explicitly approves durable capture and the target, scope, privacy, evidence, and write permission are clear. It cannot mark `PASS`, close a project, run final check, or replace required distillation/checkpoint.
 
 ## FAIL Rule
 
