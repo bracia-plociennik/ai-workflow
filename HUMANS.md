@@ -785,6 +785,14 @@ Jeśli capture jest wymagany, użyj właściwego miejsca: micro-task artifact, m
 
 End-of-Task Capture może pomóc podjąć tę decyzję przy zakończeniu rozmowy lub zadania, ale nie pozwala pominąć QA, evidence, risk, permissions, phase gates, memory scope boundaries ani owner approvals.
 
+### Validation Profiles
+
+Profile walidacji są opisane w `.systems/ai/core/validation-profiles.md`. Zwykłe `.systems/scripts/validate-workflow` uruchamia profil `standard`, czyli lżejszą walidację do codziennej iteracji i zwykłej jakości po implementacji.
+
+Używaj `.systems/scripts/validate-workflow --profile fast --explain` do szybkiego sanity checku w trakcie edycji. Używaj `.systems/scripts/validate-workflow --profile scoped --checks check-validation-profiles --explain`, gdy świadomie iterujesz nad konkretnym walidatorem. Używaj `.systems/scripts/validate-workflow --profile full` przy checkpoint validation, dużej destylacji, dużej weryfikacji, CI, release/final confidence albo zmianach wysokiego wpływu w kontraktach, fazach, template’ach, validatorach, `AGENTS.md`, `HUMANS.md` lub `README.md`.
+
+`standard`, `scoped` i `fast` nie zmieniają DoD, PASS Integrity, quality closure, risk, permissions, evidence ani commit readiness. Jeśli wybierzesz wąską walidację zamiast pełnej przy ryzykownym zakresie, Codex musi pokazać residual risk i owner decision.
+
 ### Optional Knowledge Capture Po Fazach
 
 Każdy artefakt fazy ma miękką sekcję `Optional Knowledge Capture`. To jest decyzja, czy dana faza wytworzyła wiedzę wartą zapisu, i gdzie ta wiedza należy:

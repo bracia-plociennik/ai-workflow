@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing validation profile artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for validation profile check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q -- "$pattern" "$file"; then
+    echo "Missing validation profile reference in $file: $label"
+    fail=1
+  fi
+}
+
+require_ref_near() {
+  local file="$1"
+  local start_pattern="$2"
+  local target_pattern="$3"
+  local max_lines="$4"
+  local label="$5"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for validation profile check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! awk \
+    -v start="$start_pattern" \
+    -v target="$target_pattern" \
+    -v max="$max_lines" '
+      $0 ~ start { in_section = 1; line_count = 0 }
+      in_section {
+        if ($0 ~ target) found = 1
+        line_count++
+        if (line_count > max) in_section = 0
+      }
+      END { exit found ? 0 : 1 }
+    ' "$file"
+  then
+    echo "Missing validation profile reference in $file near $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/validation-profiles.md"
+  ".systems/scripts/validate-workflow"
+  ".systems/scripts/check-validation-profiles"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+contract=".systems/ai/core/validation-profiles.md"
+validator=".systems/scripts/check-validation-profiles"
+validate=".systems/scripts/validate-workflow"
+
+for term in \
+  'Validation Profiles' \
+  'full' \
+  'standard' \
+  'scoped' \
+  'fast' \
+  'final validation evidence' \
+  'check-validator-smoke-tests' \
+  'Default `.systems/scripts/validate-workflow` with no arguments is the `standard` profile' \
+  'CI must call `.systems/scripts/validate-workflow --profile full` explicitly' \
+  '--profile full' \
+  '--profile standard' \
+  '--profile scoped --checks' \
+  '--profile fast' \
+  '--explain' \
+  'Definition of Done' \
+  'PASS Integrity' \
+  'quality closure' \
+  'commit readiness' \
+  'residual risk'
+do
+  require_ref "$contract" "$term" "contract term: $term"
+done
+
+for term in \
+  'profile="standard"' \
+  '--profile' \
+  '--checks' \
+  '--explain' \
+  'run_fast_checks' \
+  'run_core_validators' \
+  'run_named_check' \
+  'check-validator-smoke-tests' \
+  'Final validation evidence: yes for ordinary work' \
+  'Final validation evidence: no' \
+  'AI_WORKFLOW_SKIP_SMOKE_TESTS'
+do
+  require_ref "$validate" "$term" "validate-workflow profile support: $term"
+done
+
+require_ref "$validate" 'if \[\[ "\$profile" == "full" && "\$\{AI_WORKFLOW_SKIP_SMOKE_TESTS:-0\}" != "1" \]\]' "full profile smoke gate"
+require_ref "$validate" '--profile scoped requires --checks' "scoped requires explicit checks"
+require_ref "$validate" '--checks is valid only with --profile scoped' "checks scoped-only"
+
+for file in AGENTS.md README.md HUMANS.md .systems/ai/core/commands.md .systems/ai/core/contract-compliance.md; do
+  require_ref "$file" 'validation-profiles\.md|Validation Profiles|validation profile' "$file validation profile guidance"
+  require_ref "$file" 'full' "$file full profile guidance"
+  require_ref "$file" 'standard' "$file standard profile guidance"
+  require_ref "$file" 'scoped' "$file scoped profile guidance"
+  require_ref "$file" 'fast' "$file fast profile guidance"
+done
+
+require_ref ".github/workflows/ai-workflow-validate.yml" '\.systems/scripts/validate-workflow --profile full' "CI explicit full validation"
+require_ref ".systems/scripts/update-from-upstream" '\.systems/scripts/validate-workflow --profile full' "update-from-upstream explicit full validation"
+require_ref ".systems/ai/core/update-from-upstream.md" '\.systems/scripts/validate-workflow --profile full' "update policy explicit full validation"
+require_ref_near "AGENTS.md" 'Before finalizing workflow-template changes' '\.systems/scripts/validate-workflow --profile full' 20 "AGENTS finalization explicit full validation"
+require_ref_near ".systems/ai/core/commands.md" 'For final workflow-template maintenance' '\.systems/scripts/validate-workflow --profile full' 20 "commands final maintenance explicit full validation"
+require_ref_near "README.md" 'Validation Before Reuse' '\.systems/scripts/validate-workflow --profile full' 20 "README reuse explicit full validation"
+require_ref ".systems/scripts/check-required-artifacts" 'validation-profiles\.md' "required core artifact"
+require_ref ".systems/scripts/check-required-artifacts" 'check-validation-profiles' "required validator artifact"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'validation-profiles' "smoke coverage"
+require_ref ".systems/scripts/validate-workflow" 'check-validation-profiles' "validate-workflow chain"
+require_ref ".systems/ai/core/commands.md" 'check-validation-profiles' "commands validator list"
+require_ref "README.md" 'check-validation-profiles' "README validator list"
+require_ref "AGENTS.md" 'check-validation-profiles' "AGENTS validator list"
+
+unsafe_patterns=(
+  'fast is enough before commit'
+  'scoped is enough before commit'
+  'standard is enough before commit'
+  'fast is enough before push'
+  'scoped is enough before push'
+  'standard is enough before push'
+  'standard is enough for checkpoint'
+  'standard is enough for major distillation'
+  'standard is enough for major verification'
+  'standard is enough for CI'
+  'standard is enough for release'
+  'standard may replace full'
+  'standard can replace full'
+  'scoped may replace full'
+  'fast may replace full'
+  'skip smoke tests and mark PASS'
+  'skip smoke tests.*final validation evidence: yes'
+  'fast.*final validation evidence: yes'
+  'scoped.*final validation evidence: yes'
+  'standard.*final validation evidence: yes'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates .systems/scripts .github/workflows \
+    | rg -v -i 'check-validation-profiles|check-validator-smoke-tests' \
+    | rg -v -i 'must not|does not|do not|cannot|not enough|not final|unsafe|invalid|blocks?|without explicit owner|unless the owner explicitly|nie może|nie wystarcza|nie zastępuje'; then
+    echo "Unsafe validation profile wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

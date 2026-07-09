@@ -96,6 +96,8 @@ If the user says the task is done and asks to preserve learnings, for example `t
 
 Before committing, preparing a commit summary, or closing work, apply `.systems/ai/core/contract-compliance.md`. The gate is advisory-only, but the agent should explicitly state work mode compliance and the knowledge capture decision: `required` with the correct target, or `not-required` with a reason.
 
+Use `.systems/ai/core/validation-profiles.md` for validation profile routing. `.systems/scripts/validate-workflow` with no arguments is the `standard` profile for daily iteration and ordinary post-implementation quality. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
+
 Every workflow phase artifact should include `Optional Knowledge Capture`: a soft decision about whether the phase produced reusable knowledge and where it belongs. This does not require memory after every phase and does not grant durable write permission outside the current phase's `Writes allowed`, memory policy, System Insights policy, risk policy, or owner approvals.
 
 If a blocking detail is missing, ask before continuing. The clarification must include:
@@ -318,11 +320,11 @@ Workspace-owned advisory/supporting artifacts:
 Use `.systems/ai/core/command-routing.md` for user-facing workflow prompts and aliases.
 Use `.systems/ai/core/commands.md` and the repo command map in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`.
 
-Before finalizing workflow-template changes, run:
+Before finalizing workflow-template changes, run the explicit `full` profile. The no-arg `.systems/scripts/validate-workflow` remains the `standard` profile for daily iteration only.
 
 ```sh
 git diff --check
-.systems/scripts/validate-workflow
+.systems/scripts/validate-workflow --profile full
 .systems/scripts/check-naming
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
@@ -336,6 +338,7 @@ git diff --check
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
+.systems/scripts/check-validation-profiles
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

@@ -27,7 +27,7 @@ jobs:
         run: .systems/scripts/check-branch-policy
 
       - name: Validate workflow template
-        run: .systems/scripts/validate-workflow
+        run: .systems/scripts/validate-workflow --profile full
 
       - name: Check strict naming
         run: .systems/scripts/check-naming

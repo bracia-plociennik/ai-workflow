@@ -1,32 +1,202 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+profile="standard"
+checks=""
+explain=0
+
+usage() {
+  cat <<'EOF'
+Usage:
+  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--checks check-a,check-b] [--explain]
+
+Profiles:
+  standard  Core validator/structure checks without embedded smoke tests. Default daily validator.
+  full      Complete validation, including check-validator-smoke-tests. Explicit heavy validator.
+  scoped    Fast base checks plus explicit --checks validators. Iteration only.
+  fast      Cheap sanity checks. Iteration only.
+EOF
+}
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --profile)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --profile"
+        exit 1
+      fi
+      profile="$2"
+      shift 2
+      ;;
+    --checks)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --checks"
+        exit 1
+      fi
+      checks="$2"
+      shift 2
+      ;;
+    --explain)
+      explain=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown validate-workflow argument: $1"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+case "$profile" in
+  full|standard|scoped|fast)
+    ;;
+  *)
+    echo "Unknown validation profile: $profile"
+    exit 1
+    ;;
+esac
+
+if [[ -n "$checks" && "$profile" != "scoped" ]]; then
+  echo "--checks is valid only with --profile scoped"
+  exit 1
+fi
+
+if [[ "$profile" == "scoped" && -z "$checks" ]]; then
+  echo "--profile scoped requires --checks <check-a,check-b>"
+  exit 1
+fi
+
 if ! command -v rg >/dev/null 2>&1; then
   echo "Missing required command: rg"
   exit 1
 fi
 
-.systems/scripts/check-required-artifacts
-.systems/scripts/check-prompt-composition
-.systems/scripts/check-branch-policy
-.systems/scripts/check-naming
-.systems/scripts/check-status-consistency
-.systems/scripts/check-qa-evidence
-.systems/scripts/check-system-insights
-.systems/scripts/check-system-skills
-.systems/scripts/check-contract-compliance
-.systems/scripts/check-knowledge-capture-gate
-.systems/scripts/check-default-quality-phase-chaining
-.systems/scripts/check-dreaming-mode
-.systems/scripts/check-global-quality-review-stance
-.systems/scripts/check-intent-plan-spec-compliance-review
-.systems/scripts/check-implementation-slicing
-.systems/scripts/check-request-batch-triage
-.systems/scripts/check-response-evidence-trace
-.systems/scripts/check-phase-skill-discovery
-.systems/scripts/check-default-quality-closure
-.systems/scripts/check-default-idea-validation-opt-out
-.systems/scripts/check-end-of-task-capture
+run_cmd() {
+  if [[ "$explain" == "1" ]]; then
+    printf '+ %s\n' "$*"
+  fi
+  "$@"
+}
+
+explain_profile() {
+  if [[ "$explain" != "1" ]]; then
+    return 0
+  fi
+
+  case "$profile" in
+    full)
+      echo "Validation profile: full"
+      if [[ "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" == "1" ]]; then
+        echo "Smoke tests: skipped by AI_WORKFLOW_SKIP_SMOKE_TESTS=1"
+        echo "Final validation evidence: no, unless owner explicitly accepts residual risk"
+      else
+        echo "Smoke tests: run"
+        echo "Final validation evidence: yes"
+      fi
+      ;;
+    standard)
+      echo "Validation profile: standard"
+      echo "Smoke tests: skipped"
+      echo "Final validation evidence: yes for ordinary work; no when a full-required gate applies"
+      ;;
+    scoped)
+      echo "Validation profile: scoped"
+      echo "Scoped checks: $checks"
+      echo "Smoke tests: skipped"
+      echo "Final validation evidence: no, unless owner explicitly accepts narrow validation with residual risk"
+      ;;
+    fast)
+      echo "Validation profile: fast"
+      echo "Smoke tests: skipped"
+      echo "Final validation evidence: no, iteration only"
+      ;;
+  esac
+}
+
+run_fast_checks() {
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    run_cmd git diff --check
+  elif [[ "$explain" == "1" ]]; then
+    echo "+ git diff --check (skipped: not a git repository)"
+  fi
+  run_cmd .systems/scripts/check-required-artifacts
+  run_cmd .systems/scripts/check-branch-policy
+  run_cmd .systems/scripts/check-naming
+  run_cmd .systems/scripts/check-status-consistency
+  run_cmd .systems/scripts/check-qa-evidence
+  run_cmd .systems/scripts/check-contract-compliance
+}
+
+run_named_check() {
+  local check_name="$1"
+  local check_path
+
+  if [[ ! "$check_name" =~ ^check-[a-z0-9-]+$ ]]; then
+    echo "Invalid scoped check name: $check_name"
+    exit 1
+  fi
+
+  check_path=".systems/scripts/$check_name"
+  if [[ ! -f "$check_path" ]]; then
+    echo "Unknown scoped check: $check_name"
+    exit 1
+  fi
+
+  run_cmd "$check_path"
+}
+
+run_core_validators() {
+  run_cmd .systems/scripts/check-required-artifacts
+  run_cmd .systems/scripts/check-prompt-composition
+  run_cmd .systems/scripts/check-branch-policy
+  run_cmd .systems/scripts/check-naming
+  run_cmd .systems/scripts/check-status-consistency
+  run_cmd .systems/scripts/check-qa-evidence
+  run_cmd .systems/scripts/check-system-insights
+  run_cmd .systems/scripts/check-system-skills
+  run_cmd .systems/scripts/check-contract-compliance
+  run_cmd .systems/scripts/check-knowledge-capture-gate
+  run_cmd .systems/scripts/check-default-quality-phase-chaining
+  run_cmd .systems/scripts/check-dreaming-mode
+  run_cmd .systems/scripts/check-global-quality-review-stance
+  run_cmd .systems/scripts/check-intent-plan-spec-compliance-review
+  run_cmd .systems/scripts/check-implementation-slicing
+  run_cmd .systems/scripts/check-validation-profiles
+  run_cmd .systems/scripts/check-request-batch-triage
+  run_cmd .systems/scripts/check-response-evidence-trace
+  run_cmd .systems/scripts/check-phase-skill-discovery
+  run_cmd .systems/scripts/check-default-quality-closure
+  run_cmd .systems/scripts/check-default-idea-validation-opt-out
+  run_cmd .systems/scripts/check-end-of-task-capture
+}
+
+explain_profile
+
+if [[ "$profile" == "fast" ]]; then
+  run_fast_checks
+  exit 0
+fi
+
+if [[ "$profile" == "scoped" ]]; then
+  run_fast_checks
+  IFS=',' read -r -a selected_checks <<< "$checks"
+  for check_name in "${selected_checks[@]}"; do
+    check_name="${check_name//[[:space:]]/}"
+    if [[ -z "$check_name" ]]; then
+      echo "Empty scoped check name in --checks"
+      exit 1
+    fi
+    run_named_check "$check_name"
+  done
+  exit 0
+fi
+
+run_core_validators
 
 fail=0
 phases=(
@@ -356,8 +526,8 @@ for required_branch_policy_ref in README.md .systems/ai/core/installation.md .sy
   fi
 done
 
-if [[ "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != "1" ]]; then
-  .systems/scripts/check-validator-smoke-tests
+if [[ "$profile" == "full" && "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != "1" ]]; then
+  run_cmd .systems/scripts/check-validator-smoke-tests
 fi
 
 exit "$fail"

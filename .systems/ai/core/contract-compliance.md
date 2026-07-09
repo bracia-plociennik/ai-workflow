@@ -37,6 +37,8 @@ Default Quality Closure from `.systems/ai/core/quality-review.md` applies before
 
 Formal `PASS` requires the PASS Integrity Gate from `.systems/ai/core/quality-review.md`: findings-first review, DoD fit, intent/plan/spec/prompt compliance, and no unresolved `P0`, `P1`, or material `P2` findings. Advisory quality closure for side tasks, micro-tasks, micro-projects, and workflow-maintenance must not create formal `PASS`; use evidence wording such as `No blockers found`, `No findings found`, or `Ready for owner review`.
 
+Validation Profiles from `.systems/ai/core/validation-profiles.md` apply to workflow validation evidence. `.systems/scripts/validate-workflow` with no arguments uses `standard` for daily iteration and ordinary post-implementation quality. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `fast` and `scoped` are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
+
 End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` can precede handoff when the owner says the task is done and asks to preserve learnings. It is capture review/proposal by default. It does not replace this compliance gate, and it does not grant permission to skip evidence, quality, risk, phase gates, memory scope boundaries, or owner approvals.
 
 The selected mode must match risk, scope, approvals, write set, and artifacts. If the mode does not fit, route to the safer workflow path before continuing.

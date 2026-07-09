@@ -42,7 +42,7 @@ The script:
 3. Blocks if system-owned files are dirty.
 4. Runs `git fetch`.
 5. Runs `git merge --ff-only`.
-6. Runs `.systems/scripts/validate-workflow`.
+6. Runs `.systems/scripts/validate-workflow --profile full`.
 7. Prints a copy-paste `update-workspace` command for optional target-owned workspace schema backfill.
 
 The update script does not run `update-workspace` automatically because `AI_WORKFLOW_WORKSPACE_HOME/**` is target-owned. Schema backfill is a separate explicit step:

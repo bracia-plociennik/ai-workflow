@@ -25,11 +25,11 @@ If a command is not configured, write `not configured`. Do not invent commands.
 
 For implementation work, run the relevant configured checks for the changed area.
 
-For workflow-template maintenance, run:
+For final workflow-template maintenance, reuse checks, checkpoint validation, major verification, or other high-impact changes, run the explicit `full` profile. The no-arg `.systems/scripts/validate-workflow` remains the `standard` profile for daily iteration.
 
 ```sh
 git diff --check
-.systems/scripts/validate-workflow
+.systems/scripts/validate-workflow --profile full
 .systems/scripts/check-naming
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
@@ -43,6 +43,7 @@ git diff --check
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
+.systems/scripts/check-validation-profiles
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -62,6 +63,8 @@ git diff --check
 `check-intent-plan-spec-compliance-review` validates the shared review/quality lens that compares implementation against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria, and blocks technical-only PASS/review wording.
 
 `check-implementation-slicing` validates the Implementation Slice Plan contract, DoD source, mandatory quality closure, PASS Integrity Gate, phase-4/template integration, side-task/micro-task/micro-project routing, and the boundary that slicing cannot bypass spec, scope, risk, permissions, approvals, or QA.
+
+`check-validation-profiles` validates `.systems/ai/core/validation-profiles.md`, `validate-workflow --profile` behavior, the no-arg `standard` validation default, explicit `full` smoke-test coverage, and the boundary that `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
 
 `check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
 

@@ -1529,6 +1529,56 @@ perl -0pi -e 's/## Definition of Done/## Done/g' "$tmp/.systems/ai/templates/mic
 run_must_fail "implementation-slicing-requires-micro-project-dod" .systems/scripts/check-implementation-slicing
 mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
 
+run_must_pass "validation-profiles-valid" .systems/scripts/check-validation-profiles
+run_must_pass "validation-profile-fast-explain" .systems/scripts/validate-workflow --profile fast --explain
+run_must_pass "validation-profile-scoped-check" .systems/scripts/validate-workflow --profile scoped --checks check-validation-profiles --explain
+run_must_fail "validation-profile-scoped-requires-checks" .systems/scripts/validate-workflow --profile scoped
+
+cp "$tmp/.systems/scripts/validate-workflow" "$tmp/.systems/scripts/validate-workflow.bak"
+perl -0pi -e 's/profile="standard"/profile="full"/' "$tmp/.systems/scripts/validate-workflow"
+run_must_fail "validation-profiles-require-standard-default" .systems/scripts/check-validation-profiles
+mv "$tmp/.systems/scripts/validate-workflow.bak" "$tmp/.systems/scripts/validate-workflow"
+
+cp "$tmp/.github/workflows/ai-workflow-validate.yml" "$tmp/.github/workflows/ai-workflow-validate.yml.bak"
+perl -0pi -e 's/validate-workflow --profile full/validate-workflow/' "$tmp/.github/workflows/ai-workflow-validate.yml"
+run_must_fail "validation-profiles-require-ci-explicit-full" .systems/scripts/check-validation-profiles
+mv "$tmp/.github/workflows/ai-workflow-validate.yml.bak" "$tmp/.github/workflows/ai-workflow-validate.yml"
+
+cp "$tmp/AGENTS.md" "$tmp/AGENTS.md.bak"
+perl -0pi -e 's/validate-workflow --profile full/validate-workflow/g' "$tmp/AGENTS.md"
+run_must_fail "validation-profiles-require-agents-final-full" .systems/scripts/check-validation-profiles
+mv "$tmp/AGENTS.md.bak" "$tmp/AGENTS.md"
+
+cp "$tmp/.systems/ai/core/commands.md" "$tmp/.systems/ai/core/commands.md.bak"
+perl -0pi -e 's/validate-workflow --profile full/validate-workflow/g' "$tmp/.systems/ai/core/commands.md"
+run_must_fail "validation-profiles-require-commands-final-full" .systems/scripts/check-validation-profiles
+mv "$tmp/.systems/ai/core/commands.md.bak" "$tmp/.systems/ai/core/commands.md"
+
+cp "$tmp/README.md" "$tmp/README.md.bak"
+perl -0pi -e 's/validate-workflow --profile full/validate-workflow/g' "$tmp/README.md"
+run_must_fail "validation-profiles-require-readme-reuse-full" .systems/scripts/check-validation-profiles
+mv "$tmp/README.md.bak" "$tmp/README.md"
+
+cp "$tmp/.systems/scripts/validate-workflow" "$tmp/.systems/scripts/validate-workflow.bak"
+perl -0pi -e 's/check-validator-smoke-tests/check-validator-light-tests/g' "$tmp/.systems/scripts/validate-workflow"
+run_must_fail "validation-profiles-require-full-smoke-tests" .systems/scripts/check-validation-profiles
+mv "$tmp/.systems/scripts/validate-workflow.bak" "$tmp/.systems/scripts/validate-workflow"
+
+cp "$tmp/.systems/ai/core/validation-profiles.md" "$tmp/.systems/ai/core/validation-profiles.md.bak"
+printf '\nfast is enough before commit\n' >> "$tmp/.systems/ai/core/validation-profiles.md"
+run_must_fail "validation-profiles-block-fast-enough-before-commit" .systems/scripts/check-validation-profiles
+mv "$tmp/.systems/ai/core/validation-profiles.md.bak" "$tmp/.systems/ai/core/validation-profiles.md"
+
+cp "$tmp/.systems/ai/core/validation-profiles.md" "$tmp/.systems/ai/core/validation-profiles.md.bak"
+printf '\nstandard may replace full for workflow contracts\n' >> "$tmp/.systems/ai/core/validation-profiles.md"
+run_must_fail "validation-profiles-block-standard-replaces-full" .systems/scripts/check-validation-profiles
+mv "$tmp/.systems/ai/core/validation-profiles.md.bak" "$tmp/.systems/ai/core/validation-profiles.md"
+
+cp "$tmp/.systems/ai/core/validation-profiles.md" "$tmp/.systems/ai/core/validation-profiles.md.bak"
+printf '\nskip smoke tests and mark PASS\n' >> "$tmp/.systems/ai/core/validation-profiles.md"
+run_must_fail "validation-profiles-block-skip-smoke-pass" .systems/scripts/check-validation-profiles
+mv "$tmp/.systems/ai/core/validation-profiles.md.bak" "$tmp/.systems/ai/core/validation-profiles.md"
+
 run_must_pass "request-batch-triage-valid" .systems/scripts/check-request-batch-triage
 
 cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
