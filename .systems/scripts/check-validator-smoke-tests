@@ -1472,6 +1472,63 @@ printf '\nscope creep is acceptable if tests pass\n' >> "$tmp/.systems/ai/core/q
 run_must_fail "intent-plan-spec-compliance-blocks-scope-creep-tests-pass" .systems/scripts/check-intent-plan-spec-compliance-review
 mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
 
+run_must_pass "implementation-slicing-valid" .systems/scripts/check-implementation-slicing
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/Implementation Slice Plan/Implementation Steps/g' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-requires-core-contract" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/workflow/phase-4-implementation.md" "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak"
+perl -0pi -e 's/Implementation Slice Plan/Implementation Steps/g' "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+run_must_fail "implementation-slicing-requires-phase4-slice-plan" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak" "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md" "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md.bak"
+perl -0pi -e 's/## Slice Execution Evidence/## Execution Evidence/g' "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md"
+run_must_fail "implementation-slicing-requires-template-execution-evidence" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nslice plan may bypass QA\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-blocks-bypass-qa-wording" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/DoD source/Done target/g' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-requires-dod-source" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/Mandatory Quality Closure/Quality Note/g' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-requires-quality-closure" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nimplementation PASS without review\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-blocks-pass-without-review" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nPASS before findings review\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-blocks-pass-before-findings-review" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
+perl -0pi -e 's/Implementation Slice Plan/Implementation Steps/g' "$tmp/.systems/ai/core/operating-model.md"
+run_must_fail "implementation-slicing-requires-micro-work-routing" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/operating-model.md.bak" "$tmp/.systems/ai/core/operating-model.md"
+
+cp "$tmp/.systems/ai/templates/projects/micro-task.template.md" "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak"
+perl -0pi -e 's/## Definition of Done/## Done/g' "$tmp/.systems/ai/templates/projects/micro-task.template.md"
+run_must_fail "implementation-slicing-requires-micro-task-dod" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak" "$tmp/.systems/ai/templates/projects/micro-task.template.md"
+
+cp "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak"
+perl -0pi -e 's/## Definition of Done/## Done/g' "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+run_must_fail "implementation-slicing-requires-micro-project-dod" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+
 run_must_pass "request-batch-triage-valid" .systems/scripts/check-request-batch-triage
 
 cp "$tmp/.systems/ai/core/request-batch-triage.md" "$tmp/.systems/ai/core/request-batch-triage.md.bak"
@@ -1563,6 +1620,16 @@ mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-
 cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
 printf '\nbez QA may continue as PASS\n' >> "$tmp/.systems/ai/core/quality-review.md"
 run_must_fail "default-quality-closure-blocks-opt-out-pass" .systems/scripts/check-default-quality-closure
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/bez weryfikacji/bez sprawdzania/g' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "default-quality-closure-requires-verification-opt-out" .systems/scripts/check-default-quality-closure
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nwithout verification may count as PASS\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "default-quality-closure-blocks-without-verification-pass" .systems/scripts/check-default-quality-closure
 mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
 
 run_must_pass "default-idea-validation-opt-out-valid" .systems/scripts/check-default-idea-validation-opt-out

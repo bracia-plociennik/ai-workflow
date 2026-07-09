@@ -662,17 +662,17 @@ English variants:
 Routing notes:
 
 - Review, code review, final review, find findings, find blockers, and generic quality-check prompts use `global-quality-review-stance` unless the current project state clearly satisfies formal `phase-5-quality` routing.
-- `global-quality-review-stance` is read-only/advisory by default, findings-first, and reports severity, blockers, Intent / Plan / Spec Compliance, evidence reviewed, skipped/unreadable areas, residual risk, and formal gate eligibility.
+- `global-quality-review-stance` is read-only/advisory by default, findings-first, and reports severity, blockers, DoD fit, Intent / Plan / Spec Compliance, changed files review, edge cases, regression risk, skipped/unreadable areas, residual risk, and formal gate eligibility.
 - Review and quality commands compare implementation against owner instruction, accepted plan, accepted spec, approved scope, and acceptance criteria when those sources exist. Technical checks are not enough if the work solves the wrong problem, misses accepted scope, or adds unapproved scope creep.
 - Advisory review cannot mark formal `PASS` or `FAIL`, create quality artifacts, update status, or bypass QA/Quality gates.
 - `final review` does not trigger `phase-8-final-check`.
 - `review i popraw` runs review first; fixes require a separate allowed write path, risk gates, and owner approval when required.
-- `Uruchom phase-5-quality dla <task-id>` or an implementation state ready for `phase-5-quality` uses the formal phase and may produce `PASS` or `FAIL` only with required evidence and allowed artifact writes.
-- `PASS bez evidence` and `PASS without evidence` are invalid.
+- `Uruchom phase-5-quality dla <task-id>` or an implementation state ready for `phase-5-quality` uses the formal phase and may produce `PASS` or `FAIL` only after the PASS Integrity Gate: required evidence, findings-first review, no unresolved `P0`, `P1`, or material `P2`, and allowed artifact writes.
+- `PASS bez evidence`, `PASS without evidence`, `implementation PASS without review`, and `PASS before findings review` are invalid.
 - Failed or skipped checks that affect acceptance criteria or Intent / Plan / Spec Compliance mean `FAIL`.
 - Every substantive work item should end with Default Quality Closure: formal QA/Quality when the phase path defines it, otherwise advisory `global-quality-review-stance`.
-- Owner opt-out grammar includes `bez QA`, `bez review`, `bez quality`, `without QA`, `without review`, and `fast path no review`.
-- Opt-out must report `Quality skipped by owner opt-out` and residual risk; it does not allow continuing as `PASS` or bypassing required QA/Quality gates.
+- Owner opt-out grammar includes `bez QA`, `bez review`, `bez quality`, `bez weryfikacji`, `bez sprawdzania`, `without QA`, `without review`, `without verification`, `no verification`, and `fast path no review`.
+- Opt-out must report `Quality skipped by owner opt-out` and residual risk; it does not allow continuing as `PASS`, bypassing required QA/Quality gates, or bypassing risk, permissions, evidence, DoD, approvals, or stop conditions.
 
 ### End-of-Task Capture
 
@@ -909,6 +909,9 @@ English variants:
 Routing notes:
 
 - Side tasks still need scope, low risk, no unresolved decisions, and evidence.
+- Side-task, micro-task, and micro-project implementation-class writes need a compact or full Implementation Slice Plan from `.systems/ai/core/implementation-slicing.md` before writes.
+- When there is no formal spec, the accepted owner prompt/context is the slice plan source and must provide an explicit or safely inferable DoD source.
+- After implementation-class writes, side-task, micro-task, and micro-project work uses advisory quality closure from `global-quality-review-stance` unless the owner explicitly opts out.
 - Project-local micro-tasks belong in `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks.md` and `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/micro-tasks/`.
 - Repo-level micro-projects belong in `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<micro-project>/`.
 - Architecture, plan, spec QA, quality phase, distillation, and checkpoint artifacts are optional for micro-tasks and micro-projects, but evidence is required.

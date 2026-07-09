@@ -137,10 +137,13 @@ A side task is allowed only when all conditions are true:
 Side tasks still require:
 
 - repository-first inspection;
+- compact or full Implementation Slice Plan from `.systems/ai/core/implementation-slicing.md` before implementation-class writes;
+- explicit or safely inferable Definition of Done before implementation-class writes;
 - smallest correct change;
 - source-of-truth order from `AGENTS.md`;
 - risk classification;
 - evidence in the final response;
+- advisory quality closure with verify/review evidence, findings/blockers, DoD fit, and residual risk unless the owner explicitly opts out;
 - no unrelated file changes.
 
 Project-local micro-tasks are side tasks with durable project-local artifacts. Store them in:
@@ -150,11 +153,15 @@ Project-local micro-tasks are side tasks with durable project-local artifacts. S
 
 Micro-tasks do not update `tasks.md`, `planning/`, `quality/`, `distillations/`, or `checkpoints/` unless the owner or risk classification promotes them to the full workflow. Architecture, plan, spec QA, quality phase, distillation, and checkpoint artifacts are optional for micro-tasks.
 
+Micro-task implementation-class writes still need a compact or full Implementation Slice Plan. When there is no formal spec, use the accepted owner prompt/context and micro-task artifact as the source. Record the DoD source before writes and finish with advisory quality closure unless the owner explicitly opts out.
+
 Repo-level micro-projects are small, self-contained, low-risk work items outside a full project workspace. Store them in:
 
 - `AI_WORKFLOW_WORKSPACE_HOME/micro-projects/<micro-project>/`
 
 Micro-projects do not create `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` workspaces and do not use phase artifacts unless promoted to the normal workflow.
+
+Micro-project implementation-class writes still need a compact or full Implementation Slice Plan. When there is no formal spec, use the accepted owner prompt/context and micro-project artifact as the source. Record the DoD source before writes and finish with advisory quality closure unless the owner explicitly opts out.
 
 Route to the full workflow when:
 

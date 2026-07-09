@@ -13,6 +13,26 @@
 
 - 
 
+## Implementation Slice Plan
+
+- Source: `<accepted spec|accepted owner prompt/context>`
+- Implementation scope:
+- DoD source: `<accepted spec DoD|accepted owner prompt/context DoD|safely inferred DoD>`
+
+| Slice ID | Goal | Expected Files/Areas | Acceptance Check | Evidence Required | Status |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | `<planned|in-progress|completed|blocked|skipped>` |
+
+Stop rule:
+
+- Stop and route to the proper phase or owner decision if a slice reveals scope creep, missing decision, dependency conflict, unsafe action, unapproved external effect, or spec/context mismatch.
+
+## Slice Execution Evidence
+
+| Slice ID | Status | Files/Areas Changed | Checks Run Or Skipped | Acceptance Result | Residual Risk | Next Slice Or Stop Reason |
+| --- | --- | --- | --- | --- | --- | --- |
+| | `<completed|blocked|skipped>` | | | | | |
+
 ## Files Changed
 
 | Path | Change Summary |
@@ -43,6 +63,11 @@
 - Known bugs in scope: `<none|list>`
 - Ready for Quality phase: `<yes|no>`
 - Blocking reason: `<none|reason>`
+
+## Quality Closure Target
+
+- Closure route: `phase-5-quality`
+- PASS Integrity note: formal `PASS` can be declared only in `phase-5-quality` after findings-first review, DoD fit, Intent / Plan / Spec Compliance, changed files review, edge cases, regression risk, skipped checks impact, residual risk, and no unresolved `P0`, `P1`, or material `P2`.
 
 ## Optional Knowledge Capture
 

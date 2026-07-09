@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_file() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    echo "Missing implementation slicing artifact: $path"
+    fail=1
+  fi
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for implementation slicing check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing implementation slicing reference in $file: $label"
+    fail=1
+  fi
+}
+
+required_files=(
+  ".systems/ai/core/implementation-slicing.md"
+  ".systems/ai/workflow/phase-4-implementation.md"
+  ".systems/ai/templates/workflow/phase-4-implementation.template.md"
+  ".systems/ai/templates/projects/micro-task.template.md"
+  ".systems/ai/templates/micro-projects/micro-project.template.md"
+  ".systems/scripts/check-implementation-slicing"
+)
+
+for path in "${required_files[@]}"; do
+  require_file "$path"
+done
+
+contract=".systems/ai/core/implementation-slicing.md"
+phase4=".systems/ai/workflow/phase-4-implementation.md"
+template=".systems/ai/templates/workflow/phase-4-implementation.template.md"
+micro_task_template=".systems/ai/templates/projects/micro-task.template.md"
+micro_project_template=".systems/ai/templates/micro-projects/micro-project.template.md"
+
+for term in \
+  'Implementation Slice Plan' \
+  'Slice Execution Evidence' \
+  'implementation-class writes' \
+  'accepted spec' \
+  'accepted owner prompt/context' \
+  'DoD source' \
+  'DoD Before Implementation' \
+  'slice id' \
+  'goal' \
+  'expected files/areas' \
+  'acceptance check' \
+  'evidence required' \
+  'status' \
+  'compact mode' \
+  'one-slice plan' \
+  'scope creep' \
+  'missing decision' \
+  'dependency conflict' \
+  'unsafe action' \
+  'Mandatory Quality Closure' \
+  'PASS Integrity Gate' \
+  'findings-first review' \
+  'No blockers found' \
+  'No findings found' \
+  'Ready for owner review'
+do
+  require_ref "$contract" "$term" "contract term: $term"
+done
+
+for term in \
+  'must not' \
+  'grant write permission' \
+  'expand scope' \
+  'change risk classification' \
+  'bypass.*accepted spec' \
+  'bypass.*QA/Quality' \
+  'bypass.*risk' \
+  'bypass.*permissions'
+do
+  require_ref "$contract" "$term" "authority boundary: $term"
+done
+
+for term in \
+  'Implementation Slice Plan' \
+  'Slice Execution Evidence' \
+  'implementation-class writes' \
+  'accepted spec' \
+  'DoD source' \
+  'testable Definition of Done' \
+  'findings-first review' \
+  'phase-5-quality'
+do
+  require_ref "$phase4" "$term" "phase-4 term: $term"
+done
+
+for term in \
+  '## Implementation Slice Plan' \
+  '## Slice Execution Evidence' \
+  'Source: `<accepted spec|accepted owner prompt/context>`' \
+  'DoD source' \
+  'Slice ID' \
+  'Expected Files/Areas' \
+  'Acceptance Check' \
+  'Evidence Required' \
+  'Residual Risk'
+do
+  require_ref "$template" "$term" "phase-4 template field: $term"
+done
+
+for file in "$micro_task_template" "$micro_project_template"; do
+  require_ref "$file" '## Definition of Done' "$file Definition of Done"
+  require_ref "$file" 'DoD source' "$file DoD source"
+  require_ref "$file" '## Implementation Slice Plan' "$file Implementation Slice Plan"
+  require_ref "$file" '## Quality Closure' "$file Quality Closure"
+  require_ref "$file" 'Findings/blockers' "$file findings/blockers"
+  require_ref "$file" 'No blockers found' "$file advisory no blockers wording"
+  require_ref "$file" 'Ready for owner review' "$file advisory ready wording"
+done
+
+require_ref ".systems/ai/core/operating-model.md" 'Implementation Slice Plan' "operating model side-task/micro-task/micro-project integration"
+require_ref ".systems/ai/core/operating-model.md" 'Definition of Done' "operating model DoD integration"
+require_ref ".systems/ai/core/operating-model.md" 'advisory quality closure' "operating model quality closure integration"
+require_ref ".systems/ai/core/command-routing.md" 'Implementation Slice Plan' "command routing integration"
+require_ref ".systems/ai/core/command-routing.md" 'DoD source' "command routing DoD integration"
+require_ref ".systems/ai/core/command-routing.md" 'PASS Integrity Gate' "command routing PASS integrity"
+require_ref ".systems/ai/core/workflow.md" 'implementation-slicing\.md' "workflow router integration"
+require_ref "AGENTS.md" 'implementation-slicing\.md' "AGENTS routing"
+require_ref "AGENTS.md" 'DoD source' "AGENTS DoD routing"
+require_ref "AGENTS.md" 'Formal `PASS`' "AGENTS PASS integrity"
+require_ref "HUMANS.md" 'Implementation Slice Plan' "human guidance"
+require_ref "HUMANS.md" 'DoD source' "human DoD guidance"
+require_ref "HUMANS.md" 'No blockers found' "human advisory quality wording"
+require_ref "README.md" 'implementation-slicing\.md' "README guidance"
+require_ref "README.md" 'DoD source' "README DoD guidance"
+require_ref "README.md" 'PASS' "README PASS integrity guidance"
+require_ref ".systems/ai/core/commands.md" 'check-implementation-slicing' "commands validator list"
+require_ref "AGENTS.md" 'check-implementation-slicing' "AGENTS validator list"
+require_ref "README.md" 'check-implementation-slicing' "README validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-implementation-slicing' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-implementation-slicing' "required artifacts list"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'implementation-slicing' "smoke coverage"
+
+unsafe_patterns=(
+  'slice plan may bypass spec'
+  'slice plan may bypass QA'
+  'slice plan may bypass risk'
+  'slice plan may bypass permissions'
+  'slice plan may bypass approvals'
+  'slicing may bypass QA'
+  'slicing may bypass spec'
+  'slicing may bypass risk'
+  'slicing may bypass permissions'
+  'slicing grants write permission'
+  'slice plan grants write permission'
+  'implementation-class writes do not need .*slice'
+  'no slice plan needed'
+  'implementation PASS without review'
+  'PASS before findings review'
+  'without verification may count as PASS'
+  'without verification can count as PASS'
+  'without verification allows PASS'
+  'advisory review may produce formal PASS'
+  'advisory review may create formal PASS'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'must not|does not|do not|cannot|never|invalid|unsafe|block|without evidence|without a formal gate|nie może|nie wolno|nie daje|nie zastępuje'; then
+    echo "Unsafe implementation slicing wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

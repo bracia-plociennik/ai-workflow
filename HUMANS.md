@@ -112,7 +112,9 @@ Formalne `phase-5-quality` uruchamiaj tylko wtedy, gdy istnieje task/package po 
 
 Domyślnie każde merytoryczne wykonanie pracy powinno kończyć się quality/review closure. Po implementacji używaj formalnej QA/Quality fazy, jeśli workflow ją definiuje. Dla side-tasków, micro-tasków, micro-projectów i advisory work wystarczy advisory `global-quality-review-stance`.
 
-Możesz jawnie pominąć review dla szybkiej ścieżki, pisząc `bez QA`, `bez review`, `bez quality`, `without QA`, `without review` albo `fast path no review`. Codex powinien wtedy napisać `Quality skipped by owner opt-out` i residual risk. To nie daje zgody na przejście przez wymagany QA PASS.
+Możesz jawnie pominąć review dla szybkiej ścieżki, pisząc `bez QA`, `bez review`, `bez quality`, `bez weryfikacji`, `bez sprawdzania`, `without QA`, `without review`, `without verification`, `no verification` albo `fast path no review`. Codex powinien wtedy napisać `Quality skipped by owner opt-out` i residual risk. To nie daje zgody na przejście przez wymagany QA PASS.
+
+Formalny `PASS` jest wiarygodny tylko po findings-first review: blockers, findings by severity, DoD fit, Intent / Plan / Spec Compliance, changed files review, edge cases, regression risk, skipped checks impact i residual risk. Jeśli są unresolved `P0`, `P1` albo materialne `P2`, wynik nie może być `PASS`. Dla micro-tasków, side-tasków, micro-projectów i workflow-maintenance bez formalnego gate Codex powinien pisać `No blockers found`, `No findings found` albo `Ready for owner review` z evidence, a nie formalne `PASS`.
 
 Praktyczne prompty:
 
@@ -532,6 +534,8 @@ Krótkie:
 ```text
 Side-task: popraw tekst CTA.
 ```
+
+Jeśli side-task, micro-task albo micro-project zawiera implementation-class writes, Codex powinien najpierw przygotować Implementation Slice Plan z `.systems/ai/core/implementation-slicing.md`. Dla małych low-risk zmian wystarczy compact one-slice plan, ale nadal musi wskazać source, scope, DoD source, expected files/areas, acceptance check, evidence required i status. Slice plan nie daje zgody na write, nie rozszerza scope i nie zastępuje QA/review closure.
 
 ### Micro-task i micro-project
 
@@ -1405,7 +1409,7 @@ Fazy:
 14. `phase-3-specification.md` - spec taska albo paczki.
 15. `phase-3-spec-qa.md` - sprawdzenie, czy spec nadaje się do implementacji.
 16. `phase-3-spec-fix-loop.md` - poprawki specyfikacji po FAIL.
-17. `phase-4-implementation.md` - zmiany w kodzie albo docs zgodne ze specem.
+17. `phase-4-implementation.md` - Implementation Slice Plan, potem zmiany w kodzie albo docs zgodne ze specem i Slice Execution Evidence.
 18. `phase-5-quality.md` - testy, review, manual checks i evidence.
 19. `phase-5-fix-loop.md` - poprawki implementacji po FAIL.
 20. `phase-6-distillation.md` - zapisanie wiedzy po tasku.

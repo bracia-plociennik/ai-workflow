@@ -42,6 +42,7 @@ git diff --check
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-intent-plan-spec-compliance-review
+.systems/scripts/check-implementation-slicing
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -59,6 +60,8 @@ git diff --check
 `check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
 
 `check-intent-plan-spec-compliance-review` validates the shared review/quality lens that compares implementation against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria, and blocks technical-only PASS/review wording.
+
+`check-implementation-slicing` validates the Implementation Slice Plan contract, DoD source, mandatory quality closure, PASS Integrity Gate, phase-4/template integration, side-task/micro-task/micro-project routing, and the boundary that slicing cannot bypass spec, scope, risk, permissions, approvals, or QA.
 
 `check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
 

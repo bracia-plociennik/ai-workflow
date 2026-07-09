@@ -107,6 +107,7 @@ cd ai-workflow
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-intent-plan-spec-compliance-review
+.systems/scripts/check-implementation-slicing
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -170,6 +171,10 @@ Dreaming Mode reports belong in `ai-workflow-workspace/dreams/runs/**`. They are
 
 Global quality review uses `.systems/ai/core/quality-review.md` for read-only/advisory review, code review, final review, findings, blockers, and generic quality-check prompts. It is findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and does not create formal `PASS`/`FAIL`, quality artifacts, status updates, or final-check approval.
 
+Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for implementation-class writes. Formal phase-4, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance writes start with an Implementation Slice Plan, include a DoD source, and record Slice Execution Evidence. Slicing does not grant write permission, expand scope, or bypass QA.
+
+Implementation work must end with quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; micro-work and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` requires findings-first review evidence and cannot be declared with unresolved `P0`, `P1`, or material `P2` findings. Advisory closure uses wording such as `No blockers found`, `No findings found`, or `Ready for owner review` instead of formal `PASS`.
+
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
 End-of-Task Capture uses `.systems/ai/core/end-of-task-capture.md` for chat-end prompts such as `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`. It preserves existing `distillation`, `checkpoint`, `final review`, `final check`, `final-owner-yes`, change-request, and commit-readiness routing, then produces capture review/proposal unless durable capture is explicitly approved and safe.
@@ -220,6 +225,7 @@ git diff --check
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-intent-plan-spec-compliance-review
+.systems/scripts/check-implementation-slicing
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

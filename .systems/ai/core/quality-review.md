@@ -37,7 +37,7 @@ Default behavior:
 
 - after write or implementation work, use the formal QA/Quality phase when the active workflow defines and permits it;
 - for side tasks, micro-tasks, micro-projects, advisory work, docs-only workflow maintenance, and read-only audits, use `global-quality-review-stance` as advisory quality closure;
-- report findings, blockers, evidence reviewed, skipped checks, residual risk, and whether a formal gate can be used;
+- after implementation, slice execution, or fix work, report verify/review evidence, findings, blockers, DoD fit, intent/plan/spec/prompt compliance, changed files review, edge cases, regression risk, skipped checks impact, residual risk, and whether a formal gate can be used;
 - include the result in the user-facing response and `Execution Trace`.
 
 Owner opt-out grammar:
@@ -45,11 +45,37 @@ Owner opt-out grammar:
 - `bez QA`
 - `bez review`
 - `bez quality`
+- `bez weryfikacji`
+- `bez sprawdzania`
 - `without QA`
 - `without review`
+- `without verification`
+- `no verification`
 - `fast path no review`
 
-When the owner opts out, the response must state `Quality skipped by owner opt-out` and report residual risk. Opt-out does not allow continuing as `PASS`, does not satisfy a required QA/Quality gate, and does not allow moving to the next phase when QA PASS is required.
+When the owner opts out, the response must state `Quality skipped by owner opt-out` and report residual risk. Opt-out does not allow continuing as `PASS`, does not satisfy a required QA/Quality gate, does not allow moving to the next phase when QA PASS is required, and does not bypass risk, permissions, evidence, DoD, approvals, or stop conditions.
+
+## PASS Integrity Gate
+
+Formal `PASS` is allowed only inside formal QA/Quality phases, including `phase-5-quality`, when required inputs, writes, evidence, and gate permissions are satisfied.
+
+Formal `PASS` requires findings-first review evidence before the result is declared. The review lens must include:
+
+- blockers;
+- findings by severity;
+- DoD fit;
+- intent/plan/spec/prompt compliance;
+- changed files review;
+- edge cases;
+- regression risk;
+- skipped checks impact;
+- residual risk.
+
+If unresolved `P0`, `P1`, or material `P2` findings remain, the result cannot be `PASS`.
+
+Do not use empty `zweryfikowane`, `verified`, or `PASS` wording without evidence and findings-first review. Advisory review and default quality closure outside a formal gate must not produce formal `PASS`; use evidence wording such as `No blockers found`, `No findings found`, or `Ready for owner review`.
+
+If a later review finds a material issue that the required review lens should have caught, treat it as a new finding/regression or evidence that the earlier `PASS` was invalid because the required lens or evidence was missing.
 
 ## Review Procedure
 

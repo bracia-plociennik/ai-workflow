@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, and `end-of-task-capture.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `implementation-slicing.md`, and `end-of-task-capture.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -211,6 +211,10 @@ Micro-task and micro-project architecture, planning, spec QA, quality phase, dis
 
 Before committing a side task, micro-task, micro-project, full-project task, or workflow-maintenance change, record or report the advisory contract compliance and knowledge capture decision required by `.systems/ai/core/contract-compliance.md`.
 
+Implementation-class writes in full-project implementation, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance changes require an Implementation Slice Plan from `.systems/ai/core/implementation-slicing.md` before writes. The plan must include a DoD source. Tiny low-risk one-file fixes may use compact one-slice plans. Slicing is sequencing/evidence discipline only and cannot grant write permission, expand scope, change risk, bypass accepted specs or owner prompt/context, skip approvals, or satisfy QA by itself.
+
+After implementation-class writes, run quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; side tasks, micro-tasks, micro-projects, and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` is allowed only in formal QA/Quality gates after findings-first review with no unresolved `P0`, `P1`, or material `P2`. Advisory closure must use evidence wording such as `No blockers found`, `No findings found`, or `Ready for owner review`, not formal `PASS`.
+
 ## Risk Routing
 
 Use `.systems/ai/core/risk-model.md`.
@@ -331,6 +335,7 @@ git diff --check
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
 .systems/scripts/check-intent-plan-spec-compliance-review
+.systems/scripts/check-implementation-slicing
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

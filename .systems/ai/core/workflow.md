@@ -112,7 +112,7 @@ Every workflow phase and phase artifact includes `Optional Knowledge Capture`. T
 | 3 specification | `.systems/ai/workflow/phase-3-specification.md` | task/package spec |
 | 3 spec QA | `.systems/ai/workflow/phase-3-spec-qa.md` | spec QA evidence |
 | 3 spec fix loop | `.systems/ai/workflow/phase-3-spec-fix-loop.md` | updated spec plus fix evidence |
-| 4 implementation | `.systems/ai/workflow/phase-4-implementation.md` | implementation result |
+| 4 implementation | `.systems/ai/workflow/phase-4-implementation.md` plus `.systems/ai/core/implementation-slicing.md` | implementation result with Implementation Slice Plan and Slice Execution Evidence |
 | 5 quality | `.systems/ai/workflow/phase-5-quality.md` | quality evidence |
 | 5 fix loop | `.systems/ai/workflow/phase-5-fix-loop.md` | implementation fixes plus quality rerun |
 | 6 distillation | `.systems/ai/workflow/phase-6-distillation.md` | distillation artifact |
