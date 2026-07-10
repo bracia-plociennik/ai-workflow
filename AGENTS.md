@@ -90,9 +90,11 @@ If the user asks to capture anonymized lessons, System Insights, cross-project b
 
 If the user asks for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams, route through `.systems/ai/core/dreaming-mode.md`. Dreaming Mode is advisory-only and writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`. It cannot automatically write memory, External Memory, System Insights, skills, status, source files, commits, pull requests, scheduler automation, or approvals.
 
-If the user asks for review, code review, final review, findings, blockers, or a quality check outside a clearly resolvable formal phase, route through `.systems/ai/core/quality-review.md`. The global quality review stance is read-only/advisory by default, findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and cannot mark formal `PASS` or `FAIL`, update quality artifacts, or trigger `phase-8-final-check`.
+If the user asks for review, code review, final review, findings, blockers, or a quality check outside a clearly resolvable formal phase, route through `.systems/ai/core/quality-review.md`. The global quality review stance is read-only/advisory by default, findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and cannot mark formal `PASS` or `FAIL`, update quality artifacts, or trigger `phase-8-final-check`. Its Review Completeness Gate must also check cross-contract consistency, risk/work mode compatibility, negative-space/adversarial cases, automated evidence as supporting-only, post-fix full re-review, reviewed baseline, and closure freshness.
 
 If the user says the task is done and asks to preserve learnings, for example `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`, route through `.systems/ai/core/end-of-task-capture.md`. Apply its precedence first: final-owner-yes/change requests, explicit formal phases, global review, and commit readiness keep priority. End-of-Task Capture is capture review/proposal by default. It must not mark `PASS`, run `phase-8-final-check`, close a project, update status from chat-only claims, or write durable memory/insights unless target, scope, privacy, evidence, and write permission are clear.
+
+After implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task with unresolved capture value, use `.systems/ai/core/knowledge-capture-reminder.md`. Knowledge Capture Reminder is advisory unless an existing gate requires capture. It may propose distillation, checkpoint, memory, External Memory, System Insights, or status/evidence targets, but it must not automatically write them, commit ignored workspace artifacts, or push.
 
 Before committing, preparing a commit summary, or closing work, apply `.systems/ai/core/contract-compliance.md`. The gate is advisory-only, but the agent should explicitly state work mode compliance and the knowledge capture decision: `required` with the correct target, or `not-required` with a reason.
 
@@ -339,6 +341,7 @@ git diff --check
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
+.systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

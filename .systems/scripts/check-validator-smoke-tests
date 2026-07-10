@@ -300,6 +300,16 @@ MD
 run_must_fail "contract-compliance-requires-micro-task-knowledge-capture" .systems/scripts/check-contract-compliance
 mv "$tmp/.systems/ai/templates/projects/micro-task.template.md.bak" "$tmp/.systems/ai/templates/projects/micro-task.template.md"
 
+cp "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak"
+perl -0pi -e 's/Risk: `low`/Risk: `medium`/' "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+run_must_fail "contract-compliance-blocks-medium-risk-micro-project-template" .systems/scripts/check-contract-compliance
+mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+
+cp "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak"
+perl -0pi -e 's/Work mode: `repo-level-micro-project`/Work mode: `workflow-maintenance`/' "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+run_must_fail "contract-compliance-requires-micro-project-work-mode" .systems/scripts/check-contract-compliance
+mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+
 run_must_pass "system-skills-valid" .systems/scripts/check-system-skills
 run_must_pass "naming-allows-canonical-skill-md" .systems/scripts/check-naming
 
@@ -1410,6 +1420,36 @@ mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-repo
 
 run_must_pass "global-quality-review-valid" .systems/scripts/check-global-quality-review-stance
 
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/Cross-contract consistency/Cross-policy note/g' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-requires-cross-contract-consistency" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/- Negative-space \/ adversarial review: `<completed\|not-applicable\|incomplete>`\n//' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "global-quality-review-requires-formal-negative-space-field" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\ngreen validators are sufficient for PASS\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-green-validator-verdict" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\npost-fix review may inspect only fixed lines\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-fixed-lines-only-review" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nclosure may remain current without full re-review\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-current-closure-without-rereview" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+printf '\nNo findings found may be declared with stale closure\n' >> "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "global-quality-review-blocks-no-findings-with-stale-closure" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
 cp "$tmp/.systems/ai/core/command-routing.md" "$tmp/.systems/ai/core/command-routing.md.bak"
 perl -0pi -e 's/find blockers/find bx/g; s/Find blockers/Find bx/g' "$tmp/.systems/ai/core/command-routing.md"
 run_must_fail "global-quality-review-requires-find-blockers-routing" .systems/scripts/check-global-quality-review-stance
@@ -1512,6 +1552,16 @@ mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/
 cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
 printf '\nPASS before findings review\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
 run_must_fail "implementation-slicing-blocks-pass-before-findings-review" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\npost-fix review may inspect only fixed lines\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-blocks-fixed-lines-only-post-fix-review" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nautomated checks are sufficient for PASS\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-blocks-automated-only-pass" .systems/scripts/check-implementation-slicing
 mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
 
 cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
@@ -1765,6 +1815,90 @@ cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-
 printf '\nExternal Memory stores frontend lessons\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
 run_must_fail "end-of-task-capture-blocks-external-memory-domain-lessons" .systems/scripts/check-end-of-task-capture
 mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+run_must_pass "knowledge-capture-reminder-valid" .systems/scripts/check-knowledge-capture-reminder
+
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+run_must_fail "knowledge-capture-reminder-requires-contract" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+mv "$tmp/.systems/ai/templates/capture/knowledge-capture-reminder.template.md" "$tmp/.systems/ai/templates/capture/knowledge-capture-reminder.template.md.bak"
+run_must_fail "knowledge-capture-reminder-requires-template" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/templates/capture/knowledge-capture-reminder.template.md.bak" "$tmp/.systems/ai/templates/capture/knowledge-capture-reminder.template.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+perl -0pi -e 's/implementation work completed/implementation finished/g' "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-requires-implementation-trigger" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+perl -0pi -e 's/the owner starts a new unrelated task/the owner starts a follow-up/g' "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-requires-new-unrelated-task-trigger" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nKnowledge Capture Reminder automatically writes memory\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-auto-memory" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nKnowledge Capture Reminder automatically writes memory; this does not require owner approval\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-auto-memory-with-trailing-negation" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nKnowledge Capture Reminder auto-push\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-auto-push" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\ncommit ignored workspace artifacts\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-ignored-workspace-commit" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nskip knowledge capture may bypass phase 6 evidence privacy status gate\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-skip-bypass" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nowner-approved skip capture may bypass permissions and owner approvals\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-skip-permission-bypass" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nno capture may ignore stop conditions\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-skip-stop-condition-bypass" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+product_domains=(frontend backend "smart contract" SEO ads advertising "paid media" offer "client work" product)
+for domain in "${product_domains[@]}"; do
+  cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+  printf '\nExternal Memory stores %s lessons\n' "$domain" >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+  domain_slug="${domain// /-}"
+  run_must_fail "knowledge-capture-reminder-blocks-external-memory-${domain_slug}-lessons" .systems/scripts/check-knowledge-capture-reminder
+  mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+done
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nProduct lessons belong in External Memory\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-inverse-external-memory-domain-routing" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nSystem Insights stores anonymized SEO lessons.\nExternal Memory stores AI Workflow improvement proposals.\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_pass "knowledge-capture-reminder-allows-valid-memory-targets" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nExternal Memory never stores SEO lessons.\nProduct lessons do not belong in External Memory.\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_pass "knowledge-capture-reminder-allows-negated-domain-boundaries" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+
+cp "$tmp/.systems/ai/core/knowledge-capture-reminder.md" "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak"
+printf '\nSystem Insights may include raw client data\n' >> "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
+run_must_fail "knowledge-capture-reminder-blocks-system-insights-raw-client-data" .systems/scripts/check-knowledge-capture-reminder
+mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
 
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality

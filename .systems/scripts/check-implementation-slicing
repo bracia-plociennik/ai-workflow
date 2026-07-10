@@ -72,7 +72,11 @@ for term in \
   'findings-first review' \
   'No blockers found' \
   'No findings found' \
-  'Ready for owner review'
+  'Ready for owner review' \
+  'Post-fix full re-review' \
+  'full current diff/worktree' \
+  'Closure freshness' \
+  'supporting evidence'
 do
   require_ref "$contract" "$term" "contract term: $term"
 done
@@ -125,6 +129,8 @@ for file in "$micro_task_template" "$micro_project_template"; do
   require_ref "$file" 'Findings/blockers' "$file findings/blockers"
   require_ref "$file" 'No blockers found' "$file advisory no blockers wording"
   require_ref "$file" 'Ready for owner review' "$file advisory ready wording"
+  require_ref "$file" 'Post-fix full re-review' "$file post-fix full review"
+  require_ref "$file" 'Closure freshness' "$file closure freshness"
 done
 
 require_ref ".systems/ai/core/operating-model.md" 'Implementation Slice Plan' "operating model side-task/micro-task/micro-project integration"
@@ -171,6 +177,9 @@ unsafe_patterns=(
   'without verification allows PASS'
   'advisory review may produce formal PASS'
   'advisory review may create formal PASS'
+  'post-fix review may inspect only fixed lines'
+  'post-fix review can inspect only fixed lines'
+  'automated checks are sufficient for PASS'
 )
 
 for pattern in "${unsafe_patterns[@]}"; do

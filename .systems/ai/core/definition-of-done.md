@@ -41,6 +41,8 @@ Phase-level `Optional Knowledge Capture` is also advisory. A `no`, `none`, `reje
 
 End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` is also advisory unless the owner explicitly approves durable capture and the target, scope, privacy, evidence, and write permission are clear. It cannot mark `PASS`, close a project, run final check, or replace required distillation/checkpoint.
 
+Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md` should be considered after implementation, fixes, quality closure, handoff, commit readiness, or before unrelated new work. It is advisory unless existing workflow gates require capture. Optional reminder skip must report residual risk and cannot replace required distillation, checkpoint, status/evidence sync, QA evidence, privacy checks, or commit readiness.
+
 ## FAIL Rule
 
 Mark `FAIL` when any required criterion is missing, unverified, contradicted by repository state, or blocked by an unresolved decision.

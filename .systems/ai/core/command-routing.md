@@ -664,6 +664,9 @@ Routing notes:
 - Review, code review, final review, find findings, find blockers, and generic quality-check prompts use `global-quality-review-stance` unless the current project state clearly satisfies formal `phase-5-quality` routing.
 - `global-quality-review-stance` is read-only/advisory by default, findings-first, and reports severity, blockers, DoD fit, Intent / Plan / Spec Compliance, changed files review, edge cases, regression risk, skipped/unreadable areas, residual risk, and formal gate eligibility.
 - Review and quality commands compare implementation against owner instruction, accepted plan, accepted spec, approved scope, and acceptance criteria when those sources exist. Technical checks are not enough if the work solves the wrong problem, misses accepted scope, or adds unapproved scope creep.
+- Review Completeness Gate checks cross-contract consistency, risk/work mode compatibility, source-of-truth and phase boundaries, negative-space/adversarial cases, reviewed baseline, and closure freshness.
+- Automated tests and validators are supporting evidence, not a standalone verdict. Green checks do not authorize `No findings found`, `Ready for owner review`, or formal `PASS` without the required manual/static review lenses.
+- Any fix after review makes the previous closure `stale`; rerun the complete review against the full current diff/worktree, not only the fixed lines.
 - Advisory review cannot mark formal `PASS` or `FAIL`, create quality artifacts, update status, or bypass QA/Quality gates.
 - `final review` does not trigger `phase-8-final-check`.
 - `review i popraw` runs review first; fixes require a separate allowed write path, risk gates, and owner approval when required.
@@ -704,6 +707,30 @@ Routing notes:
 - If a command includes both completion wording and explicit phase wording, route by the explicit phase first and include the End-of-Task Capture decision as supporting output only.
 - Default output is capture review/proposal. Durable writes require explicit owner capture intent plus clear target, scope, privacy, evidence, and write permission.
 - End-of-Task Capture cannot mark `PASS`, run `phase-8-final-check`, close a project without `final-owner-yes`, update status from chat-only claims, store raw client data in System Insights, or store product/domain lessons in External Memory.
+
+### Knowledge Capture Reminder
+
+Use `.systems/ai/core/knowledge-capture-reminder.md` after implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task when previous work has unresolved capture value.
+
+Owner skip variants:
+
+- `pomijam capture`
+- `bez utrwalania wiedzy`
+- `skip knowledge capture`
+- `no capture`
+- `owner-approved skip capture`
+
+Routing notes:
+
+- Reminder is advisory unless existing gates require capture, such as `phase-6-distillation`, `phase-7-checkpoint`, status/evidence synchronization, or commit readiness.
+- If capture is required by phase 6 or phase 7, route to that phase instead of writing memory ad hoc.
+- If capture is useful but optional, show the reminder as proposal-only and allow owner skip with residual risk.
+- Ignored workspace-only capture reports `Commit needed: no, workspace ignored`.
+- Push is disabled by default and requires explicit owner request.
+- Reminder cannot automatically write memory, External Memory, System Insights, distillation, checkpoint, status, commits, pull requests, or push.
+- Owner skip does not bypass phase 6, phase 7, QA/Quality, evidence, privacy, status, risk, permissions, phase gates, stop conditions, or owner approvals.
+- External Memory remains only for AI Workflow improvement proposals; product/domain lessons belong elsewhere.
+- System Insights require anonymization and must not contain raw client data.
 
 ### Distillation
 

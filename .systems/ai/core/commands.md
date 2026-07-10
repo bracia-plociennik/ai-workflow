@@ -44,6 +44,7 @@ git diff --check
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
+.systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -65,6 +66,8 @@ git diff --check
 `check-implementation-slicing` validates the Implementation Slice Plan contract, DoD source, mandatory quality closure, PASS Integrity Gate, phase-4/template integration, side-task/micro-task/micro-project routing, and the boundary that slicing cannot bypass spec, scope, risk, permissions, approvals, or QA.
 
 `check-validation-profiles` validates `.systems/ai/core/validation-profiles.md`, `validate-workflow --profile` behavior, the no-arg `standard` validation default, explicit `full` smoke-test coverage, and the boundary that `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
+
+`check-knowledge-capture-reminder` validates the advisory post-implementation/fix/quality/handoff reminder, owner skip grammar, tracked-vs-ignored commit boundary, push-disabled default, and the rule that reminders cannot bypass phase 6, phase 7, QA, evidence, privacy, status, risk, permissions, or memory scope gates.
 
 `check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
 

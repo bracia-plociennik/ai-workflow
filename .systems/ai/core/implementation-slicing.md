@@ -112,6 +112,8 @@ Do not use empty `zweryfikowane`, `verified`, or `PASS` wording without evidence
 
 If a later review finds a material issue that the required lens should have caught, treat it as either a new finding/regression or evidence that the earlier `PASS` was invalid because the required review lens or evidence was missing.
 
+Any fix after quality review invalidates the previous quality closure. Set `Closure freshness: stale` and repeat the complete findings-first review against the full current diff/worktree, applicable artifacts, DoD, and cross-contract boundaries. `Post-fix full re-review` must inspect the complete current state, not only the fixed lines. Automated checks remain supporting evidence and cannot restore `No findings found`, `Ready for owner review`, or formal `PASS` without the full-current-state re-review required by `.systems/ai/core/quality-review.md`.
+
 ## Compact Mode
 
 Tiny low-risk implementation work may use compact mode.

@@ -57,11 +57,59 @@ for term in \
   'regression' \
   'architecture alignment' \
   'known bugs' \
+  'Review Completeness Gate' \
+  'Cross-contract consistency' \
+  'Risk/work mode compatibility' \
+  'Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed' \
+  'Negative-space / adversarial review' \
+  'Automated evidence role' \
+  'supporting-only' \
+  'Post-fix full re-review' \
+  'Reviewed baseline' \
+  'Closure freshness' \
+  'Recording the review artifact' \
   'mark formal `PASS` or `FAIL`' \
   'phase-8-final-check'
 do
   require_ref "$quality_contract" "$term" "$term"
 done
+
+for file in ".systems/ai/workflow/phase-5-quality.md" ".systems/ai/templates/workflow/phase-5-quality.template.md"; do
+  for term in \
+    'Review Completeness Gate' \
+    'Cross-contract consistency' \
+    'Risk/work mode compatibility' \
+    'Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed' \
+    'Negative-space / adversarial review' \
+    'Automated evidence role' \
+    'supporting-only' \
+    'Post-fix full re-review' \
+    'Reviewed baseline' \
+    'Closure freshness'
+  do
+    require_ref "$file" "$term" "$file review completeness: $term"
+  done
+done
+
+quality_template=".systems/ai/templates/workflow/phase-5-quality.template.md"
+for field_pattern in \
+  '^- Cross-contract consistency: `<aligned\|partial\|mismatch\|unknown>`$' \
+  '^- Risk/work mode compatibility: `<aligned\|partial\|mismatch\|unknown>`$' \
+  '^- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: `<yes\|no\|not-applicable>`$' \
+  '^- Negative-space / adversarial review: `<completed\|not-applicable\|incomplete>`$' \
+  '^- Automated evidence role: `supporting-only`$' \
+  '^- Post-fix full re-review: `<completed\|not-required\|incomplete>`$' \
+  '^- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`$' \
+  '^- Closure freshness: `<current\|stale>`$'
+do
+  require_ref "$quality_template" "$field_pattern" "formal quality template field: $field_pattern"
+done
+
+require_ref "AGENTS.md" 'Review Completeness Gate' "AGENTS review completeness routing"
+require_ref "HUMANS.md" 'Review Completeness Gate' "human review completeness guidance"
+require_ref "README.md" 'Review Completeness Gate' "README review completeness guidance"
+require_ref ".systems/ai/core/command-routing.md" 'supporting evidence, not a standalone verdict' "routing automated evidence boundary"
+require_ref ".systems/ai/core/command-routing.md" 'full current diff/worktree' "routing post-fix full review"
 
 require_ref "AGENTS.md" 'quality-review\.md' "AGENTS routing"
 require_ref "HUMANS.md" 'Global Quality Review' "human guidance"
@@ -110,6 +158,21 @@ for pattern in "${unsafe_patterns[@]}"; do
   if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
     | rg -v -i 'cannot|does not|must not|never|not trigger|not run|not start|not mark|not create|not update|prompt-composition|Workflow-phase roles|role framing|nie może|nie uruchamia|nie tworzy|nie aktualizuje'; then
     echo "Unsafe global quality review wording found: $pattern"
+    fail=1
+  fi
+done
+
+strict_unsafe_patterns=(
+  'green validators are sufficient for (PASS|No findings found)'
+  'automated (tests|checks|validators) are sufficient for (PASS|No findings found|Ready for owner review)'
+  'post-fix review (may|can|should) inspect only (the )?fixed lines'
+  'closure (may|can) remain current without[^.\n]{0,80}full[^.\n]{0,80}re-review'
+  'No findings found (may|can) be declared with (a )?stale closure'
+)
+
+for pattern in "${strict_unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates; then
+    echo "Unsafe review completeness wording found: $pattern"
     fail=1
   fi
 done

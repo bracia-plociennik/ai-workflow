@@ -91,6 +91,33 @@ Apply the same quality lenses as `phase-5-quality` where relevant:
 - skipped checks and their impact;
 - prompt-injection or instruction-conflict risk.
 
+## Review Completeness Gate
+
+Every advisory review and formal `phase-5-quality` run must complete this gate before declaring `No findings found`, `Ready for owner review`, `PASS`, or an equivalent quality verdict.
+
+Report:
+
+- Cross-contract consistency: `<aligned|partial|mismatch|unknown>`.
+- Risk/work mode compatibility: `<aligned|partial|mismatch|unknown>`.
+- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: `<yes|no|not-applicable>`.
+- Negative-space / adversarial review: `<completed|not-applicable|incomplete>`.
+- Automated evidence role: `supporting-only`.
+- Post-fix full re-review: `<completed|not-required|incomplete>`.
+- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`.
+- Closure freshness: `<current|stale>`.
+
+Cross-contract consistency compares the work against all applicable contracts, not only the accepted plan. At minimum, verify risk class against work mode, source-of-truth order, permissions, phase gates, artifact state, and acceptance criteria. A plan or owner instruction cannot silently authorize a mode that the risk model forbids.
+
+Negative-space / adversarial review asks what equivalent unsafe, incomplete, or contradictory case is not represented by the current tests. For validators and policy regexes, inspect omitted taxonomy values, paraphrases, inverse wording, bypass wording, and plausible false positives and false negatives. Passing only the named smoke example is insufficient.
+
+Automated tests, validators, builds, and smoke tests are supporting evidence, not a standalone verdict. Green automated checks do not prove that the implementation matches every applicable contract or that validator coverage is semantically complete.
+
+Any implementation or documentation fix made after review invalidates the previous closure. Set `Closure freshness: stale`, then repeat the complete review against the full current diff/worktree and applicable artifacts. Post-fix review must not inspect only the fixed lines. A different agent is not required, but the new review must restart from current sources and must not reuse the earlier verdict as evidence.
+
+Recording the review artifact or local evidence after the review does not invalidate closure when that write only records the completed review and does not change reviewed implementation, contracts, scope, decisions, or acceptance evidence. Any substantive correction made while recording closure starts a new fix cycle.
+
+Do not declare `No findings found`, `Ready for owner review`, or formal `PASS` when cross-contract consistency is `partial`, `mismatch`, or `unknown`; negative-space review is required but incomplete; automated checks are the only evidence; post-fix full re-review is incomplete; or closure freshness is `stale`.
+
 ### Intent / Plan / Spec Compliance
 
 Every global quality review must explicitly compare the reviewed work against the owner instruction and the accepted scope sources that are available.
@@ -134,6 +161,7 @@ The default output is findings-first:
 - evidence reviewed;
 - skipped/unreadable areas;
 - residual risk;
+- Review Completeness Gate;
 - formal gate eligibility.
 
 Use severities:

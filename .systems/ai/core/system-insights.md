@@ -56,6 +56,8 @@ Agents may also propose `System Insight Candidates` in Dream Reports created by 
 
 Agents may also mark `Target: <system-insights>` in a phase artifact's `Optional Knowledge Capture` block when a phase produces a reusable anonymized operating lesson. That block is only a candidate/proposal unless it is part of an owner-approved capture task or a phase that explicitly permits durable System Insight writes.
 
+Agents may also propose a `System Insight Candidate` through Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md` after implementation, fixes, quality closure, handoff, commit readiness, or before unrelated new work. The reminder is proposal-only for System Insights unless an owner-approved capture task or allowed checkpoint/final-check route grants durable write permission.
+
 Agents must not write durable System Insights ad hoc during active implementation.
 
 Durable writes to `AI_WORKFLOW_WORKSPACE_HOME/system-insights/**` are allowed only when one of these is true:

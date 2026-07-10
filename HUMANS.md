@@ -110,6 +110,8 @@ Intent / Plan / Spec Compliance sprawdza, czy wykonanie odpowiada na owner instr
 
 Formalne `phase-5-quality` uruchamiaj tylko wtedy, gdy istnieje task/package po implementacji, znane są wymagane wejścia, można zapisać quality evidence i spełnione są gates. `PASS` wymaga zgodności z owner instruction, accepted plan, accepted spec, approved scope i acceptance criteria; same przechodzące testy techniczne nie wystarczą.
 
+Każdy globalny review i formalne phase-5 stosują także `Review Completeness Gate`: sprawdzają zgodność risk z work mode i pozostałymi kontraktami, szukają pominiętych wariantów oraz false positives/false negatives, traktują automatyczne testy tylko jako supporting evidence i zapisują reviewed baseline. Każda poprawka po review unieważnia wcześniejszą closure; przed `No findings found`, `Ready for owner review` albo `PASS` trzeba ponowić cały review aktualnego diffu/worktree, nie tylko poprawionych linii.
+
 Domyślnie każde merytoryczne wykonanie pracy powinno kończyć się quality/review closure. Po implementacji używaj formalnej QA/Quality fazy, jeśli workflow ją definiuje. Dla side-tasków, micro-tasków, micro-projectów i advisory work wystarczy advisory `global-quality-review-stance`.
 
 Możesz jawnie pominąć review dla szybkiej ścieżki, pisząc `bez QA`, `bez review`, `bez quality`, `bez weryfikacji`, `bez sprawdzania`, `without QA`, `without review`, `without verification`, `no verification` albo `fast path no review`. Codex powinien wtedy napisać `Quality skipped by owner opt-out` i residual risk. To nie daje zgody na przejście przez wymagany QA PASS.
@@ -488,6 +490,14 @@ Dziękuję, utrwal wiedzę z tej rozmowy.
 ```
 
 Ten tryb nie zastępuje `Zrób distillation`, `Zrób checkpoint`, `Zrób final review`, `Zrób final check`, `final-owner-yes`, change requestów ani commit readiness. Jeśli polecenie zawiera jednocześnie jawny formalny etap i `koniec zadania`, formalny etap ma pierwszeństwo, a End-of-Task Capture jest tylko decyzją wspierającą.
+
+### Knowledge Capture Reminder
+
+Po implementacji, fixach, quality closure, handoffie, commit readiness albo przed wejściem w nowy niezwiązany temat Codex powinien przypomnieć o utrwaleniu wiedzy, jeśli poprzednia praca ma nierozstrzygniętą wartość capture.
+
+Reminder jest miękki, chyba że istniejące bramki wymagają `phase-6-distillation`, `phase-7-checkpoint`, status/evidence sync albo commit readiness. Możesz pominąć opcjonalny reminder przez `pomijam capture`, `bez utrwalania wiedzy`, `skip knowledge capture`, `no capture` albo `owner-approved skip capture`. Pominięcie musi pokazać residual risk i nie omija twardych bramek.
+
+Capture zapisane tylko w ignored `ai-workflow-workspace/**` nie tworzy commita. Push nigdy nie jest domyślny i wymaga jawnego polecenia.
 
 ### Final check i final-owner-yes
 

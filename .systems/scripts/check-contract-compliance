@@ -46,6 +46,10 @@ required_contract_terms=(
   "repo-level-micro-project"
   "side-task"
   "workflow-maintenance"
+  "Risk/work mode compatible"
+  "Review completeness gate"
+  "Post-fix full re-review"
+  "Closure freshness"
   "phase-6-distillation"
   "phase-7-checkpoint"
   "not-required"
@@ -64,7 +68,15 @@ for template in .systems/ai/templates/projects/micro-task.template.md .systems/a
   require_ref "$template" '## Contract Compliance' "template contract compliance section"
   require_ref "$template" '## Knowledge Capture' "template knowledge capture section"
   require_ref "$template" 'Promote to full workflow' "template promote decision"
+  require_ref "$template" 'Risk/work mode compatibility' "template risk/work mode review"
+  require_ref "$template" 'Post-fix full re-review' "template post-fix full review"
+  require_ref "$template" 'Closure freshness' "template closure freshness"
 done
+
+require_ref ".systems/ai/templates/projects/micro-task.template.md" 'Risk: `low`' "micro-task low-risk contract"
+require_ref ".systems/ai/templates/projects/micro-task.template.md" 'Work mode: `project-local-micro-task`' "micro-task work mode"
+require_ref ".systems/ai/templates/micro-projects/micro-project.template.md" 'Risk: `low`' "micro-project low-risk contract"
+require_ref ".systems/ai/templates/micro-projects/micro-project.template.md" 'Work mode: `repo-level-micro-project`' "micro-project work mode"
 
 require_ref ".systems/scripts/validate-workflow" 'check-contract-compliance' "validator chain"
 require_ref ".systems/scripts/check-required-artifacts" 'check-contract-compliance' "required artifact list"

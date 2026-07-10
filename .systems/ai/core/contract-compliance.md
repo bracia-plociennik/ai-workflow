@@ -31,6 +31,8 @@ Before implementation, commit, or handoff, classify the work mode:
 
 `global-quality-review-stance` from `.systems/ai/core/quality-review.md` can be used inside any work mode as read-only/advisory quality review. It does not create a formal quality artifact and does not replace work mode compliance, evidence, risk, write permissions, or formal phase gates.
 
+Review Completeness Gate applies to advisory review and formal `phase-5-quality`. It requires cross-contract consistency, explicit risk/work mode compatibility, negative-space/adversarial review when validators or policy boundaries are involved, automated evidence treated as supporting-only, a full-current-state post-fix re-review, a reviewed baseline, and `Closure freshness: current` before a quality-ready verdict.
+
 `request-batch-triage` from `.systems/ai/core/request-batch-triage.md` can precede any work mode when the owner provides multiple items. It classifies and recommends routes only. It is not itself commit-ready evidence for implementation and does not create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests without the separately approved routed work mode.
 
 Default Quality Closure from `.systems/ai/core/quality-review.md` applies before handoff or commit for substantive work. Use formal QA/Quality when the active workflow defines it; otherwise use advisory `global-quality-review-stance`. After implementation, slice execution, or fix work, quality closure must cover verify/review evidence, findings/blockers, DoD fit, intent/plan/spec/prompt compliance, changed files review, edge cases, regression risk, skipped checks impact, and residual risk. If the owner opts out with `bez QA`, `bez review`, `bez quality`, `bez weryfikacji`, `bez sprawdzania`, `without QA`, `without review`, `without verification`, `no verification`, or `fast path no review`, record `Quality skipped by owner opt-out` plus residual risk. Opt-out does not satisfy required QA PASS and cannot bypass risk, permissions, evidence, DoD, approvals, or stop conditions.
@@ -41,6 +43,8 @@ Validation Profiles from `.systems/ai/core/validation-profiles.md` apply to work
 
 End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` can precede handoff when the owner says the task is done and asks to preserve learnings. It is capture review/proposal by default. It does not replace this compliance gate, and it does not grant permission to skip evidence, quality, risk, phase gates, memory scope boundaries, or owner approvals.
 
+Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md` applies after implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task when previous work may have unresolved capture value. It is a pre-handoff and pre-new-work lens, not a hard requirement for every task. It can recommend capture targets, but durable writes still require target, scope, privacy, evidence, write permission, and the correct phase or artifact path.
+
 The selected mode must match risk, scope, approvals, write set, and artifacts. If the mode does not fit, route to the safer workflow path before continuing.
 
 ## Compliance Questions
@@ -49,17 +53,23 @@ Answer these before commit or handoff:
 
 - `Work mode compliance: pass|warning|blocked`
 - `Work mode: <full-project|project-local-micro-task|repo-level-micro-project|side-task|workflow-maintenance>`
+- `Risk/work mode compatible: yes|no`
 - `Scope/acceptance clear: yes|no`
 - `Risk allowed for mode: yes|no`
 - `Required artifacts current: yes|no|not-applicable`
 - `Write-set conflicts: none|warning|blocked`
 - `Evidence available: yes|no`
 - `Quality closure: formal|advisory|skipped-owner-opt-out|not-applicable`
+- `Review completeness gate: complete|incomplete|not-applicable`
+- `Post-fix full re-review: completed|not-required|incomplete`
+- `Closure freshness: current|stale|not-applicable`
 - `Knowledge capture: required|not-required`
 - `Knowledge capture target: <status/evidence|micro-task-artifact|micro-project-artifact|phase-6-distillation|phase-7-checkpoint|project-memory|repo-memory|external-memory|system-insights|not-applicable>`
 - `Reason: <short evidence-backed reason>`
 
 If any answer is `blocked` or `no` for a required item, stop before commit unless the current phase explicitly allows recording the blocker.
+
+If risk is not compatible with the selected work mode, route to an allowed mode before implementation or handoff. Medium-risk, high-risk, and critical-risk work must not remain in micro-task or repo-level-micro-project mode. If review completeness is incomplete, post-fix full re-review is incomplete, or closure freshness is stale, do not report commit readiness.
 
 ## Knowledge Capture Decision
 

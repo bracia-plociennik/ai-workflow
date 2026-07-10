@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for knowledge capture reminder check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qi "$pattern" "$file"; then
+    echo "Missing knowledge capture reminder reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/knowledge-capture-reminder.md"
+template=".systems/ai/templates/capture/knowledge-capture-reminder.template.md"
+
+require_ref "$contract" '^# knowledge-capture-reminder\.md$' "core contract"
+require_ref "$contract" 'Knowledge Capture Reminder' "contract name"
+require_ref "$contract" 'Triggers' "triggers"
+require_ref "$contract" 'Required Output' "required output"
+require_ref "$contract" 'Owner Skip' "owner skip"
+require_ref "$contract" 'Commit And Push Policy' "commit and push policy"
+require_ref "$contract" 'Safety Boundaries' "safety boundaries"
+require_ref "$template" '^# Knowledge Capture Reminder$' "template"
+
+for trigger in \
+  'implementation work completed' \
+  'fix work completed' \
+  'quality closure completed' \
+  'handoff is being prepared' \
+  'commit readiness is being checked' \
+  'the owner starts a new unrelated task' \
+  'unresolved capture decision'
+do
+  require_ref "$contract" "$trigger" "trigger: $trigger"
+done
+
+for field in \
+  'Trigger' \
+  'Previous work scope' \
+  'Capture state' \
+  'Recommended target' \
+  'Required vs optional' \
+  'Writes allowed' \
+  'Commit needed' \
+  'Push allowed' \
+  'Owner skip' \
+  'Residual risk'
+do
+  require_ref "$contract" "$field" "output field: $field"
+  require_ref "$template" "$field" "template field: $field"
+done
+
+for opt_out in \
+  'pomijam capture' \
+  'bez utrwalania wiedzy' \
+  'skip knowledge capture' \
+  'no capture' \
+  'owner-approved skip capture'
+do
+  require_ref "$contract" "$opt_out" "owner skip: $opt_out"
+  require_ref ".systems/ai/core/command-routing.md" "$opt_out" "routing owner skip: $opt_out"
+done
+
+for boundary in \
+  'automatically write memory' \
+  'Commit needed: no, workspace ignored' \
+  'Push allowed: no, owner request required' \
+  'Push is disabled by default' \
+  'phase-6-distillation' \
+  'phase-7-checkpoint' \
+  'status/evidence' \
+  'commit readiness' \
+  'External Memory only for AI Workflow improvement proposals' \
+  'System Insights only for anonymized cross-project operating lessons' \
+  'raw client data'
+do
+  require_ref "$contract" "$boundary" "boundary: $boundary"
+done
+
+for integration in \
+  "AGENTS.md:knowledge-capture-reminder\\.md" \
+  "HUMANS.md:Knowledge Capture Reminder" \
+  "README.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/command-routing.md:Knowledge Capture Reminder" \
+  ".systems/ai/core/workflow.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/memory.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/system-insights.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/contract-compliance.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/definition-of-done.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/response-contract.md:knowledge-capture-reminder\\.md" \
+  ".systems/ai/core/commands.md:check-knowledge-capture-reminder" \
+  "README.md:check-knowledge-capture-reminder" \
+  "AGENTS.md:check-knowledge-capture-reminder" \
+  ".systems/scripts/validate-workflow:check-knowledge-capture-reminder" \
+  ".systems/scripts/check-required-artifacts:check-knowledge-capture-reminder" \
+  ".systems/scripts/check-validator-smoke-tests:knowledge-capture-reminder"
+do
+  file="${integration%%:*}"
+  pattern="${integration#*:}"
+  require_ref "$file" "$pattern" "integration: $pattern"
+done
+
+product_domain='(frontend|backend|smart[ -]?contracts?|seo|ads|advertising|paid[ -]?media|offer|client[ -]?work|product)'
+product_knowledge='(lesson|lessons|insight|insights|practice|practices|rubric|checklist|heuristic|zasada|lekcja|wniosek)'
+
+unsafe_patterns=(
+  'Knowledge Capture Reminder automatically writes memory'
+  'Knowledge Capture Reminder writes External Memory automatically'
+  'Knowledge Capture Reminder writes System Insights automatically'
+  'Knowledge Capture Reminder runs phase-6-distillation automatically'
+  'Knowledge Capture Reminder runs phase-7-checkpoint automatically'
+  'Knowledge Capture Reminder auto-push'
+  'Knowledge Capture Reminder automatically pushes'
+  '^[[:space:]-]*commit ignored workspace artifacts([[:space:]]|$)'
+  'Knowledge Capture Reminder (may |can |must |will )?commit ignored workspace artifacts'
+  'ai-workflow-workspace.*must be committed'
+  '(skip knowledge capture|no capture|pomijam capture|bez utrwalania wiedzy|owner-approved skip capture)[^.\n]{0,160}\b(bypass|skip|omit|ignore|omija|pomija)\b[^.\n]{0,160}\b(phase 6|phase-6|phase 7|phase-7|QA|evidence|privacy|status|risk|permissions?|approvals?|stop conditions?|gate)\b'
+  "External Memory[[:space:]]+(stores|accepts|contains|keeps|records|is[[:space:]]+for|(may|can|should|must)[[:space:]]+(store|accept|contain|keep|record))\b[^.\n]{0,80}\b${product_domain}\b[^.\n]{0,80}\b${product_knowledge}\b"
+  "\b${product_domain}\b[[:space:]-]+\b${product_knowledge}\b[[:space:]]+(belong|belongs|go|goes|may go|can go|should go|are stored|is stored)[^.\n]{0,80}\bExternal Memory\b"
+  'System Insights may include raw client data'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates; then
+    echo "Unsafe knowledge capture reminder wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

@@ -58,6 +58,14 @@ It uses the same memory scope boundaries as this router:
 
 Default End-of-Task Capture output is proposal-only. Durable memory writes require explicit owner capture intent plus clear target, scope, privacy, evidence, and write permission.
 
+## Knowledge Capture Reminder
+
+`.systems/ai/core/knowledge-capture-reminder.md` can proactively remind the agent and owner to consider capture after implementation, fixes, quality closure, handoff, commit readiness, or before switching to unrelated new work.
+
+The reminder uses the same scope boundaries as this router. It may recommend project memory, repo memory, External Memory, System Insights, status/evidence, phase 6 distillation, phase 7 checkpoint, `proposal-only`, or `none`.
+
+It must not automatically write durable memory. Durable writes require the existing owner approval, privacy, source evidence, write permission, and phase/artifact routing.
+
 ## Memory Index
 
 | Date | Topic | Type | Status | Route |

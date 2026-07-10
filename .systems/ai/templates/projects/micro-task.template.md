@@ -6,6 +6,7 @@
 - Project: `<project>`
 - Scope: `<short scope>`
 - Risk: `low`
+- Work mode: `project-local-micro-task`
 - Result: `<completed|blocked|promoted>`
 
 ## Acceptance
@@ -41,6 +42,13 @@
 - Findings/blockers: `<none|list>`
 - DoD fit: `<aligned|partial|mismatch|unknown>`
 - Intent/plan/spec/prompt compliance: `<aligned|partial|mismatch|unknown>`
+- Cross-contract consistency: `<aligned|partial|mismatch|unknown>`
+- Risk/work mode compatibility: `<aligned|partial|mismatch|unknown>`
+- Negative-space / adversarial review: `<completed|not-applicable|incomplete>`
+- Automated evidence role: `supporting-only`
+- Post-fix full re-review: `<completed|not-required|incomplete>`
+- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`
+- Closure freshness: `<current|stale>`
 - Result wording: `<No blockers found|No findings found|Ready for owner review|Quality skipped by owner opt-out>`
 - Residual risk: `<risk>`
 

@@ -34,6 +34,18 @@
 - Overbuild: `<yes|no>`
 - Evidence:
 
+## Review Completeness Gate
+
+- Cross-contract consistency: `<aligned|partial|mismatch|unknown>`
+- Risk/work mode compatibility: `<aligned|partial|mismatch|unknown>`
+- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: `<yes|no|not-applicable>`
+- Negative-space / adversarial review: `<completed|not-applicable|incomplete>`
+- Automated evidence role: `supporting-only`
+- Post-fix full re-review: `<completed|not-required|incomplete>`
+- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`
+- Closure freshness: `<current|stale>`
+- Evidence:
+
 ## Commands
 
 | Command | Result | Notes |
@@ -77,6 +89,13 @@
 ## Quality Gate
 
 - Intent / Plan / Spec Compliance PASS: `<yes|no>`
+- Review Completeness Gate PASS: `<yes|no>`
+- Cross-contract consistency aligned: `<yes|no>`
+- Risk/work mode compatibility aligned: `<yes|no>`
+- Negative-space / adversarial review complete or not applicable: `<yes|no>`
+- Automated evidence treated as supporting-only: `<yes|no>`
+- Post-fix full re-review complete or not required: `<yes|no>`
+- Closure freshness current: `<yes|no>`
 - 100% DoD satisfied: `<yes|no>`
 - No known bug in scope: `<yes|no>`
 - No regression in changed/direct paths: `<yes|no>`

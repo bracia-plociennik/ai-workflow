@@ -61,6 +61,8 @@ If the owner explicitly opts out of Default Idea Validation with `bez idea valid
 
 If End-of-Task Capture is used, the trace must state whether it was the matched route or supporting output, which sources were reviewed, whether durable writes were performed or skipped, and residual risk. Use `.systems/ai/core/end-of-task-capture.md` for the required `End-of-Task Capture` block.
 
+If Knowledge Capture Reminder is used, the trace must state the trigger, previous work scope, capture state, recommended target, whether capture is required or optional, whether writes are allowed, whether commit or push is allowed, owner skip state, and residual risk. Use `.systems/ai/core/knowledge-capture-reminder.md` for the required block.
+
 ## Required Footer
 
 Use this exact section shape:

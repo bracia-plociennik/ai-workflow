@@ -17,6 +17,7 @@
 
 - 100% of task/package DoD is satisfied.
 - Intent / Plan / Spec Compliance is `PASS`: implementation matches the owner instruction, accepted plan, accepted spec, approved scope, and acceptance criteria.
+- Review Completeness Gate is complete, cross-contract consistency and risk/work mode compatibility are aligned, and closure freshness is `current`.
 - Relevant tests/checks passed or were explicitly skipped without affecting PASS.
 - No known in-scope bug, direct regression, missing evidence, or unresolved blocker remains.
 
@@ -24,6 +25,7 @@
 
 - Any DoD item is unmet.
 - Implementation solves the wrong problem, misses the owner instruction, diverges from the accepted plan or accepted spec, fails acceptance criteria, or includes unapproved scope creep.
+- Review Completeness Gate is incomplete, post-fix full re-review is incomplete, or closure freshness is `stale`.
 - Evidence is missing, placeholder-only, or contradicted by repo state.
 - A skipped check affects PASS or a regression/bug remains.
 
@@ -37,6 +39,7 @@
 - Commands, manual checks, and artifacts reviewed.
 - Owner instruction, accepted plan, accepted spec, scope/out-of-scope notes, and acceptance criteria reviewed or explicitly marked missing/stale/unreadable with impact.
 - DoD matrix, skipped checks with impact, findings, and residual risks.
+- Cross-contract consistency, negative-space/adversarial review, automated-evidence role, reviewed baseline, post-fix full re-review, and closure freshness.
 - Explicit gate decision.
 
 ### Next allowed phases
@@ -138,11 +141,28 @@ Jeśli czegoś nie dało się zweryfikować:
 Codex musi zawsze wykonać i zaraportować:
 
 - Intent / Plan / Spec Compliance
+- Review Completeness Gate
 - walidację DoD
 - check edge cases
 - check regresji
 - check zgodności z architekturą
 - check known bugs
+
+## **Review Completeness Gate**
+
+Przed `PASS` Codex musi potwierdzić:
+
+- Cross-contract consistency: risk class jest zgodny z work mode, a source-of-truth, permissions, phase gates, artifact state i acceptance criteria nie są sprzeczne.
+- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: `yes|no|not-applicable`.
+- Negative-space / adversarial review: dla validatorów, regexów i granic policy sprawdzono pominięte warianty taxonomy, równoważne parafrazy, inverse wording, bypass wording oraz możliwe false positives i false negatives.
+- Automated evidence role: `supporting-only`; zielone testy i validatory nie są samodzielnym werdyktem.
+- Post-fix full re-review: po każdej poprawce od ostatniego review ponownie sprawdzono cały aktualny diff/worktree, nie tylko poprawione linie.
+- Reviewed baseline: zapisano aktualny HEAD, worktree/diff i artefakty objęte review.
+- Closure freshness: `current`.
+
+Każda poprawka po review ustawia closure na `stale`. Dopóki pełny post-fix review nie zostanie ponowiony, wynik tej fazy musi być `FAIL` albo stop condition. Nie wolno przyznać `PASS` wyłącznie dlatego, że automatyczne checks są zielone.
+
+Samo zapisanie quality artifactu po zakończonym review nie unieważnia closure, jeśli wyłącznie utrwala wykonane evidence i nie zmienia implementacji, kontraktów, scope, decyzji ani acceptance evidence. Merytoryczna korekta wykonana podczas zapisu rozpoczyna nowy fix loop.
 
 ## **Zasada walidacji DoD**
 
@@ -248,6 +268,14 @@ Raport końcowy powinien zawierać:
 
 - wynik końcowy: PASS / FAIL
 - Intent / Plan / Spec Compliance: PASS / FAIL
+- Review Completeness Gate: PASS / FAIL
+- Cross-contract consistency: aligned / partial / mismatch / unknown
+- Risk/work mode compatibility: aligned / partial / mismatch / unknown
+- Negative-space / adversarial review: completed / not-applicable / incomplete
+- Automated evidence role: supporting-only
+- Post-fix full re-review: completed / not-required / incomplete
+- Reviewed baseline
+- Closure freshness: current / stale
 - compared against: owner instruction, accepted plan, accepted spec, scope, acceptance criteria
 - DoD: PASS / FAIL
 - edge cases: PASS / FAIL

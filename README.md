@@ -109,6 +109,7 @@ cd ai-workflow
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
+.systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -176,11 +177,15 @@ Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for imp
 
 Implementation work must end with quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; micro-work and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` requires findings-first review evidence and cannot be declared with unresolved `P0`, `P1`, or material `P2` findings. Advisory closure uses wording such as `No blockers found`, `No findings found`, or `Ready for owner review` instead of formal `PASS`.
 
+Review Completeness Gate requires cross-contract and risk/work-mode consistency, negative-space/adversarial review for validators and policy boundaries, automated checks treated as supporting evidence, a reviewed baseline, and a fresh full-current-state review after every fix. A stale closure cannot support `No findings found`, `Ready for owner review`, commit readiness, or formal `PASS`.
+
 Validation profiles use `.systems/ai/core/validation-profiles.md`. `.systems/scripts/validate-workflow` with no arguments uses the `standard` profile for daily iteration and ordinary post-implementation quality. Use `.systems/scripts/validate-workflow --profile fast --explain` for quick sanity checks, `.systems/scripts/validate-workflow --profile scoped --checks <check-name> --explain` for explicit validator iteration, and `.systems/scripts/validate-workflow --profile full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
 
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
 End-of-Task Capture uses `.systems/ai/core/end-of-task-capture.md` for chat-end prompts such as `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`. It preserves existing `distillation`, `checkpoint`, `final review`, `final check`, `final-owner-yes`, change-request, and commit-readiness routing, then produces capture review/proposal unless durable capture is explicitly approved and safe.
+
+Knowledge Capture Reminder uses `.systems/ai/core/knowledge-capture-reminder.md` after implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task when previous work has unresolved capture value. It is advisory unless existing gates require capture. It can recommend distillation, checkpoint, memory, External Memory, System Insights, or status/evidence, but it does not automatically write them, commit ignored workspace artifacts, or push.
 
 Every workflow phase artifact also includes `Optional Knowledge Capture`, a soft decision about whether the phase produced reusable knowledge and whether to capture it now, defer to distillation/checkpoint, reject it, or record `none`. This does not automatically write memory and does not block the next phase when no capture is needed.
 
@@ -230,6 +235,7 @@ git diff --check
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
+.systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

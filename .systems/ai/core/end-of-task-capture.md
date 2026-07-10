@@ -8,6 +8,8 @@ It is not a workflow phase. It does not replace `phase-6-distillation`, `phase-7
 
 Default behavior is capture review/proposal. Durable writes are allowed only when the owner explicitly requests capture and target, scope, privacy, status, and write gates are clear.
 
+Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md` is different: it is proactive after implementation, fixes, quality closure, handoff, commit readiness, or before unrelated new work. End-of-Task Capture remains owner-triggered by completion/capture wording and keeps the routing order below.
+
 ## Trigger Grammar
 
 Use End-of-Task Capture only when the command includes completion/capture intent, such as:
