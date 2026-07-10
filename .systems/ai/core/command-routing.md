@@ -43,6 +43,7 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
 - If a command is clear but gates are not satisfied, route to the required predecessor phase or stop with the blocking gate.
 - If a command is ambiguous, inspect repo artifacts first. Ask only when the missing information cannot be discovered safely.
+- After intake or batch triage, use Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md`. Ask at most 1-3 material questions with recommendation and impacts; disclose safe reversible choices instead of asking about every implementation detail.
 - If a command conflicts with workflow safety, stop. Do not reinterpret it as approval to bypass safeguards.
 
 ## Clarification Format
@@ -53,11 +54,39 @@ When asking for missing information, include:
 - alternative and impact;
 - exact decision needed to continue.
 
+Use the decision classes, grouped question limit, non-interactive exceptions, and no-question opt-out from `.systems/ai/core/owner-decision-checkpoints.md`. Do not ask generic permission to continue when no material owner decision exists.
+
+Recognize `nie dopytuj`, `bez pytań`, `nie zadawaj pytań pomocniczych`, `do not ask follow-up questions`, `no clarifying questions`, and `use reasonable defaults` as task-local question opt-outs. They do not bypass risk, permissions, DoD, evidence, QA/Quality, approvals, or stop conditions.
+
 Example:
 
 ```text
 I can resolve "taski 01-16" as WH-LANDING-001..WH-ADMIN-016 from the active WorkshopHub plan. Recommendation: run supervised autopilot only for low/medium-risk ready tasks; impact: faster progress, high-risk payment/mail tasks will stop for approval. Alternative: implement only one task manually; impact: slower but easier review. Please confirm which mode to use.
 ```
+
+### Owner Decision Discovery
+
+Polish variants:
+
+- `Dopytaj mnie o decyzje.`
+- `Jakie decyzje muszę podjąć?`
+- `Nie dopytuj.`
+- `Bez pytań, użyj rozsądnych defaultów.`
+
+English variants:
+
+- `Ask me for the decisions I need to make.`
+- `What owner decisions are needed?`
+- `Do not ask follow-up questions.`
+- `Use reasonable defaults.`
+
+Routing notes:
+
+- Default interactive work uses `.systems/ai/core/owner-decision-checkpoints.md` after intake and before dependent work.
+- Ask at most 1-3 material decisions with the recommended option first and impact for every option.
+- Do not ask for repository-discoverable facts or every low-impact reversible detail.
+- Active autopilot, Dreaming/automations, and read-only review queue decisions without mid-run interruption.
+- No-question opt-out cannot bypass scope, risk, permissions, security, billing, migrations, production, external effects, DoD, evidence, QA/Quality, approvals, or stop conditions.
 
 ## Unsafe Or Bypass Commands
 
@@ -102,7 +131,7 @@ Owner opt-out grammar:
 - `skip idea validation`;
 - `fast path no idea validation`.
 
-Opt-out skips only the idea/task validation lens output. It does not skip source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, or any stop condition. If acceptance criteria, target project, risk, safe environment, or write permission remains unclear, stop and ask for the missing decision.
+Opt-out skips only the idea/task validation lens output. It does not skip source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, or any stop condition. If acceptance criteria, target project, risk, safe environment, or write permission remains unclear, stop and request the missing decision. When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.
 
 Polish variants:
 
@@ -416,6 +445,8 @@ Routing notes:
 - The opt-out runs only the requested working phase and stops.
 - This opt-out does not approve moving to the next phase when QA/Quality PASS is required.
 - If the working phase fails, is blocked, or lacks required evidence, stop before the paired QA/Quality phase.
+- If its `Owner Decision Checkpoint` is materially `awaiting-owner` or `blocked`, stop before the paired QA/Quality phase.
+- Optional owner refinements and disclosed auto-resolved reversible decisions do not block the paired QA/Quality phase.
 - If the paired QA/Quality phase returns `FAIL`, stop at the matching fix loop.
 - `phase-8-final-check` remains owner-triggered only and must never be started by default phase quality chaining.
 
@@ -1030,7 +1061,7 @@ Route to decision review before changing architecture, plan, spec, or implementa
 Polish variants:
 
 - `Przejrzyj decyzje AI.`
-- `Pokaż decyzje auto-resolvable, high-impact i critical-risk.`
+- `Pokaż decyzje auto-resolvable, owner-preference, high-impact i critical-risk.`
 - `Sprawdź, które decyzje wymagają owner approval.`
 - `Zrób review decyzji przed implementacją.`
 - `Pokaż rekomendację, alternatywę i impact każdej decyzji.`
@@ -1038,7 +1069,7 @@ Polish variants:
 English variants:
 
 - `Review the AI decisions.`
-- `Show auto-resolvable, high-impact, and critical-risk decisions.`
+- `Show auto-resolvable, owner-preference, high-impact, and critical-risk decisions.`
 - `Check which decisions require owner approval.`
 - `Run decision review before implementation.`
 - `Show recommendation, alternative, and impact for each decision.`

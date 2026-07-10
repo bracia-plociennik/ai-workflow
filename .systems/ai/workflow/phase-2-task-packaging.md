@@ -63,6 +63,17 @@ Ta faza służy do grupowania tasków w pakiety przed specyfikacją, ale tylko n
 Celem nie jest zmiana planu.
 Celem jest przyspieszenie specyfikacji poprzez bezpieczne grupowanie tasków.
 
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`

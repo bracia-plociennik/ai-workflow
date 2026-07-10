@@ -1982,6 +1982,91 @@ perl -0pi -e 's/Instruction refresh/Refresh result/g' "$tmp/.systems/ai/core/con
 run_must_fail "contract-compliance-requires-instruction-refresh" .systems/scripts/check-contract-compliance
 mv "$tmp/.systems/ai/core/contract-compliance.md.bak" "$tmp/.systems/ai/core/contract-compliance.md"
 
+run_must_pass "owner-decision-checkpoints-valid" .systems/scripts/check-owner-decision-checkpoints
+
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+run_must_fail "owner-decision-checkpoints-requires-contract" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+
+cp "$tmp/.systems/ai/workflow/phase-1-architecture.md" "$tmp/.systems/ai/workflow/phase-1-architecture.md.bak"
+perl -0pi -e 's/## Owner Decision Checkpoint/## Decision Notes/' "$tmp/.systems/ai/workflow/phase-1-architecture.md"
+run_must_fail "owner-decision-checkpoints-requires-phase-block" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/workflow/phase-1-architecture.md.bak" "$tmp/.systems/ai/workflow/phase-1-architecture.md"
+
+cp "$tmp/.systems/ai/workflow/phase-1-architecture.md" "$tmp/.systems/ai/workflow/phase-1-architecture.md.bak"
+printf '\n## Owner Decision Checkpoint\n' >> "$tmp/.systems/ai/workflow/phase-1-architecture.md"
+run_must_fail "owner-decision-checkpoints-blocks-duplicate-phase-block" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/workflow/phase-1-architecture.md.bak" "$tmp/.systems/ai/workflow/phase-1-architecture.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md" "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md.bak"
+perl -0pi -e 's/- Optional owner refinements: `<list\|none>`\n//' "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md"
+run_must_fail "owner-decision-checkpoints-requires-template-fields" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md"
+
+cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+perl -0pi -e 's/`owner-preference`/`owner-choice`/g' "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_fail "owner-decision-checkpoints-requires-owner-preference" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md" "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md.bak"
+perl -0pi -e 's/owner-preference/owner-choice/g' "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md"
+run_must_fail "owner-decision-checkpoints-requires-owner-preference-in-phase-taxonomy" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-0-idea-validation.template.md"
+
+cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+perl -0pi -e 's/put the recommended option first/list options in any order/' "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_fail "owner-decision-checkpoints-requires-recommendation-first" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+
+cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+perl -0pi -e 's/group at most `1-3` questions/group material questions/' "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_fail "owner-decision-checkpoints-requires-question-batch-limit" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+
+cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+perl -0pi -e 's/provide impact for the recommendation and each alternative/list available options/' "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_fail "owner-decision-checkpoints-requires-option-impact" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+
+for unsafe_case in \
+  'ask the owner about every uncertainty' \
+  'auto-resolve high-impact decisions' \
+  'critical-risk decisions are auto-resolvable' \
+  'nie dopytuj may bypass QA' \
+  'no-question opt-out allows guessed acceptance criteria' \
+  'autopilot may ask live questions while running' \
+  'autopilot asks clarification questions while running' \
+  'autopilot may continue with a pending material decision' \
+  'autopilot continues with a pending material decision' \
+  'Dreaming Mode may ask live questions' \
+  'Dreaming Mode asks follow-up questions' \
+  'read-only review may interrupt to ask' \
+  'Optional Knowledge Capture requires interactive question'
+do
+  cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+  printf '\n%s\n' "$unsafe_case" >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+  unsafe_slug="$(printf '%s' "$unsafe_case" | tr '[:upper:] ' '[:lower:]-' | tr -cd '[:alnum:]-')"
+  run_must_fail "owner-decision-checkpoints-blocks-${unsafe_slug}" .systems/scripts/check-owner-decision-checkpoints
+  mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+done
+
+cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
+perl -0pi -e 's/- Decisions asked\/pending: <ids\|none>\n//' "$tmp/.systems/ai/core/response-contract.md"
+run_must_fail "owner-decision-checkpoints-requires-response-trace" .systems/scripts/check-owner-decision-checkpoints
+run_must_fail "response-evidence-trace-requires-owner-decision-fields" .systems/scripts/check-response-evidence-trace
+mv "$tmp/.systems/ai/core/response-contract.md.bak" "$tmp/.systems/ai/core/response-contract.md"
+
+cp "$tmp/.systems/ai/core/workflow.md" "$tmp/.systems/ai/core/workflow.md.bak"
+perl -0pi -e 's/If the working phase ends with a material `Owner Decision Checkpoint` state of `awaiting-owner` or `blocked`, stop before QA\/Quality chaining\./Pending decisions can be handled after QA./' "$tmp/.systems/ai/core/workflow.md"
+run_must_fail "owner-decision-checkpoints-blocks-quality-chain-with-pending-decision" .systems/scripts/check-owner-decision-checkpoints
+run_must_fail "default-quality-chaining-blocks-pending-owner-decision" .systems/scripts/check-default-quality-phase-chaining
+mv "$tmp/.systems/ai/core/workflow.md.bak" "$tmp/.systems/ai/core/workflow.md"
+
+cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak"
+printf '\nA deterministic task with no material choice reports `No owner decision needed`. Optional refinements and reversible auto-resolved decisions remain non-blocking.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_pass "owner-decision-checkpoints-allows-deterministic-and-phase-end-recap" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality
 

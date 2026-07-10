@@ -107,6 +107,17 @@
 - Quality result: `<PASS|FAIL>`
 - Required next phase: `<6. FAZA DESTYLACJI|5.5. FIX LOOP>`
 
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`

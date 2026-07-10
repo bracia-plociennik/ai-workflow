@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `implementation-slicing.md`, `instruction-adherence-refresh.md`, and `end-of-task-capture.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `implementation-slicing.md`, `instruction-adherence-refresh.md`, and `end-of-task-capture.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -61,9 +61,11 @@ Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow comm
 
 If the owner provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, route through `.systems/ai/core/request-batch-triage.md` before ordinary task intake, planning, specification, implementation, task creation, change request creation, or autopilot. Batch triage groups, splits, classifies risk, and recommends routes only. It does not grant write permission and does not automatically create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests.
 
+Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation or batch triage and before dependent planning, specification, implementation, or owner-sensitive writes. Ask about material decisions and meaningful owner preferences by default, grouped into at most 1-3 questions with a recommendation and impacts. Discover repository facts first, auto-resolve only safe reversible details, and report those decisions. Active autopilot, Dreaming/automations, and read-only review queue decisions instead of interrupting mid-run. Explicit no-question opt-out suppresses questions only inside its contracted scope and cannot bypass hard gates.
+
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
-Default Idea Validation applies to new work unless the owner explicitly opts out. Single new work uses Task Idea Validation, new or broad project ideas use formal `phase-0-idea-validation`, and batch/list/checklist input uses `request-batch-triage` plus the selected validation route. Owner opt-out grammar is `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`. Opt-out skips only the idea/task validation lens output and must report `Idea validation skipped by owner opt-out` plus residual risk in `Execution Trace`. It must not bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, Definition of Done, or stop conditions. If acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence remains unclear, stop and ask.
+Default Idea Validation applies to new work unless the owner explicitly opts out. Single new work uses Task Idea Validation, new or broad project ideas use formal `phase-0-idea-validation`, and batch/list/checklist input uses `request-batch-triage` plus the selected validation route. Owner opt-out grammar is `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`. Opt-out skips only the idea/task validation lens output and must report `Idea validation skipped by owner opt-out` plus residual risk in `Execution Trace`. It must not bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, Definition of Done, or stop conditions. If acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence remains unclear, stop and request the missing decision. When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.
 
 If the user asks `co teraz`, `co dalej`, `jak zacząć`, `zgubiłem się`, `what should I do next`, or equivalent, use `.systems/ai/core/guide.md`. Read status and artifacts first, then give exactly one recommendation with impact and exactly one alternative with impact.
 
@@ -103,6 +105,8 @@ Before committing, preparing a commit summary, or closing work, apply `.systems/
 Use `.systems/ai/core/validation-profiles.md` for validation profile routing. `.systems/scripts/validate-workflow` with no arguments is the `standard` profile for daily iteration and ordinary post-implementation quality. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
 
 Every workflow phase artifact should include `Optional Knowledge Capture`: a soft decision about whether the phase produced reusable knowledge and where it belongs. This does not require memory after every phase and does not grant durable write permission outside the current phase's `Writes allowed`, memory policy, System Insights policy, risk policy, or owner approvals.
+
+Every workflow phase artifact must also include `Owner Decision Checkpoint`. Optional refinements and reported reversible decisions do not block progression. A material `awaiting-owner` or `blocked` decision prevents dependent phase progression and default QA/Quality chaining.
 
 If a blocking detail is missing, ask before continuing. The clarification must include:
 
@@ -347,6 +351,7 @@ git diff --check
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
+.systems/scripts/check-owner-decision-checkpoints
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

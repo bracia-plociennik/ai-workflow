@@ -42,6 +42,8 @@ require_literal 'bez QA' .systems/ai/core/workflow.md .systems/ai/core/command-r
 require_literal 'without QA' .systems/ai/core/workflow.md .systems/ai/core/command-routing.md HUMANS.md
 require_literal_in_file 'This opt-out does not approve moving to the next phase when QA/Quality PASS is required.' .systems/ai/core/workflow.md
 require_literal_in_file 'This opt-out does not approve moving to the next phase when QA/Quality PASS is required.' .systems/ai/core/command-routing.md
+require_literal_in_file 'If the working phase ends with a material `Owner Decision Checkpoint` state of `awaiting-owner` or `blocked`, stop before QA/Quality chaining.' .systems/ai/core/workflow.md
+require_literal_in_file 'If its `Owner Decision Checkpoint` is materially `awaiting-owner` or `blocked`, stop before the paired QA/Quality phase.' .systems/ai/core/command-routing.md
 
 if rg -i -q 'without QA may continue to next phase|without QA can continue to next phase|without QA may proceed to next phase|without QA can proceed to next phase|bez QA.*moze przejsc do kolejnej fazy|bez QA.*może przejść do kolejnej fazy|bez QA.*moze kontynuowac|bez QA.*może kontynuować' .systems/ai/core .systems/ai/workflow .systems/ai/templates HUMANS.md; then
   echo "Unsafe opt-out wording suggests progression without required QA"

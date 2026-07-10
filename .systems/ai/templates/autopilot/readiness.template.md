@@ -96,6 +96,7 @@ blockers:
 
 owner-decisions:
   - id: <decision-id>
+    classification: <owner-preference|high-impact|critical-risk|blocked-by-missing-facts>
     decision: <decision-needed>
     options:
       - option: <recommended-option>
@@ -106,6 +107,12 @@ owner-decisions:
     chosen-answer: null
     approval-evidence: null
     status: <pending|approved|rejected|not-applicable>
+
+decision-interaction:
+  mode: <asked|queued|none-needed|autopilot-non-interactive>
+  max-batch-size: 3
+  pending-material-decisions: []
+  auto-resolved-decisions: []
 
 external-effects:
   email: <none|test-adapter|real-write|unknown>
@@ -132,4 +139,4 @@ For `planning-range`, missing architecture, plan, optional owner-requested packa
 
 For `implementation-range`, missing Architecture QA PASS, Plan QA PASS, packaging decision or solo-by-default/not-requested packaging decision, first Spec QA PASS, safe implementation write scope, or checkpoint policy is blocking.
 
-Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`.
+Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`. Readiness cannot be `ready` while a material owner decision is pending.

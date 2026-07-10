@@ -61,6 +61,17 @@
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/status.md` and decision artifacts required by this phase.
 - No product-code writes.
 
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`
@@ -103,7 +114,7 @@ Codex must classify the idea into:
 - what is strong and should definitely stay;
 - what is weak and should be improved or removed;
 - what is missing and should be added before project context is created;
-- unresolved decisions, classified as `auto-resolvable`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`;
+- unresolved decisions, classified as `auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`;
 - known constraints from repo context;
 - recommended next shape of the idea.
 

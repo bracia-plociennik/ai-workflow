@@ -60,6 +60,17 @@ Ta faza służy do naprawy problemów wykrytych w fazie 3.5. FAZA SPECYFIKACJI Q
 Celem nie jest stworzenie nowej specyfikacji od zera.
 Celem jest poprawienie dokładnie tych błędów, braków, niespójności i ryzyk, które zostały wykryte przez QA, tak aby specyfikacja mogła przejść gate.
 
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`

@@ -49,6 +49,8 @@ Implementation-class writes must not start until the work has a clear and testab
 
 Before the first implementation-class write for an accepted scope, run targeted or full Instruction Adherence Refresh from `.systems/ai/core/instruction-adherence-refresh.md`. Repeat targeted refresh before the next write when controlling scope, instructions, accepted artifacts, status, permissions, or write set materially changed outside the accepted implementation output. Expected output edits inside the current accepted slice do not retrigger refresh by themselves. Resume, context compaction, working-directory change, long interruption, or source conflict requires full refresh.
 
+Before implementation slices begin, Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md` must classify remaining choices. Material decisions must be answered or queued through the active non-interactive route; only safe reversible choices may be auto-resolved and must be reported.
+
 For formal workflow tasks, the DoD comes from the accepted spec and Spec QA evidence. `phase-4-implementation` must stop when the DoD is missing, untestable, stale, or contradictory.
 
 For side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance changes, the DoD comes from the accepted owner prompt/context, accepted micro-task artifact, or accepted micro-project artifact. If the DoD is not explicit but is safely inferable, record the inference in the `Implementation Slice Plan`. If it is unclear, stop before writes and ask for the missing acceptance decision.

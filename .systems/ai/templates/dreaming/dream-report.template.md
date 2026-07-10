@@ -86,6 +86,9 @@ System Insights require anonymized cross-project operating lessons.
 
 ## Owner Decision Queue
 
+- Interaction mode: `queued`
+- Live questions asked: `none`
+
 | Priority | Source path | Finding | Proposed target | Owner action |
 | --- | --- | --- | --- | --- |
 | `<P1|P2|P3>` | `<path>` | `<finding>` | `<target>` | `<capture|review|create-task|create-skill-plan|reject|defer>` |

@@ -111,6 +111,7 @@ cd ai-workflow
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
+.systems/scripts/check-owner-decision-checkpoints
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -176,6 +177,8 @@ Global quality review uses `.systems/ai/core/quality-review.md` for read-only/ad
 
 Instruction Adherence Refresh uses `.systems/ai/core/instruction-adherence-refresh.md` to re-anchor long-running sessions on current contracts and repository state. Targeted refresh runs at pre-write, pre-commit/handoff/quality, and material scope/instruction-change boundaries; full refresh runs after resume, context compaction, working-directory change, long interruption, or source conflict. Every substantive Execution Trace reports refresh status and baseline, while normal continuation without a new trigger may report `not-needed`.
 
+Owner Decision Discovery uses `.systems/ai/core/owner-decision-checkpoints.md` to ask 1-3 material questions by default before dependent work, disclose safe reversible decisions, and add a phase-end checkpoint to every workflow phase. Active autopilot, Dreaming/automations, and read-only review queue decisions without mid-run interruption. Explicit no-question opt-out cannot bypass hard gates.
+
 Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for implementation-class writes. Formal phase-4, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance writes start with an Implementation Slice Plan, include a DoD source, and record Slice Execution Evidence. Slicing does not grant write permission, expand scope, or bypass QA.
 
 Implementation work must end with quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; micro-work and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` requires findings-first review evidence and cannot be declared with unresolved `P0`, `P1`, or material `P2` findings. Advisory closure uses wording such as `No blockers found`, `No findings found`, or `Ready for owner review` instead of formal `PASS`.
@@ -240,6 +243,7 @@ git diff --check
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
+.systems/scripts/check-owner-decision-checkpoints
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

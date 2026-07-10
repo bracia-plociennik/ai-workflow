@@ -17,7 +17,7 @@
 ### Pass criteria
 
 - Architecture defines scope boundaries, components, data/integration impact, risks, and open decisions.
-- Unknowns are classified as resolved, auto-resolvable, high-impact, critical-risk, or blocked.
+- Unknowns are classified as resolved, auto-resolvable, owner-preference, high-impact, critical-risk, or blocked.
 - Plan can be produced without guessing architecture.
 
 ### Fail criteria
@@ -232,6 +232,17 @@ powstał artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/pha
 ```
 
 ---
+
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
 
 ## Optional Knowledge Capture
 

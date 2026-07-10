@@ -79,6 +79,17 @@ This phase is the first bootstrap step after cloning AI Workflow into a target r
 
 It prepares the target-owned workspace, preserves legacy context, and creates the local execution entrypoint when safe. It does not replace `phase-0-repo-intake`; repo intake still records real repository facts, command maps, safe environments, risk zones, and readiness for project work.
 
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`

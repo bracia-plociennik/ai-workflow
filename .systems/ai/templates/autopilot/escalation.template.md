@@ -8,7 +8,7 @@ escalation:
   task-id: null
   phase: null
   escalation-reason: null
-  classification: null # retry-limit | critical-risk | blocking-drift | recovery-inconsistency | missing-access | unresolved-high-impact-decision | budget-exceeded
+  classification: null # retry-limit | critical-risk | blocking-drift | recovery-inconsistency | missing-access | unresolved-owner-preference | unresolved-high-impact-decision | budget-exceeded
   workflow-effect: STOP
 
 failed-checks: []

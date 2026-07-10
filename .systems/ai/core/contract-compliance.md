@@ -35,6 +35,8 @@ Review Completeness Gate applies to advisory review and formal `phase-5-quality`
 
 Instruction Adherence Refresh from `.systems/ai/core/instruction-adherence-refresh.md` is required before commit readiness or handoff. Use targeted refresh when continuity is intact and full refresh after resume, compaction, working-directory change, long interruption, or conflict. A stale or blocked instruction baseline blocks commit readiness.
 
+Owner Decision Checkpoint from `.systems/ai/core/owner-decision-checkpoints.md` must be current before commit or handoff. A material `awaiting-owner` or `blocked` decision blocks commit readiness. Optional refinements and disclosed reversible auto-resolved decisions do not block readiness.
+
 `request-batch-triage` from `.systems/ai/core/request-batch-triage.md` can precede any work mode when the owner provides multiple items. It classifies and recommends routes only. It is not itself commit-ready evidence for implementation and does not create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests without the separately approved routed work mode.
 
 Default Quality Closure from `.systems/ai/core/quality-review.md` applies before handoff or commit for substantive work. Use formal QA/Quality when the active workflow defines it; otherwise use advisory `global-quality-review-stance`. After implementation, slice execution, or fix work, quality closure must cover verify/review evidence, findings/blockers, DoD fit, intent/plan/spec/prompt compliance, changed files review, edge cases, regression risk, skipped checks impact, and residual risk. If the owner opts out with `bez QA`, `bez review`, `bez quality`, `bez weryfikacji`, `bez sprawdzania`, `without QA`, `without review`, `without verification`, `no verification`, or `fast path no review`, record `Quality skipped by owner opt-out` plus residual risk. Opt-out does not satisfy required QA PASS and cannot bypass risk, permissions, evidence, DoD, approvals, or stop conditions.
@@ -65,6 +67,7 @@ Answer these before commit or handoff:
 - `Review completeness gate: complete|incomplete|not-applicable`
 - `Instruction refresh: performed-targeted|performed-full|not-needed|blocked`
 - `Instruction baseline: current|stale|blocked`
+- `Owner decision state: clear|awaiting-owner|blocked|queued|not-applicable`
 - `Post-fix full re-review: completed|not-required|incomplete`
 - `Closure freshness: current|stale|not-applicable`
 - `Knowledge capture: required|not-required`

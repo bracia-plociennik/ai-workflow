@@ -28,7 +28,7 @@ When the owner uses one of these phrases, skip only the Task Idea Validation or 
 
 The opt-out must not skip source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, Definition of Done, prompt-injection policy, or status/evidence reconciliation.
 
-If the opt-out leaves acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence unclear, stop and ask for the missing decision instead of planning or executing.
+If the opt-out leaves acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence unclear, stop and request the missing decision instead of planning or executing. When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.
 
 ## When To Use
 
@@ -81,6 +81,19 @@ Choose the safest workflow path:
 - change request triage through `.systems/ai/core/change-requests.md`;
 - supervised autopilot only when task set, risk, gates, safe environment, and evidence are clear;
 - STOP for missing approvals, unresolved high/critical risk, unsafe commands, or unknown safe environment.
+
+## Owner Decision Discovery
+
+After validation and before presenting a dependent plan or starting execution, use `.systems/ai/core/owner-decision-checkpoints.md`.
+
+- Inspect repository and accepted artifacts before asking.
+- Classify remaining choices as `auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`.
+- Ask at most 1-3 material questions that block the nearest safe next step.
+- Put the recommendation first and state impact for every option.
+- Report safe reversible decisions that were auto-resolved.
+- If no material decision exists, continue and report `No owner decision needed`.
+
+The owner no-question opt-out is separate from idea-validation opt-out. It suppresses interactive questions within the accepted scope but cannot make an unresolved hard gate executable.
 
 ## Modes
 

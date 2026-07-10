@@ -8,6 +8,10 @@
 
 `proposed | approved | rejected | superseded`
 
+## Classification
+
+`auto-resolvable | owner-preference | high-impact | critical-risk | blocked-by-missing-facts`
+
 ## Context
 
 - 
@@ -21,6 +25,13 @@
 ## Recommendation
 
 - 
+
+## Decision Timing
+
+- Why needed now:
+- Blocking point:
+- Can owner override later: `<yes|no>`
+- Override impact:
 
 ## Owner Decision
 

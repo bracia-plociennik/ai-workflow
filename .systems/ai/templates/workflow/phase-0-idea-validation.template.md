@@ -40,7 +40,7 @@ Briefly summarize the owner's idea in plain language, using both the chat prompt
 
 | Decision | Class | Recommendation | Blocks Context? |
 | --- | --- | --- | --- |
-| | `<auto-resolvable|high-impact|critical-risk|blocked-by-missing-facts>` | | `<yes|no>` |
+| | `<auto-resolvable|owner-preference|high-impact|critical-risk|blocked-by-missing-facts>` | | `<yes|no>` |
 
 ## Recommended Idea Shape
 
@@ -53,6 +53,17 @@ result: <accepted|accepted-with-changes|blocked>
 blocking-reason: <none|reason>
 next-valid-step: <create context.md|revise idea|owner decision>
 ```
+
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
 
 ## Optional Knowledge Capture
 

@@ -1,5 +1,11 @@
 # changelog.md
 
+## 0.8.23 - 2026-07-10
+
+- Added default Owner Decision Discovery with material decision and owner-preference classification, grouped 1-3 question batches, repository-first discovery, and reversible auto-decision disclosure.
+- Added phase-end Owner Decision Checkpoints to every phase and phase template, plus queued non-interactive behavior for active autopilot, Dreaming/automations, and read-only review.
+- Added safe no-question opt-out boundaries, Execution Trace decision evidence, and validator/smoke coverage for question fatigue, authority bypasses, and pending-decision progression.
+
 ## 0.8.22 - 2026-07-10
 
 - Added targeted and full Instruction Adherence Refresh profiles for pre-write, pre-commit/handoff/quality, resume, compaction, working-directory, interruption, scope-change, and source-conflict boundaries.

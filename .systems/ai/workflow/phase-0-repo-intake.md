@@ -465,7 +465,7 @@ Audit musi wypisać decyzje wymagane przed dalszym workflow.
 
 Każda decyzja powinna mieć:
 
-- klasę: `auto-resolvable`, `high-impact`, `critical-risk`, `blocked-by-missing-facts`;
+- klasę: `auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, `blocked-by-missing-facts`;
 - rekomendację;
 - wpływ rekomendacji;
 - alternatywę;
@@ -614,6 +614,17 @@ Nie zgaduj komend, decyzji ani layoutu.
 
 Na końcu podaj gate decision i następną poprawną fazę.
 ```
+
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
 
 ## Optional Knowledge Capture
 

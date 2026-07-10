@@ -139,6 +139,8 @@ Readiness status values are:
 
 Autopilot cannot enter `running` until readiness is `ready`. If readiness is `blocked` or `awaiting-owner`, run state must remain `stopped` or `awaiting-owner`, and the owner-facing prompt must list every required decision.
 
+Use `.systems/ai/core/owner-decision-checkpoints.md` during readiness. Readiness may ask one grouped batch of 1-3 material questions before the run starts. It cannot be `ready` while `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decisions required by the requested range remain pending.
+
 If no run exists, create the next `autopilot-XXX` directory and fill `readiness.md` before `state.md` can move to `running`. If an existing run is `awaiting-owner`, update the same `readiness.md` after owner answers unless scope, mode, or task set changed. If scope changes, supersede the old readiness artifact and create a new one for the new run or scope.
 
 ## State Machine
@@ -152,6 +154,9 @@ Use the range state machines above. Do not run `phase-8-final-check` from autopi
 - STOP on critical risk, retry limit, blocking drift, or missing required evidence.
 - Record auto-resolvable decisions before continuing.
 - Stop for human approval on high-risk and critical-risk decisions.
+- Do not ask live questions while the run state is `running`.
+- If a new material decision appears, stop as `awaiting-owner`, record the decision and escalation evidence, and return one queued owner decision batch after stopping.
+- Never continue `running` with a pending material decision.
 - Use fake/log/test adapters by default for external effects.
 - Do not send real emails, alerts, tickets, invoices, payments, production cron, or external API writes without explicit owner approval.
 

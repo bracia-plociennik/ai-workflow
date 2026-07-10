@@ -60,6 +60,17 @@ Ta faza służy do naprawy problemów wykrytych w fazie 1.5. FAZA ARCHITEKTURY Q
 Celem nie jest stworzenie nowej architektury od zera.
 Celem jest poprawienie dokładnie tych luk, ryzyk, sprzeczności i błędów, które zostały wykryte przez Architecture QA, tak aby architektura mogła ponownie przejść przez gate.
 
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`

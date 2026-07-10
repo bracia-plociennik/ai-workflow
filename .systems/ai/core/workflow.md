@@ -66,6 +66,8 @@ Use `.systems/ai/core/request-batch-triage.md` before ordinary task intake when 
 
 Use `.systems/ai/core/task-intake.md` as the Default Idea Validation pre-routing lens for new task, planning, approach, side-task, micro-task, change request, and autopilot requests. It is not a phase and does not grant write permission. Broad project ideas still route to `phase-0-idea-validation`. Batch/list input uses request batch triage first and then the selected validation route. The owner can opt out only with explicit wording such as `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`; this must report `Idea validation skipped by owner opt-out` plus residual risk and cannot bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, or final owner approval.
 
+Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation or batch triage and before dependent planning, specification, implementation, or owner-sensitive writes. Ask 1-3 material questions by default, disclose reversible auto-resolved decisions, and do not ask for repo-discoverable facts. Active autopilot, Dreaming/automations, and read-only review queue decisions rather than interrupting mid-run.
+
 Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer after phase summaries, blocker reports, implementation summaries, QA reports, guide responses, side-task responses, micro-task responses, micro-project responses, and autopilot responses.
 
 Use `.systems/ai/core/parallel-work-policy.md` when the user asks about working on multiple projects, tasks, Codex threads, micro-tasks, micro-projects, or autopilot runs in parallel. Parallel work is status-only in v1 and must stop on write-set, status-router, memory-router, dependency, or active-run conflicts.
@@ -147,6 +149,8 @@ Default chained pairs:
 
 If the working phase does not meet its pass criteria, do not run the paired QA/Quality phase. Stop with the blocker, missing evidence, or owner decision.
 
+If the working phase ends with a material `Owner Decision Checkpoint` state of `awaiting-owner` or `blocked`, stop before QA/Quality chaining. Optional owner refinements and disclosed auto-resolved reversible decisions do not block chaining.
+
 If the paired QA/Quality phase returns `FAIL`, stop at the matching fix loop. Do not continue to the next planning, specification, implementation, distillation, checkpoint, or final-check phase.
 
 Owner opt-out grammar such as `bez QA`, `bez quality`, `without QA`, `without quality`, `tylko faza`, or `only this phase` runs only the requested working phase and then stops. This opt-out does not approve moving to the next phase when QA/Quality PASS is required.
@@ -210,6 +214,23 @@ Each phase file must include this exact gate block:
 ```
 
 `.systems/scripts/validate-workflow` must fail if any phase file lacks the block.
+
+Each phase file and workflow phase template must also include:
+
+```md
+## Owner Decision Checkpoint
+
+- Interaction mode: <interactive|queued|suppressed-owner-opt-out|none>
+- Decision state: <clear|awaiting-owner|blocked|queued>
+- Material decisions: <decision IDs|none>
+- Questions asked: <decision IDs|none>
+- Auto-resolved reversible decisions: <decision IDs|none>
+- Optional owner refinements: <list|none>
+- Decision artifacts: <paths|none>
+- Next route:
+```
+
+This checkpoint is completed at phase end. Optional refinements and reported reversible decisions do not block transition. Material `awaiting-owner` or `blocked` decisions stop dependent phase progression and default QA/Quality chaining.
 
 Each phase file and workflow phase template must also include:
 

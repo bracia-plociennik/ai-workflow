@@ -169,6 +169,7 @@ run_core_validators() {
   run_cmd .systems/scripts/check-validation-profiles
   run_cmd .systems/scripts/check-knowledge-capture-reminder
   run_cmd .systems/scripts/check-instruction-adherence-refresh
+  run_cmd .systems/scripts/check-owner-decision-checkpoints
   run_cmd .systems/scripts/check-request-batch-triage
   run_cmd .systems/scripts/check-response-evidence-trace
   run_cmd .systems/scripts/check-phase-skill-discovery

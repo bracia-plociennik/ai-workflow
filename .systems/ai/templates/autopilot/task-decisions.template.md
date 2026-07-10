@@ -9,7 +9,7 @@ Every decision made during spec, implementation, QA, fix loop, distillation, che
 ```yaml
 - decision-id: <TASK-ID>-D001
   phase: null
-  classification: auto-resolvable # auto-resolvable | high-impact | critical-risk | blocked-by-missing-facts
+  classification: auto-resolvable # auto-resolvable | owner-preference | high-impact | critical-risk | blocked-by-missing-facts
   status: chosen # chosen | awaiting-owner | superseded
   chosen: recommendation # recommendation | alternative | none
   recommendation: null

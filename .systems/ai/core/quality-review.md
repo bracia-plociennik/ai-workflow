@@ -79,6 +79,8 @@ If a later review finds a material issue that the required review lens should ha
 
 ## Review Procedure
 
+Read-only review and QA use the non-interactive path from `.systems/ai/core/owner-decision-checkpoints.md`. Finish evidence review before presenting owner decisions. Do not interrupt mid-review; report missing material sources as `unknown`, a blocker, or formal `FAIL` when the formal phase requires it, then queue decisions at the end.
+
 Apply the same quality lenses as `phase-5-quality` where relevant:
 
 - Intent / Plan / Spec Compliance;

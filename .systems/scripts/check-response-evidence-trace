@@ -31,7 +31,7 @@ require_literal() {
     return 0
   fi
 
-  if ! rg -qF "$value" "$file"; then
+  if ! rg -qF -- "$value" "$file"; then
     echo "Missing response evidence trace reference in $file: $label"
     fail=1
   fi
@@ -64,6 +64,15 @@ for field in \
   'Drift/conflict: <none|warning|blocked>'
 do
   require_literal "$contract" "$field" "trace field: $field"
+done
+
+for field in \
+  'Owner decision interaction:' \
+  '- Mode: <asked|queued|none-needed|skipped-owner-opt-out|autopilot-non-interactive>' \
+  '- Decisions asked/pending: <ids|none>' \
+  '- Auto-resolved decisions: <ids|none>'
+do
+  require_literal "$contract" "$field" "owner decision trace field: $field"
 done
 
 require_ref "AGENTS.md" 'Execution Trace' "AGENTS execution trace"

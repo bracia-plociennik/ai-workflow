@@ -67,6 +67,8 @@ After the matrix, include:
 - recommended next route;
 - explicit statement that triage does not grant implementation or artifact-write permission.
 
+After triage, run Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md` for the selected route. Group at most 1-3 material route or preference decisions. Do not ask about every item when the matrix already resolves its route, and do not ask for facts discoverable from repository or project artifacts.
+
 ## Grouping Rules
 
 Group items only when all of these are true:

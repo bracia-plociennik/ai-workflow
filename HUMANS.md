@@ -136,6 +136,16 @@ Zrób review diffu w global-quality-review-stance. Findings first, wskaż blocke
 Uruchom phase-5-quality dla <task-id>. Zapisz quality artifact, evidence i jednoznaczne PASS albo FAIL.
 ```
 
+## Owner Decision Checkpoints
+
+AI Workflow domyślnie wykrywa materialne decyzje i znaczące preferencje ownera przed planowaniem, specyfikacją albo implementacją. Najpierw sprawdza repo i zaakceptowane artefakty, a potem grupuje maksymalnie 1-3 pytania z rekomendowaną opcją i wpływem. Nie powinien pytać o fakty możliwe do znalezienia ani o każdy drobny detal techniczny.
+
+Na końcu każdej fazy `Owner Decision Checkpoint` pokazuje otwarte decyzje, opcjonalne refinements oraz bezpieczne i odwracalne decyzje podjęte automatycznie. Zmiana takiej decyzji przez ownera może wymagać właściwego fix loop i re-QA.
+
+Aktywny autopilot, Dreaming/automations i read-only review nie są przerywane pytaniami. Zbierają owner decision queue i pokazują ją po zatrzymaniu albo zakończeniu analizy. Autopilot readiness może zapytać przed wejściem w `running`.
+
+Możesz użyć `nie dopytuj`, `bez pytań`, `nie zadawaj pytań pomocniczych`, `do not ask follow-up questions`, `no clarifying questions` albo `use reasonable defaults`. Opt-out dotyczy bieżącego scope, chyba że jawnie rozszerzysz go do końca taska, chatu albo sesji. Nie pozwala on zgadywać ani omijać hard gates.
+
 ## Owner Request Batch Triage
 
 Jeśli podajesz Codexowi listę kilku rzeczy do zrobienia, AI Workflow powinien najpierw wykonać `request-batch-triage` z `.systems/ai/core/request-batch-triage.md`. To jest klasyfikacja przed pracą: rozbija listę na itemy, grupuje podobne, ocenia ryzyko, zależności, scope i routing.

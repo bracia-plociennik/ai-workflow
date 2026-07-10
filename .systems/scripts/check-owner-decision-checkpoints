@@ -1,0 +1,209 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_literal() {
+  local file="$1"
+  local value="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for owner decision checkpoint check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qF -- "$value" "$file"; then
+    echo "Missing owner decision checkpoint reference in $file: $label"
+    fail=1
+  fi
+}
+
+require_pattern() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for owner decision checkpoint check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing owner decision checkpoint reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/owner-decision-checkpoints.md"
+response_contract=".systems/ai/core/response-contract.md"
+
+require_pattern "$contract" '^# owner-decision-checkpoints\.md$' "core contract"
+
+for section in \
+  '## Decision Classes' \
+  '## Discover Before Asking' \
+  '## Interactive Decision Flow' \
+  '## Decision Request Contract' \
+  '## Phase-End Owner Decision Checkpoint' \
+  '## Non-Interactive Modes' \
+  '## Owner No-Question Opt-Out' \
+  '## Knowledge Capture Boundary' \
+  '## Response Trace'
+do
+  require_literal "$contract" "$section" "section: $section"
+done
+
+for class in auto-resolvable owner-preference high-impact critical-risk blocked-by-missing-facts; do
+  require_literal "$contract" "\`${class}\`" "decision class: $class"
+done
+
+for behavior in \
+  'group at most `1-3` questions' \
+  'put the recommended option first' \
+  'provide impact for the recommendation and each alternative' \
+  'Do not ask the owner to locate a file' \
+  'Do not invent a question when no owner decision exists' \
+  'No owner decision needed' \
+  'Do not ask generic permission' \
+  'Optional refinements and disclosed auto-resolved decisions do not block the next phase' \
+  'never continue `running` with a pending material decision' \
+  'must not ask live, follow-up, clarification, or other interactive questions' \
+  'must not interrupt mid-review' \
+  'Questions skipped by owner opt-out'
+do
+  require_literal "$contract" "$behavior" "behavior: $behavior"
+done
+
+for phrase in \
+  'nie dopytuj' \
+  'bez pytań' \
+  'nie zadawaj pytań pomocniczych' \
+  'do not ask follow-up questions' \
+  'no clarifying questions' \
+  'use reasonable defaults'
+do
+  require_literal "$contract" "$phrase" "owner opt-out: $phrase"
+done
+
+checkpoint_fields=(
+  '- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`'
+  '- Decision state: `<clear|awaiting-owner|blocked|queued>`'
+  '- Material decisions: `<decision IDs|none>`'
+  '- Questions asked: `<decision IDs|none>`'
+  '- Auto-resolved reversible decisions: `<decision IDs|none>`'
+  '- Optional owner refinements: `<list|none>`'
+  '- Decision artifacts: `<paths|none>`'
+  '- Next route:'
+)
+
+phase_files=()
+while IFS= read -r -d '' path; do
+  phase_files+=("$path")
+done < <(find .systems/ai/workflow -maxdepth 1 -type f -name 'phase-*.md' -print0 | sort -z)
+
+template_files=()
+while IFS= read -r -d '' path; do
+  template_files+=("$path")
+done < <(find .systems/ai/templates/workflow -maxdepth 1 -type f -name 'phase-*.template.md' -print0 | sort -z)
+
+check_checkpoint_block() {
+  local file="$1"
+
+  require_pattern "$file" '^## Owner Decision Checkpoint$' "checkpoint heading"
+  if [[ "$(rg -c '^## Owner Decision Checkpoint$' "$file")" -ne 1 ]]; then
+    echo "Owner Decision Checkpoint must appear exactly once in $file"
+    fail=1
+  fi
+  for field in "${checkpoint_fields[@]}"; do
+    require_literal "$file" "$field" "checkpoint field: $field"
+  done
+}
+
+for file in "${phase_files[@]}" "${template_files[@]}"; do
+  check_checkpoint_block "$file"
+done
+
+if [[ "${#phase_files[@]}" -eq 0 || "${#template_files[@]}" -eq 0 ]]; then
+  echo "No phase files or templates found for owner decision checkpoint validation"
+  fail=1
+fi
+
+for field in \
+  'Owner decision interaction:' \
+  '- Mode: <asked|queued|none-needed|skipped-owner-opt-out|autopilot-non-interactive>' \
+  '- Decisions asked/pending: <ids|none>' \
+  '- Auto-resolved decisions: <ids|none>'
+do
+  require_literal "$contract" "$field" "contract response field: $field"
+  require_literal "$response_contract" "$field" "response contract field: $field"
+done
+
+require_literal ".systems/ai/templates/humans/decision.template.md" 'auto-resolvable | owner-preference | high-impact | critical-risk | blocked-by-missing-facts' "human decision taxonomy"
+require_literal ".systems/ai/templates/autopilot/task-decisions.template.md" 'auto-resolvable | owner-preference | high-impact | critical-risk | blocked-by-missing-facts' "autopilot task decision taxonomy"
+require_literal ".systems/ai/workflow/phase-0-idea-validation.md" '`auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`' "idea validation decision taxonomy"
+require_literal ".systems/ai/templates/workflow/phase-0-idea-validation.template.md" '<auto-resolvable|owner-preference|high-impact|critical-risk|blocked-by-missing-facts>' "idea validation template taxonomy"
+require_literal ".systems/ai/workflow/phase-0-repo-intake.md" '`auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, `blocked-by-missing-facts`' "repo intake decision taxonomy"
+require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'Readiness cannot be `ready` while a material owner decision is pending.' "autopilot readiness pending-decision gate"
+require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'max-batch-size: 3' "autopilot readiness batch limit"
+require_literal ".systems/ai/templates/dreaming/dream-report.template.md" 'Live questions asked: `none`' "Dreaming non-interactive queue"
+require_literal "$contract" 'Dreaming Mode and asynchronous automations must not ask live, follow-up, clarification, or other interactive questions.' "Dreaming and automation non-interactive boundary"
+require_literal "$contract" 'They must not interrupt mid-review.' "read-only review non-interactive boundary"
+require_literal "$contract" 'Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves.' "soft knowledge capture question boundary"
+require_literal "$contract" 'Session-wide behavior requires explicit wording' "session-wide opt-out boundary"
+require_literal ".systems/ai/core/task-intake.md" 'When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.' "idea-validation and question opt-out precedence"
+require_literal ".systems/ai/core/command-routing.md" 'When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.' "routing opt-out precedence"
+require_literal "AGENTS.md" 'When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.' "AGENTS opt-out precedence"
+require_literal ".systems/ai/core/workflow.md" 'If the working phase ends with a material `Owner Decision Checkpoint` state of `awaiting-owner` or `blocked`, stop before QA/Quality chaining.' "workflow decision stop before quality chaining"
+require_literal ".systems/ai/core/command-routing.md" 'If its `Owner Decision Checkpoint` is materially `awaiting-owner` or `blocked`, stop before the paired QA/Quality phase.' "routing decision stop before quality chaining"
+
+integrations=(
+  'AGENTS.md:owner-decision-checkpoints.md'
+  'HUMANS.md:Owner Decision Checkpoints'
+  'README.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/operating-model.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/task-intake.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/request-batch-triage.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/command-routing.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/workflow.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/autopilot.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/dreaming-mode.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/quality-review.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/implementation-slicing.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/contract-compliance.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/response-contract.md:owner-decision-checkpoints.md'
+  '.systems/ai/core/commands.md:check-owner-decision-checkpoints'
+  '.systems/scripts/check-required-artifacts:check-owner-decision-checkpoints'
+  '.systems/scripts/validate-workflow:check-owner-decision-checkpoints'
+  '.systems/scripts/check-validator-smoke-tests:owner-decision-checkpoints'
+)
+
+for integration in "${integrations[@]}"; do
+  file="${integration%%:*}"
+  value="${integration#*:}"
+  require_literal "$file" "$value" "integration: $value"
+done
+
+unsafe_patterns=(
+  'ask (the )?owner (about )?every (uncertainty|detail|choice|implementation decision)'
+  'auto-resolve[^.\n]{0,60}(high-impact|critical-risk|blocked-by-missing-facts)'
+  '(high-impact|critical-risk|blocked-by-missing-facts)[^.\n]{0,60}(is|are|may be|can be)[^.\n]{0,30}auto-resolv'
+  '(no-question opt-out|nie dopytuj|no clarifying questions)[^.\n]{0,80}(may|can|allows?|bypasses?|guesses?|permits?|authorizes?)[^.\n]{0,60}(scope|acceptance criteria|risk|permissions|security|billing|migrations|production|external effects|DoD|evidence|QA|Quality|approvals|stop conditions)'
+  'autopilot[^.\n]{0,80}(asks?|may ask|can ask)[^.\n]{0,40}(live|follow-up|clarification|interactive)? ?questions[^.\n]{0,40}running'
+  'autopilot[^.\n]{0,80}((may|can|should|will) continue|continues)[^.\n]{0,50}pending material decision'
+  'Dreaming Mode[^.\n]{0,60}(asks?|may ask|can ask)[^.\n]{0,40}(live|follow-up|clarification|interactive)? ?questions'
+  'read-only review[^.\n]{0,60}(interrupts?|may interrupt|can interrupt)[^.\n]{0,30}(to ask|with questions)'
+  'Optional Knowledge Capture[^.\n]{0,60}(triggers?|requires?)[^.\n]{0,30}(interactive question|live question)'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'must not|do not|does not|cannot|never|forbidden|invalid|without|instead of|rather than'; then
+    echo "Unsafe owner decision checkpoint wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

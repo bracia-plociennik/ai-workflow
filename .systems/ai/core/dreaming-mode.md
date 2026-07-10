@@ -81,6 +81,8 @@ Every report must include:
 - privacy/scope check;
 - owner decision queue.
 
+Dreaming Mode is non-interactive under `.systems/ai/core/owner-decision-checkpoints.md`. It must finish the allowed advisory scan without live questions and place all material decisions or preferences in the owner decision queue.
+
 Every recommendation or candidate must include:
 
 - `source path`;

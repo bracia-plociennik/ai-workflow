@@ -53,6 +53,12 @@ Formal new project or broad product ideas still use `phase-0-idea-validation`. S
 
 If task intake reveals high or critical risk, unknown safe environment, missing acceptance criteria, unresolved external effects, or a request to bypass evidence/DoD/risk policy, stop before planning implementation.
 
+## Owner Decision Discovery
+
+After task intake or batch triage, use `.systems/ai/core/owner-decision-checkpoints.md` before dependent planning, specification, implementation, or owner-sensitive writes. Inspect current sources first, ask at most 1-3 material questions, and report reversible auto-resolved decisions. Active autopilot, Dreaming/automations, and read-only review use queued decisions without mid-run interruption.
+
+An explicit no-question opt-out suppresses interactive questions only for its declared work scope. It does not convert unresolved high-impact, critical-risk, missing-fact, risk, permission, DoD, QA, approval, or stop-condition decisions into safe defaults.
+
 Autopilot must also declare a range before execution. Use `.systems/ai/core/autopilot.md`:
 
 - `planning-range` for phase 1 architecture through phase 3 Spec QA, with no product-code writes.
