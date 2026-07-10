@@ -63,6 +63,16 @@ Each asked or queued material decision records:
 
 Use the platform's structured question UI when available. Otherwise use a concise text checkpoint with the same fields.
 
+## Decision Record Producers
+
+The following are full producers for asked or queued material decisions and must contain every field in the Decision Request Contract:
+
+- Dream Report `Owner Decision Queue` entries;
+- autopilot readiness `owner-decisions` entries;
+- owner-facing interactive or queued response output.
+
+The response is transient evidence and must render the same fields for every queued decision it presents. `task-decisions` and escalation artifacts are supporting decision evidence: they may reference a decision ID, answer, approval, or route, but they do not replace a full queued-decision record.
+
 ## Phase-End Owner Decision Checkpoint
 
 Every workflow phase and phase template contains this block. Complete it at phase end:
@@ -130,7 +140,7 @@ With opt-out active:
 - list defaults chosen, unresolved decisions, and residual risk;
 - stop and state the exact missing decision without interactive questioning when a hard gate remains unresolved.
 
-Opt-out must not guess or bypass scope, risk, permissions, security, billing, migrations, production, external effects, DoD, evidence, QA/Quality, required approvals, stop conditions, or final owner approval. It does not turn `high-impact`, `critical-risk`, or `blocked-by-missing-facts` into `auto-resolvable`.
+Opt-out must not guess or bypass scope, risk, permissions, security, billing, migrations, production, external effects, DoD, evidence, QA/Quality, required approvals, stop conditions, or final owner approval. Material and blocked classifications remain non-auto-resolvable.
 
 ## Knowledge Capture Boundary
 

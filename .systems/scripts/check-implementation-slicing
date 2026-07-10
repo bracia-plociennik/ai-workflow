@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_file() {
@@ -192,11 +194,8 @@ unsafe_patterns=(
 )
 
 for pattern in "${unsafe_patterns[@]}"; do
-  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-    | rg -v -i 'must not|does not|do not|cannot|never|invalid|unsafe|block|without evidence|without a formal gate|nie może|nie wolno|nie daje|nie zastępuje'; then
-    echo "Unsafe implementation slicing wording found: $pattern"
-    fail=1
-  fi
+  policy_reject_unsafe_pattern "$pattern" "Unsafe implementation slicing wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 done
 
 exit "$fail"

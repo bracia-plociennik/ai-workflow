@@ -33,6 +33,61 @@ run_must_pass() {
   fi
 }
 
+run_policy_boundary_matrix() {
+  local id="$1"
+  local file="$2"
+  local check="$3"
+  local safe_case="$4"
+  local direct_unsafe_case="$5"
+  local compound_unsafe_case="$6"
+  local semicolon_unsafe_case="$7"
+  local target="$tmp/$file"
+  local period_unsafe_case="${compound_unsafe_case/, but /. }"
+  local colon_unsafe_case="${compound_unsafe_case/, but /: }"
+  local unless_unsafe_case="${compound_unsafe_case/, but / unless }"
+  local yet_unsafe_case="${compound_unsafe_case/, but / yet }"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$safe_case" >> "$target"
+  run_must_pass "policy-boundary-${id}-allows-safe-prohibition" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$direct_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-direct-unsafe" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$compound_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-safe-but-unsafe-exception" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$period_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-safe-period-unsafe-exception" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$colon_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-safe-colon-unsafe-exception" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$unless_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-safe-unless-unsafe-exception" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$yet_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-safe-yet-unsafe-exception" "$check"
+  mv "$target.bak" "$target"
+
+  cp "$target" "$target.bak"
+  printf '\n%s\n' "$semicolon_unsafe_case" >> "$target"
+  run_must_fail "policy-boundary-${id}-blocks-safe-semicolon-unsafe-exception" "$check"
+  mv "$target.bak" "$target"
+}
+
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/tasks.md" "$tmp/example-tasks.orig"
 
@@ -1307,9 +1362,9 @@ not-applicable
 
 ## Owner Decision Queue
 
-| Priority | Source path | Finding | Proposed target | Owner action |
-| --- | --- | --- | --- | --- |
-| `P3` | `ai-workflow-workspace/projects/example/status.md` | `Review checkpoint candidate.` | `project-memory` | `defer` |
+| Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `DREAM-001` | `owner-preference` | `Capture a review checkpoint?` | `A reusable status decision was found.` | `defer` | `Preserves the current workflow route.` | `capture: creates owner-approved follow-up` | `none` | `pending` | `none` | `ai-workflow-workspace/projects/example/status.md` | `defer` |
 MD
 run_must_pass "dreaming-mode-allows-valid-workflow-report" .systems/scripts/check-dreaming-mode
 
@@ -1397,9 +1452,9 @@ cat > "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-r
 
 ## Owner Decision Queue
 
-| Priority | Source path | Finding | Proposed target | Owner action |
-| --- | --- | --- | --- | --- |
-| `P3` | `.systems/ai/core/workflow.md` | `Quality routing is explicit.` | `system-insights` | `capture` |
+| Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `DREAM-002` | `owner-preference` | `Capture the quality routing lesson?` | `A reusable workflow pattern was found.` | `capture` | `Creates an owner-approved follow-up.` | `defer: leaves the report advisory` | `none` | `pending` | `none` | `.systems/ai/core/workflow.md` | `capture` |
 MD
 run_must_pass "dreaming-mode-allows-valid-full-repo-report" .systems/scripts/check-dreaming-mode
 
@@ -2049,6 +2104,149 @@ do
   run_must_fail "owner-decision-checkpoints-blocks-${unsafe_slug}" .systems/scripts/check-owner-decision-checkpoints
   mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
 done
+
+run_must_pass "review-completeness-gate-valid" .systems/scripts/check-review-completeness-gate
+
+cp "$tmp/.systems/ai/core/quality-review.md" "$tmp/.systems/ai/core/quality-review.md.bak"
+perl -0pi -e 's/an applicable policy-boundary adversarial matrix or producer-consumer field audit is incomplete/an applicable matrix is incomplete/' "$tmp/.systems/ai/core/quality-review.md"
+run_must_fail "review-completeness-gate-blocks-incomplete-v2-verdict" .systems/scripts/check-review-completeness-gate
+mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/- Policy-boundary adversarial matrix: `<completed\|not-applicable\|incomplete>`\n//' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "review-completeness-gate-requires-formal-policy-matrix" .systems/scripts/check-review-completeness-gate
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
+cp "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak"
+perl -0pi -e 's/- Producer-consumer field audit: `<completed\|not-applicable\|incomplete>`\n//' "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+run_must_fail "review-completeness-gate-requires-micro-producer-audit" .systems/scripts/check-review-completeness-gate
+mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
+
+cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
+perl -0pi -e 's/ \| Decision Artifact//' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+run_must_fail "review-completeness-gate-requires-dreaming-decision-artifact" .systems/scripts/check-review-completeness-gate
+run_must_fail "dreaming-mode-requires-full-queued-decision-fields" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+
+cp "$tmp/.systems/ai/templates/autopilot/readiness.template.md" "$tmp/.systems/ai/templates/autopilot/readiness.template.md.bak"
+perl -0pi -e 's/    decision-artifact: null\n//' "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
+run_must_fail "review-completeness-gate-requires-autopilot-decision-artifact" .systems/scripts/check-review-completeness-gate
+run_must_fail "owner-decision-checkpoints-requires-autopilot-decision-artifact" .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/.systems/ai/templates/autopilot/readiness.template.md.bak" "$tmp/.systems/ai/templates/autopilot/readiness.template.md"
+
+cp "$tmp/.systems/scripts/check-owner-decision-checkpoints" "$tmp/.systems/scripts/check-owner-decision-checkpoints.bak"
+perl -0pi -e 's/policy_reject_unsafe_pattern/policy_reject_removed/g' "$tmp/.systems/scripts/check-owner-decision-checkpoints"
+run_must_fail "review-completeness-gate-requires-shared-policy-helper" .systems/scripts/check-review-completeness-gate
+mv "$tmp/.systems/scripts/check-owner-decision-checkpoints.bak" "$tmp/.systems/scripts/check-owner-decision-checkpoints"
+
+run_must_fail "policy-boundaries-fails-missing-source" bash -lc '
+  source .systems/scripts/lib/policy-boundaries.sh
+  fail=0
+  policy_reject_unsafe_pattern "unsafe policy wording" "missing source test" /definitely/missing/policy-source.md
+  exit "$fail"
+'
+
+cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
+printf '\nDo not say `no sources needed`; no sources needed.\n' >> "$tmp/.systems/ai/core/response-contract.md"
+run_must_fail "policy-boundaries-blocks-repeated-unsafe-match-after-safe-quote" .systems/scripts/check-response-evidence-trace
+mv "$tmp/.systems/ai/core/response-contract.md.bak" "$tmp/.systems/ai/core/response-contract.md"
+
+run_policy_boundary_matrix \
+  "response-evidence" \
+  ".systems/ai/core/response-contract.md" \
+  .systems/scripts/check-response-evidence-trace \
+  "Execution Trace must not be omitted for substantive responses." \
+  "Execution Trace may be omitted for substantive responses." \
+  "Execution Trace must not be omitted by default, but Execution Trace may be omitted for substantive responses." \
+  "Execution Trace must not be omitted by default; Execution Trace may be omitted for substantive responses."
+run_policy_boundary_matrix \
+  "default-quality" \
+  ".systems/ai/core/quality-review.md" \
+  .systems/scripts/check-default-quality-closure \
+  "bez QA must not mark PASS." \
+  "bez QA may mark PASS." \
+  "bez QA must not mark PASS, but bez QA may mark PASS." \
+  "bez QA must not mark PASS; bez QA may mark PASS."
+run_policy_boundary_matrix \
+  "instruction-refresh" \
+  ".systems/ai/core/instruction-adherence-refresh.md" \
+  .systems/scripts/check-instruction-adherence-refresh \
+  "Instruction Adherence Refresh must not grant write permission." \
+  "Instruction Adherence Refresh allows write permission." \
+  "Instruction Adherence Refresh must not grant write permission, but Instruction Adherence Refresh allows write permission." \
+  "Instruction Adherence Refresh must not grant write permission; Instruction Adherence Refresh allows write permission."
+run_policy_boundary_matrix \
+  "phase-skill" \
+  ".systems/ai/core/operating-model.md" \
+  .systems/scripts/check-phase-skill-discovery \
+  "A skill must not approve implementation." \
+  "A skill may approve implementation." \
+  "A skill must not approve implementation, but a skill may approve implementation." \
+  "A skill must not approve implementation; a skill may approve implementation."
+run_policy_boundary_matrix \
+  "batch-triage" \
+  ".systems/ai/core/request-batch-triage.md" \
+  .systems/scripts/check-request-batch-triage \
+  "Batch triage must not write files." \
+  "Batch triage may write files." \
+  "Batch triage must not write files, but batch triage may write files." \
+  "Batch triage must not write files; batch triage may write files."
+run_policy_boundary_matrix \
+  "intent-review" \
+  ".systems/ai/core/quality-review.md" \
+  .systems/scripts/check-intent-plan-spec-compliance-review \
+  "Technical checks are not enough." \
+  "Technical checks are enough." \
+  "Technical checks are not enough, but technical checks are enough." \
+  "Technical checks are not enough; technical checks are enough."
+run_policy_boundary_matrix \
+  "global-review" \
+  ".systems/ai/core/quality-review.md" \
+  .systems/scripts/check-global-quality-review-stance \
+  "Advisory review must not mark formal PASS." \
+  "Advisory review may mark formal PASS." \
+  "Advisory review must not mark formal PASS, but advisory review may mark formal PASS." \
+  "Advisory review must not mark formal PASS; advisory review may mark formal PASS."
+run_policy_boundary_matrix \
+  "validation-profiles" \
+  ".systems/ai/core/validation-profiles.md" \
+  .systems/scripts/check-validation-profiles \
+  "Standard must not replace full." \
+  "Standard may replace full." \
+  "Standard must not replace full, but standard may replace full." \
+  "Standard must not replace full; standard may replace full."
+run_policy_boundary_matrix \
+  "implementation-slicing" \
+  ".systems/ai/core/implementation-slicing.md" \
+  .systems/scripts/check-implementation-slicing \
+  "Slicing must not bypass QA." \
+  "Slicing may bypass QA." \
+  "Slicing must not bypass QA, but slicing may bypass QA." \
+  "Slicing must not bypass QA; slicing may bypass QA."
+run_policy_boundary_matrix \
+  "end-task" \
+  ".systems/ai/core/end-of-task-capture.md" \
+  .systems/scripts/check-end-of-task-capture \
+  "End task must not run phase-8-final-check." \
+  "End task runs phase-8-final-check." \
+  "End task must not run phase-8-final-check, but end task runs phase-8-final-check." \
+  "End task must not run phase-8-final-check; end task runs phase-8-final-check."
+run_policy_boundary_matrix \
+  "idea-opt-out" \
+  ".systems/ai/core/task-intake.md" \
+  .systems/scripts/check-default-idea-validation-opt-out \
+  "Without idea validation must not bypass risk checks." \
+  "Without idea validation may bypass risk checks." \
+  "Without idea validation must not bypass risk checks, but without idea validation may bypass risk checks." \
+  "Without idea validation must not bypass risk checks; without idea validation may bypass risk checks."
+run_policy_boundary_matrix \
+  "owner-checkpoints" \
+  ".systems/ai/core/owner-decision-checkpoints.md" \
+  .systems/scripts/check-owner-decision-checkpoints \
+  "Autopilot must not ask live questions while running." \
+  "Autopilot may ask live questions while running." \
+  "Autopilot must not ask live questions while running, but autopilot may ask live questions while running." \
+  "Autopilot must not ask live questions while running; autopilot may ask live questions while running."
 
 cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
 perl -0pi -e 's/- Decisions asked\/pending: <ids\|none>\n//' "$tmp/.systems/ai/core/response-contract.md"

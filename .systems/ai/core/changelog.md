@@ -15,7 +15,7 @@
 ## 0.8.21 - 2026-07-10
 
 - Added Knowledge Capture Reminder routing after implementation, fixes, quality closure, handoff, commit readiness, and unrelated task switches, with advisory-only memory targets and explicit commit/push boundaries.
-- Added Review Completeness Gate for advisory review and formal phase-5 quality: cross-contract and risk/work-mode consistency, negative-space/adversarial review, supporting-only automated evidence, reviewed baseline, post-fix full re-review, and closure freshness.
+- Added Review Completeness Gate v2 for advisory review and formal phase-5 quality: policy-boundary adversarial matrices, producer-consumer field audits, shared policy validator handling, supporting-only automated evidence, reviewed baseline, post-fix full re-review, and closure freshness.
 - Expanded validator and smoke coverage for product-domain External Memory misuse and quality-verdict shortcuts after fixes.
 
 ## 0.8.20 - 2026-06-23

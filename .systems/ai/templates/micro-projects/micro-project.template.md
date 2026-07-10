@@ -50,6 +50,10 @@
 - Instruction refresh: `<performed-targeted|performed-full|not-needed|blocked>`
 - Instruction baseline: `<current|stale|blocked>`
 - Closure freshness: `<current|stale>`
+- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`
+- Producer-consumer field audit: `<completed|not-applicable|incomplete>`
+- Producers/consumers reviewed: `<paths or not-applicable>`
+- Required-field mapping: `<complete|partial|mismatch|not-applicable>`
 - Result wording: `<No blockers found|No findings found|Ready for owner review|Quality skipped by owner opt-out>`
 - Residual risk: `<risk>`
 

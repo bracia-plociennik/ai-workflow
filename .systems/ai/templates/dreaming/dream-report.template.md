@@ -89,6 +89,6 @@ System Insights require anonymized cross-project operating lessons.
 - Interaction mode: `queued`
 - Live questions asked: `none`
 
-| Priority | Source path | Finding | Proposed target | Owner action |
-| --- | --- | --- | --- | --- |
-| `<P1|P2|P3>` | `<path>` | `<finding>` | `<target>` | `<capture|review|create-task|create-skill-plan|reject|defer>` |
+| Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<decision-id>` | `<owner-preference|high-impact|critical-risk|blocked-by-missing-facts>` | `<question or decision statement>` | `<reason>` | `<recommended option>` | `<impact>` | `<alternatives with impacts>` | `<blocked step or none>` | `<pending|approved|rejected>` | `<path or none>` | `<path>` | `<capture|review|create-task|create-skill-plan|reject|defer>` |

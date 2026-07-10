@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_literal() {
@@ -149,6 +151,13 @@ require_literal ".systems/ai/workflow/phase-0-repo-intake.md" '`auto-resolvable`
 require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'Readiness cannot be `ready` while a material owner decision is pending.' "autopilot readiness pending-decision gate"
 require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'max-batch-size: 3' "autopilot readiness batch limit"
 require_literal ".systems/ai/templates/dreaming/dream-report.template.md" 'Live questions asked: `none`' "Dreaming non-interactive queue"
+require_literal "$contract" '## Decision Record Producers' "decision record producer contract"
+require_literal "$contract" 'Dream Report `Owner Decision Queue` entries' "Dreaming queue producer"
+require_literal "$contract" 'autopilot readiness `owner-decisions` entries' "autopilot queue producer"
+require_literal ".systems/ai/templates/dreaming/dream-report.template.md" '| Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |' "Dreaming queued-decision fields"
+for field in 'why-needed-now:' 'blocking-point:' 'decision-artifact:'; do
+  require_literal ".systems/ai/templates/autopilot/readiness.template.md" "$field" "autopilot queued-decision field: $field"
+done
 require_literal "$contract" 'Dreaming Mode and asynchronous automations must not ask live, follow-up, clarification, or other interactive questions.' "Dreaming and automation non-interactive boundary"
 require_literal "$contract" 'They must not interrupt mid-review.' "read-only review non-interactive boundary"
 require_literal "$contract" 'Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves.' "soft knowledge capture question boundary"
@@ -199,11 +208,8 @@ unsafe_patterns=(
 )
 
 for pattern in "${unsafe_patterns[@]}"; do
-  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-    | rg -v -i 'must not|do not|does not|cannot|never|forbidden|invalid|without|instead of|rather than'; then
-    echo "Unsafe owner decision checkpoint wording found: $pattern"
-    fail=1
-  fi
+  policy_reject_unsafe_pattern "$pattern" "Unsafe owner decision checkpoint wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 done
 
 exit "$fail"

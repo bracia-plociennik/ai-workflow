@@ -703,7 +703,7 @@ Routing notes:
 - `final review` does not trigger `phase-8-final-check`.
 - `review i popraw` runs review first; fixes require a separate allowed write path, risk gates, and owner approval when required.
 - `Uruchom phase-5-quality dla <task-id>` or an implementation state ready for `phase-5-quality` uses the formal phase and may produce `PASS` or `FAIL` only after the PASS Integrity Gate: required evidence, findings-first review, no unresolved `P0`, `P1`, or material `P2`, and allowed artifact writes.
-- `PASS bez evidence`, `PASS without evidence`, `implementation PASS without review`, and `PASS before findings review` are invalid.
+- Declaring `PASS` requires evidence and a findings-first review; an implementation cannot reach formal `PASS` before that review is complete.
 - Failed or skipped checks that affect acceptance criteria or Intent / Plan / Spec Compliance mean `FAIL`.
 - Every substantive work item should end with Default Quality Closure: formal QA/Quality when the phase path defines it, otherwise advisory `global-quality-review-stance`.
 - Owner opt-out grammar includes `bez QA`, `bez review`, `bez quality`, `bez weryfikacji`, `bez sprawdzania`, `without QA`, `without review`, `without verification`, `no verification`, and `fast path no review`.

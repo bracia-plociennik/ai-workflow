@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_ref() {
@@ -84,11 +86,9 @@ require_ref ".systems/scripts/validate-workflow" 'check-response-evidence-trace'
 require_ref ".systems/scripts/check-required-artifacts" 'check-response-evidence-trace' "required artifacts"
 require_ref ".systems/scripts/check-validator-smoke-tests" 'response-evidence-trace' "smoke coverage"
 
-if rg -n -i 'no sources needed|sources are optional|Execution Trace may be omitted for substantive responses|Co dalej\?.*Execution Trace' \
-  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-  | rg -v -i 'Do not say|must not|not after|cannot|forbidden|invalid'; then
-  echo "Unsafe response evidence trace wording found"
-  fail=1
-fi
+policy_reject_unsafe_pattern \
+  'no sources needed|sources are optional|Execution Trace may be omitted for substantive responses|Execution Trace[^.\n]{0,80}(after|following|later than)[^.\n]{0,80}Co dalej\?' \
+  "Unsafe response evidence trace wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 
 exit "$fail"

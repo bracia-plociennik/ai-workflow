@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_ref() {
@@ -142,11 +144,8 @@ unsafe_patterns=(
 )
 
 for pattern in "${unsafe_patterns[@]}"; do
-  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-    | rg -v -i 'does not|must not|cannot|not allow|invalid|still route|still routes|not final check|not write|no automatic|no project closure|preserve|preserves|preserving|nie może|nie zastępuje|nie pozwala|nie uruchamiaj|nie oznaczaj|zachowują|mają pierwszeństwo'; then
-    echo "Unsafe end-of-task capture wording found: $pattern"
-    fail=1
-  fi
+  policy_reject_unsafe_pattern "$pattern" "Unsafe end-of-task capture wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 done
 
 exit "$fail"

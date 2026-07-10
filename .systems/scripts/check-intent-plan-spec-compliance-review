@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_file() {
@@ -116,11 +118,8 @@ unsafe_patterns=(
 )
 
 for pattern in "${unsafe_patterns[@]}"; do
-  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-    | rg -v -i 'not enough|not sufficient|cannot|must not|do not|does not|nie wystarcz|nie wolno|nie może|blocked|invalid|unsafe|blok'; then
-    echo "Unsafe intent/plan/spec compliance wording found: $pattern"
-    fail=1
-  fi
+  policy_reject_unsafe_pattern "$pattern" "Unsafe intent/plan/spec compliance wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 done
 
 exit "$fail"

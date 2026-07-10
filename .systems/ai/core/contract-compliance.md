@@ -31,7 +31,7 @@ Before implementation, commit, or handoff, classify the work mode:
 
 `global-quality-review-stance` from `.systems/ai/core/quality-review.md` can be used inside any work mode as read-only/advisory quality review. It does not create a formal quality artifact and does not replace work mode compliance, evidence, risk, write permissions, or formal phase gates.
 
-Review Completeness Gate applies to advisory review and formal `phase-5-quality`. It requires cross-contract consistency, explicit risk/work mode compatibility, negative-space/adversarial review when validators or policy boundaries are involved, automated evidence treated as supporting-only, a full-current-state post-fix re-review, a reviewed baseline, and `Closure freshness: current` before a quality-ready verdict.
+Review Completeness Gate applies to advisory review and formal `phase-5-quality`. It requires cross-contract consistency, explicit risk/work mode compatibility, negative-space/adversarial review when validators or policy boundaries are involved, a policy-boundary adversarial matrix and producer-consumer field audit when applicable, automated evidence treated as supporting-only, a full-current-state post-fix re-review, a reviewed baseline, and `Closure freshness: current` before a quality-ready verdict.
 
 Instruction Adherence Refresh from `.systems/ai/core/instruction-adherence-refresh.md` is required before commit readiness or handoff. Use targeted refresh when continuity is intact and full refresh after resume, compaction, working-directory change, long interruption, or conflict. A stale or blocked instruction baseline blocks commit readiness.
 

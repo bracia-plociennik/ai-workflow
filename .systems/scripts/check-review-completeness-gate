@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_literal() {
+  local file="$1"
+  local value="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for review completeness gate check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qF -- "$value" "$file"; then
+    echo "Missing review completeness gate reference in $file: $label"
+    fail=1
+  fi
+}
+
+quality_contract=".systems/ai/core/quality-review.md"
+helper=".systems/scripts/lib/policy-boundaries.sh"
+
+require_literal "$quality_contract" '### V2: Policy And Schema Change Evidence' "V2 contract section"
+for field in \
+  'Policy-boundary adversarial matrix' \
+  'Producer-consumer field audit' \
+  'Producers/consumers reviewed' \
+  'Required-field mapping'
+do
+  require_literal "$quality_contract" "$field" "V2 contract field: $field"
+done
+
+require_literal "$quality_contract" 'including `but`, `however`, a period, colon, `unless`, `yet`, or a semicolon-separated clause, fails' "compound policy bypass rule"
+require_literal "$quality_contract" 'Presence of a section heading is not field-level evidence.' "producer-consumer boundary"
+require_literal "$quality_contract" 'an applicable policy-boundary adversarial matrix or producer-consumer field audit is incomplete' "incomplete V2 verdict block"
+require_literal "$helper" 'policy_reject_unsafe_pattern' "shared policy helper"
+require_literal "$helper" 'Policy-boundary scan failed' "fail-closed source handling"
+
+policy_validators=(
+  .systems/scripts/check-response-evidence-trace
+  .systems/scripts/check-default-quality-closure
+  .systems/scripts/check-instruction-adherence-refresh
+  .systems/scripts/check-phase-skill-discovery
+  .systems/scripts/check-request-batch-triage
+  .systems/scripts/check-intent-plan-spec-compliance-review
+  .systems/scripts/check-global-quality-review-stance
+  .systems/scripts/check-validation-profiles
+  .systems/scripts/check-implementation-slicing
+  .systems/scripts/check-end-of-task-capture
+  .systems/scripts/check-default-idea-validation-opt-out
+  .systems/scripts/check-owner-decision-checkpoints
+)
+
+for validator in "${policy_validators[@]}"; do
+  require_literal "$validator" 'lib/policy-boundaries.sh' "shared policy helper source"
+  require_literal "$validator" 'policy_reject_unsafe_pattern' "shared policy helper use"
+  if rg -qi 'rg -v -i .*(must not|do not|cannot)' "$validator"; then
+    echo "Unsafe whole-line negation filter remains in $validator"
+    fail=1
+  fi
+done
+
+quality_templates=(
+  .systems/ai/templates/workflow/phase-5-quality.template.md
+  .systems/ai/templates/micro-projects/micro-project.template.md
+  .systems/ai/templates/projects/micro-task.template.md
+  .systems/ai/templates/reviews/review.template.md
+)
+
+review_gate_fields=(
+  '- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`'
+  '- Producer-consumer field audit: `<completed|not-applicable|incomplete>`'
+  '- Producers/consumers reviewed: `<paths or not-applicable>`'
+  '- Required-field mapping: `<complete|partial|mismatch|not-applicable>`'
+)
+
+for template in "${quality_templates[@]}"; do
+  for field in "${review_gate_fields[@]}"; do
+    require_literal "$template" "$field" "canonical V2 template field: $field"
+  done
+done
+
+require_literal ".systems/ai/core/owner-decision-checkpoints.md" '## Decision Record Producers' "queue producer classification"
+require_literal ".systems/ai/templates/dreaming/dream-report.template.md" '| Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |' "Dreaming full decision record"
+for field in 'why-needed-now:' 'blocking-point:' 'decision-artifact:'; do
+  require_literal ".systems/ai/templates/autopilot/readiness.template.md" "$field" "autopilot full decision record: $field"
+done
+
+for integration in \
+  'AGENTS.md:check-review-completeness-gate' \
+  'README.md:check-review-completeness-gate' \
+  '.systems/ai/core/commands.md:check-review-completeness-gate' \
+  '.systems/scripts/check-required-artifacts:check-review-completeness-gate' \
+  '.systems/scripts/validate-workflow:check-review-completeness-gate' \
+  '.systems/scripts/check-validator-smoke-tests:review-completeness-gate'
+do
+  file="${integration%%:*}"
+  value="${integration#*:}"
+  require_literal "$file" "$value" "integration: $value"
+done
+
+exit "$fail"

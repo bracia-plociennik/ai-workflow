@@ -41,6 +41,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
@@ -62,6 +63,8 @@ git diff --check
 `check-dreaming-mode` validates the advisory-only Dreaming Mode contract, report templates, workspace bootstrap namespace, privacy boundaries, and the split between `workflow-artifacts-only` and `full-repo` reports.
 
 `check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
+
+`check-review-completeness-gate` validates Review Completeness Gate v2, including policy-boundary adversarial evidence, producer-consumer field audits, canonical queue producers, and the ban on whole-line negation filters in policy validators.
 
 `check-intent-plan-spec-compliance-review` validates the shared review/quality lens that compares implementation against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria, and blocks technical-only PASS/review wording.
 

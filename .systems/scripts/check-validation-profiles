@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_file() {
@@ -163,12 +165,8 @@ unsafe_patterns=(
 )
 
 for pattern in "${unsafe_patterns[@]}"; do
-  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates .systems/scripts .github/workflows \
-    | rg -v -i 'check-validation-profiles|check-validator-smoke-tests' \
-    | rg -v -i 'must not|does not|do not|cannot|not enough|not final|unsafe|invalid|blocks?|without explicit owner|unless the owner explicitly|nie może|nie wystarcza|nie zastępuje'; then
-    echo "Unsafe validation profile wording found: $pattern"
-    fail=1
-  fi
+  policy_reject_unsafe_pattern "$pattern" "Unsafe validation profile wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates .systems/scripts/validate-workflow .github/workflows
 done
 
 exit "$fail"

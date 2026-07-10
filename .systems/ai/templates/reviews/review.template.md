@@ -22,3 +22,14 @@
 ## Residual Risk
 
 - `<risk or none>`
+
+## Review Completeness Gate
+
+- Cross-contract consistency: `<aligned|partial|mismatch|unknown>`
+- Negative-space / adversarial review: `<completed|not-applicable|incomplete>`
+- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`
+- Producer-consumer field audit: `<completed|not-applicable|incomplete>`
+- Producers/consumers reviewed: `<paths or not-applicable>`
+- Required-field mapping: `<complete|partial|mismatch|not-applicable>`
+- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`
+- Closure freshness: `<current|stale>`

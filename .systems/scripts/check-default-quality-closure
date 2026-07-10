@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
 fail=0
 
 require_ref() {
@@ -78,18 +80,14 @@ require_ref ".systems/scripts/validate-workflow" 'check-default-quality-closure'
 require_ref ".systems/scripts/check-required-artifacts" 'check-default-quality-closure' "required artifacts"
 require_ref ".systems/scripts/check-validator-smoke-tests" 'default-quality-closure' "smoke coverage"
 
-if rg -n -i '(bez QA|without QA|bez review|without review|bez weryfikacji|bez sprawdzania|without verification|no verification|fast path no review)[^.\n]{0,120}\b(may|can|allows?|continues?|continue|mark|marks?|count)\b[^.\n]{0,120}\b(PASS|QA PASS|continue as PASS)\b' \
-  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-  | rg -v -i 'does not|must not|cannot|not allow|invalid|nie daje|nie oznacza'; then
-  echo "Unsafe default quality closure opt-out wording found"
-  fail=1
-fi
+policy_reject_unsafe_pattern \
+  '(bez QA|without QA|bez review|without review|bez weryfikacji|bez sprawdzania|without verification|no verification|fast path no review)[^.\n]{0,120}\b(may|can|allows?|continues?|continue|mark|marks?|count)\b[^.\n]{0,120}\b(PASS|QA PASS|continue as PASS)\b' \
+  "Unsafe default quality closure opt-out wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 
-if rg -n -i '(advisory review|global-quality-review-stance|micro-task|side-task|micro-project|workflow-maintenance)[^.\n]{0,140}\b(may|can|creates?|produce|produces?|mark|marks?)\b[^.\n]{0,140}\bformal PASS\b' \
-  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
-  | rg -v -i 'does not|must not|cannot|not create|not produce|not mark|instead of|nie może|nie daje'; then
-  echo "Unsafe advisory quality closure PASS wording found"
-  fail=1
-fi
+policy_reject_unsafe_pattern \
+  '(advisory review|global-quality-review-stance|micro-task|side-task|micro-project|workflow-maintenance)[^.\n]{0,140}\b(may|can|creates?|produce|produces?|mark|marks?)\b[^.\n]{0,140}\bformal PASS\b' \
+  "Unsafe advisory quality closure PASS wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
 
 exit "$fail"

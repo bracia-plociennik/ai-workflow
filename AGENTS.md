@@ -92,7 +92,7 @@ If the user asks to capture anonymized lessons, System Insights, cross-project b
 
 If the user asks for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams, route through `.systems/ai/core/dreaming-mode.md`. Dreaming Mode is advisory-only and writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`. It cannot automatically write memory, External Memory, System Insights, skills, status, source files, commits, pull requests, scheduler automation, or approvals.
 
-If the user asks for review, code review, final review, findings, blockers, or a quality check outside a clearly resolvable formal phase, route through `.systems/ai/core/quality-review.md`. The global quality review stance is read-only/advisory by default, findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and cannot mark formal `PASS` or `FAIL`, update quality artifacts, or trigger `phase-8-final-check`. Its Review Completeness Gate must also check cross-contract consistency, risk/work mode compatibility, negative-space/adversarial cases, automated evidence as supporting-only, post-fix full re-review, reviewed baseline, and closure freshness.
+If the user asks for review, code review, final review, findings, blockers, or a quality check outside a clearly resolvable formal phase, route through `.systems/ai/core/quality-review.md`. The global quality review stance is read-only/advisory by default, findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and cannot mark formal `PASS` or `FAIL`, update quality artifacts, or trigger `phase-8-final-check`. Its Review Completeness Gate must also check cross-contract consistency, risk/work mode compatibility, negative-space/adversarial cases, policy-boundary adversarial matrices and producer-consumer field audits when applicable, automated evidence as supporting-only, post-fix full re-review, reviewed baseline, and closure freshness.
 
 Use `.systems/ai/core/instruction-adherence-refresh.md` at continuity and execution boundaries. Run targeted refresh before the first implementation-class write for a scope, before commit/handoff/quality closure, and after material scope or instruction changes. Run full refresh after resume, context compaction, working-directory change, long interruption, or source conflict. Do not refresh before every message or edit. Every substantive `Execution Trace` reports refresh status, trigger, refreshed contracts, reviewed baseline, and drift/conflict.
 
@@ -346,6 +346,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles

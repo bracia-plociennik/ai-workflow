@@ -106,6 +106,7 @@ cd ai-workflow
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
@@ -183,7 +184,7 @@ Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for imp
 
 Implementation work must end with quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; micro-work and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` requires findings-first review evidence and cannot be declared with unresolved `P0`, `P1`, or material `P2` findings. Advisory closure uses wording such as `No blockers found`, `No findings found`, or `Ready for owner review` instead of formal `PASS`.
 
-Review Completeness Gate requires cross-contract and risk/work-mode consistency, negative-space/adversarial review for validators and policy boundaries, automated checks treated as supporting evidence, a reviewed baseline, and a fresh full-current-state review after every fix. A stale closure cannot support `No findings found`, `Ready for owner review`, commit readiness, or formal `PASS`.
+Review Completeness Gate requires cross-contract and risk/work-mode consistency, negative-space/adversarial review for validators and policy boundaries, a policy-boundary adversarial matrix and producer-consumer field audit when applicable, automated checks treated as supporting evidence, a reviewed baseline, and a fresh full-current-state review after every fix. A stale or incomplete closure cannot support `No findings found`, `Ready for owner review`, commit readiness, or formal `PASS`.
 
 Validation profiles use `.systems/ai/core/validation-profiles.md`. `.systems/scripts/validate-workflow` with no arguments uses the `standard` profile for daily iteration and ordinary post-implementation quality. Use `.systems/scripts/validate-workflow --profile fast --explain` for quick sanity checks, `.systems/scripts/validate-workflow --profile scoped --checks <check-name> --explain` for explicit validator iteration, and `.systems/scripts/validate-workflow --profile full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
 
@@ -238,6 +239,7 @@ git diff --check
 .systems/scripts/check-default-quality-phase-chaining
 .systems/scripts/check-dreaming-mode
 .systems/scripts/check-global-quality-review-stance
+.systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles

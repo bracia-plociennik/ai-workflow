@@ -46,6 +46,10 @@
 - Instruction refresh: `<performed-targeted|performed-full|not-needed|blocked>`
 - Instruction baseline: `<current|stale|blocked>`
 - Closure freshness: `<current|stale>`
+- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`
+- Producer-consumer field audit: `<completed|not-applicable|incomplete>`
+- Producers/consumers reviewed: `<paths or not-applicable>`
+- Required-field mapping: `<complete|partial|mismatch|not-applicable>`
 - Evidence:
 
 ## Commands
@@ -99,6 +103,9 @@
 - Post-fix full re-review complete or not required: `<yes|no>`
 - Instruction baseline current: `<yes|no>`
 - Closure freshness current: `<yes|no>`
+- Policy-boundary adversarial matrix complete or not applicable: `<yes|no>`
+- Producer-consumer field audit complete or not applicable: `<yes|no>`
+- Required-field mapping complete or not applicable: `<yes|no>`
 - 100% DoD satisfied: `<yes|no>`
 - No known bug in scope: `<yes|no>`
 - No regression in changed/direct paths: `<yes|no>`

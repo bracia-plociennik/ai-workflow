@@ -164,6 +164,7 @@ run_core_validators() {
   run_cmd .systems/scripts/check-default-quality-phase-chaining
   run_cmd .systems/scripts/check-dreaming-mode
   run_cmd .systems/scripts/check-global-quality-review-stance
+  run_cmd .systems/scripts/check-review-completeness-gate
   run_cmd .systems/scripts/check-intent-plan-spec-compliance-review
   run_cmd .systems/scripts/check-implementation-slicing
   run_cmd .systems/scripts/check-validation-profiles

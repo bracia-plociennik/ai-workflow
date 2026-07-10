@@ -98,14 +98,17 @@ owner-decisions:
   - id: <decision-id>
     classification: <owner-preference|high-impact|critical-risk|blocked-by-missing-facts>
     decision: <decision-needed>
+    why-needed-now: <reason>
     options:
       - option: <recommended-option>
         impact: <impact>
       - option: <alternative-option>
         impact: <impact>
     recommendation: <recommended-option>
+    blocking-point: <blocked-step-or-none>
     chosen-answer: null
     approval-evidence: null
+    decision-artifact: null
     status: <pending|approved|rejected|not-applicable>
 
 decision-interaction:
