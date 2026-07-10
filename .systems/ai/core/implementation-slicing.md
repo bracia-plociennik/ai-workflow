@@ -47,6 +47,8 @@ Every implementation-class write path must identify:
 
 Implementation-class writes must not start until the work has a clear and testable Definition of Done.
 
+Before the first implementation-class write for an accepted scope, run targeted or full Instruction Adherence Refresh from `.systems/ai/core/instruction-adherence-refresh.md`. Repeat targeted refresh before the next write when controlling scope, instructions, accepted artifacts, status, permissions, or write set materially changed outside the accepted implementation output. Expected output edits inside the current accepted slice do not retrigger refresh by themselves. Resume, context compaction, working-directory change, long interruption, or source conflict requires full refresh.
+
 For formal workflow tasks, the DoD comes from the accepted spec and Spec QA evidence. `phase-4-implementation` must stop when the DoD is missing, untestable, stale, or contradictory.
 
 For side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance changes, the DoD comes from the accepted owner prompt/context, accepted micro-task artifact, or accepted micro-project artifact. If the DoD is not explicit but is safely inferable, record the inference in the `Implementation Slice Plan`. If it is unclear, stop before writes and ask for the missing acceptance decision.
@@ -113,6 +115,8 @@ Do not use empty `zweryfikowane`, `verified`, or `PASS` wording without evidence
 If a later review finds a material issue that the required lens should have caught, treat it as either a new finding/regression or evidence that the earlier `PASS` was invalid because the required review lens or evidence was missing.
 
 Any fix after quality review invalidates the previous quality closure. Set `Closure freshness: stale` and repeat the complete findings-first review against the full current diff/worktree, applicable artifacts, DoD, and cross-contract boundaries. `Post-fix full re-review` must inspect the complete current state, not only the fixed lines. Automated checks remain supporting evidence and cannot restore `No findings found`, `Ready for owner review`, or formal `PASS` without the full-current-state re-review required by `.systems/ai/core/quality-review.md`.
+
+Post-fix full re-review must also use a current Instruction Adherence Refresh baseline. If the baseline is stale or blocked, quality closure remains stale.
 
 ## Compact Mode
 

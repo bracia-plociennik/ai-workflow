@@ -1,5 +1,11 @@
 # changelog.md
 
+## 0.8.22 - 2026-07-10
+
+- Added targeted and full Instruction Adherence Refresh profiles for pre-write, pre-commit/handoff/quality, resume, compaction, working-directory, interruption, scope-change, and source-conflict boundaries.
+- Extended every substantive Execution Trace with refresh status, trigger, refreshed contracts, reviewed baseline, and drift/conflict evidence.
+- Added drift-warning and owner-behavior boundaries plus validator and smoke coverage for chat-memory authority, hidden default changes, heavy per-message refresh, stale baselines, and gate bypasses.
+
 ## 0.8.21 - 2026-07-10
 
 - Added Knowledge Capture Reminder routing after implementation, fixes, quality closure, handoff, commit readiness, and unrelated task switches, with advisory-only memory targets and explicit commit/push boundaries.

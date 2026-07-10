@@ -8,11 +8,13 @@
 - Required approvals for high-risk work are recorded.
 - Safe verification commands and environment from `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md` are known.
 - Accepted spec contains a clear and testable Definition of Done.
+- Targeted or full Instruction Adherence Refresh baseline is current for the selected task/package.
 
 ### Output required
 
 - Implementation changes limited to the accepted spec.
 - Implementation Slice Plan derived from the accepted spec before implementation-class writes, including DoD source.
+- Instruction refresh evidence with trigger, refreshed contracts, and reviewed baseline.
 - Slice Execution Evidence for each completed, blocked, or skipped slice.
 - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-4-<task-id>-implementation-result.md`.
 - Updated task index/status, optional task card, and project status.
@@ -22,6 +24,7 @@
 - Implementation matches the accepted spec and does not expand scope.
 - Accepted Definition of Done is clear, testable, and used as the target for slice acceptance checks.
 - Implementation Slice Plan exists and all implemented slices have evidence.
+- Instruction baseline is current when implementation-class writes begin and after any material scope or instruction change.
 - No unrelated files are changed.
 - Implementation result records changed files, commands run, skipped checks, and residual risk.
 
@@ -29,6 +32,7 @@
 
 - Implementation-class writes started without an Implementation Slice Plan.
 - Implementation-class writes started with missing or untestable DoD.
+- Implementation-class writes started with missing, stale, or blocked instruction baseline.
 - Slice Execution Evidence is missing, placeholder-only, or contradicted by repo state.
 - Implementation deviates from spec, changes unrelated files, or introduces unresolved decisions.
 - Required approval, safe command, or safe environment is missing.
@@ -43,6 +47,7 @@
 
 - Accepted spec path.
 - Implementation Slice Plan with source, scope, DoD source, slice id, goal, expected files/areas, acceptance check, evidence required, and status.
+- Instruction refresh status, trigger, refreshed contracts, reviewed baseline, and drift/conflict.
 - Slice Execution Evidence with files/areas changed, checks run or skipped, acceptance result, residual risk, and next slice or stop reason.
 - Changed files and rationale.
 - Commands/checks run or skipped with reason.

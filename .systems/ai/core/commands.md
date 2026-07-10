@@ -45,6 +45,7 @@ git diff --check
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
+.systems/scripts/check-instruction-adherence-refresh
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -68,6 +69,8 @@ git diff --check
 `check-validation-profiles` validates `.systems/ai/core/validation-profiles.md`, `validate-workflow --profile` behavior, the no-arg `standard` validation default, explicit `full` smoke-test coverage, and the boundary that `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
 
 `check-knowledge-capture-reminder` validates the advisory post-implementation/fix/quality/handoff reminder, owner skip grammar, tracked-vs-ignored commit boundary, push-disabled default, and the rule that reminders cannot bypass phase 6, phase 7, QA, evidence, privacy, status, risk, permissions, or memory scope gates.
+
+`check-instruction-adherence-refresh` validates targeted/full refresh triggers, always-visible Execution Trace fields, drift-warning routing, contracted opt-out boundaries, lightweight normal continuation, and the rule that refresh cannot grant writes or bypass source-of-truth, risk, permissions, DoD, QA, evidence, or approvals.
 
 `check-request-batch-triage` validates owner request batch triage, triage matrix fields, mixed-list routing, high-risk routing, and the boundary that triage cannot automatically implement, commit, or create workflow artifacts.
 

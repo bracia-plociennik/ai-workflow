@@ -110,6 +110,7 @@ cd ai-workflow
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
+.systems/scripts/check-instruction-adherence-refresh
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery
@@ -172,6 +173,8 @@ Do not edit `.systems/**` in a target repository. Workflow improvement ideas dis
 Dreaming Mode reports belong in `ai-workflow-workspace/dreams/runs/**`. They are advisory-only recommendation queues and do not automatically write memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
 Global quality review uses `.systems/ai/core/quality-review.md` for read-only/advisory review, code review, final review, findings, blockers, and generic quality-check prompts. It is findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and does not create formal `PASS`/`FAIL`, quality artifacts, status updates, or final-check approval.
+
+Instruction Adherence Refresh uses `.systems/ai/core/instruction-adherence-refresh.md` to re-anchor long-running sessions on current contracts and repository state. Targeted refresh runs at pre-write, pre-commit/handoff/quality, and material scope/instruction-change boundaries; full refresh runs after resume, context compaction, working-directory change, long interruption, or source conflict. Every substantive Execution Trace reports refresh status and baseline, while normal continuation without a new trigger may report `not-needed`.
 
 Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for implementation-class writes. Formal phase-4, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance writes start with an Implementation Slice Plan, include a DoD source, and record Slice Execution Evidence. Slicing does not grant write permission, expand scope, or bypass QA.
 
@@ -236,6 +239,7 @@ git diff --check
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
+.systems/scripts/check-instruction-adherence-refresh
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

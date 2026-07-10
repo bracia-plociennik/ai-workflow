@@ -49,6 +49,9 @@ required_contract_terms=(
   "Risk/work mode compatible"
   "Review completeness gate"
   "Post-fix full re-review"
+  "Instruction refresh"
+  "Instruction baseline"
+  "instruction-adherence-refresh.md"
   "Closure freshness"
   "phase-6-distillation"
   "phase-7-checkpoint"
@@ -70,6 +73,8 @@ for template in .systems/ai/templates/projects/micro-task.template.md .systems/a
   require_ref "$template" 'Promote to full workflow' "template promote decision"
   require_ref "$template" 'Risk/work mode compatibility' "template risk/work mode review"
   require_ref "$template" 'Post-fix full re-review' "template post-fix full review"
+  require_ref "$template" 'Instruction refresh' "template instruction refresh"
+  require_ref "$template" 'Instruction baseline' "template instruction baseline"
   require_ref "$template" 'Closure freshness' "template closure freshness"
 done
 

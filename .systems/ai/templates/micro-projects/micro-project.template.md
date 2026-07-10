@@ -47,6 +47,8 @@
 - Automated evidence role: `supporting-only`
 - Post-fix full re-review: `<completed|not-required|incomplete>`
 - Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`
+- Instruction refresh: `<performed-targeted|performed-full|not-needed|blocked>`
+- Instruction baseline: `<current|stale|blocked>`
 - Closure freshness: `<current|stale>`
 - Result wording: `<No blockers found|No findings found|Ready for owner review|Quality skipped by owner opt-out>`
 - Residual risk: `<risk>`
@@ -56,6 +58,7 @@
 - Work mode compliance: `<pass|warning|blocked>`
 - Scope/acceptance clear: `<yes|no>`
 - Risk allowed for mode: `<yes|no>`
+- Instruction baseline current: `<yes|no>`
 - Write-set conflicts: `<none|warning|blocked>`
 
 ## Changed Files

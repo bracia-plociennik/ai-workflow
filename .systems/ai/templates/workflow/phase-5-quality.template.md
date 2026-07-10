@@ -43,6 +43,8 @@
 - Automated evidence role: `supporting-only`
 - Post-fix full re-review: `<completed|not-required|incomplete>`
 - Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`
+- Instruction refresh: `<performed-targeted|performed-full|not-needed|blocked>`
+- Instruction baseline: `<current|stale|blocked>`
 - Closure freshness: `<current|stale>`
 - Evidence:
 
@@ -95,6 +97,7 @@
 - Negative-space / adversarial review complete or not applicable: `<yes|no>`
 - Automated evidence treated as supporting-only: `<yes|no>`
 - Post-fix full re-review complete or not required: `<yes|no>`
+- Instruction baseline current: `<yes|no>`
 - Closure freshness current: `<yes|no>`
 - 100% DoD satisfied: `<yes|no>`
 - No known bug in scope: `<yes|no>`

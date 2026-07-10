@@ -51,9 +51,20 @@ Skipped/unreadable sources:
 
 Limits/residual uncertainty:
 - <remaining uncertainty or none>
+
+Instruction refresh:
+- Status: <performed-targeted|performed-full|not-needed|blocked>
+- Trigger: <trigger|none>
+- Contracts refreshed: <paths|not-needed>
+- Reviewed baseline: <HEAD/worktree/status/artifacts|not-needed>
+- Drift/conflict: <none|warning|blocked>
 ```
 
 Keep the trace concise. For very small substantive answers, each field may be a single line. For strict JSON-only, patch-only, or exact-template output, include the trace in the nearest surrounding human-facing response instead of inside the constrained payload.
+
+Instruction refresh fields are always present in substantive responses. Use `.systems/ai/core/instruction-adherence-refresh.md` to decide whether the status is `performed-targeted`, `performed-full`, `not-needed`, or `blocked`. A performed refresh must list the contracts and reviewed baseline. `not-needed` is allowed only when no new refresh trigger occurred.
+
+When refresh detects drift or source conflict, include the required `Drift Warning` block before `Co dalej?`. A blocked conflict stops implementation-class writes and must be reflected under limits/residual uncertainty.
 
 Do not say `no sources needed` for a substantive response. If no files, tools, or artifacts were needed, write `Sources used: owner prompt only` and explain the limit under `Limits/residual uncertainty`.
 

@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `implementation-slicing.md`, and `end-of-task-capture.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `implementation-slicing.md`, `instruction-adherence-refresh.md`, and `end-of-task-capture.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -91,6 +91,8 @@ If the user asks to capture anonymized lessons, System Insights, cross-project b
 If the user asks for Dreaming Mode, nightly analysis, AFK review, dream scan, or scan dreams, route through `.systems/ai/core/dreaming-mode.md`. Dreaming Mode is advisory-only and writes only Dream Reports under `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`. It cannot automatically write memory, External Memory, System Insights, skills, status, source files, commits, pull requests, scheduler automation, or approvals.
 
 If the user asks for review, code review, final review, findings, blockers, or a quality check outside a clearly resolvable formal phase, route through `.systems/ai/core/quality-review.md`. The global quality review stance is read-only/advisory by default, findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and cannot mark formal `PASS` or `FAIL`, update quality artifacts, or trigger `phase-8-final-check`. Its Review Completeness Gate must also check cross-contract consistency, risk/work mode compatibility, negative-space/adversarial cases, automated evidence as supporting-only, post-fix full re-review, reviewed baseline, and closure freshness.
+
+Use `.systems/ai/core/instruction-adherence-refresh.md` at continuity and execution boundaries. Run targeted refresh before the first implementation-class write for a scope, before commit/handoff/quality closure, and after material scope or instruction changes. Run full refresh after resume, context compaction, working-directory change, long interruption, or source conflict. Do not refresh before every message or edit. Every substantive `Execution Trace` reports refresh status, trigger, refreshed contracts, reviewed baseline, and drift/conflict.
 
 If the user says the task is done and asks to preserve learnings, for example `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`, route through `.systems/ai/core/end-of-task-capture.md`. Apply its precedence first: final-owner-yes/change requests, explicit formal phases, global review, and commit readiness keep priority. End-of-Task Capture is capture review/proposal by default. It must not mark `PASS`, run `phase-8-final-check`, close a project, update status from chat-only claims, or write durable memory/insights unless target, scope, privacy, evidence, and write permission are clear.
 
@@ -217,6 +219,8 @@ Before committing a side task, micro-task, micro-project, full-project task, or 
 
 Implementation-class writes in full-project implementation, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance changes require an Implementation Slice Plan from `.systems/ai/core/implementation-slicing.md` before writes. The plan must include a DoD source. Tiny low-risk one-file fixes may use compact one-slice plans. Slicing is sequencing/evidence discipline only and cannot grant write permission, expand scope, change risk, bypass accepted specs or owner prompt/context, skip approvals, or satisfy QA by itself.
 
+Before the first implementation-class write for an accepted scope, confirm a current targeted or full Instruction Adherence Refresh baseline. A slice plan without current instruction baseline evidence does not authorize writes.
+
 After implementation-class writes, run quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; side tasks, micro-tasks, micro-projects, and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` is allowed only in formal QA/Quality gates after findings-first review with no unresolved `P0`, `P1`, or material `P2`. Advisory closure must use evidence wording such as `No blockers found`, `No findings found`, or `Ready for owner review`, not formal `PASS`.
 
 ## Risk Routing
@@ -342,6 +346,7 @@ git diff --check
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
+.systems/scripts/check-instruction-adherence-refresh
 .systems/scripts/check-request-batch-triage
 .systems/scripts/check-response-evidence-trace
 .systems/scripts/check-phase-skill-discovery

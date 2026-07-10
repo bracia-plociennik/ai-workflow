@@ -17,7 +17,7 @@
 
 - 100% of task/package DoD is satisfied.
 - Intent / Plan / Spec Compliance is `PASS`: implementation matches the owner instruction, accepted plan, accepted spec, approved scope, and acceptance criteria.
-- Review Completeness Gate is complete, cross-contract consistency and risk/work mode compatibility are aligned, and closure freshness is `current`.
+- Review Completeness Gate is complete, cross-contract consistency and risk/work mode compatibility are aligned, instruction baseline is current, and closure freshness is `current`.
 - Relevant tests/checks passed or were explicitly skipped without affecting PASS.
 - No known in-scope bug, direct regression, missing evidence, or unresolved blocker remains.
 
@@ -25,7 +25,7 @@
 
 - Any DoD item is unmet.
 - Implementation solves the wrong problem, misses the owner instruction, diverges from the accepted plan or accepted spec, fails acceptance criteria, or includes unapproved scope creep.
-- Review Completeness Gate is incomplete, post-fix full re-review is incomplete, or closure freshness is `stale`.
+- Review Completeness Gate is incomplete, instruction baseline is stale or blocked, post-fix full re-review is incomplete, or closure freshness is `stale`.
 - Evidence is missing, placeholder-only, or contradicted by repo state.
 - A skipped check affects PASS or a regression/bug remains.
 
@@ -39,7 +39,7 @@
 - Commands, manual checks, and artifacts reviewed.
 - Owner instruction, accepted plan, accepted spec, scope/out-of-scope notes, and acceptance criteria reviewed or explicitly marked missing/stale/unreadable with impact.
 - DoD matrix, skipped checks with impact, findings, and residual risks.
-- Cross-contract consistency, negative-space/adversarial review, automated-evidence role, reviewed baseline, post-fix full re-review, and closure freshness.
+- Cross-contract consistency, negative-space/adversarial review, automated-evidence role, reviewed baseline, instruction refresh, post-fix full re-review, and closure freshness.
 - Explicit gate decision.
 
 ### Next allowed phases
@@ -158,6 +158,8 @@ Przed `PASS` Codex musi potwierdzić:
 - Automated evidence role: `supporting-only`; zielone testy i validatory nie są samodzielnym werdyktem.
 - Post-fix full re-review: po każdej poprawce od ostatniego review ponownie sprawdzono cały aktualny diff/worktree, nie tylko poprawione linie.
 - Reviewed baseline: zapisano aktualny HEAD, worktree/diff i artefakty objęte review.
+- Instruction refresh: `performed-targeted|performed-full|not-needed|blocked`.
+- Instruction baseline: `current|stale|blocked`.
 - Closure freshness: `current`.
 
 Każda poprawka po review ustawia closure na `stale`. Dopóki pełny post-fix review nie zostanie ponowiony, wynik tej fazy musi być `FAIL` albo stop condition. Nie wolno przyznać `PASS` wyłącznie dlatego, że automatyczne checks są zielone.
@@ -275,6 +277,8 @@ Raport końcowy powinien zawierać:
 - Automated evidence role: supporting-only
 - Post-fix full re-review: completed / not-required / incomplete
 - Reviewed baseline
+- Instruction refresh: performed-targeted / performed-full / not-needed / blocked
+- Instruction baseline: current / stale / blocked
 - Closure freshness: current / stale
 - compared against: owner instruction, accepted plan, accepted spec, scope, acceptance criteria
 - DoD: PASS / FAIL

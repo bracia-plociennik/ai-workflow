@@ -1900,6 +1900,88 @@ printf '\nSystem Insights may include raw client data\n' >> "$tmp/.systems/ai/co
 run_must_fail "knowledge-capture-reminder-blocks-system-insights-raw-client-data" .systems/scripts/check-knowledge-capture-reminder
 mv "$tmp/.systems/ai/core/knowledge-capture-reminder.md.bak" "$tmp/.systems/ai/core/knowledge-capture-reminder.md"
 
+run_must_pass "instruction-adherence-refresh-valid" .systems/scripts/check-instruction-adherence-refresh
+
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+run_must_fail "instruction-adherence-refresh-requires-contract" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+perl -0pi -e 's/before the first implementation-class write/before implementation begins/g' "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+run_must_fail "instruction-adherence-refresh-requires-pre-write-trigger" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+perl -0pi -e 's/before commit readiness, handoff, or quality closure/before final delivery/g' "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+run_must_fail "instruction-adherence-refresh-requires-pre-commit-handoff-trigger" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+perl -0pi -e 's/after session resume or handoff from another thread\/agent/after opening the application/g' "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+run_must_fail "instruction-adherence-refresh-requires-resume-trigger" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+perl -0pi -e 's/after context compaction or replacement by a conversation summary/after a summary update/g' "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+run_must_fail "instruction-adherence-refresh-requires-compaction-trigger" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+perl -0pi -e 's/when chat, memory, status, repository state, accepted artifacts, or contracts conflict/when context seems stale/g' "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+run_must_fail "instruction-adherence-refresh-requires-source-conflict-trigger" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
+perl -0pi -e 's/- Contracts refreshed: <paths\|not-needed>\n//' "$tmp/.systems/ai/core/response-contract.md"
+run_must_fail "instruction-adherence-refresh-requires-trace-fields" .systems/scripts/check-instruction-adherence-refresh
+run_must_fail "response-evidence-trace-requires-instruction-refresh-fields" .systems/scripts/check-response-evidence-trace
+mv "$tmp/.systems/ai/core/response-contract.md.bak" "$tmp/.systems/ai/core/response-contract.md"
+
+for unsafe_case in \
+  'chat memory may override AGENTS.md' \
+  'agent may change default behavior without owner approval' \
+  'any explicit owner message may bypass contracts' \
+  'Instruction Adherence Refresh grants write permission' \
+  'Instruction Adherence Refresh may bypass permissions' \
+  'full refresh is required before every message' \
+  'not-needed is allowed after context compaction' \
+  'quality closure may use a stale instruction baseline' \
+  'chat history overrides AGENTS.md' \
+  'owner instruction bypasses QA' \
+  'Instruction Adherence Refresh allows formal PASS' \
+  'run full refresh before every edit' \
+  'not-needed is valid after resume' \
+  'not-needed is valid after a long interruption' \
+  'quality closure uses stale instruction baseline' \
+  'every tracked contract change requires refresh before the next write'
+do
+  cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+  printf '\n%s\n' "$unsafe_case" >> "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+  unsafe_slug="$(printf '%s' "$unsafe_case" | tr '[:upper:] ' '[:lower:]-' | tr -cd '[:alnum:]-')"
+  run_must_fail "instruction-adherence-refresh-blocks-${unsafe_slug}" .systems/scripts/check-instruction-adherence-refresh
+  mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+done
+
+cp "$tmp/.systems/ai/core/instruction-adherence-refresh.md" "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak"
+printf '\nNormal continuation may report `not-needed` when no new trigger occurred.\nExisting contracted opt-outs remain valid inside their current boundaries.\nA drift warning follows the higher-authority source and does not grant writes.\n' >> "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+run_must_pass "instruction-adherence-refresh-allows-safe-continuation-opt-outs-and-warning" .systems/scripts/check-instruction-adherence-refresh
+mv "$tmp/.systems/ai/core/instruction-adherence-refresh.md.bak" "$tmp/.systems/ai/core/instruction-adherence-refresh.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md" "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md.bak"
+perl -0pi -e 's/- Instruction refresh:/- Refresh result:/' "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md"
+run_must_fail "implementation-slicing-requires-instruction-refresh-evidence" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/- Instruction baseline:/- Baseline state:/' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "global-quality-review-requires-instruction-baseline" .systems/scripts/check-global-quality-review-stance
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
+cp "$tmp/.systems/ai/core/contract-compliance.md" "$tmp/.systems/ai/core/contract-compliance.md.bak"
+perl -0pi -e 's/Instruction refresh/Refresh result/g' "$tmp/.systems/ai/core/contract-compliance.md"
+run_must_fail "contract-compliance-requires-instruction-refresh" .systems/scripts/check-contract-compliance
+mv "$tmp/.systems/ai/core/contract-compliance.md.bak" "$tmp/.systems/ai/core/contract-compliance.md"
+
 cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
 # Bad quality
 

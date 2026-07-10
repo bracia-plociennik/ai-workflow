@@ -76,7 +76,9 @@ for term in \
   'Post-fix full re-review' \
   'full current diff/worktree' \
   'Closure freshness' \
-  'supporting evidence'
+  'supporting evidence' \
+  'Instruction Adherence Refresh' \
+  'current Instruction Adherence Refresh baseline'
 do
   require_ref "$contract" "$term" "contract term: $term"
 done
@@ -102,7 +104,9 @@ for term in \
   'DoD source' \
   'testable Definition of Done' \
   'findings-first review' \
-  'phase-5-quality'
+  'phase-5-quality' \
+  'Instruction Adherence Refresh' \
+  'Instruction baseline'
 do
   require_ref "$phase4" "$term" "phase-4 term: $term"
 done
@@ -112,6 +116,9 @@ for term in \
   '## Slice Execution Evidence' \
   'Source: `<accepted spec|accepted owner prompt/context>`' \
   'DoD source' \
+  'Instruction refresh' \
+  'Reviewed baseline' \
+  'Drift/conflict' \
   'Slice ID' \
   'Expected Files/Areas' \
   'Acceptance Check' \
@@ -130,6 +137,8 @@ for file in "$micro_task_template" "$micro_project_template"; do
   require_ref "$file" 'No blockers found' "$file advisory no blockers wording"
   require_ref "$file" 'Ready for owner review' "$file advisory ready wording"
   require_ref "$file" 'Post-fix full re-review' "$file post-fix full review"
+  require_ref "$file" 'Instruction refresh' "$file instruction refresh"
+  require_ref "$file" 'Instruction baseline' "$file instruction baseline"
   require_ref "$file" 'Closure freshness' "$file closure freshness"
 done
 

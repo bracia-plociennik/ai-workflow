@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for instruction adherence refresh check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qi "$pattern" "$file"; then
+    echo "Missing instruction adherence refresh reference in $file: $label"
+    fail=1
+  fi
+}
+
+require_literal() {
+  local file="$1"
+  local value="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for instruction adherence refresh check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qF "$value" "$file"; then
+    echo "Missing instruction adherence refresh reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/instruction-adherence-refresh.md"
+response_contract=".systems/ai/core/response-contract.md"
+
+require_ref "$contract" '^# instruction-adherence-refresh\.md$' "core contract"
+require_ref "$contract" 'Instruction Adherence Refresh' "contract name"
+require_ref "$contract" 'Targeted Refresh' "targeted profile"
+require_ref "$contract" 'Full Refresh' "full profile"
+require_ref "$contract" 'Normal Continuation' "normal continuation"
+require_ref "$contract" 'Required Execution Trace Output' "trace output"
+require_ref "$contract" 'Drift Warning' "drift warning"
+require_ref "$contract" 'Owner-Approved Behavior Changes' "owner behavior boundary"
+require_ref "$contract" 'Authority Boundary' "authority boundary"
+
+for trigger in \
+  'before the first implementation-class write' \
+  'before commit readiness, handoff, or quality closure' \
+  'after the owner changes scope' \
+  'after session resume' \
+  'after context compaction' \
+  'after working-directory or repository-mode change' \
+  'after a long interruption' \
+  'when chat, memory, status, repository state, accepted artifacts, or contracts conflict'
+do
+  require_ref "$contract" "$trigger" "trigger: $trigger"
+done
+
+for field in \
+  'Instruction refresh:' \
+  'Status: <performed-targeted|performed-full|not-needed|blocked>' \
+  'Trigger: <trigger|none>' \
+  'Contracts refreshed: <paths|not-needed>' \
+  'Reviewed baseline: <HEAD/worktree/status/artifacts|not-needed>' \
+  'Drift/conflict: <none|warning|blocked>'
+do
+  require_literal "$contract" "$field" "contract trace field: $field"
+  require_literal "$response_contract" "$field" "response trace field: $field"
+done
+
+for field in \
+  'Conflicting chat/context claim' \
+  'Higher-authority source' \
+  'Impact' \
+  'Required route'
+do
+  require_ref "$contract" "$field" "drift warning field: $field"
+done
+
+for boundary in \
+  'Do not run refresh before every message, file edit, command, or tool call' \
+  'not-needed.*invalid.*resume, context compaction, working-directory change, long interruption, or source conflict' \
+  'Expected output edits inside the current accepted slice do not retrigger refresh by themselves' \
+  'existing contracted opt-outs' \
+  'owner-approved tracked workflow-maintenance' \
+  'must not change its default workflow behavior' \
+  'grant write permission' \
+  'Definition of Done' \
+  'mark formal `PASS`'
+do
+  require_ref "$contract" "$boundary" "boundary: $boundary"
+done
+
+for integration in \
+  'AGENTS.md:instruction-adherence-refresh\.md' \
+  'HUMANS.md:Instruction Adherence Refresh' \
+  'README.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/core/operating-model.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/core/command-routing.md:Instruction Adherence Refresh' \
+  '.systems/ai/core/workflow.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/core/implementation-slicing.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/core/quality-review.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/core/contract-compliance.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/core/prompt-injection.md:instruction-adherence-refresh\.md' \
+  '.systems/ai/workflow/phase-4-implementation.md:Instruction Adherence Refresh' \
+  '.systems/ai/workflow/phase-5-quality.md:Instruction refresh' \
+  '.systems/ai/templates/workflow/phase-4-implementation.template.md:Instruction refresh' \
+  '.systems/ai/templates/workflow/phase-5-quality.template.md:Instruction refresh' \
+  '.systems/ai/core/commands.md:check-instruction-adherence-refresh' \
+  'README.md:check-instruction-adherence-refresh' \
+  'AGENTS.md:check-instruction-adherence-refresh' \
+  '.systems/scripts/validate-workflow:check-instruction-adherence-refresh' \
+  '.systems/scripts/check-required-artifacts:check-instruction-adherence-refresh' \
+  '.systems/scripts/check-validator-smoke-tests:instruction-adherence-refresh'
+do
+  file="${integration%%:*}"
+  pattern="${integration#*:}"
+  require_ref "$file" "$pattern" "integration: $pattern"
+done
+
+unsafe_patterns=(
+  'chat (history|memory|context)[^.\n]{0,60}(may|can|should|must|overrides?|replaces?|takes precedence over)[^.\n]{0,60}(AGENTS|repository state|workflow contracts)'
+  'agent[^.\n]{0,40}(may|can|should|changes?)[^.\n]{0,60}default (workflow )?behavior without owner approval'
+  '(any )?(explicit )?owner (message|instruction)[^.\n]{0,60}(may|can|allows?|bypasses?)[^.\n]{0,60}(contracts|risk|permissions|QA|Quality|approvals)'
+  '(refresh|Instruction Adherence Refresh)[^.\n]{0,60}(grants?|allows?)[^.\n]{0,40}(write permission|writes|formal PASS|PASS)'
+  '(refresh|Instruction Adherence Refresh)[^.\n]{0,60}(may|can|allows?|bypasses?)[^.\n]{0,60}(risk|permissions|Definition of Done|DoD|QA|Quality|approvals)'
+  'full refresh (is )?(required|run|performed|used) before every (message|edit)'
+  '(run|perform|require|use)[^.\n]{0,30}full refresh before every (message|edit)'
+  'not-needed (is )?(allowed|valid|acceptable|permitted) after (a )?(resume|context compaction|working-directory change|long interruption|source conflict|unresolved source conflict)'
+  'quality closure[^.\n]{0,40}(may|can|uses?|accepts?)[^.\n]{0,30}(a )?stale instruction baseline'
+  '(every|any)[^.\n]{0,30}(tracked contract|repository|file|output) change[^.\n]{0,60}(requires?|triggers?)[^.\n]{0,30}refresh before the next write'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  if rg -n -i "$pattern" AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates \
+    | rg -v -i 'must not|do not|does not|cannot|never|invalid|unsafe|forbidden|only existing|without owner-approved'; then
+    echo "Unsafe instruction adherence refresh wording found: $pattern"
+    fail=1
+  fi
+done
+
+exit "$fail"

@@ -66,6 +66,9 @@ for term in \
   'supporting-only' \
   'Post-fix full re-review' \
   'Reviewed baseline' \
+  'Instruction refresh' \
+  'Instruction baseline' \
+  'instruction-adherence-refresh\.md' \
   'Closure freshness' \
   'Recording the review artifact' \
   'mark formal `PASS` or `FAIL`' \
@@ -85,6 +88,8 @@ for file in ".systems/ai/workflow/phase-5-quality.md" ".systems/ai/templates/wor
     'supporting-only' \
     'Post-fix full re-review' \
     'Reviewed baseline' \
+    'Instruction refresh' \
+    'Instruction baseline' \
     'Closure freshness'
   do
     require_ref "$file" "$term" "$file review completeness: $term"
@@ -100,6 +105,8 @@ for field_pattern in \
   '^- Automated evidence role: `supporting-only`$' \
   '^- Post-fix full re-review: `<completed\|not-required\|incomplete>`$' \
   '^- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`$' \
+  '^- Instruction refresh: `<performed-targeted\|performed-full\|not-needed\|blocked>`$' \
+  '^- Instruction baseline: `<current\|stale\|blocked>`$' \
   '^- Closure freshness: `<current\|stale>`$'
 do
   require_ref "$quality_template" "$field_pattern" "formal quality template field: $field_pattern"
@@ -168,6 +175,7 @@ strict_unsafe_patterns=(
   'post-fix review (may|can|should) inspect only (the )?fixed lines'
   'closure (may|can) remain current without[^.\n]{0,80}full[^.\n]{0,80}re-review'
   'No findings found (may|can) be declared with (a )?stale closure'
+  'quality closure (may|can) use (a )?stale instruction baseline'
 )
 
 for pattern in "${strict_unsafe_patterns[@]}"; do

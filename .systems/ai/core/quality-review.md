@@ -104,6 +104,8 @@ Report:
 - Automated evidence role: `supporting-only`.
 - Post-fix full re-review: `<completed|not-required|incomplete>`.
 - Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`.
+- Instruction refresh: `<performed-targeted|performed-full|not-needed|blocked>`.
+- Instruction baseline: `<current|stale|blocked>`.
 - Closure freshness: `<current|stale>`.
 
 Cross-contract consistency compares the work against all applicable contracts, not only the accepted plan. At minimum, verify risk class against work mode, source-of-truth order, permissions, phase gates, artifact state, and acceptance criteria. A plan or owner instruction cannot silently authorize a mode that the risk model forbids.
@@ -117,6 +119,8 @@ Any implementation or documentation fix made after review invalidates the previo
 Recording the review artifact or local evidence after the review does not invalidate closure when that write only records the completed review and does not change reviewed implementation, contracts, scope, decisions, or acceptance evidence. Any substantive correction made while recording closure starts a new fix cycle.
 
 Do not declare `No findings found`, `Ready for owner review`, or formal `PASS` when cross-contract consistency is `partial`, `mismatch`, or `unknown`; negative-space review is required but incomplete; automated checks are the only evidence; post-fix full re-review is incomplete; or closure freshness is `stale`.
+
+Review uses `.systems/ai/core/instruction-adherence-refresh.md` before evaluating the final baseline. A stale or blocked instruction baseline makes Review Completeness Gate incomplete and prevents a quality-ready verdict.
 
 ### Intent / Plan / Spec Compliance
 

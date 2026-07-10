@@ -20,6 +20,23 @@ require_ref() {
   fi
 }
 
+require_literal() {
+  local file="$1"
+  local value="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for response evidence trace check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qF "$value" "$file"; then
+    echo "Missing response evidence trace reference in $file: $label"
+    fail=1
+  fi
+}
+
 contract=".systems/ai/core/response-contract.md"
 
 require_ref "$contract" '^## Execution Trace$' "Execution Trace section"
@@ -38,7 +55,19 @@ do
   require_ref "$contract" "$field" "trace field: $field"
 done
 
+for field in \
+  'Instruction refresh:' \
+  'Status: <performed-targeted|performed-full|not-needed|blocked>' \
+  'Trigger: <trigger|none>' \
+  'Contracts refreshed: <paths|not-needed>' \
+  'Reviewed baseline: <HEAD/worktree/status/artifacts|not-needed>' \
+  'Drift/conflict: <none|warning|blocked>'
+do
+  require_literal "$contract" "$field" "trace field: $field"
+done
+
 require_ref "AGENTS.md" 'Execution Trace' "AGENTS execution trace"
+require_ref "AGENTS.md" 'refresh status, trigger, refreshed contracts, reviewed baseline, and drift/conflict' "AGENTS instruction refresh trace"
 require_ref "HUMANS.md" 'Execution Trace' "human guidance"
 require_ref "README.md" 'check-response-evidence-trace' "README validator list"
 require_ref ".systems/ai/core/commands.md" 'check-response-evidence-trace' "commands validator list"

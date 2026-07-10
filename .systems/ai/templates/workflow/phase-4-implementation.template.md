@@ -18,6 +18,11 @@
 - Source: `<accepted spec|accepted owner prompt/context>`
 - Implementation scope:
 - DoD source: `<accepted spec DoD|accepted owner prompt/context DoD|safely inferred DoD>`
+- Instruction refresh: `<performed-targeted|performed-full|blocked>`
+- Refresh trigger:
+- Contracts refreshed:
+- Reviewed baseline:
+- Drift/conflict: `<none|warning|blocked>`
 
 | Slice ID | Goal | Expected Files/Areas | Acceptance Check | Evidence Required | Status |
 | --- | --- | --- | --- | --- | --- |

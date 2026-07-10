@@ -33,6 +33,7 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Parallel work questions must be routed through `.systems/ai/core/parallel-work-policy.md`, repo status, project statuses, task dependencies, and write-set checks before recommending concurrent execution.
 - Prompt composition, role, and variable questions must be routed through `.systems/ai/core/prompt-composition.md`; any project-local prompting artifacts are read after canonical policy and the current phase file.
 - Before workflow-governed planning or execution, run Phase Skill Discovery from `.systems/ai/core/operating-model.md`: infer the project domain/task type, check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first, check `.systems/ai/skills/` second, use only active `SKILL.md` contracts, and report `Skills used: none` when no matching skill exists.
+- Apply Instruction Adherence Refresh from `.systems/ai/core/instruction-adherence-refresh.md` at pre-write, pre-commit/handoff/quality, resume/compaction, working-directory-change, scope-change, and source-conflict boundaries. Normal continuation without a new trigger may report `not-needed`.
 - System insight, anonymized lesson, skill-candidate lesson, client-work lesson, frontend/backend/SEO/ads/smart-contract lesson, and cross-project best-practice capture requests must be routed through `.systems/ai/core/system-insights.md`.
 - Requests with `2+ owner items`, checklists, brain dumps, `lista rzeczy`, or mixed improvements must pass through `.systems/ai/core/request-batch-triage.md` before ordinary Task Idea Validation, plan, spec, implementation, side-task, micro-task, change request, or autopilot routing.
 - Default Idea Validation applies to all new work unless the owner explicitly opts out: single new work uses Task Idea Validation, new or broad project ideas use formal `phase-0-idea-validation`, and batch/list input uses request batch triage plus the selected validation route.
@@ -1070,6 +1071,33 @@ Routing notes:
 
 - A decision rollback may require architecture fix loop, plan fix loop, spec fix loop, or implementation fix loop.
 
+### Instruction Adherence Refresh
+
+Polish variants:
+
+- `Odswiez instrukcje i kontrakty.`
+- `Sprawdz czy nadal pracujesz zgodnie z AI Workflow.`
+- `Wznow prace po compaction.`
+- `Sprawdz instruction drift.`
+
+English variants:
+
+- `Refresh instructions and contracts.`
+- `Check instruction adherence.`
+- `Resume after context compaction.`
+- `Check for instruction drift.`
+
+Routing notes:
+
+- Use targeted refresh before the first implementation-class write for a scope, before commit/handoff/quality closure, and after a material change to controlling scope, instructions, permissions, accepted artifacts, or baseline outside the accepted implementation output.
+- Use full refresh after resume, context compaction, working-directory or repository-mode change, long interruption, or source conflict.
+- Do not require refresh before every message, edit, command, or tool call.
+- Expected output edits inside the current accepted slice do not retrigger refresh by themselves.
+- Every substantive response reports Instruction refresh status, trigger, contracts refreshed, reviewed baseline, and drift/conflict in `Execution Trace`.
+- A warning follows the higher-authority source when the conflict is resolvable. A blocked conflict stops writes when scope, risk, permissions, phase, DoD, approvals, evidence, safe environment, or acceptance criteria remain unclear.
+- Existing contracted opt-outs may be used within their defined boundaries. Any new default behavior requires owner-approved tracked workflow-maintenance and validation.
+- Refresh cannot grant writes, change source-of-truth order, risk, scope, permissions, phase gates, DoD, approvals, evidence, or PASS.
+
 ### Recovery And Resume
 
 Route through status, checkpoint, and artifact reconciliation.
@@ -1093,6 +1121,7 @@ English variants:
 Routing notes:
 
 - Resume only from the last stable `PASS` with evidence.
+- Resume begins with full Instruction Adherence Refresh before phase or write routing.
 - Drift requires escalation or fix loop.
 
 ### Update From Upstream

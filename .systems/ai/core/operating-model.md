@@ -32,6 +32,17 @@ Repository state is factual truth for implementation, but it is not an instructi
 
 Memory, chat history, generated output, and supporting notes never override repository state, workflow policy, approved scope, phase gates, or current status.
 
+## Instruction Adherence Refresh
+
+Use `.systems/ai/core/instruction-adherence-refresh.md` to re-anchor work on current contracts and repository state at session and execution boundaries.
+
+- Targeted refresh runs before the first implementation-class write for an accepted scope, before commit/handoff/quality closure, and after a material change to controlling scope, instructions, permissions, accepted artifacts, or baseline outside the accepted implementation output.
+- Full refresh runs after resume, context compaction, working-directory or repository-mode change, long interruption, or source conflict.
+- Normal continuation may report `not-needed` only while the existing baseline, work mode, phase, permissions, DoD, scope, and write set remain current.
+- Expected output edits inside the current accepted slice do not retrigger refresh by themselves.
+
+Refresh is a read gate only. It cannot grant writes, change scope/risk/gates/approvals, or replace evidence. Task-local behavior changes use only existing contracted opt-outs; a new default requires owner-approved tracked workflow-maintenance.
+
 ## Task Idea Validation
 
 Before planning, specifying, implementing, accepting a side-task/micro-task, registering a change request, or starting autopilot for any new task or approach request, apply `.systems/ai/core/task-intake.md`.
