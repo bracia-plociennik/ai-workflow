@@ -9,6 +9,27 @@
 - Task index under review: `.systems/ai/examples/projects/EXAMPLE/tasks.md`
 - Workflow phase: `phase-2-plan-qa`
 - Result: `PASS`
+- QA verification contract: `full-qa-verification-v1`
+
+## QA Verification Scope
+
+- Full QA contract: `.systems/ai/core/full-qa-verification.md`
+- QA subject: plan, router, and task index only; no implementation code exists.
+
+## Artifact QA Completeness Gate
+
+- Owner intent and governing sources reviewed: `.systems/ai/examples/projects/EXAMPLE/architecture/phase-1-architecture.md`, `.systems/ai/examples/projects/EXAMPLE/planning/phase-2-project-plan.md`
+- DoD / phase acceptance criteria reviewed: `yes`
+- Scope and out-of-scope consistency: `aligned`
+- Artifact / relevant diff review: `completed`
+- Findings-first review: `completed`
+- Failure / rework / dependency scenarios: `completed`
+- Repository and source compatibility: `aligned`
+- Post-fix full artifact re-review: `not-required`
+- Evidence reviewed: `plan, plans.md, tasks.md`
+- Skipped or unreadable sources: `none`
+- Residual risk: `example-only artifact`
+- Closure freshness: `current`
 
 ## Evidence
 

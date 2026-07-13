@@ -110,6 +110,14 @@ Faza obejmuje:
 - poprawność logiczną specyfikacji
 - wykrycie konfliktów, zależności i redundancji
 
+## QA Verification Scope
+
+Stosuj `.systems/ai/core/full-qa-verification.md`. Spec QA ocenia krytycznie, czy spec odpowiada na intencję ownera, plan, architekturę, DoD i acceptance criteria oraz czy może doprowadzić do poprawnej implementacji.
+
+## Artifact QA Completeness Gate
+
+Przed `PASS` zapisz wszystkie pola z `Artifact QA Completeness Gate` w `full-qa-verification.md`. Sprawdź owner intent, wejściowe artefakty, phase acceptance criteria, zakres, aktualny diff specyfikacji, findings/blockers, scenariusze failure/rework/dependency, zgodność z repo oraz świeży pełny re-review po poprawkach. Niekompletny gate, material mismatch, stale closure albo brak istotnego źródła oznacza `FAIL` albo stop condition.
+
 ## Out-of-scope
 
 Faza nie obejmuje:

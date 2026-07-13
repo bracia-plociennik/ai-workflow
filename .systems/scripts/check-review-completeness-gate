@@ -52,7 +52,13 @@ policy_validators=(
   .systems/scripts/check-end-of-task-capture
   .systems/scripts/check-default-idea-validation-opt-out
   .systems/scripts/check-owner-decision-checkpoints
+  .systems/scripts/check-full-qa-verification
 )
+
+if ! printf '%s\n' "${policy_validators[@]}" | rg -qx -- '.systems/scripts/check-full-qa-verification'; then
+  echo 'Missing full QA policy validator from Review Completeness Gate audit'
+  fail=1
+fi
 
 for validator in "${policy_validators[@]}"; do
   require_literal "$validator" 'lib/policy-boundaries.sh' "shared policy helper source"
@@ -75,12 +81,29 @@ review_gate_fields=(
   '- Producer-consumer field audit: `<completed|not-applicable|incomplete>`'
   '- Producers/consumers reviewed: `<paths or not-applicable>`'
   '- Required-field mapping: `<complete|partial|mismatch|not-applicable>`'
+  '- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`'
+  '- Closure freshness: `<current|stale>`'
 )
 
 for template in "${quality_templates[@]}"; do
   for field in "${review_gate_fields[@]}"; do
     require_literal "$template" "$field" "canonical V2 template field: $field"
   done
+done
+
+review_template_gate="$(awk '
+  $0 == "## Review Completeness Gate" { in_section=1; next }
+  in_section && /^## / { exit }
+  in_section { print }
+' .systems/ai/templates/reviews/review.template.md)"
+for field in \
+  '- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`' \
+  '- Closure freshness: `<current|stale>`'
+do
+  if ! printf '%s\n' "$review_template_gate" | rg -qF -- "$field"; then
+    echo "Missing review-template Review Completeness Gate field: $field"
+    fail=1
+  fi
 done
 
 require_literal ".systems/ai/core/owner-decision-checkpoints.md" '## Decision Record Producers' "queue producer classification"

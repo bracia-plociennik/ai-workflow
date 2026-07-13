@@ -129,6 +129,7 @@ run_fast_checks() {
   run_cmd .systems/scripts/check-naming
   run_cmd .systems/scripts/check-status-consistency
   run_cmd .systems/scripts/check-qa-evidence
+  run_cmd .systems/scripts/check-full-qa-verification
   run_cmd .systems/scripts/check-contract-compliance
 }
 
@@ -157,6 +158,7 @@ run_core_validators() {
   run_cmd .systems/scripts/check-naming
   run_cmd .systems/scripts/check-status-consistency
   run_cmd .systems/scripts/check-qa-evidence
+  run_cmd .systems/scripts/check-full-qa-verification
   run_cmd .systems/scripts/check-system-insights
   run_cmd .systems/scripts/check-system-skills
   run_cmd .systems/scripts/check-contract-compliance
@@ -504,7 +506,7 @@ for required_repository_mode_text in 'Official Repo Mode' 'Target Repo Mode' 'AI
   fi
 done
 
-for required_resolver_ref in .systems/scripts/check-naming .systems/scripts/check-status-consistency .systems/scripts/check-qa-evidence; do
+for required_resolver_ref in .systems/scripts/check-naming .systems/scripts/check-status-consistency .systems/scripts/check-qa-evidence .systems/scripts/check-full-qa-verification; do
   if ! rg -q 'resolve-workflow-env' "$required_resolver_ref"; then
     echo "Validator missing workflow env resolver: $required_resolver_ref"
     fail=1

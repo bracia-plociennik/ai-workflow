@@ -112,6 +112,8 @@ Task-local odstępstwa są dostępne tylko przez istniejące contracted opt-outs
 
 Global Quality Review to read-only/advisory tryb review inspirowany `phase-5-quality`. Używaj go dla komend typu `zrób review`, `zrób final review`, `find findings`, `find blockers`, `code review`, `sprawdź ryzyka` albo ogólnego `zrób fazę jakości`, gdy nie chodzi o formalny task/package quality gate.
 
+QA zawsze oznacza pełną weryfikację odpowiednią do artefaktu zgodnie z `.systems/ai/core/full-qa-verification.md`: zgodność z intencją ownera, DoD, zakresem i wejściowymi artefaktami, findings/blockers, evidence, pominięte źródła oraz residual risk. Architecture, Plan, Packaging i Spec QA mogą dać PASS tylko dla własnego artefaktu; nie deklarują poprawności niewdrożonego produktu. `phase-5-quality` obejmuje także code/diff/review, a dla danych, integracji, parserów, state flows i executable entrypoints stosuje matrix `source shape -> canonical state -> derived output -> forbidden states -> failure behavior`.
+
 Wynik ma być findings-first: severity, blockers, Intent / Plan / Spec Compliance, evidence reviewed, skipped/unreadable areas, residual risk i formal gate eligibility. Taki review nie tworzy formalnego `PASS`/`FAIL`, nie zapisuje quality artifactu, nie aktualizuje statusu i nie uruchamia `phase-8-final-check`.
 
 Intent / Plan / Spec Compliance sprawdza, czy wykonanie odpowiada na owner instruction, accepted plan, accepted spec, scope i acceptance criteria. Review ma wskazać wrong problem solved, owner instruction mismatch, accepted plan mismatch, accepted spec mismatch, acceptance criteria gap, scope creep, underbuild albo overbuild, jeśli występują.

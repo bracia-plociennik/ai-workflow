@@ -40,6 +40,7 @@
 - Owner instruction, accepted plan, accepted spec, scope/out-of-scope notes, and acceptance criteria reviewed or explicitly marked missing/stale/unreadable with impact.
 - DoD matrix, skipped checks with impact, findings, and residual risks.
 - Cross-contract consistency, negative-space/adversarial review, automated-evidence role, reviewed baseline, instruction refresh, post-fix full re-review, and closure freshness.
+- Adaptive Data / Integration Verification Matrix when the changed scope affects data models, parsers, transformations, integrations, state transitions, executable entrypoints, derived outputs, or persisted error states; otherwise an explicit `not-applicable` reason.
 - Explicit gate decision.
 
 ### Next allowed phases
@@ -197,6 +198,20 @@ Codex musi sprawdzić:
 Jeśli nowy istotny edge case pojawił się po implementacji i nie został oceniony:
 
 - wynik = FAIL
+
+## **Adaptive Data / Integration Verification Matrix**
+
+Stosuj `.systems/ai/core/full-qa-verification.md`. Gdy zakres dotyka modelu danych, parsera, transformacji, integracji, state transition, executable entrypoint, derived output albo persisted error state, utwórz matrix obejmujący:
+
+- source shape;
+- expected canonical state;
+- expected derived output;
+- forbidden states/rows;
+- failure behavior;
+- automated check;
+- manual trace.
+
+Każdy istotny wiersz wymaga checka lub jawnego, bezpiecznego ograniczenia. Wymagany jest co najmniej jeden reprezentatywny manual trace przepływu oraz jeden trace ścieżki błędu. Brak wymaganej macierzy, niezweryfikowany forbidden state albo nieznane failure behavior oznacza `FAIL`. Jeśli matrix nie dotyczy zakresu, zapisz `not-applicable` wraz z uzasadnieniem.
 
 ## **Zasada regresji**
 

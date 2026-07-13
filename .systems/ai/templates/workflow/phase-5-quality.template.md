@@ -8,6 +8,7 @@
 - Implementation/spec under review:
 - Workflow phase: `5. FAZA JAKOŚCI`
 - Result: `<PASS|FAIL>`
+- QA verification contract: `full-qa-verification-v1`
 
 ## Definition Of Done Validation
 
@@ -63,6 +64,15 @@
 | Check | Result | Notes |
 | --- | --- | --- |
 | | `<PASS|FAIL|not-run>` | |
+
+## Adaptive Data / Integration Verification Matrix
+
+- Applicability: `<required|not-applicable>`
+- Not-applicable reason: `<reason|required when not-applicable>`
+
+| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States/Rows | Failure Behavior | Automated Check | Manual Trace |
+| --- | --- | --- | --- | --- | --- | --- |
+| | | | | | | |
 
 ## Edge Cases
 

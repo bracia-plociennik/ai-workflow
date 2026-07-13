@@ -7,7 +7,28 @@
 - Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Workflow phase: `2.9. PACKAGING QA`
 - Result: `<PASS|FAIL|skipped>`
+- QA verification contract: `full-qa-verification-v1`
 - Owner-requested packaging: `<yes|no>`
+
+## QA Verification Scope
+
+- Full QA contract: `.systems/ai/core/full-qa-verification.md`
+- QA subject: `task packages and their dependencies; not implementation code review`
+
+## Artifact QA Completeness Gate
+
+- Owner intent and governing sources reviewed: `<paths|missing>`
+- DoD / phase acceptance criteria reviewed: `<yes|no>`
+- Scope and out-of-scope consistency: `<aligned|partial|mismatch|unknown>`
+- Artifact / relevant diff review: `<completed|incomplete>`
+- Findings-first review: `<completed|incomplete>`
+- Failure / rework / dependency scenarios: `<completed|not-applicable|incomplete>`
+- Repository and source compatibility: `<aligned|partial|mismatch|unknown>`
+- Post-fix full artifact re-review: `<completed|not-required|incomplete>`
+- Evidence reviewed: `<paths|commands|manual checks>`
+- Skipped or unreadable sources: `<none|list>`
+- Residual risk: `<none|list>`
+- Closure freshness: `<current|stale>`
 
 ## Skip Check
 

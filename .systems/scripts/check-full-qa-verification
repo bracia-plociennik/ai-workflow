@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$script_dir/resolve-workflow-env"
+cd "$AI_WORKFLOW_HOME"
+source "$script_dir/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local value="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for full QA verification check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -qF -- "$value" "$file"; then
+    echo "Missing full QA verification reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/full-qa-verification.md"
+require_ref "$contract" '## Purpose' 'contract purpose'
+require_ref "$contract" '## Artifact-Appropriate Scope' 'artifact scope'
+require_ref "$contract" '## Artifact QA Completeness Gate' 'artifact completeness gate'
+require_ref "$contract" '## Adaptive Data / Integration Verification Matrix' 'adaptive matrix'
+require_ref "$contract" 'Formal architecture, plan, packaging, and specification QA evaluate the quality and readiness of their own artifacts.' 'artifact PASS boundary'
+require_ref "$contract" '`phase-5-quality` alone can issue the formal implementation `PASS` or `FAIL`.' 'formal implementation PASS boundary'
+require_ref "$contract" 'legacy-qa-evidence-v1.md' 'legacy evidence registry boundary'
+require_ref .systems/scripts/check-qa-evidence 'is_registered_legacy_evidence' 'legacy evidence fingerprint enforcement'
+
+artifact_fields=(
+  'Owner intent and governing sources reviewed'
+  'DoD / phase acceptance criteria reviewed'
+  'Scope and out-of-scope consistency'
+  'Artifact / relevant diff review'
+  'Findings-first review'
+  'Failure / rework / dependency scenarios'
+  'Repository and source compatibility'
+  'Post-fix full artifact re-review'
+  'Evidence reviewed'
+  'Skipped or unreadable sources'
+  'Residual risk'
+  'Closure freshness'
+)
+
+for file in \
+  .systems/ai/workflow/phase-1-architecture-qa.md \
+  .systems/ai/workflow/phase-2-plan-qa.md \
+  .systems/ai/workflow/phase-2-packaging-qa.md \
+  .systems/ai/workflow/phase-3-spec-qa.md \
+  .systems/ai/templates/workflow/phase-1-architecture-qa.template.md \
+  .systems/ai/templates/workflow/phase-2-plan-qa.template.md \
+  .systems/ai/templates/workflow/phase-2-packaging-qa.template.md \
+  .systems/ai/templates/workflow/phase-3-spec-qa.template.md
+do
+  require_ref "$file" 'QA Verification Scope' 'QA verification scope'
+  require_ref "$file" 'Artifact QA Completeness Gate' 'artifact completeness gate'
+  require_ref "$file" 'full-qa-verification.md' 'full QA contract reference'
+done
+
+for template in \
+  .systems/ai/templates/workflow/phase-1-architecture-qa.template.md \
+  .systems/ai/templates/workflow/phase-2-plan-qa.template.md \
+  .systems/ai/templates/workflow/phase-2-packaging-qa.template.md \
+  .systems/ai/templates/workflow/phase-3-spec-qa.template.md
+do
+  require_ref "$template" 'QA verification contract: `full-qa-verification-v1`' 'V1 QA runtime marker'
+  for field in "${artifact_fields[@]}"; do
+    require_ref "$template" "$field" "artifact QA template field: $field"
+  done
+done
+
+require_ref .systems/ai/templates/workflow/phase-5-quality.template.md 'QA verification contract: `full-qa-verification-v1`' 'phase 5 V1 QA runtime marker'
+
+for file in \
+  .systems/ai/workflow/phase-5-quality.md \
+  .systems/ai/templates/workflow/phase-5-quality.template.md \
+  .systems/ai/core/quality-review.md \
+  .systems/ai/templates/reviews/review.template.md
+do
+  require_ref "$file" 'Adaptive Data / Integration Verification Matrix' 'adaptive matrix integration'
+done
+
+for field in \
+  'Source Shape' \
+  'Expected Canonical State' \
+  'Expected Derived Output' \
+  'Forbidden States/Rows' \
+  'Failure Behavior' \
+  'Automated Check' \
+  'Manual Trace'
+do
+  require_ref .systems/ai/templates/workflow/phase-5-quality.template.md "$field" "phase 5 matrix field: $field"
+  require_ref .systems/ai/templates/reviews/review.template.md "$field" "review matrix field: $field"
+done
+
+for file in AGENTS.md HUMANS.md README.md .systems/ai/core/commands.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md; do
+  require_ref "$file" 'full-qa-verification.md' 'workflow guidance integration'
+done
+
+for file in \
+  AGENTS.md \
+  README.md \
+  .systems/ai/core/commands.md \
+  .systems/scripts/validate-workflow \
+  .systems/scripts/check-required-artifacts \
+  .systems/scripts/check-validator-smoke-tests
+do
+  require_ref "$file" 'check-full-qa-verification' 'validator integration'
+done
+
+unsafe_patterns=(
+  'technical checks are enough without owner intent'
+  'technical checks are sufficient without DoD'
+  'artifact QA PASS proves implementation is correct'
+  'PASS without findings-first review'
+  'data integration changes do not need .*matrix'
+  'forbidden states do not need verification'
+  'failure behavior may remain unknown for PASS'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe full QA verification wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+done
+
+exit "$fail"

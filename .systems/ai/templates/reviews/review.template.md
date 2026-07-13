@@ -33,3 +33,12 @@
 - Required-field mapping: `<complete|partial|mismatch|not-applicable>`
 - Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`
 - Closure freshness: `<current|stale>`
+
+## Adaptive Data / Integration Verification Matrix
+
+- Applicability: `<required|not-applicable>`
+- Not-applicable reason: `<reason|required when not-applicable>`
+
+| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States/Rows | Failure Behavior | Automated Check | Manual Trace |
+| --- | --- | --- | --- | --- | --- | --- |
+| | | | | | | |

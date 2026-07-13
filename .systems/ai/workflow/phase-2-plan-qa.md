@@ -125,6 +125,14 @@ Codex nie może:
 - proponować pełnego nowego planu
 - mieszać tej fazy z fazą 2.
 
+## QA Verification Scope
+
+Stosuj `.systems/ai/core/full-qa-verification.md`. Plan QA ocenia krytycznie, czy plan odpowiada na intencję ownera, architekturę i właściwy zakres, oraz czy prowadzi do wykonalnego produktu bez ukrytego reworku.
+
+## Artifact QA Completeness Gate
+
+Przed `PASS` zapisz wszystkie pola z `Artifact QA Completeness Gate` w `full-qa-verification.md`. Sprawdź owner intent, wejściowe artefakty, phase acceptance criteria, zakres, aktualny diff planu/task indexu, findings/blockers, scenariusze failure/rework/dependency, zgodność z repo oraz świeży pełny re-review po poprawkach. Niekompletny gate, material mismatch, stale closure albo brak istotnego źródła oznacza `FAIL` albo stop condition.
+
 ## Zakres walidacji
 
 Codex musi obowiązkowo sprawdzić:

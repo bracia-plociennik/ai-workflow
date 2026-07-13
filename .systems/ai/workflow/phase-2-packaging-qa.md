@@ -139,6 +139,14 @@ Codex nie może:
 - mieszać tej fazy z 2.7.
 - poprawiać planu projektu
 
+## QA Verification Scope
+
+Stosuj `.systems/ai/core/full-qa-verification.md`. Packaging QA ocenia krytycznie, czy pakiety zachowują intencję ownera, plan, architekturę i niezależność wykonania, bez ukrytych konfliktów lub reworku.
+
+## Artifact QA Completeness Gate
+
+Przed `PASS` zapisz wszystkie pola z `Artifact QA Completeness Gate` w `full-qa-verification.md`. Sprawdź owner intent, wejściowe artefakty, phase acceptance criteria, zakres, aktualny diff pakietów, findings/blockers, scenariusze failure/rework/dependency, zgodność z repo oraz świeży pełny re-review po poprawkach. Niekompletny gate, material mismatch, stale closure albo brak istotnego źródła oznacza `FAIL` albo stop condition.
+
 ## Zakres walidacji
 
 Codex musi obowiązkowo sprawdzić:

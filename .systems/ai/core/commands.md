@@ -34,6 +34,7 @@ git diff --check
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-full-qa-verification
 .systems/scripts/check-system-insights
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
@@ -65,6 +66,10 @@ git diff --check
 `check-global-quality-review-stance` validates the read-only/advisory review stance, review/findings/blockers routing, formal `phase-5-quality` separation, and final-review/final-check boundary.
 
 `check-review-completeness-gate` validates Review Completeness Gate v2, including policy-boundary adversarial evidence, producer-consumer field audits, canonical queue producers, and the ban on whole-line negation filters in policy validators.
+
+`check-full-qa-verification` validates artifact-appropriate full QA across early formal QA phases, phase 5, and global review, including the adaptive data/integration matrix boundary.
+
+Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. Earlier formal QA phases validate their own artifact; `phase-5-quality` validates implementation, and global review remains advisory.
 
 `check-intent-plan-spec-compliance-review` validates the shared review/quality lens that compares implementation against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria, and blocks technical-only PASS/review wording.
 

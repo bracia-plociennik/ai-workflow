@@ -90,6 +90,7 @@ run_policy_boundary_matrix() {
 
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/tasks.md" "$tmp/example-tasks.orig"
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/example-phase5-quality.orig"
 
 install_fixture="$tmp/.install-smoke"
 install_target="$install_fixture/target"
@@ -2139,6 +2140,17 @@ perl -0pi -e 's/policy_reject_unsafe_pattern/policy_reject_removed/g' "$tmp/.sys
 run_must_fail "review-completeness-gate-requires-shared-policy-helper" .systems/scripts/check-review-completeness-gate
 mv "$tmp/.systems/scripts/check-owner-decision-checkpoints.bak" "$tmp/.systems/scripts/check-owner-decision-checkpoints"
 
+cp "$tmp/.systems/scripts/check-review-completeness-gate" "$tmp/.systems/scripts/check-review-completeness-gate.bak"
+perl -0pi -e 's/\n  \.systems\/scripts\/check-full-qa-verification//' "$tmp/.systems/scripts/check-review-completeness-gate"
+run_must_fail "review-completeness-gate-audits-full-qa-policy-validator" .systems/scripts/check-review-completeness-gate
+mv "$tmp/.systems/scripts/check-review-completeness-gate.bak" "$tmp/.systems/scripts/check-review-completeness-gate"
+
+cp "$tmp/.systems/ai/templates/reviews/review.template.md" "$tmp/.systems/ai/templates/reviews/review.template.md.bak"
+perl -0pi -e 's/- Reviewed baseline: `<HEAD\/worktree\/diff\/artifact identifiers>`\n- Closure freshness: `<current\|stale>`\n\n## Adaptive Data \/ Integration Verification Matrix/## Adaptive Data \/ Integration Verification Matrix/' "$tmp/.systems/ai/templates/reviews/review.template.md"
+printf '\n- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`\n- Closure freshness: `<current|stale>`\n' >> "$tmp/.systems/ai/templates/reviews/review.template.md"
+run_must_fail "review-completeness-gate-requires-review-baseline-and-freshness-inside-gate" .systems/scripts/check-review-completeness-gate
+mv "$tmp/.systems/ai/templates/reviews/review.template.md.bak" "$tmp/.systems/ai/templates/reviews/review.template.md"
+
 run_must_fail "policy-boundaries-fails-missing-source" bash -lc '
   source .systems/scripts/lib/policy-boundaries.sh
   fail=0
@@ -2247,6 +2259,14 @@ run_policy_boundary_matrix \
   "Autopilot may ask live questions while running." \
   "Autopilot must not ask live questions while running, but autopilot may ask live questions while running." \
   "Autopilot must not ask live questions while running; autopilot may ask live questions while running."
+run_policy_boundary_matrix \
+  "full-qa-verification" \
+  ".systems/ai/core/full-qa-verification.md" \
+  .systems/scripts/check-full-qa-verification \
+  "Formal PASS must not occur without findings-first review." \
+  "Formal PASS without findings-first review." \
+  "Formal PASS must not occur without findings-first review, but formal PASS without findings-first review." \
+  "Formal PASS must not occur without findings-first review; formal PASS without findings-first review."
 
 cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
 perl -0pi -e 's/- Decisions asked\/pending: <ids\|none>\n//' "$tmp/.systems/ai/core/response-contract.md"
@@ -2302,6 +2322,100 @@ can-proceed: true
 ```
 MD
 run_must_fail "pass-with-failed-command" .systems/scripts/check-qa-evidence
+cp "$tmp/example-phase5-quality.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+run_must_pass "full-qa-verification-valid" .systems/scripts/check-full-qa-verification
+
+cp "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md" "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md.bak"
+perl -0pi -e 's/## Artifact QA Completeness Gate/## Missing Artifact Gate/' "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md"
+run_must_fail "full-qa-verification-requires-artifact-completeness-gate" .systems/scripts/check-full-qa-verification
+mv "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md"
+
+cp "$tmp/.systems/ai/core/full-qa-verification.md" "$tmp/.systems/ai/core/full-qa-verification.md.bak"
+printf '\nTechnical checks are enough without owner intent.\n' >> "$tmp/.systems/ai/core/full-qa-verification.md"
+run_must_fail "full-qa-verification-blocks-technical-only-qa" .systems/scripts/check-full-qa-verification
+mv "$tmp/.systems/ai/core/full-qa-verification.md.bak" "$tmp/.systems/ai/core/full-qa-verification.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/\| Forbidden States\/Rows \|/| Missing Forbidden States |/' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "full-qa-verification-requires-forbidden-state-matrix-field" .systems/scripts/check-full-qa-verification
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak"
+perl -0pi -e 's/## Artifact QA Completeness Gate/## Missing Artifact QA Gate/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+run_must_fail "qa-evidence-requires-artifact-completeness-for-pass" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak"
+perl -0pi -e 's/- QA verification contract: `full-qa-verification-v1`\n//' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+run_must_fail "qa-evidence-requires-contract-marker-for-formal-pass" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak"
+perl -0pi -e 's/Scope and out-of-scope consistency: `aligned`/Scope and out-of-scope consistency: `mismatch`/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+run_must_fail "qa-evidence-rejects-artifact-pass-with-scope-mismatch" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+
+legacy_qa="$tmp/ai-workflow-workspace/projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md"
+cp "$legacy_qa" "$legacy_qa.bak"
+printf '\nTampered legacy evidence.\n' >> "$legacy_qa"
+run_must_fail "qa-evidence-rejects-tampered-legacy-fingerprint" .systems/scripts/check-qa-evidence
+mv "$legacy_qa.bak" "$legacy_qa"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/## Adaptive Data \/ Integration Verification Matrix/## Missing Adaptive Matrix/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-requires-adaptive-matrix-for-phase-5-pass" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+run_must_pass "qa-evidence-allows-complete-phase-5-v1-pass" .systems/scripts/check-qa-evidence
+
+for heading in \
+  'Definition Of Done Validation' \
+  'Intent / Plan / Spec Compliance' \
+  'Review Completeness Gate' \
+  'Findings'
+do
+  cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+  perl -0pi -e "s{\\Q## ${heading}\\E}{## Missing ${heading}}" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+  heading_slug="$(printf '%s' "$heading" | tr '[:upper:] ' '[:lower:]-' | tr -cd '[:alnum:]-')"
+  run_must_fail "qa-evidence-requires-phase-5-${heading_slug}" .systems/scripts/check-qa-evidence
+  mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+done
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/\| Example artifact flow is linked and internally consistent \| PASS \|/| Example artifact flow is linked and internally consistent | FAIL |/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-rejects-phase-5-pass-with-failed-dod" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/Compliance status: `aligned`/Compliance status: `partial`/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-rejects-phase-5-pass-with-partial-intent-compliance" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/Closure freshness: `current`/Closure freshness: `stale`/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-rejects-phase-5-pass-with-stale-completeness-gate" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/- Critical errors: none\./- P1: unresolved artifact-flow regression./' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-rejects-phase-5-pass-with-unresolved-p1" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/100% DoD satisfied: `yes`/100% DoD satisfied: `no`/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-rejects-phase-5-pass-with-unsatisfied-quality-gate" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/Applicability: `not-applicable`/Applicability: `required`/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-requires-complete-required-adaptive-matrix-row" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/Applicability: `not-applicable`/Applicability: `required`/; s/\| \| \| \| \| \| \| \|/| input record | canonical profile | derived output | wrong profile | explicit error | integration test | manual trace |/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_pass "qa-evidence-allows-complete-required-adaptive-matrix-row" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
 
 cp "$tmp/example-status.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"
 perl -0pi -e 's/^\| `current-phase` \| `[^`]+` \|$/| `current-phase` | `phase-1-architecture` |/m' "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md"

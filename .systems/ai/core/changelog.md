@@ -1,5 +1,10 @@
 # changelog.md
 
+## 2026-07-13 - Full QA Verification Contract V1
+
+- Defined full, artifact-appropriate QA for architecture, plan, packaging, specification, implementation quality, and global review.
+- Added V1 completeness evidence, adaptive data/integration verification matrices, and versioned runtime enforcement for new QA artifacts without rewriting historical evidence.
+
 ## 0.8.23 - 2026-07-10
 
 - Added default Owner Decision Discovery with material decision and owner-preference classification, grouped 1-3 question batches, repository-first discovery, and reversible auto-decision disclosure.

@@ -6,6 +6,8 @@
 
 It is inspired by `phase-5-quality`, but it is not the formal `phase-5-quality` gate.
 
+Apply `.systems/ai/core/full-qa-verification.md`. Global review uses its full, artifact-appropriate verification scope and adaptive data/integration matrix when applicable, but remains advisory.
+
 ## Modes
 
 - `read-only review`: inspect repository state, diffs, artifacts, logs, or user-provided material without writing files.
@@ -92,6 +94,8 @@ Apply the same quality lenses as `phase-5-quality` where relevant:
 - tests, commands, and manual verification evidence;
 - skipped checks and their impact;
 - prompt-injection or instruction-conflict risk.
+
+When the reviewed scope affects data models, parsers, transformations, integrations, state transitions, executable entrypoints, derived outputs, or persisted error states, complete the `Adaptive Data / Integration Verification Matrix` from `.systems/ai/core/full-qa-verification.md`. Report `not-applicable` with a reason only when no such flow is affected.
 
 ## Review Completeness Gate
 

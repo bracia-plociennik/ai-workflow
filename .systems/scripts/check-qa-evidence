@@ -14,6 +14,18 @@ else
   workspace_home=""
 fi
 
+legacy_registry="${workspace_home:+$workspace_home/repo/core/legacy-qa-evidence-v1.md}"
+
+is_registered_legacy_evidence() {
+  local file="$1"
+  local relative_path checksum
+
+  [[ -n "$workspace_home" && -f "$legacy_registry" && "$file" == "$workspace_home"/* ]] || return 1
+  relative_path="${file#"$workspace_home"/}"
+  checksum="$(shasum -a 256 "$file" | awk '{print $1}')"
+  rg -qF -- "| $relative_path | $checksum |" "$legacy_registry"
+}
+
 has_pass_result() {
   local file="$1"
   rg -q '(^|[:|` ])PASS([` |]|$)' "$file"
@@ -40,6 +52,209 @@ validate_evidence_file() {
   local file="$1"
 
   if has_pass_result "$file"; then
+    case "$(basename "$file")" in
+      phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md|phase-5-*-quality.md)
+        if ! rg -qF -- 'QA verification contract: `full-qa-verification-v1`' "$file" && ! is_registered_legacy_evidence "$file"; then
+          reject_pass_file "$file" 'missing V1 QA marker or registered legacy evidence fingerprint'
+        fi
+        ;;
+    esac
+
+    if rg -qF -- 'QA verification contract: `full-qa-verification-v1`' "$file"; then
+      case "$(basename "$file")" in
+      phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md)
+        for heading in '## QA Verification Scope' '## Artifact QA Completeness Gate'; do
+          if ! rg -qF -- "$heading" "$file"; then
+            reject_pass_file "$file" "missing $heading for formal artifact QA PASS"
+          fi
+        done
+        for field in \
+          'Owner intent and governing sources reviewed:' \
+          'DoD / phase acceptance criteria reviewed:' \
+          'Scope and out-of-scope consistency:' \
+          'Artifact / relevant diff review:' \
+          'Findings-first review:' \
+          'Failure / rework / dependency scenarios:' \
+          'Repository and source compatibility:' \
+          'Post-fix full artifact re-review:' \
+          'Evidence reviewed:' \
+          'Skipped or unreadable sources:' \
+          'Residual risk:' \
+          'Closure freshness:'
+        do
+          if ! rg -qF -- "$field" "$file"; then
+            reject_pass_file "$file" "missing formal artifact QA evidence: $field"
+          fi
+        done
+        artifact_gate="$(section_after '## Artifact QA Completeness Gate' "$file")"
+        if printf '%s\n' "$artifact_gate" | rg -qi \
+          'Owner intent and governing sources reviewed:[[:space:]]*`?missing|DoD / phase acceptance criteria reviewed:[[:space:]]*`?no|Scope and out-of-scope consistency:[[:space:]]*`?(partial|mismatch|unknown)|Artifact / relevant diff review:[[:space:]]*`?incomplete|Findings-first review:[[:space:]]*`?incomplete|Failure / rework / dependency scenarios:[[:space:]]*`?incomplete|Repository and source compatibility:[[:space:]]*`?(partial|mismatch|unknown)|Post-fix full artifact re-review:[[:space:]]*`?incomplete|Closure freshness:[[:space:]]*`?stale'; then
+          reject_pass_file "$file" 'formal artifact QA PASS contains incomplete, mismatched, unknown, missing, or stale completeness evidence'
+        fi
+        ;;
+      phase-5-*-quality.md)
+        for heading in \
+          '## Definition Of Done Validation' \
+          '## Intent / Plan / Spec Compliance' \
+          '## Review Completeness Gate' \
+          '## Findings' \
+          '## Adaptive Data / Integration Verification Matrix'
+        do
+          if ! rg -qF -- "$heading" "$file"; then
+            reject_pass_file "$file" "missing $heading for phase-5 PASS"
+          fi
+        done
+
+        dod_validation="$(section_after '## Definition Of Done Validation' "$file")"
+        intent_compliance="$(section_after '## Intent / Plan / Spec Compliance' "$file")"
+        completeness_gate="$(section_after '## Review Completeness Gate' "$file")"
+        findings="$(section_after '## Findings' "$file")"
+        quality_gate="$(section_after '## Quality Gate' "$file")"
+
+        if ! printf '%s\n' "$dod_validation" | awk -F'|' '
+          /^\|/ {
+            result=$3
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", result)
+            if ($2 !~ /DoD Item/ && result ~ /PASS/) found=1
+          }
+          END { exit(found ? 0 : 1) }
+        '; then
+          reject_pass_file "$file" 'phase-5 PASS has no completed DoD validation row'
+        fi
+        if printf '%s\n' "$dod_validation" | rg -qi '(^|\|)[[:space:]]*FAIL[[:space:]]*(\||$)'; then
+          reject_pass_file "$file" 'phase-5 PASS contains a failed DoD item'
+        fi
+
+        for field in \
+          'Result:' \
+          'Owner instruction reviewed:' \
+          'Accepted plan reviewed:' \
+          'Accepted spec reviewed:' \
+          'Scope/out-of-scope reviewed:' \
+          'Acceptance criteria reviewed:' \
+          'Compliance status:' \
+          'Wrong problem solved:' \
+          'Owner instruction mismatch:' \
+          'Accepted plan mismatch:' \
+          'Accepted spec mismatch:' \
+          'Acceptance criteria gap:' \
+          'Scope creep:' \
+          'Underbuild:' \
+          'Overbuild:' \
+          'Evidence:'
+        do
+          if ! printf '%s\n' "$intent_compliance" | rg -qF -- "$field"; then
+            reject_pass_file "$file" "missing intent/plan/spec compliance evidence: $field"
+          fi
+        done
+        if printf '%s\n' "$intent_compliance" | rg -qi \
+          'Result:[[:space:]]*`?(FAIL|blocked|unknown)|reviewed:[[:space:]]*`?(no|missing)|Compliance status:[[:space:]]*`?(partial|mismatch|unknown)|Wrong problem solved:[[:space:]]*`?yes|mismatch:[[:space:]]*`?yes|Acceptance criteria gap:[[:space:]]*`?yes|Scope creep:[[:space:]]*`?yes|Underbuild:[[:space:]]*`?yes|Overbuild:[[:space:]]*`?yes'; then
+          reject_pass_file "$file" 'phase-5 PASS has incomplete or mismatched intent/plan/spec compliance evidence'
+        fi
+
+        for field in \
+          'Cross-contract consistency:' \
+          'Risk/work mode compatibility:' \
+          'Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed:' \
+          'Negative-space / adversarial review:' \
+          'Automated evidence role:' \
+          'Post-fix full re-review:' \
+          'Reviewed baseline:' \
+          'Instruction refresh:' \
+          'Instruction baseline:' \
+          'Closure freshness:' \
+          'Policy-boundary adversarial matrix:' \
+          'Producer-consumer field audit:' \
+          'Producers/consumers reviewed:' \
+          'Required-field mapping:' \
+          'Evidence:'
+        do
+          if ! printf '%s\n' "$completeness_gate" | rg -qF -- "$field"; then
+            reject_pass_file "$file" "missing review completeness evidence: $field"
+          fi
+        done
+        if ! printf '%s\n' "$completeness_gate" | rg -q '^-[[:space:]]*Automated evidence role:[[:space:]]*`supporting-only`[[:space:]]*$'; then
+          reject_pass_file "$file" 'phase-5 PASS must treat automated evidence as supporting-only'
+        fi
+        if printf '%s\n' "$completeness_gate" | rg -qi \
+          '(consistency|compatibility):[[:space:]]*`?(partial|mismatch|unknown)|reviewed:[[:space:]]*`?no`?[[:space:]]*$|adversarial review:[[:space:]]*`?incomplete|Post-fix full re-review:[[:space:]]*`?incomplete|Instruction refresh:[[:space:]]*`?blocked|Instruction baseline:[[:space:]]*`?(stale|blocked)|Closure freshness:[[:space:]]*`?stale|adversarial matrix:[[:space:]]*`?incomplete|field audit:[[:space:]]*`?incomplete|Required-field mapping:[[:space:]]*`?(partial|mismatch)'; then
+          reject_pass_file "$file" 'phase-5 PASS has incomplete, mismatched, or stale Review Completeness Gate evidence'
+        fi
+
+        if ! printf '%s\n' "$findings" | rg -qi '(none|resolved)'; then
+          reject_pass_file "$file" 'phase-5 PASS findings must explicitly record none or resolved status'
+        fi
+        if printf '%s\n' "$findings" | rg -qi '(P0|P1|material[[:space:]]+P2).*(unresolved|open|active|remaining)'; then
+          reject_pass_file "$file" 'phase-5 PASS has unresolved P0, P1, or material P2 finding'
+        fi
+
+        for field in \
+          'Intent / Plan / Spec Compliance PASS:' \
+          'Review Completeness Gate PASS:' \
+          'Cross-contract consistency aligned:' \
+          'Risk/work mode compatibility aligned:' \
+          'Negative-space / adversarial review complete or not applicable:' \
+          'Automated evidence treated as supporting-only:' \
+          'Post-fix full re-review complete or not required:' \
+          'Instruction baseline current:' \
+          'Closure freshness current:' \
+          'Policy-boundary adversarial matrix complete or not applicable:' \
+          'Producer-consumer field audit complete or not applicable:' \
+          'Required-field mapping complete or not applicable:' \
+          '100% DoD satisfied:' \
+          'No known bug in scope:' \
+          'No regression in changed/direct paths:' \
+          'Edge cases covered or explicitly rejected:' \
+          'Explicit evidence attached:' \
+          'Quality result:'
+        do
+          if ! printf '%s\n' "$quality_gate" | rg -qF -- "$field"; then
+            reject_pass_file "$file" "missing phase-5 quality gate evidence: $field"
+          fi
+        done
+        if ! printf '%s\n' "$quality_gate" | rg -q '^-[[:space:]]*Quality result:[[:space:]]*`?PASS`?[[:space:]]*$'; then
+          reject_pass_file "$file" 'phase-5 PASS quality gate does not record PASS'
+        fi
+        if printf '%s\n' "$quality_gate" | rg -qi ':[[:space:]]*`?no`?[[:space:]]*$'; then
+          reject_pass_file "$file" 'phase-5 PASS quality gate contains an unsatisfied required condition'
+        fi
+
+        if ! rg -qF -- '## Adaptive Data / Integration Verification Matrix' "$file"; then
+          reject_pass_file "$file" 'missing Adaptive Data / Integration Verification Matrix for phase-5 PASS'
+        fi
+        if ! rg -qF -- 'Applicability:' "$file"; then
+          reject_pass_file "$file" 'missing adaptive matrix applicability for phase-5 PASS'
+        fi
+        if rg -qF -- 'Applicability: `required`' "$file"; then
+          matrix="$(section_after '## Adaptive Data / Integration Verification Matrix' "$file")"
+          if ! printf '%s\n' "$matrix" | rg -qF -- '| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States/Rows | Failure Behavior | Automated Check | Manual Trace |'; then
+            reject_pass_file "$file" 'missing adaptive matrix columns for required phase-5 flow'
+          fi
+          if ! printf '%s\n' "$matrix" | awk -F'|' '
+            /^\|/ {
+              complete=1
+              for (i = 2; i <= 8; i++) {
+                value=$i
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+                if (value == "" || value ~ /^-+$/) complete=0
+              }
+              if (complete && $2 !~ /Source Shape/) found=1
+            }
+            END { exit(found ? 0 : 1) }
+          '; then
+            reject_pass_file "$file" 'required adaptive matrix has no complete source/canonical/derived/forbidden/failure/check/trace row'
+          fi
+        elif rg -qF -- 'Applicability: `not-applicable`' "$file"; then
+          if ! rg -q '^-[[:space:]]*Not-applicable reason:[[:space:]]*`[^`][^`]*`' "$file"; then
+            reject_pass_file "$file" 'not-applicable adaptive matrix lacks a reason for phase-5 PASS'
+          fi
+        else
+          reject_pass_file "$file" 'adaptive matrix applicability must be required or not-applicable for phase-5 PASS'
+        fi
+        ;;
+      esac
+    fi
+
     if ! rg -q '^## Evidence$' "$file"; then
       reject_pass_file "$file" "missing ## Evidence section"
     fi

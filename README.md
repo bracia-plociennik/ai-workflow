@@ -99,6 +99,7 @@ cd ai-workflow
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-full-qa-verification
 .systems/scripts/check-system-insights
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance
@@ -174,7 +175,7 @@ Do not edit `.systems/**` in a target repository. Workflow improvement ideas dis
 
 Dreaming Mode reports belong in `ai-workflow-workspace/dreams/runs/**`. They are advisory-only recommendation queues and do not automatically write memory, System Insights, External Memory, skills, status, source changes, commits, pull requests, or scheduler automation.
 
-Global quality review uses `.systems/ai/core/quality-review.md` for read-only/advisory review, code review, final review, findings, blockers, and generic quality-check prompts. It is findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria when available, and does not create formal `PASS`/`FAIL`, quality artifacts, status updates, or final-check approval.
+Global quality review uses `.systems/ai/core/quality-review.md` and `.systems/ai/core/full-qa-verification.md` for read-only/advisory review, code review, final review, findings, blockers, and generic quality-check prompts. It is findings-first, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, acceptance criteria, and an adaptive data/integration matrix when applicable; it does not create formal `PASS`/`FAIL`, quality artifacts, status updates, or final-check approval.
 
 Instruction Adherence Refresh uses `.systems/ai/core/instruction-adherence-refresh.md` to re-anchor long-running sessions on current contracts and repository state. Targeted refresh runs at pre-write, pre-commit/handoff/quality, and material scope/instruction-change boundaries; full refresh runs after resume, context compaction, working-directory change, long interruption, or source conflict. Every substantive Execution Trace reports refresh status and baseline, while normal continuation without a new trigger may report `not-needed`.
 
@@ -185,6 +186,8 @@ Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for imp
 Implementation work must end with quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; micro-work and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` requires findings-first review evidence and cannot be declared with unresolved `P0`, `P1`, or material `P2` findings. Advisory closure uses wording such as `No blockers found`, `No findings found`, or `Ready for owner review` instead of formal `PASS`.
 
 Review Completeness Gate requires cross-contract and risk/work-mode consistency, negative-space/adversarial review for validators and policy boundaries, a policy-boundary adversarial matrix and producer-consumer field audit when applicable, automated checks treated as supporting evidence, a reviewed baseline, and a fresh full-current-state review after every fix. A stale or incomplete closure cannot support `No findings found`, `Ready for owner review`, commit readiness, or formal `PASS`.
+
+Full QA Verification makes the same evidence expectation explicit for all formal QA: each phase reviews owner intent, governing artifacts, DoD or phase acceptance, scope, relevant artifact/diff, findings/blockers, evidence, skipped sources, and residual risk. Phase 5 adds implementation/code review and uses the adaptive Data / Integration Verification Matrix for data models, parsers, transformations, integrations, state transitions, executable entrypoints, derived outputs, and persisted error states.
 
 Validation profiles use `.systems/ai/core/validation-profiles.md`. `.systems/scripts/validate-workflow` with no arguments uses the `standard` profile for daily iteration and ordinary post-implementation quality. Use `.systems/scripts/validate-workflow --profile fast --explain` for quick sanity checks, `.systems/scripts/validate-workflow --profile scoped --checks <check-name> --explain` for explicit validator iteration, and `.systems/scripts/validate-workflow --profile full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
 
@@ -232,6 +235,7 @@ git diff --check
 .systems/scripts/check-required-artifacts
 .systems/scripts/check-status-consistency
 .systems/scripts/check-qa-evidence
+.systems/scripts/check-full-qa-verification
 .systems/scripts/check-system-insights
 .systems/scripts/check-system-skills
 .systems/scripts/check-contract-compliance

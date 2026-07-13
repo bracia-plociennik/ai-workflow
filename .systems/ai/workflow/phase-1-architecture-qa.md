@@ -119,6 +119,14 @@ Codex nie może:
 - proponować pełnej nowej architektury
 - mieszać tej fazy z fazą 1.
 
+## QA Verification Scope
+
+Stosuj `.systems/ai/core/full-qa-verification.md`. Architecture QA krytycznie ocenia, czy architektura odpowiada na intencję ownera i prowadzi do właściwego produktu, ale nie udaje code review niewdrożonego rozwiązania.
+
+## Artifact QA Completeness Gate
+
+Przed `PASS` zapisz wszystkie pola z `Artifact QA Completeness Gate` w `full-qa-verification.md`. Sprawdź owner intent, wejściowe artefakty, phase acceptance criteria, zakres, aktualny diff architektury, findings/blockers, scenariusze failure/rework/dependency, zgodność z repo oraz świeży pełny re-review po poprawkach. Niekompletny gate, material mismatch, stale closure albo brak istotnego źródła oznacza `FAIL` albo stop condition.
+
 ## Zakres walidacji
 
 Codex musi obowiązkowo sprawdzić:
