@@ -7,7 +7,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-tar --exclude='.git' -cf - . | tar -xf - -C "$tmp"
+tar --exclude='.git' --exclude='ai-workflow-workspace' -cf - . | tar -xf - -C "$tmp"
 
 run_must_fail() {
   local name="$1"
@@ -2405,6 +2405,32 @@ run_must_fail "qa-evidence-rejects-artifact-pass-with-scope-mismatch" .systems/s
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
 
 legacy_qa="$tmp/ai-workflow-workspace/projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md"
+legacy_registry="$tmp/ai-workflow-workspace/repo/core/legacy-qa-evidence-v1.md"
+mkdir -p "$(dirname "$legacy_qa")" "$(dirname "$legacy_registry")"
+cat > "$legacy_qa" <<'MD'
+# Registered Legacy QA Evidence
+
+Result: `PASS`
+
+## Evidence
+
+manual-checks: legacy fixture reviewed
+
+## Gate Decision
+
+result: PASS
+can-proceed: true
+MD
+legacy_checksum="$(shasum -a 256 "$legacy_qa" | awk '{print $1}')"
+cat > "$legacy_registry" <<EOF
+# Legacy QA Evidence Registry
+
+| Path | SHA-256 |
+| --- | --- |
+| projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md | $legacy_checksum |
+EOF
+run_must_pass "qa-evidence-allows-registered-legacy-fingerprint" .systems/scripts/check-qa-evidence
+
 cp "$legacy_qa" "$legacy_qa.bak"
 printf '\nTampered legacy evidence.\n' >> "$legacy_qa"
 run_must_fail "qa-evidence-rejects-tampered-legacy-fingerprint" .systems/scripts/check-qa-evidence
