@@ -12,6 +12,8 @@ It is separate from the phase-level `Optional Knowledge Capture` block. Phase ca
 
 This gate is advisory-only. It does not replace phase gates, risk policy, permissions, Definition of Done, required evidence, stop conditions, or owner approvals.
 
+For implementation-capable work, contract compliance also confirms that `.systems/ai/core/plan-quality-contract.md` is complete before implementation-class writes: testable DoD, artifact QA route, implementation quality-closure route, verification criteria, and blocking route are explicit. A read-only plan must justify `not-applicable` and cannot be reported as implementation-ready.
+
 Agents should run the check before committing or preparing a commit summary. A missing runtime capture decision is not a validator hard stop by itself, but the final response or commit-ready summary should state the decision.
 
 If the relevant phase artifact already contains `Optional Knowledge Capture`, use it as evidence for this gate. If the phase decision says `defer-to-distillation` or `defer-to-checkpoint`, do not duplicate durable memory before the routed phase unless the owner explicitly approves capture now and permissions allow it.

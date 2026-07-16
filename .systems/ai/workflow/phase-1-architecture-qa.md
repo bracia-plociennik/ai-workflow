@@ -16,12 +16,14 @@
 ### Pass criteria
 
 - Architecture is complete, internally consistent, risk-aware, and proportional.
+- Plan Quality Contract is complete: testable DoD, `phase-1-architecture-qa` route, later implementation quality route, verification criteria, and blocking route are explicit.
 - No hidden implementation decisions or unresolved blockers remain.
 - Evidence supports every PASS check.
 
 ### Fail criteria
 
 - Any required QA check fails.
+- Plan Quality Contract is incomplete, uses unjustified `not-applicable`, or contradicts the architecture work mode.
 - Evidence is missing, placeholder-only, or contradicts repo state.
 - Architecture requires changes before planning.
 

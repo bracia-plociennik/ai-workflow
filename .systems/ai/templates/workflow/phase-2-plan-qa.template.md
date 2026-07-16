@@ -40,6 +40,7 @@
 | Redundancy | `<PASS|FAIL>` | | |
 | Architecture consistency | `<PASS|FAIL>` | | |
 | Task contract completeness | `<PASS|FAIL>` | | |
+| Plan Quality Contract completeness | `<PASS|FAIL>` | | |
 | Hidden dependencies | `<PASS|FAIL>` | | |
 | Readiness statuses | `<PASS|FAIL>` | | |
 | Planning router consistency | `<PASS|FAIL>` | | |

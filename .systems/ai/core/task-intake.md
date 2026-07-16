@@ -51,7 +51,7 @@ If the user asks only for factual status, command output, or a narrow clarificat
 
 ## Required Validation Summary
 
-Before presenting a plan or starting execution, provide or record a concise summary with these sections:
+Before presenting a plan or starting execution, provide or record a concise summary with these sections. Every substantive plan then includes `.systems/ai/core/plan-quality-contract.md` before implementation readiness is claimed.
 
 ### Co zostaje
 

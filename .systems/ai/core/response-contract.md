@@ -141,6 +141,8 @@ Both `Napisz:` prompts must be directly usable by the user. If a prompt depends 
 
 Start with the Task Idea Validation summary from `.systems/ai/core/task-intake.md`: `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. Only then provide the plan, clarification, or implementation route.
 
+Every substantive plan, including `/plan`, must render the `Plan Quality Contract` from `.systems/ai/core/plan-quality-contract.md` before describing implementation readiness. For read-only planning, state the justified `not-applicable` routes instead of implying implementation quality closure.
+
 If a blocker exists, the recommendation must resolve the most important blocker. If the task is a new project idea, recommend formal `phase-0-idea-validation`. If the task is small and low-risk, the alternative may be normal workflow instead of side-task/micro-task.
 
 ### Completed Phase

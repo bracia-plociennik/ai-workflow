@@ -42,6 +42,7 @@
 | Check | Result | Evidence | Finding |
 | --- | --- | --- | --- |
 | Completeness | `<PASS|FAIL>` | | |
+| Plan Quality Contract completeness | `<PASS|FAIL>` | | |
 | Internal consistency | `<PASS|FAIL>` | | |
 | Unknown classification | `<PASS|FAIL>` | | |
 | Risk ownership/mitigation | `<PASS|FAIL>` | | |

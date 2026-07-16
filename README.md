@@ -110,6 +110,7 @@ cd ai-workflow
 .systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
+.systems/scripts/check-plan-quality-contract
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
@@ -182,6 +183,8 @@ Instruction Adherence Refresh uses `.systems/ai/core/instruction-adherence-refre
 Owner Decision Discovery uses `.systems/ai/core/owner-decision-checkpoints.md` to ask 1-3 material questions by default before dependent work, disclose safe reversible decisions, and add a phase-end checkpoint to every workflow phase. Active autopilot, Dreaming/automations, and read-only review queue decisions without mid-run interruption. Explicit no-question opt-out cannot bypass hard gates.
 
 Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for implementation-class writes. Formal phase-4, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance writes start with an Implementation Slice Plan, include a DoD source, and record Slice Execution Evidence. Slicing does not grant write permission, expand scope, or bypass QA.
+
+Plan Quality Contract uses `.systems/ai/core/plan-quality-contract.md` for every substantive plan, including Codex `/plan`. Implementation-capable plans declare a testable DoD, artifact QA route, post-implementation quality route, verification criteria, quality-ready criteria, and blocking route before writes; read-only plans justify `not-applicable` instead of implying implementation readiness.
 
 Implementation work must end with quality closure unless the owner explicitly opts out. Formal workflow paths use `phase-5-quality`; micro-work and workflow-maintenance use advisory `global-quality-review-stance`. Formal `PASS` requires findings-first review evidence and cannot be declared with unresolved `P0`, `P1`, or material `P2` findings. Advisory closure uses wording such as `No blockers found`, `No findings found`, or `Ready for owner review` instead of formal `PASS`.
 

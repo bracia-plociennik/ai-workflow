@@ -1,5 +1,11 @@
 # changelog.md
 
+## 2026-07-16 - Plan Quality Contract V1
+
+- Required every substantive plan, including Codex `/plan`, to declare a testable DoD, artifact QA route, post-implementation quality route, verification criteria, quality-ready criteria, and blocking route before implementation readiness.
+- Added template and formal QA coverage for architecture, project plan, specification, task cards, micro-tasks, and micro-projects, with a justified read-only `not-applicable` boundary.
+- Added `check-plan-quality-contract`, Review Completeness Gate policy coverage, and validator smoke tests for missing routes, read-only justification, `/plan` artifact QA routing, and quality-bypass wording.
+
 ## 2026-07-13 - Full QA Verification Contract V1
 
 - Defined full, artifact-appropriate QA for architecture, plan, packaging, specification, implementation quality, and global review.

@@ -55,6 +55,25 @@
 - Spec artifact, task index update, optional task card update, project status, decisions/escalations.
 - No product-code writes.
 
+## Plan Quality Contract
+
+The task/package specification is an `implementation-capable` plan. Before it can satisfy the Implementation Gate, it must include:
+
+- Plan classification: `implementation-capable`
+- DoD source: accepted task contract, approved owner prompt/context, or accepted plan
+- Testable DoD / acceptance conditions: observable task completion and acceptance conditions
+- Artifact QA route: `phase-3-spec-qa`
+- Artifact QA trigger: after the specification is complete and before implementation
+- Implementation Quality Closure route: `phase-5-quality`
+- Required verification: automated checks, manual checks, edge/regression review, and adaptive data/integration matrix when applicable
+- Quality-ready criteria: DoD is testable, implementation steps are scoped, and required verification is executable
+- Owner opt-out: `none` or `Quality skipped by owner opt-out`
+- Not-applicable reason: `none` or a specific read-only reason
+- Blocking decision: decision ID or `none`
+- Next route: `phase-3-spec-qa`
+
+A genuinely read-only specification analysis may use `not-applicable` only with a specific reason and no implementation writes. Missing or untestable DoD, missing quality route, or unresolved blocking decision fails the Implementation Gate.
+
 Ta faza jest twardym Implementation Gate przed rozpoczęciem implementacji.
 
 Celem nie jest analiza taska / tasks package.

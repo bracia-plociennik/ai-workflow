@@ -17,12 +17,14 @@
 ### Pass criteria
 
 - Plan covers architecture, dependencies, sequencing, task contracts, readiness statuses, and risk routing.
+- Plan Quality Contract is complete: testable DoD, `phase-2-plan-qa` route, later implementation quality route, verification criteria, and blocking route are explicit.
 - Planning router points to the current plan, and task index matches the plan for task IDs, risk class, status, optional task card path, spec path, quality path, and notes.
 - Evidence supports every PASS check.
 
 ### Fail criteria
 
 - Planning router, plan, and task index disagree.
+- Plan Quality Contract is incomplete, uses unjustified `not-applicable`, or contradicts the planned work mode.
 - Any task contract or dependency is incomplete.
 - Evidence is missing or plan requires architecture changes.
 

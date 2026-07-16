@@ -567,6 +567,8 @@ Side-task: popraw tekst CTA.
 
 Jeśli side-task, micro-task albo micro-project zawiera implementation-class writes, Codex powinien najpierw przygotować Implementation Slice Plan z `.systems/ai/core/implementation-slicing.md`. Dla małych low-risk zmian wystarczy compact one-slice plan, ale nadal musi wskazać source, scope, DoD source, expected files/areas, acceptance check, evidence required i status. Slice plan nie daje zgody na write, nie rozszerza scope i nie zastępuje QA/review closure.
 
+Każdy plan, także Codex `/plan`, używa `.systems/ai/core/plan-quality-contract.md`. Przed writes plan wskazuje testowalny DoD, QA dla artefaktu planu, route quality closure po implementacji, wymagane verification, quality-ready criteria i blocking route. Dla analizy read-only można podać `not-applicable` wyłącznie z uzasadnieniem; nie oznacza to gotowości do implementacji.
+
 ### Micro-task i micro-project
 
 Micro-task w projekcie:

@@ -1,0 +1,223 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+artifact=""
+fail=0
+
+usage() {
+  cat <<'EOF'
+Usage: .systems/scripts/check-plan-quality-contract [--artifact <plan-path>]
+
+Without --artifact, validates the repository Plan Quality Contract, routing, and templates.
+With --artifact, validates a concrete plan artifact against the required plan-quality fields.
+EOF
+}
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for plan-quality contract check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q -- "$pattern" "$file"; then
+    echo "Missing plan-quality contract reference in $file: $label"
+    fail=1
+  fi
+}
+
+require_concrete_artifact_field() {
+  local label="$1"
+  local line
+  local value
+
+  line="$(rg -m1 "^[-*] ${label}:" "$artifact" || true)"
+  value="${line#*:}"
+  value="$(printf '%s' "$value" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+
+  if [[ -z "$line" || -z "$value" || "$value" == '<'*'>' ]]; then
+    echo "Plan artifact needs a concrete value for: $label"
+    fail=1
+  fi
+}
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --artifact)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --artifact"
+        exit 1
+      fi
+      artifact="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+required_fields=(
+  '## Plan Quality Contract'
+  'Plan classification:'
+  'DoD source:'
+  'Testable DoD / acceptance conditions:'
+  'Artifact QA route:'
+  'Artifact QA trigger:'
+  'Implementation Quality Closure route:'
+  'Required verification:'
+  'Quality-ready criteria:'
+  'Owner opt-out:'
+  'Not-applicable reason:'
+  'Blocking decision:'
+  'Next route:'
+)
+
+if [[ -n "$artifact" ]]; then
+  for field in "${required_fields[@]}"; do
+    require_ref "$artifact" "$field" "artifact field: $field"
+  done
+
+  for field in \
+    'Plan classification' \
+    'DoD source' \
+    'Testable DoD / acceptance conditions' \
+    'Artifact QA route' \
+    'Artifact QA trigger' \
+    'Implementation Quality Closure route' \
+    'Required verification' \
+    'Quality-ready criteria' \
+    'Next route'
+  do
+    require_concrete_artifact_field "$field"
+  done
+
+  if rg -q '^[-*] Plan classification: `?implementation-capable`?$' "$artifact"; then
+    if rg -q '^[-*] Artifact QA route: `?not-applicable`?$' "$artifact"; then
+      echo "Implementation-capable plan cannot use not-applicable artifact QA"
+      fail=1
+    fi
+
+    if rg -q '^[-*] Implementation Quality Closure route: `?not-applicable`?$' "$artifact"; then
+      echo "Implementation-capable plan cannot use not-applicable implementation quality closure"
+      fail=1
+    fi
+  fi
+
+  if rg -q '^[-*] Plan classification: `?read-only`?$' "$artifact"; then
+    require_ref "$artifact" '^[-*] Artifact QA route: `?not-applicable`?$' "read-only artifact QA route"
+    require_ref "$artifact" '^[-*] Implementation Quality Closure route: `?not-applicable`?$' "read-only implementation quality closure"
+    not_applicable_reason="$(rg -m1 '^[-*] Not-applicable reason:' "$artifact" || true)"
+    if [[ -z "$not_applicable_reason" || "$not_applicable_reason" == *'Not-applicable reason:' || "$not_applicable_reason" == *'<reason|none>'* ]]; then
+      echo "Read-only plan needs a specific not-applicable reason"
+      fail=1
+    fi
+  fi
+
+  policy_reject_unsafe_pattern \
+    '(Quality skipped by owner opt-out|bez QA|without QA|without review|without verification)[^.\n]{0,140}\b(may|can|allows?|continue|mark|count)\b[^.\n]{0,140}\b(PASS|QA PASS|phase gate)\b' \
+    "Unsafe plan-quality owner opt-out wording found" \
+    "$artifact"
+
+  exit "$fail"
+fi
+
+contract=".systems/ai/core/plan-quality-contract.md"
+for field in "${required_fields[@]}"; do
+  require_ref "$contract" "$field" "contract field: $field"
+done
+
+for term in \
+  'phase-1-architecture-qa' \
+  'phase-2-plan-qa' \
+  'phase-3-spec-qa' \
+  'phase-5-quality' \
+  'global-quality-review-stance' \
+  'read-only' \
+  'Quality skipped by owner opt-out' \
+  'Implementation-class writes must not start'
+do
+  require_ref "$contract" "$term" "$term"
+done
+
+for file in \
+  ".systems/ai/workflow/phase-1-architecture.md" \
+  ".systems/ai/workflow/phase-2-project-plan.md" \
+  ".systems/ai/workflow/phase-3-specification.md" \
+  ".systems/ai/templates/workflow/phase-1-architecture.template.md" \
+  ".systems/ai/templates/workflow/phase-2-project-plan.template.md" \
+  ".systems/ai/templates/workflow/phase-3-specification.template.md" \
+  ".systems/ai/templates/projects/task-card.template.md" \
+  ".systems/ai/templates/projects/micro-task.template.md" \
+  ".systems/ai/templates/micro-projects/micro-project.template.md"
+do
+  for field in "${required_fields[@]}"; do
+    require_ref "$file" "$field" "$field"
+  done
+done
+
+for qa_template in \
+  ".systems/ai/templates/workflow/phase-1-architecture-qa.template.md" \
+  ".systems/ai/templates/workflow/phase-2-plan-qa.template.md" \
+  ".systems/ai/templates/workflow/phase-3-spec-qa.template.md"
+do
+  require_ref "$qa_template" 'Plan Quality Contract completeness' "QA review of Plan Quality Contract"
+done
+
+require_ref ".systems/ai/core/command-routing.md" '`/plan`' "Codex /plan routing"
+require_ref ".systems/ai/core/command-routing.md" 'phase-3-spec-qa' "Codex /plan artifact QA route"
+require_ref ".systems/ai/core/response-contract.md" '`/plan`' "Codex /plan response contract"
+
+for file in \
+  ".systems/ai/core/task-intake.md" \
+  ".systems/ai/core/command-routing.md" \
+  ".systems/ai/core/workflow.md" \
+  ".systems/ai/core/implementation-slicing.md" \
+  ".systems/ai/core/quality-review.md" \
+  ".systems/ai/core/definition-of-done.md" \
+  ".systems/ai/core/contract-compliance.md" \
+  ".systems/ai/core/response-contract.md" \
+  ".systems/ai/core/operating-model.md" \
+  "AGENTS.md" \
+  "HUMANS.md" \
+  "README.md"
+do
+  require_ref "$file" 'plan-quality-contract\.md' "contract integration"
+done
+
+for integration in \
+  ".systems/ai/core/commands.md:check-plan-quality-contract" \
+  "AGENTS.md:check-plan-quality-contract" \
+  "README.md:check-plan-quality-contract" \
+  ".systems/scripts/validate-workflow:check-plan-quality-contract" \
+  ".systems/scripts/check-required-artifacts:check-plan-quality-contract" \
+  ".systems/scripts/check-validator-smoke-tests:plan-quality-contract"
+do
+  file="${integration%%:*}"
+  pattern="${integration#*:}"
+  require_ref "$file" "$pattern" "integration: $pattern"
+done
+
+policy_reject_unsafe_pattern \
+  '(plan quality contract|plan)[^.\n]{0,140}\b(may|can|allows?|bypass|skip)\b[^.\n]{0,140}\b(DoD|QA|Quality|evidence|phase gate|permissions|approval|PASS)\b' \
+  "Unsafe Plan Quality Contract wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+
+policy_reject_unsafe_pattern \
+  '(implementation-capable|implementation writes|writes)[^.\n]{0,140}\b(may|can|allows?|use|mark)\b[^.\n]{0,140}\bnot-applicable\b' \
+  "Unsafe Plan Quality Contract not-applicable wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+
+exit "$fail"

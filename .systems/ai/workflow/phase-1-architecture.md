@@ -55,6 +55,25 @@
 - Architecture, project status, and decision artifacts.
 - No product-code writes.
 
+## Plan Quality Contract
+
+The architecture artifact is an `implementation-capable` planning artifact. Before it is ready for project planning, it must include:
+
+- Plan classification: `implementation-capable`
+- DoD source: accepted owner intent, project context, or architecture acceptance criteria
+- Testable DoD / acceptance conditions: conditions that make the architecture usable for planning
+- Artifact QA route: `phase-1-architecture-qa`
+- Artifact QA trigger: after the architecture artifact is complete and before project planning
+- Implementation Quality Closure route: `phase-5-quality` for every later formal implementation task
+- Required verification: artifact review, manual checks, edge/regression review, and adaptive data/integration matrix when applicable
+- Quality-ready criteria: architecture is reviewable, aligned, and has no unresolved blocking decision
+- Owner opt-out: `none` or `Quality skipped by owner opt-out`
+- Not-applicable reason: `none` or a specific read-only reason
+- Blocking decision: decision ID or `none`
+- Next route: `phase-1-architecture-qa`
+
+A read-only architecture analysis may use `not-applicable` only with a specific reason and no implementation writes. Missing or untestable DoD, missing quality route, or unresolved blocking decision prevents implementation readiness.
+
 Ta faza służy do zamknięcia decyzji architektonicznych przed planowaniem tasków.
 
 Celem nie jest opis systemu dla samego opisu.

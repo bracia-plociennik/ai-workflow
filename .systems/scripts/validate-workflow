@@ -169,6 +169,7 @@ run_core_validators() {
   run_cmd .systems/scripts/check-review-completeness-gate
   run_cmd .systems/scripts/check-intent-plan-spec-compliance-review
   run_cmd .systems/scripts/check-implementation-slicing
+  run_cmd .systems/scripts/check-plan-quality-contract
   run_cmd .systems/scripts/check-validation-profiles
   run_cmd .systems/scripts/check-knowledge-capture-reminder
   run_cmd .systems/scripts/check-instruction-adherence-refresh

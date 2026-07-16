@@ -45,6 +45,7 @@ git diff --check
 .systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
+.systems/scripts/check-plan-quality-contract
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
@@ -74,6 +75,8 @@ Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. E
 `check-intent-plan-spec-compliance-review` validates the shared review/quality lens that compares implementation against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria, and blocks technical-only PASS/review wording.
 
 `check-implementation-slicing` validates the Implementation Slice Plan contract, DoD source, mandatory quality closure, PASS Integrity Gate, phase-4/template integration, side-task/micro-task/micro-project routing, and the boundary that slicing cannot bypass spec, scope, risk, permissions, approvals, or QA.
+
+`check-plan-quality-contract` validates the Plan Quality Contract for formal and micro-work plans, Codex `/plan` routing, testable DoD, artifact QA and implementation quality routes, read-only `not-applicable` reasons, pre-write readiness, and opt-out boundaries.
 
 `check-validation-profiles` validates `.systems/ai/core/validation-profiles.md`, `validate-workflow --profile` behavior, the no-arg `standard` validation default, explicit `full` smoke-test coverage, and the boundary that `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
 

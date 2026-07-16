@@ -45,7 +45,7 @@ Every implementation-class write path must identify:
 
 ## DoD Before Implementation
 
-Implementation-class writes must not start until the work has a clear and testable Definition of Done.
+Implementation-class writes must not start until the work has a clear and testable Definition of Done. They also require a complete `Plan Quality Contract` from `.systems/ai/core/plan-quality-contract.md`: implementation-capable classification, testable DoD, artifact QA route, implementation quality-closure route, required verification, quality-ready criteria, and next route.
 
 Before the first implementation-class write for an accepted scope, run targeted or full Instruction Adherence Refresh from `.systems/ai/core/instruction-adherence-refresh.md`. Repeat targeted refresh before the next write when controlling scope, instructions, accepted artifacts, status, permissions, or write set materially changed outside the accepted implementation output. Expected output edits inside the current accepted slice do not retrigger refresh by themselves. Resume, context compaction, working-directory change, long interruption, or source conflict requires full refresh.
 

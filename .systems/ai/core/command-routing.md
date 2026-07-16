@@ -419,6 +419,16 @@ Routing notes:
 - Dreaming Mode must not automatically write memory, External Memory, System Insights, skills, status, source changes, commits, pull requests, scheduler automation, or approvals.
 - V1 has no scheduler, daemon, hook, cron, automation, or background execution.
 
+### Plan Quality Contract
+
+Route every substantive `plan`, `/plan`, specification request, micro-task plan, micro-project plan, or accepted owner prompt/context used as an implementation plan through `.systems/ai/core/plan-quality-contract.md`.
+
+- Inside a resolvable formal project task, `/plan` routes to `phase-3-specification`, which declares `phase-3-spec-qa` before implementation and `phase-5-quality` after implementation.
+- Formal architecture and project-plan artifacts route to `phase-1-architecture-qa` and `phase-2-plan-qa` respectively before their next working phase.
+- Side-task, micro-task, micro-project, and workflow-maintenance implementation plans route to `global-quality-review-stance` for artifact and post-write closure.
+- A read-only plan may declare `not-applicable` only with a reason and no implementation writes; it does not create implementation readiness.
+- An explicit quality opt-out reports `Quality skipped by owner opt-out` and residual risk. It cannot satisfy formal PASS, phase progression, risk, permissions, evidence, DoD, approvals, or stop conditions.
+
 ### Default Phase Quality Chaining
 
 For short owner commands that request a working phase, run the working phase and its paired QA/Quality phase in one chained execution before reporting the result.

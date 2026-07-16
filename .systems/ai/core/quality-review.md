@@ -17,6 +17,8 @@ Apply `.systems/ai/core/full-qa-verification.md`. Global review uses its full, a
 
 ## Routing
 
+When reviewing a plan or plan-producing artifact, use `.systems/ai/core/plan-quality-contract.md` to verify that its DoD, artifact QA route, post-implementation closure route, verification criteria, opt-out boundary, and blocking route match the work mode. This review does not itself make a plan implementation-ready.
+
 Use `global-quality-review-stance` for prompts such as:
 
 - `zrob review`

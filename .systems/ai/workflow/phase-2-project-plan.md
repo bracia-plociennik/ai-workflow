@@ -56,6 +56,25 @@
 - Project plan, `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/plans.md`, `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/tasks.md`, optional task cards in `tasks/`, project status, decisions/escalations.
 - No product-code writes.
 
+## Plan Quality Contract
+
+The project plan is an `implementation-capable` planning artifact. Before it is ready for Plan QA, it must include:
+
+- Plan classification: `implementation-capable`
+- DoD source: accepted owner intent, approved architecture, or project-plan acceptance criteria
+- Testable DoD / acceptance conditions: conditions that make the plan executable without hidden scope or dependencies
+- Artifact QA route: `phase-2-plan-qa`
+- Artifact QA trigger: after the project plan and task index are complete
+- Implementation Quality Closure route: `phase-5-quality` for every later formal implementation task
+- Required verification: artifact review, task/index consistency, edge/regression review, and adaptive data/integration matrix when applicable
+- Quality-ready criteria: task contracts are complete and routing is evidence-backed
+- Owner opt-out: `none` or `Quality skipped by owner opt-out`
+- Not-applicable reason: `none` or a specific read-only reason
+- Blocking decision: decision ID or `none`
+- Next route: `phase-2-plan-qa`
+
+A read-only planning analysis may use `not-applicable` only with a specific reason and no implementation writes. Missing or untestable DoD, missing quality route, or unresolved blocking decision prevents implementation readiness.
+
 Ta faza służy do stworzenia planu tasków, który nadaje się do realnego wykonania i minimalizuje ryzyko reworku.
 
 Celem nie jest stworzenie backlogu opisowego.

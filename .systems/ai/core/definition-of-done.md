@@ -1,5 +1,7 @@
 # definition-of-done.md
 
+For every implementation-capable plan, `.systems/ai/core/plan-quality-contract.md` must identify this DoD source, testable done conditions, artifact QA route, and post-implementation quality route before implementation-class writes begin.
+
 ## Task Done Criteria
 
 A task is done only when all applicable items are true:

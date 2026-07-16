@@ -49,6 +49,7 @@ policy_validators=(
   .systems/scripts/check-global-quality-review-stance
   .systems/scripts/check-validation-profiles
   .systems/scripts/check-implementation-slicing
+  .systems/scripts/check-plan-quality-contract
   .systems/scripts/check-end-of-task-capture
   .systems/scripts/check-default-idea-validation-opt-out
   .systems/scripts/check-owner-decision-checkpoints

@@ -18,6 +18,21 @@
 - Done when:
   - `<testable done condition>`
 
+## Plan Quality Contract
+
+- Plan classification: `<implementation-capable|read-only>`
+- DoD source: `<owner prompt/context|micro-project artifact|accepted plan|other>`
+- Testable DoD / acceptance conditions: `<testable done conditions>`
+- Artifact QA route: `<global-quality-review-stance|not-applicable>`
+- Artifact QA trigger: `<before implementation|not-applicable with reason>`
+- Implementation Quality Closure route: `<global-quality-review-stance|not-applicable>`
+- Required verification: `<automated checks|manual checks|edge/regression review|adaptive data/integration matrix or not-applicable with reason>`
+- Quality-ready criteria: `<criteria>`
+- Owner opt-out: `<none|Quality skipped by owner opt-out>`
+- Not-applicable reason: `<reason|none>`
+- Blocking decision: `<decision ID|none>`
+- Next route: `<route>`
+
 ## Implementation Slice Plan
 
 - Source: `<accepted owner prompt/context|micro-project artifact>`

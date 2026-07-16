@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `full-qa-verification.md`, `implementation-slicing.md`, `instruction-adherence-refresh.md`, and `end-of-task-capture.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `full-qa-verification.md`, `implementation-slicing.md`, `plan-quality-contract.md`, `instruction-adherence-refresh.md`, and `end-of-task-capture.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -66,6 +66,8 @@ Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation or ba
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
 Default Idea Validation applies to new work unless the owner explicitly opts out. Single new work uses Task Idea Validation, new or broad project ideas use formal `phase-0-idea-validation`, and batch/list/checklist input uses `request-batch-triage` plus the selected validation route. Owner opt-out grammar is `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`. Opt-out skips only the idea/task validation lens output and must report `Idea validation skipped by owner opt-out` plus residual risk in `Execution Trace`. It must not bypass source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, final owner approval, Definition of Done, or stop conditions. If acceptance criteria, target project/workspace, risk, safe environment, write permission, or required evidence remains unclear, stop and request the missing decision. When owner no-question opt-out is also active, state the exact missing decision without interactive questioning.
+
+Every substantive plan, including Codex `/plan`, formal architecture/project-plan/specification, task card, micro-task, micro-project, or accepted owner prompt/context used as an implementation plan, must use `.systems/ai/core/plan-quality-contract.md`. Before implementation-class writes, the plan must state a testable DoD, artifact QA route, post-implementation quality route, required verification, quality-ready criteria, and blocking route. A read-only plan may use `not-applicable` only with a reason and no implementation writes; it is not implementation-ready.
 
 If the user asks `co teraz`, `co dalej`, `jak zacząć`, `zgubiłem się`, `what should I do next`, or equivalent, use `.systems/ai/core/guide.md`. Read status and artifacts first, then give exactly one recommendation with impact and exactly one alternative with impact.
 
@@ -350,6 +352,7 @@ git diff --check
 .systems/scripts/check-review-completeness-gate
 .systems/scripts/check-intent-plan-spec-compliance-review
 .systems/scripts/check-implementation-slicing
+.systems/scripts/check-plan-quality-contract
 .systems/scripts/check-validation-profiles
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh

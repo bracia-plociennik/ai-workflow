@@ -35,6 +35,7 @@
 | Check | Result | Evidence | Finding |
 | --- | --- | --- | --- |
 | Spec contract complete | `<PASS|FAIL>` | | |
+| Plan Quality Contract completeness | `<PASS|FAIL>` | | |
 | Implementation Gate correct | `<PASS|FAIL>` | | |
 | Architecture consistency | `<PASS|FAIL>` | | |
 | Project-plan consistency | `<PASS|FAIL>` | | |

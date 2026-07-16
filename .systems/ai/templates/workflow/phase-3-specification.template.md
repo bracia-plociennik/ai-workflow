@@ -43,6 +43,21 @@
 
 1. 
 
+## Plan Quality Contract
+
+- Plan classification: `implementation-capable`
+- DoD source: `<accepted task contract|approved owner prompt/context|accepted plan>`
+- Testable DoD / acceptance conditions: `<observable task completion and acceptance conditions>`
+- Artifact QA route: `phase-3-spec-qa`
+- Artifact QA trigger: `after the specification is complete and before implementation`
+- Implementation Quality Closure route: `phase-5-quality`
+- Required verification: `<automated checks|manual checks|edge/regression review|adaptive data/integration matrix or not-applicable with reason>`
+- Quality-ready criteria: `<DoD is testable, implementation steps are scoped, and required verification is executable>`
+- Owner opt-out: `<none|Quality skipped by owner opt-out>`
+- Not-applicable reason: `<none|reason>`
+- Blocking decision: `<decision ID|none>`
+- Next route: `phase-3-spec-qa`
+
 ## Potential Errors
 
 | Error | Cause | Handling |

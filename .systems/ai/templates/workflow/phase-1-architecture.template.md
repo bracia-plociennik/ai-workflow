@@ -88,6 +88,21 @@
 - Tasks that must stay separate:
 - Tasks that can be deferred:
 
+## Plan Quality Contract
+
+- Plan classification: `implementation-capable`
+- DoD source: `<accepted owner intent|approved project context|architecture acceptance criteria>`
+- Testable DoD / acceptance conditions: `<conditions that make this architecture usable for planning>`
+- Artifact QA route: `phase-1-architecture-qa`
+- Artifact QA trigger: `after architecture artifact is complete and before project planning`
+- Implementation Quality Closure route: `phase-5-quality` for each later formal implementation task
+- Required verification: `<artifact review|manual checks|edge/regression review|adaptive data/integration matrix or not-applicable with reason>`
+- Quality-ready criteria: `<architecture is reviewable, aligned, and has no unresolved blocking decision>`
+- Owner opt-out: `<none|Quality skipped by owner opt-out>`
+- Not-applicable reason: `<none|reason>`
+- Blocking decision: `<decision ID|none>`
+- Next route: `phase-1-architecture-qa`
+
 ## Architecture Gate
 
 - Blocking unknowns resolved: `<yes|no>`

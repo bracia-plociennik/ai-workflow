@@ -86,6 +86,21 @@ The same task IDs must be present in `AI_WORKFLOW_WORKSPACE_HOME/projects/<proje
 | --- | --- | --- |
 | | | `<yes|no>` |
 
+## Plan Quality Contract
+
+- Plan classification: `implementation-capable`
+- DoD source: `<accepted owner intent|approved architecture|project plan acceptance criteria>`
+- Testable DoD / acceptance conditions: `<conditions that make the plan executable without hidden scope or dependencies>`
+- Artifact QA route: `phase-2-plan-qa`
+- Artifact QA trigger: `after the project plan and task index are complete`
+- Implementation Quality Closure route: `phase-5-quality` for each later formal implementation task
+- Required verification: `<artifact review|task/index consistency|edge/regression review|adaptive data/integration matrix or not-applicable with reason>`
+- Quality-ready criteria: `<all task contracts are complete and routing is evidence-backed>`
+- Owner opt-out: `<none|Quality skipped by owner opt-out>`
+- Not-applicable reason: `<none|reason>`
+- Blocking decision: `<decision ID|none>`
+- Next route: `phase-2-plan-qa`
+
 ## Plan Gate Decision
 
 - All tasks have full contract: `<yes|no>`

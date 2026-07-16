@@ -154,6 +154,7 @@ A side task is allowed only when all conditions are true:
 Side tasks still require:
 
 - repository-first inspection;
+- a complete Plan Quality Contract from `.systems/ai/core/plan-quality-contract.md` before implementation-class writes;
 - compact or full Implementation Slice Plan from `.systems/ai/core/implementation-slicing.md` before implementation-class writes;
 - explicit or safely inferable Definition of Done before implementation-class writes;
 - smallest correct change;

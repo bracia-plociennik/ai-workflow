@@ -16,12 +16,14 @@
 ### Pass criteria
 
 - Spec contract is complete, consistent, testable, and implementation-ready.
+- Plan Quality Contract is complete: testable DoD, `phase-3-spec-qa` route, `phase-5-quality` route, verification criteria, and blocking route are explicit.
 - Implementation gate is correct for risk class.
 - Evidence supports every PASS check.
 
 ### Fail criteria
 
 - Spec has missing DoD, test plan, dependencies, risk routing, or acceptance criteria.
+- Plan Quality Contract is incomplete, uses unjustified `not-applicable`, or omits the required quality route.
 - Spec conflicts with architecture, plan, task index, or repo state.
 - Evidence is missing.
 

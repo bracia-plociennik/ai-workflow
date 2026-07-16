@@ -1635,6 +1635,54 @@ perl -0pi -e 's/## Definition of Done/## Done/g' "$tmp/.systems/ai/templates/mic
 run_must_fail "implementation-slicing-requires-micro-project-dod" .systems/scripts/check-implementation-slicing
 mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
 
+run_must_pass "plan-quality-contract-valid" .systems/scripts/check-plan-quality-contract
+
+cp "$tmp/.systems/ai/core/plan-quality-contract.md" "$tmp/.systems/ai/core/plan-quality-contract.md.bak"
+perl -0pi -e 's/## Plan Quality Contract/## Plan Readiness/g' "$tmp/.systems/ai/core/plan-quality-contract.md"
+run_must_fail "plan-quality-contract-requires-core-contract" .systems/scripts/check-plan-quality-contract
+mv "$tmp/.systems/ai/core/plan-quality-contract.md.bak" "$tmp/.systems/ai/core/plan-quality-contract.md"
+
+cp "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md" "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md.bak"
+perl -0pi -e 's/Implementation Quality Closure route:/Implementation Closure route:/' "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md"
+run_must_fail "plan-quality-contract-requires-implementation-quality-route" .systems/scripts/check-plan-quality-contract
+mv "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-3-specification.template.md"
+
+cp "$tmp/.systems/ai/core/command-routing.md" "$tmp/.systems/ai/core/command-routing.md.bak"
+perl -0pi -e 's/phase-3-spec-qa/phase-3-artifact-review/g' "$tmp/.systems/ai/core/command-routing.md"
+run_must_fail "plan-quality-contract-requires-plan-artifact-qa-route" .systems/scripts/check-plan-quality-contract
+mv "$tmp/.systems/ai/core/command-routing.md.bak" "$tmp/.systems/ai/core/command-routing.md"
+
+cp "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md" "$tmp/plan-quality-read-only.md"
+perl -0pi -e 's/<implementation-capable\|read-only>/read-only/; s/<owner prompt\/context\|micro-project artifact\|accepted plan\|other>/accepted owner read-only request/; s/<testable done conditions>/analysis is delivered to the owner/; s/<global-quality-review-stance\|not-applicable>/not-applicable/g; s/<before implementation\|not-applicable with reason>/not-applicable because no implementation writes/; s/<automated checks\|manual checks\|edge\/regression review\|adaptive data\/integration matrix or not-applicable with reason>/manual artifact review only/; s/<criteria>/analysis has the requested evidence/; s/<route>/handoff/; s/<reason\|none>/read-only analysis has no implementation writes/' "$tmp/plan-quality-read-only.md"
+run_must_pass "plan-quality-contract-allows-justified-read-only-plan" .systems/scripts/check-plan-quality-contract --artifact "$tmp/plan-quality-read-only.md"
+
+cp "$tmp/plan-quality-read-only.md" "$tmp/plan-quality-read-only.md.bak"
+perl -0pi -e 's/- Plan classification: `read-only`/- Plan classification: `implementation-capable`/' "$tmp/plan-quality-read-only.md"
+run_must_fail "plan-quality-contract-blocks-implementation-plan-without-artifact-qa" .systems/scripts/check-plan-quality-contract --artifact "$tmp/plan-quality-read-only.md"
+mv "$tmp/plan-quality-read-only.md.bak" "$tmp/plan-quality-read-only.md"
+
+cp "$tmp/plan-quality-read-only.md" "$tmp/plan-quality-read-only.md.bak"
+perl -0pi -e 's/- DoD source: `accepted owner read-only request`/- DoD source:/' "$tmp/plan-quality-read-only.md"
+run_must_fail "plan-quality-contract-requires-concrete-dod-source" .systems/scripts/check-plan-quality-contract --artifact "$tmp/plan-quality-read-only.md"
+mv "$tmp/plan-quality-read-only.md.bak" "$tmp/plan-quality-read-only.md"
+
+perl -0pi -e 's/- Not-applicable reason: `read-only analysis has no implementation writes`/- Not-applicable reason:/' "$tmp/plan-quality-read-only.md"
+run_must_fail "plan-quality-contract-requires-read-only-not-applicable-reason" .systems/scripts/check-plan-quality-contract --artifact "$tmp/plan-quality-read-only.md"
+
+cp "$tmp/.systems/ai/core/plan-quality-contract.md" "$tmp/.systems/ai/core/plan-quality-contract.md.bak"
+printf '\nPlan Quality Contract may bypass QA.\n' >> "$tmp/.systems/ai/core/plan-quality-contract.md"
+run_must_fail "plan-quality-contract-blocks-quality-bypass-wording" .systems/scripts/check-plan-quality-contract
+mv "$tmp/.systems/ai/core/plan-quality-contract.md.bak" "$tmp/.systems/ai/core/plan-quality-contract.md"
+
+run_policy_boundary_matrix \
+  "plan-quality-contract" \
+  ".systems/ai/core/plan-quality-contract.md" \
+  .systems/scripts/check-plan-quality-contract \
+  "Implementation-capable plans must not use not-applicable quality closure." \
+  "Implementation-capable plans may use not-applicable quality closure." \
+  "Implementation-capable plans must not use not-applicable quality closure, but implementation-capable plans may use not-applicable quality closure." \
+  "Implementation-capable plans must not use not-applicable quality closure; implementation-capable plans may use not-applicable quality closure."
+
 run_must_pass "validation-profiles-valid" .systems/scripts/check-validation-profiles
 run_must_pass "validation-profile-fast-explain" .systems/scripts/validate-workflow --profile fast --explain
 run_must_pass "validation-profile-scoped-check" .systems/scripts/validate-workflow --profile scoped --checks check-validation-profiles --explain
