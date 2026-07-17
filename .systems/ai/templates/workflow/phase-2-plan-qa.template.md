@@ -64,6 +64,15 @@
 - Can proceed to optional task packaging: `<yes|no|not-requested>`
 - Required next phase: `<3. FAZA SPECYFIKACJI|2.7. TASK PACKAGING|2.6. PLAN FIX LOOP>`
 
+## Delivery Constraints QA
+
+- Constraint source:
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun route:
+- Result: `<aligned|partial|mismatch|unknown>`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

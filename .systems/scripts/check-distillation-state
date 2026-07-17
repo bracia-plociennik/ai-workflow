@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1" pattern="$2" label="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "Missing distillation state file: $file"
+    fail=1
+    return
+  fi
+  if ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing distillation state reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=.systems/ai/core/distillation-state.md
+template=.systems/ai/templates/capture/distillation-state.template.md
+require_ref "$contract" '^# distillation-state\.md$' 'core contract'
+require_ref "$contract" '`is_distilled` is compatibility output only' 'derived boolean rule'
+require_ref "$contract" 'Every implementation-class write must create or update' 'mandatory producer rule'
+require_ref "$contract" 'pending-quality -> not-applicable' 'direct no-value transition'
+require_ref ".systems/ai/workflow/phase-6-distillation.md" 'repo-level micro-project' 'micro-project phase-6 route'
+require_ref ".systems/ai/workflow/phase-6-distillation.md" 'advisory quality result' 'advisory quality boundary'
+require_ref ".systems/ai/templates/workflow/phase-6-distillation.template.md" 'Micro-project quality route:' 'micro-project template route'
+require_ref "$contract" 'Dreaming remains advisory-only' 'Dreaming boundary'
+for section in '## State Record' '## State Semantics And Transitions' '## Producers' '## Consumers' '## Dreaming Boundary' '## Privacy And Scope'; do
+  require_ref "$contract" "^${section}$" "$section"
+done
+for state in pending-quality ready completed deferred owner-skipped blocked not-applicable; do
+  require_ref "$contract" "${state}" "state $state"
+done
+for field in 'Work ID:' 'Work mode:' 'Project/repo scope:' 'Source artifact:' 'Quality artifact:' 'State:' 'Distillation artifact:' 'Last reminder:' 'Owner disposition:' 'Privacy/scope check:' 'Residual risk:'; do
+  require_ref "$contract" "$field" "contract field $field"
+  require_ref "$template" "$field" "template field $field"
+done
+require_ref "$template" '^- State:' 'canonical State field'
+require_ref "$template" '`is_distilled` derived value:' 'derived boolean template field'
+for integration in \
+  'AGENTS.md:distillation-state.md' \
+  'HUMANS.md:Distillation State' \
+  'README.md:distillation-state.md' \
+  '.systems/ai/workflow/phase-6-distillation.md:Distillation State' \
+  '.systems/ai/workflow/phase-7-checkpoint.md:Distillation State' \
+  '.systems/ai/core/knowledge-capture-reminder.md:Distillation State' \
+  '.systems/ai/core/end-of-task-capture.md:Distillation State' \
+  '.systems/ai/core/dreaming-mode.md:Undistilled Work Queue' \
+  '.systems/ai/core/commands.md:check-distillation-state' \
+  '.systems/scripts/validate-workflow:check-distillation-state' \
+  '.systems/scripts/check-required-artifacts:distillation-state.md'; do
+  file="${integration%%:*}"; pattern="${integration#*:}"
+  require_ref "$file" "$pattern" "integration $pattern"
+done
+
+for file in \
+  .systems/ai/workflow/phase-4-implementation.md \
+  .systems/ai/workflow/phase-5-quality.md \
+  .systems/ai/workflow/phase-6-distillation.md \
+  .systems/ai/workflow/phase-7-checkpoint.md \
+  .systems/ai/templates/workflow/phase-4-implementation.template.md \
+  .systems/ai/templates/workflow/phase-5-quality.template.md \
+  .systems/ai/templates/workflow/phase-6-distillation.template.md \
+  .systems/ai/templates/workflow/phase-7-checkpoint.template.md \
+  .systems/ai/templates/capture/knowledge-capture-reminder.template.md \
+  .systems/ai/templates/capture/end-of-task-capture.template.md; do
+  require_ref "$file" 'Distillation State' 'phase/capture state field'
+done
+
+for file in .systems/ai/workflow/phase-4-implementation.md .systems/ai/templates/workflow/phase-4-implementation.template.md; do
+  require_ref "$file" 'State record required:' 'mandatory state record field'
+  require_ref "$file" 'State record path:' 'state record path field'
+done
+
+policy_reject_unsafe_pattern \
+  'Dreaming[^.\n]{0,100}automatically[^.\n]{0,80}(write|change|create|promote)' \
+  'Unsafe Dreaming distillation wording found' \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+policy_reject_unsafe_pattern \
+  'is_distilled[^.\n]{0,100}(authori[sz]e|permit|grant|allow)[^.\n]{0,80}(write|push|commit|promote)' \
+  'Unsafe is_distilled authority wording found' \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+
+exit "$fail"

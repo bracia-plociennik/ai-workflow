@@ -16,6 +16,7 @@ The public `ai-workflow` template does not track active runtime workspace files 
 - `external-memory/` -> `AI_WORKFLOW_WORKSPACE_HOME/external-memory/`
 - `system-insights/` -> `AI_WORKFLOW_WORKSPACE_HOME/system-insights/`
 - `dreams/` -> `AI_WORKFLOW_WORKSPACE_HOME/dreams/`
+- `repo/capture-state/` -> scoped `Distillation State` records for repo-level work.
 - `skills/` -> `AI_WORKFLOW_WORKSPACE_HOME/skills/README.md`
 
 Do not edit these templates from a target repository. Target-specific facts belong in `AI_WORKFLOW_WORKSPACE_HOME`.

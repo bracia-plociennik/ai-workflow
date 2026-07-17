@@ -7,6 +7,7 @@
 - Source scope reviewed:
 - Completion state:
 - Capture targets:
+- Distillation State: `<state|unknown>`
 - Writes allowed:
 - Owner approval:
 - Privacy/scope check:

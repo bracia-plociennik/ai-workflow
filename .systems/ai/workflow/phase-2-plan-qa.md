@@ -76,6 +76,10 @@ Nie używaj odpowiedzi typu:
 - "wydaje się kompletne"
 - "można iść dalej"
 
+## Delivery Constraints QA
+
+Verify that the project plan records the accepted delivery constraint, must-have outcome, cutline, deferred scope, quality floor, and overrun route without weakening DoD or QA.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

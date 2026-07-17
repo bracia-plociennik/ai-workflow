@@ -92,6 +92,10 @@ Every recommendation or candidate must include:
 - `risk/privacy note`;
 - `owner action`.
 
+## Undistilled Work Queue
+
+Dreaming may read `.systems/ai/core/distillation-state.md` records and add an `Undistilled Work Queue` to the Dream Report. It reports work in `ready`, `deferred`, `blocked`, or `owner-skipped` states with source evidence, recommended target, blocker, owner action, privacy state, and residual risk. Dreaming is advisory-only: it does not change state, create distillation, write memory, promote insights or skills, update status, commit, push, or run scheduler automation.
+
 ## Privacy Rules
 
 Dream Reports must not copy raw client data, client names, private company names, emails, phone numbers, wallet addresses, account IDs, ticket IDs, exact private domains, production identifiers, `.env` content, credentials, API keys, private keys, seed phrases, access tokens, internal URLs, or security-sensitive operational details.

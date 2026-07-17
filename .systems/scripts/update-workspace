@@ -120,6 +120,7 @@ workspace_dirs=(
   "$workspace_home/projects"
   "$workspace_home/humans"
   "$workspace_home/micro-projects"
+  "$workspace_home/repo/capture-state"
   "$workspace_home/external-memory/memory"
   "$workspace_home/system-insights/insights"
   "$workspace_home/dreams/runs"

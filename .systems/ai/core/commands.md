@@ -100,6 +100,10 @@ Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. E
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 
+## New Workflow Validators
+
+`check-delivery-constraints` validates deadline/timebox fields and safety boundaries. `check-distillation-state` validates the state machine, producer-consumer boundary, and Dreaming no-write rule.
+
 ## Skipped Checks
 
 Skipped checks must include:

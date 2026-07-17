@@ -88,6 +88,17 @@
 - Can continue project workflow: `<yes|no>`
 - Blocking reason: `<none|reason>`
 
+## Distillation State Review
+
+- Records reviewed:
+- `ready` records:
+- `deferred` records:
+- `blocked` records:
+- `owner-skipped` records:
+- `completed` records synchronized:
+- Unresolved capture queue:
+- Dreaming writes performed: `no`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

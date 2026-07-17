@@ -36,6 +36,26 @@
 
 ## Implementation Slice Plan
 
+## Delivery Constraints
+
+- Use `.systems/ai/core/delivery-constraints.md`.
+- Mode: `<deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>`
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun checkpoint:
+
+## Distillation State
+
+- Work ID:
+- State: `<pending-quality|ready|completed|deferred|owner-skipped|blocked|not-applicable>`
+- Source artifact:
+- Quality artifact:
+- Distillation artifact:
+- Owner disposition:
+- Privacy/scope check:
+- Residual risk:
+
 - Source: `<accepted owner prompt/context|micro-task artifact>`
 - Implementation scope:
 - DoD source:

@@ -157,6 +157,7 @@ for section in "${recommendation_sections[@]}"; do
 done
 
 require_section_table_columns "$dream_template" "Owner Decision Queue" "Decision ID" "Class" "Statement" "Why Needed Now" "Recommended Option" "Recommendation Impact" "Alternatives And Impacts" "Blocking Point" "Status" "Decision Artifact" "Source Path" "Owner Action"
+require_section_table_columns "$dream_template" "Undistilled Work Queue" "Work ID" "Scope" "State" "Source Evidence" "Quality Evidence" "Recommended Target" "Why Useful" "Blocker/Missing Decision" "Privacy/Scope" "Owner Action" "Residual Risk"
 
 unsafe_patterns=(
   'Dreaming Mode writes System Insights automatically'
@@ -218,6 +219,7 @@ check_dream_report() {
   done
 
   require_section_table_columns "$file" "Owner Decision Queue" "Decision ID" "Class" "Statement" "Why Needed Now" "Recommended Option" "Recommendation Impact" "Alternatives And Impacts" "Blocking Point" "Status" "Decision Artifact" "Source Path" "Owner Action"
+  require_section_table_columns "$file" "Undistilled Work Queue" "Work ID" "Scope" "State" "Source Evidence" "Quality Evidence" "Recommended Target" "Why Useful" "Blocker/Missing Decision" "Privacy/Scope" "Owner Action" "Residual Risk"
 
   if rg -q 'Dream variant:[[:space:]]*`?full-repo`?' "$file"; then
     if rg -A8 '^## Repo/Code Review Findings$' "$file" | rg -q 'not-applicable'; then

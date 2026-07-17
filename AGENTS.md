@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `full-qa-verification.md`, `implementation-slicing.md`, `plan-quality-contract.md`, `instruction-adherence-refresh.md`, and `end-of-task-capture.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `full-qa-verification.md`, `implementation-slicing.md`, `plan-quality-contract.md`, `instruction-adherence-refresh.md`, `end-of-task-capture.md`, `delivery-constraints.md`, and `distillation-state.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -328,6 +328,10 @@ Workspace-owned advisory/supporting artifacts:
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/`
 
 ## Commands
+
+For new implementation work, apply `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or bounded owner opt-out before dependent writes. Deadline pressure cannot bypass DoD, QA, risk, permissions, evidence, or approvals.
+
+For knowledge capture, apply `.systems/ai/core/distillation-state.md`. `is_distilled` is derived from `State: completed` and never grants write authority. Dreaming only reports the `Undistilled Work Queue` and remains advisory-only.
 
 Use `.systems/ai/core/command-routing.md` for user-facing workflow prompts and aliases.
 Use `.systems/ai/core/commands.md` and the repo command map in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`.

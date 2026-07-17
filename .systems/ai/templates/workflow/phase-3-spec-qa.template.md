@@ -59,6 +59,15 @@
 - Can enter implementation: `<yes|no>`
 - Required next phase: `<4. FAZA IMPLEMENTACJI|3.7. SPEC FIX LOOP>`
 
+## Delivery Constraints QA
+
+- Constraint source:
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun route:
+- Result: `<aligned|partial|mismatch|unknown>`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

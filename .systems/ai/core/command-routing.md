@@ -113,6 +113,12 @@ Safe response:
 - offer the nearest safe route;
 - request required approval only when policy allows approval to unblock the action.
 
+## Deadline And Distillation Routing
+
+For new implementation work, route missing deadline, time budget, must-have, cutline, and overrun decisions through `.systems/ai/core/delivery-constraints.md` and Owner Decision Discovery. Do not treat deadline pressure as a bypass for QA, DoD, risk, permissions, evidence, or approvals.
+
+Route capture-state questions, unresolved distillation, and the Dreaming queue through `.systems/ai/core/distillation-state.md`. Dreaming reports `Undistilled Work Queue` entries advisory-only and does not write or change state automatically.
+
 ## Command Families
 
 Each family below includes Polish and English variants. The examples are intentionally redundant so short user prompts can be routed consistently.

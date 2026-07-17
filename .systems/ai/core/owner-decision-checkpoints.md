@@ -146,6 +146,10 @@ Opt-out must not guess or bypass scope, risk, permissions, security, billing, mi
 
 Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves. Ask only when an existing checkpoint, distillation, status/evidence, commit-readiness, privacy, or owner-approved capture gate requires a material decision.
 
+## Delivery Constraint Questions
+
+When `.systems/ai/core/delivery-constraints.md` applies, treat deadline, timezone, time budget, must-have outcome, cutline, and overrun handling as one grouped material decision. Ask at most `1-3` questions, do not ask redundant synonyms, and do not invent a deadline. A deadline is a planning constraint only and cannot weaken DoD, QA, evidence, risk, permissions, approvals, or stop conditions.
+
 ## Response Trace
 
 Every substantive response reports:

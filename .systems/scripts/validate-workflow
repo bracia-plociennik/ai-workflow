@@ -180,6 +180,8 @@ run_core_validators() {
   run_cmd .systems/scripts/check-default-quality-closure
   run_cmd .systems/scripts/check-default-idea-validation-opt-out
   run_cmd .systems/scripts/check-end-of-task-capture
+  run_cmd .systems/scripts/check-delivery-constraints
+  run_cmd .systems/scripts/check-distillation-state
 }
 
 explain_profile

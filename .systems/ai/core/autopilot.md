@@ -160,6 +160,10 @@ Use the range state machines above. Do not run `phase-8-final-check` from autopi
 - Use fake/log/test adapters by default for external effects.
 - Do not send real emails, alerts, tickets, invoices, payments, production cron, or external API writes without explicit owner approval.
 
+## Delivery Constraint Readiness
+
+Before `running`, implementation-range readiness must record a resolved delivery constraint or explicit bounded owner opt-out from `.systems/ai/core/delivery-constraints.md`. A new material delivery decision stops the run as `awaiting-owner`.
+
 ## Retry Limits
 
 - Max 2 Spec QA fix loops per task/package.

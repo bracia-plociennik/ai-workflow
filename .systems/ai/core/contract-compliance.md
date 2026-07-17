@@ -108,6 +108,10 @@ Capture is normally not required when:
 
 When capture is not required, state `Knowledge capture: not-required` with a short reason.
 
+## Delivery And Distillation Compliance
+
+For implementation-class work, contract compliance checks the delivery constraint block and confirms that deadline pressure did not weaken DoD, QA, permissions, evidence, or approvals. It also checks whether a scoped `Distillation State` disposition is required or intentionally not applicable, while preserving the advisory-only Dreaming boundary.
+
 ## Mode-Specific Capture Targets
 
 | Work mode | Default capture target |

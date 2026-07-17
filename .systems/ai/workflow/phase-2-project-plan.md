@@ -80,6 +80,10 @@ Ta faza służy do stworzenia planu tasków, który nadaje się do realnego wyko
 Celem nie jest stworzenie backlogu opisowego.
 Celem jest stworzenie sekwencji tasków, które po spełnieniu zależności da się wdrażać bez zgadywania, bez ukrytych zależności i bez doprecyzowywania w trakcie implementacji.
 
+## Delivery Constraints
+
+The project plan must record the delivery constraint from `.systems/ai/core/delivery-constraints.md`, including must-have outcome, cutline, deferred scope, quality floor, and overrun route.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

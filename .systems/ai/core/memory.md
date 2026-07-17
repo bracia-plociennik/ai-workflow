@@ -66,6 +66,10 @@ The reminder uses the same scope boundaries as this router. It may recommend pro
 
 It must not automatically write durable memory. Durable writes require the existing owner approval, privacy, source evidence, write permission, and phase/artifact routing.
 
+## Distillation State
+
+Use `.systems/ai/core/distillation-state.md` to track whether meaningful work is pending quality, ready for capture, completed, deferred, owner-skipped, blocked, or not applicable. This state is workspace evidence and is not itself memory. Dreaming may report unresolved states but does not write them.
+
 ## Memory Index
 
 | Date | Topic | Type | Status | Route |

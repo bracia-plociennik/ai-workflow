@@ -69,6 +69,10 @@ After each slice, record evidence appropriate to the work mode:
 
 Formal `phase-4-implementation` records this in the implementation result artifact. Side tasks, micro-tasks, micro-projects, and workflow-maintenance work may record it in the response, micro-task artifact, micro-project artifact, or final handoff evidence.
 
+## Delivery Constraint Integration
+
+The Implementation Slice Plan must use `.systems/ai/core/delivery-constraints.md` when the scope is implementation-capable. Slice sequencing may defer stretch or should-have work according to the accepted cutline, but it must not alter must-have outcomes, DoD, acceptance criteria, risk, permissions, QA, evidence, or approvals. An overrun stops the run at the owner decision checkpoint.
+
 ## Mandatory Quality Closure
 
 Every implementation-class write path must end with quality closure after implementation, after slice execution, and after fix work.

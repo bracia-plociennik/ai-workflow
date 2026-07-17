@@ -74,6 +74,27 @@ Stop rule:
 - Closure route: `phase-5-quality`
 - PASS Integrity note: formal `PASS` can be declared only in `phase-5-quality` after findings-first review, DoD fit, Intent / Plan / Spec Compliance, changed files review, edge cases, regression risk, skipped checks impact, residual risk, and no unresolved `P0`, `P1`, or material `P2`.
 
+## Delivery Constraints
+
+- Contract: `.systems/ai/core/delivery-constraints.md`
+- Mode: `<deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>`
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun checkpoint:
+
+## Distillation State
+
+- State record required: `yes`
+- State record path: `<repo/capture-state|project/capture-state path>`
+- Work ID:
+- State before implementation: `pending-quality`
+- Source artifact:
+- Quality artifact: `<pending|path>`
+- Owner disposition: `not-requested`
+- Privacy/scope check: `unknown`
+- Residual risk:
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

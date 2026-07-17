@@ -74,6 +74,10 @@ Nie używaj odpowiedzi typu:
 - "wydaje się poprawne"
 - "można iść dalej"
 
+## Delivery Constraints QA
+
+Verify that the architecture records or explicitly bounds the accepted delivery constraint, protected quality floor, cutline, deferred scope, and overrun route. Deadline pressure is not a reason to waive architecture QA or later quality gates.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

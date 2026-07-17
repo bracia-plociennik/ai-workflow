@@ -86,6 +86,21 @@ range-readiness:
     final-checkpoint-after-last-task: <confirmed|blocked|not-applicable>
     stop-before-phase-8: <confirmed|blocked|not-applicable>
 
+delivery-constraints:
+  mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>
+  deadline: <timestamp|none>
+  timezone: <IANA timezone|none>
+  time-budget: <duration|none>
+  must-have-outcome: <testable result>
+  cutline: <scope reduced first>
+  overrun-checkpoint: <route>
+
+distillation-state:
+  record-namespace: <project-capture-state|repo-capture-state|not-applicable>
+  producer-before-quality: <pending-quality|not-applicable>
+  consumer-after-quality: <ready|not-applicable>
+  dreaming-boundary: <advisory-only-queue|not-applicable>
+
 blockers:
   - id: <blocker-id>
     source: <artifact-or-policy>

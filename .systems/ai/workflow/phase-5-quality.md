@@ -82,6 +82,25 @@ Nie używaj odpowiedzi typu:
 - "powinno działać"
 - "w większości spełnia"
 
+## Distillation State
+
+- Work ID:
+- State after quality closure: `<ready|blocked|owner-skipped>`
+- Quality artifact:
+- Source implementation artifact:
+- Privacy/scope check: `<pass|fail|unknown>`
+- Residual risk:
+
+## Delivery Constraints QA
+
+- Constraint source:
+- Deadline/timebox status: `<on-track|at-risk|overrun|owner-opt-out|not-set>`
+- Delivered scope:
+- Deferred scope:
+- Quality floor preserved: `<yes|no>`
+- Overrun decision:
+- Evidence:
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

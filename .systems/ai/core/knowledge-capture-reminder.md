@@ -25,6 +25,8 @@ If the previous work scope is unclear or there is no source evidence, report `Ca
 
 ## Required Output
 
+Include `Distillation State` when a scoped state record exists. Report its source artifact, quality evidence, owner disposition, and residual risk without changing the state automatically.
+
 Use this output block when the reminder is relevant:
 
 ```text
@@ -76,6 +78,10 @@ Durable capture that writes only ignored or local-only workspace artifacts, such
 If capture requires distillation or checkpoint, recommend that formal phase route instead of writing memory directly.
 
 Push is disabled by default. Report `Push allowed: no, owner request required` unless the owner explicitly asks to push.
+
+## Distillation State
+
+When a scoped `Distillation State` record exists, the reminder reports `ready`, `deferred`, and `blocked` work with its source, quality evidence, owner disposition, and residual risk. The reminder does not change state or write distillation automatically.
 
 ## Memory Boundaries
 

@@ -31,6 +31,10 @@ Every applicable plan contains this block before implementation readiness is dec
 
 `DoD source` and `Testable DoD / acceptance conditions` must be concrete enough to decide whether the work is done. A generic statement such as `test later` is not a quality route.
 
+## Delivery Constraint Integration
+
+Implementation-capable plans must use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or a bounded owner opt-out. The plan must identify must-have outcome, cutline, deferred scope, quality floor, and overrun route. A read-only plan may mark delivery constraints `not-applicable` only with a reason. Delivery pressure never satisfies the DoD or bypasses QA, risk, permissions, approvals, or evidence.
+
 ## Route Selection
 
 Use these defaults:

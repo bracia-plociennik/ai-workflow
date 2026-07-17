@@ -1361,6 +1361,12 @@ not-applicable
 - Durable writes performed: `no`
 - Scheduler/automation used: `no`
 
+## Undistilled Work Queue
+
+| Work ID | Scope | State | Source Evidence | Quality Evidence | Recommended Target | Why Useful | Blocker/Missing Decision | Privacy/Scope | Owner Action | Residual Risk |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `none` | `none` | `none` | `none` | `none` | `none` | `No eligible records.` | `none` | `pass` | `none` | `none` |
+
 ## Owner Decision Queue
 
 | Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |
@@ -1450,6 +1456,12 @@ cat > "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-r
 - Prompt-injection boundary respected: `yes`
 - Durable writes performed: `no`
 - Scheduler/automation used: `no`
+
+## Undistilled Work Queue
+
+| Work ID | Scope | State | Source Evidence | Quality Evidence | Recommended Target | Why Useful | Blocker/Missing Decision | Privacy/Scope | Owner Action | Residual Risk |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `none` | `none` | `none` | `none` | `none` | `none` | `No eligible records.` | `none` | `pass` | `none` | `none` |
 
 ## Owner Decision Queue
 
@@ -2599,6 +2611,38 @@ grep -q "LOCAL_SYSTEM_INSIGHT_ENTRY_MARKER" "$target_workspace/system-insights/i
 grep -q "LOCAL_DREAM_REPORT_MARKER" "$target_workspace/dreams/runs/2026-06-19-local-dream/dream-report.md" || { echo "Update smoke lost dream report"; exit 1; }
 grep -q "LEGACY_ORIGINAL_FILENAME_MARKER" "$target_workspace/repo/legacy/Old Prompt FINAL_v2.md" || { echo "Update smoke lost legacy source filename"; exit 1; }
 grep -q "LOCAL_WORKSPACE_SKILL_MARKER" "$target_workspace/skills/local-skill/README.md" || { echo "Update smoke lost workspace skill"; exit 1; }
+
+run_must_pass "delivery-constraints-valid" .systems/scripts/check-delivery-constraints
+cp "$tmp/.systems/ai/core/delivery-constraints.md" "$tmp/.systems/ai/core/delivery-constraints.md.bak"
+printf '\nDeadline pressure may skip QA.\n' >> "$tmp/.systems/ai/core/delivery-constraints.md"
+run_must_fail "delivery-constraints-blocks-quality-bypass" .systems/scripts/check-delivery-constraints
+mv "$tmp/.systems/ai/core/delivery-constraints.md.bak" "$tmp/.systems/ai/core/delivery-constraints.md"
+
+run_must_pass "distillation-state-valid" .systems/scripts/check-distillation-state
+cp "$tmp/.systems/ai/core/distillation-state.md" "$tmp/.systems/ai/core/distillation-state.md.bak"
+printf '\nDreaming automatically writes memory from every undistilled state.\n' >> "$tmp/.systems/ai/core/distillation-state.md"
+run_must_fail "distillation-state-blocks-dreaming-write" .systems/scripts/check-distillation-state
+mv "$tmp/.systems/ai/core/distillation-state.md.bak" "$tmp/.systems/ai/core/distillation-state.md"
+
+cp "$tmp/.systems/ai/templates/capture/distillation-state.template.md" "$tmp/.systems/ai/templates/capture/distillation-state.template.md.bak"
+perl -0pi -e 's/- State:.*\n/- Missing State field\n/' "$tmp/.systems/ai/templates/capture/distillation-state.template.md"
+run_must_fail "distillation-state-requires-state-field" .systems/scripts/check-distillation-state
+mv "$tmp/.systems/ai/templates/capture/distillation-state.template.md.bak" "$tmp/.systems/ai/templates/capture/distillation-state.template.md"
+
+cp "$tmp/.systems/ai/workflow/phase-5-quality.md" "$tmp/.systems/ai/workflow/phase-5-quality.md.bak"
+perl -0pi -e 's/## Delivery Constraints QA\n.*?## Owner Decision Checkpoint/## Owner Decision Checkpoint/ms' "$tmp/.systems/ai/workflow/phase-5-quality.md"
+run_must_fail "delivery-constraints-requires-phase5-evidence" .systems/scripts/check-delivery-constraints
+mv "$tmp/.systems/ai/workflow/phase-5-quality.md.bak" "$tmp/.systems/ai/workflow/phase-5-quality.md"
+
+cp "$tmp/.systems/ai/core/distillation-state.md" "$tmp/.systems/ai/core/distillation-state.md.bak"
+perl -0pi -e 's/Every implementation-class write must create or update/Each implementation-class write may create or update/' "$tmp/.systems/ai/core/distillation-state.md"
+run_must_fail "distillation-state-requires-mandatory-producer" .systems/scripts/check-distillation-state
+mv "$tmp/.systems/ai/core/distillation-state.md.bak" "$tmp/.systems/ai/core/distillation-state.md"
+
+cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
+perl -0pi -e 's/\| Work ID \| Scope \| State \| Source Evidence \| Quality Evidence \| Recommended Target \| Why Useful \| Blocker\/Missing Decision \| Privacy\/Scope \| Owner Action \| Residual Risk \|/| Work ID | Scope | State | Source Evidence | Quality Evidence | Recommended Target | Why Useful | Blocker\/Missing Decision | Privacy\/Scope | Owner Action | |/' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+run_must_fail "dreaming-queue-requires-all-columns" .systems/scripts/check-dreaming-mode
+mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
 
 git -C "$target_work" config user.email "smoke@example.invalid"
 git -C "$target_work" config user.name "AI Workflow Smoke"

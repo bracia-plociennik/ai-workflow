@@ -7,7 +7,9 @@
 - Date: `<YYYY-MM-DD>`
 - Workflow phase: `6. FAZA DESTYLACJI`
 - Artifact naming: use the same task/package prefix as the specification, for example `phase-6-ex-01-example-task-distillation.md`.
+- Repo-level micro-project artifact: `AI_WORKFLOW_WORKSPACE_HOME/repo/distillations/phase-6-<work-id>-distillation.md` when no project workspace exists.
 - Quality artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-5-<task-id>-quality.md`
+- Micro-project quality route: `<formal-PASS|advisory-Ready-for-owner-review|not-applicable>`
 - memory-in-repo-memory: false
 
 ## What Was Done
@@ -67,6 +69,16 @@
 - Captures reusable knowledge: `<yes|no>`
 - Avoids local noise: `<yes|no>`
 - Ready for checkpoint processing: `<yes|no>`
+
+## Distillation State
+
+- Work ID:
+- Previous state: `ready`
+- State after accepted distillation: `completed`
+- Distillation artifact:
+- `is_distilled` derived value: `true`
+- Privacy/scope check: `pass`
+- Residual risk:
 
 ## Owner Decision Checkpoint
 

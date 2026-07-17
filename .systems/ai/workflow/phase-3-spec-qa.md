@@ -70,6 +70,10 @@ W autopilocie `3.5. SPEC QA` jest obowiązkowa przed każdą implementacją task
 Celem nie jest potwierdzenie poprawności.
 Celem jest znalezienie błędów, luk i sprzeczności, które mogą spowodować rework lub błędną implementację.
 
+## Delivery Constraints QA
+
+Verify that the specification inherits or explicitly updates the accepted delivery constraint and does not silently change must-have scope, DoD, acceptance criteria, risk, permissions, or quality floor.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

@@ -21,6 +21,7 @@ The nested `ai-workflow/` clone is system-owned and should stay local to the tar
 - `external-memory/` - portable AI Workflow improvement suggestions.
 - `system-insights/` - anonymized operating lessons and skill candidates.
 - `dreams/` - advisory-only Dreaming Mode reports and recommendation queues.
+- `repo/capture-state/` - scoped `Distillation State` records for repo-level work; these records never grant write authority.
 - `skills/` - user-defined workflow skills that can override system skills.
 
 ## Rules

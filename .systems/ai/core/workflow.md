@@ -100,6 +100,10 @@ Every workflow phase and phase artifact includes `Optional Knowledge Capture`. T
 
 `repo intake` is sufficient only after `phase-0-init` has created or verified `AI_WORKFLOW_WORKSPACE_HOME` and any root `AGENTS.md` merge blocker is resolved or explicitly recorded. It must apply installation collision policy, replace stale or incomplete `AI_WORKFLOW_WORKSPACE_HOME/repo/core/*.md` runtime when needed, fill current repo facts, discover or mark commands as `not configured`, and stop before product-code writes.
 
+## Delivery And Distillation Contracts
+
+New implementation work uses `.systems/ai/core/delivery-constraints.md` before dependent writes. Meaningful work may create a scoped record under `.systems/ai/core/distillation-state.md`; phase 6 is the canonical `completed` transition, phase 7 reviews unresolved states, and Dreaming reports an `Undistilled Work Queue` without changing state or writing durable knowledge.
+
 ## Canonical Phase Order
 
 | Phase | Phase File | Required Output |

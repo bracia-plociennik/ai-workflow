@@ -70,6 +70,15 @@
 - Can proceed to project planning: `<yes|no>`
 - Required next phase: `<2. FAZA PLANU PROJEKTU|1.7. ARCHITECTURE FIX LOOP>`
 
+## Delivery Constraints QA
+
+- Constraint source:
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun route:
+- Result: `<aligned|partial|mismatch|unknown>`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

@@ -84,6 +84,14 @@ System Insights require anonymized cross-project operating lessons.
 - Durable writes performed: `no`
 - Scheduler/automation used: `no`
 
+## Undistilled Work Queue
+
+| Work ID | Scope | State | Source Evidence | Quality Evidence | Recommended Target | Why Useful | Blocker/Missing Decision | Privacy/Scope | Owner Action | Residual Risk |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<id>` | `<scope>` | `<ready|deferred|blocked|owner-skipped>` | `<path>` | `<path|none>` | `<phase-6|owner decision|none>` | `<reason>` | `<blocker|none>` | `<pass|fail|unknown>` | `<action>` | `<risk>` |
+
+Dreaming report boundary: `Durable writes performed: no`; `Scheduler/automation used: no`.
+
 ## Owner Decision Queue
 
 - Interaction mode: `queued`

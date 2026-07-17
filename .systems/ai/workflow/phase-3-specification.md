@@ -79,6 +79,10 @@ Ta faza jest twardym Implementation Gate przed rozpoczęciem implementacji.
 Celem nie jest analiza taska / tasks package.
 Celem jest przygotowanie operacyjnego planu wykonania zadania albo paczki zadań, który eliminuje niepewność i pozwala przejść do implementacji bez zgadywania.
 
+## Delivery Constraints
+
+The specification must inherit or explicitly update the accepted delivery constraint from `.systems/ai/core/delivery-constraints.md`. Any change to must-have scope, DoD, acceptance criteria, risk, or quality floor requires owner decision.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

@@ -4,13 +4,15 @@
 
 ### Input required
 
-- Quality result is `PASS` for the task/package.
+- For a formal project task/package, the Quality result is `PASS`.
+- For a repo-level micro-project or workflow-maintenance scope, an owner-triggered phase-6 route may use an advisory quality result of `Ready for owner review` only when the full current review found no known P0/P1/material P2 findings and the distillation scope is explicit. This route is not a formal implementation `PASS` and cannot authorize phase 8 or final closure.
 - Implementation result, quality evidence, and relevant decisions are available.
 - Task index identifies the completed task/package.
 
 ### Output required
 
 - Distillation artifact under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/distillations/`.
+- For repo-level micro-projects without a project workspace, use `AI_WORKFLOW_WORKSPACE_HOME/repo/distillations/phase-6-<work-id>-distillation.md`.
 - Updated project memory when task-local learning affects future tasks.
 - Optional `System Insight Candidate` when the task produced anonymized, reusable operating lessons for future projects, clients, quality reviews, or skills.
 - Updated task index/status and project status.
@@ -75,6 +77,10 @@ Celem jest zapisanie tylko tych informacji, które mają wartość operacyjną i
 - Optional owner refinements: `<list|none>`
 - Decision artifacts: `<paths|none>`
 - Next route:
+
+## Distillation State
+
+Phase 6 is the canonical transition to `State: completed` in `.systems/ai/core/distillation-state.md` after an accepted distillation artifact exists. It must not mark work completed when quality, privacy, scope, evidence, or permission gates are missing.
 
 ## Optional Knowledge Capture
 

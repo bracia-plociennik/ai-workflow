@@ -81,6 +81,10 @@ If End-of-Task Capture is used, the trace must state whether it was the matched 
 
 If Knowledge Capture Reminder is used, the trace must state the trigger, previous work scope, capture state, recommended target, whether capture is required or optional, whether writes are allowed, whether commit or push is allowed, owner skip state, and residual risk. Use `.systems/ai/core/knowledge-capture-reminder.md` for the required block.
 
+## Delivery And Distillation Trace
+
+When deadline-aware delivery applies, the substantive response should report the agreed deadline/timebox, delivered and deferred scope, overrun status, and quality-floor impact. When capture state applies, it should report the `Distillation State`, derived `is_distilled` value, source/quality evidence, owner disposition, and next consumer. These fields are evidence only and do not grant writes or change gates.
+
 ## Required Footer
 
 Use this exact section shape:

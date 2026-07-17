@@ -48,6 +48,8 @@ If a command contains both completion wording and explicit phase wording, route 
 
 ## Required Output
 
+Include `Distillation State` when a scoped state record exists. End-of-Task Capture may route to phase 6/7 or owner decision, but chat completion alone cannot produce `completed`.
+
 Use this output block when the route is End-of-Task Capture or when a higher-precedence route includes it as supporting output:
 
 ```text
@@ -128,6 +130,10 @@ End-of-Task Capture must not:
 - write frontend, backend, SEO, ads, smart-contract, product, or client-work lessons into External Memory.
 
 If scope, target, privacy, evidence, safe environment, status, or write permission is unclear, stop with proposal-only capture and ask for the missing decision.
+
+## Distillation State
+
+End-of-Task Capture may propose a state transition or route to phase 6/7 when a `Distillation State` record is present. Chat completion claims alone do not create `completed`; durable state changes require the existing capture permissions and evidence.
 
 ## Response And Trace
 

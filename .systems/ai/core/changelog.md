@@ -1,5 +1,11 @@
 # changelog.md
 
+## 2026-07-17 - Deadline Delivery And Distillation State V1
+
+- Added delivery-constraint planning with deadline/timebox, protected must-have outcome, cutline, overrun checkpoint, and bounded owner opt-out semantics.
+- Added per-work-item Distillation State with derived `is_distilled`, producer-consumer rules, scoped records, and advisory Dreaming `Undistilled Work Queue` boundary.
+- Added templates, validators, smoke coverage, phase integration, and required-artifact wiring without enabling automatic Dreaming or memory writes.
+
 ## 2026-07-16 - Plan Quality Contract V1
 
 - Required every substantive plan, including Codex `/plan`, to declare a testable DoD, artifact QA route, post-implementation quality route, verification criteria, quality-ready criteria, and blocking route before implementation readiness.

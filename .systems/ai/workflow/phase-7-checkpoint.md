@@ -454,6 +454,10 @@ Na końcu zwróć:
 - Decision artifacts: `<paths|none>`
 - Next route:
 
+## Distillation State
+
+Checkpoint must account for scoped `Distillation State` records, including `ready`, `deferred`, `blocked`, and `owner-skipped` work, instead of treating only existing phase-6 files as the complete queue. It may synchronize approved memory through its existing writes, but it must not infer completion or create Dreaming writes.
+
 ## Optional Knowledge Capture
 
 - Capture recommended: `<yes|no>`

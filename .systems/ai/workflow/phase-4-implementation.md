@@ -83,6 +83,27 @@ Celem jest wykonanie zakresu zgodnego ze specyfikacją i przygotowanie wyniku do
 
 Implementation-class writes in this phase must follow `.systems/ai/core/implementation-slicing.md`.
 
+## Delivery Constraints
+
+- Contract: `.systems/ai/core/delivery-constraints.md`
+- Mode: `<deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>`
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun checkpoint:
+
+## Distillation State
+
+- State record required: `yes`
+- State record path:
+- Work ID:
+- State before implementation: `pending-quality`
+- Source artifact:
+- Quality artifact: `<pending|path>`
+- Owner disposition: `not-requested`
+- Privacy/scope check: `unknown`
+- Residual risk:
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

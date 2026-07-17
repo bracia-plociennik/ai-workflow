@@ -151,6 +151,10 @@ Do not create a separate artifact just to satisfy this lens unless the routed wo
 
 Do not store task-level validation in `.systems/**`. Target-specific validation belongs under `AI_WORKFLOW_WORKSPACE_HOME/**`.
 
+## Delivery Constraint Discovery
+
+For new implementation work, apply `.systems/ai/core/delivery-constraints.md` after repository facts are known. Discover an existing deadline, time budget, must-have outcome, and safe cutline before dependent planning. Ask only material missing questions through Owner Decision Discovery. A missing delivery constraint is not permission to invent one, and deadline pressure cannot bypass DoD, QA, evidence, permissions, risk, or approvals.
+
 ## Stop Conditions
 
 Stop before planning or implementation when:

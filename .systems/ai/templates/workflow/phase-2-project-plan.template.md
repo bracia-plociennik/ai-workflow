@@ -111,6 +111,15 @@ The same task IDs must be present in `AI_WORKFLOW_WORKSPACE_HOME/projects/<proje
 - Ready for Plan QA: `<yes|no>`
 - Blocking reason: `<none|reason>`
 
+## Delivery Constraints
+
+- Contract: `.systems/ai/core/delivery-constraints.md`
+- Mode: `<deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>`
+- Must-have outcome:
+- Cutline/deferred scope:
+- Quality floor:
+- Overrun checkpoint:
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

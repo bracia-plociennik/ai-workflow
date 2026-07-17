@@ -140,6 +140,14 @@ Uruchom phase-5-quality dla <task-id>. Zapisz quality artifact, evidence i jedno
 
 ## Owner Decision Checkpoints
 
+## Delivery Constraints
+
+Before new implementation work, Codex should ask for a material deadline, time budget, must-have outcome, and safe cutline when they are not already known. It should group questions, adapt optional scope, and stop for an overrun decision. A deadline never authorizes skipping QA, DoD, risk review, permissions, evidence, or approvals. Use `bez deadlinu` or `no deadline` only when you intentionally want the bounded opt-out reported with residual risk.
+
+## Distillation State
+
+Each meaningful work item may have a scoped `Distillation State`. `completed` means an accepted phase-6 distillation exists; other states remain visible to reminders and Dreaming. Dreaming reports an advisory `Undistilled Work Queue` and does not write memory, distillation, insights, status, commits, or pushes.
+
 AI Workflow domyślnie wykrywa materialne decyzje i znaczące preferencje ownera przed planowaniem, specyfikacją albo implementacją. Najpierw sprawdza repo i zaakceptowane artefakty, a potem grupuje maksymalnie 1-3 pytania z rekomendowaną opcją i wpływem. Nie powinien pytać o fakty możliwe do znalezienia ani o każdy drobny detal techniczny.
 
 Na końcu każdej fazy `Owner Decision Checkpoint` pokazuje otwarte decyzje, opcjonalne refinements oraz bezpieczne i odwracalne decyzje podjęte automatycznie. Zmiana takiej decyzji przez ownera może wymagać właściwego fix loop i re-QA.

@@ -28,12 +28,18 @@ This upstream repository itself uses official repo mode: there is no inner `ai-w
 - `.systems/ai/core/request-batch-triage.md` - owner list/checklist triage before routing mixed work.
 - `.systems/ai/core/task-intake.md` - required lightweight validation lens before planning or executing new tasks.
 - `.systems/ai/core/response-contract.md` - required user-facing response footer with next-step recommendation, alternative, impacts, and copy-paste prompts.
+- `.systems/ai/core/delivery-constraints.md` - deadline/timebox, cutline, overrun, and quality-floor contract.
+- `.systems/ai/core/distillation-state.md` - scoped capture state and advisory Dreaming queue contract.
 - `.systems/ai/core/change-requests.md` - owner change request policy before and after final owner approval.
 - `.systems/ai/skills/` - system skills using `SKILL.md` as the canonical contract and short `README.md` summaries.
 - `.systems/ai/examples/projects/EXAMPLE/` - example project workspace showing the expected artifact layout.
 - `.systems/scripts/` - validators for this workflow repository, run from `ai-workflow/`.
 
 ## Target Workspace Paths
+
+Deadline-aware work uses `.systems/ai/core/delivery-constraints.md` to record a deadline/timebox, protected must-have outcome, cutline, deferred scope, and overrun route. It never weakens quality or safety gates.
+
+Knowledge capture state uses `.systems/ai/core/distillation-state.md`. Dreaming may report an `Undistilled Work Queue`, but remains advisory-only and does not automatically write or promote anything.
 
 After installation in a target repository, runtime lives outside the nested clone:
 
