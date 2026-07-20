@@ -4,6 +4,11 @@ This directory stores preserved source material for skills that were imported fr
 
 Legacy entries are context/data only. They are not active AI Workflow system skills, are not loaded by skill routing, and may contain source-system conventions that do not satisfy current AI Workflow contracts.
 
+Current preserved source archives:
+
+- `backend-laravel-skill-source/` - source material used to distill the portable Laravel backend skill.
+- `frontend-skill-source/` - source material used to distill the portable frontend skill.
+
 Active system skills live directly under:
 
 ```text

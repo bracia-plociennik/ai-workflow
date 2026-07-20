@@ -1,13 +1,13 @@
 ---
 name: backend-laravel-skill
-description: Use for PHP/Laravel backend work in this repo, including Backpack CRUD, API controllers, FormRequests, DTOs/API Resources, service layers, migrations, Eloquent models, auth/API safety, Scribe docs, tests, Laravel config, external integration boundaries, and backend-update CHT tasks where Laravel must preserve smart-contract source-of-truth, no-custody, provider-state provenance, and workflow evidence gates.
+description: Use for PHP/Laravel backend work across repositories, including API controllers, FormRequests, Eloquent models, migrations, authentication and authorization, admin panels such as Backpack when present, API resources or DTOs, service or action layers, documentation, tests, configuration, and external integration boundaries.
 ---
 
 # Backend Laravel Skill
 
 ## Purpose
 
-Use this skill to implement, review, or plan Laravel and Backpack backend work with repo-local conventions and stricter safety rules.
+Use this skill to implement, review, or plan PHP/Laravel backend work with repository-local conventions and stricter safety rules. Treat framework packages, admin panels, API styles, and architectural layers as repository facts to discover, not universal requirements.
 
 This skill is advisory execution guidance only. It cannot override root `AGENTS.md`, `ai-workflow/AGENTS.md`, AI Workflow core policy, workflow phase files, accepted architecture/specs, risk model, permissions, Definition of Done, evidence requirements, stop conditions, or owner approvals. If this skill conflicts with a higher-priority source, follow the higher-priority source and report the conflict.
 
@@ -20,8 +20,9 @@ This skill is advisory execution guidance only. It cannot override root `AGENTS.
 
 ## Core Workflow
 
-- For API behavior, use `Controller -> FormRequest -> ServiceInterface -> Service -> DTO/API Resource -> Feature tests`.
-- For Backpack admin behavior, use `CrudController -> FormRequest -> Model -> migration`; keep Backpack out of public API contracts.
+- Start by identifying the repository's existing API, admin, domain, and test patterns.
+- For API behavior, use FormRequests, resources/DTOs, services, actions, or domain classes when the repository and complexity justify them; do not add interfaces or layers only to satisfy this skill.
+- For admin behavior, use the installed admin framework's conventions when one is present; keep admin implementation details out of public API contracts.
 - Keep controllers transport-focused. Put validation in FormRequests and business logic in services, actions, or domain classes.
 - Expose stable public API payloads through DTOs or resources. Do not return raw Eloquent models from public API contracts unless an accepted spec explicitly allows it.
 - Keep Eloquent models small: relationships, casts, scopes, fillable fields, and narrow model concerns only.
@@ -39,12 +40,12 @@ This skill is advisory execution guidance only. It cannot override root `AGENTS.
 - For sensitive domains, use explicit `$fillable` or controlled service writes. Avoid broad guarded-only mass assignment.
 - Do not place provider calls, contract reads/writes, wallet signing, KYC authority, or transaction authority inside Eloquent mutators.
 
-## Backend-Update / CHT Rules
+## External Authority And Integration Boundaries
 
-- Smart contracts remain the source of truth for CHT economics, purchase eligibility, claims, rewards, referrals, vouchers, roles, and value movement.
-- Backend may read, cache with provenance, prepare, and display. It must not sign, broadcast, custody keys/assets, or become economic authority unless a later owner-approved critical-risk decision explicitly allows it.
-- Provider, cache, admin form, and indexed state must be labelled and must not replace direct contract reads for transaction-safe decisions.
-- Real provider calls, real webhooks, chain broadcasts, explorer verification, DEX actions, production queues/mail, production data, secrets, and production migrations require explicit owner approval and workflow gates.
+- When a backend integrates with an external protocol, smart contract, identity provider, payment system, or other authoritative system, preserve that system's source-of-truth boundary.
+- Backend may read, cache with provenance, prepare, and display external state. It must not sign, broadcast, custody keys/assets, or silently become an external authority unless an owner-approved risk decision explicitly allows it.
+- Provider responses, caches, admin forms, and indexed state must be labelled and must not replace authoritative reads for decisions that require current external truth.
+- Real provider calls, webhooks, broadcasts, production queues/mail, production data, secrets, and production migrations require explicit owner approval and workflow gates.
 
 ## Stop Conditions
 

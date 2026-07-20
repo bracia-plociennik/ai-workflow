@@ -57,6 +57,8 @@ external_cdn_pattern='fonts\.googleapis|fonts\.gstatic|cdn\.|unpkg\.com|jsdelivr
 external_asset_resource_pattern='https?://'
 undeclared_dependency_pattern='^[[:space:]]*import[[:space:]]+yaml\b|^[[:space:]]*from[[:space:]]+yaml[[:space:]]+import\b'
 generated_runtime_pattern='(__pycache__|\.py[co]$)'
+nonportable_local_path_pattern='(/Users/|/home/|[A-Za-z]:[\\\\/]Users[\\\\/])'
+known_project_marker_pattern='(^|[^[:alnum:]])(CHT|GFIX|GFI|TokBase|Tokenuj)([^[:alnum:]]|$)'
 max_skill_md_lines=300
 
 active_resource_names=(
@@ -86,6 +88,7 @@ intake_plan_patterns=(
   'Implementation Approval|approval state|approval'
   'Validation Plan|validation plan'
   'Residual Risk|residual risk|ryzyko'
+  'Portability / Privacy Review|portability|privacy review'
 )
 
 check_frontmatter() {
@@ -214,6 +217,26 @@ check_context_authority_artifacts() {
   done < <(find "$dir" -type f -print0)
 }
 
+check_portability_artifacts() {
+  local dir="$1"
+  local label="$2"
+  local path
+
+  while IFS= read -r -d '' path; do
+    if is_skill_text_artifact "$path"; then
+      if rg -n -i "$nonportable_local_path_pattern" "$path"; then
+        echo "$label active artifact contains a machine-specific local path: ${path#./}"
+        fail=1
+      fi
+
+      if rg -n -i "$known_project_marker_pattern" "$path"; then
+        echo "$label active artifact contains a known project/client marker: ${path#./}"
+        fail=1
+      fi
+    fi
+  done < <(find "$dir" -type f -print0)
+}
+
 check_skill_context_contract() {
   local dir="$1"
   local label="$2"
@@ -230,6 +253,7 @@ check_skill_context_contract() {
   fi
 
   check_context_authority_artifacts "$dir" "$label"
+  check_portability_artifacts "$dir" "$label"
 
   if [[ -d "$dir/context" ]] && has_active_skill_artifacts "$dir"; then
     if [[ ! -f "$intake_plan" ]]; then

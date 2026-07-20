@@ -1,5 +1,11 @@
 # changelog.md
 
+## 2026-07-20 - Portable System Skills Cleanup
+
+- Generalized the active Laravel skill to discover repository architecture instead of assuming one project's CHT, Backpack, Sanctum, or service-layer conventions.
+- Moved project-specific frontend and backend source material under `legacy/**`, outside normal skill routing.
+- Added portability/privacy intake requirements and validator smoke coverage for local paths and known project markers in active skill artifacts.
+
 ## 2026-07-17 - Deadline Delivery And Distillation State V1
 
 - Added delivery-constraint planning with deadline/timebox, protected must-have outcome, cutline, overrun checkpoint, and bounded owner opt-out semantics.

@@ -34,6 +34,12 @@
 - `scripts/*`:
 - Rejected as noise:
 
+## Portability / Privacy Review
+
+- Active artifacts contain no client names, project names, private domains, or machine-specific paths:
+- Project-specific source material location, if retained:
+- Review result:
+
 ## Implementation Approval
 
 - Approval state: `pending`

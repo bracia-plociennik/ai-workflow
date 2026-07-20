@@ -369,6 +369,18 @@ mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$t
 run_must_pass "system-skills-valid" .systems/scripts/check-system-skills
 run_must_pass "naming-allows-canonical-skill-md" .systems/scripts/check-naming
 
+cp "$tmp/.systems/ai/skills/skill-creator/SKILL.md" "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak"
+printf '\nProject source marker: CHT\n' >> "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+run_must_fail "system-skills-blocks-known-project-marker" .systems/scripts/check-system-skills
+mv "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak" "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+cp "$tmp/.systems/ai/skills/skill-creator/SKILL.md" "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak"
+printf '\nSource path: /Users/example/project/AGENTS.md\n' >> "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+run_must_fail "system-skills-blocks-machine-specific-path" .systems/scripts/check-system-skills
+mv "$tmp/.systems/ai/skills/skill-creator/SKILL.md.bak" "$tmp/.systems/ai/skills/skill-creator/SKILL.md"
+
+run_must_pass "system-skills-allows-legacy-source-material" .systems/scripts/check-system-skills
+
 mkdir -p "$tmp/ai-workflow-workspace/skills/naming-smoke/context"
 cat > "$tmp/ai-workflow-workspace/skills/naming-smoke/context/CONTRACTS-AGENTS.md" <<'MD'
 # Context
@@ -458,6 +470,12 @@ cat > "$tmp/.systems/ai/skills/context-intake-smoke/skill-intake-plan.md" <<'MD'
 ## Residual Risk
 
 - Low.
+
+## Portability / Privacy Review
+
+- Active artifacts contain no client names, project names, private domains, or machine-specific paths.
+- Project-specific source material location, if retained: legacy source archive.
+- Review result: pass.
 MD
 cat > "$tmp/.systems/ai/skills/context-intake-smoke/references/frontend.md" <<'MD'
 # Frontend

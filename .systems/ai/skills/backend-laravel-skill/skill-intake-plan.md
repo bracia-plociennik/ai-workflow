@@ -11,15 +11,15 @@
 
 ## Source Materials
 
-- `context/prompt.md` - source prompt for Laravel, Backpack, PHP backend generation behavior.
-- `context/backend-laravel-skill-source-practices.md` - reviewed current backend strengths, unsafe patterns, and recommended seed rules.
-- `context/BACKEND-AGENTS.md` - auxiliary backend operational guidance preserved as source data only.
+- `.systems/ai/skills/legacy/backend-laravel-skill-source/context/prompt.md` - source prompt for Laravel, Backpack, and PHP backend behavior.
+- `.systems/ai/skills/legacy/backend-laravel-skill-source/context/backend-laravel-skill-source-practices.md` - reviewed source-repository strengths, unsafe patterns, and recommended seed rules.
+- `.systems/ai/skills/legacy/backend-laravel-skill-source/context/BACKEND-AGENTS.md` - auxiliary source-repository guidance preserved as legacy data only.
 
 ## Co zostaje
 
-- Keep the repo-local Laravel/Backpack workflow: API work through FormRequest, service, DTO/resource, and tests; admin work through Backpack CRUD and FormRequest.
+- Keep repository-local Laravel conventions: use the existing request, service/action, resource/DTO, admin, and test patterns that fit the target codebase.
 - Keep the useful safety findings from the backend source review: no runtime schema mutation, no direct `env()` outside config, no raw `curl_*`, no raw public Eloquent responses, and no sensitive data leakage.
-- Keep backend-update/CHT boundaries: smart contracts are source of truth, backend is no-custody/no-signing/no-broadcast unless later owner-approved critical-risk scope changes that.
+- Keep generic external-authority boundaries: authoritative protocols remain the source of truth, and the backend must not become a custody, signing, broadcast, or economic authority without explicit approval.
 
 ## Co poprawic lub usunac
 
@@ -39,7 +39,13 @@
 - `SKILL.md` - active skill contract and trigger metadata.
 - `agents/openai.yaml` - UI metadata for skill listing and default invocation.
 - `references/laravel-backpack-practices.md` - detailed practices loaded only when needed.
-- `context/` - preserved source material only; not active normal-use guidance.
+- `.systems/ai/skills/legacy/backend-laravel-skill-source/` - preserved source material only; not active normal-use guidance.
+
+## Portability / Privacy Review
+
+- Active artifacts contain no client names, project names, private domains, or machine-specific paths.
+- Project-specific source material is preserved only under `.systems/ai/skills/legacy/`.
+- Generic rules were checked against the active contract and reference files after removing source-repository assumptions.
 
 ## Design Decisions
 
@@ -57,6 +63,6 @@
 
 ## Validation Plan
 
-- Run `/Users/jakubplociennik/.codex/skills/.system/skill-creator/scripts/quick_validate.py ai-workflow-workspace/skills/backend-laravel-skill`.
+- Run `python3 -B .systems/ai/skills/skill-creator/scripts/quick_validate.py .systems/ai/skills/backend-laravel-skill`.
 - Run AI Workflow checks from `ai-workflow/`: `check-naming`, `check-required-artifacts`, and `validate-workflow`.
 - Confirm no product code, backend implementation artifacts, frontend code, contracts, or smartcontracts artifacts were changed.

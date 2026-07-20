@@ -57,7 +57,7 @@ Optional directories are included only when they directly support the skill. Run
 
 User skills use the same contract shape under `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill-name>/`.
 
-Legacy imports belong under `.systems/ai/skills/legacy/<source-name>/` and are context/data only.
+Legacy imports belong under `.systems/ai/skills/legacy/<source-name>/` and are context/data only. Project-specific or client-raw source material that must be retained belongs there; active skill artifacts must remain portable and free of machine-specific paths, private domains, and source-repository identifiers.
 
 ## Resource Routing
 

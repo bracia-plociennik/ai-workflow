@@ -13,9 +13,9 @@
 
 ## Source Materials
 
-- `context/dump-blueprint.md` - frontend skill blueprint and proposed resource map.
-- `context/dump-idea-validation.md` - source review and frontend quality lessons; contains project-specific source data.
-- `context/dump-masterprompt.md` - raw prompt source; current worktree version is preserved without overwriting user changes.
+- `.systems/ai/skills/legacy/frontend-skill-source/context/dump-blueprint.md` - frontend skill blueprint and proposed resource map.
+- `.systems/ai/skills/legacy/frontend-skill-source/context/dump-idea-validation.md` - source review and frontend quality lessons; contains project-specific source data.
+- `.systems/ai/skills/legacy/frontend-skill-source/context/dump-masterprompt.md` - raw prompt source preserved as legacy data only.
 - Existing `blockchain-skill` and `backend-laravel-skill` - local active-skill layout and authority conventions.
 - Official shadcn, Radix Themes, and 21st.dev documentation - external reference data only.
 
@@ -61,7 +61,13 @@ Do not use as authority for backend-only, contract-only, legal, product approval
 - `scripts/` - read-only deterministic scanners.
 - `assets/` - templates and examples, not active instructions.
 - `evals/evals.json` - local forward-evaluation cases.
-- `context/` - tracked raw source only.
+- `.systems/ai/skills/legacy/frontend-skill-source/` - tracked raw source only; not active guidance.
+
+## Portability / Privacy Review
+
+- Active artifacts contain no client names, project names, private domains, or machine-specific paths.
+- Project-specific source material is preserved only under `.systems/ai/skills/legacy/`.
+- Active guidance was checked for historical project identifiers and source-repository path leakage.
 
 ## Approval And Validation
 

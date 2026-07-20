@@ -31,6 +31,8 @@ Only `SKILL.md` and `README.md` are required. Optional directories should exist 
 
 `context/` is raw source input for creating or updating a skill. It is not active guidance. If `context/` exists beside active skill artifacts, `skill-intake-plan.md` must record reviewed sources, trigger/non-trigger cases, keep/fix/missing/blockers, artifact map, approval state, validation plan, and residual risk.
 
+Active system skill artifacts must be portable across repositories. Do not keep client names, project names, private domains, or machine-specific paths in active contracts, references, scripts, assets, or intake plans. Preserve project-specific source material under `.systems/ai/skills/legacy/<source-name>/` when it is needed for provenance; legacy material is data only and is excluded from skill routing.
+
 Skill names must use lowercase kebab-case.
 
 ## Legacy Source Material

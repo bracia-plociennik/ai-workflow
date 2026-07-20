@@ -1,17 +1,16 @@
 # Laravel And Backpack Practices
 
-Use this reference for detailed Laravel/Backpack implementation, QA, and review decisions after `backend-laravel-skill` triggers.
+Use this reference for detailed Laravel implementation, QA, and review decisions after `backend-laravel-skill` triggers. Apply Backpack-specific guidance only when the target repository uses Backpack.
 
 ## Backend Shape
 
-- Current backend is Laravel with Backpack admin, Sanctum auth, DTO-heavy API responses, FormRequests, services/interfaces, migrations, factories, and Pest/PHPUnit tests.
-- Strong local pattern: Backpack CRUD controller -> dedicated FormRequest -> Eloquent model -> optional DTO/service layer -> focused tests.
-- Preserve current conventions unless an accepted spec requires a new domain namespace such as `App\Cht\...`.
+- Inspect the current backend before selecting an architecture. A repository may use Laravel with Backpack, Sanctum, DTOs/resources, FormRequests, services/actions, migrations, factories, and Pest/PHPUnit, but none of these are assumed.
+- Preserve existing conventions and add only the layers needed by the accepted scope, complexity, and Definition of Done.
 
 ## API Implementation Rules
 
-- Implement non-trivial API behavior through `Controller -> FormRequest -> ServiceInterface -> Service -> DTO/API Resource`.
-- Bind service interfaces in a service provider.
+- Implement non-trivial API behavior through the repository's established controller, request, service/action, domain, and resource/DTO boundaries.
+- Bind service interfaces only when the repository already uses them or a real substitution boundary requires one.
 - Keep controllers limited to request receipt, service calls, and response construction.
 - Normalize strings and defaults in `prepareForValidation()`.
 - Put validation attributes and API-friendly validation errors in FormRequests.
@@ -73,8 +72,8 @@ Use this reference for detailed Laravel/Backpack implementation, QA, and review 
 - Request-dependent model mutators for domain-critical behavior.
 - Unredacted exception e-mails or full request/trace logging.
 - Broad `logAll()` on sensitive domains without redaction.
-- Backend-calculated CHT economics.
-- Provider, cache, admin, or indexed state treated as smart-contract truth.
+- Backend-calculated external economics or authorization state.
+- Provider, cache, admin, or indexed state treated as authoritative external truth.
 
 ## Review Checklist
 
@@ -85,4 +84,3 @@ Use this reference for detailed Laravel/Backpack implementation, QA, and review 
 - Migration reversible or explicitly gated.
 - Auth, ownership, rate limits, validation, idempotency, and redaction covered where relevant.
 - Tests and skipped-check impact recorded.
-
