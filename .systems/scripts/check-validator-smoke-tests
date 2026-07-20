@@ -2458,32 +2458,44 @@ legacy_checksum="$(shasum -a 256 "$legacy_qa" | awk '{print $1}')"
 write_legacy_registry() {
   local path="$1"
   local checksum="$2"
+  local classification="${3:-historical QA artifact; bytes preserved}"
   cat > "$legacy_registry" <<EOF
 # Legacy QA Evidence Registry
 
-| Path | SHA-256 |
-| --- | --- |
-| $path | $checksum |
+| Relative workspace path | SHA-256 | Classification |
+| --- | --- | --- |
+| $path | $checksum | $classification |
 EOF
 }
 
 write_legacy_registry \
   "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
-  "$legacy_checksum"
+  "$legacy_checksum" \
+  "historical QA artifact; bytes preserved"
 run_must_pass "qa-evidence-allows-registered-legacy-fingerprint" .systems/scripts/check-qa-evidence
 
-cat > "$legacy_registry" <<EOF
-# Legacy QA Evidence Registry
+generic_legacy="$tmp/ai-workflow-workspace/projects/upgrade-with-master-prompt/quality/phase-4-legacy-implementation-result.md"
+cat > "$generic_legacy" <<'MD'
+# Registered Legacy Implementation Evidence
 
-| Path | SHA-256 |
-| --- | --- |
-| projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md | $legacy_checksum | unexpected-column |
-EOF
-run_must_fail "qa-evidence-rejects-non-exact-legacy-registry-row" .systems/scripts/check-qa-evidence
+Result: `PASS`
+MD
+generic_legacy_checksum="$(shasum -a 256 "$generic_legacy" | awk '{print $1}')"
+write_legacy_registry \
+  "projects/upgrade-with-master-prompt/quality/phase-4-legacy-implementation-result.md" \
+  "$generic_legacy_checksum" \
+  "historical QA artifact; bytes preserved"
+printf '| %s | %s | %s |\n' \
+  "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
+  "$legacy_checksum" \
+  "historical QA artifact; bytes preserved" >> "$legacy_registry"
+run_must_pass "qa-evidence-allows-registered-legacy-fingerprint-for-generic-quality-file" .systems/scripts/check-qa-evidence
+rm "$generic_legacy"
 
 write_legacy_registry \
   "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
-  "$legacy_checksum"
+  "$legacy_checksum" \
+  "historical QA artifact; bytes preserved"
 
 cp "$legacy_qa" "$legacy_qa.bak"
 printf '\nTampered legacy evidence.\n' >> "$legacy_qa"

@@ -3,7 +3,7 @@
 ## 2026-07-20 - Terminal Legacy QA Fingerprint Admission
 
 - Added V1-first classification for formal QA `PASS` artifacts.
-- Registered unmarked pre-V1 evidence is admitted only by exact workspace-relative path and SHA-256 match, then exits validation for that file without applying later V1 fields.
+- Registered unmarked pre-V1 evidence is admitted only by exact workspace-relative path and SHA-256 match, then exits validation for that file without applying later V1 fields. Descriptive registry columns such as `Classification` are ignored for identity, and admission applies to every registered quality artifact regardless of historical filename.
 - Preserved strict V1 validation and rejection for unregistered, tampered, mismatched, outside-workspace, and incomplete artifacts.
 
 ## 2026-07-20 - Portable System Skills Cleanup
