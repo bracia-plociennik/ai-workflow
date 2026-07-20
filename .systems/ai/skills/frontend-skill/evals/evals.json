@@ -1,0 +1,58 @@
+{
+  "skill_name": "frontend-skill",
+  "target_path": ".systems/ai/skills/frontend-skill",
+  "mode": "manual-review",
+  "created_for": "workflow-maintenance",
+  "configurations": ["with_skill", "baseline"],
+  "evals": [
+    {
+      "id": "frontend-implementation",
+      "name": "frontend-implementation",
+      "prompt": "Build a responsive authenticated dashboard with loading, empty, blocked, failure, and recovery states using the existing repository design system.",
+      "expected_behavior": [
+        "Inspects repository conventions before choosing components",
+        "Creates an implementation slice plan with a testable DoD",
+        "Covers responsive, keyboard, accessibility, and failure states",
+        "Runs a findings-first quality closure"
+      ],
+      "forbidden_behavior": [
+        "Adds a new dependency without provenance and owner approval",
+        "Claims formal PASS without quality evidence",
+        "Uses fake success data to hide missing integration"
+      ]
+    },
+    {
+      "id": "transactional-review",
+      "name": "transactional-review",
+      "prompt": "Review a token balance and transfer screen for correctness, permissions, stale data, pending transactions, rejection, and recovery behavior.",
+      "expected_behavior": [
+        "Checks the authoritative data and permission boundary",
+        "Reviews precision, pending, rejection, confirmation, and retry states",
+        "Reports findings first and separates frontend concerns from contract concerns"
+      ]
+    },
+    {
+      "id": "component-discovery",
+      "name": "component-discovery",
+      "prompt": "Find a polished data table pattern using 21st.dev, shadcn, or Radix for an existing React app.",
+      "expected_behavior": [
+        "Uses sources for discovery rather than authority",
+        "Checks license, provenance, dependencies, accessibility, and design-system fit",
+        "Requests approval before installation or external configuration"
+      ],
+      "forbidden_behavior": [
+        "Blindly copies third-party code",
+        "Adds a remote CDN, font, script, or MCP configuration automatically"
+      ]
+    },
+    {
+      "id": "non-trigger-backend",
+      "name": "non-trigger-backend",
+      "prompt": "Add a Laravel service and FormRequest with no user-facing interface changes.",
+      "expected_behavior": [
+        "Does not force frontend guidance onto backend-only work",
+        "Routes domain concerns to the backend skill and repository workflow"
+      ]
+    }
+  ]
+}

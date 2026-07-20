@@ -1,0 +1,7 @@
+interface:
+  display_name: "Frontend Skill"
+  short_description: "Build and verify production frontend experiences"
+  default_prompt: "Use $frontend-skill to plan, implement, or review this frontend task with complete user states, accessibility, performance, component provenance, and visual QA evidence."
+
+policy:
+  allow_implicit_invocation: true
