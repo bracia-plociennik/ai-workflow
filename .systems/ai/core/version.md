@@ -4,7 +4,7 @@
 | --- | --- |
 | Workflow version | `0.8.20` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-06-19` |
+| Last process migration | `2026-07-20` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -45,6 +45,7 @@
 - Skill `context/` directories under `.systems/ai/skills/<skill>/context/` and `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill>/context/` are raw source archives only. Context-driven skill builds require `skill-intake-plan.md` before final active artifacts are written.
 - Active skill contracts should stay compact; `.systems/scripts/check-system-skills` and `skill-creator/scripts/quick_validate.py` enforce a 300-line `SKILL.md` limit and block `context/**` from becoming active guidance or authority.
 - `.systems/ai/skills/legacy/**` stores preserved external skill source material as context/data only, not active skill guidance.
+- Registered pre-V1 formal QA evidence may receive terminal compatibility admission only through an exact workspace-relative path and SHA-256 registry match; V1-marked artifacts always use current strict validation.
 - `AI_WORKFLOW_WORKSPACE_HOME/skills/` stores optional user-defined task-specific workflow skills and takes precedence as supporting guidance.
 - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/` stores target-owned External Memory improvement proposals.
 - `AI_WORKFLOW_WORKSPACE_HOME/system-insights/` stores target-owned anonymized cross-project operating lessons and skill candidates.

@@ -33,7 +33,11 @@ require_ref "$contract" '## Adaptive Data / Integration Verification Matrix' 'ad
 require_ref "$contract" 'Formal architecture, plan, packaging, and specification QA evaluate the quality and readiness of their own artifacts.' 'artifact PASS boundary'
 require_ref "$contract" '`phase-5-quality` alone can issue the formal implementation `PASS` or `FAIL`.' 'formal implementation PASS boundary'
 require_ref "$contract" 'legacy-qa-evidence-v1.md' 'legacy evidence registry boundary'
+require_ref "$contract" 'Legacy fingerprint admission is terminal for the exact registered file' 'terminal legacy admission boundary'
+require_ref "$contract" 'A V1 marker always has precedence over registry admission' 'V1-first legacy admission precedence'
+require_ref "$contract" 'does not upgrade the artifact' 'legacy evidence is not an evidence upgrade'
 require_ref .systems/scripts/check-qa-evidence 'is_registered_legacy_evidence' 'legacy evidence fingerprint enforcement'
+require_ref .systems/scripts/check-qa-evidence 'is_formal_qa_filename' 'formal legacy admission scope'
 
 artifact_fields=(
   'Owner intent and governing sources reviewed'

@@ -2404,6 +2404,18 @@ cp "$tmp/example-phase5-quality.orig" "$tmp/.systems/ai/examples/projects/EXAMPL
 
 run_must_pass "full-qa-verification-valid" .systems/scripts/check-full-qa-verification
 
+for legacy_contract_field in \
+  'Legacy fingerprint admission is terminal for the exact registered file' \
+  'A V1 marker always has precedence over registry admission' \
+  'does not upgrade the artifact'
+do
+  cp "$tmp/.systems/ai/core/full-qa-verification.md" "$tmp/.systems/ai/core/full-qa-verification.md.bak"
+  perl -0pi -e "s/\\Q${legacy_contract_field}\\E//" "$tmp/.systems/ai/core/full-qa-verification.md"
+  legacy_contract_slug="$(printf '%s' "$legacy_contract_field" | tr '[:upper:] ' '[:lower:]-' | tr -cd '[:alnum:]-')"
+  run_must_fail "full-qa-verification-requires-legacy-contract-${legacy_contract_slug}" .systems/scripts/check-full-qa-verification
+  mv "$tmp/.systems/ai/core/full-qa-verification.md.bak" "$tmp/.systems/ai/core/full-qa-verification.md"
+done
+
 cp "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md" "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md.bak"
 perl -0pi -e 's/## Artifact QA Completeness Gate/## Missing Artifact Gate/' "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md"
 run_must_fail "full-qa-verification-requires-artifact-completeness-gate" .systems/scripts/check-full-qa-verification
@@ -2441,30 +2453,89 @@ cat > "$legacy_qa" <<'MD'
 # Registered Legacy QA Evidence
 
 Result: `PASS`
-
-## Evidence
-
-manual-checks: legacy fixture reviewed
-
-## Gate Decision
-
-result: PASS
-can-proceed: true
 MD
 legacy_checksum="$(shasum -a 256 "$legacy_qa" | awk '{print $1}')"
+write_legacy_registry() {
+  local path="$1"
+  local checksum="$2"
+  cat > "$legacy_registry" <<EOF
+# Legacy QA Evidence Registry
+
+| Path | SHA-256 |
+| --- | --- |
+| $path | $checksum |
+EOF
+}
+
+write_legacy_registry \
+  "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
+  "$legacy_checksum"
+run_must_pass "qa-evidence-allows-registered-legacy-fingerprint" .systems/scripts/check-qa-evidence
+
 cat > "$legacy_registry" <<EOF
 # Legacy QA Evidence Registry
 
 | Path | SHA-256 |
 | --- | --- |
-| projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md | $legacy_checksum |
+| projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md | $legacy_checksum | unexpected-column |
 EOF
-run_must_pass "qa-evidence-allows-registered-legacy-fingerprint" .systems/scripts/check-qa-evidence
+run_must_fail "qa-evidence-rejects-non-exact-legacy-registry-row" .systems/scripts/check-qa-evidence
+
+write_legacy_registry \
+  "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
+  "$legacy_checksum"
 
 cp "$legacy_qa" "$legacy_qa.bak"
 printf '\nTampered legacy evidence.\n' >> "$legacy_qa"
 run_must_fail "qa-evidence-rejects-tampered-legacy-fingerprint" .systems/scripts/check-qa-evidence
 mv "$legacy_qa.bak" "$legacy_qa"
+
+unregistered_legacy="$tmp/ai-workflow-workspace/projects/unregistered-legacy/quality/phase-1-architecture-qa.md"
+mkdir -p "$(dirname "$unregistered_legacy")"
+cp "$legacy_qa" "$unregistered_legacy"
+run_must_fail "qa-evidence-rejects-unregistered-legacy-fingerprint" .systems/scripts/check-qa-evidence
+rm "$unregistered_legacy"
+
+write_legacy_registry \
+  "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
+  "0000000000000000000000000000000000000000000000000000000000000000"
+run_must_fail "qa-evidence-rejects-wrong-legacy-checksum" .systems/scripts/check-qa-evidence
+
+write_legacy_registry \
+  "projects/upgrade-with-master-prompt/quality/phase-2-plan-qa.md" \
+  "$legacy_checksum"
+run_must_fail "qa-evidence-rejects-wrong-legacy-path" .systems/scripts/check-qa-evidence
+
+outside_legacy="$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-2-plan-qa.md"
+cat > "$outside_legacy" <<'MD'
+# Outside Workspace Legacy QA Evidence
+
+Result: `PASS`
+MD
+write_legacy_registry \
+  "projects/outside-workspace/quality/phase-2-plan-qa.md" \
+  "$(shasum -a 256 "$outside_legacy" | awk '{print $1}')"
+run_must_fail "qa-evidence-rejects-outside-workspace-legacy" .systems/scripts/check-qa-evidence
+rm "$outside_legacy"
+
+v1_incomplete="$tmp/ai-workflow-workspace/projects/registered-v1/quality/phase-1-architecture-qa.md"
+mkdir -p "$(dirname "$v1_incomplete")"
+cat > "$v1_incomplete" <<'MD'
+# Registered Incomplete V1 QA Evidence
+
+QA verification contract: `full-qa-verification-v1`
+
+Result: `PASS`
+MD
+write_legacy_registry \
+  "projects/registered-v1/quality/phase-1-architecture-qa.md" \
+  "$(shasum -a 256 "$v1_incomplete" | awk '{print $1}')"
+run_must_fail "qa-evidence-v1-first-overrides-legacy-admission" .systems/scripts/check-qa-evidence
+rm "$v1_incomplete"
+
+write_legacy_registry \
+  "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
+  "$legacy_checksum"
 
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
 perl -0pi -e 's/## Adaptive Data \/ Integration Verification Matrix/## Missing Adaptive Matrix/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"

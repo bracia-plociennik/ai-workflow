@@ -42,6 +42,8 @@ Missing governing sources, an incomplete required review, a material mismatch, u
 
 New QA artifacts created from V1 templates declare `QA verification contract: full-qa-verification-v1`; `check-qa-evidence` enforces the V1 runtime fields when that marker is present. Older closed evidence is admitted only through the ignored workspace registry `AI_WORKFLOW_WORKSPACE_HOME/repo/core/legacy-qa-evidence-v1.md`, which records its exact relative path and SHA-256 fingerprint. A formal QA `PASS` without a V1 marker or registered legacy fingerprint fails.
 
+Legacy fingerprint admission is terminal for the exact registered file: once the file is proven to be an unmarked pre-V1 artifact with an exact workspace-relative path and current SHA-256 match, later V1 structural and semantic checks are not applied to that file. The admission preserves immutable historical evidence; it does not upgrade the artifact, extend its original scope, authorize a new phase or external effect, or prove that the historical review met current V1 completeness standards. Any byte change invalidates the fingerprint. A V1 marker always has precedence over registry admission, so a V1-marked incomplete artifact fails current validation even when its bytes are registered.
+
 ## Formal Phase 5 PASS Evidence
 
 A V1 `phase-5-quality` artifact may declare `PASS` only when it records a completed DoD validation, `aligned` Intent / Plan / Spec Compliance, a complete and current Review Completeness Gate, explicit findings status, the applicable adaptive matrix, evidence, and a satisfied Quality Gate. A missing section, an incomplete review, a stale baseline, an unresolved `P0`, `P1`, or material `P2`, or any unsatisfied Quality Gate condition blocks `PASS`.

@@ -23,12 +23,37 @@ is_registered_legacy_evidence() {
   [[ -n "$workspace_home" && -f "$legacy_registry" && "$file" == "$workspace_home"/* ]] || return 1
   relative_path="${file#"$workspace_home"/}"
   checksum="$(shasum -a 256 "$file" | awk '{print $1}')"
-  rg -qF -- "| $relative_path | $checksum |" "$legacy_registry"
+  awk -F'|' -v expected_path="$relative_path" -v expected_checksum="$checksum" '
+    function trim(value) {
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+      return value
+    }
+    NF == 4 && trim($2) == expected_path && trim($3) == expected_checksum {
+      found=1
+    }
+    END { exit(found ? 0 : 1) }
+  ' "$legacy_registry"
 }
 
 has_pass_result() {
   local file="$1"
   rg -q '(^|[:|` ])PASS([` |]|$)' "$file"
+}
+
+has_v1_contract() {
+  local file="$1"
+  rg -qF -- 'QA verification contract: `full-qa-verification-v1`' "$file"
+}
+
+is_formal_qa_filename() {
+  case "$(basename "$1")" in
+    phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md|phase-5-*-quality.md)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
 }
 
 section_after() {
@@ -52,15 +77,20 @@ validate_evidence_file() {
   local file="$1"
 
   if has_pass_result "$file"; then
-    case "$(basename "$file")" in
-      phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md|phase-5-*-quality.md)
-        if ! rg -qF -- 'QA verification contract: `full-qa-verification-v1`' "$file" && ! is_registered_legacy_evidence "$file"; then
-          reject_pass_file "$file" 'missing V1 QA marker or registered legacy evidence fingerprint'
-        fi
-        ;;
-    esac
+    local v1_contract=false
+    if has_v1_contract "$file"; then
+      v1_contract=true
+    elif is_formal_qa_filename "$file"; then
+      if is_registered_legacy_evidence "$file"; then
+        # An exact, immutable pre-V1 admission is terminal. Do not apply
+        # fields introduced after the historical artifact was closed.
+        return 0
+      fi
 
-    if rg -qF -- 'QA verification contract: `full-qa-verification-v1`' "$file"; then
+      reject_pass_file "$file" 'missing V1 QA marker or registered legacy evidence fingerprint'
+    fi
+
+    if [[ "$v1_contract" == true ]]; then
       case "$(basename "$file")" in
       phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md)
         for heading in '## QA Verification Scope' '## Artifact QA Completeness Gate'; do

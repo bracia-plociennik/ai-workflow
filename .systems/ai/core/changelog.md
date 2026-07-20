@@ -1,5 +1,11 @@
 # changelog.md
 
+## 2026-07-20 - Terminal Legacy QA Fingerprint Admission
+
+- Added V1-first classification for formal QA `PASS` artifacts.
+- Registered unmarked pre-V1 evidence is admitted only by exact workspace-relative path and SHA-256 match, then exits validation for that file without applying later V1 fields.
+- Preserved strict V1 validation and rejection for unregistered, tampered, mismatched, outside-workspace, and incomplete artifacts.
+
 ## 2026-07-20 - Portable System Skills Cleanup
 
 - Generalized the active Laravel skill to discover repository architecture instead of assuming one project's CHT, Backpack, Sanctum, or service-layer conventions.
