@@ -34,6 +34,8 @@ require_ref "$contract" 'Safety Boundaries' "safety boundaries"
 require_ref "$template" '^# End-of-Task Capture$' "template"
 
 for trigger in \
+  'Koniec pracy' \
+  'Koniec zadania' \
   'to koniec zadania' \
   'koniec taska' \
   'kończymy ten task' \
@@ -54,6 +56,7 @@ for field in \
   'Source scope reviewed' \
   'Completion state' \
   'Capture targets' \
+  'Capture mode' \
   'Writes allowed' \
   'Owner approval' \
   'Privacy/scope check' \
@@ -115,7 +118,7 @@ for integration in \
   "HUMANS.md:End-of-Task Capture" \
   "README.md:end-of-task-capture\\.md" \
   ".systems/ai/core/workflow.md:end-of-task-capture\\.md" \
-  ".systems/ai/core/memory.md:end-of-task-capture\\.md" \
+  ".systems/ai/core/memory.md:Koniec pracy.*Koniec zadania.*capture-now" \
   ".systems/ai/core/contract-compliance.md:end-of-task-capture\\.md" \
   ".systems/ai/core/definition-of-done.md:end-of-task-capture\\.md" \
   ".systems/ai/core/response-contract.md:end-of-task-capture\\.md" \
@@ -132,6 +135,8 @@ do
 done
 
 unsafe_patterns=(
+  '(Koniec pracy|Koniec zadania)[^.\n]{0,120}\b(may|can|should|will)\b[^.\n]{0,100}\b(acknowledge only|ask what to do next|proposal-only)\b'
+  '(Koniec pracy|Koniec zadania)[^.\n]{0,120}\bdoes not require\b[^.\n]{0,80}\bcapture\b'
   'end task may mark PASS automatically'
   'end task runs phase-8-final-check'
   'end task may close project without final-owner-yes'

@@ -136,6 +136,20 @@ Do not overwrite target-owned `README.md`, existing `AGENTS.md`, existing `HUMAN
 
 Unresolved `phase-0-init` blockers or installation collisions block repo intake, architecture, planning, implementation, and autopilot.
 
+When a target worktree has a strong AI Workflow installation marker but lacks the nested clone or root shim, use `.systems/ai/core/worktree-bootstrap.md`. Obtain platform network/write approval before the canonical clone. Stop on a weak marker, existing root `AGENTS.md`, wrong origin, dirty clone, ambiguous contents, or official-repo self-clone.
+
+## Validation Routing
+
+Use `.systems/ai/core/validation-routing.md` for every QA closure. Semantic and product review precedes scripts. Workflow validators are supporting evidence and run only when applicable to the artifact or workflow-owned files changed. Green workflow scripts cannot override missing DoD, mismatched intent, blockers, findings, failed product tests, or residual risk.
+
+## Model Selection Guidance
+
+Every new planning, implementation, and QA scope reports the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Model choice is non-blocking and cannot modify workflow authority or quality requirements.
+
+## Cross-System Upgrade Handoff
+
+For substantive AI Workflow or AI System upgrades, use `.systems/ai/core/cross-system-upgrade-handoff.md`. The owner decides whether the counterpart is affected. `pending` blocks commit/handoff; `yes` requires one privacy-safe External Memory handoff; `no` requires a reason.
+
 ## Side Task / Micro-task Contract
 
 Side tasks are short, one-off changes that may run outside the full project workflow. They exist to avoid process overhead for safe work, not to bypass gates.

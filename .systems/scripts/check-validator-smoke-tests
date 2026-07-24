@@ -2346,6 +2346,242 @@ run_policy_boundary_matrix \
   "Formal PASS must not occur without findings-first review, but formal PASS without findings-first review." \
   "Formal PASS must not occur without findings-first review; formal PASS without findings-first review."
 
+run_policy_boundary_matrix \
+  "cross-system-handoff" \
+  ".systems/ai/core/cross-system-upgrade-handoff.md" \
+  .systems/scripts/check-cross-system-upgrade-handoff \
+  "Cross-system impact pending must not allow commit." \
+  "Cross-system impact pending may allow commit." \
+  "Cross-system impact pending must not allow commit, but cross-system impact pending may allow commit." \
+  "Cross-system impact pending must not allow commit; cross-system impact pending may allow commit."
+run_policy_boundary_matrix \
+  "worktree-bootstrap" \
+  ".systems/ai/core/worktree-bootstrap.md" \
+  .systems/scripts/check-worktree-bootstrap \
+  "Bootstrap must not skip approval." \
+  "Bootstrap may skip approval." \
+  "Bootstrap must not skip approval, but bootstrap may skip approval." \
+  "Bootstrap must not skip approval; bootstrap may skip approval."
+run_policy_boundary_matrix \
+  "validation-routing" \
+  ".systems/ai/core/validation-routing.md" \
+  .systems/scripts/check-validation-routing \
+  "Green scripts must not equal PASS." \
+  "Green scripts equal PASS." \
+  "Green scripts must not equal PASS, but green scripts equal PASS." \
+  "Green scripts must not equal PASS; green scripts equal PASS."
+run_policy_boundary_matrix \
+  "model-selection" \
+  ".systems/ai/core/model-selection-guidance.md" \
+  .systems/scripts/check-model-selection-guidance \
+  "Model selection must not bypass QA." \
+  "Model selection may bypass QA." \
+  "Model selection must not bypass QA, but model selection may bypass QA." \
+  "Model selection must not bypass QA; model selection may bypass QA."
+
+run_must_pass "cross-system-upgrade-handoff-valid" .systems/scripts/check-cross-system-upgrade-handoff
+
+handoff_fixture="$tmp/ai-workflow-workspace/external-memory/memory"
+mkdir -p "$handoff_fixture"
+cat > "$handoff_fixture/valid-handoff.md" <<'MD'
+# Valid Handoff
+
+- Privacy/scope check: `pass`
+- Raw client data included: `no`
+MD
+cat > "$handoff_fixture/valid-record.md" <<MD
+# Record
+
+## Cross-system Impact
+
+- Owner decision: \`yes\`
+- Counterpart: \`ai-system\`
+- Handoff artifact: \`$handoff_fixture/valid-handoff.md\`
+MD
+run_must_pass "cross-system-yes-requires-existing-safe-handoff" .systems/scripts/check-cross-system-upgrade-handoff --record "$handoff_fixture/valid-record.md"
+
+cat > "$handoff_fixture/missing-record.md" <<'MD'
+# Record
+
+## Cross-system Impact
+
+- Owner decision: `yes`
+- Counterpart: `ai-system`
+- Handoff artifact: `pending`
+MD
+run_must_fail "cross-system-yes-without-handoff-fails" .systems/scripts/check-cross-system-upgrade-handoff --record "$handoff_fixture/missing-record.md"
+
+cat > "$handoff_fixture/pending-record.md" <<'MD'
+# Record
+
+## Cross-system Impact
+
+- Owner decision: `pending`
+- Counterpart: `ai-system`
+- Handoff artifact: `pending`
+MD
+run_must_fail "cross-system-pending-blocks-handoff" .systems/scripts/check-cross-system-upgrade-handoff --record "$handoff_fixture/pending-record.md"
+
+cat > "$handoff_fixture/raw-handoff.md" <<'MD'
+# Unsafe Handoff
+
+Client name: Example Corporation
+MD
+cat > "$handoff_fixture/raw-record.md" <<MD
+# Record
+
+## Cross-system Impact
+
+- Owner decision: \`yes\`
+- Counterpart: \`ai-system\`
+- Handoff artifact: \`$handoff_fixture/raw-handoff.md\`
+MD
+run_must_fail "cross-system-handoff-blocks-raw-client-data" .systems/scripts/check-cross-system-upgrade-handoff --record "$handoff_fixture/raw-record.md"
+
+cat > "$handoff_fixture/email-handoff.md" <<'MD'
+# Unsafe Handoff
+
+Contact: owner@example.invalid
+MD
+cat > "$handoff_fixture/email-record.md" <<MD
+# Record
+
+## Cross-system Impact
+
+- Owner decision: \`yes\`
+- Counterpart: \`ai-system\`
+- Handoff artifact: \`$handoff_fixture/email-handoff.md\`
+MD
+run_must_fail "cross-system-handoff-blocks-email-shaped-data" .systems/scripts/check-cross-system-upgrade-handoff --record "$handoff_fixture/email-record.md"
+
+cat > "$tmp/outside-handoff.md" <<'MD'
+# Outside Handoff
+MD
+cat > "$handoff_fixture/outside-record.md" <<MD
+# Record
+
+## Cross-system Impact
+
+- Owner decision: \`yes\`
+- Counterpart: \`ai-system\`
+- Handoff artifact: \`$tmp/outside-handoff.md\`
+MD
+run_must_fail "cross-system-handoff-requires-external-memory-namespace" .systems/scripts/check-cross-system-upgrade-handoff --record "$handoff_fixture/outside-record.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+perl -0pi -e 's/Koniec pracy/Koniec iteracji/g' "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-requires-koniec-pracy" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.bak"
+printf '\nKoniec pracy may acknowledge only and ask what to do next.\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-acknowledge-only" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+run_must_pass "validation-routing-valid" .systems/scripts/check-validation-routing
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/- Workflow script applicability:.*\n//' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "validation-routing-requires-script-applicability" .systems/scripts/check-validation-routing
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
+cp "$tmp/.systems/ai/core/validation-routing.md" "$tmp/.systems/ai/core/validation-routing.md.bak"
+printf '\nGreen scripts equal PASS.\n' >> "$tmp/.systems/ai/core/validation-routing.md"
+run_must_fail "validation-routing-blocks-green-scripts-pass" .systems/scripts/check-validation-routing
+mv "$tmp/.systems/ai/core/validation-routing.md.bak" "$tmp/.systems/ai/core/validation-routing.md"
+
+run_must_pass "model-selection-guidance-valid" .systems/scripts/check-model-selection-guidance
+cp "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md" "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md.bak"
+perl -0pi -e 's/- Blocking: `no`\n//' "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md"
+run_must_fail "model-selection-requires-non-blocking-field" .systems/scripts/check-model-selection-guidance
+mv "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-4-implementation.template.md"
+
+cp "$tmp/.systems/ai/core/model-selection-guidance.md" "$tmp/.systems/ai/core/model-selection-guidance.md.bak"
+printf '\nModel selection may bypass QA.\n' >> "$tmp/.systems/ai/core/model-selection-guidance.md"
+run_must_fail "model-selection-blocks-qa-bypass" .systems/scripts/check-model-selection-guidance
+mv "$tmp/.systems/ai/core/model-selection-guidance.md.bak" "$tmp/.systems/ai/core/model-selection-guidance.md"
+
+run_must_pass "worktree-bootstrap-contract-valid" .systems/scripts/check-worktree-bootstrap
+
+bootstrap_v1="$tmp/.bootstrap-v1-smoke"
+bootstrap_source="$bootstrap_v1/source"
+bootstrap_remote="$bootstrap_v1/ai-workflow.git"
+mkdir -p "$bootstrap_source"
+(cd "$tmp" && tar --exclude='.git' --exclude='.bootstrap-v1-smoke' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$bootstrap_source"
+git -C "$bootstrap_source" init -q
+git -C "$bootstrap_source" config user.email "smoke@example.invalid"
+git -C "$bootstrap_source" config user.name "AI Workflow Smoke"
+git -C "$bootstrap_source" add .
+git -C "$bootstrap_source" commit -q -m "bootstrap fixture"
+git -C "$bootstrap_source" branch -M main
+git clone -q --bare "$bootstrap_source" "$bootstrap_remote"
+
+bootstrap_target="$bootstrap_v1/target"
+mkdir -p "$bootstrap_target/ai-workflow-workspace"
+git -C "$bootstrap_target" init -q
+run_must_pass "worktree-bootstrap-local-bare-remote" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_target" --approved
+test -f "$bootstrap_target/AGENTS.md" || { echo "Bootstrap did not create root AGENTS.md"; exit 1; }
+test -f "$bootstrap_target/ai-workflow-workspace/repo/core/init.md" || { echo "Bootstrap did not create init evidence"; exit 1; }
+grep -qxF "/AGENTS.md" "$bootstrap_target/.git/info/exclude" || { echo "Bootstrap did not exclude root AGENTS.md"; exit 1; }
+grep -qxF "/ai-workflow/" "$bootstrap_target/.git/info/exclude" || { echo "Bootstrap did not exclude nested clone"; exit 1; }
+
+bootstrap_product="$bootstrap_v1/product"
+bootstrap_linked="$bootstrap_v1/linked-worktree"
+mkdir -p "$bootstrap_product"
+git -C "$bootstrap_product" init -q
+git -C "$bootstrap_product" config user.email "smoke@example.invalid"
+git -C "$bootstrap_product" config user.name "AI Workflow Smoke"
+printf '# Product\n' > "$bootstrap_product/README.md"
+git -C "$bootstrap_product" add README.md
+git -C "$bootstrap_product" commit -q -m "product fixture"
+git -C "$bootstrap_product" worktree add -q -b bootstrap-linked "$bootstrap_linked"
+mkdir -p "$bootstrap_linked/ai-workflow-workspace"
+run_must_pass "worktree-bootstrap-linked-worktree" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_linked" --approved
+test -f "$bootstrap_linked/AGENTS.md" || { echo "Linked-worktree bootstrap did not create root AGENTS.md"; exit 1; }
+linked_exclude="$(git -C "$bootstrap_linked" rev-parse --git-path info/exclude)"
+if [[ "$linked_exclude" != /* ]]; then
+  linked_exclude="$bootstrap_linked/$linked_exclude"
+fi
+grep -qxF "/AGENTS.md" "$linked_exclude" || { echo "Linked-worktree bootstrap did not exclude root AGENTS.md"; exit 1; }
+grep -qxF "/ai-workflow/" "$linked_exclude" || { echo "Linked-worktree bootstrap did not exclude nested clone"; exit 1; }
+
+bootstrap_no_approval="$bootstrap_v1/no-approval"
+mkdir -p "$bootstrap_no_approval/ai-workflow-workspace"
+git -C "$bootstrap_no_approval" init -q
+run_must_fail "worktree-bootstrap-requires-approval" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_no_approval"
+
+bootstrap_weak="$bootstrap_v1/weak-marker"
+mkdir -p "$bootstrap_weak"
+git -C "$bootstrap_weak" init -q
+run_must_fail "worktree-bootstrap-requires-strong-marker" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_weak" --approved
+
+bootstrap_symlink="$bootstrap_v1/symlink-marker"
+mkdir -p "$bootstrap_symlink"
+git -C "$bootstrap_symlink" init -q
+ln -s "$bootstrap_v1" "$bootstrap_symlink/accepted-marker"
+run_must_fail "worktree-bootstrap-rejects-symlink-marker" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_symlink" --accepted-marker accepted-marker --approved
+
+bootstrap_collision="$bootstrap_v1/agents-collision"
+mkdir -p "$bootstrap_collision/ai-workflow-workspace"
+git -C "$bootstrap_collision" init -q
+printf '# Existing instructions\n' > "$bootstrap_collision/AGENTS.md"
+run_must_fail "worktree-bootstrap-stops-agents-collision" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_collision" --approved
+
+bootstrap_wrong="$bootstrap_v1/wrong-origin"
+mkdir -p "$bootstrap_wrong/ai-workflow-workspace"
+git -C "$bootstrap_wrong" init -q
+git clone -q "$bootstrap_remote" "$bootstrap_wrong/ai-workflow"
+git -C "$bootstrap_wrong/ai-workflow" remote set-url origin "$bootstrap_v1/wrong.git"
+run_must_fail "worktree-bootstrap-stops-wrong-origin" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_wrong" --approved
+
+bootstrap_dirty="$bootstrap_v1/dirty-clone"
+mkdir -p "$bootstrap_dirty/ai-workflow-workspace"
+git -C "$bootstrap_dirty" init -q
+git clone -q "$bootstrap_remote" "$bootstrap_dirty/ai-workflow"
+printf '\ndirty\n' >> "$bootstrap_dirty/ai-workflow/README.md"
+run_must_fail "worktree-bootstrap-stops-dirty-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_dirty" --approved
+
+run_must_fail "worktree-bootstrap-stops-self-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$tmp" --approved
+
 cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
 perl -0pi -e 's/- Decisions asked\/pending: <ids\|none>\n//' "$tmp/.systems/ai/core/response-contract.md"
 run_must_fail "owner-decision-checkpoints-requires-response-trace" .systems/scripts/check-owner-decision-checkpoints

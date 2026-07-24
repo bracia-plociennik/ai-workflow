@@ -256,6 +256,10 @@ powstał artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/architecture/pha
 
 Use `.systems/ai/core/delivery-constraints.md` to record the expected deadline/timebox, must-have outcome, cutline, deferred scope, and quality floor for the architecture work. This does not authorize scope or quality reduction.
 
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

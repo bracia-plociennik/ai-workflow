@@ -54,6 +54,10 @@ policy_validators=(
   .systems/scripts/check-default-idea-validation-opt-out
   .systems/scripts/check-owner-decision-checkpoints
   .systems/scripts/check-full-qa-verification
+  .systems/scripts/check-cross-system-upgrade-handoff
+  .systems/scripts/check-worktree-bootstrap
+  .systems/scripts/check-validation-routing
+  .systems/scripts/check-model-selection-guidance
 )
 
 if ! printf '%s\n' "${policy_validators[@]}" | rg -qx -- '.systems/scripts/check-full-qa-verification'; then

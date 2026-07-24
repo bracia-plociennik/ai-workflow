@@ -63,6 +63,10 @@ Ta faza służy do grupowania tasków w pakiety przed specyfikacją, ale tylko n
 Celem nie jest zmiana planu.
 Celem jest przyspieszenie specyfikacji poprzez bezpieczne grupowanie tasków.
 
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

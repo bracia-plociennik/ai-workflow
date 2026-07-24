@@ -120,6 +120,14 @@ The same task IDs must be present in `AI_WORKFLOW_WORKSPACE_HOME/projects/<proje
 - Quality floor:
 - Overrun checkpoint:
 
+## Model Recommendation
+
+- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Reason:
+- Criticality:
+- Current model known: <yes|no>
+- Blocking: `no`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

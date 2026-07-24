@@ -69,6 +69,22 @@ Stop rule:
 - Ready for Quality phase: `<yes|no>`
 - Blocking reason: `<none|reason>`
 
+## Validation Routing
+
+- Broad AI Workflow validation during implementation: `not-applicable`
+- Slice acceptance checks:
+- Target-product tests/checks:
+- Workflow scripts deferred to quality closure when applicable: <yes|no - reason>
+- Script evidence role: `supporting-only`
+
+## Model Recommendation
+
+- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Reason:
+- Criticality:
+- Current model known: <yes|no>
+- Blocking: `no`
+
 ## Quality Closure Target
 
 - Closure route: `phase-5-quality`

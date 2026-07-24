@@ -517,6 +517,15 @@ Krótkie:
 Dziękuję, utrwal wiedzę z tej rozmowy.
 ```
 
+Najkrótsze terminalne komendy:
+
+```text
+Koniec pracy
+Koniec zadania
+```
+
+Te dwie dokładne frazy oznaczają `capture-now`. Codex nie powinien tylko potwierdzić zakończenia ani pytać, co robić dalej. Ma wykonać właściwy capture route, a jeśli brakuje QA, privacy, evidence albo permission, zatrzymać się na tej bramce z zachowaniem decyzji capture-now.
+
 Ten tryb nie zastępuje `Zrób distillation`, `Zrób checkpoint`, `Zrób final review`, `Zrób final check`, `final-owner-yes`, change requestów ani commit readiness. Jeśli polecenie zawiera jednocześnie jawny formalny etap i `koniec zadania`, formalny etap ma pierwszeństwo, a End-of-Task Capture jest tylko decyzją wspierającą.
 
 ### Knowledge Capture Reminder
@@ -827,11 +836,27 @@ End-of-Task Capture może pomóc podjąć tę decyzję przy zakończeniu rozmowy
 
 ### Validation Profiles
 
-Profile walidacji są opisane w `.systems/ai/core/validation-profiles.md`. Zwykłe `.systems/scripts/validate-workflow` uruchamia profil `standard`, czyli lżejszą walidację do codziennej iteracji i zwykłej jakości po implementacji.
+Profile walidacji są opisane w `.systems/ai/core/validation-profiles.md`. Zwykłe `.systems/scripts/validate-workflow` uruchamia profil `standard`, czyli lżejszą walidację do codziennej iteracji nad AI Workflow. Nie jest to domyślne QA implementacji produktu. Najpierw wykonaj semantic/code/diff review, DoD, findings/blockers i testy produktu; dopiero potem uruchom adekwatne skrypty workflow jako supporting evidence.
 
 Używaj `.systems/scripts/validate-workflow --profile fast --explain` do szybkiego sanity checku w trakcie edycji. Używaj `.systems/scripts/validate-workflow --profile scoped --checks check-validation-profiles --explain`, gdy świadomie iterujesz nad konkretnym walidatorem. Używaj `.systems/scripts/validate-workflow --profile full` przy checkpoint validation, dużej destylacji, dużej weryfikacji, CI, release/final confidence albo zmianach wysokiego wpływu w kontraktach, fazach, template’ach, validatorach, `AGENTS.md`, `HUMANS.md` lub `README.md`.
 
 `standard`, `scoped` i `fast` nie zmieniają DoD, PASS Integrity, quality closure, risk, permissions, evidence ani commit readiness. Jeśli wybierzesz wąską walidację zamiast pełnej przy ryzykownym zakresie, Codex musi pokazać residual risk i owner decision.
+
+### Semantic QA Przed Skryptami
+
+QA zawsze zaczyna się od intencji ownera, DoD, planu/speca/scope, findings-first review, edge cases, regresji, failure paths i testów produktu. Dopiero potem Codex może uruchomić adekwatne `.systems/scripts/**` jako supporting evidence. Zielone skrypty nie oznaczają `PASS`. Zwykła implementacja produktu nie uruchamia broad AI Workflow validation, jeśli nie zmienia kontraktów lub runtime artifacts workflow.
+
+### Worktree Bootstrap
+
+Jeśli nowy worktree ma mocny marker instalacji AI Workflow, ale nie ma `ai-workflow/`, Codex używa `.systems/ai/core/worktree-bootstrap.md`. Po platform approval uruchamia kanoniczny clone, weryfikuje origin i zawartość, a potem `init-workspace`. Istniejący root `AGENTS.md`, zły origin, dirty clone, słaby marker albo self-clone zatrzymują pracę.
+
+### Rekomendacja Luna / Sol
+
+Każdy nowy zakres planowania, implementacji i QA raportuje rekomendację modelu. `GPT-5.6 Luna High` jest domyślna dla jasnych, ograniczonych i odwracalnych zadań. `GPT-5.6 Sol High` jest rekomendowana dla trudnej architektury, dużej niejednoznaczności, security, billing, migracji, produkcji, szerokich integracji, recovery, adversarial review i high-impact policy work. Rekomendacja jest advisory-only i ma `Blocking: no`.
+
+### Cross-System Upgrade Handoff
+
+Przy substantive upgrade AI Workflow lub AI System Codex pyta, czy zmiana ma być przeniesiona do drugiego systemu. `pending` blokuje commit/handoff. `yes` wymaga jednego zanonimizowanego External Memory handoffu z decyzjami, safety boundaries, referencjami do plików, validatorami, smoke tests i adaptation checklist. Autopilot kolejkuje tę decyzję zamiast pytać w trakcie.
 
 ### Optional Knowledge Capture Po Fazach
 

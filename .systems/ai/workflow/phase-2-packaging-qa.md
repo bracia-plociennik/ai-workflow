@@ -72,6 +72,16 @@ Nie używaj odpowiedzi typu:
 - "wydaje się bezpieczne"
 - "można iść dalej"
 
+## Validation Execution Record
+
+Packaging QA follows `.systems/ai/core/validation-routing.md`. Review owner intent, package completeness, dependency and execution safety, DoD, and artifact diff before applicable targeted validators. Workflow scripts are supporting-only, and green scripts cannot create Packaging QA PASS.
+
+Record all canonical `Validation Execution Record` fields.
+
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

@@ -26,6 +26,18 @@ Codex may use:
 ai-workflow/.systems/scripts/init-workspace
 ```
 
+## Worktree Bootstrap Preflight
+
+When a new target worktree has a strong AI Workflow installation marker but lacks `ai-workflow/` or the root shim, follow `.systems/ai/core/worktree-bootstrap.md`.
+
+- Require `ai-workflow-workspace/` or another owner-accepted explicit installation marker.
+- Obtain platform network/write approval before clone.
+- Run the canonical clone command exactly as documented above.
+- Verify origin and required clone contents, then run `ai-workflow/.systems/scripts/init-workspace`.
+- Stop on an existing root `AGENTS.md`, wrong origin, dirty clone, ambiguous marker, or official-repo self-clone.
+
+The portable instruction shim lives at `.systems/ai/templates/worktree/worktree-bootstrap-shim.template.md`. The executable helper `.systems/scripts/bootstrap-target-worktree` requires `--approved`; its remote override is test-only.
+
 The bootstrap script creates `ai-workflow-workspace/`, preserves safe legacy context, and writes local-only install exclusions to `.git/info/exclude`, not to committed `.gitignore`.
 
 ## Path Resolution Contract

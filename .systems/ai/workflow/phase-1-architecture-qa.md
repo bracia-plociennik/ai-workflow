@@ -78,6 +78,21 @@ Nie używaj odpowiedzi typu:
 
 Verify that the architecture records or explicitly bounds the accepted delivery constraint, protected quality floor, cutline, deferred scope, and overrun route. Deadline pressure is not a reason to waive architecture QA or later quality gates.
 
+## Validation Execution Record
+
+Architecture QA follows `.systems/ai/core/validation-routing.md`:
+
+- semantic review of owner intent, product outcome, DoD, scope, and architecture diff comes first;
+- targeted artifact validators run only when applicable and remain supporting-only;
+- green scripts cannot create Architecture QA PASS;
+- broad AI Workflow validation is not part of ordinary architecture QA.
+
+Record `Semantic QA result`, `Findings/blockers`, `Product checks`, `Workflow script applicability`, `Targeted workflow commands`, `Script evidence role: supporting-only`, and the artifact-level `Final verdict`.
+
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

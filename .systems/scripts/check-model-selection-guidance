@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for model guidance check: $file"
+    fail=1
+  elif ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing model guidance requirement in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/model-selection-guidance.md"
+require_ref "$contract" '^# model-selection-guidance\.md$' "core contract"
+require_ref "$contract" 'GPT-5\.6 Luna High' "Luna option"
+require_ref "$contract" 'GPT-5\.6 Sol High' "Sol option"
+require_ref "$contract" 'bounded, reversible' "Luna classification"
+require_ref "$contract" 'security, billing, migrations, production' "Sol classification"
+require_ref "$contract" 'advisory-only' "authority boundary"
+require_ref "$contract" 'Blocking: no' "non-blocking"
+require_ref "$contract" 'Deadline pressure.*does not justify' "deadline boundary"
+
+templates=(
+  .systems/ai/templates/workflow/phase-1-architecture.template.md
+  .systems/ai/templates/workflow/phase-2-project-plan.template.md
+  .systems/ai/templates/workflow/phase-2-task-packaging.template.md
+  .systems/ai/templates/workflow/phase-3-specification.template.md
+  .systems/ai/templates/workflow/phase-1-architecture-qa.template.md
+  .systems/ai/templates/workflow/phase-2-plan-qa.template.md
+  .systems/ai/templates/workflow/phase-2-packaging-qa.template.md
+  .systems/ai/templates/workflow/phase-3-spec-qa.template.md
+  .systems/ai/templates/workflow/phase-4-implementation.template.md
+  .systems/ai/templates/workflow/phase-5-quality.template.md
+  .systems/ai/templates/reviews/review.template.md
+  .systems/ai/templates/micro-projects/micro-project.template.md
+  .systems/ai/templates/projects/micro-task.template.md
+)
+
+for file in "${templates[@]}"; do
+  for field in 'Recommended:' 'Reason:' 'Criticality:' 'Current model known:' 'Blocking: `no`'; do
+    require_ref "$file" "$field" "model field: $field"
+  done
+done
+
+require_ref ".systems/ai/core/response-contract.md" 'Model recommendation:' "response producer"
+require_ref "AGENTS.md" 'model-selection-guidance\.md' "AGENTS integration"
+require_ref "HUMANS.md" 'Rekomendacja Luna / Sol' "HUMANS integration"
+require_ref "README.md" 'model-selection-guidance\.md' "README integration"
+require_ref ".systems/ai/core/commands.md" 'check-model-selection-guidance' "commands integration"
+require_ref ".systems/scripts/validate-workflow" 'check-model-selection-guidance' "workflow validation"
+require_ref ".systems/scripts/check-required-artifacts" 'check-model-selection-guidance' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'model-selection-blocks-qa-bypass' "smoke integration"
+
+unsafe_patterns=(
+  'Model recommendation[^.\n]{0,100}\bBlocking:\s*(yes|conditional)\b'
+  '(Luna|Sol|model choice|model selection)[^.\n]{0,120}\b(may|can|allows?|should)\b[^.\n]{0,100}\b(bypass|skip|change)\b[^.\n]{0,80}\b(risk|permissions|QA|approval|DoD)\b'
+  'deadline[^.\n]{0,100}\b(may|can|should)\b[^.\n]{0,100}\b(lower|reduce|weaken)\b[^.\n]{0,80}\b(model|quality)\b'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe model guidance wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+done
+
+exit "$fail"

@@ -33,6 +33,20 @@
 - Blocking decision: `<decision ID|none>`
 - Next route: `<route>`
 
+## Model Recommendation
+
+- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Reason:
+- Criticality:
+- Current model known: <yes|no>
+- Blocking: `no`
+
+## Cross-system Impact
+
+- Owner decision: <yes|no|pending|not-applicable>
+- Counterpart: <ai-workflow|ai-system|none|not-applicable>
+- Handoff artifact: <path|not-required|pending|not-applicable>
+
 ## Implementation Slice Plan
 
 ## Delivery Constraints
@@ -90,6 +104,12 @@
 - Producers/consumers reviewed: `<paths or not-applicable>`
 - Required-field mapping: `<complete|partial|mismatch|not-applicable>`
 - Result wording: `<No blockers found|No findings found|Ready for owner review|Quality skipped by owner opt-out>`
+- Semantic QA result:
+- Product checks:
+- Workflow script applicability: <applicable|not-applicable - reason>
+- Targeted workflow commands:
+- Script evidence role: `supporting-only`
+- Final verdict:
 - Residual risk: `<risk>`
 
 ## Contract Compliance

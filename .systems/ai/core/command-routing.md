@@ -6,6 +6,10 @@ This file defines how agents should interpret user-facing workflow commands.
 
 It covers natural-language prompts, not shell verification commands. Shell commands for install, lint, test, build, and validation live in `.systems/ai/core/commands.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`.
 
+For every new planning, implementation, or QA scope, append the advisory Model recommendation from `.systems/ai/core/model-selection-guidance.md`. The recommendation is non-blocking and does not modify any workflow gate.
+
+For substantive workflow-maintenance upgrades, route the shared-impact owner decision through `.systems/ai/core/cross-system-upgrade-handoff.md` before commit or handoff.
+
 Use this file when a user gives a short command, phase alias, owner request batch, side-task request, autopilot request, parallel work question, rollback request, recovery request, guide request, or unsafe bypass request.
 
 Use `.systems/ai/core/task-intake.md` first when a user gives a new task, planning request, approach request, uncertainty request, side-task/micro-task request, change request, or autopilot request that introduces new scope.
@@ -728,11 +732,13 @@ Routing notes:
 
 ### End-of-Task Capture
 
-Route through `.systems/ai/core/end-of-task-capture.md` only when the owner includes completion/capture intent.
+Route through `.systems/ai/core/end-of-task-capture.md` only when the owner includes completion/capture intent. Exact `Koniec pracy` and `Koniec zadania` commands mean `capture-now` and cannot end as acknowledge-only responses.
 
 Polish variants:
 
 - `To koniec zadania.`
+- `Koniec pracy.`
+- `Koniec zadania.`
 - `Koniec taska.`
 - `Kończymy ten task.`
 - `Zamykamy ten task.`
@@ -754,7 +760,8 @@ Routing notes:
 - `Zrób final check` still routes to `phase-8-final-check`.
 - `Zrób final review` still routes to `global-quality-review-stance`, not final check.
 - If a command includes both completion wording and explicit phase wording, route by the explicit phase first and include the End-of-Task Capture decision as supporting output only.
-- Default output is capture review/proposal. Durable writes require explicit owner capture intent plus clear target, scope, privacy, evidence, and write permission.
+- Default output is capture review/proposal. Exact `Koniec pracy` and `Koniec zadania` provide explicit owner capture intent; route durable capture through clear target, scope, quality, privacy, evidence, and write permission.
+- If capture has no valuable target, report `Capture targets: none` with a reason. If a gate is missing, route to that gate while preserving capture-now intent instead of acknowledging and asking what to do next.
 - End-of-Task Capture cannot mark `PASS`, run `phase-8-final-check`, close a project without `final-owner-yes`, update status from chat-only claims, store raw client data in System Insights, or store product/domain lessons in External Memory.
 
 ### Knowledge Capture Reminder

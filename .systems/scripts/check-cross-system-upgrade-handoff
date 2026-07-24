@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+record=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --record)
+      [[ $# -ge 2 ]] || { echo "--record requires a value"; exit 1; }
+      record="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for cross-system handoff check: $file"
+    fail=1
+  elif ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing cross-system handoff requirement in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/cross-system-upgrade-handoff.md"
+template=".systems/ai/templates/external-memory/cross-system-upgrade-handoff.template.md"
+
+require_ref "$contract" '^# cross-system-upgrade-handoff\.md$' "core contract"
+require_ref "$contract" 'Owner decision: <yes\|no\|pending>' "owner decision"
+require_ref "$contract" 'Counterpart: <ai-workflow\|ai-system\|none>' "counterpart"
+require_ref "$contract" 'Handoff artifact: <path\|not-required\|pending>' "handoff artifact"
+require_ref "$contract" 'pending.*stop before commit and handoff' "pending boundary"
+require_ref "$contract" 'yes.*External Memory handoff' "yes handoff"
+require_ref "$contract" 'no-question opt-out cannot infer' "opt-out boundary"
+require_ref "$contract" 'Active autopilot does not interrupt mid-run' "autopilot queue"
+require_ref "$template" 'Privacy/scope check: <pass\|fail>' "privacy field"
+require_ref "$template" 'Raw client data included: <no>' "raw-data boundary"
+require_ref "AGENTS.md" 'cross-system-upgrade-handoff\.md' "AGENTS integration"
+require_ref "HUMANS.md" 'Cross-System Upgrade Handoff' "HUMANS integration"
+require_ref "README.md" 'cross-system-upgrade-handoff\.md' "README integration"
+require_ref ".systems/ai/core/commands.md" 'check-cross-system-upgrade-handoff' "commands integration"
+require_ref ".systems/ai/core/contract-compliance.md" 'Cross-system impact: yes\|no\|pending' "commit consumer"
+require_ref ".systems/ai/core/response-contract.md" 'Cross-system impact' "response consumer"
+require_ref ".systems/scripts/validate-workflow" 'check-cross-system-upgrade-handoff' "workflow validation"
+require_ref ".systems/scripts/check-required-artifacts" 'check-cross-system-upgrade-handoff' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'cross-system-upgrade-handoff' "smoke integration"
+
+unsafe_patterns=(
+  'shared impact[^.\n]{0,100}\bmay\b[^.\n]{0,80}\b(auto-resolve|infer|guess)\b'
+  'Cross-system impact[^.\n]{0,120}\bpending\b[^.\n]{0,100}\b(may|can)\b[^.\n]{0,60}\b(commit|handoff)\b'
+  'Cross-system impact[^.\n]{0,120}\byes\b[^.\n]{0,100}\b(without|no)\b[^.\n]{0,60}\bhandoff\b'
+  'handoff[^.\n]{0,100}\b(may|can|should)\b[^.\n]{0,80}\b(client names|raw client data|secrets|credentials)\b'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe cross-system handoff wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/templates
+done
+
+if [[ -n "$record" ]]; then
+  [[ -f "$record" ]] || { echo "Cross-system decision record missing: $record"; exit 1; }
+  section="$(awk '
+    /^## Cross-system [Ii]mpact[[:space:]]*$/ { active=1; next }
+    /^## / && active { exit }
+    active { print }
+  ' "$record")"
+  [[ -n "$section" ]] || { echo "Missing Cross-system Impact section in $record"; exit 1; }
+  decision="$(sed -nE 's/^- Owner decision: `?([^`[:space:]]+)`?.*/\1/p' <<< "$section" | head -1)"
+  counterpart="$(sed -nE 's/^- Counterpart: `?([^`[:space:]]+)`?.*/\1/p' <<< "$section" | head -1)"
+  handoff="$(sed -nE 's/^- Handoff artifact: `?([^`]+)`?.*/\1/p' <<< "$section" | head -1)"
+  case "$decision" in
+    yes)
+      [[ "$counterpart" == "ai-workflow" || "$counterpart" == "ai-system" ]] || { echo "Shared-impact yes requires counterpart"; fail=1; }
+      [[ -n "$handoff" && "$handoff" != "pending" && "$handoff" != "not-required" ]] || { echo "Shared-impact yes requires handoff path"; fail=1; }
+      if [[ -n "$handoff" && ! -f "$handoff" ]]; then
+        echo "Shared-impact handoff does not exist: $handoff"
+        fail=1
+      elif [[ -n "$handoff" ]]; then
+        [[ "$handoff" != *".."* ]] || { echo "Shared-impact handoff path cannot traverse: $handoff"; fail=1; }
+        [[ ! -L "$handoff" ]] || { echo "Shared-impact handoff cannot be a symlink: $handoff"; fail=1; }
+        handoff_dir="$(cd "$(dirname "$handoff")" && pwd -P)"
+        case "$handoff_dir" in
+          */ai-workflow-workspace/external-memory/memory)
+            ;;
+          *)
+            echo "Shared-impact handoff must live under ai-workflow-workspace/external-memory/memory/: $handoff"
+            fail=1
+            ;;
+        esac
+      fi
+      if [[ -n "$handoff" && -f "$handoff" ]] && rg -qi -- \
+        '(^|[[:space:]])(client name|email|phone|api key|private key|wallet key|production credentials)[[:space:]]*:[[:space:]]*.+' \
+        "$handoff"; then
+        echo "Shared-impact handoff contains a raw client/credential marker: $handoff"
+        fail=1
+      elif [[ -n "$handoff" && -f "$handoff" ]] && rg -qi -- \
+        '([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|sk-[a-z0-9]{16,})' \
+        "$handoff"; then
+        echo "Shared-impact handoff contains an email or credential-shaped value: $handoff"
+        fail=1
+      fi
+      ;;
+    no)
+      [[ "$counterpart" == "none" && "$handoff" == "not-required" ]] || { echo "Shared-impact no requires none/not-required"; fail=1; }
+      ;;
+    pending)
+      echo "Shared-impact decision pending blocks commit/handoff"
+      fail=1
+      ;;
+    not-applicable)
+      ;;
+    *)
+      echo "Missing or invalid Cross-system impact decision in $record"
+      fail=1
+      ;;
+  esac
+fi
+
+exit "$fail"

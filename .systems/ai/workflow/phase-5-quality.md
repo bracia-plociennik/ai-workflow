@@ -101,6 +101,25 @@ Nie używaj odpowiedzi typu:
 - Overrun decision:
 - Evidence:
 
+## Validation Execution Record
+
+Follow `.systems/ai/core/validation-routing.md` in order:
+
+1. owner intent, DoD, plan/spec, and scope;
+2. findings-first current diff/code/artifact review;
+3. edge cases, regression, failure paths, skipped checks, and residual risk;
+4. target-product tests, builds, and manual checks;
+5. only applicable workflow scripts as supporting evidence;
+6. final implementation verdict.
+
+Record `Semantic QA result`, `Findings/blockers`, `Product checks`, `Workflow script applicability`, `Targeted workflow commands`, `Script evidence role: supporting-only`, and `Final verdict`.
+
+Ordinary product implementation does not require broad AI Workflow validation unless workflow contracts or runtime artifacts changed. Green scripts never equal `PASS`.
+
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

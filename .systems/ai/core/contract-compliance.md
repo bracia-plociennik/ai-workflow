@@ -45,9 +45,13 @@ Default Quality Closure from `.systems/ai/core/quality-review.md` applies before
 
 Formal `PASS` requires the PASS Integrity Gate from `.systems/ai/core/quality-review.md`: findings-first review, DoD fit, intent/plan/spec/prompt compliance, and no unresolved `P0`, `P1`, or material `P2` findings. Advisory quality closure for side tasks, micro-tasks, micro-projects, and workflow-maintenance must not create formal `PASS`; use evidence wording such as `No blockers found`, `No findings found`, or `Ready for owner review`.
 
-Validation Profiles from `.systems/ai/core/validation-profiles.md` apply to workflow validation evidence. `.systems/scripts/validate-workflow` with no arguments uses `standard` for daily iteration and ordinary post-implementation quality. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `fast` and `scoped` are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
+Validation Profiles from `.systems/ai/core/validation-profiles.md` apply to workflow validation evidence. `.systems/scripts/validate-workflow` with no arguments uses `standard` for daily workflow-system iteration, not default product QA. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `fast` and `scoped` are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
 
-End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` can precede handoff when the owner says the task is done and asks to preserve learnings. It is capture review/proposal by default. It does not replace this compliance gate, and it does not grant permission to skip evidence, quality, risk, phase gates, memory scope boundaries, or owner approvals.
+Validation Routing from `.systems/ai/core/validation-routing.md` applies before any workflow scripts. Semantic intent/DoD/scope review, findings-first diff/artifact/code review, failure-path analysis, and target-product checks come first. Workflow scripts are applicable supporting evidence only and cannot independently justify quality readiness or `PASS`.
+
+Cross-System Upgrade Handoff from `.systems/ai/core/cross-system-upgrade-handoff.md` applies to substantive workflow-maintenance upgrades. Shared impact `pending` blocks commit/handoff. Shared impact `yes` requires one privacy-safe External Memory handoff for the complete scope. No-question opt-out cannot infer the decision.
+
+End-of-Task Capture from `.systems/ai/core/end-of-task-capture.md` can precede handoff when the owner says the task is done and asks to preserve learnings. Exact `Koniec pracy` and `Koniec zadania` mean `capture-now`; other completion wording is capture review/proposal unless capture intent is explicit. It does not replace this compliance gate, and it does not grant permission to skip evidence, quality, risk, phase gates, memory scope boundaries, or owner approvals.
 
 Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md` applies after implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task when previous work may have unresolved capture value. It is a pre-handoff and pre-new-work lens, not a hard requirement for every task. It can recommend capture targets, but durable writes still require target, scope, privacy, evidence, write permission, and the correct phase or artifact path.
 
@@ -72,11 +76,14 @@ Answer these before commit or handoff:
 - `Owner decision state: clear|awaiting-owner|blocked|queued|not-applicable`
 - `Post-fix full re-review: completed|not-required|incomplete`
 - `Closure freshness: current|stale|not-applicable`
+- `Cross-system impact: yes|no|pending|not-applicable`
+- `Cross-system counterpart: ai-workflow|ai-system|none|not-applicable`
+- `Cross-system handoff: <path|not-required|pending|not-applicable>`
 - `Knowledge capture: required|not-required`
 - `Knowledge capture target: <status/evidence|micro-task-artifact|micro-project-artifact|phase-6-distillation|phase-7-checkpoint|project-memory|repo-memory|external-memory|system-insights|not-applicable>`
 - `Reason: <short evidence-backed reason>`
 
-If any answer is `blocked` or `no` for a required item, stop before commit unless the current phase explicitly allows recording the blocker.
+If any answer is `blocked` or `no` for a required item, or Cross-system impact is `pending`, stop before commit unless the current phase explicitly allows recording the blocker. If Cross-system impact is `yes`, stop unless the required handoff artifact exists and passes privacy/scope review.
 
 If risk is not compatible with the selected work mode, route to an allowed mode before implementation or handoff. Medium-risk, high-risk, and critical-risk work must not remain in micro-task or repo-level-micro-project mode. If review completeness is incomplete, post-fix full re-review is incomplete, or closure freshness is stale, do not report commit readiness.
 

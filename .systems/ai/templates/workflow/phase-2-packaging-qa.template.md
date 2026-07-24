@@ -62,6 +62,24 @@
 - Can proceed to Specification: `<yes|no>`
 - Required next phase: `<3. FAZA SPECYFIKACJI|2.9.1. PACKAGE FIX LOOP>`
 
+## Validation Execution Record
+
+- Semantic QA result:
+- Findings/blockers:
+- Product checks:
+- Workflow script applicability: <applicable|not-applicable - reason>
+- Targeted workflow commands:
+- Script evidence role: `supporting-only`
+- Final verdict:
+
+## Model Recommendation
+
+- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Reason:
+- Criticality:
+- Current model known: <yes|no>
+- Blocking: `no`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

@@ -63,6 +63,13 @@ Owner decision interaction:
 - Mode: <asked|queued|none-needed|skipped-owner-opt-out|autopilot-non-interactive>
 - Decisions asked/pending: <ids|none>
 - Auto-resolved decisions: <ids|none>
+
+Model recommendation:
+- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High|not-applicable>
+- Reason:
+- Criticality:
+- Current model known: <yes|no|not-applicable>
+- Blocking: <no|not-applicable>
 ```
 
 Keep the trace concise. For very small substantive answers, each field may be a single line. For strict JSON-only, patch-only, or exact-template output, include the trace in the nearest surrounding human-facing response instead of inside the constrained payload.
@@ -73,11 +80,15 @@ When refresh detects drift or source conflict, include the required `Drift Warni
 
 Owner decision interaction fields are always present in substantive responses. Use `.systems/ai/core/owner-decision-checkpoints.md`. For queued decisions, the `Co dalej?` recommendation must point to the highest-priority decision batch. If no material choice exists, report `Mode: none-needed` and `No owner decision needed` rather than inventing a question.
 
+For new planning, implementation, or QA scopes, the Model recommendation fields are required and follow `.systems/ai/core/model-selection-guidance.md`. For unrelated substantive responses use `not-applicable`. A model recommendation is advisory-only and always uses `Blocking: no`.
+
+For substantive workflow-maintenance upgrades, include the `Cross-system impact` block from `.systems/ai/core/cross-system-upgrade-handoff.md` before commit or handoff.
+
 Do not say `no sources needed` for a substantive response. If no files, tools, or artifacts were needed, write `Sources used: owner prompt only` and explain the limit under `Limits/residual uncertainty`.
 
 If the owner explicitly opts out of Default Idea Validation with `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`, the trace must include `Idea validation skipped by owner opt-out` and residual risk. This reports only the skipped idea/task validation lens; it does not waive source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, or final owner approval.
 
-If End-of-Task Capture is used, the trace must state whether it was the matched route or supporting output, which sources were reviewed, whether durable writes were performed or skipped, and residual risk. Use `.systems/ai/core/end-of-task-capture.md` for the required `End-of-Task Capture` block.
+If End-of-Task Capture is used, the trace must state whether it was the matched route or supporting output, whether the mode was `capture-now` or `proposal-only`, which sources were reviewed, whether durable writes were performed or skipped, and residual risk. Exact `Koniec pracy` and `Koniec zadania` cannot produce an acknowledge-only response. Use `.systems/ai/core/end-of-task-capture.md` for the required `End-of-Task Capture` block.
 
 If Knowledge Capture Reminder is used, the trace must state the trigger, previous work scope, capture state, recommended target, whether capture is required or optional, whether writes are allowed, whether commit or push is allowed, owner skip state, and residual risk. Use `.systems/ai/core/knowledge-capture-reminder.md` for the required block.
 

@@ -80,6 +80,16 @@ Nie używaj odpowiedzi typu:
 
 Verify that the project plan records the accepted delivery constraint, must-have outcome, cutline, deferred scope, quality floor, and overrun route without weakening DoD or QA.
 
+## Validation Execution Record
+
+Plan QA follows `.systems/ai/core/validation-routing.md`. Review owner intent, DoD, scope, sequencing, dependencies, and plan diff before any applicable targeted artifact validator. Workflow scripts are supporting-only, broad AI Workflow validation is not an ordinary Plan QA step, and green scripts cannot create Plan QA PASS.
+
+Record all canonical `Validation Execution Record` fields.
+
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

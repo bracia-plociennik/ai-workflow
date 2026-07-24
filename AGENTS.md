@@ -28,7 +28,7 @@ Read in this order before workflow-governed work:
 
 1. `AGENTS.md`
 2. `.systems/ai/core/operating-model.md`
-3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `full-qa-verification.md`, `implementation-slicing.md`, `plan-quality-contract.md`, `instruction-adherence-refresh.md`, `end-of-task-capture.md`, `delivery-constraints.md`, and `distillation-state.md`
+3. Policy docs under `.systems/ai/core/`, especially `repository-modes.md`, `command-routing.md`, `task-intake.md`, `request-batch-triage.md`, `owner-decision-checkpoints.md`, `guide.md`, `parallel-work-policy.md`, `contract-compliance.md`, `cross-system-upgrade-handoff.md`, `response-contract.md`, `change-requests.md`, `definition-of-done.md`, `risk-model.md`, `permissions.md`, `commands.md`, `prompt-injection.md`, `prompt-composition.md`, `system-insights.md`, `dreaming-mode.md`, `quality-review.md`, `full-qa-verification.md`, `validation-routing.md`, `implementation-slicing.md`, `plan-quality-contract.md`, `instruction-adherence-refresh.md`, `end-of-task-capture.md`, `worktree-bootstrap.md`, `model-selection-guidance.md`, `delivery-constraints.md`, and `distillation-state.md`
 4. `.systems/ai/core/workflow.md`
 5. The current phase file under `.systems/ai/workflow/`
 6. Relevant project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/`, when they exist
@@ -98,13 +98,19 @@ If the user asks for review, code review, final review, findings, blockers, or a
 
 Use `.systems/ai/core/instruction-adherence-refresh.md` at continuity and execution boundaries. Run targeted refresh before the first implementation-class write for a scope, before commit/handoff/quality closure, and after material scope or instruction changes. Run full refresh after resume, context compaction, working-directory change, long interruption, or source conflict. Do not refresh before every message or edit. Every substantive `Execution Trace` reports refresh status, trigger, refreshed contracts, reviewed baseline, and drift/conflict.
 
-If the user says the task is done and asks to preserve learnings, for example `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`, route through `.systems/ai/core/end-of-task-capture.md`. Apply its precedence first: final-owner-yes/change requests, explicit formal phases, global review, and commit readiness keep priority. End-of-Task Capture is capture review/proposal by default. It must not mark `PASS`, run `phase-8-final-check`, close a project, update status from chat-only claims, or write durable memory/insights unless target, scope, privacy, evidence, and write permission are clear.
+If the user says the task is done and asks to preserve learnings, for example `Koniec pracy`, `Koniec zadania`, `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`, route through `.systems/ai/core/end-of-task-capture.md`. Exact `Koniec pracy` and `Koniec zadania` mean `capture-now`; do not merely acknowledge or ask what to do next. Apply precedence first: final-owner-yes/change requests, explicit formal phases, global review, and commit readiness keep priority. Other completion wording remains capture review/proposal unless it contains explicit capture intent. The route must not mark `PASS`, run `phase-8-final-check`, close a project, update status from chat-only claims, or write durable memory/insights unless target, scope, privacy, evidence, and write permission are clear.
 
 After implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task with unresolved capture value, use `.systems/ai/core/knowledge-capture-reminder.md`. Knowledge Capture Reminder is advisory unless an existing gate requires capture. It may propose distillation, checkpoint, memory, External Memory, System Insights, or status/evidence targets, but it must not automatically write them, commit ignored workspace artifacts, or push.
 
+For every new planning, implementation, or QA scope, report the advisory `Model recommendation` from `.systems/ai/core/model-selection-guidance.md`. Luna High fits bounded reversible low/medium-risk work; Sol High fits difficult architecture, substantial ambiguity, security, billing, migrations, production, broad integrations, recovery, adversarial review, high-risk work, and high-impact policy work. The recommendation is never blocking and cannot change risk, permissions, DoD, evidence, QA, or approvals.
+
+For substantive workflow-maintenance upgrades, apply `.systems/ai/core/cross-system-upgrade-handoff.md` before commit or handoff. Ask the owner whether the upgrade should affect the counterpart system. `pending` blocks commit/handoff; `yes` requires one privacy-safe External Memory handoff for the full scope. No-question opt-out cannot decide shared impact, and active autopilot queues the decision.
+
 Before committing, preparing a commit summary, or closing work, apply `.systems/ai/core/contract-compliance.md`. The gate is advisory-only, but the agent should explicitly state work mode compliance and the knowledge capture decision: `required` with the correct target, or `not-required` with a reason.
 
-Use `.systems/ai/core/validation-profiles.md` for validation profile routing. `.systems/scripts/validate-workflow` with no arguments is the `standard` profile for daily iteration and ordinary post-implementation quality. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
+Use `.systems/ai/core/validation-profiles.md` for applicable AI Workflow validation. `.systems/scripts/validate-workflow` with no arguments is the `standard` profile for daily workflow-system iteration, not default product QA. Use `full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes. `scoped` and `fast` profiles are iteration aids unless the owner explicitly accepts narrow validation with residual risk.
+
+Use `.systems/ai/core/validation-routing.md` before running workflow scripts during QA. Semantic intent/DoD/scope review, findings-first code/diff/artifact review, edge and failure-path analysis, and target-product checks come first. Run only applicable workflow scripts afterward as supporting evidence. Green scripts never equal `PASS`, and ordinary product implementation must not run broad AI Workflow validation solely because AI Workflow governs the task.
 
 Every workflow phase artifact should include `Optional Knowledge Capture`: a soft decision about whether the phase produced reusable knowledge and where it belongs. This does not require memory after every phase and does not grant durable write permission outside the current phase's `Writes allowed`, memory policy, System Insights policy, risk policy, or owner approvals.
 
@@ -367,6 +373,10 @@ git diff --check
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
 .systems/scripts/check-end-of-task-capture
+.systems/scripts/check-cross-system-upgrade-handoff
+.systems/scripts/check-worktree-bootstrap
+.systems/scripts/check-validation-routing
+.systems/scripts/check-model-selection-guidance
 ```
 
 If a required command cannot run, record the reason and the impact on `PASS`.

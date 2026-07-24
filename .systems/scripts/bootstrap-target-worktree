@@ -1,0 +1,192 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+canonical_remote="https://github.com/bracia-plociennik/ai-workflow.git"
+target=""
+accepted_marker=""
+approved=0
+
+usage() {
+  cat <<'EOF'
+Usage: bootstrap-target-worktree --target <target-repo> --approved [--accepted-marker <relative-path>]
+
+Production uses the canonical AI Workflow GitHub remote. A remote override is
+accepted only when AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1.
+EOF
+}
+
+fail() {
+  echo "Worktree bootstrap STOP: $*" >&2
+  exit 1
+}
+
+normalize_path() {
+  (cd "$1" && pwd -P)
+}
+
+resolve_git_exclude() {
+  local repo="$1"
+  local exclude_path
+  exclude_path="$(git -C "$repo" rev-parse --git-path info/exclude)"
+  if [[ "$exclude_path" != /* ]]; then
+    exclude_path="$repo/$exclude_path"
+  fi
+  printf '%s\n' "$exclude_path"
+}
+
+is_official_remote() {
+  local remote="$1"
+  [[ "$remote" == "$canonical_remote" ||
+     "$remote" == "https://github.com/bracia-plociennik/ai-workflow" ||
+     "$remote" == "git@github.com:bracia-plociennik/ai-workflow.git" ||
+     "$remote" == "ssh://git@github.com/bracia-plociennik/ai-workflow.git" ]]
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --target)
+      [[ $# -ge 2 ]] || fail "--target requires a value"
+      target="$2"
+      shift 2
+      ;;
+    --accepted-marker)
+      [[ $# -ge 2 ]] || fail "--accepted-marker requires a value"
+      accepted_marker="$2"
+      shift 2
+      ;;
+    --approved)
+      approved=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      fail "unknown argument: $1"
+      ;;
+  esac
+done
+
+[[ -n "$target" ]] || fail "--target is required"
+[[ -d "$target" ]] || fail "target directory does not exist: $target"
+[[ "$(git -C "$target" rev-parse --is-inside-work-tree 2>/dev/null || true)" == "true" ]] ||
+  fail "target is not a Git worktree: $target"
+
+target="$(normalize_path "$target")"
+script_root="$(normalize_path "$(dirname "$0")/../..")"
+exclude_file="$(resolve_git_exclude "$target")"
+
+if [[ "$target" == "$script_root" ]]; then
+  fail "official AI Workflow repository must not clone itself"
+fi
+
+target_origin="$(git -C "$target" remote get-url origin 2>/dev/null || true)"
+if [[ -n "$target_origin" ]] && is_official_remote "$target_origin"; then
+  fail "target repository origin is the official AI Workflow repository"
+fi
+
+strong_marker=0
+if [[ -d "$target/ai-workflow-workspace" ]]; then
+  strong_marker=1
+fi
+
+if [[ -n "$accepted_marker" ]]; then
+  [[ "$accepted_marker" != /* ]] || fail "accepted marker must be relative to target"
+  [[ "$accepted_marker" != *".."* ]] || fail "accepted marker cannot traverse outside target"
+  marker_path="$target/$accepted_marker"
+  [[ -e "$marker_path" ]] || fail "accepted marker does not exist: $accepted_marker"
+  [[ ! -L "$marker_path" ]] || fail "accepted marker cannot be a symlink"
+  marker_parent="$(cd "$(dirname "$marker_path")" && pwd -P)"
+  case "$marker_parent" in
+    "$target"|"$target"/*)
+      ;;
+    *)
+      fail "accepted marker resolves outside target"
+      ;;
+  esac
+  strong_marker=1
+fi
+
+[[ "$strong_marker" -eq 1 ]] || fail "missing strong AI Workflow installation marker"
+
+expected_remote="$canonical_remote"
+if [[ "${AI_WORKFLOW_BOOTSTRAP_TEST_MODE:-0}" == "1" ]]; then
+  expected_remote="${AI_WORKFLOW_BOOTSTRAP_REMOTE:-}"
+  [[ -n "$expected_remote" ]] || fail "test mode requires AI_WORKFLOW_BOOTSTRAP_REMOTE"
+  tmp_root="$(cd "${TMPDIR:-/tmp}" && pwd -P)"
+  case "$target" in
+    "$tmp_root"/*)
+      ;;
+    *)
+      fail "test remote override is allowed only for targets under TMPDIR"
+      ;;
+  esac
+  [[ "$expected_remote" == /* && -d "$expected_remote" ]] || fail "test remote must be an existing absolute local path"
+  remote_parent="$(cd "$(dirname "$expected_remote")" && pwd -P)"
+  case "$remote_parent" in
+    "$tmp_root"|"$tmp_root"/*)
+      ;;
+    *)
+      fail "test remote override must resolve under TMPDIR"
+      ;;
+  esac
+fi
+
+clone="$target/ai-workflow"
+if [[ -e "$clone" ]]; then
+  [[ -d "$clone/.git" ]] || fail "existing ai-workflow path is not a Git clone"
+  clone_origin="$(git -C "$clone" remote get-url origin 2>/dev/null || true)"
+  [[ -n "$clone_origin" ]] || fail "existing clone has no origin"
+  if [[ "${AI_WORKFLOW_BOOTSTRAP_TEST_MODE:-0}" == "1" ]]; then
+    [[ "$clone_origin" == "$expected_remote" ]] || fail "existing clone has wrong origin: $clone_origin"
+  elif ! is_official_remote "$clone_origin"; then
+    fail "existing clone has wrong origin: $clone_origin"
+  fi
+  [[ -z "$(git -C "$clone" status --porcelain)" ]] || fail "existing clone is dirty"
+  [[ -f "$clone/AGENTS.md" ]] || fail "existing clone is missing AGENTS.md"
+  [[ -x "$clone/.systems/scripts/init-workspace" ]] || fail "existing clone is missing executable init-workspace"
+  needs_init=0
+  if [[ -f "$target/AGENTS.md" ]]; then
+    rg -q -- 'ai-workflow/AGENTS\.md' "$target/AGENTS.md" || fail "existing root AGENTS.md does not delegate to AI Workflow"
+  else
+    needs_init=1
+  fi
+  if ! grep -qxF "/AGENTS.md" "$exclude_file" ||
+     ! grep -qxF "/ai-workflow/" "$exclude_file"; then
+    needs_init=1
+  fi
+  if [[ "$needs_init" -eq 1 ]]; then
+    [[ "$approved" -eq 1 ]] || fail "repairing the root shim or local excludes requires recorded write approval"
+    env -u AI_WORKFLOW_WORKSPACE_HOME "$clone/.systems/scripts/init-workspace" \
+      --workspace "$target/ai-workflow-workspace"
+  fi
+  echo "Worktree bootstrap result: existing installation verified"
+  exit 0
+fi
+
+[[ ! -e "$target/AGENTS.md" ]] || fail "root AGENTS.md already exists and requires owner-approved merge"
+[[ "$approved" -eq 1 ]] || fail "platform network/write approval was not recorded"
+
+remote="$expected_remote"
+
+(
+  cd "$target"
+  git clone "$remote" ai-workflow
+)
+
+clone_origin="$(git -C "$clone" remote get-url origin 2>/dev/null || true)"
+[[ "$clone_origin" == "$remote" ]] || fail "cloned origin does not match expected remote"
+[[ -f "$clone/AGENTS.md" ]] || fail "clone is missing AGENTS.md"
+[[ -x "$clone/.systems/scripts/init-workspace" ]] || fail "clone is missing executable init-workspace"
+[[ -z "$(git -C "$clone" status --porcelain)" ]] || fail "new clone is unexpectedly dirty"
+
+env -u AI_WORKFLOW_WORKSPACE_HOME "$clone/.systems/scripts/init-workspace" \
+  --workspace "$target/ai-workflow-workspace"
+
+[[ -f "$target/AGENTS.md" ]] || fail "init-workspace did not create root AGENTS.md"
+[[ -f "$target/ai-workflow-workspace/repo/core/init.md" ]] || fail "init-workspace did not create init evidence"
+grep -qxF "/AGENTS.md" "$exclude_file" || fail "init-workspace did not exclude root AGENTS.md"
+grep -qxF "/ai-workflow/" "$exclude_file" || fail "init-workspace did not exclude nested clone"
+
+echo "Worktree bootstrap result: installed and initialized"

@@ -74,6 +74,16 @@ Celem jest znalezienie błędów, luk i sprzeczności, które mogą spowodować 
 
 Verify that the specification inherits or explicitly updates the accepted delivery constraint and does not silently change must-have scope, DoD, acceptance criteria, risk, permissions, or quality floor.
 
+## Validation Execution Record
+
+Spec QA follows `.systems/ai/core/validation-routing.md`. Review owner intent, DoD, acceptance criteria, scope, execution clarity, failure paths, and spec diff before applicable targeted validators. Workflow scripts are supporting-only, broad AI Workflow validation is not an ordinary Spec QA step, and green scripts cannot create Spec QA PASS.
+
+Record all canonical `Validation Execution Record` fields.
+
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

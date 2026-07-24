@@ -79,6 +79,24 @@
 - Overrun route:
 - Result: `<aligned|partial|mismatch|unknown>`
 
+## Validation Execution Record
+
+- Semantic QA result:
+- Findings/blockers:
+- Product checks:
+- Workflow script applicability: <applicable|not-applicable - reason>
+- Targeted workflow commands:
+- Script evidence role: `supporting-only`
+- Final verdict:
+
+## Model Recommendation
+
+- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Reason:
+- Criticality:
+- Current model known: <yes|no>
+- Blocking: `no`
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

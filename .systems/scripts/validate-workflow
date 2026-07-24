@@ -180,6 +180,10 @@ run_core_validators() {
   run_cmd .systems/scripts/check-default-quality-closure
   run_cmd .systems/scripts/check-default-idea-validation-opt-out
   run_cmd .systems/scripts/check-end-of-task-capture
+  run_cmd .systems/scripts/check-cross-system-upgrade-handoff
+  run_cmd .systems/scripts/check-worktree-bootstrap
+  run_cmd .systems/scripts/check-validation-routing
+  run_cmd .systems/scripts/check-model-selection-guidance
   run_cmd .systems/scripts/check-delivery-constraints
   run_cmd .systems/scripts/check-distillation-state
 }

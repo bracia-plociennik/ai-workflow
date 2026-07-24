@@ -38,6 +38,10 @@ Path resolution follows `.systems/ai/core/repository-modes.md`. In official repo
 - Dream Reports: `AI_WORKFLOW_WORKSPACE_HOME/dreams/runs/**`
 - Owner request batch triage contract: `.systems/ai/core/request-batch-triage.md`
 - End-of-Task Capture contract: `.systems/ai/core/end-of-task-capture.md`
+- Cross-system upgrade handoff contract: `.systems/ai/core/cross-system-upgrade-handoff.md`
+- Worktree bootstrap contract: `.systems/ai/core/worktree-bootstrap.md`
+- Validation routing contract: `.systems/ai/core/validation-routing.md`
+- Model selection guidance: `.systems/ai/core/model-selection-guidance.md`
 - Repo context: router `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`, detailed entries `AI_WORKFLOW_WORKSPACE_HOME/repo/context/`
 - Repo intake: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`
 - Repo status: `AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md`
@@ -84,7 +88,7 @@ Use `.systems/ai/core/dreaming-mode.md` for Dreaming Mode, nightly analysis, AFK
 
 Use `.systems/ai/core/quality-review.md` and `.systems/ai/core/full-qa-verification.md` for review, code review, final review, findings, blockers, and generic quality-check requests that are not clearly formal workflow phase runs. The global quality review stance is read-only/advisory by default, includes Intent / Plan / Spec Compliance against owner instruction, accepted plan, accepted spec, scope, acceptance criteria, and the adaptive data/integration matrix when applicable; it cannot mark formal `PASS`/`FAIL`, update quality artifacts, or trigger `phase-8-final-check`.
 
-Use `.systems/ai/core/end-of-task-capture.md` when the owner says the work is done and asks to preserve learnings, for example `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`. Explicit formal phase commands keep precedence, including `final review`, `final check`, `final-owner-yes`, change requests, and commit-readiness prompts. End-of-Task Capture is capture review/proposal by default and cannot mark `PASS`, run `phase-8-final-check`, close a project, or write durable memory without clear target, scope, privacy, evidence, and write permission.
+Use `.systems/ai/core/end-of-task-capture.md` when the owner says the work is done and asks to preserve learnings, for example `Koniec pracy`, `Koniec zadania`, `to koniec zadania`, `koniec taska`, `kończymy ten task`, `dziękuję, utrwal wiedzę`, `utrwal wiedzę z tej rozmowy`, `end task and capture knowledge`, or `done, capture learnings`. Exact `Koniec pracy` and `Koniec zadania` mean `capture-now`, not acknowledge-only. Explicit formal phase commands keep precedence, including `final review`, `final check`, `final-owner-yes`, change requests, and commit-readiness prompts. End-of-Task Capture cannot mark `PASS`, run `phase-8-final-check`, close a project, or write durable memory without clear target, scope, privacy, evidence, and write permission.
 
 Use `.systems/ai/core/knowledge-capture-reminder.md` after implementation, fixes, quality closure, handoff, commit readiness, or before switching to unrelated new work when previous work may have unresolved capture value. The reminder is advisory unless phase 6, phase 7, status/evidence sync, or commit readiness already requires capture. It cannot automatically write memory, distillation, checkpoint, status, commits, pull requests, or push.
 

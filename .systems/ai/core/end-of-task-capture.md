@@ -6,7 +6,7 @@
 
 It is not a workflow phase. It does not replace `phase-6-distillation`, `phase-7-checkpoint`, `phase-8-final-check`, `final review`, `final-owner-yes`, change request routing, commit readiness, or contract compliance.
 
-Default behavior is capture review/proposal. Durable writes are allowed only when the owner explicitly requests capture and target, scope, privacy, status, and write gates are clear.
+Default behavior is capture review/proposal, except for the exact terminal commands `Koniec pracy` and `Koniec zadania`. Those two commands mean `capture-now`: the owner has approved durable capture through the correct route when target, scope, privacy, status, quality, evidence, and write gates are clear.
 
 Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md` is different: it is proactive after implementation, fixes, quality closure, handoff, commit readiness, or before unrelated new work. End-of-Task Capture remains owner-triggered by completion/capture wording and keeps the routing order below.
 
@@ -14,6 +14,8 @@ Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md`
 
 Use End-of-Task Capture only when the command includes completion/capture intent, such as:
 
+- `Koniec pracy`
+- `Koniec zadania`
 - `to koniec zadania`
 - `koniec taska`
 - `kończymy ten task`
@@ -26,6 +28,8 @@ Use End-of-Task Capture only when the command includes completion/capture intent
 - `finish this task and preserve learnings`
 
 Do not route generic phase, review, checkpoint, distillation, final approval, or commit-readiness commands here unless they also include completion/capture intent and no higher-precedence route applies.
+
+The exact terminal commands `Koniec pracy` and `Koniec zadania` are not acknowledge-only prompts. The response must execute or route the capture decision and must not merely confirm completion or ask what to do next.
 
 ## Precedence Rules
 
@@ -62,6 +66,7 @@ End-of-Task Capture
 - Source scope reviewed:
 - Completion state:
 - Capture targets:
+- Capture mode: <capture-now|proposal-only>
 - Writes allowed:
 - Owner approval:
 - Privacy/scope check:
@@ -90,6 +95,8 @@ Allowed targets are:
 
 Use `proposal-only` when the owner signaled completion but did not approve durable capture, or when target, scope, privacy, status, source evidence, or write permission is unclear.
 
+For exact `Koniec pracy` or `Koniec zadania`, use `Capture mode: capture-now`. If no valuable knowledge exists, record `Capture targets: none` and a reason. If a required gate is unclear, retain the capture-now intent but stop on the quality/privacy/evidence/permission route instead of degrading to acknowledge-only behavior.
+
 ## Routing
 
 Formal project/task work:
@@ -97,17 +104,18 @@ Formal project/task work:
 - If Quality PASS exists and the task/package is complete, route to `phase-6-distillation`.
 - If checkpoint cadence is reached or the final in-scope task/package is complete, route to `phase-7-checkpoint`.
 - If Quality PASS is missing, do not write final distillation for a completed task/package; route to quality/fix/review or produce proposal-only capture.
+- For exact terminal capture-now commands, preserve the owner capture approval while routing through missing Quality PASS or other required gates.
 
 Side tasks, micro-tasks, and micro-projects:
 
 - Use lightweight End-of-Task Capture plus `.systems/ai/core/contract-compliance.md`.
-- Durable entries belong in the micro-task/micro-project artifact when one exists.
+- Durable entries belong in the micro-task/micro-project artifact, Distillation State, and applicable memory when they exist and the capture-now gates are clear.
 - Promote to the formal workflow if risk, scope, evidence, or approvals exceed the side-task or micro-project contract.
 
 Chat-only or advisory work:
 
 - Default to proposal-only capture.
-- Durable capture is allowed only when the owner explicitly requests it, for example `utrwal wiedzę`, and target, scope, privacy, status, and write permission are unambiguous.
+- Durable capture is allowed when the owner explicitly requests it, including exact `Koniec pracy` or `Koniec zadania`, and target, scope, privacy, status, and write permission are unambiguous.
 
 Memory routing:
 
@@ -130,6 +138,8 @@ End-of-Task Capture must not:
 - write frontend, backend, SEO, ads, smart-contract, product, or client-work lessons into External Memory.
 
 If scope, target, privacy, evidence, safe environment, status, or write permission is unclear, stop with proposal-only capture and ask for the missing decision.
+
+For exact terminal capture-now commands, missing gates cause a quality/fix/privacy/evidence/permission stop while preserving the owner-approved capture intent. They never allow an acknowledge-only response.
 
 ## Distillation State
 

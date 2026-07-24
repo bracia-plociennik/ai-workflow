@@ -56,6 +56,10 @@ git diff --check
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
 .systems/scripts/check-end-of-task-capture
+.systems/scripts/check-cross-system-upgrade-handoff
+.systems/scripts/check-worktree-bootstrap
+.systems/scripts/check-validation-routing
+.systems/scripts/check-model-selection-guidance
 ```
 
 `check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
@@ -97,6 +101,14 @@ Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. E
 `check-default-idea-validation-opt-out` validates Default Idea Validation for single new work, broad project ideas, and batch validation routes, plus owner opt-out grammar and the boundary that opt-out cannot bypass safety gates.
 
 `check-end-of-task-capture` validates chat-end knowledge capture routing, conflict-free precedence against formal phase/review/final commands, required output fields, and safety boundaries for memory, System Insights, External Memory, status, and final approval.
+
+`check-cross-system-upgrade-handoff` validates the owner shared-impact decision, pending commit/handoff block, required External Memory handoff for `yes`, privacy boundary, and autopilot queue behavior.
+
+`check-worktree-bootstrap` validates the strong-marker, approval, origin, collision, dirty-clone, self-clone, canonical command, and portable bootstrap boundaries.
+
+`check-validation-routing` validates semantic/product QA before applicable workflow scripts, supporting-only script evidence, phase-specific routing, and the ban on `green scripts = PASS`.
+
+`check-model-selection-guidance` validates Luna/Sol classification, required recommendation fields, advisory-only authority, and `Blocking: no`.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 

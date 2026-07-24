@@ -4,7 +4,7 @@
 
 Validation Profiles define faster local validation paths without weakening the final safety gate.
 
-Default `.systems/scripts/validate-workflow` with no arguments is the `standard` profile. It is the daily iteration and ordinary post-implementation quality validator.
+Default `.systems/scripts/validate-workflow` with no arguments is the `standard` profile. It is a daily AI Workflow iteration validator, not a default product-implementation QA command.
 
 Profiles may reduce iteration time, but they must not change Definition of Done, PASS Integrity, quality closure, risk policy, permissions, evidence requirements, phase gates, owner approvals, CI behavior, or commit readiness.
 
@@ -13,7 +13,7 @@ Profiles may reduce iteration time, but they must not change Definition of Done,
 | Profile | Intended use | Final validation evidence |
 | --- | --- | --- |
 | `full` | Checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes | `yes`, unless smoke tests are explicitly skipped and residual risk is reported |
-| `standard` | Daily iteration, ordinary post-implementation quality closure, and normal workflow-maintenance checks | `yes` for ordinary work; `no` when a full-required gate applies |
+| `standard` | Daily AI Workflow iteration and normal workflow-maintenance checks when workflow validation is applicable | `yes` for applicable ordinary workflow work; `no` when a full-required gate applies |
 | `scoped` | Local iteration for one or more explicitly selected validators | `no` unless the owner explicitly accepts narrow validation with residual risk |
 | `fast` | Quick sanity check during editing | `no` |
 
@@ -41,7 +41,9 @@ Profiles may reduce iteration time, but they must not change Definition of Done,
 
 `standard` runs the core validator and structural checks but does not run embedded `check-validator-smoke-tests`.
 
-Use it for normal daily iteration, ordinary post-implementation quality closure, and routine workflow maintenance. If work reveals validator changes, high-impact contract changes, checkpoint-level synchronization, major distillation, major verification, or release/final confidence needs, escalate to `full`.
+Use it for normal daily AI Workflow iteration and routine workflow maintenance after semantic review. Do not run it by default for ordinary product implementation, PDF/document/design work, or unrelated code QA. If work reveals validator changes, high-impact contract changes, checkpoint-level synchronization, major distillation, major verification, or release/final confidence needs, escalate to `full`.
+
+Use `.systems/ai/core/validation-routing.md` to decide applicability. Workflow scripts remain supporting evidence and never replace semantic QA, product tests, findings-first review, or final verdict reasoning.
 
 ## Full Profile
 

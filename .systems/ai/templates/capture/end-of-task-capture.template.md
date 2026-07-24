@@ -7,6 +7,7 @@
 - Source scope reviewed:
 - Completion state:
 - Capture targets:
+- Capture mode: <capture-now|proposal-only>
 - Distillation State: `<state|unknown>`
 - Writes allowed:
 - Owner approval:

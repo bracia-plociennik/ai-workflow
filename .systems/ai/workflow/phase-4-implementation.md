@@ -104,6 +104,16 @@ Implementation-class writes in this phase must follow `.systems/ai/core/implemen
 - Privacy/scope check: `unknown`
 - Residual risk:
 
+## Validation Routing
+
+Phase 4 implementation does not run broad AI Workflow validation. Run implementation-slice acceptance checks and safe target-product tests as execution evidence. After writes, route to `phase-5-quality`, where semantic/product QA precedes any applicable workflow scripts under `.systems/ai/core/validation-routing.md`.
+
+Green workflow scripts cannot establish implementation quality or `PASS`.
+
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

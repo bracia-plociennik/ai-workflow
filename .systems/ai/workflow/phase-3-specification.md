@@ -83,6 +83,10 @@ Celem jest przygotowanie operacyjnego planu wykonania zadania albo paczki zadań
 
 The specification must inherit or explicitly update the accepted delivery constraint from `.systems/ai/core/delivery-constraints.md`. Any change to must-have scope, DoD, acceptance criteria, risk, or quality floor requires owner decision.
 
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`

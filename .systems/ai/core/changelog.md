@@ -1,5 +1,13 @@
 # changelog.md
 
+## 0.8.24 - 2026-07-24
+
+- Added exact `Koniec pracy` and `Koniec zadania` capture-now routing while preserving quality, privacy, evidence, permission, phase, and final-approval boundaries.
+- Added safe target-worktree bootstrap guidance and an executable helper with strong-marker, platform approval, origin, collision, dirty-clone, self-clone, linked-worktree, and local bare-remote smoke coverage.
+- Added semantic QA before applicable workflow scripts, supporting-only script evidence, phase-specific validation routing, and explicit rejection of `green scripts = PASS`.
+- Added advisory Luna High/Sol High recommendations for planning, implementation, and QA scopes.
+- Added explicit cross-system impact decisions and privacy-safe External Memory handoffs for shared AI Workflow/AI System upgrades.
+
 ## 2026-07-20 - Terminal Legacy QA Fingerprint Admission
 
 - Added V1-first classification for formal QA `PASS` artifacts.

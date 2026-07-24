@@ -2,9 +2,9 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.20` |
+| Workflow version | `0.8.24` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
-| Last process migration | `2026-07-20` |
+| Last process migration | `2026-07-24` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |
 | Phase file standard | `phase-<number>-<name>.md` |
 
@@ -26,6 +26,10 @@
 - `.systems/ai/core/task-intake.md` defines the default Task Idea Validation lens before planning or executing any new task, approach request, side-task, micro-task, change request, or autopilot request. Owner opt-out requires explicit wording and cannot bypass risk, permissions, evidence, QA/Quality, phase gates, or approvals.
 - `.systems/ai/core/parallel-work-policy.md` defines status-only coordination for multiple projects, tasks, micro-tasks, micro-projects, and Codex threads without adding lock files or scheduler state.
 - `.systems/ai/core/contract-compliance.md` defines advisory work mode compliance and commit readiness knowledge capture decisions.
+- `.systems/ai/core/cross-system-upgrade-handoff.md` requires an owner shared-impact decision and a privacy-safe External Memory handoff when a system upgrade should affect its counterpart.
+- `.systems/ai/core/worktree-bootstrap.md` defines strong-marker, approval, origin, collision, dirty-clone, and self-clone boundaries for target worktrees.
+- `.systems/ai/core/validation-routing.md` requires semantic and product QA before applicable workflow scripts and keeps scripts supporting-only.
+- `.systems/ai/core/model-selection-guidance.md` defines advisory Luna High/Sol High recommendations for planning, implementation, and QA scopes.
 - Each workflow phase artifact includes `Optional Knowledge Capture` as a soft phase-level decision for memory, decision, status, External Memory, and System Insights candidates.
 - `.systems/ai/core/prompt-composition.md` defines advisory prompt modules, role profiles, variable packs, project-local prompting lifecycle, and authority limits.
 - `.systems/ai/core/system-insights.md` defines advisory anonymized System Insights, privacy rules, allowed categories, status lifecycle, write routing, and skill-candidate boundaries.

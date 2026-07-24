@@ -127,6 +127,10 @@ cd ai-workflow
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
 .systems/scripts/check-end-of-task-capture
+.systems/scripts/check-cross-system-upgrade-handoff
+.systems/scripts/check-worktree-bootstrap
+.systems/scripts/check-validation-routing
+.systems/scripts/check-model-selection-guidance
 ```
 
 ## First-Time Use
@@ -198,11 +202,19 @@ Review Completeness Gate requires cross-contract and risk/work-mode consistency,
 
 Full QA Verification makes the same evidence expectation explicit for all formal QA: each phase reviews owner intent, governing artifacts, DoD or phase acceptance, scope, relevant artifact/diff, findings/blockers, evidence, skipped sources, and residual risk. Phase 5 adds implementation/code review and uses the adaptive Data / Integration Verification Matrix for data models, parsers, transformations, integrations, state transitions, executable entrypoints, derived outputs, and persisted error states.
 
-Validation profiles use `.systems/ai/core/validation-profiles.md`. `.systems/scripts/validate-workflow` with no arguments uses the `standard` profile for daily iteration and ordinary post-implementation quality. Use `.systems/scripts/validate-workflow --profile fast --explain` for quick sanity checks, `.systems/scripts/validate-workflow --profile scoped --checks <check-name> --explain` for explicit validator iteration, and `.systems/scripts/validate-workflow --profile full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
+Validation profiles use `.systems/ai/core/validation-profiles.md`. `.systems/scripts/validate-workflow` with no arguments uses the `standard` profile for daily workflow-system iteration, not default product QA. Semantic and product QA comes first; run only applicable workflow scripts as supporting evidence. Use `.systems/scripts/validate-workflow --profile fast --explain` for quick sanity checks, `.systems/scripts/validate-workflow --profile scoped --checks <check-name> --explain` for explicit validator iteration, and `.systems/scripts/validate-workflow --profile full` for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
+
+Validation routing uses `.systems/ai/core/validation-routing.md`. QA starts with owner intent, DoD, scope, findings-first diff/code/artifact review, failure paths, and target-product checks. Applicable `.systems/scripts/**` commands run afterward as supporting evidence. Green scripts never equal `PASS`.
+
+Worktree bootstrap uses `.systems/ai/core/worktree-bootstrap.md` and `.systems/scripts/bootstrap-target-worktree`. A missing nested clone can be created only for a target with a strong installation marker, after platform approval, using the canonical upstream URL. Existing root instructions, wrong origin, dirty clone, ambiguous marker, and official-repo self-clone stop the flow.
+
+Model selection guidance uses `.systems/ai/core/model-selection-guidance.md`. New planning, implementation, and QA scopes report an advisory Luna High or Sol High recommendation with `Blocking: no`; model choice cannot change workflow gates.
+
+Cross-system upgrades use `.systems/ai/core/cross-system-upgrade-handoff.md`. The owner decides whether an AI Workflow upgrade should affect AI System or vice versa. `pending` blocks commit/handoff, and `yes` requires one privacy-safe External Memory handoff for the accepted scope.
 
 Before committing workflow-governed work, use `.systems/ai/core/contract-compliance.md` to make an advisory work mode and knowledge capture decision. The check covers full projects, project-local micro-tasks, repo-level micro-projects, side tasks, and workflow maintenance. It does not require memory for every commit, but it does require a stated `Knowledge capture: required|not-required` decision with a target or reason.
 
-End-of-Task Capture uses `.systems/ai/core/end-of-task-capture.md` for chat-end prompts such as `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`. It preserves existing `distillation`, `checkpoint`, `final review`, `final check`, `final-owner-yes`, change-request, and commit-readiness routing, then produces capture review/proposal unless durable capture is explicitly approved and safe.
+End-of-Task Capture uses `.systems/ai/core/end-of-task-capture.md` for chat-end prompts such as `Koniec pracy`, `Koniec zadania`, `to koniec zadania`, `dziękuję, utrwal wiedzę`, and `end task and capture knowledge`. Exact `Koniec pracy` and `Koniec zadania` mean `capture-now`, never acknowledge-only. Existing formal phase, review, change-request, quality, privacy, evidence, approval, and commit-readiness routing keeps precedence.
 
 Knowledge Capture Reminder uses `.systems/ai/core/knowledge-capture-reminder.md` after implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task when previous work has unresolved capture value. It is advisory unless existing gates require capture. It can recommend distillation, checkpoint, memory, External Memory, System Insights, or status/evidence, but it does not automatically write them, commit ignored workspace artifacts, or push.
 
@@ -265,6 +277,10 @@ git diff --check
 .systems/scripts/check-default-quality-closure
 .systems/scripts/check-default-idea-validation-opt-out
 .systems/scripts/check-end-of-task-capture
+.systems/scripts/check-cross-system-upgrade-handoff
+.systems/scripts/check-worktree-bootstrap
+.systems/scripts/check-validation-routing
+.systems/scripts/check-model-selection-guidance
 ```
 
 From the target repository root, product-specific validation commands are whatever repo intake records in:

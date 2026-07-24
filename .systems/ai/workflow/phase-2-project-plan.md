@@ -84,6 +84,10 @@ Celem jest stworzenie sekwencji tasków, które po spełnieniu zależności da s
 
 The project plan must record the delivery constraint from `.systems/ai/core/delivery-constraints.md`, including must-have outcome, cutline, deferred scope, quality floor, and overrun route.
 
+## Model Recommendation
+
+Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
+
 ## Owner Decision Checkpoint
 
 - Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
