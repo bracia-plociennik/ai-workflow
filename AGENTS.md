@@ -112,6 +112,8 @@ Use `.systems/ai/core/validation-profiles.md` for applicable AI Workflow validat
 
 Use `.systems/ai/core/workspace-freshness.md` and `.systems/ai/core/contract-topology.md` for advisory runtime freshness and contract relationship reports. Use `.systems/ai/core/validation-observability.md` before changing smoke-suite membership or cost assumptions. Use `.systems/ai/core/skill-behavioral-evaluation.md` for optional, supporting-only behavioral evals of active skills; absent evals do not invalidate a skill.
 
+Full validation reports `AI_WORKFLOW_VALIDATE_START`, progress, and exactly one `AI_WORKFLOW_VALIDATE_COMPLETE` marker. A timeout or interruption is not PASS. Target nested clones must remain canonical: `update-from-upstream` may only fast-forward a clone that is equal to or behind fetched upstream; `ahead` and `diverged` states stop without reset. Target work may update `AI_WORKFLOW_WORKSPACE_HOME/**`, but must not edit or commit nested `ai-workflow/**` system files.
+
 Use `.systems/ai/core/validation-routing.md` before running workflow scripts during QA. Semantic intent/DoD/scope review, findings-first code/diff/artifact review, edge and failure-path analysis, and target-product checks come first. Run only applicable workflow scripts afterward as supporting evidence. Green scripts never equal `PASS`, and ordinary product implementation must not run broad AI Workflow validation solely because AI Workflow governs the task.
 
 Every workflow phase artifact should include `Optional Knowledge Capture`: a soft decision about whether the phase produced reusable knowledge and where it belongs. This does not require memory after every phase and does not grant durable write permission outside the current phase's `Writes allowed`, memory policy, System Insights policy, risk policy, or owner approvals.
@@ -366,6 +368,7 @@ git diff --check
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-plan-quality-contract
 .systems/scripts/check-validation-profiles
+.systems/scripts/check-validation-completion
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
 .systems/scripts/check-owner-decision-checkpoints

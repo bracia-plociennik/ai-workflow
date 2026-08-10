@@ -5,6 +5,9 @@ dry_run=0
 skip_validation=0
 remote_arg=""
 branch_arg=""
+update_result="fail"
+update_completion_emitted=0
+update_started_at=0
 
 usage() {
   cat <<'EOF'
@@ -67,6 +70,28 @@ if [[ "$repo_root" != "$ai_workflow_home" ]]; then
   echo "Git root: $repo_root"
   exit 1
 fi
+
+update_started_at=$SECONDS
+finish_update() {
+  local status="$?"
+  if [[ "$update_completion_emitted" -eq 0 ]]; then
+    update_completion_emitted=1
+    if [[ "$status" -eq 0 && "$update_result" == "pass" ]]; then
+      printf 'AI_WORKFLOW_UPDATE_COMPLETE result=pass duration_seconds=%s\n' "$((SECONDS - update_started_at))"
+    elif [[ "$update_result" == "skipped" ]]; then
+      printf 'AI_WORKFLOW_UPDATE_COMPLETE result=skipped duration_seconds=%s\n' "$((SECONDS - update_started_at))"
+    elif [[ "$status" -eq 124 || "$update_result" == "timeout" ]]; then
+      printf 'AI_WORKFLOW_UPDATE_COMPLETE result=timeout exit_code=%s duration_seconds=%s\n' "$status" "$((SECONDS - update_started_at))"
+    elif [[ "$status" -eq 130 || "$status" -eq 143 || "$update_result" == "interrupted" ]]; then
+      printf 'AI_WORKFLOW_UPDATE_COMPLETE result=interrupted exit_code=%s duration_seconds=%s\n' "$status" "$((SECONDS - update_started_at))"
+    else
+      printf 'AI_WORKFLOW_UPDATE_COMPLETE result=fail exit_code=%s duration_seconds=%s\n' "$status" "$((SECONDS - update_started_at))"
+    fi
+  fi
+}
+trap finish_update EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 remote="$remote_arg"
 branch="$branch_arg"
@@ -151,20 +176,81 @@ echo "Update target: $target_ref"
 echo "Protected external workspace: $workspace_home"
 
 if [[ "$dry_run" -eq 1 ]]; then
+  update_result="skipped"
   echo "Dry run only. No fetch, merge, or validation was performed."
   exit 0
 fi
 
 git fetch "$remote" "$branch"
-git merge --ff-only FETCH_HEAD
+
+upstream_relation="$(git rev-list --left-right --count HEAD...FETCH_HEAD)"
+read -r local_only upstream_only <<< "$upstream_relation"
+
+if [[ "$local_only" -eq 0 && "$upstream_only" -eq 0 ]]; then
+  relation="equal"
+elif [[ "$local_only" -eq 0 ]]; then
+  relation="behind"
+elif [[ "$upstream_only" -eq 0 ]]; then
+  relation="ahead"
+else
+  relation="diverged"
+fi
+
+printf 'AI_WORKFLOW_UPSTREAM_STATE relation=%s local_only=%s upstream_only=%s\n' \
+  "$relation" "$local_only" "$upstream_only"
+
+if [[ "$relation" == "ahead" || "$relation" == "diverged" ]]; then
+  echo "STOP: nested AI Workflow clone is not canonical."
+  echo "Local system commits must be promoted through the official upstream repository or recorded in AI_WORKFLOW_WORKSPACE_HOME/external-memory/."
+  echo "No reset, rebase, merge, workspace write, or validation was performed."
+  if [[ "$local_only" -gt 0 ]]; then
+    echo "Local-only commits:"
+    git log --oneline "FETCH_HEAD..HEAD"
+  fi
+  exit 1
+fi
+
+if [[ "$relation" == "behind" ]]; then
+  git merge --ff-only FETCH_HEAD
+fi
+
+if [[ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]]; then
+  echo "STOP: nested AI Workflow clone did not end at fetched canonical HEAD."
+  exit 1
+fi
 
 if [[ "$skip_validation" -eq 1 ]]; then
   echo "WARNING: validation skipped. This update result is not eligible for final PASS."
+  echo "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=skipped"
+  update_result="skipped"
 else
-  .systems/scripts/validate-workflow --profile full
+  echo "AI_WORKFLOW_UPDATE_VALIDATION_START profile=full progress=summary"
+  set +e
+  .systems/scripts/validate-workflow --profile full --progress summary
+  validation_status=$?
+  set -e
+  if [[ "$validation_status" -ne 0 ]]; then
+    if [[ "$validation_status" -eq 124 ]]; then
+      update_result="timeout"
+      echo "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=timeout exit_code=124"
+    elif [[ "$validation_status" -eq 130 || "$validation_status" -eq 143 ]]; then
+      update_result="interrupted"
+      echo "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=interrupted exit_code=$validation_status"
+    else
+      echo "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=fail exit_code=$validation_status"
+    fi
+    exit "$validation_status"
+  fi
+  echo "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=pass"
+  update_result="pass"
 fi
 
-echo "update-from-upstream completed."
+if [[ "$update_result" == "pass" ]]; then
+  echo "update-from-upstream completed."
+else
+  echo "Update completed without validation success; do not treat this run as PASS."
+  exit 0
+fi
 echo
 echo "Workspace schema was not modified by update-from-upstream."
 echo "Recommended next command to backfill missing target-owned workspace schema files without overwriting existing runtime:"

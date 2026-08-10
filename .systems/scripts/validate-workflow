@@ -5,11 +5,18 @@ profile="standard"
 checks=""
 explain=0
 timing_output=""
+progress="summary"
+timeout_seconds="1200"
+
+validation_started=0
+completion_emitted=0
+current_stage="startup"
+current_check="none"
 
 usage() {
   cat <<'EOF'
 Usage:
-  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--checks check-a,check-b] [--timing-output path] [--explain]
+  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--checks check-a,check-b] [--timing-output path] [--progress quiet|summary|verbose] [--timeout-seconds seconds] [--explain]
 
 Profiles:
   standard  Core validator/structure checks without embedded smoke tests. Default daily validator.
@@ -49,6 +56,22 @@ while [[ "$#" -gt 0 ]]; do
       timing_output="$2"
       shift 2
       ;;
+    --progress)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --progress"
+        exit 1
+      fi
+      progress="$2"
+      shift 2
+      ;;
+    --timeout-seconds)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --timeout-seconds"
+        exit 1
+      fi
+      timeout_seconds="$2"
+      shift 2
+      ;;
     -h|--help)
       usage
       exit 0
@@ -70,6 +93,20 @@ case "$profile" in
     ;;
 esac
 
+case "$progress" in
+  quiet|summary|verbose)
+    ;;
+  *)
+    echo "Unknown progress mode: $progress"
+    exit 1
+    ;;
+esac
+
+if ! [[ "$timeout_seconds" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ "$timeout_seconds" == "0" || "$timeout_seconds" == "0.0" ]]; then
+  echo "--timeout-seconds must be greater than zero"
+  exit 1
+fi
+
 if [[ -n "$checks" && "$profile" != "scoped" ]]; then
   echo "--checks is valid only with --profile scoped"
   exit 1
@@ -84,6 +121,31 @@ if ! command -v rg >/dev/null 2>&1; then
   echo "Missing required command: rg"
   exit 1
 fi
+
+validation_started=1
+printf 'AI_WORKFLOW_VALIDATE_START profile=%s progress=%s\n' "$profile" "$progress"
+
+finish_validation() {
+  local status="$?"
+  local result="fail"
+  if [[ "$status" -eq 0 ]]; then
+    result="pass"
+  elif [[ "$status" -eq 124 ]]; then
+    result="timeout"
+  elif [[ "$status" -eq 130 || "$status" -eq 143 ]]; then
+    result="interrupted"
+  fi
+  if [[ "$validation_started" -eq 1 && "$completion_emitted" -eq 0 ]]; then
+    completion_emitted=1
+    printf 'AI_WORKFLOW_VALIDATE_COMPLETE profile=%s result=%s exit_code=%s duration_seconds=%s stage=%s check=%s\n' \
+      "$profile" "$result" "$status" "$((SECONDS - validation_started_at))" "$current_stage" "$current_check"
+  fi
+}
+
+validation_started_at=$SECONDS
+trap finish_validation EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 record_timing() {
   local check_name="$1"
@@ -102,18 +164,29 @@ record_timing() {
 run_cmd() {
   local started=$SECONDS
   local status
+  current_stage="validator"
+  current_check="$*"
+  if [[ "$progress" != "quiet" ]]; then
+    printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=started\n' "$current_stage" "$current_check"
+  fi
   if [[ "$explain" == "1" ]]; then
     printf '+ %s\n' "$*"
   fi
   set +e
   if [[ "$1" == ".systems/scripts/check-validator-smoke-tests" && -n "$timing_output" ]]; then
-    AI_WORKFLOW_TIMING_OUTPUT="$timing_output" "$@"
+    AI_WORKFLOW_TIMING_OUTPUT="$timing_output" .systems/scripts/run-with-timeout --timeout-seconds "$timeout_seconds" "$@" --progress "$progress"
+  elif [[ "$1" == ".systems/scripts/check-validator-smoke-tests" ]]; then
+    .systems/scripts/run-with-timeout --timeout-seconds "$timeout_seconds" "$@" --progress "$progress"
   else
-    "$@"
+    .systems/scripts/run-with-timeout --timeout-seconds "$timeout_seconds" "$@"
   fi
   status=$?
   set -e
   record_timing "$(basename "$1")" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  if [[ "$progress" != "quiet" ]]; then
+    printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=%s duration_seconds=%s\n' \
+      "$current_stage" "$current_check" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)" "$((SECONDS - started))"
+  fi
   return "$status"
 }
 
@@ -223,17 +296,20 @@ run_core_validators() {
   run_cmd .systems/scripts/check-workspace-freshness
   run_cmd .systems/scripts/check-contract-topology
   run_cmd .systems/scripts/check-validation-observability
+  run_cmd .systems/scripts/check-validation-completion
   run_cmd .systems/scripts/check-skill-evaluation-contract
 }
 
 explain_profile
 
 if [[ "$profile" == "fast" ]]; then
+  current_stage="fast-profile"
   run_fast_checks
   exit 0
 fi
 
 if [[ "$profile" == "scoped" ]]; then
+  current_stage="scoped-profile"
   run_fast_checks
   IFS=',' read -r -a selected_checks <<< "$checks"
   for check_name in "${selected_checks[@]}"; do
@@ -250,6 +326,7 @@ fi
 run_core_validators
 
 fail=0
+current_stage="structural-checks"
 phases=(
   phase-0-init.md
   phase-0-repo-intake.md
@@ -578,6 +655,7 @@ for required_branch_policy_ref in README.md .systems/ai/core/installation.md .sy
 done
 
 if [[ "$profile" == "full" && "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != "1" ]]; then
+  current_stage="smoke-suite"
   run_cmd .systems/scripts/check-validator-smoke-tests
 fi
 

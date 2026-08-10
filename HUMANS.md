@@ -819,7 +819,7 @@ Gdy AI Workflow jest zainstalowany jako nested clone w `ai-workflow/`, nie aktua
 ai-workflow/.systems/scripts/update-from-upstream
 ```
 
-Ten flow blokuje dirty zmiany w system-owned plikach nested clone, robi `git fetch` i `ff-only merge`, a potem uruchamia walidację systemu. Nie czyta, nie backupuje, nie przywraca i nie modyfikuje `ai-workflow-workspace/`; repo runtime, project/human workspaces, micro-projects, lokalne `external-memory`, user skills oraz legacy materiały są target-owned i leżą poza aktualizowanym clone.
+Ten flow blokuje dirty zmiany w system-owned plikach nested clone, odrzuca lokalne commity `ahead` albo stan `diverged`, robi canonical `git fetch` i `ff-only merge` gdy clone jest behind, a potem uruchamia walidację z lifecycle markerami. Nie czyta, nie backupuje, nie przywraca i nie modyfikuje `ai-workflow-workspace/`; repo runtime, project/human workspaces, micro-projects, lokalne `external-memory`, user skills oraz legacy materiały są target-owned i leżą poza aktualizowanym clone.
 
 Po udanym update uruchom osobny, idempotentny sync schematu workspace:
 
@@ -849,6 +849,8 @@ Profile walidacji są opisane w `.systems/ai/core/validation-profiles.md`. Zwyk�
 Używaj `.systems/scripts/validate-workflow --profile fast --explain` do szybkiego sanity checku w trakcie edycji. Używaj `.systems/scripts/validate-workflow --profile scoped --checks check-validation-profiles --explain`, gdy świadomie iterujesz nad konkretnym walidatorem. Używaj `.systems/scripts/validate-workflow --profile full` przy checkpoint validation, dużej destylacji, dużej weryfikacji, CI, release/final confidence albo zmianach wysokiego wpływu w kontraktach, fazach, template’ach, validatorach, `AGENTS.md`, `HUMANS.md` lub `README.md`.
 
 `standard`, `scoped` i `fast` nie zmieniają DoD, PASS Integrity, quality closure, risk, permissions, evidence ani commit readiness. Jeśli wybierzesz wąską walidację zamiast pełnej przy ryzykownym zakresie, Codex musi pokazać residual risk i owner decision.
+
+Pełny validator pokazuje `AI_WORKFLOW_VALIDATE_START`, aktualny etap i dokładnie jeden `AI_WORKFLOW_VALIDATE_COMPLETE`. Timeout lub przerwanie oznacza brak PASS. W nested repo `ai-workflow/` lokalny commit ahead albo stan diverged zatrzymuje update; system może być aktualizowany tylko przez canonical fast-forward z upstream. Zwykła praca target repo aktualizuje `ai-workflow-workspace/`, nie `.systems/**` nested clone.
 
 ### Semantic QA Przed Skryptami
 

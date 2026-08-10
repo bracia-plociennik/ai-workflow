@@ -47,6 +47,7 @@ git diff --check
 .systems/scripts/check-implementation-slicing
 .systems/scripts/check-plan-quality-contract
 .systems/scripts/check-validation-profiles
+.systems/scripts/check-validation-completion
 .systems/scripts/check-knowledge-capture-reminder
 .systems/scripts/check-instruction-adherence-refresh
 .systems/scripts/check-owner-decision-checkpoints
@@ -61,6 +62,14 @@ git diff --check
 .systems/scripts/check-validation-routing
 .systems/scripts/check-model-selection-guidance
 ```
+
+The full validator emits `AI_WORKFLOW_VALIDATE_START`, progress markers, and
+exactly one `AI_WORKFLOW_VALIDATE_COMPLETE` marker. Use
+`--progress summary|verbose|quiet` to control detail. Slow nested checks are
+bounded by the portable `.systems/scripts/run-with-timeout` wrapper; timeout
+returns code `124` and is not a passing validation result. The updater uses
+`--profile full --progress summary` and also reports canonical upstream state;
+an `ahead` or `diverged` nested clone stops before validation.
 
 `check-knowledge-capture-gate` validates the phase-level `Optional Knowledge Capture` blocks and keeps them advisory rather than mandatory durable memory writes.
 
@@ -114,7 +123,7 @@ Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. E
 
 `.systems/scripts/validate-workflow --timing-output <path>` records command-level timing metadata without repository content. `.systems/scripts/check-validator-smoke-tests --group <all|core|policy|quality|skills|workspace>` supports measured group runs; `--group all` preserves full coverage and remains the default.
 
-`check-workspace-freshness`, `check-contract-topology`, and `check-validation-observability` validate the advisory reporting and measurement boundaries. `check-skill-evaluation-contract` validates optional behavioral skill evals; existing skills without evals remain valid.
+`check-workspace-freshness`, `check-contract-topology`, `check-validation-observability`, and `check-validation-completion` validate advisory reporting, measurement, lifecycle markers, canonical update boundaries, and timeout safety. `check-skill-evaluation-contract` validates optional behavioral skill evals; existing skills without evals remain valid.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 

@@ -183,6 +183,8 @@ required=(
   ".systems/ai/templates/prompting/project-prompting-readme.template.md"
   ".github/workflows/ai-workflow-validate.yml"
   ".systems/scripts/validate-workflow"
+  ".systems/scripts/run-with-timeout"
+  ".systems/scripts/check-validation-completion"
   ".systems/scripts/resolve-workflow-env"
   ".systems/scripts/check-branch-policy"
   ".systems/scripts/check-naming"

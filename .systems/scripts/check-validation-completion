@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail=0
+
+required_files=(
+  ".systems/scripts/validate-workflow"
+  ".systems/scripts/check-validator-smoke-tests"
+  ".systems/scripts/update-from-upstream"
+  ".systems/scripts/run-with-timeout"
+  ".systems/ai/core/validation-observability.md"
+  ".systems/ai/core/update-from-upstream.md"
+)
+
+for file in "${required_files[@]}"; do
+  if [[ ! -f "$file" ]]; then
+    echo "Missing validation completion artifact: $file"
+    fail=1
+  fi
+done
+
+require_text() {
+  local file="$1"
+  local text="$2"
+  local label="$3"
+  if ! rg -q --fixed-strings -- "$text" "$file"; then
+    echo "Missing validation completion requirement: $label"
+    fail=1
+  fi
+}
+
+for marker in \
+  "AI_WORKFLOW_VALIDATE_START" \
+  "AI_WORKFLOW_VALIDATE_PROGRESS" \
+  "AI_WORKFLOW_VALIDATE_COMPLETE"; do
+  require_text .systems/scripts/validate-workflow "$marker" "validate marker $marker"
+done
+
+for marker in "AI_WORKFLOW_SMOKE_START" "AI_WORKFLOW_SMOKE_PROGRESS" "AI_WORKFLOW_SMOKE_COMPLETE"; do
+  require_text .systems/scripts/check-validator-smoke-tests "$marker" "smoke marker $marker"
+done
+
+require_text .systems/scripts/validate-workflow "--progress" "validate progress option"
+require_text .systems/scripts/validate-workflow "--timeout-seconds" "validate timeout option"
+require_text .systems/scripts/validate-workflow "run-with-timeout" "validator timeout wrapper"
+require_text .systems/scripts/validate-workflow "check-validator-smoke-tests" "full smoke stage"
+
+for relation in equal behind ahead diverged; do
+  require_text .systems/scripts/update-from-upstream "$relation" "upstream relation $relation"
+done
+require_text .systems/scripts/update-from-upstream "AI_WORKFLOW_UPSTREAM_STATE" "upstream state marker"
+require_text .systems/scripts/update-from-upstream "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE" "update validation marker"
+require_text .systems/scripts/update-from-upstream "AI_WORKFLOW_UPDATE_COMPLETE" "update completion marker"
+require_text .systems/scripts/update-from-upstream "result=timeout" "update timeout result"
+require_text .systems/scripts/update-from-upstream "result=interrupted" "update interrupted result"
+require_text .systems/scripts/update-from-upstream "--profile full --progress summary" "mandatory full validation with progress"
+require_text .systems/scripts/update-from-upstream "git merge --ff-only FETCH_HEAD" "fast-forward-only update"
+
+require_text .systems/scripts/check-validator-smoke-tests "--test-timeout-seconds" "smoke test timeout option"
+require_text .systems/scripts/check-validator-smoke-tests "AI_WORKFLOW_SMOKE_PROGRESS" "smoke progress marker"
+
+require_text .systems/scripts/run-with-timeout "start_new_session=True" "isolated process group"
+if rg -q "shell=True" .systems/scripts/run-with-timeout; then
+  echo "Timeout wrapper must not use shell=True"
+  fail=1
+fi
+
+for file in AGENTS.md HUMANS.md README.md .systems/ai/core/commands.md .systems/ai/core/validation-observability.md .systems/ai/core/update-from-upstream.md; do
+  require_text "$file" "AI_WORKFLOW_VALIDATE_COMPLETE" "completion marker reference in $file"
+  require_text "$file" "ahead" "canonical ahead handling in $file"
+done
+
+if rg -q 'update-from-upstream.*validate-workflow --profile standard|update-from-upstream.*AI_WORKFLOW_SKIP_SMOKE_TESTS' .systems/scripts/update-from-upstream .systems/ai/core/update-from-upstream.md; then
+  echo "Update flow must not downgrade full validation or silently skip smoke tests"
+  fail=1
+fi
+
+exit "$fail"

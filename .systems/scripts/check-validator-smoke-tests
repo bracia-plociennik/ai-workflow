@@ -3,6 +3,10 @@ set -euo pipefail
 
 tmp="$(mktemp -d "${TMPDIR:-/tmp}/ai-workflow-validator-smoke.XXXXXX")"
 smoke_group="all"
+progress="summary"
+test_timeout_seconds="180"
+smoke_started_at=$SECONDS
+smoke_completion_emitted=0
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
@@ -11,8 +15,18 @@ while [[ "$#" -gt 0 ]]; do
       smoke_group="$2"
       shift 2
       ;;
+    --progress)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --progress"; exit 1; }
+      progress="$2"
+      shift 2
+      ;;
+    --test-timeout-seconds)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --test-timeout-seconds"; exit 1; }
+      test_timeout_seconds="$2"
+      shift 2
+      ;;
     -h|--help)
-      echo "Usage: check-validator-smoke-tests [--group all|core|policy|quality|skills|workspace]"
+      echo "Usage: check-validator-smoke-tests [--group all|core|policy|quality|skills|workspace] [--progress quiet|summary|verbose] [--test-timeout-seconds seconds]"
       exit 0
       ;;
     *)
@@ -27,10 +41,39 @@ case "$smoke_group" in
   *) echo "Unknown smoke group: $smoke_group"; exit 1 ;;
 esac
 
+case "$progress" in
+  quiet|summary|verbose) ;;
+  *) echo "Unknown progress mode: $progress"; exit 1 ;;
+esac
+
+if ! [[ "$test_timeout_seconds" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ "$test_timeout_seconds" == "0" || "$test_timeout_seconds" == "0.0" ]]; then
+  echo "--test-timeout-seconds must be greater than zero"
+  exit 1
+fi
+
+timeout_runner="$(pwd -P)/.systems/scripts/run-with-timeout"
+
+finish_smoke() {
+  local status="${1:-$?}"
+  local result="fail"
+  if [[ "$status" -eq 0 ]]; then result="pass"; fi
+  if [[ "$status" -eq 124 ]]; then result="timeout"; fi
+  if [[ "$status" -eq 130 || "$status" -eq 143 ]]; then result="interrupted"; fi
+  if [[ "$smoke_completion_emitted" -eq 0 ]]; then
+    smoke_completion_emitted=1
+    printf 'AI_WORKFLOW_SMOKE_COMPLETE group=%s result=%s exit_code=%s duration_seconds=%s\n' \
+      "$smoke_group" "$result" "$status" "$((SECONDS - smoke_started_at))"
+  fi
+}
+
 cleanup() {
   rm -rf "$tmp"
 }
-trap cleanup EXIT
+trap 'smoke_status=$?; finish_smoke "$smoke_status"; cleanup' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+printf 'AI_WORKFLOW_SMOKE_START group=%s progress=%s\n' "$smoke_group" "$progress"
 
 tar --exclude='.git' --exclude='ai-workflow-workspace' -cf - . | tar -xf - -C "$tmp"
 
@@ -43,8 +86,12 @@ run_must_fail() {
 
   should_run_smoke_test "$name" || return 0
 
+  if [[ "$progress" != "quiet" ]]; then
+    printf 'AI_WORKFLOW_SMOKE_PROGRESS test=%s status=started\n' "$name"
+  fi
+
   set +e
-  (cd "$tmp" && "$@") >"$output" 2>&1
+  (cd "$tmp" && "$timeout_runner" --timeout-seconds "$test_timeout_seconds" "$@") >"$output" 2>&1
   status=$?
   set -e
   record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -ne 0 ]] && echo pass || echo fail)"
@@ -52,6 +99,9 @@ run_must_fail() {
     echo "Validator smoke test unexpectedly passed: $name"
     cat "$output"
     exit 1
+  fi
+  if [[ "$progress" == "verbose" ]]; then
+    printf 'AI_WORKFLOW_SMOKE_PROGRESS test=%s status=pass duration_seconds=%s\n' "$name" "$((SECONDS - started))"
   fi
 }
 
@@ -64,8 +114,12 @@ run_must_pass() {
 
   should_run_smoke_test "$name" || return 0
 
+  if [[ "$progress" != "quiet" ]]; then
+    printf 'AI_WORKFLOW_SMOKE_PROGRESS test=%s status=started\n' "$name"
+  fi
+
   set +e
-  (cd "$tmp" && "$@") >"$output" 2>&1
+  (cd "$tmp" && "$timeout_runner" --timeout-seconds "$test_timeout_seconds" "$@") >"$output" 2>&1
   status=$?
   set -e
   record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
@@ -73,6 +127,9 @@ run_must_pass() {
     echo "Validator smoke test unexpectedly failed: $name"
     cat "$output"
     exit 1
+  fi
+  if [[ "$progress" == "verbose" ]]; then
+    printf 'AI_WORKFLOW_SMOKE_PROGRESS test=%s status=pass duration_seconds=%s\n' "$name" "$((SECONDS - started))"
   fi
 }
 
@@ -105,6 +162,123 @@ record_smoke_timing() {
   fi
   printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$(smoke_test_group "$name")" "$duration" "$result" "smoke-$smoke_group" >> "$output_path"
 }
+
+run_must_pass "validation-completion-validator-valid" .systems/scripts/check-validation-completion
+
+run_must_pass "validate-workflow-emits-one-completion-marker" env AI_WORKFLOW_SKIP_SMOKE_TESTS=1 .systems/scripts/validate-workflow --profile fast --progress summary --timeout-seconds 60
+test "$(rg -c '^AI_WORKFLOW_VALIDATE_START ' "$tmp/validate-workflow-emits-one-completion-marker.out")" -eq 1 || { echo "validate-workflow start marker count mismatch"; exit 1; }
+test "$(rg -c '^AI_WORKFLOW_VALIDATE_COMPLETE ' "$tmp/validate-workflow-emits-one-completion-marker.out")" -eq 1 || { echo "validate-workflow completion marker count mismatch"; exit 1; }
+
+cat > "$tmp/.systems/scripts/check-smoke-failure" <<'SH'
+#!/usr/bin/env bash
+exit 7
+SH
+chmod +x "$tmp/.systems/scripts/check-smoke-failure"
+run_must_fail "validate-workflow-emits-failure-marker" .systems/scripts/validate-workflow --profile scoped --checks check-smoke-failure --progress quiet --timeout-seconds 60
+grep -q '^AI_WORKFLOW_VALIDATE_COMPLETE .*result=fail ' "$tmp/validate-workflow-emits-failure-marker.out" || { echo "validate-workflow failure marker missing"; exit 1; }
+
+run_must_fail "timeout-wrapper-returns-124" .systems/scripts/run-with-timeout --timeout-seconds 1 python3 -c 'import time; time.sleep(3)'
+grep -q '^AI_WORKFLOW_TIMEOUT ' "$tmp/timeout-wrapper-returns-124.out" || { echo "timeout marker missing"; exit 1; }
+
+cat > "$tmp/timeout-process-tree.py" <<'PY'
+import os
+import pathlib
+import sys
+import time
+
+pid_file = pathlib.Path(sys.argv[1])
+child_pid = os.fork()
+if child_pid == 0:
+    pid_file.write_text(str(os.getpid()))
+    time.sleep(10)
+else:
+    pid_file.write_text(str(child_pid))
+    time.sleep(10)
+PY
+timeout_tree_pid_file="$tmp/timeout-process-tree.pid"
+run_must_fail "timeout-wrapper-kills-process-group" .systems/scripts/run-with-timeout --timeout-seconds 1 python3 "$tmp/timeout-process-tree.py" "$timeout_tree_pid_file"
+test -s "$timeout_tree_pid_file" || { echo "timeout process tree did not publish child pid"; exit 1; }
+timeout_tree_pid="$(cat "$timeout_tree_pid_file")"
+if kill -0 "$timeout_tree_pid" 2>/dev/null; then
+  echo "timeout wrapper left an orphan process"
+  kill "$timeout_tree_pid" 2>/dev/null || true
+  exit 1
+fi
+
+update_fixture_root="$tmp/update-lifecycle-fixture"
+update_remote="$update_fixture_root/remote.git"
+update_target="$update_fixture_root/target"
+update_ai="$update_target/ai-workflow"
+mkdir -p "$update_fixture_root" "$update_ai/.systems/scripts" "$update_target/ai-workflow-workspace/repo/core"
+git init -q --bare "$update_remote"
+cp "$tmp/.systems/scripts/update-from-upstream" "$update_ai/.systems/scripts/update-from-upstream"
+printf '%s\n' '#!/usr/bin/env bash' 'printf "stub validation args: %s\\n" "$*"' 'exit "${STUB_VALIDATE_STATUS:-0}"' > "$update_ai/.systems/scripts/validate-workflow"
+chmod +x "$update_ai/.systems/scripts/update-from-upstream" "$update_ai/.systems/scripts/validate-workflow"
+git -C "$update_ai" init -q
+git -C "$update_ai" config user.email "smoke@example.invalid"
+git -C "$update_ai" config user.name "AI Workflow Smoke"
+git -C "$update_ai" add .
+git -C "$update_ai" commit -q -m "fixture baseline"
+git -C "$update_ai" branch -M main
+git -C "$update_ai" remote add origin "$update_remote"
+git -C "$update_ai" push -q -u origin main
+
+run_must_pass "update-equal-canonical" env AI_WORKFLOW_WORKSPACE_HOME="$update_target/ai-workflow-workspace" "$update_ai/.systems/scripts/update-from-upstream" --remote origin --branch main
+grep -q '^AI_WORKFLOW_UPSTREAM_STATE relation=equal ' "$tmp/update-equal-canonical.out" || { echo "equal relation marker missing"; exit 1; }
+grep -q '^AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=pass$' "$tmp/update-equal-canonical.out" || { echo "equal validation marker missing"; exit 1; }
+grep -q '^AI_WORKFLOW_UPDATE_COMPLETE result=pass ' "$tmp/update-equal-canonical.out" || { echo "equal completion marker missing"; exit 1; }
+
+run_must_fail "update-validation-failure" env STUB_VALIDATE_STATUS=7 AI_WORKFLOW_WORKSPACE_HOME="$update_target/ai-workflow-workspace" "$update_ai/.systems/scripts/update-from-upstream" --remote origin --branch main
+grep -q '^AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=fail exit_code=7$' "$tmp/update-validation-failure.out" || { echo "update validation failure marker missing"; exit 1; }
+grep -q '^AI_WORKFLOW_UPDATE_COMPLETE result=fail exit_code=7 ' "$tmp/update-validation-failure.out" || { echo "update failure completion marker missing"; exit 1; }
+if grep -q '^update-from-upstream completed\.$' "$tmp/update-validation-failure.out"; then
+  echo "failed update printed success completion"
+  exit 1
+fi
+if grep -q "ai-workflow/.systems/scripts/update-workspace" "$tmp/update-validation-failure.out"; then
+  echo "failed update printed update-workspace recommendation"
+  exit 1
+fi
+
+run_must_fail "update-validation-timeout" env STUB_VALIDATE_STATUS=124 AI_WORKFLOW_WORKSPACE_HOME="$update_target/ai-workflow-workspace" "$update_ai/.systems/scripts/update-from-upstream" --remote origin --branch main
+grep -q '^AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=timeout exit_code=124$' "$tmp/update-validation-timeout.out" || { echo "update timeout validation marker missing"; exit 1; }
+grep -q '^AI_WORKFLOW_UPDATE_COMPLETE result=timeout exit_code=124 ' "$tmp/update-validation-timeout.out" || { echo "update timeout completion marker missing"; exit 1; }
+if grep -q "ai-workflow/.systems/scripts/update-workspace" "$tmp/update-validation-timeout.out"; then
+  echo "timed out update printed update-workspace recommendation"
+  exit 1
+fi
+
+update_remote_work="$update_fixture_root/remote-work"
+git clone -q "$update_remote" "$update_remote_work"
+git -C "$update_remote_work" config user.email "smoke@example.invalid"
+git -C "$update_remote_work" config user.name "AI Workflow Smoke"
+printf '%s\n' 'REMOTE_ADVANCE' >> "$update_remote_work/README.md"
+git -C "$update_remote_work" add README.md
+git -C "$update_remote_work" commit -q -m "remote advance"
+git -C "$update_remote_work" push -q origin main
+
+run_must_pass "update-behind-canonical" env AI_WORKFLOW_WORKSPACE_HOME="$update_target/ai-workflow-workspace" "$update_ai/.systems/scripts/update-from-upstream" --remote origin --branch main
+grep -q '^AI_WORKFLOW_UPSTREAM_STATE relation=behind ' "$tmp/update-behind-canonical.out" || { echo "behind relation marker missing"; exit 1; }
+test "$(git -C "$update_ai" rev-parse HEAD)" = "$(git -C "$update_ai" rev-parse origin/main)" || { echo "behind update did not fast-forward"; exit 1; }
+
+printf '%s\n' 'LOCAL_AHEAD' >> "$update_ai/README.md"
+git -C "$update_ai" add README.md
+git -C "$update_ai" commit -q -m "local noncanonical commit"
+printf '%s\n' 'WORKSPACE_MUST_SURVIVE' > "$update_target/ai-workflow-workspace/repo/core/status.md"
+run_must_fail "update-ahead-stops" env AI_WORKFLOW_WORKSPACE_HOME="$update_target/ai-workflow-workspace" "$update_ai/.systems/scripts/update-from-upstream" --remote origin --branch main
+grep -q '^AI_WORKFLOW_UPSTREAM_STATE relation=ahead ' "$tmp/update-ahead-stops.out" || { echo "ahead relation marker missing"; exit 1; }
+if grep -q '^AI_WORKFLOW_UPDATE_VALIDATION_START' "$tmp/update-ahead-stops.out"; then
+  echo "ahead update incorrectly ran validation"
+  exit 1
+fi
+grep -q 'WORKSPACE_MUST_SURVIVE' "$update_target/ai-workflow-workspace/repo/core/status.md" || { echo "ahead update touched workspace"; exit 1; }
+
+printf '%s\n' 'REMOTE_DIVERGENCE' >> "$update_remote_work/README.md"
+git -C "$update_remote_work" add README.md
+git -C "$update_remote_work" commit -q -m "second remote advance"
+git -C "$update_remote_work" push -q origin main
+run_must_fail "update-diverged-stops" env AI_WORKFLOW_WORKSPACE_HOME="$update_target/ai-workflow-workspace" "$update_ai/.systems/scripts/update-from-upstream" --remote origin --branch main
+grep -q '^AI_WORKFLOW_UPSTREAM_STATE relation=diverged ' "$tmp/update-diverged-stops.out" || { echo "diverged relation marker missing"; exit 1; }
 
 run_policy_boundary_matrix() {
   local id="$1"
@@ -3122,7 +3296,11 @@ MD
 
 run_must_pass "update-leaves-external-workspace-untouched" env AI_WORKFLOW_WORKSPACE_HOME="$target_workspace" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
 grep -q "upstream update marker" "$target_work/README.md" || { echo "Update smoke missing upstream marker"; exit 1; }
-grep -q "ai-workflow/.systems/scripts/update-workspace" "$tmp/update-leaves-external-workspace-untouched.out" || { echo "Update smoke did not print update-workspace recommendation"; exit 1; }
+grep -q "AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=skipped" "$tmp/update-leaves-external-workspace-untouched.out" || { echo "Update smoke missing skipped validation marker"; exit 1; }
+if grep -q "ai-workflow/.systems/scripts/update-workspace" "$tmp/update-leaves-external-workspace-untouched.out"; then
+  echo "Update smoke printed update-workspace recommendation after skipped validation"
+  exit 1
+fi
 grep -q "LOCAL_REPO_RUNTIME_MARKER" "$target_workspace/repo/core/status.md" || { echo "Update smoke lost repo runtime"; exit 1; }
 grep -q "LOCAL_MICRO_PROJECT_MARKER" "$target_workspace/micro-projects/my-micro-project/micro-project.md" || { echo "Update smoke lost micro-project"; exit 1; }
 grep -q "LOCAL_PROJECT_RUNTIME_MARKER" "$target_workspace/projects/my-project/status.md" || { echo "Update smoke lost project workspace"; exit 1; }

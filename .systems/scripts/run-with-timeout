@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""Run one command with a process-group timeout and no shell interpolation."""
+
+from __future__ import annotations
+
+import argparse
+import os
+import signal
+import subprocess
+import sys
+
+
+def terminate_group(process: subprocess.Popen[bytes]) -> None:
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    try:
+        process.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        process.wait()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--timeout-seconds", type=float, required=True)
+    parser.add_argument("command", nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+
+    if args.timeout_seconds <= 0:
+        parser.error("--timeout-seconds must be greater than zero")
+    if not args.command:
+        parser.error("a command is required")
+
+    process = subprocess.Popen(args.command, start_new_session=True)
+    try:
+        return process.wait(timeout=args.timeout_seconds)
+    except subprocess.TimeoutExpired:
+        print(
+            "AI_WORKFLOW_TIMEOUT command={} timeout_seconds={}".format(
+                args.command[0], args.timeout_seconds
+            ),
+            file=sys.stderr,
+        )
+        terminate_group(process)
+        return 124
+    except KeyboardInterrupt:
+        terminate_group(process)
+        return 130
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
