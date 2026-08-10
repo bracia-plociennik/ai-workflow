@@ -4,11 +4,12 @@ set -euo pipefail
 profile="standard"
 checks=""
 explain=0
+timing_output=""
 
 usage() {
   cat <<'EOF'
 Usage:
-  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--checks check-a,check-b] [--explain]
+  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--checks check-a,check-b] [--timing-output path] [--explain]
 
 Profiles:
   standard  Core validator/structure checks without embedded smoke tests. Default daily validator.
@@ -39,6 +40,14 @@ while [[ "$#" -gt 0 ]]; do
     --explain)
       explain=1
       shift
+      ;;
+    --timing-output)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --timing-output"
+        exit 1
+      fi
+      timing_output="$2"
+      shift 2
       ;;
     -h|--help)
       usage
@@ -76,11 +85,36 @@ if ! command -v rg >/dev/null 2>&1; then
   exit 1
 fi
 
+record_timing() {
+  local check_name="$1"
+  local duration="$2"
+  local result="$3"
+  [[ -n "$timing_output" ]] || return 0
+  mkdir -p "$(dirname "$timing_output")"
+  if [[ ! -f "$timing_output" ]]; then
+    printf 'command/check_id\tgroup\tduration_seconds\tresult\tprofile\n' > "$timing_output"
+  fi
+  local group="validator"
+  [[ "$check_name" == "check-validator-smoke-tests" ]] && group="smoke"
+  printf '%s\t%s\t%s\t%s\t%s\n' "$check_name" "$group" "$duration" "$result" "$profile" >> "$timing_output"
+}
+
 run_cmd() {
+  local started=$SECONDS
+  local status
   if [[ "$explain" == "1" ]]; then
     printf '+ %s\n' "$*"
   fi
-  "$@"
+  set +e
+  if [[ "$1" == ".systems/scripts/check-validator-smoke-tests" && -n "$timing_output" ]]; then
+    AI_WORKFLOW_TIMING_OUTPUT="$timing_output" "$@"
+  else
+    "$@"
+  fi
+  status=$?
+  set -e
+  record_timing "$(basename "$1")" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  return "$status"
 }
 
 explain_profile() {
@@ -186,6 +220,10 @@ run_core_validators() {
   run_cmd .systems/scripts/check-model-selection-guidance
   run_cmd .systems/scripts/check-delivery-constraints
   run_cmd .systems/scripts/check-distillation-state
+  run_cmd .systems/scripts/check-workspace-freshness
+  run_cmd .systems/scripts/check-contract-topology
+  run_cmd .systems/scripts/check-validation-observability
+  run_cmd .systems/scripts/check-skill-evaluation-contract
 }
 
 explain_profile

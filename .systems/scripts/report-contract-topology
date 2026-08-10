@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+source "$script_dir/resolve-workflow-env"
+repo_root="$AI_WORKFLOW_HOME"
+output=""
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --output)
+      [[ "$#" -ge 2 ]] || { echo "Missing --output value"; exit 1; }
+      output="$2"
+      shift 2
+      ;;
+    -h|--help)
+      echo "Usage: report-contract-topology --output <path>"
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+[[ -n "$output" ]] || { echo "--output is required"; exit 1; }
+mkdir -p "$(dirname "$output")"
+cd "$repo_root"
+
+observed_at="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+{
+  echo "# Contract Topology Map"
+  echo
+  echo "- Observed-at: \`$observed_at\`"
+  echo "- Advisory-only: \`yes\`"
+  echo "- Source scope: core contracts, routers, validators, templates, and documented producer/consumer references."
+  echo
+  echo "## Contract Inventory"
+  echo
+  echo '| Contract | Status | Known references | Template signal |'
+  echo '| --- | --- | --- | --- |'
+  while IFS= read -r contract; do
+    name="$(basename "$contract")"
+    refs="$(rg -l --glob '*.md' --glob '*.sh' "$name" AGENTS.md README.md HUMANS.md .systems 2>/dev/null || true)"
+    refs="$(printf '%s\n' "$refs" | sed '/^$/d' | wc -l | tr -d ' ')"
+    template_signal="$(rg -l --glob '*.template.md' "$(basename "$contract" .md)" .systems/ai/templates 2>/dev/null || true)"
+    template_signal="$(printf '%s\n' "$template_signal" | sed '/^$/d' | wc -l | tr -d ' ')"
+    status="orphaned"
+    [[ "$refs" -gt 0 ]] && status="partial"
+    [[ "$refs" -gt 1 && "$template_signal" -gt 0 ]] && status="linked"
+    echo "| \`$contract\` | \`$status\` | $refs | $template_signal |"
+  done < <(find .systems/ai/core -maxdepth 1 -type f -name '*.md' -print | sort)
+  echo
+  echo "## Producer / Consumer Scan"
+  echo
+  echo '| Surface | Evidence files | Status |'
+  echo '| --- | --- | --- |'
+  for surface in 'Owner Decision Queue' 'Execution Trace' 'Review Completeness Gate' 'Optional Knowledge Capture' 'Dream Report' 'Behavioral Evaluation Contract'; do
+    count="$(rg -l -F "$surface" .systems/ai/core .systems/ai/templates .systems/scripts 2>/dev/null || true)"
+    count="$(printf '%s\n' "$count" | sed '/^$/d' | wc -l | tr -d ' ')"
+    status="unknown"
+    [[ "$count" -gt 1 ]] && status="linked"
+    [[ "$count" -eq 1 ]] && status="partial"
+    echo "| \`$surface\` | $count | \`$status\` |"
+  done
+  echo
+  echo "Topology findings are advisory and do not alter workflow gates, permissions, approvals, or stop conditions."
+} > "$output"
+
+echo "Contract topology report written: $output"

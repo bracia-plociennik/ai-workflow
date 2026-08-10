@@ -1,5 +1,12 @@
 # changelog.md
 
+## 0.8.25 - 2026-08-10
+
+- Added advisory Workspace Freshness Ledger and Contract Topology Map reports.
+- Added validation timing metadata and smoke-group interfaces while preserving the full default group.
+- Added Dream Report schema v2 lifecycle/content boundaries while preserving immutable v1 validation.
+- Added an optional behavioral evaluation contract for active skills without mandatory eval backfill.
+
 ## 0.8.24 - 2026-07-24
 
 - Added exact `Koniec pracy` and `Koniec zadania` capture-now routing while preserving quality, privacy, evidence, permission, phase, and final-approval boundaries.

@@ -65,6 +65,11 @@ If a useful finding depends on excluded or sensitive material, record only a gen
 
 Use `.systems/ai/templates/dreaming/dream-report.template.md`.
 
+New reports use `Dream Report schema: v2`. Every recommendation or candidate
+receives a stable ID, lifecycle (`new|repeated|promoted|rejected|obsolete|unknown`),
+previous evidence, and a decision artifact field. Historical v1 reports remain
+immutable and continue through the legacy structural validation path.
+
 Every report must include:
 
 - `Dream variant: <workflow-artifacts-only|full-repo>`;
@@ -80,15 +85,18 @@ Every report must include:
 - rejected as noise;
 - privacy/scope check;
 - owner decision queue.
+- recommendation lifecycle and recurrence evidence.
 
 Dreaming Mode is non-interactive under `.systems/ai/core/owner-decision-checkpoints.md`. It must finish the allowed advisory scan without live questions and place all material decisions or preferences in the owner decision queue.
 
 Every recommendation or candidate must include:
 
 - `source path`;
+- `recommendation ID` and `lifecycle` for schema v2;
 - `finding`;
 - `target`;
 - `reason`;
+- `previous evidence` and `decision artifact` for schema v2;
 - `risk/privacy note`;
 - `owner action`.
 

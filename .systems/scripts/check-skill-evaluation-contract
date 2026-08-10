@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+fail=0
+contract=.systems/ai/core/skill-behavioral-evaluation.md
+[[ -f "$contract" ]] || { echo "Missing skill behavioral evaluation contract"; exit 1; }
+for text in 'trigger scenarios' 'non-trigger scenarios' 'baseline' 'with-skill' 'expected behavior' 'forbidden behavior' 'evidence' 'residual risk' 'optional' 'runtime reports' 'outside'; do
+  rg -qi -- "$text" "$contract" || { echo "Skill evaluation contract missing: $text"; fail=1; }
+done
+if rg -qi 'all existing skills must have evals|evals are required for every skill|evaluation (may|can) (approve|skip).*gate?' "$contract"; then
+  echo "Skill evaluation contract contains unsafe or mandatory wording"
+  fail=1
+fi
+for skill in .systems/ai/skills/*; do
+  [[ -d "$skill" && -f "$skill/SKILL.md" ]] || continue
+  evals="$skill/evals/evals.json"
+  [[ -e "$evals" ]] || continue
+  if ! python3 -B - "$evals" <<'PY'
+import json, pathlib, sys
+path = pathlib.Path(sys.argv[1])
+try:
+    data = json.loads(path.read_text())
+except Exception as exc:
+    print(f"Malformed optional skill eval: {path}: {exc}")
+    raise SystemExit(1)
+if not isinstance(data, dict) or not isinstance(data.get("evals"), list):
+    print(f"Optional skill eval must contain an evals list: {path}")
+    raise SystemExit(1)
+for item in data["evals"]:
+    if not isinstance(item, dict) or not item.get("id") or not item.get("prompt"):
+        print(f"Optional skill eval item missing id/prompt: {path}")
+        raise SystemExit(1)
+PY
+  then
+    fail=1
+  fi
+  if rg -q 'claude -p|\.claude/|CLAUDECODE|https?://' "$evals"; then
+    echo "Unsafe runtime or external execution marker in optional skill eval: $evals"
+    fail=1
+  fi
+done
+exit "$fail"

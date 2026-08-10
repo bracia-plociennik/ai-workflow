@@ -2,6 +2,14 @@
 
 ## Cel dokumentu
 
+## System Health Reports
+
+Use `report-workspace-freshness` for current-vs-stale ignored workspace facts
+and `report-contract-topology` for an advisory map of contracts, validators,
+templates, producers, and consumers. Use timing output and smoke groups only
+to measure cost before changing coverage. Behavioral skill evaluations are
+optional; missing evals do not block normal skill use.
+
 `HUMANS.md` to instrukcja dla człowieka pracującego z repozytorium, które używa naszego systemu docs, workflow i autopilota.
 
 Ten dokument jest dla:

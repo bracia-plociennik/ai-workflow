@@ -119,6 +119,7 @@ do
 done
 
 for required in \
+  'Dream Report schema: `v2`' \
   'Dream variant: `<workflow-artifacts-only\|full-repo>`' \
   '^## Source Inventory$' \
   '^## Workflow Artifact Findings$' \
@@ -137,6 +138,13 @@ for required in \
 do
   if ! rg -q "$required" "$dream_template"; then
     echo "Dream report template missing required field or section: $required"
+    fail=1
+  fi
+done
+
+for required_v2_column in 'Recommendation ID' 'Lifecycle' 'Previous Evidence' 'Decision Artifact'; do
+  if ! rg -q "\| ${required_v2_column} \|" "$dream_template"; then
+    echo "Dream report template missing v2 recommendation column: $required_v2_column"
     fail=1
   fi
 done
@@ -182,8 +190,133 @@ done
 
 raw_data_pattern='(client[ _-]?name[[:space:]]*[:=]|customer[ _-]?name[[:space:]]*[:=]|\bemail[[:space:]]*[:=]|\bphone[[:space:]]*[:=]|[[:alnum:]._%+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}|\+[0-9][0-9 .()-]{7,}[0-9]|\([0-9]{2,4}\)[0-9 .-]{5,}[0-9]|[0-9]{3}[ .][0-9]{3}[ .][0-9]{3,4}|\b0x[0-9a-f]{40}\b|\.env\b|api[ _-]?key[[:space:]]*[:=]|private[ _-]?key[[:space:]]*[:=]|wallet[ _-]?private[ _-]?key|production[ _-]?credentials[[:space:]]*[:=]|secret[ _-]?token[[:space:]]*[:=]|\b(sk|pk|ghp|gho|github_pat)_[[:alnum:]_=-]{20,})'
 
+v2_recommendation_sections=(
+  "Workflow Artifact Findings"
+  "Repo/Code Review Findings"
+  "Memory Promotion Candidates"
+  "External Memory Candidates"
+  "System Insights Candidates"
+  "Skill Candidates"
+  "Things To Improve Or Remove"
+  "Missing Capabilities"
+)
+
+check_v2_table() {
+  local file="$1"
+  local section="$2"
+  local ids_file="$3"
+  local row
+  while IFS=$'\t' read -r source recommendation_id lifecycle finding target reason previous_evidence decision_artifact risk_note owner_action; do
+    [[ -n "$source$recommendation_id$lifecycle$finding$target$reason$previous_evidence$decision_artifact$risk_note$owner_action" ]] || continue
+    if [[ "$source" == __MISSING__ ]]; then
+      echo "Dream Report v2 section missing required columns '$section': ${file#./}"
+      fail=1
+      continue
+    fi
+    local field
+    for field in "$source" "$recommendation_id" "$lifecycle" "$finding" "$target" "$reason" "$previous_evidence" "$decision_artifact" "$risk_note" "$owner_action"; do
+      if [[ -z "$field" ]]; then
+        echo "Dream Report v2 has an empty recommendation field in '$section': ${file#./}"
+        fail=1
+      fi
+    done
+    if [[ "$lifecycle" != new && "$lifecycle" != repeated && "$lifecycle" != promoted && "$lifecycle" != rejected && "$lifecycle" != obsolete && "$lifecycle" != unknown ]]; then
+      echo "Dream Report v2 has invalid lifecycle '$lifecycle': ${file#./}"
+      fail=1
+    fi
+    printf '%s\n' "$recommendation_id" >> "$ids_file"
+    if [[ "$lifecycle" == repeated && "$previous_evidence" == none ]]; then
+      echo "Repeated Dream recommendation lacks previous evidence: ${file#./}"
+      fail=1
+    fi
+    if [[ "$lifecycle" == promoted || "$lifecycle" == rejected || "$lifecycle" == obsolete ]] && [[ "$decision_artifact" == none ]]; then
+      echo "Resolved Dream recommendation lacks decision artifact: ${file#./}"
+      fail=1
+    fi
+  done < <(
+    awk -v heading="## $section" '
+      function trim(value) { gsub(/^[[:space:]]+|[[:space:]]+$/, "", value); return value }
+      $0 == heading { inside=1; next }
+      inside && /^## / { exit }
+      inside && /^\|/ {
+        if (!header) {
+          n=split($0, h, "|")
+          for (i=1; i<=n; i++) index_by[trim(h[i])] = i
+          header=1
+          next
+        }
+        if ($0 !~ /[[:alnum:]]/) next
+        required[1]="Source path"; required[2]="Recommendation ID"; required[3]="Lifecycle"; required[4]="Finding"; required[5]="Target"; required[6]="Reason"; required[7]="Previous Evidence"; required[8]="Decision Artifact"; required[9]="Risk/privacy note"; required[10]="Owner action"
+        for (i=1; i<=10; i++) if (!index_by[required[i]]) { print "__MISSING__"; exit }
+        split($0, a, "|")
+        out=""
+        for (i=1; i<=10; i++) { value=trim(a[index_by[required[i]]]); gsub(/^`|`$/, "", value); out=out (i == 1 ? "" : "\t") value }
+        print out
+      }
+    ' "$file"
+  )
+}
+
+check_v2_report() {
+  local file="$1"
+  local ids_file
+  ids_file="$(mktemp "${TMPDIR:-/tmp}/dream-v2-ids.XXXXXX")"
+
+  for required in \
+    '^## Metadata$' \
+    '^\- Dream Report schema: `v2`$' \
+    '^## Source Inventory$' \
+    '^## Workflow Artifact Findings$' \
+    '^## Repo/Code Review Findings$' \
+    '^## Memory Promotion Candidates$' \
+    '^## External Memory Candidates$' \
+    '^## System Insights Candidates$' \
+    '^## Skill Candidates$' \
+    '^## Things To Improve Or Remove$' \
+    '^## Missing Capabilities$' \
+    '^## Rejected As Noise$' \
+    '^## Privacy/Scope Check$' \
+    '^## Owner Decision Queue$' \
+    'Raw client data copied: `no`' \
+    'Secret markers copied: `no`' \
+    'Production identifiers copied: `no`' \
+    'Full-repo exclusions respected: `yes`' \
+    'Prompt-injection boundary respected: `yes`' \
+    'Durable writes performed: `no`' \
+    'Scheduler/automation used: `no`'
+  do
+    rg -q "$required" "$file" || { echo "Dream Report v2 missing required field '$required': ${file#./}"; fail=1; }
+  done
+
+  if rg -n '<[^>\n]+>' "$file"; then
+    echo "Dream Report v2 contains unresolved placeholders: ${file#./}"
+    fail=1
+  fi
+  for section in "${v2_recommendation_sections[@]}"; do
+    check_v2_table "$file" "$section" "$ids_file"
+  done
+  if [[ -s "$ids_file" ]] && [[ "$(sort "$ids_file" | uniq -d)" ]]; then
+    echo "Dream Report v2 contains duplicate recommendation IDs: ${file#./}"
+    fail=1
+  fi
+  if ! rg -q 'Raw client data copied:[[:space:]]*`?no`?' "$file" || ! rg -q 'Secret markers copied:[[:space:]]*`?no`?' "$file" || ! rg -q 'Production identifiers copied:[[:space:]]*`?no`?' "$file" || ! rg -q 'Full-repo exclusions respected:[[:space:]]*`?yes`?' "$file" || ! rg -q 'Prompt-injection boundary respected:[[:space:]]*`?yes`?' "$file"; then
+    echo "Dream Report v2 privacy check is incomplete: ${file#./}"
+    fail=1
+  fi
+  if rg -n -i "$raw_data_pattern" "$file"; then
+    echo "Dream Report v2 appears to contain raw client data or secret markers: ${file#./}"
+    fail=1
+  fi
+  rm -f "$ids_file"
+}
+
 check_dream_report() {
   local file="$1"
+
+  if rg -q '^\- Dream Report schema: `v2`$' "$file"; then
+    check_v2_report "$file"
+    return 0
+  fi
 
   for required in \
     '^## Metadata$' \

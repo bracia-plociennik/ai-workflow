@@ -403,6 +403,13 @@ Routing notes:
 
 ### Dreaming Mode
 
+For system-health maintenance, use `.systems/ai/core/workspace-freshness.md`,
+`.systems/ai/core/contract-topology.md`, and
+`.systems/ai/core/validation-observability.md` for advisory reports and measured
+validation cost. Use `.systems/ai/core/skill-behavioral-evaluation.md` for
+optional active-skill evals. These reports and evals do not grant authority,
+change gates, or make green scripts equivalent to quality PASS.
+
 Route to `.systems/ai/core/dreaming-mode.md`.
 
 Polish variants:

@@ -2,6 +2,7 @@
 
 ## Metadata
 
+- Dream Report schema: `v2`
 - Date: `<YYYY-MM-DD>`
 - Dream variant: `<workflow-artifacts-only|full-repo>`
 - Repository mode: `<official|target|unknown>`
@@ -16,57 +17,57 @@
 
 ## Workflow Artifact Findings
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<finding>` | `<project-memory|repo-memory|external-memory|system-insights|skill-candidate|decision|status|review|none>` | `<why it matters>` | `<safe|needs anonymization|blocked>` | `<capture|review|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<project-memory|repo-memory|external-memory|system-insights|skill-candidate|decision|status|review|none>` | `<why it matters>` | `<path|none>` | `<path|none>` | `<safe|needs anonymization|blocked>` | `<capture|review|reject|defer>` |
 
 ## Repo/Code Review Findings
 
 Required for `full-repo`. For `workflow-artifacts-only`, write `not-applicable`.
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path or not-applicable>` | `<finding>` | `<review|project-task|repo-memory|system-insights|skill-candidate|none>` | `<why it matters>` | `<safe|needs anonymization|blocked>` | `<review|create-task|capture|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path or not-applicable>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<review|project-task|repo-memory|system-insights|skill-candidate|none>` | `<why it matters>` | `<path|none>` | `<path|none>` | `<safe|needs anonymization|blocked>` | `<review|create-task|capture|reject|defer>` |
 
 ## Memory Promotion Candidates
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<finding>` | `<project-memory|repo-memory>` | `<why it belongs there>` | `<safe|needs owner review|blocked>` | `<capture|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<project-memory|repo-memory>` | `<why it belongs there>` | `<path|none>` | `<path|none>` | `<safe|needs owner review|blocked>` | `<capture|reject|defer>` |
 
 ## External Memory Candidates
 
 External Memory is only for AI Workflow improvement proposals.
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<finding>` | `<external-memory|none>` | `<workflow improvement reason>` | `<safe|blocked>` | `<capture|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<external-memory|none>` | `<workflow improvement reason>` | `<path|none>` | `<path|none>` | `<safe|blocked>` | `<capture|reject|defer>` |
 
 ## System Insights Candidates
 
 System Insights require anonymized cross-project operating lessons.
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<finding>` | `<system-insights|none>` | `<reusable operating lesson>` | `<safe|needs anonymization|blocked>` | `<capture|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<system-insights|none>` | `<reusable operating lesson>` | `<path|none>` | `<path|none>` | `<safe|needs anonymization|blocked>` | `<capture|reject|defer>` |
 
 ## Skill Candidates
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<finding>` | `<workspace-skill|system-skill|none>` | `<repeatable method or rubric>` | `<safe|needs anonymization|blocked>` | `<create-skill-plan|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<workspace-skill|system-skill|none>` | `<repeatable method or rubric>` | `<path|none>` | `<path|none>` | `<safe|needs anonymization|blocked>` | `<create-skill-plan|reject|defer>` |
 
 ## Things To Improve Or Remove
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<finding>` | `<review|task|external-memory|none>` | `<why it should change>` | `<safe|needs owner review|blocked>` | `<review|create-task|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<finding>` | `<review|task|external-memory|none>` | `<why it should change>` | `<path|none>` | `<path|none>` | `<safe|needs owner review|blocked>` | `<review|create-task|reject|defer>` |
 
 ## Missing Capabilities
 
-| Source path | Finding | Target | Reason | Risk/privacy note | Owner action |
-| --- | --- | --- | --- | --- | --- |
-| `<path>` | `<gap>` | `<workflow|repo|project|skill|none>` | `<why it is missing>` | `<safe|needs owner review|blocked>` | `<plan|reject|defer>` |
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `<path>` | `<recommendation-id>` | `<new|repeated|promoted|rejected|obsolete|unknown>` | `<gap>` | `<workflow|repo|project|skill|none>` | `<why it is missing>` | `<path|none>` | `<path|none>` | `<safe|needs owner review|blocked>` | `<plan|reject|defer>` |
 
 ## Rejected As Noise
 

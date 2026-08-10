@@ -2,6 +2,31 @@
 set -euo pipefail
 
 tmp="$(mktemp -d "${TMPDIR:-/tmp}/ai-workflow-validator-smoke.XXXXXX")"
+smoke_group="all"
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --group)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --group"; exit 1; }
+      smoke_group="$2"
+      shift 2
+      ;;
+    -h|--help)
+      echo "Usage: check-validator-smoke-tests [--group all|core|policy|quality|skills|workspace]"
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+case "$smoke_group" in
+  all|core|policy|quality|skills|workspace) ;;
+  *) echo "Unknown smoke group: $smoke_group"; exit 1 ;;
+esac
+
 cleanup() {
   rm -rf "$tmp"
 }
@@ -13,8 +38,17 @@ run_must_fail() {
   local name="$1"
   shift
   local output="$tmp/${name}.out"
+  local started=$SECONDS
+  local status
 
-  if (cd "$tmp" && "$@") >"$output" 2>&1; then
+  should_run_smoke_test "$name" || return 0
+
+  set +e
+  (cd "$tmp" && "$@") >"$output" 2>&1
+  status=$?
+  set -e
+  record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -ne 0 ]] && echo pass || echo fail)"
+  if [[ "$status" -eq 0 ]]; then
     echo "Validator smoke test unexpectedly passed: $name"
     cat "$output"
     exit 1
@@ -25,12 +59,51 @@ run_must_pass() {
   local name="$1"
   shift
   local output="$tmp/${name}.out"
+  local started=$SECONDS
+  local status
 
-  if ! (cd "$tmp" && "$@") >"$output" 2>&1; then
+  should_run_smoke_test "$name" || return 0
+
+  set +e
+  (cd "$tmp" && "$@") >"$output" 2>&1
+  status=$?
+  set -e
+  record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  if [[ "$status" -ne 0 ]]; then
     echo "Validator smoke test unexpectedly failed: $name"
     cat "$output"
     exit 1
   fi
+}
+
+smoke_test_group() {
+  local name="$1"
+  case "$name" in
+    *skill*|*context*|*quick-validate*) echo skills ;;
+    *quality*|*qa-*|*full-qa*|*global-review*|*intent-plan*|*implementation-slicing*|*plan-quality*|*validation-routing*|*default-quality*|*review-completeness*) echo quality ;;
+    *policy*|*prompt-composition*|*contract-compliance*|*request-batch*|*owner-decision*|*response-evidence*|*end-of-task*|*knowledge-capture*|*cross-system*|*instruction-refresh*|*phase-skill*|*idea-validation*|*delivery-constraints*|*distillation-state*) echo policy ;;
+    *init-workspace*|*update-workspace*|*resolver*|*branch-policy*|*bootstrap*|*naming*|*status*|*required-artifacts*) echo workspace ;;
+    *) echo core ;;
+  esac
+}
+
+should_run_smoke_test() {
+  # The current suite still contains shared setup/assertions outside the test
+  # wrappers. Keep the monolith until an equivalence audit proves safe slicing.
+  return 0
+}
+
+record_smoke_timing() {
+  local name="$1"
+  local duration="$2"
+  local result="$3"
+  local output_path="${AI_WORKFLOW_TIMING_OUTPUT:-}"
+  [[ -n "$output_path" ]] || return 0
+  mkdir -p "$(dirname "$output_path")"
+  if [[ ! -f "$output_path" ]]; then
+    printf 'command/check_id\tgroup\tduration_seconds\tresult\tprofile\n' > "$output_path"
+  fi
+  printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$(smoke_test_group "$name")" "$duration" "$result" "smoke-$smoke_group" >> "$output_path"
 }
 
 run_policy_boundary_matrix() {
@@ -1276,7 +1349,7 @@ run_must_fail "dreaming-mode-requires-risk-privacy-template-field" .systems/scri
 mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
 
 cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
-perl -0pi -e 's/^## System Insights Candidates\n\nSystem Insights require anonymized cross-project operating lessons\.\n\n\| Source path \| Finding \| Target \| Reason \| Risk\/privacy note \| Owner action \|\n\| --- \| --- \| --- \| --- \| --- \| --- \|\n\| `<path>` \| `<finding>` \| `<system-insights\|none>` \| `<reusable operating lesson>` \| `<safe\|needs anonymization\|blocked>` \| `<capture\|reject\|defer>` \|$/## System Insights Candidates\n\nSystem Insights require anonymized cross-project operating lessons.\n\n| Source path | Finding | Target | Reason | Owner action |\n| --- | --- | --- | --- | --- |\n| `<path>` | `<finding>` | `<system-insights|none>` | `<reusable operating lesson>` | `<capture|reject|defer>` |/m' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+perl -0pi -e 's/^\| Source path \| Recommendation ID \| Lifecycle \| Finding \| Target \| Reason \| Previous Evidence \| Decision Artifact \| Risk\/privacy note \| Owner action \|$/| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Owner action |/m' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
 run_must_fail "dreaming-mode-requires-risk-privacy-per-candidate-section" .systems/scripts/check-dreaming-mode
 mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
 
@@ -1502,6 +1575,119 @@ mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-repor
 cp "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md.bak"
 perl -0pi -e 's/\| `.systems\/ai\/core\/workflow.md` \| `Quality routing is explicit.` \| `system-insights` \| `Reusable workflow design pattern.` \| `safe` \| `capture` \|/\| `not-applicable` \| `not-applicable` \| `none` \| `full-repo skipped` \| `safe` \| `defer` \|/' "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md"
 run_must_fail "dreaming-mode-blocks-full-repo-not-applicable-report" .systems/scripts/check-dreaming-mode
+
+v2_workspace="$tmp/v2-dream-workspace"
+mkdir -p "$v2_workspace/dreams/runs/v2-valid"
+cat > "$v2_workspace/dreams/runs/v2-valid/dream-report.md" <<'MD'
+# Dream Report
+
+## Metadata
+
+- Dream Report schema: `v2`
+- Date: `2026-08-10`
+- Dream variant: `workflow-artifacts-only`
+- Repository mode: `official`
+- Project scope: `repo`
+- Result: `completed`
+
+## Source Inventory
+
+| Source path | Source type | Reviewed? | Notes |
+| --- | --- | --- | --- |
+| `.systems/ai/core/dreaming-mode.md` | `workflow-artifact` | `yes` | policy |
+
+## Workflow Artifact Findings
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `.systems/ai/core/dreaming-mode.md` | `v2-workflow` | `new` | report content gate | `review` | protects evidence | `none` | `none` | `safe` | `review` |
+
+## Repo/Code Review Findings
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `v2-repo` | `new` | no repo scan | `none` | artifact-only run | `none` | `none` | `safe` | `reject` |
+
+## Memory Promotion Candidates
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `v2-memory` | `new` | no memory candidate | `repo-memory` | none | `none` | `none` | `safe` | `reject` |
+
+## External Memory Candidates
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `v2-external` | `new` | no external candidate | `none` | none | `none` | `none` | `safe` | `reject` |
+
+## System Insights Candidates
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `v2-insight` | `new` | no insight candidate | `none` | none | `none` | `none` | `safe` | `reject` |
+
+## Skill Candidates
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `not-applicable` | `v2-skill` | `new` | no skill candidate | `none` | none | `none` | `none` | `safe` | `reject` |
+
+## Things To Improve Or Remove
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `.systems/ai/core/dreaming-mode.md` | `v2-improve` | `new` | preserve v1 compatibility | `review` | avoids migration risk | `none` | `none` | `safe` | `review` |
+
+## Missing Capabilities
+
+| Source path | Recommendation ID | Lifecycle | Finding | Target | Reason | Previous Evidence | Decision Artifact | Risk/privacy note | Owner action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `.systems/ai/core/dreaming-mode.md` | `v2-missing` | `new` | lifecycle evidence | `workflow` | repeated recommendations need context | `none` | `none` | `safe` | `plan` |
+
+## Rejected As Noise
+
+| Source path | Finding | Reason rejected |
+| --- | --- | --- |
+| `not-applicable` | `none` | `not actionable` |
+
+## Privacy/Scope Check
+
+- Raw client data copied: `no`
+- Secret markers copied: `no`
+- Production identifiers copied: `no`
+- Full-repo exclusions respected: `yes`
+- Prompt-injection boundary respected: `yes`
+- Durable writes performed: `no`
+- Scheduler/automation used: `no`
+
+## Owner Decision Queue
+
+- Interaction mode: `queued`
+- Live questions asked: `none`
+
+| Decision ID | Class | Statement | Why Needed Now | Recommended Option | Recommendation Impact | Alternatives And Impacts | Blocking Point | Status | Decision Artifact | Source Path | Owner Action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `v2-decision` | `owner-preference` | `none` | `none` | `none` | `none` | `none` | `none` | `not-applicable` | `none` | `not-applicable` | `reject` |
+
+Dreaming report boundary: `Durable writes performed: no`; `Scheduler/automation used: no`.
+MD
+run_must_pass "dreaming-v2-valid-report" env AI_WORKFLOW_WORKSPACE_HOME="$v2_workspace" .systems/scripts/check-dreaming-mode
+cp "$v2_workspace/dreams/runs/v2-valid/dream-report.md" "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak"
+perl -0pi -e 's/report content gate/<finding>/' "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+run_must_fail "dreaming-v2-blocks-placeholder" env AI_WORKFLOW_WORKSPACE_HOME="$v2_workspace" .systems/scripts/check-dreaming-mode
+mv "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak" "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+cp "$v2_workspace/dreams/runs/v2-valid/dream-report.md" "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak"
+perl -0pi -e 's/v2-repo/v2-workflow/' "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+run_must_fail "dreaming-v2-blocks-duplicate-id" env AI_WORKFLOW_WORKSPACE_HOME="$v2_workspace" .systems/scripts/check-dreaming-mode
+mv "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak" "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+cp "$v2_workspace/dreams/runs/v2-valid/dream-report.md" "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak"
+perl -0pi -e 's/\| `new` \|/| `repeated` |/g' "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+run_must_fail "dreaming-v2-blocks-repeated-without-evidence" env AI_WORKFLOW_WORKSPACE_HOME="$v2_workspace" .systems/scripts/check-dreaming-mode
+mv "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak" "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+cp "$v2_workspace/dreams/runs/v2-valid/dream-report.md" "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak"
+perl -0pi -e 's/- Production identifiers copied: `no`\n/- Production identifiers omitted\n/' "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
+run_must_fail "dreaming-v2-requires-complete-privacy-scope" env AI_WORKFLOW_WORKSPACE_HOME="$v2_workspace" .systems/scripts/check-dreaming-mode
+mv "$v2_workspace/dreams/runs/v2-valid/dream-report.md.bak" "$v2_workspace/dreams/runs/v2-valid/dream-report.md"
 mv "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md.bak" "$tmp/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md"
 
 run_must_pass "global-quality-review-valid" .systems/scripts/check-global-quality-review-stance
@@ -2202,7 +2388,7 @@ run_must_fail "review-completeness-gate-requires-micro-producer-audit" .systems/
 mv "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md.bak" "$tmp/.systems/ai/templates/micro-projects/micro-project.template.md"
 
 cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak"
-perl -0pi -e 's/ \| Decision Artifact//' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+perl -0pi -e 's/ \| Decision Artifact//g' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
 run_must_fail "review-completeness-gate-requires-dreaming-decision-artifact" .systems/scripts/check-review-completeness-gate
 run_must_fail "dreaming-mode-requires-full-queued-decision-fields" .systems/scripts/check-dreaming-mode
 mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
@@ -2980,6 +3166,39 @@ cp "$tmp/.systems/ai/templates/dreaming/dream-report.template.md" "$tmp/.systems
 perl -0pi -e 's/\| Work ID \| Scope \| State \| Source Evidence \| Quality Evidence \| Recommended Target \| Why Useful \| Blocker\/Missing Decision \| Privacy\/Scope \| Owner Action \| Residual Risk \|/| Work ID | Scope | State | Source Evidence | Quality Evidence | Recommended Target | Why Useful | Blocker\/Missing Decision | Privacy\/Scope | Owner Action | |/' "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
 run_must_fail "dreaming-queue-requires-all-columns" .systems/scripts/check-dreaming-mode
 mv "$tmp/.systems/ai/templates/dreaming/dream-report.template.md.bak" "$tmp/.systems/ai/templates/dreaming/dream-report.template.md"
+
+run_must_pass "workspace-freshness-validator-valid" .systems/scripts/check-workspace-freshness
+cp "$tmp/.systems/ai/core/workspace-freshness.md" "$tmp/.systems/ai/core/workspace-freshness.md.bak"
+printf '\nStale workspace blocks workflow.\n' >> "$tmp/.systems/ai/core/workspace-freshness.md"
+run_must_fail "workspace-freshness-remains-advisory" .systems/scripts/check-workspace-freshness
+mv "$tmp/.systems/ai/core/workspace-freshness.md.bak" "$tmp/.systems/ai/core/workspace-freshness.md"
+
+git -C "$tmp" init -q
+git -C "$tmp" config user.email "smoke@example.invalid"
+git -C "$tmp" config user.name "AI Workflow Smoke"
+git -C "$tmp" add README.md
+git -C "$tmp" commit -q -m "fixture"
+printf 'dirty\n' >> "$tmp/README.md"
+run_must_pass "workspace-freshness-dirty-runtime-advisory" .systems/scripts/report-workspace-freshness --output "$tmp/freshness-report.md"
+grep -q 'Drift: `stale`' "$tmp/freshness-report.md" || { echo "Freshness report did not classify dirty worktree as stale"; exit 1; }
+
+run_must_pass "contract-topology-validator-valid" .systems/scripts/check-contract-topology
+cp "$tmp/.systems/ai/core/contract-topology.md" "$tmp/.systems/ai/core/contract-topology.md.bak"
+printf '\nOrphaned topology is a hard gate before the next phase.\n' >> "$tmp/.systems/ai/core/contract-topology.md"
+run_must_fail "contract-topology-remains-advisory" .systems/scripts/check-contract-topology
+mv "$tmp/.systems/ai/core/contract-topology.md.bak" "$tmp/.systems/ai/core/contract-topology.md"
+
+run_must_pass "validation-observability-validator-valid" .systems/scripts/check-validation-observability
+cp "$tmp/.systems/ai/core/validation-observability.md" "$tmp/.systems/ai/core/validation-observability.md.bak"
+printf '\nGreen scripts = PASS.\n' >> "$tmp/.systems/ai/core/validation-observability.md"
+run_must_fail "validation-observability-preserves-pass-integrity" .systems/scripts/check-validation-observability
+mv "$tmp/.systems/ai/core/validation-observability.md.bak" "$tmp/.systems/ai/core/validation-observability.md"
+
+run_must_pass "skill-evaluation-validator-valid" .systems/scripts/check-skill-evaluation-contract
+cp "$tmp/.systems/ai/core/skill-behavioral-evaluation.md" "$tmp/.systems/ai/core/skill-behavioral-evaluation.md.bak"
+printf '\nAll existing skills must have evals.\n' >> "$tmp/.systems/ai/core/skill-behavioral-evaluation.md"
+run_must_fail "skill-evaluation-remains-optional" .systems/scripts/check-skill-evaluation-contract
+mv "$tmp/.systems/ai/core/skill-behavioral-evaluation.md.bak" "$tmp/.systems/ai/core/skill-behavioral-evaluation.md"
 
 git -C "$target_work" config user.email "smoke@example.invalid"
 git -C "$target_work" config user.name "AI Workflow Smoke"

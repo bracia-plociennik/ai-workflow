@@ -110,6 +110,12 @@ Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. E
 
 `check-model-selection-guidance` validates Luna/Sol classification, required recommendation fields, advisory-only authority, and `Blocking: no`.
 
+`.systems/scripts/report-workspace-freshness --output <path>` writes an advisory Workspace Freshness Ledger. `.systems/scripts/report-contract-topology --output <path>` writes an advisory Contract Topology Map. These reports never become hard gates.
+
+`.systems/scripts/validate-workflow --timing-output <path>` records command-level timing metadata without repository content. `.systems/scripts/check-validator-smoke-tests --group <all|core|policy|quality|skills|workspace>` supports measured group runs; `--group all` preserves full coverage and remains the default.
+
+`check-workspace-freshness`, `check-contract-topology`, and `check-validation-observability` validate the advisory reporting and measurement boundaries. `check-skill-evaluation-contract` validates optional behavioral skill evals; existing skills without evals remain valid.
+
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.
 
 ## New Workflow Validators
