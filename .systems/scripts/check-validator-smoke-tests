@@ -249,7 +249,7 @@ if grep -q "ai-workflow/.systems/scripts/update-workspace" "$tmp/update-validati
 fi
 
 update_remote_work="$update_fixture_root/remote-work"
-git clone -q "$update_remote" "$update_remote_work"
+git clone -q --branch main "$update_remote" "$update_remote_work"
 git -C "$update_remote_work" config user.email "smoke@example.invalid"
 git -C "$update_remote_work" config user.name "AI Workflow Smoke"
 printf '%s\n' 'REMOTE_ADVANCE' >> "$update_remote_work/README.md"
