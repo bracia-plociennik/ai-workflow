@@ -26,6 +26,7 @@ Profiles may reduce iteration time, but they must not change Definition of Done,
 - `--profile standard`;
 - `--profile scoped --checks <check-a,check-b>`;
 - `--profile fast`;
+- `--project <slug>` with any profile to scope runtime status, QA evidence, and naming to one existing project while retaining global product and non-project workspace checks;
 - `--explain` with any profile.
 
 `--checks` is valid only with `--profile scoped`. Scoped checks must be explicit script basenames such as `check-validation-profiles`; automatic changed-file inference is intentionally out of scope for v1.

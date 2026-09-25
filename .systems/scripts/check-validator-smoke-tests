@@ -343,7 +343,7 @@ install_fixture="$tmp/.install-smoke"
 install_target="$install_fixture/target"
 install_ai="$install_target/ai-workflow"
 mkdir -p "$install_ai"
-(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$install_ai"
+(cd "$tmp" && tar -cf - .systems AGENTS.md HUMANS.md README.md) | tar -xf - -C "$install_ai"
 git -C "$install_target" init -q
 run_must_pass "init-workspace-creates-local-excludes" env -u AI_WORKFLOW_WORKSPACE_HOME "$install_ai/.systems/scripts/init-workspace"
 grep -qxF "/AGENTS.md" "$install_target/.git/info/exclude" || { echo "init-workspace did not exclude root AGENTS.md"; exit 1; }
@@ -365,7 +365,7 @@ grep -q "phase-0-init result: ready-for-repo-intake" "$tmp/init-workspace-create
 legacy_install_target="$install_fixture/legacy-target"
 legacy_install_ai="$legacy_install_target/ai-workflow"
 mkdir -p "$legacy_install_ai" "$legacy_install_target/docs" "$legacy_install_target/.codex"
-(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$legacy_install_ai"
+(cd "$tmp" && tar -cf - .systems AGENTS.md HUMANS.md README.md) | tar -xf - -C "$legacy_install_ai"
 git -C "$legacy_install_target" init -q
 cat > "$legacy_install_target/AGENTS.md" <<'MD'
 # Legacy Agents
@@ -395,7 +395,7 @@ grep -q "phase-0-init result: blocked-owner-merge" "$tmp/init-workspace-preserve
 workspace_update_target="$install_fixture/workspace-update-target"
 workspace_update_ai="$workspace_update_target/ai-workflow"
 mkdir -p "$workspace_update_ai" "$workspace_update_target/ai-workflow-workspace/repo/core" "$workspace_update_target/ai-workflow-workspace/external-memory/memory"
-(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$workspace_update_ai"
+(cd "$tmp" && tar -cf - .systems AGENTS.md HUMANS.md README.md) | tar -xf - -C "$workspace_update_ai"
 git -C "$workspace_update_target" init -q
 cat > "$workspace_update_target/ai-workflow-workspace/repo/core/status.md" <<'MD'
 # Existing Repo Status
@@ -424,7 +424,7 @@ grep -q "No existing workspace files were overwritten." "$tmp/update-workspace-b
 workspace_update_dry_target="$install_fixture/workspace-update-dry-target"
 workspace_update_dry_ai="$workspace_update_dry_target/ai-workflow"
 mkdir -p "$workspace_update_dry_ai" "$workspace_update_dry_target/ai-workflow-workspace/repo/core"
-(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$workspace_update_dry_ai"
+(cd "$tmp" && tar -cf - .systems AGENTS.md HUMANS.md README.md) | tar -xf - -C "$workspace_update_dry_ai"
 git -C "$workspace_update_dry_target" init -q
 run_must_pass "update-workspace-dry-run-no-writes" env -u AI_WORKFLOW_WORKSPACE_HOME "$workspace_update_dry_ai/.systems/scripts/update-workspace" --dry-run
 test ! -e "$workspace_update_dry_target/ai-workflow-workspace/system-insights" || { echo "update-workspace dry run wrote system insights"; exit 1; }
@@ -447,6 +447,7 @@ grep -qxF "AI_WORKFLOW_MODE_RESOLVED=target" "$resolver_target_out" || { echo "R
 grep -qxF "AI_WORKFLOW_HOME=$install_ai_real" "$resolver_target_out" || { echo "Resolver target AI_WORKFLOW_HOME mismatch"; exit 1; }
 grep -qxF "TARGET_REPO_ROOT=$install_target_real" "$resolver_target_out" || { echo "Resolver target TARGET_REPO_ROOT mismatch"; exit 1; }
 grep -qxF "AI_WORKFLOW_WORKSPACE_HOME=$install_target_real/ai-workflow-workspace" "$resolver_target_out" || { echo "Resolver target workspace mismatch"; exit 1; }
+rm -rf "$install_fixture"
 
 branch_policy_fixture="$tmp/.branch-policy-smoke"
 mkdir -p "$branch_policy_fixture/.systems/scripts"
@@ -2866,14 +2867,15 @@ bootstrap_v1="$tmp/.bootstrap-v1-smoke"
 bootstrap_source="$bootstrap_v1/source"
 bootstrap_remote="$bootstrap_v1/ai-workflow.git"
 mkdir -p "$bootstrap_source"
-(cd "$tmp" && tar --exclude='.git' --exclude='.bootstrap-v1-smoke' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$bootstrap_source"
+(cd "$tmp" && tar -cf - .systems AGENTS.md HUMANS.md README.md) | tar -xf - -C "$bootstrap_source"
 git -C "$bootstrap_source" init -q
 git -C "$bootstrap_source" config user.email "smoke@example.invalid"
 git -C "$bootstrap_source" config user.name "AI Workflow Smoke"
 git -C "$bootstrap_source" add .
 git -C "$bootstrap_source" commit -q -m "bootstrap fixture"
 git -C "$bootstrap_source" branch -M main
-git clone -q --bare "$bootstrap_source" "$bootstrap_remote"
+git init -q --bare "$bootstrap_remote"
+git -C "$bootstrap_source" push -q "$bootstrap_remote" main
 
 bootstrap_target="$bootstrap_v1/target"
 mkdir -p "$bootstrap_target/ai-workflow-workspace"
@@ -2941,6 +2943,7 @@ printf '\ndirty\n' >> "$bootstrap_dirty/ai-workflow/README.md"
 run_must_fail "worktree-bootstrap-stops-dirty-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_dirty" --approved
 
 run_must_fail "worktree-bootstrap-stops-self-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$tmp" --approved
+rm -rf "$bootstrap_v1"
 
 cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
 perl -0pi -e 's/- Decisions asked\/pending: <ids\|none>\n//' "$tmp/.systems/ai/core/response-contract.md"
@@ -3002,11 +3005,12 @@ run_must_pass "full-qa-verification-valid" .systems/scripts/check-full-qa-verifi
 
 for legacy_contract_field in \
   'Legacy fingerprint admission is terminal for the exact registered file' \
-  'A V1 marker always has precedence over registry admission' \
+  'A V1 marker takes precedence over pre-V1 admission' \
+  'superseded-invalid-v1' \
   'does not upgrade the artifact'
 do
   cp "$tmp/.systems/ai/core/full-qa-verification.md" "$tmp/.systems/ai/core/full-qa-verification.md.bak"
-  perl -0pi -e "s/\\Q${legacy_contract_field}\\E//" "$tmp/.systems/ai/core/full-qa-verification.md"
+  perl -0pi -e "s/\\Q${legacy_contract_field}\\E//g" "$tmp/.systems/ai/core/full-qa-verification.md"
   legacy_contract_slug="$(printf '%s' "$legacy_contract_field" | tr '[:upper:] ' '[:lower:]-' | tr -cd '[:alnum:]-')"
   run_must_fail "full-qa-verification-requires-legacy-contract-${legacy_contract_slug}" .systems/scripts/check-full-qa-verification
   mv "$tmp/.systems/ai/core/full-qa-verification.md.bak" "$tmp/.systems/ai/core/full-qa-verification.md"
@@ -3138,12 +3142,96 @@ MD
 write_legacy_registry \
   "projects/registered-v1/quality/phase-1-architecture-qa.md" \
   "$(shasum -a 256 "$v1_incomplete" | awk '{print $1}')"
+printf '| %s | %s | %s |\n' \
+  "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
+  "$legacy_checksum" \
+  "historical QA artifact; bytes preserved" >> "$legacy_registry"
 run_must_fail "qa-evidence-v1-first-overrides-legacy-admission" .systems/scripts/check-qa-evidence
+
+run_must_pass "qa-evidence-project-scope-isolates-other-project" .systems/scripts/check-qa-evidence --project upgrade-with-master-prompt
+run_must_fail "qa-evidence-selected-project-still-fails" .systems/scripts/check-qa-evidence --project registered-v1
+run_must_fail "qa-evidence-rejects-unsafe-project" .systems/scripts/check-qa-evidence --project ../registered-v1
+run_must_fail "qa-evidence-rejects-missing-project" .systems/scripts/check-qa-evidence --project absent-project
+
+v1_recovery="${v1_incomplete%/*}/recovery-phase-1-architecture-qa.md"
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$v1_recovery"
+v1_checksum="$(shasum -a 256 "$v1_incomplete" | awk '{print $1}')"
+recovery_checksum="$(shasum -a 256 "$v1_recovery" | awk '{print $1}')"
+write_recovery_registry() {
+  local original_sha="${1:-$v1_checksum}"
+  local replacement_sha="${2:-$recovery_checksum}"
+  cat > "$legacy_registry" <<EOF
+# Legacy QA Evidence Registry
+
+| Classification | Workspace-relative artifact path | Original SHA-256 | Replacement path | Replacement SHA-256 |
+| --- | --- | --- | --- | --- |
+| pre-v1 | \`projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md\` | \`$legacy_checksum\` | none | none |
+| superseded-invalid-v1 | \`projects/registered-v1/quality/phase-1-architecture-qa.md\` | \`$original_sha\` | \`projects/registered-v1/quality/recovery-phase-1-architecture-qa.md\` | \`$replacement_sha\` |
+EOF
+}
+write_recovery_registry
+run_must_pass "qa-evidence-five-column-verified-v1-recovery" .systems/scripts/check-qa-evidence
+
+cp "$v1_incomplete" "$v1_incomplete.bak"
+perl -0pi -e 's/QA verification contract: `full-qa-verification-v1`/No V1 marker/' "$v1_incomplete"
+write_recovery_registry "$(shasum -a 256 "$v1_incomplete" | awk '{print $1}')" "$recovery_checksum"
+run_must_fail "qa-evidence-rejects-invalid-v1-classification-without-v1-marker" .systems/scripts/check-qa-evidence
+mv "$v1_incomplete.bak" "$v1_incomplete"
+write_recovery_registry
+
+cp "$v1_recovery" "$v1_recovery.bak"
+printf '\nTampered recovery.\n' >> "$v1_recovery"
+run_must_fail "qa-evidence-rejects-tampered-recovery" .systems/scripts/check-qa-evidence
+mv "$v1_recovery.bak" "$v1_recovery"
+
+write_recovery_registry "$v1_checksum" "0000000000000000000000000000000000000000000000000000000000000000"
+run_must_fail "qa-evidence-rejects-wrong-recovery-fingerprint" .systems/scripts/check-qa-evidence
+write_recovery_registry
+
+cp "$v1_incomplete" "$v1_incomplete.bak"
+printf '\nTampered original.\n' >> "$v1_incomplete"
+run_must_fail "qa-evidence-rejects-tampered-v1-original" .systems/scripts/check-qa-evidence
+mv "$v1_incomplete.bak" "$v1_incomplete"
+
+cp "$v1_recovery" "$v1_recovery.bak"
+perl -0pi -e 's/## Artifact QA Completeness Gate/## Missing Artifact QA Gate/' "$v1_recovery"
+write_recovery_registry "$v1_checksum" "$(shasum -a 256 "$v1_recovery" | awk '{print $1}')"
+run_must_fail "qa-evidence-rejects-incomplete-v1-recovery" .systems/scripts/check-qa-evidence
+mv "$v1_recovery.bak" "$v1_recovery"
+
+write_recovery_registry
+rm "$v1_recovery"
+run_must_fail "qa-evidence-rejects-missing-v1-recovery" .systems/scripts/check-qa-evidence
 rm "$v1_incomplete"
 
 write_legacy_registry \
   "projects/upgrade-with-master-prompt/quality/phase-1-architecture-qa.md" \
   "$legacy_checksum"
+
+scoped_status="$tmp/ai-workflow-workspace/projects/upgrade-with-master-prompt/status.md"
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$scoped_status"
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/tasks.md" "${scoped_status%/*}/tasks.md"
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/context.md" "${scoped_status%/*}/context.md"
+bad_project="$tmp/ai-workflow-workspace/projects/unrelated-project"
+mkdir -p "$bad_project"
+cp "$scoped_status" "$bad_project/status.md"
+cp "${scoped_status%/*}/tasks.md" "$bad_project/tasks.md"
+cp "${scoped_status%/*}/context.md" "$bad_project/context.md"
+perl -0pi -e 's/`phase-4-implementation`/`not-a-phase`/' "$bad_project/status.md"
+printf '# Invalid name in another project\n' > "$bad_project/Bad Name.md"
+run_must_pass "naming-project-scope-isolates-other-project" .systems/scripts/check-naming --project upgrade-with-master-prompt
+run_must_fail "naming-global-still-fails" .systems/scripts/check-naming
+run_must_fail "naming-rejects-unsafe-project" .systems/scripts/check-naming --project ../unrelated-project
+run_must_pass "status-consistency-project-scope-isolates-other-project" .systems/scripts/check-status-consistency --project upgrade-with-master-prompt
+run_must_fail "status-consistency-selected-project-still-fails" .systems/scripts/check-status-consistency --project unrelated-project
+run_must_fail "status-consistency-global-still-fails" .systems/scripts/check-status-consistency
+run_must_fail "status-consistency-rejects-unsafe-project" .systems/scripts/check-status-consistency --project ../unrelated-project
+run_must_fail "status-consistency-rejects-missing-project" .systems/scripts/check-status-consistency --project absent-project
+run_must_pass "workflow-fast-project-scope" .systems/scripts/validate-workflow --profile fast --project upgrade-with-master-prompt --explain
+run_must_fail "workflow-fast-global-still-fails" .systems/scripts/validate-workflow --profile fast
+run_must_fail "workflow-fast-rejects-unsafe-project" .systems/scripts/validate-workflow --profile fast --project ../unrelated-project
+rm -rf "$bad_project"
+rm "$scoped_status" "${scoped_status%/*}/tasks.md" "${scoped_status%/*}/context.md"
 
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
 perl -0pi -e 's/## Adaptive Data \/ Integration Verification Matrix/## Missing Adaptive Matrix/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
@@ -3213,14 +3301,15 @@ remote_bare="$update_fixture/remote.git"
 target_work="$update_fixture/target/ai-workflow"
 target_workspace="$update_fixture/target/ai-workflow-workspace"
 mkdir -p "$remote_work" "$update_fixture/target"
-(cd "$tmp" && tar --exclude='.git' --exclude='.install-smoke' --exclude='.update-smoke' -cf - .) | tar -xf - -C "$remote_work"
+(cd "$tmp" && tar -cf - .systems AGENTS.md HUMANS.md README.md) | tar -xf - -C "$remote_work"
 git -C "$remote_work" init -q
 git -C "$remote_work" checkout -q -b main
 git -C "$remote_work" config user.email "smoke@example.invalid"
 git -C "$remote_work" config user.name "AI Workflow Smoke"
 git -C "$remote_work" add -A
 git -C "$remote_work" commit -q -m "initial"
-git clone -q --bare "$remote_work" "$remote_bare"
+git init -q --bare "$remote_bare"
+git -C "$remote_work" push -q "$remote_bare" main
 git clone -q "$remote_bare" "$target_work"
 git -C "$remote_work" remote add origin "$remote_bare"
 
@@ -3392,5 +3481,6 @@ git -C "$remote_work" push -q origin main
 echo "FF_ONLY_EXTERNAL_WORKSPACE_MARKER" >> "$target_workspace/repo/core/status.md"
 run_must_fail "update-ff-only-failure-leaves-external-workspace" env AI_WORKFLOW_WORKSPACE_HOME="$target_workspace" "$target_work/.systems/scripts/update-from-upstream" --remote origin --branch main --skip-validation
 grep -q "FF_ONLY_EXTERNAL_WORKSPACE_MARKER" "$target_workspace/repo/core/status.md" || { echo "Update smoke modified external workspace after ff-only failure"; exit 1; }
+rm -rf "$update_fixture"
 
 echo "Validator smoke tests passed."

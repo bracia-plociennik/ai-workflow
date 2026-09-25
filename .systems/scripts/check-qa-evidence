@@ -2,6 +2,21 @@
 set -euo pipefail
 
 fail=0
+project=""
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --project)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --project" >&2; exit 2; }
+      project="$2"
+      shift 2
+      ;;
+    *) echo "Unknown check-qa-evidence argument: $1" >&2; exit 2 ;;
+  esac
+done
+if [[ -n "$project" && ! "$project" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+  echo "Unsafe project slug: $project" >&2
+  exit 2
+fi
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 source "$script_dir/resolve-workflow-env"
 repo_root="$AI_WORKFLOW_HOME"
@@ -15,26 +30,65 @@ else
 fi
 
 legacy_registry="${workspace_home:+$workspace_home/repo/core/legacy-qa-evidence-v1.md}"
+if [[ -n "$project" && ( -z "$workspace_home" || ! -d "$workspace_home/projects/$project" ) ]]; then
+  echo "Selected project does not exist: $project" >&2
+  exit 2
+fi
 
 is_registered_legacy_evidence() {
   local file="$1"
-  local relative_path checksum
+  local relative_path checksum admission classification replacement replacement_checksum
+  local project_name replacement_file replacement_dir
 
   [[ -n "$workspace_home" && -f "$legacy_registry" && "$file" == "$workspace_home"/* ]] || return 1
   relative_path="${file#"$workspace_home"/}"
   checksum="$(shasum -a 256 "$file" | awk '{print $1}')"
-  awk -F'|' -v expected_path="$relative_path" -v expected_checksum="$checksum" '
+  admission="$(awk -F'|' -v expected_path="$relative_path" -v expected_checksum="$checksum" '
     function trim(value) {
       gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+      if (value ~ /^`[^`]*`$/) value=substr(value, 2, length(value)-2)
       return value
     }
-    # Registry identity is the exact path plus SHA-256 pair. Additional
-    # metadata columns (for example Classification) are descriptive only.
-    NF >= 4 && trim($2) == expected_path && trim($3) == expected_checksum {
-      found=1
+    NF >= 4 {
+      # Historical registries use path/SHA/classification; newer registries
+      # use classification/path/SHA/replacement-path/replacement-SHA.
+      if (trim($2) ~ /^projects\//) {
+        kind="legacy"; path=trim($2); checksum=trim($3); replacement="none"; replacement_checksum="none"
+      } else if (NF >= 7 && trim($3) ~ /^projects\//) {
+        kind=trim($2); path=trim($3); checksum=trim($4)
+        replacement=trim($5); replacement_checksum=trim($6)
+      } else next
+      if (path == expected_path && checksum == expected_checksum) {
+        found++
+        result=kind "|" replacement "|" replacement_checksum
+      }
     }
-    END { exit(found ? 0 : 1) }
-  ' "$legacy_registry"
+    END { if (found == 1) print result; else exit 1 }
+  ' "$legacy_registry")" || return 1
+  IFS='|' read -r classification replacement replacement_checksum <<< "$admission"
+  case "$classification" in
+    legacy|pre-v1)
+      ! has_v1_contract "$file" || return 1
+      [[ "$replacement" == "none" && "$replacement_checksum" == "none" ]] || return 1
+      ;;
+    superseded-invalid-v1)
+      has_v1_contract "$file" || return 1
+      [[ "$relative_path" == projects/*/quality/*.md ]] || return 1
+      project_name="${relative_path#projects/}"
+      project_name="${project_name%%/*}"
+      [[ "$replacement" == projects/"$project_name"/quality/*.md ]] || return 1
+      [[ "$replacement" != *'/../'* && "$replacement" != *'/./'* && "$replacement" != *'//'* ]] || return 1
+      [[ "$replacement_checksum" =~ ^[0-9a-f]{64}$ ]] || return 1
+      replacement_file="$workspace_home/$replacement"
+      [[ -f "$replacement_file" && ! -L "$replacement_file" && "$replacement_file" != "$file" ]] || return 1
+      replacement_dir="$(cd "$(dirname "$replacement_file")" && pwd -P)" || return 1
+      [[ "$replacement_dir" == "$workspace_home/projects/$project_name/quality" ]] || return 1
+      [[ "$(shasum -a 256 "$replacement_file" | awk '{print $1}')" == "$replacement_checksum" ]] || return 1
+      has_v1_contract "$replacement_file" && has_pass_result "$replacement_file" || return 1
+      ;;
+    *) return 1 ;;
+  esac
+  return 0
 }
 
 has_pass_result() {
@@ -48,7 +102,9 @@ has_v1_contract() {
 }
 
 is_formal_qa_filename() {
-  case "$(basename "$1")" in
+  local filename="${1##*/}"
+  filename="${filename#recovery-}"
+  case "$filename" in
     phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md|phase-5-*-quality.md)
       return 0
       ;;
@@ -77,22 +133,24 @@ reject_pass_file() {
 
 validate_evidence_file() {
   local file="$1"
+  local qa_filename="${file##*/}"
+  qa_filename="${qa_filename#recovery-}"
 
   if has_pass_result "$file"; then
     local v1_contract=false
-    if has_v1_contract "$file"; then
-      v1_contract=true
-    elif is_registered_legacy_evidence "$file"; then
+    if is_registered_legacy_evidence "$file"; then
       # An exact, immutable pre-V1 admission is terminal for every
-      # registered quality artifact. Do not apply fields introduced after
-      # the historical artifact was closed.
+      # registered quality artifact. A V1-marked original is admitted only
+      # by a verified superseded-invalid-v1 recovery artifact.
       return 0
+    elif has_v1_contract "$file"; then
+      v1_contract=true
     elif is_formal_qa_filename "$file"; then
       reject_pass_file "$file" 'missing V1 QA marker or registered legacy evidence fingerprint'
     fi
 
     if [[ "$v1_contract" == true ]]; then
-      case "$(basename "$file")" in
+      case "$qa_filename" in
       phase-1-architecture-qa.md|phase-2-plan-qa.md|phase-2-packaging-qa.md|phase-3-*-spec-qa.md)
         for heading in '## QA Verification Scope' '## Artifact QA Completeness Gate'; do
           if ! rg -qF -- "$heading" "$file"; then
@@ -325,13 +383,22 @@ validate_evidence_file() {
 
 project_roots=(".systems/ai/examples/projects")
 if [[ -n "$workspace_home" && -d "$workspace_home/projects" ]]; then
-  project_roots+=("$workspace_home/projects")
+  if [[ -n "$project" ]]; then
+    project_roots+=("$workspace_home/projects/$project")
+  else
+    project_roots+=("$workspace_home/projects")
+  fi
 fi
 
 for project_root in "${project_roots[@]}"; do
+  if [[ -n "$project" && "$project_root" == "$workspace_home/projects/$project" ]]; then
+    find_depth=(-maxdepth 2)
+  else
+    find_depth=(-mindepth 1)
+  fi
   while IFS= read -r -d '' file; do
     validate_evidence_file "$file"
-  done < <(find "$project_root" -path '*/quality/*' -type f -name '*.md' -print0 2>/dev/null || true)
+  done < <(find "$project_root" "${find_depth[@]}" -path '*/quality/*' -type f -name '*.md' -print0 2>/dev/null || true)
 done
 
 exit "$fail"

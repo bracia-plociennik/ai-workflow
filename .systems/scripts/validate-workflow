@@ -2,6 +2,7 @@
 set -euo pipefail
 
 profile="standard"
+project=""
 checks=""
 explain=0
 timing_output=""
@@ -16,7 +17,7 @@ current_check="none"
 usage() {
   cat <<'EOF'
 Usage:
-  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--checks check-a,check-b] [--timing-output path] [--progress quiet|summary|verbose] [--timeout-seconds seconds] [--explain]
+  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--project slug] [--checks check-a,check-b] [--timing-output path] [--progress quiet|summary|verbose] [--timeout-seconds seconds] [--explain]
 
 Profiles:
   standard  Core validator/structure checks without embedded smoke tests. Default daily validator.
@@ -34,6 +35,14 @@ while [[ "$#" -gt 0 ]]; do
         exit 1
       fi
       profile="$2"
+      shift 2
+      ;;
+    --project)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --project"
+        exit 1
+      fi
+      project="$2"
       shift 2
       ;;
     --checks)
@@ -83,6 +92,11 @@ while [[ "$#" -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ -n "$project" && ! "$project" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+  echo "Unsafe project slug: $project"
+  exit 1
+fi
 
 case "$profile" in
   full|standard|scoped|fast)
@@ -195,6 +209,10 @@ explain_profile() {
     return 0
   fi
 
+  if [[ -n "$project" ]]; then
+    echo "Runtime project scope: $project (product checks remain global)"
+  fi
+
   case "$profile" in
     full)
       echo "Validation profile: full"
@@ -225,6 +243,15 @@ explain_profile() {
   esac
 }
 
+run_runtime_check() {
+  local check_path="$1"
+  if [[ -n "$project" ]]; then
+    run_cmd "$check_path" --project "$project"
+  else
+    run_cmd "$check_path"
+  fi
+}
+
 run_fast_checks() {
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     run_cmd git diff --check
@@ -233,9 +260,9 @@ run_fast_checks() {
   fi
   run_cmd .systems/scripts/check-required-artifacts
   run_cmd .systems/scripts/check-branch-policy
-  run_cmd .systems/scripts/check-naming
-  run_cmd .systems/scripts/check-status-consistency
-  run_cmd .systems/scripts/check-qa-evidence
+  run_runtime_check .systems/scripts/check-naming
+  run_runtime_check .systems/scripts/check-status-consistency
+  run_runtime_check .systems/scripts/check-qa-evidence
   run_cmd .systems/scripts/check-full-qa-verification
   run_cmd .systems/scripts/check-contract-compliance
 }
@@ -255,16 +282,19 @@ run_named_check() {
     exit 1
   fi
 
-  run_cmd "$check_path"
+  case "$check_name" in
+    check-naming|check-status-consistency|check-qa-evidence) run_runtime_check "$check_path" ;;
+    *) run_cmd "$check_path" ;;
+  esac
 }
 
 run_core_validators() {
   run_cmd .systems/scripts/check-required-artifacts
   run_cmd .systems/scripts/check-prompt-composition
   run_cmd .systems/scripts/check-branch-policy
-  run_cmd .systems/scripts/check-naming
-  run_cmd .systems/scripts/check-status-consistency
-  run_cmd .systems/scripts/check-qa-evidence
+  run_runtime_check .systems/scripts/check-naming
+  run_runtime_check .systems/scripts/check-status-consistency
+  run_runtime_check .systems/scripts/check-qa-evidence
   run_cmd .systems/scripts/check-full-qa-verification
   run_cmd .systems/scripts/check-system-insights
   run_cmd .systems/scripts/check-system-skills
