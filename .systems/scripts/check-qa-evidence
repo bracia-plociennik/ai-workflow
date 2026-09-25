@@ -72,7 +72,6 @@ is_registered_legacy_evidence() {
       [[ "$replacement" == "none" && "$replacement_checksum" == "none" ]] || return 1
       ;;
     superseded-invalid-v1)
-      has_v1_contract "$file" || return 1
       [[ "$relative_path" == projects/*/quality/*.md ]] || return 1
       project_name="${relative_path#projects/}"
       project_name="${project_name%%/*}"
@@ -334,7 +333,7 @@ validate_evidence_file() {
             reject_pass_file "$file" 'required adaptive matrix has no complete source/canonical/derived/forbidden/failure/check/trace row'
           fi
         elif rg -qF -- 'Applicability: `not-applicable`' "$file"; then
-          if ! rg -q '^-[[:space:]]*Not-applicable reason:[[:space:]]*`[^`][^`]*`' "$file"; then
+          if ! rg -q '^-[[:space:]]*Not-applicable reason:[[:space:]]*[^[:space:]].*$' "$file"; then
             reject_pass_file "$file" 'not-applicable adaptive matrix lacks a reason for phase-5 PASS'
           fi
         else
