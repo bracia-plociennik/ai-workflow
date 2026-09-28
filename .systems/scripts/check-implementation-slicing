@@ -30,6 +30,43 @@ require_ref() {
   fi
 }
 
+require_section_term() {
+  local file="$1"
+  local heading="$2"
+  local pattern="$3"
+  local label="$4"
+  local section
+
+  [[ -f "$file" ]] || return 0
+  section="$(awk -v heading="$heading" '
+    $0 == heading { inside=1; next }
+    inside && /^## / { exit }
+    inside { print }
+  ' "$file")"
+  if [[ -z "$section" ]] || ! printf '%s\n' "$section" | rg -qi -- "$pattern"; then
+    echo "Missing pre-quality local failure route in $file: $label"
+    fail=1
+  fi
+}
+
+reject_section_pattern() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+  local section
+
+  [[ -f "$file" ]] || return 0
+  section="$(awk '
+    $0 == "## Pre-Quality Local Failure Route" { inside=1; next }
+    inside && /^## / { exit }
+    inside { print }
+  ' "$file")"
+  if printf '%s\n' "$section" | rg -qi -- "$pattern"; then
+    echo "Unsafe pre-quality local failure route in $file: $label"
+    fail=1
+  fi
+}
+
 required_files=(
   ".systems/ai/core/implementation-slicing.md"
   ".systems/ai/workflow/phase-4-implementation.md"
@@ -113,6 +150,36 @@ do
   require_ref "$phase4" "$term" "phase-4 term: $term"
 done
 
+for file in "$contract" "$phase4"; do
+  for entry in \
+    'safe local check fails::failed local check trigger' \
+    'before.*quality verdict::pre-quality boundary' \
+    'record the command, exit/result, failure surface, slice and DoD::failed-check evidence' \
+    'inspect the failure::failure diagnosis' \
+    'accepted spec::accepted scope' \
+    'write set::approved write set' \
+    'risk class::risk class boundary' \
+    'permissions::permission boundary' \
+    'safe environment::safe environment boundary' \
+    'correct.*(same|current) slice::in-slice correction' \
+    'rerun the failed check::failed-check retest' \
+    'regression checks::regression retest' \
+    'evidence-backed hypothesis::repeat-attempt bound' \
+    '(stop|STOP).*owner decision::unsafe correction stop' \
+    'owner-controlled state::owner-controlled state boundary' \
+    'weaken tests::test-weakening prohibition' \
+    'phase-5-fix-loop::formal fix-loop boundary' \
+    'post-review fix.*stale::post-review freshness' \
+    'supporting evidence::non-authoritative green checks' \
+    '(not formal|cannot create formal).*PASS::no false formal success' \
+    'complete slice evidence::slice completion boundary'
+  do
+    require_section_term "$file" '## Pre-Quality Local Failure Route' "${entry%%::*}" "${entry#*::}"
+  done
+  reject_section_pattern "$file" '(do not|must not|never|need not|may skip|can skip) (inspect|diagnose) the failure[[:space:]]*[.!?]?[[:space:]]*$' 'failure diagnosis forbidden'
+  reject_section_pattern "$file" '(do not|must not|never|need not|may skip|can skip) (rerun|retest) the failed check[[:space:]]*[.!?]?[[:space:]]*$' 'failed-check retest forbidden'
+done
+
 for term in \
   '## Implementation Slice Plan' \
   '## Slice Execution Evidence' \
@@ -192,6 +259,20 @@ unsafe_patterns=(
   'post-fix review can inspect only fixed lines'
   'automated checks are sufficient for PASS'
 )
+
+local_failure_unsafe_patterns=(
+  'failed local (check|test) (may|can|should) be ignored'
+  '(local failure|failed local check) (may|can) (bypass|skip) (quality|QA|scope|permissions|approval|stop)'
+  'retry (may|can) (cross|bypass) (scope|permissions|stop)'
+  '(protected )?(test|guard)s? (may|can) be (weakened|disabled)'
+  '(green|passing) (retest|check|test)s? (is|are|means?) (formal )?PASS'
+  'Phase 4 (may|can) (go|route) directly to phase-5-fix-loop'
+)
+
+for pattern in "${local_failure_unsafe_patterns[@]}"; do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe pre-quality local failure wording found: $pattern" \
+    "$contract" "$phase4"
+done
 
 for pattern in "${unsafe_patterns[@]}"; do
   policy_reject_unsafe_pattern "$pattern" "Unsafe implementation slicing wording found: $pattern" \

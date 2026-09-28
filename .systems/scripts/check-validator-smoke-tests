@@ -1439,6 +1439,38 @@ rm "$workspace_fixture/repo/legacy/Legacy Instructions_BAD.md"
 rm "$workspace_fixture/repo/context/Imported Repo Context_BAD.md"
 rm "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Client Brief_BAD.md"
 
+frozen_eval="$workspace_fixture/projects/EXAMPLE/evals/frozen-run"
+mkdir -p "$frozen_eval/fixture" "$frozen_eval/runs/run-001/checkout"
+printf '# Frozen input manifest\n' > "$frozen_eval/freeze.md"
+printf '# Synthetic source state\n' > "$frozen_eval/fixture/STATE.md"
+printf '# Archived agent instructions\n' > "$frozen_eval/runs/run-001/checkout/AGENTS.md"
+run_must_pass "naming-allows-frozen-eval-inputs" env AI_WORKFLOW_WORKSPACE_HOME="$workspace_fixture" .systems/scripts/check-naming
+
+mv "$frozen_eval/freeze.md" "$frozen_eval/freeze.txt"
+run_must_fail "naming-requires-frozen-eval-marker" env AI_WORKFLOW_WORKSPACE_HOME="$workspace_fixture" .systems/scripts/check-naming
+if ! rg -qF 'fixture/STATE.md' "$tmp/naming-requires-frozen-eval-marker.out"; then
+  echo 'Naming smoke test failed for the wrong reason: missing frozen eval marker'
+  exit 1
+fi
+mv "$frozen_eval/freeze.txt" "$frozen_eval/freeze.md"
+
+printf '# Canonical eval artifact\n' > "$frozen_eval/Result_BAD.md"
+run_must_fail "naming-rejects-bad-canonical-eval-artifact" env AI_WORKFLOW_WORKSPACE_HOME="$workspace_fixture" .systems/scripts/check-naming
+if ! rg -qF 'Result_BAD.md' "$tmp/naming-rejects-bad-canonical-eval-artifact.out"; then
+  echo 'Naming smoke test failed for the wrong reason: canonical eval artifact'
+  exit 1
+fi
+rm "$frozen_eval/Result_BAD.md"
+
+printf '# Unrelated workspace artifact\n' > "$workspace_fixture/projects/EXAMPLE/Other_BAD.md"
+run_must_fail "naming-rejects-bad-unrelated-workspace-artifact" env AI_WORKFLOW_WORKSPACE_HOME="$workspace_fixture" .systems/scripts/check-naming
+if ! rg -qF 'Other_BAD.md' "$tmp/naming-rejects-bad-unrelated-workspace-artifact.out"; then
+  echo 'Naming smoke test failed for the wrong reason: unrelated workspace artifact'
+  exit 1
+fi
+rm "$workspace_fixture/projects/EXAMPLE/Other_BAD.md"
+rm -rf "$frozen_eval"
+
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/context.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Context_BAD.md"
 run_must_fail "missing-canonical-project-context" .systems/scripts/check-status-consistency
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/context/Context_BAD.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/context.md"
@@ -1960,6 +1992,103 @@ run_must_fail "intent-plan-spec-compliance-blocks-scope-creep-tests-pass" .syste
 mv "$tmp/.systems/ai/core/quality-review.md.bak" "$tmp/.systems/ai/core/quality-review.md"
 
 run_must_pass "implementation-slicing-valid" .systems/scripts/check-implementation-slicing
+
+assert_local_failure_smoke_error() {
+  local name="$1"
+  local expected="$2"
+  if ! rg -qF -- "$expected" "$tmp/$name.out"; then
+    echo "Implementation slicing smoke test failed for the wrong reason: $name"
+    cat "$tmp/$name.out"
+    exit 1
+  fi
+}
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/## Pre-Quality Local Failure Route/## Local Failure Note/' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-requires-core-local-failure-route" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-requires-core-local-failure-route" "Missing pre-quality local failure route"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/workflow/phase-4-implementation.md" "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak"
+perl -0pi -e 's/## Pre-Quality Local Failure Route/## Local Failure Note/' "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+run_must_fail "implementation-slicing-requires-phase4-local-failure-route" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-requires-phase4-local-failure-route" "Missing pre-quality local failure route"
+mv "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak" "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/rerun the failed check/consider the failed check/' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-requires-failed-check-retest" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-requires-failed-check-retest" "failed-check retest"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nDo not assert that a failed local check may be ignored.\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_pass "implementation-slicing-safe-local-failure-prohibition" .systems/scripts/check-implementation-slicing
+printf 'Do not assert that a failed local check may be ignored, but a failed local check may be ignored.\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-compound-ignore-exception" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-compound-ignore-exception" "Unsafe pre-quality local failure wording found"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nA failed local check may be ignored.\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-direct-ignore" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-direct-ignore" "Unsafe pre-quality local failure wording found"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nRetry may bypass permissions.\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-permission-bypass" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-permission-bypass" "Unsafe pre-quality local failure wording found"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nProtected tests may be weakened.\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-protected-test-weakening" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-protected-test-weakening" "Unsafe pre-quality local failure wording found"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+printf '\nPassing tests are formal PASS.\n' >> "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-green-test-as-formal-pass" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-green-test-as-formal-pass" "Unsafe pre-quality local failure wording found"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/workflow/phase-4-implementation.md" "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak"
+printf '\nPhase 4 may go directly to phase-5-fix-loop.\n' >> "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+run_must_fail "implementation-slicing-rejects-direct-formal-fix-loop" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-direct-formal-fix-loop" "Unsafe pre-quality local failure wording found"
+mv "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak" "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+rm "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-missing-local-failure-source" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-missing-local-failure-source" "Missing implementation slicing artifact"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+run_must_pass "implementation-slicing-in-scope-correction-and-legitimate-stop" .systems/scripts/check-implementation-slicing
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/(## Pre-Quality Local Failure Route\n)/$1\nDo not rerun the failed check without a safe environment.\n/' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_pass "implementation-slicing-allows-conditional-retest-safety" .systems/scripts/check-implementation-slicing
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/(## Pre-Quality Local Failure Route\n)/$1\nDo not rerun the failed check.\n/' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-forbidden-retest" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-forbidden-retest" "failed-check retest forbidden"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
+
+cp "$tmp/.systems/ai/workflow/phase-4-implementation.md" "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak"
+perl -0pi -e 's/(## Pre-Quality Local Failure Route\n)/$1\nInspect the failure, but do not rerun the failed check.\n/' "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+run_must_fail "implementation-slicing-rejects-compound-forbidden-retest" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-compound-forbidden-retest" "failed-check retest forbidden"
+mv "$tmp/.systems/ai/workflow/phase-4-implementation.md.bak" "$tmp/.systems/ai/workflow/phase-4-implementation.md"
+
+cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
+perl -0pi -e 's/(## Pre-Quality Local Failure Route\n)/$1\nNever inspect the failure.\n/' "$tmp/.systems/ai/core/implementation-slicing.md"
+run_must_fail "implementation-slicing-rejects-forbidden-diagnosis" .systems/scripts/check-implementation-slicing
+assert_local_failure_smoke_error "implementation-slicing-rejects-forbidden-diagnosis" "failure diagnosis forbidden"
+mv "$tmp/.systems/ai/core/implementation-slicing.md.bak" "$tmp/.systems/ai/core/implementation-slicing.md"
 
 cp "$tmp/.systems/ai/core/implementation-slicing.md" "$tmp/.systems/ai/core/implementation-slicing.md.bak"
 perl -0pi -e 's/Implementation Slice Plan/Implementation Steps/g' "$tmp/.systems/ai/core/implementation-slicing.md"

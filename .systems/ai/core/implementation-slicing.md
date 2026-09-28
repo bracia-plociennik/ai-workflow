@@ -69,6 +69,18 @@ After each slice, record evidence appropriate to the work mode:
 
 Formal `phase-4-implementation` records this in the implementation result artifact. Side tasks, micro-tasks, micro-projects, and workflow-maintenance work may record it in the response, micro-task artifact, micro-project artifact, or final handoff evidence.
 
+## Pre-Quality Local Failure Route
+
+When a safe local check fails during an authorized implementation slice, before its first formal or advisory quality verdict, keep the result as failing execution evidence. Record the command, exit/result, failure surface, slice and DoD expectation. Inspect the failure before choosing a correction or a stop; a red check is never acceptance evidence.
+
+If the diagnosis identifies an implementation defect wholly inside the accepted spec or owner prompt/context, current write set, risk class, permissions and safe environment, correct it within the same slice. Record the diagnosis and changed files, then rerun the failed check and relevant regression checks. Include before/after results in Slice Execution Evidence. This is an in-spec implementation correction, not entry into `phase-5-fix-loop`.
+
+Another correction attempt requires a new evidence-backed hypothesis and safe progress. If the same failure recurs without a credible safe next action, stop and report the blocker; do not retry without a bound justified by evidence. If a check cannot run safely, report the unavailable verification and its DoD impact instead of inventing a result.
+
+Stop and route to the appropriate owner decision or earlier phase when correction needs changed scope, architecture or DoD; a file outside the accepted write set; a protected test or guard weakened to obtain green output; owner-controlled state; new permission; an unsafe command; or an external effect. Do not forge state, ignore the failed local check, or weaken tests to make them pass. A passing retest is supporting evidence, not formal `PASS` or advisory quality closure.
+
+After the first quality verdict, this local route no longer substitutes for quality: formal Phase 5 `FAIL` uses `phase-5-fix-loop`, while any post-review fix makes the previous closure stale and requires full current-state re-review. Formal Phase 4 may route to Phase 5 only with complete slice evidence; micro-work routes to advisory global review under its existing authority.
+
 ## Delivery Constraint Integration
 
 The Implementation Slice Plan must use `.systems/ai/core/delivery-constraints.md` when the scope is implementation-capable. Slice sequencing may defer stretch or should-have work according to the accepted cutline, but it must not alter must-have outcomes, DoD, acceptance criteria, risk, permissions, QA, evidence, or approvals. An overrun stops the run at the owner decision checkpoint.

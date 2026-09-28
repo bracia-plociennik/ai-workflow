@@ -63,6 +63,21 @@ is_canonical_skill_contract_path() {
   return 1
 }
 
+is_frozen_eval_input_path() {
+  local path="$1"
+  local relative
+  local eval_root
+
+  [[ -n "$workspace_home" && "$path" == "$workspace_home"/projects/* ]] || return 1
+  relative="${path#"$workspace_home"/projects/}"
+  if [[ "$relative" =~ ^([^/]+)/evals/([^/]+)/(fixture/|runs/[^/]+/checkout/) ]]; then
+    eval_root="$workspace_home/projects/${BASH_REMATCH[1]}/evals/${BASH_REMATCH[2]}"
+    [[ -s "$eval_root/freeze.md" ]] && return 0
+  fi
+
+  return 1
+}
+
 is_exempt_supporting_path() {
   local path="${1#./}"
 
@@ -113,6 +128,9 @@ is_exempt_supporting_path() {
         return 0
         ;;
     esac
+    if is_frozen_eval_input_path "$absolute_path"; then
+      return 0
+    fi
   fi
 
   return 1

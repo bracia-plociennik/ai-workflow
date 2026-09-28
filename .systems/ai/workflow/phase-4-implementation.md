@@ -110,6 +110,16 @@ Phase 4 implementation does not run broad AI Workflow validation. Run implementa
 
 Green workflow scripts cannot establish implementation quality or `PASS`.
 
+## Pre-Quality Local Failure Route
+
+If a safe local check fails while an approved implementation slice is still in Phase 4 and before the first quality verdict, record the command, exit/result, failure surface, slice and DoD expectation. Inspect the failure; a failing check is not completed acceptance evidence. Do not jump directly to the formal `phase-5-fix-loop` from Phase 4.
+
+When the defect is wholly inside the accepted spec, approved write set, risk class, permissions and safe environment, correct only that defect in the current slice. Record diagnosis and changed files, rerun the failed check plus relevant regression checks, and preserve before/after results in Slice Execution Evidence. A further attempt requires a new evidence-backed hypothesis and safe progress; recurring failure without a credible safe next action is a STOP, not an unbounded retry loop.
+
+If the check cannot run safely, report unavailable verification and its DoD impact. If repair requires changed scope, architecture, DoD, a protected test or guard, owner-controlled state, another file or permission, an unsafe command or external effect, STOP and route to the appropriate owner decision or earlier phase. Do not ignore a failed local check, forge state or weaken tests to obtain green output. Green retests are supporting evidence only and cannot create formal `PASS`.
+
+This pre-quality correction does not change Phase 4's next-phase route. Only complete slice evidence permits transition to `phase-5-quality`. Once Phase 5 has issued `FAIL`, use `phase-5-fix-loop`; a post-review fix makes the quality closure stale and requires a full current-state re-review.
+
 ## Model Recommendation
 
 Report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Use `Blocking: no`.
