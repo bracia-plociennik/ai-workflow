@@ -90,9 +90,29 @@ is_registered_legacy_evidence() {
   return 0
 }
 
-has_pass_result() {
+declared_result_values() {
   local file="$1"
-  rg -q '(^|[:|` ])PASS([` |]|$)' "$file"
+  awk '
+    /^## / { section=$0; next }
+    section == "" || section == "## Metadata" || section == "## Quality Gate" || section == "## Gate Decision" {
+      line=tolower($0)
+      sub(/^[[:space:]]*-[[:space:]]*/, "", line)
+      if (line ~ /^(result|qa result|quality result|technical result|technical final check):/) {
+        sub(/^[^:]+:[[:space:]]*["`]?/, "", line)
+        if (line ~ /^pass(["`]?[[:space:]]*([.;]|$))/) pass=1
+        if (line ~ /^fail(["`]?[[:space:]]*([.;]|$))/) fail=1
+      }
+      if (section == "## Gate Decision" && line ~ /^(can-proceed:[[:space:]]*true|can proceed:[[:space:]]*yes)$/) pass=1
+    }
+    END {
+      if (fail) print "fail"
+      if (pass) print "pass"
+    }
+  ' "$file"
+}
+
+has_pass_result() {
+  [[ "$(declared_result_values "$1")" == "pass" ]]
 }
 
 has_v1_contract() {
@@ -134,6 +154,11 @@ validate_evidence_file() {
   local file="$1"
   local qa_filename="${file##*/}"
   qa_filename="${qa_filename#recovery-}"
+
+  if [[ "$(declared_result_values "$file")" == $'fail\npass' ]]; then
+    reject_pass_file "$file" 'conflicting declared result and gate decision'
+    return
+  fi
 
   if has_pass_result "$file"; then
     local v1_contract=false
