@@ -7,6 +7,7 @@ progress="summary"
 test_timeout_seconds="180"
 smoke_started_at=$SECONDS
 smoke_completion_emitted=0
+smoke_suite_completed=0
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
@@ -69,7 +70,18 @@ finish_smoke() {
 cleanup() {
   rm -rf "$tmp"
 }
-trap 'smoke_status=$?; finish_smoke "$smoke_status"; cleanup' EXIT
+on_smoke_exit() {
+  local status="$1"
+  if [[ "$status" -eq 0 && "$smoke_suite_completed" -ne 1 ]]; then
+    echo "Smoke suite ended before the final completion point" >&2
+    status=1
+  fi
+  finish_smoke "$status"
+  cleanup
+  trap - EXIT
+  exit "$status"
+}
+trap 'on_smoke_exit "$?"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
@@ -80,9 +92,483 @@ tar --exclude='.git' --exclude='ai-workflow-workspace' -cf - . | tar -xf - -C "$
 run_must_fail() {
   local name="$1"
   shift
+  local expected_literal=""
+  if [[ "${1:-}" == "--expect-literal" ]]; then
+    [[ "$#" -ge 3 && -n "$2" ]] || { echo "Missing --expect-literal value for $name"; exit 1; }
+    expected_literal="$2"
+    shift 2
+  fi
   local output="$tmp/${name}.out"
   local started=$SECONDS
   local status
+  local expected_status=1
+  local expected_diagnostic='[[:graph:]]'
+
+  case "$name" in
+    validate-workflow-emits-failure-marker)
+      expected_status=7
+      expected_diagnostic='^AI_WORKFLOW_VALIDATE_COMPLETE .*result=fail .*exit_code=7'
+      ;;
+    timeout-wrapper-returns-124|timeout-wrapper-kills-process-group)
+      expected_status=124
+      expected_diagnostic='^AI_WORKFLOW_TIMEOUT '
+      ;;
+    update-validation-failure)
+      expected_status=7
+      expected_diagnostic='^AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=fail exit_code=7$'
+      ;;
+    update-validation-timeout)
+      expected_status=124
+      expected_diagnostic='^AI_WORKFLOW_UPDATE_VALIDATION_COMPLETE result=timeout exit_code=124$'
+      ;;
+    qa-evidence-rejects-unsafe-project|naming-rejects-unsafe-project|status-consistency-rejects-unsafe-project)
+      expected_status=2
+      expected_diagnostic='^Unsafe project slug:'
+      ;;
+    qa-evidence-rejects-missing-project|status-consistency-rejects-missing-project)
+      expected_status=2
+      expected_diagnostic='^Selected project does not exist:'
+      ;;
+    workflow-fast-rejects-unsafe-project)
+      expected_diagnostic='^Unsafe project slug:'
+      ;;
+    qa-evidence-v2-rejects-duplicate-current)
+      expected_diagnostic='exactly one top-level Current QA Run is required'
+      ;;
+    qa-evidence-v2-rejects-duplicate-run-id)
+      expected_diagnostic='duplicate QA run ID'
+      ;;
+    qa-evidence-v2-rejects-stale-input|status-consistency-v2-rejects-stale-input)
+      expected_diagnostic='stale or mismatched input SHA-256'
+      ;;
+    qa-evidence-v2-rejects-traversal)
+      expected_diagnostic='unsafe input path'
+      ;;
+    qa-evidence-v2-rejects-conflicting-gate)
+      expected_diagnostic='current verdict and gate decision conflict'
+      ;;
+    qa-evidence-v2-rejects-subsection-result-conflict|qa-evidence-v2-rejects-phase5-subsection-conflict)
+      expected_diagnostic='current Gate Decision subsection conflicts with verdict'
+      ;;
+    qa-evidence-v2-rejects-subsection-progression)
+      expected_diagnostic='current Gate Decision blocks progression despite PASS'
+      ;;
+    qa-evidence-v2-rejects-pass-fix-loop-route|qa-evidence-v2-rejects-phase5-fix-loop-route)
+      expected_diagnostic='current Gate Decision routes PASS to a fix loop'
+      ;;
+    qa-evidence-v2-rejects-quality-gate-fix-loop-route)
+      expected_diagnostic='current Quality Gate routes PASS to a fix loop'
+      ;;
+    qa-evidence-v2-rejects-report-level-result-conflict)
+      expected_diagnostic='report-level Result conflicts with current verdict'
+      ;;
+    qa-evidence-v2-rejects-final-verdict-conflict)
+      expected_diagnostic='report-level Final verdict conflicts with current verdict'
+      ;;
+    status-consistency-v2-rejects-two-current-assessments)
+      expected_diagnostic='multiple V2 assessments for current phase/task'
+      ;;
+    status-consistency-v2-rejects-current-fail)
+      expected_diagnostic='status PASS conflicts with current QA verdict'
+      ;;
+    status-consistency-v2-rejects-unmatched-task)
+      expected_diagnostic='has no QA assessment for its current task despite V2 reports for this phase'
+      ;;
+    qa-evidence-v2-rejects-fenced-fake-section)
+      expected_diagnostic='missing or empty current subsection: Findings'
+      ;;
+    qa-evidence-v2-rejects-wrong-task-identity)
+      expected_diagnostic='current identity does not match report filename'
+      ;;
+    qa-evidence-v2-rejects-fenced-verdict)
+      expected_diagnostic='missing current fields: Verdict'
+      ;;
+    qa-evidence-v2-rejects-fenced-quality-field)
+      expected_diagnostic='missing or incomplete Quality Gate: Cross-contract consistency aligned'
+      ;;
+    qa-evidence-v2-rejects-unapproved-target-root)
+      expected_diagnostic='input root is not approved: approved-target-source'
+      ;;
+    qa-evidence-v2-rejects-escaping-symlink)
+      expected_diagnostic='input artifact escapes approved root'
+      ;;
+    qa-evidence-v2-rejects-missing-current-dod)
+      expected_diagnostic='missing current implementation quality section: Definition Of Done Validation'
+      ;;
+    qa-evidence-v2-rejects-final-owner-bypass)
+      expected_diagnostic='final check cannot close plan before owner approval'
+      ;;
+    qa-evidence-v2-rejects-owner-mismatch)
+      expected_diagnostic='unsatisfied Intent / Plan / Spec Compliance: Owner instruction mismatch'
+      ;;
+    qa-evidence-v2-rejects-incomplete-adversarial-review)
+      expected_diagnostic='unsatisfied Review Completeness Gate: Negative-space / adversarial review'
+      ;;
+    qa-evidence-v2-rejects-unverified-quality-gate)
+      expected_diagnostic='unsatisfied Quality Gate: Cross-contract consistency aligned'
+      ;;
+    qa-evidence-v2-rejects-incomplete-matrix-row)
+      expected_diagnostic='incomplete current adaptive matrix row'
+      ;;
+    qa-evidence-v2-rejects-failed-completion-row)
+      expected_diagnostic='final check PASS has failed completion area'
+      ;;
+    worktree-bootstrap-stops-self-clone)
+      expected_diagnostic='official AI Workflow repository must not clone itself'
+      ;;
+    pass-without-evidence)
+      expected_diagnostic='missing or empty current subsection: Evidence'
+      ;;
+    pass-with-failed-command|qa-evidence-v2-rejects-failed-artifact-check|qa-evidence-v2-rejects-failed-edge-case)
+      expected_diagnostic='current PASS has a failed check or manual result'
+      ;;
+    qa-evidence-rejects-tampered-recovery|qa-evidence-rejects-wrong-recovery-fingerprint|qa-evidence-rejects-tampered-v1-original|qa-evidence-rejects-missing-v1-recovery)
+      expected_diagnostic='registered V1 original or recovery fingerprint mismatch'
+      ;;
+    qa-evidence-v1-first-overrides-legacy-admission|qa-evidence-selected-project-still-fails)
+      expected_diagnostic='V1 marker takes precedence over pre-V1 legacy admission'
+      ;;
+  esac
+
+  # Every ordinary negative case has a stable, cause-specific diagnostic contract.
+  if [[ "$expected_diagnostic" == '[[:graph:]]' && -z "$expected_literal" ]]; then
+    case "$name" in
+      update-ahead-stops) expected_diagnostic='^AI_WORKFLOW_UPSTREAM_STATE relation=ahead ';;
+      update-diverged-stops) expected_diagnostic='^AI_WORKFLOW_UPSTREAM_STATE relation=diverged ';;
+      branch-policy-public-blocks-dev-workspace|branch-policy-compat-dev-blocks-local-workspace) expected_diagnostic='Branch policy violation: ai-workflow-workspace/ is tracked\.';;
+      branch-policy-public-blocks-legacy-workspace|branch-policy-compat-dev-blocks-legacy-workspace) expected_diagnostic='Branch policy violation: legacy workspace files are tracked under workspace/\.';;
+      missing-autopilot-readme-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/autopilot/autopilot-readme\.template\.md';;
+      missing-phase-0-init-template) expected_diagnostic='Missing workflow template: \.systems/ai/templates/workflow/phase-0-init\.template\.md';;
+      missing-autopilot-readiness-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/autopilot/readiness\.template\.md';;
+      missing-prompt-composition-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/prompt-composition\.md';;
+      missing-project-prompting-router-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/prompting/project-prompting-readme\.template\.md';;
+      missing-system-insights-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/system-insights\.md';;
+      missing-contract-compliance-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/contract-compliance\.md';;
+      missing-skill-intake-plan-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/workspace/skills/skill-intake-plan\.template\.md';;
+      missing-knowledge-capture-gate-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-knowledge-capture-gate';;
+      missing-dreaming-mode-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/dreaming-mode\.md';;
+      missing-dream-report-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/dreaming/dream-report\.template\.md';;
+      missing-dreaming-mode-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-dreaming-mode';;
+      missing-quality-review-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/quality-review\.md';;
+      missing-global-quality-review-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-global-quality-review-stance';;
+      missing-request-batch-triage-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/request-batch-triage\.md';;
+      missing-request-batch-triage-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-request-batch-triage';;
+      missing-response-evidence-trace-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-response-evidence-trace';;
+      missing-phase-skill-discovery-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-phase-skill-discovery';;
+      missing-default-quality-closure-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-default-quality-closure';;
+      missing-default-idea-validation-opt-out-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-default-idea-validation-opt-out';;
+      missing-end-of-task-capture-contract) expected_diagnostic='Missing required artifact: \.systems/ai/core/end-of-task-capture\.md';;
+      missing-end-of-task-capture-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/capture/end-of-task-capture\.template\.md';;
+      missing-end-of-task-capture-validator) expected_diagnostic='Missing required artifact: \.systems/scripts/check-end-of-task-capture';;
+      contract-compliance-requires-side-task-mode) expected_diagnostic='Missing contract compliance reference in \.systems/ai/core/contract-compliance\.md: side-task';;
+      contract-compliance-requires-micro-task-knowledge-capture) expected_diagnostic='Missing contract compliance reference in \.systems/ai/templates/projects/micro-task\.template\.md: template contract compliance section';;
+      contract-compliance-blocks-medium-risk-micro-project-template) expected_diagnostic='Missing contract compliance reference in \.systems/ai/templates/micro-projects/micro-project\.template\.md: micro-project low-risk contract';;
+      contract-compliance-requires-micro-project-work-mode) expected_diagnostic='Missing contract compliance reference in \.systems/ai/templates/micro-projects/micro-project\.template\.md: micro-project work mode';;
+      system-skills-blocks-known-project-marker) expected_diagnostic='Project source marker: CHT';;
+      system-skills-blocks-machine-specific-path) expected_diagnostic='Source path: /Users/example/project/AGENTS\.md';;
+      system-skills-require-intake-plan-for-context) expected_diagnostic='System skill with context/ and active artifacts must include skill-intake-plan\.md: \.systems/ai/skills/context-intake-missing-plan';;
+      system-skills-block-context-active-instructions) expected_diagnostic='Always load context/\*\* as active instructions\.';;
+      system-skills-block-context-guidance|system-skills-block-context-guidance-in-reference) expected_diagnostic='Use context/\*\* as guidance during skill execution\.';;
+      quick-validate-block-context-guidance) expected_diagnostic='Active skill artifact treats context/\*\* as active guidance or authority: \.systems/ai/skills/context-intake-guidance/SKILL\.md';;
+      quick-validate-block-context-guidance-in-reference) expected_diagnostic='Active skill artifact treats context/\*\* as active guidance or authority: \.systems/ai/skills/context-reference-guidance/references/source\.md';;
+      system-skills-block-long-skill-md) expected_diagnostic='System skill SKILL\.md is too long; keep active contracts compact \(311 lines > 300\): \.systems/ai/skills/context-intake-long/SKILL\.md';;
+      system-skills-require-skill-md) expected_diagnostic='Missing system skill artifact: \.systems/ai/skills/skill-creator/SKILL\.md';;
+      system-skills-require-readme) expected_diagnostic='Missing system skill artifact: \.systems/ai/skills/skill-creator/README\.md';;
+      system-skills-require-frontmatter-name) expected_diagnostic='Missing required frontmatter key '\''name'\'': \.systems/ai/skills/skill-creator/SKILL\.md';;
+      system-skills-require-authority-boundary) expected_diagnostic='System skill SKILL\.md missing authority boundary text '\''supporting execution guidance\|advisory'\'': \.systems/ai/skills/skill-creator/SKILL\.md';;
+      system-skills-block-claude-cli-marker) expected_diagnostic='Run claude -p for trigger evals\.';;
+      system-skills-block-external-cdn) expected_diagnostic='<script src="https://cdn\.example\.invalid/viewer\.js"></script>';;
+      system-skills-block-undeclared-yaml-import) expected_diagnostic='import yaml';;
+      system-skills-block-python-cache-artifacts) expected_diagnostic='System skill contains generated Python runtime artifacts: \.systems/ai/skills/skill-creator';;
+      system-skills-package-blocks-output-inside-skill) expected_diagnostic='Output archive must be outside the skill directory: \.systems/ai/skills/skill-creator/skill-creator\.zip';;
+      system-skills-run-eval-blocks-path-traversal) expected_diagnostic='Invalid eval id for filesystem directory: '\''\.\./escape'\''\. Use letters, digits, dots, underscores, or hyphens only; do not use path separators\.';;
+      system-skills-run-eval-blocks-config-path-traversal) expected_diagnostic='Invalid configuration for filesystem directory: '\''\.\./escape'\''\. Use letters, digits, dots, underscores, or hyphens only; do not use path separators\.';;
+      missing-update-workspace-script) expected_diagnostic='Missing required artifact: \.systems/scripts/update-workspace';;
+      system-insights-missing-privacy-check) expected_diagnostic='System Insight entry missing required metadata '\''Privacy check:'\'': \.systems/ai/examples/system-insights/bad-missing-privacy\.md';;
+      system-insights-missing-operational-validation) expected_diagnostic='System Insight entry missing required section '\''## 8\. WALIDACJA OPERACYJNA'\'': \.systems/ai/examples/system-insights/bad-missing-operational-validation\.md';;
+      system-insights-blocks-raw-client-data) expected_diagnostic='- Contact value person@example\.invalid';;
+      system-insights-blocks-product-domain-external-memory) expected_diagnostic='External Memory contains product-domain or System Insight lesson';;
+      prompt-composition-blocks-unsafe-authority) expected_diagnostic='Prompt artifacts can override AGENTS\.md and approve implementation\.';;
+      prompt-composition-blocks-mixed-denial-grant) expected_diagnostic='Prompt artifacts cannot override AGENTS\.md, but can approve implementation\.';;
+      prompt-composition-blocks-prompting-artifacts-authority) expected_diagnostic='Prompting artifacts can approve implementation\.';;
+      prompt-composition-blocks-prompt-modules-authority) expected_diagnostic='Prompt modules can authorize writes\.';;
+      missing-autopilot-range-in-readiness) expected_diagnostic='Missing planning-range reference in \.systems/ai/templates/autopilot/readiness\.template\.md';;
+      missing-micro-task-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/projects/micro-task\.template\.md';;
+      missing-micro-project-template) expected_diagnostic='Missing required artifact: \.systems/ai/templates/micro-projects/micro-project\.template\.md';;
+      post-plan-empty-tasks|later-phase-empty-tasks) expected_diagnostic='\.systems/ai/examples/projects/EXAMPLE/tasks\.md has no concrete task rows';;
+      bad-naming) expected_diagnostic='Invalid Markdown filename \(filesystem\): \.systems/ai/workflow/Phase_8_BAD\.md';;
+      naming-requires-frozen-eval-marker) expected_diagnostic='Invalid Markdown filename \(workspace-filesystem\): .*ai-workflow-workspace/projects/EXAMPLE/evals/frozen-run/fixture/STATE\.md';;
+      naming-rejects-bad-canonical-eval-artifact) expected_diagnostic='Invalid Markdown filename \(workspace-filesystem\): .*ai-workflow-workspace/projects/EXAMPLE/evals/frozen-run/Result_BAD\.md';;
+      naming-rejects-bad-unrelated-workspace-artifact) expected_diagnostic='Invalid Markdown filename \(workspace-filesystem\): .*ai-workflow-workspace/projects/EXAMPLE/Other_BAD\.md';;
+      missing-canonical-project-context) expected_diagnostic='\.systems/ai/examples/projects/EXAMPLE is in or past project/context intake but missing canonical context: \.systems/ai/examples/projects/EXAMPLE/context\.md';;
+      missing-gate-heading) expected_diagnostic='Missing gate heading';;
+      knowledge-capture-requires-phase-block) expected_diagnostic='Missing Optional Knowledge Capture block in \.systems/ai/workflow/phase-0-idea-validation\.md';;
+      knowledge-capture-requires-template-field) expected_diagnostic='Missing Optional Knowledge Capture field '\''- Owner decision required:'\'' in \.systems/ai/templates/workflow/phase-0-idea-validation\.template\.md';;
+      knowledge-capture-blocks-hard-gate-wording) expected_diagnostic='Agents must write memory after every phase\.';;
+      default-quality-chain-requires-architecture-mapping) expected_diagnostic='Missing default quality chaining text in \.systems/ai/core/command-routing\.md: `phase-1-architecture` -> `phase-1-architecture-qa`';;
+      default-quality-chain-requires-bez-qa-opt-out) expected_diagnostic='Missing default quality chaining text: bez QA';;
+      default-quality-chain-blocks-unsafe-opt-out-wording) expected_diagnostic='Unsafe opt-out wording suggests progression without required QA';;
+      default-quality-chain-blocks-default-task-packaging) expected_diagnostic='Plan QA still routes unconditionally to task packaging';;
+      default-quality-chain-requires-owner-only-packaging) expected_diagnostic='Missing default quality chaining text in \.systems/ai/workflow/phase-2-task-packaging\.md: optional owner-requested';;
+      default-quality-chain-blocks-phase-8-auto-chain) expected_diagnostic='Unsafe wording suggests phase 8 can be started by default quality chaining';;
+      dreaming-mode-requires-full-repo-variant) expected_diagnostic='Dreaming Mode policy missing required boundary text: full-repo';;
+      dreaming-mode-requires-dream-variant-template-field) expected_diagnostic='Dream report template missing required field or section: Dream variant: `<workflow-artifacts-only\\\|full-repo>`';;
+      dreaming-mode-requires-risk-privacy-template-field|dreaming-mode-requires-risk-privacy-per-candidate-section) expected_diagnostic='Section '\''Workflow Artifact Findings'\'' missing required table column '\''Risk/privacy note'\'': \.systems/ai/templates/dreaming/dream-report\.template\.md';;
+      dreaming-mode-requires-prompt-injection-boundary) expected_diagnostic='Dreaming Mode policy missing required boundary text: prompt-injection\.md';;
+      dreaming-mode-requires-full-repo-exclusions) expected_diagnostic='Dreaming Mode policy missing required boundary text: \\\.git/';;
+      dreaming-mode-blocks-automatic-writes-wording) expected_diagnostic='Dreaming Mode writes System Insights automatically\.';;
+      dreaming-mode-requires-report-privacy-check) expected_diagnostic='Dream Report privacy check must confirm no raw client data copied';;
+      dreaming-mode-blocks-raw-client-data) expected_diagnostic='Dream Report appears to contain raw client data or secret markers';;
+      dreaming-mode-blocks-full-repo-not-applicable-report) expected_diagnostic='Full-repo Dream Report cannot mark repo/code review findings not-applicable';;
+      dreaming-v2-blocks-placeholder) expected_diagnostic='Dream Report v2 contains unresolved placeholders';;
+      dreaming-v2-blocks-duplicate-id) expected_diagnostic='Dream Report v2 contains duplicate recommendation IDs';;
+      dreaming-v2-blocks-repeated-without-evidence) expected_diagnostic='Repeated Dream recommendation lacks previous evidence';;
+      dreaming-v2-requires-complete-privacy-scope) expected_diagnostic='Dream Report v2 missing required field';;
+      global-quality-review-requires-cross-contract-consistency) expected_diagnostic='Missing global quality review reference in \.systems/ai/core/quality-review\.md: Cross-contract consistency';;
+      global-quality-review-requires-formal-negative-space-field) expected_diagnostic='Missing global quality review reference in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: formal quality template field: \^- Negative-space / adversarial review: `<completed\\\|not-applicable\\\|incomplete>`\$';;
+      global-quality-review-blocks-green-validator-verdict) expected_diagnostic='green validators are sufficient for PASS';;
+      global-quality-review-blocks-fixed-lines-only-review|implementation-slicing-blocks-fixed-lines-only-post-fix-review) expected_diagnostic='post-fix review may inspect only fixed lines';;
+      global-quality-review-blocks-current-closure-without-rereview) expected_diagnostic='closure may remain current without full re-review';;
+      global-quality-review-blocks-no-findings-with-stale-closure) expected_diagnostic='No findings found may be declared with stale closure';;
+      global-quality-review-requires-find-blockers-routing) expected_diagnostic='Missing global quality review reference in \.systems/ai/core/command-routing\.md: find blockers routing';;
+      global-quality-review-blocks-advisory-pass-wording) expected_diagnostic='advisory review may mark PASS';;
+      global-quality-review-blocks-advisory-produce-pass-wording) expected_diagnostic='advisory review may produce PASS';;
+      global-quality-review-blocks-final-review-final-check-wording|end-of-task-capture-blocks-final-review-final-check) expected_diagnostic='final review runs phase-8-final-check';;
+      global-quality-review-blocks-final-review-starts-final-check-wording) expected_diagnostic='final review starts phase-8-final-check';;
+      global-quality-review-requires-formal-gate-eligibility-field) expected_diagnostic='Missing global quality review reference in \.systems/ai/core/quality-review\.md: formal gate eligibility';;
+      global-quality-review-preserves-formal-phase5-pass-fail) expected_diagnostic='Missing global quality review reference in \.systems/ai/workflow/phase-5-quality\.md: formal quality PASS remains';;
+      intent-plan-spec-compliance-requires-global-review-lens) expected_diagnostic='Missing intent/plan/spec compliance reference in \.systems/ai/core/quality-review\.md: global review lens: Intent / Plan / Spec Compliance';;
+      intent-plan-spec-compliance-requires-phase5-lens) expected_diagnostic='Missing intent/plan/spec compliance reference in \.systems/ai/workflow/phase-5-quality\.md: formal quality lens: Intent / Plan / Spec Compliance';;
+      intent-plan-spec-compliance-requires-template-status) expected_diagnostic='Missing intent/plan/spec compliance reference in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: quality template field: Compliance status';;
+      intent-plan-spec-compliance-blocks-qa-pass-without-ac) expected_diagnostic='QA may pass without checking acceptance criteria';;
+      intent-plan-spec-compliance-blocks-scope-creep-tests-pass) expected_diagnostic='scope creep is acceptable if tests pass';;
+      implementation-slicing-requires-core-local-failure-route) expected_diagnostic='Missing pre-quality local failure route in \.systems/ai/core/implementation-slicing\.md: failed local check trigger';;
+      implementation-slicing-requires-phase4-local-failure-route) expected_diagnostic='Missing pre-quality local failure route in \.systems/ai/workflow/phase-4-implementation\.md: failed local check trigger';;
+      implementation-slicing-requires-failed-check-retest) expected_diagnostic='Missing pre-quality local failure route in \.systems/ai/core/implementation-slicing\.md: failed-check retest';;
+      implementation-slicing-rejects-compound-ignore-exception) expected_diagnostic='Do not assert that a failed local check may be ignored, but a failed local check may be ignored\.';;
+      implementation-slicing-rejects-direct-ignore) expected_diagnostic='A failed local check may be ignored\.';;
+      implementation-slicing-rejects-permission-bypass) expected_diagnostic='Retry may bypass permissions\.';;
+      implementation-slicing-rejects-protected-test-weakening) expected_diagnostic='Protected tests may be weakened\.';;
+      implementation-slicing-rejects-green-test-as-formal-pass) expected_diagnostic='Passing tests are formal PASS\.';;
+      implementation-slicing-rejects-direct-formal-fix-loop) expected_diagnostic='Phase 4 may go directly to phase-5-fix-loop\.';;
+      implementation-slicing-rejects-missing-local-failure-source) expected_diagnostic='Missing implementation slicing artifact: \.systems/ai/core/implementation-slicing\.md';;
+      implementation-slicing-rejects-forbidden-retest) expected_diagnostic='Unsafe pre-quality local failure route in \.systems/ai/core/implementation-slicing\.md: failed-check retest forbidden';;
+      implementation-slicing-rejects-compound-forbidden-retest) expected_diagnostic='Unsafe pre-quality local failure route in \.systems/ai/workflow/phase-4-implementation\.md: failed-check retest forbidden';;
+      implementation-slicing-rejects-forbidden-diagnosis) expected_diagnostic='Unsafe pre-quality local failure route in \.systems/ai/core/implementation-slicing\.md: failure diagnosis forbidden';;
+      implementation-slicing-requires-core-contract) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/core/implementation-slicing\.md: contract term: Implementation Slice Plan';;
+      implementation-slicing-requires-phase4-slice-plan) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/workflow/phase-4-implementation\.md: phase-4 term: Implementation Slice Plan';;
+      implementation-slicing-requires-template-execution-evidence) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/templates/workflow/phase-4-implementation\.template\.md: phase-4 template field: ## Slice Execution Evidence';;
+      implementation-slicing-blocks-bypass-qa-wording) expected_diagnostic='slice plan may bypass QA';;
+      implementation-slicing-requires-dod-source) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/core/implementation-slicing\.md: contract term: DoD source';;
+      implementation-slicing-requires-quality-closure) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/core/implementation-slicing\.md: contract term: Mandatory Quality Closure';;
+      implementation-slicing-blocks-pass-without-review) expected_diagnostic='implementation PASS without review';;
+      implementation-slicing-blocks-pass-before-findings-review) expected_diagnostic='PASS before findings review';;
+      implementation-slicing-blocks-automated-only-pass) expected_diagnostic='automated checks are sufficient for PASS';;
+      implementation-slicing-requires-micro-work-routing) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/core/operating-model\.md: operating model side-task/micro-task/micro-project integration';;
+      implementation-slicing-requires-micro-task-dod) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/templates/projects/micro-task\.template\.md: \.systems/ai/templates/projects/micro-task\.template\.md Definition of Done';;
+      implementation-slicing-requires-micro-project-dod) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/templates/micro-projects/micro-project\.template\.md: \.systems/ai/templates/micro-projects/micro-project\.template\.md Definition of Done';;
+      plan-quality-contract-requires-core-contract) expected_diagnostic='Missing plan-quality contract reference in \.systems/ai/core/plan-quality-contract\.md: contract field: ## Plan Quality Contract';;
+      plan-quality-contract-requires-implementation-quality-route) expected_diagnostic='Missing plan-quality contract reference in \.systems/ai/templates/workflow/phase-3-specification\.template\.md: Implementation Quality Closure route:';;
+      plan-quality-contract-requires-plan-artifact-qa-route) expected_diagnostic='Missing plan-quality contract reference in \.systems/ai/core/command-routing\.md: Codex /plan artifact QA route';;
+      plan-quality-contract-blocks-implementation-plan-without-artifact-qa) expected_diagnostic='Implementation-capable plan cannot use not-applicable artifact QA';;
+      plan-quality-contract-requires-concrete-dod-source) expected_diagnostic='Plan artifact needs a concrete value for: DoD source';;
+      plan-quality-contract-requires-read-only-not-applicable-reason) expected_diagnostic='Read-only plan needs a specific not-applicable reason';;
+      plan-quality-contract-blocks-quality-bypass-wording) expected_diagnostic='Plan Quality Contract may bypass QA\.';;
+      validation-profile-scoped-requires-checks) expected_diagnostic='--profile scoped requires --checks <check-a,check-b>';;
+      validation-profiles-require-standard-default) expected_diagnostic='Missing validation profile reference in \.systems/scripts/validate-workflow: validate-workflow profile support: profile="standard"';;
+      validation-profiles-require-ci-explicit-full) expected_diagnostic='Missing validation profile reference in \.github/workflows/ai-workflow-validate\.yml: CI explicit full validation';;
+      validation-profiles-require-agents-final-full) expected_diagnostic='Missing validation profile reference in AGENTS\.md near AGENTS finalization explicit full validation';;
+      validation-profiles-require-commands-final-full) expected_diagnostic='Missing validation profile reference in \.systems/ai/core/commands\.md near commands final maintenance explicit full validation';;
+      validation-profiles-require-readme-reuse-full) expected_diagnostic='Missing validation profile reference in README\.md near README reuse explicit full validation';;
+      validation-profiles-require-full-smoke-tests) expected_diagnostic='Missing validation profile reference in \.systems/scripts/validate-workflow: validate-workflow profile support: check-validator-smoke-tests';;
+      validation-profiles-block-fast-enough-before-commit) expected_diagnostic='fast is enough before commit';;
+      validation-profiles-block-standard-replaces-full) expected_diagnostic='standard may replace full for workflow contracts';;
+      validation-profiles-block-skip-smoke-pass) expected_diagnostic='skip smoke tests and mark PASS';;
+      request-batch-triage-requires-routing-field) expected_diagnostic='Missing request batch triage reference in \.systems/ai/core/request-batch-triage\.md: triage matrix field: routing';;
+      request-batch-triage-requires-risk-field) expected_diagnostic='Missing request batch triage reference in \.systems/ai/core/request-batch-triage\.md: triage matrix field: risk';;
+      request-batch-triage-requires-nine-column-matrix) expected_diagnostic='Invalid triage matrix column count at line 119: expected 9, got 8';;
+      request-batch-triage-requires-mixed-list-split) expected_diagnostic='Missing request batch triage reference in \.systems/ai/core/request-batch-triage\.md: mixed-list routing: active project and another repo-level item';;
+      request-batch-triage-blocks-automatic-implementation-wording) expected_diagnostic='batch triage may implement all items automatically';;
+      request-batch-triage-requires-high-risk-owner-decision) expected_diagnostic='Missing request batch triage reference in \.systems/ai/core/request-batch-triage\.md: high-risk routing boundary';;
+      response-evidence-trace-requires-section) expected_diagnostic='Missing response evidence trace reference in \.systems/ai/core/response-contract\.md: Execution Trace section';;
+      response-evidence-trace-requires-skills-field) expected_diagnostic='Missing response evidence trace reference in \.systems/ai/core/response-contract\.md: trace field: Skills/roles used:';;
+      response-evidence-trace-blocks-no-sources-needed) expected_diagnostic='no sources needed';;
+      response-evidence-trace-requires-agents-routing) expected_diagnostic='Missing response evidence trace reference in AGENTS\.md: AGENTS execution trace';;
+      phase-skill-discovery-requires-metadata-first-agents) expected_diagnostic='Missing phase skill discovery reference in AGENTS\.md: no unrelated full-body read';;
+      phase-skill-discovery-requires-metadata-first-operating-model) expected_diagnostic='Missing phase skill discovery reference in \.systems/ai/core/operating-model\.md: no unrelated full-body read';;
+      phase-skill-discovery-requires-frontmatter-boundary) expected_diagnostic='Missing phase skill discovery reference in AGENTS\.md: frontmatter boundary';;
+      phase-skill-discovery-requires-operating-model) expected_diagnostic='Missing phase skill discovery reference in \.systems/ai/core/operating-model\.md: phase skill discovery';;
+      phase-skill-discovery-requires-workspace-first) expected_diagnostic='Missing phase skill discovery reference in \.systems/ai/core/operating-model\.md: workspace skills first';;
+      phase-skill-discovery-requires-none-fallback) expected_diagnostic='Missing phase skill discovery reference in \.systems/ai/core/operating-model\.md: Skills used: none';;
+      phase-skill-discovery-blocks-skill-approval) expected_diagnostic='skill may approve implementation';;
+      default-quality-closure-requires-contract) expected_diagnostic='Missing default quality closure reference in \.systems/ai/core/quality-review\.md: default quality closure';;
+      default-quality-closure-requires-opt-out-report) expected_diagnostic='Missing default quality closure reference in \.systems/ai/core/quality-review\.md: Quality skipped by owner opt-out';;
+      default-quality-closure-blocks-opt-out-pass) expected_diagnostic='bez QA may continue as PASS';;
+      default-quality-closure-requires-verification-opt-out) expected_diagnostic='Missing default quality closure reference in \.systems/ai/core/quality-review\.md: opt-out: bez weryfikacji';;
+      default-quality-closure-blocks-without-verification-pass) expected_diagnostic='without verification may count as PASS';;
+      default-idea-validation-requires-single-work-default) expected_diagnostic='Missing default idea validation reference in \.systems/ai/core/task-intake\.md: Single new work defaults to Task Idea Validation';;
+      default-idea-validation-requires-batch-validation-route) expected_diagnostic='Missing default idea validation reference in \.systems/ai/core/request-batch-triage\.md: validation route';;
+      default-idea-validation-requires-opt-out-grammar) expected_diagnostic='Missing default idea validation reference in \.systems/ai/core/task-intake\.md: task intake opt-out: bez idea validation';;
+      default-idea-validation-requires-opt-out-reporting) expected_diagnostic='Missing default idea validation reference in \.systems/ai/core/response-contract\.md: required opt-out reporting phrase';;
+      default-idea-validation-blocks-risk-bypass-wording) expected_diagnostic='without idea validation may bypass risk checks';;
+      end-of-task-capture-requires-trigger-grammar) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/core/end-of-task-capture\.md: trigger grammar';;
+      end-of-task-capture-requires-precedence) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/core/end-of-task-capture\.md: precedence rules';;
+      end-of-task-capture-requires-privacy-field) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/templates/capture/end-of-task-capture\.template\.md: template field: Privacy/scope check';;
+      end-of-task-capture-preserves-distillation-route) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/core/end-of-task-capture\.md: unchanged route: Zrób distillation\.\*phase-6-distillation';;
+      end-of-task-capture-preserves-checkpoint-route) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/core/end-of-task-capture\.md: unchanged route: Zrób checkpoint\.\*phase-7-checkpoint';;
+      end-of-task-capture-blocks-auto-pass) expected_diagnostic='end task may mark PASS automatically';;
+      end-of-task-capture-blocks-auto-final-check) expected_diagnostic='end task runs phase-8-final-check';;
+      end-of-task-capture-blocks-project-close) expected_diagnostic='end task may close project without final-owner-yes';;
+      end-of-task-capture-blocks-client-names) expected_diagnostic='System Insights may include client names';;
+      end-of-task-capture-blocks-external-memory-domain-lessons|knowledge-capture-reminder-blocks-external-memory-frontend-lessons) expected_diagnostic='External Memory stores frontend lessons';;
+      knowledge-capture-reminder-requires-contract) expected_diagnostic='Missing file for knowledge capture reminder check: \.systems/ai/core/knowledge-capture-reminder\.md';;
+      knowledge-capture-reminder-requires-template) expected_diagnostic='Missing file for knowledge capture reminder check: \.systems/ai/templates/capture/knowledge-capture-reminder\.template\.md';;
+      knowledge-capture-reminder-requires-implementation-trigger) expected_diagnostic='Missing knowledge capture reminder reference in \.systems/ai/core/knowledge-capture-reminder\.md: trigger: implementation work completed';;
+      knowledge-capture-reminder-requires-new-unrelated-task-trigger) expected_diagnostic='Missing knowledge capture reminder reference in \.systems/ai/core/knowledge-capture-reminder\.md: trigger: the owner starts a new unrelated task';;
+      knowledge-capture-reminder-blocks-auto-memory) expected_diagnostic='Knowledge Capture Reminder automatically writes memory';;
+      knowledge-capture-reminder-blocks-auto-memory-with-trailing-negation) expected_diagnostic='Knowledge Capture Reminder automatically writes memory; this does not require owner approval';;
+      knowledge-capture-reminder-blocks-auto-push) expected_diagnostic='Knowledge Capture Reminder auto-push';;
+      knowledge-capture-reminder-blocks-ignored-workspace-commit) expected_diagnostic='commit ignored workspace artifacts';;
+      knowledge-capture-reminder-blocks-skip-bypass) expected_diagnostic='skip knowledge capture may bypass phase 6 evidence privacy status gate';;
+      knowledge-capture-reminder-blocks-skip-permission-bypass) expected_diagnostic='owner-approved skip capture may bypass permissions and owner approvals';;
+      knowledge-capture-reminder-blocks-skip-stop-condition-bypass) expected_diagnostic='no capture may ignore stop conditions';;
+      knowledge-capture-reminder-blocks-external-memory-backend-lessons) expected_diagnostic='External Memory stores backend lessons';;
+      knowledge-capture-reminder-blocks-external-memory-smart-contract-lessons) expected_diagnostic='External Memory stores smart contract lessons';;
+      knowledge-capture-reminder-blocks-external-memory-SEO-lessons) expected_diagnostic='External Memory stores SEO lessons';;
+      knowledge-capture-reminder-blocks-external-memory-ads-lessons) expected_diagnostic='External Memory stores ads lessons';;
+      knowledge-capture-reminder-blocks-external-memory-advertising-lessons) expected_diagnostic='External Memory stores advertising lessons';;
+      knowledge-capture-reminder-blocks-external-memory-paid-media-lessons) expected_diagnostic='External Memory stores paid media lessons';;
+      knowledge-capture-reminder-blocks-external-memory-offer-lessons) expected_diagnostic='External Memory stores offer lessons';;
+      knowledge-capture-reminder-blocks-external-memory-client-work-lessons) expected_diagnostic='External Memory stores client work lessons';;
+      knowledge-capture-reminder-blocks-external-memory-product-lessons) expected_diagnostic='External Memory stores product lessons';;
+      knowledge-capture-reminder-blocks-inverse-external-memory-domain-routing) expected_diagnostic='Product lessons belong in External Memory';;
+      knowledge-capture-reminder-blocks-system-insights-raw-client-data) expected_diagnostic='System Insights may include raw client data';;
+      instruction-adherence-refresh-requires-contract) expected_diagnostic='Missing file for instruction adherence refresh check: \.systems/ai/core/instruction-adherence-refresh\.md';;
+      instruction-adherence-refresh-requires-pre-write-trigger) expected_diagnostic='Missing instruction adherence refresh reference in \.systems/ai/core/instruction-adherence-refresh\.md: trigger: before the first implementation-class write';;
+      instruction-adherence-refresh-requires-pre-commit-handoff-trigger) expected_diagnostic='Missing instruction adherence refresh reference in \.systems/ai/core/instruction-adherence-refresh\.md: trigger: before commit readiness, handoff, or quality closure';;
+      instruction-adherence-refresh-requires-resume-trigger) expected_diagnostic='Missing instruction adherence refresh reference in \.systems/ai/core/instruction-adherence-refresh\.md: trigger: after session resume';;
+      instruction-adherence-refresh-requires-compaction-trigger) expected_diagnostic='Missing instruction adherence refresh reference in \.systems/ai/core/instruction-adherence-refresh\.md: trigger: after context compaction';;
+      instruction-adherence-refresh-requires-source-conflict-trigger) expected_diagnostic='Missing instruction adherence refresh reference in \.systems/ai/core/instruction-adherence-refresh\.md: trigger: when chat, memory, status, repository state, accepted artifacts, or contracts conflict';;
+      instruction-adherence-refresh-requires-trace-fields) expected_diagnostic='Missing instruction adherence refresh reference in \.systems/ai/core/response-contract\.md: response trace field: Contracts refreshed: <paths\|not-needed>';;
+      response-evidence-trace-requires-instruction-refresh-fields) expected_diagnostic='Missing response evidence trace reference in \.systems/ai/core/response-contract\.md: trace field: Contracts refreshed: <paths\|not-needed>';;
+      instruction-adherence-refresh-blocks-chat-memory-may-override-agentsmd) expected_diagnostic='chat memory may override AGENTS\.md';;
+      instruction-adherence-refresh-blocks-agent-may-change-default-behavior-without-owner-approval) expected_diagnostic='agent may change default behavior without owner approval';;
+      instruction-adherence-refresh-blocks-any-explicit-owner-message-may-bypass-contracts) expected_diagnostic='any explicit owner message may bypass contracts';;
+      instruction-adherence-refresh-blocks-instruction-adherence-refresh-grants-write-permission) expected_diagnostic='Instruction Adherence Refresh grants write permission';;
+      instruction-adherence-refresh-blocks-instruction-adherence-refresh-may-bypass-permissions) expected_diagnostic='Instruction Adherence Refresh may bypass permissions';;
+      instruction-adherence-refresh-blocks-full-refresh-is-required-before-every-message) expected_diagnostic='full refresh is required before every message';;
+      instruction-adherence-refresh-blocks-not-needed-is-allowed-after-context-compaction) expected_diagnostic='not-needed is allowed after context compaction';;
+      instruction-adherence-refresh-blocks-quality-closure-may-use-a-stale-instruction-baseline) expected_diagnostic='quality closure may use a stale instruction baseline';;
+      instruction-adherence-refresh-blocks-chat-history-overrides-agentsmd) expected_diagnostic='chat history overrides AGENTS\.md';;
+      instruction-adherence-refresh-blocks-owner-instruction-bypasses-qa) expected_diagnostic='owner instruction bypasses QA';;
+      instruction-adherence-refresh-blocks-instruction-adherence-refresh-allows-formal-pass) expected_diagnostic='Instruction Adherence Refresh allows formal PASS';;
+      instruction-adherence-refresh-blocks-run-full-refresh-before-every-edit) expected_diagnostic='run full refresh before every edit';;
+      instruction-adherence-refresh-blocks-not-needed-is-valid-after-resume) expected_diagnostic='not-needed is valid after resume';;
+      instruction-adherence-refresh-blocks-not-needed-is-valid-after-a-long-interruption) expected_diagnostic='not-needed is valid after a long interruption';;
+      instruction-adherence-refresh-blocks-quality-closure-uses-stale-instruction-baseline) expected_diagnostic='quality closure uses stale instruction baseline';;
+      instruction-adherence-refresh-blocks-every-tracked-contract-change-requires-refresh-before-the-next-write) expected_diagnostic='every tracked contract change requires refresh before the next write';;
+      implementation-slicing-requires-instruction-refresh-evidence) expected_diagnostic='Missing implementation slicing reference in \.systems/ai/templates/workflow/phase-4-implementation\.template\.md: phase-4 template field: Instruction refresh';;
+      global-quality-review-requires-instruction-baseline) expected_diagnostic='Missing global quality review reference in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: formal quality template field: \^- Instruction baseline: `<current\\\|stale\\\|blocked>`\$';;
+      contract-compliance-requires-instruction-refresh) expected_diagnostic='Missing contract compliance reference in \.systems/ai/core/contract-compliance\.md: Instruction refresh';;
+      owner-decision-checkpoints-requires-contract) expected_diagnostic='Missing file for owner decision checkpoint check: \.systems/ai/core/owner-decision-checkpoints\.md';;
+      owner-decision-checkpoints-requires-phase-block) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/workflow/phase-1-architecture\.md: checkpoint heading';;
+      owner-decision-checkpoints-blocks-duplicate-phase-block) expected_diagnostic='Owner Decision Checkpoint must appear exactly once in \.systems/ai/workflow/phase-1-architecture\.md';;
+      owner-decision-checkpoints-requires-template-fields) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/templates/workflow/phase-3-specification\.template\.md: checkpoint field: - Optional owner refinements: `<list\|none>`';;
+      owner-decision-checkpoints-requires-owner-preference) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/core/owner-decision-checkpoints\.md: decision class: owner-preference';;
+      owner-decision-checkpoints-requires-owner-preference-in-phase-taxonomy) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/templates/workflow/phase-0-idea-validation\.template\.md: idea validation template taxonomy';;
+      owner-decision-checkpoints-requires-recommendation-first) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/core/owner-decision-checkpoints\.md: behavior: put the recommended option first';;
+      owner-decision-checkpoints-requires-question-batch-limit) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/core/owner-decision-checkpoints\.md: behavior: group at most `1-3` questions';;
+      owner-decision-checkpoints-requires-option-impact) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/core/owner-decision-checkpoints\.md: behavior: provide impact for the recommendation and each alternative';;
+      owner-decision-checkpoints-blocks-ask-the-owner-about-every-uncertainty) expected_diagnostic='ask the owner about every uncertainty';;
+      owner-decision-checkpoints-blocks-auto-resolve-high-impact-decisions) expected_diagnostic='auto-resolve high-impact decisions';;
+      owner-decision-checkpoints-blocks-critical-risk-decisions-are-auto-resolvable) expected_diagnostic='critical-risk decisions are auto-resolvable';;
+      owner-decision-checkpoints-blocks-nie-dopytuj-may-bypass-qa) expected_diagnostic='nie dopytuj may bypass QA';;
+      owner-decision-checkpoints-blocks-no-question-opt-out-allows-guessed-acceptance-criteria) expected_diagnostic='no-question opt-out allows guessed acceptance criteria';;
+      owner-decision-checkpoints-blocks-autopilot-may-ask-live-questions-while-running) expected_diagnostic='autopilot may ask live questions while running';;
+      owner-decision-checkpoints-blocks-autopilot-asks-clarification-questions-while-running) expected_diagnostic='autopilot asks clarification questions while running';;
+      owner-decision-checkpoints-blocks-autopilot-may-continue-with-a-pending-material-decision) expected_diagnostic='autopilot may continue with a pending material decision';;
+      owner-decision-checkpoints-blocks-autopilot-continues-with-a-pending-material-decision) expected_diagnostic='autopilot continues with a pending material decision';;
+      owner-decision-checkpoints-blocks-dreaming-mode-may-ask-live-questions) expected_diagnostic='Dreaming Mode may ask live questions';;
+      owner-decision-checkpoints-blocks-dreaming-mode-asks-follow-up-questions) expected_diagnostic='Dreaming Mode asks follow-up questions';;
+      owner-decision-checkpoints-blocks-read-only-review-may-interrupt-to-ask) expected_diagnostic='read-only review may interrupt to ask';;
+      owner-decision-checkpoints-blocks-optional-knowledge-capture-requires-interactive-question) expected_diagnostic='Optional Knowledge Capture requires interactive question';;
+      review-completeness-gate-blocks-incomplete-v2-verdict) expected_diagnostic='Missing review completeness gate reference in \.systems/ai/core/quality-review\.md: incomplete V2 verdict block';;
+      review-completeness-gate-requires-formal-policy-matrix) expected_diagnostic='Missing review completeness gate reference in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: canonical V2 template field: - Policy-boundary adversarial matrix: `<completed\|not-applicable\|incomplete>`';;
+      review-completeness-gate-requires-micro-producer-audit) expected_diagnostic='Missing review completeness gate reference in \.systems/ai/templates/micro-projects/micro-project\.template\.md: canonical V2 template field: - Producer-consumer field audit: `<completed\|not-applicable\|incomplete>`';;
+      review-completeness-gate-requires-dreaming-decision-artifact) expected_diagnostic='Missing review completeness gate reference in \.systems/ai/templates/dreaming/dream-report\.template\.md: Dreaming full decision record';;
+      dreaming-mode-requires-full-queued-decision-fields) expected_diagnostic='Dream report template missing v2 recommendation column: Decision Artifact';;
+      review-completeness-gate-requires-autopilot-decision-artifact) expected_diagnostic='Missing review completeness gate reference in \.systems/ai/templates/autopilot/readiness\.template\.md: autopilot full decision record: decision-artifact:';;
+      owner-decision-checkpoints-requires-autopilot-decision-artifact) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/templates/autopilot/readiness\.template\.md: autopilot queued-decision field: decision-artifact:';;
+      review-completeness-gate-requires-shared-policy-helper) expected_diagnostic='Missing review completeness gate reference in \.systems/scripts/check-owner-decision-checkpoints: shared policy helper use';;
+      review-completeness-gate-audits-full-qa-policy-validator) expected_diagnostic='Missing full QA policy validator from Review Completeness Gate audit';;
+      review-completeness-gate-requires-review-baseline-and-freshness-inside-gate) expected_diagnostic='Missing review-template Review Completeness Gate field: - Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`';;
+      policy-boundaries-fails-missing-source) expected_diagnostic='rg: /definitely/missing/policy-source\.md: IO error for operation on /definitely/missing/policy-source\.md: No such file or directory \(os error 2\)';;
+      policy-boundaries-blocks-repeated-unsafe-match-after-safe-quote) expected_diagnostic='Do not say `no sources needed`; no sources needed\.';;
+      cross-system-yes-without-handoff-fails) expected_diagnostic='Shared-impact yes requires handoff path';;
+      cross-system-pending-blocks-handoff) expected_diagnostic='Shared-impact decision pending blocks commit/handoff';;
+      cross-system-handoff-blocks-raw-client-data) expected_diagnostic='Shared-impact handoff contains a raw client/credential marker';;
+      cross-system-handoff-blocks-email-shaped-data) expected_diagnostic='Shared-impact handoff contains an email or credential-shaped value';;
+      cross-system-handoff-requires-external-memory-namespace) expected_diagnostic='Shared-impact handoff must live under ai-workflow-workspace/external-memory/memory/';;
+      end-of-task-capture-requires-koniec-pracy) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/core/end-of-task-capture\.md: trigger: Koniec pracy';;
+      end-of-task-capture-blocks-acknowledge-only) expected_diagnostic='Koniec pracy may acknowledge only and ask what to do next\.';;
+      validation-routing-requires-script-applicability) expected_diagnostic='Missing validation routing requirement in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: field: Workflow script applicability';;
+      validation-routing-blocks-green-scripts-pass) expected_diagnostic='Green scripts equal PASS\.';;
+      model-selection-requires-non-blocking-field) expected_diagnostic='Missing model guidance requirement in \.systems/ai/templates/workflow/phase-4-implementation\.template\.md: model field: Blocking: `no`';;
+      model-selection-blocks-qa-bypass) expected_diagnostic='Model selection may bypass QA\.';;
+      worktree-bootstrap-requires-approval) expected_diagnostic='Worktree bootstrap STOP: platform network/write approval was not recorded';;
+      worktree-bootstrap-requires-strong-marker) expected_diagnostic='Worktree bootstrap STOP: missing strong AI Workflow installation marker';;
+      worktree-bootstrap-rejects-symlink-marker) expected_diagnostic='Worktree bootstrap STOP: accepted marker cannot be a symlink';;
+      worktree-bootstrap-stops-agents-collision) expected_diagnostic='Worktree bootstrap STOP: root AGENTS\.md already exists and requires owner-approved merge';;
+      worktree-bootstrap-stops-wrong-origin) expected_diagnostic='Worktree bootstrap STOP: existing clone has wrong origin';;
+      worktree-bootstrap-stops-dirty-clone) expected_diagnostic='Worktree bootstrap STOP: existing clone is dirty';;
+      owner-decision-checkpoints-requires-response-trace) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/core/response-contract\.md: response contract field: - Decisions asked/pending: <ids\|none>';;
+      response-evidence-trace-requires-owner-decision-fields) expected_diagnostic='Missing response evidence trace reference in \.systems/ai/core/response-contract\.md: owner decision trace field: - Decisions asked/pending: <ids\|none>';;
+      owner-decision-checkpoints-blocks-quality-chain-with-pending-decision) expected_diagnostic='Missing owner decision checkpoint reference in \.systems/ai/core/workflow\.md: workflow decision stop before quality chaining';;
+      default-quality-chaining-blocks-pending-owner-decision) expected_diagnostic='Missing default quality chaining text in \.systems/ai/core/workflow\.md: If the working phase ends with a material `Owner Decision Checkpoint` state of `awaiting-owner` or `blocked`, stop before QA/Quality chaining\.';;
+      qa-evidence-positive-gate-still-requires-evidence|qa-evidence-punctuated-positive-still-requires-evidence|qa-evidence-gate-only-positive-still-requires-evidence) expected_diagnostic='missing ## Evidence section';;
+      qa-evidence-rejects-conflicting-declared-results) expected_diagnostic='conflicting declared result and gate decision';;
+      full-qa-verification-requires-legacy-contract-legacy-fingerprint-admission-is-terminal-for-the-exact-registered-file) expected_diagnostic='Missing full QA verification reference in \.systems/ai/core/full-qa-verification\.md: terminal legacy admission boundary';;
+      full-qa-verification-requires-legacy-contract-a-v1-marker-takes-precedence-over-pre-v1-admission) expected_diagnostic='Missing full QA verification reference in \.systems/ai/core/full-qa-verification\.md: V1-first legacy admission precedence';;
+      full-qa-verification-requires-legacy-contract-superseded-invalid-v1) expected_diagnostic='Missing full QA verification reference in \.systems/ai/core/full-qa-verification\.md: incomplete V1 recovery boundary';;
+      full-qa-verification-requires-legacy-contract-does-not-upgrade-the-artifact) expected_diagnostic='Missing full QA verification reference in \.systems/ai/core/full-qa-verification\.md: legacy evidence is not an evidence upgrade';;
+      full-qa-verification-requires-artifact-completeness-gate) expected_diagnostic='Missing full QA verification reference in \.systems/ai/templates/workflow/phase-1-architecture-qa\.template\.md: artifact completeness gate';;
+      full-qa-verification-requires-current-phase5-run) expected_diagnostic='Missing full QA verification reference in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: current quality section: ## Current QA Run';;
+      full-qa-verification-blocks-technical-only-qa) expected_diagnostic='Technical checks are enough without owner intent\.';;
+      full-qa-verification-requires-forbidden-state-matrix-field) expected_diagnostic='Missing full QA verification reference in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: phase 5 matrix field: Forbidden States/Rows';;
+      qa-evidence-requires-artifact-completeness-for-pass) expected_diagnostic='Invalid current QA assessment: missing or incomplete Artifact QA Completeness Gate: Owner intent and governing sources reviewed';;
+      qa-evidence-requires-contract-marker-for-formal-pass|qa-evidence-rejects-tampered-legacy-fingerprint|qa-evidence-rejects-unregistered-legacy-fingerprint|qa-evidence-rejects-wrong-legacy-checksum|qa-evidence-rejects-wrong-legacy-path|qa-evidence-rejects-outside-workspace-legacy) expected_diagnostic='missing V1 QA marker or registered legacy evidence fingerprint';;
+      qa-evidence-rejects-artifact-pass-with-scope-mismatch) expected_diagnostic='Invalid current QA assessment: unsatisfied Artifact QA Completeness Gate: Scope and out-of-scope consistency';;
+      qa-evidence-rejects-incomplete-v1-recovery) expected_diagnostic='missing ## Artifact QA Completeness Gate for formal artifact QA PASS';;
+      naming-global-still-fails) expected_diagnostic='Invalid Markdown filename \(workspace-filesystem\): .*ai-workflow-workspace/projects/unrelated-project/Bad Name\.md';;
+      status-consistency-selected-project-still-fails|status-consistency-global-still-fails) expected_diagnostic='ai-workflow-workspace/projects/unrelated-project/status\.md has invalid current-phase: not-a-phase';;
+      workflow-fast-global-still-fails) expected_diagnostic='Invalid Markdown filename';;
+      qa-evidence-requires-adaptive-matrix-for-phase-5-pass) expected_diagnostic='Invalid current QA assessment: missing current implementation quality section: Adaptive Data / Integration Verification Matrix';;
+      qa-evidence-requires-phase-5-definition-of-done-validation) expected_diagnostic='Invalid current QA assessment: missing current implementation quality section: Definition Of Done Validation';;
+      qa-evidence-requires-phase-5-intent--plan--spec-compliance) expected_diagnostic='Invalid current QA assessment: missing current implementation quality section: Intent / Plan / Spec Compliance';;
+      qa-evidence-requires-phase-5-review-completeness-gate) expected_diagnostic='Invalid current QA assessment: missing or empty current subsection: Review Completeness Gate';;
+      qa-evidence-requires-phase-5-findings) expected_diagnostic='Invalid current QA assessment: missing or empty current subsection: Findings';;
+      qa-evidence-rejects-phase-5-pass-with-failed-dod) expected_diagnostic='Invalid current QA assessment: implementation PASS lacks complete current DoD validation';;
+      qa-evidence-rejects-phase-5-pass-with-partial-intent-compliance) expected_diagnostic='Invalid current QA assessment: unsatisfied Intent / Plan / Spec Compliance: Compliance status';;
+      qa-evidence-rejects-phase-5-pass-with-stale-completeness-gate) expected_diagnostic='Invalid current QA assessment: unsatisfied Review Completeness Gate: Closure freshness';;
+      qa-evidence-rejects-phase-5-pass-with-unresolved-p1) expected_diagnostic='Invalid current QA assessment: PASS has unresolved or undocumented findings';;
+      qa-evidence-rejects-phase-5-pass-with-unsatisfied-quality-gate) expected_diagnostic='Invalid current QA assessment: unsatisfied Quality Gate: 100% DoD satisfied';;
+      qa-evidence-requires-complete-required-adaptive-matrix-row) expected_diagnostic='Invalid current QA assessment: incomplete current adaptive matrix row';;
+      bad-phase-transition) expected_diagnostic='\.systems/ai/examples/projects/EXAMPLE/status\.md has invalid phase transition: phase-1-architecture \+ PASS -> phase-8-final-check';;
+      update-blocks-dirty-template|update-blocks-dirty-example-micro-project) expected_diagnostic='STOP: system-owned files are dirty';;
+      update-blocks-legacy-nested-workspace) expected_diagnostic='STOP: legacy workspace found inside AI_WORKFLOW_HOME';;
+      delivery-constraints-blocks-quality-bypass) expected_diagnostic='Deadline pressure may skip QA\.';;
+      distillation-state-blocks-dreaming-write) expected_diagnostic='Dreaming automatically writes memory from every undistilled state\.';;
+      distillation-state-requires-state-field) expected_diagnostic='Missing distillation state reference in \.systems/ai/templates/capture/distillation-state\.template\.md: canonical State field';;
+      delivery-constraints-requires-phase5-evidence) expected_diagnostic='Missing delivery constraints reference in \.systems/ai/workflow/phase-5-quality\.md: delivery block';;
+      distillation-state-requires-mandatory-producer) expected_diagnostic='Missing distillation state reference in \.systems/ai/core/distillation-state\.md: mandatory producer rule';;
+      dreaming-queue-requires-all-columns) expected_diagnostic='Section '\''Undistilled Work Queue'\'' missing required table column '\''Residual Risk'\'': \.systems/ai/templates/dreaming/dream-report\.template\.md';;
+      workspace-freshness-remains-advisory) expected_diagnostic='Workspace freshness incorrectly acts as a hard gate';;
+      contract-topology-remains-advisory) expected_diagnostic='Contract topology incorrectly acts as a hard gate';;
+      validation-observability-preserves-pass-integrity) expected_diagnostic='Validation observability weakens coverage or PASS integrity';;
+      skill-evaluation-remains-optional) expected_diagnostic='Skill evaluation contract contains unsafe or mandatory wording';;
+      update-ff-only-failure-leaves-external-workspace) expected_diagnostic='^AI_WORKFLOW_UPSTREAM_STATE relation=diverged ';;
+    esac
+  fi
 
   should_run_smoke_test "$name" || return 0
 
@@ -94,9 +580,33 @@ run_must_fail() {
   (cd "$tmp" && "$timeout_runner" --timeout-seconds "$test_timeout_seconds" "$@") >"$output" 2>&1
   status=$?
   set -e
-  record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -ne 0 ]] && echo pass || echo fail)"
-  if [[ "$status" -eq 0 ]]; then
-    echo "Validator smoke test unexpectedly passed: $name"
+  if [[ -n "${AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT:-}" ]]; then
+    mkdir -p "$(dirname "$AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT")"
+    printf '%s\t%s\t%s\n' "$name" "$status" "$(sed -n '/[^[:space:]]/{p;q;}' "$output")" >> "$AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT"
+  fi
+  record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -eq "$expected_status" ]] && echo pass || echo fail)"
+  if [[ "$status" -ne "$expected_status" ]]; then
+    echo "Validator smoke test returned $status instead of expected $expected_status: $name"
+    cat "$output"
+    exit 1
+  fi
+  if grep -Eq '^(Traceback \(most recent call last\):|FileNotFoundError:|PermissionError:|OSError:)' "$output"; then
+    echo "Validator smoke test hit an infrastructure error instead of the intended rejection: $name"
+    cat "$output"
+    exit 1
+  fi
+  if [[ "$expected_diagnostic" == '[[:graph:]]' && -z "$expected_literal" ]]; then
+    echo "Validator smoke test lacks a specific diagnostic contract: $name"
+    cat "$output"
+    exit 1
+  fi
+  if ! grep -Eq -- "$expected_diagnostic" "$output"; then
+    echo "Validator smoke test lacks expected diagnostic: $name"
+    cat "$output"
+    exit 1
+  fi
+  if [[ -n "$expected_literal" ]] && ! grep -Fq -- "$expected_literal" "$output"; then
+    echo "Validator smoke test lacks the intended rejected clause: $name"
     cat "$output"
     exit 1
   fi
@@ -162,6 +672,38 @@ record_smoke_timing() {
   fi
   printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$(smoke_test_group "$name")" "$duration" "$result" "smoke-$smoke_group" >> "$output_path"
 }
+
+for infrastructure_case in unexpected-timeout missing-source wrong-error-code wrong-diagnostic; do
+  case "$infrastructure_case" in
+    unexpected-timeout)
+      infrastructure_command=(.systems/scripts/run-with-timeout --timeout-seconds 1 python3 -c 'import time; time.sleep(3)')
+      ;;
+    missing-source)
+      infrastructure_command=(.systems/scripts/no-such-validator)
+      ;;
+    wrong-error-code)
+      infrastructure_command=(python3 -c 'import sys; print("wrong rejection"); sys.exit(2)')
+      ;;
+    wrong-diagnostic)
+      infrastructure_command=(python3 -c 'import sys; print("unrelated error"); sys.exit(1)')
+      ;;
+  esac
+  if (AI_WORKFLOW_TIMING_OUTPUT='' run_must_fail "smoke-helper-rejects-$infrastructure_case" --expect-literal 'intended policy violation' "${infrastructure_command[@]}") > "$tmp/smoke-helper-$infrastructure_case.out" 2>&1; then
+    echo "Negative smoke helper accepted $infrastructure_case as a policy rejection"
+    exit 1
+  fi
+  expected_failure='instead of expected 1'
+  if [[ "$infrastructure_case" == missing-source ]]; then
+    expected_failure='infrastructure error instead of the intended rejection'
+  elif [[ "$infrastructure_case" == wrong-diagnostic ]]; then
+    expected_failure='lacks the intended rejected clause'
+  fi
+  grep -q "$expected_failure" "$tmp/smoke-helper-$infrastructure_case.out" || {
+    echo "Negative smoke helper did not report the wrong exit status for $infrastructure_case"
+    cat "$tmp/smoke-helper-$infrastructure_case.out"
+    exit 1
+  }
+done
 
 run_must_pass "validation-completion-validator-valid" .systems/scripts/check-validation-completion
 
@@ -301,37 +843,37 @@ run_policy_boundary_matrix() {
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$direct_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-direct-unsafe" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-direct-unsafe" --expect-literal "$direct_unsafe_case" "$check"
   mv "$target.bak" "$target"
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$compound_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-safe-but-unsafe-exception" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-safe-but-unsafe-exception" --expect-literal "$compound_unsafe_case" "$check"
   mv "$target.bak" "$target"
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$period_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-safe-period-unsafe-exception" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-safe-period-unsafe-exception" --expect-literal "$period_unsafe_case" "$check"
   mv "$target.bak" "$target"
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$colon_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-safe-colon-unsafe-exception" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-safe-colon-unsafe-exception" --expect-literal "$colon_unsafe_case" "$check"
   mv "$target.bak" "$target"
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$unless_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-safe-unless-unsafe-exception" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-safe-unless-unsafe-exception" --expect-literal "$unless_unsafe_case" "$check"
   mv "$target.bak" "$target"
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$yet_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-safe-yet-unsafe-exception" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-safe-yet-unsafe-exception" --expect-literal "$yet_unsafe_case" "$check"
   mv "$target.bak" "$target"
 
   cp "$target" "$target.bak"
   printf '\n%s\n' "$semicolon_unsafe_case" >> "$target"
-  run_must_fail "policy-boundary-${id}-blocks-safe-semicolon-unsafe-exception" "$check"
+  run_must_fail "policy-boundary-${id}-blocks-safe-semicolon-unsafe-exception" --expect-literal "$semicolon_unsafe_case" "$check"
   mv "$target.bak" "$target"
 }
 
@@ -3087,7 +3629,11 @@ git clone -q "$bootstrap_remote" "$bootstrap_dirty/ai-workflow"
 printf '\ndirty\n' >> "$bootstrap_dirty/ai-workflow/README.md"
 run_must_fail "worktree-bootstrap-stops-dirty-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$bootstrap_dirty" --approved
 
-run_must_fail "worktree-bootstrap-stops-self-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" .systems/scripts/bootstrap-target-worktree --target "$tmp" --approved
+bootstrap_self="$bootstrap_v1/self-clone"
+mkdir -p "$bootstrap_self/.systems/scripts"
+cp "$tmp/.systems/scripts/bootstrap-target-worktree" "$bootstrap_self/.systems/scripts/bootstrap-target-worktree"
+git -C "$bootstrap_self" init -q
+run_must_fail "worktree-bootstrap-stops-self-clone" env AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1 AI_WORKFLOW_BOOTSTRAP_REMOTE="$bootstrap_remote" "$bootstrap_self/.systems/scripts/bootstrap-target-worktree" --target "$bootstrap_self" --approved
 rm -rf "$bootstrap_v1"
 
 cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"
@@ -3107,44 +3653,182 @@ printf '\nA deterministic task with no material choice reports `No owner decisio
 run_must_pass "owner-decision-checkpoints-allows-deterministic-and-phase-end-recap" .systems/scripts/check-owner-decision-checkpoints
 mv "$tmp/.systems/ai/core/owner-decision-checkpoints.md.bak" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
 
-cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
-# Bad quality
-
-Result: `PASS`
-
-## Gate Decision
-
-can-proceed: true
-MD
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/^### Evidence$/### Missing Evidence/m' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
 run_must_fail "pass-without-evidence" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
 
-cat > "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" <<'MD'
-# Bad quality
-
-Result: `PASS`
-
-## Evidence
-
-```yaml
-commands:
-  - command: "example check"
-    result: "FAIL"
-    notes: "failed command must block PASS"
-manual-checks: []
-artifacts-reviewed:
-  - ".systems/ai/examples/projects/EXAMPLE/tasks.md"
-skipped-checks: []
-```
-
-## Gate Decision
-
-```yaml
-result: PASS
-can-proceed: true
-```
-MD
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/result: "PASS"/result: "FAIL"/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
 run_must_fail "pass-with-failed-command" .systems/scripts/check-qa-evidence
-cp "$tmp/example-phase5-quality.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+v2_project="$tmp/ai-workflow-workspace/projects/qa-reader-smoke"
+mkdir -p "$v2_project/specs" "$v2_project/quality"
+printf 'Synthetic accepted specification.\n' > "$v2_project/specs/fixture.md"
+printf 'Synthetic project context.\n' > "$v2_project/context.md"
+cat > "$v2_project/status.md" <<'MD'
+| Field | Value |
+| --- | --- |
+| `workflow-scope` | `plan-derived` |
+| `current-task` | `LV-CORE-001-verdict-integrity` |
+| `current-phase` | `phase-3-spec-qa` |
+| `phase-result` | `PASS` |
+| `next-phase` | `phase-4-implementation` |
+| `blocking-reason` | `none` |
+| `updated-at` | `2026-09-29` |
+MD
+cat > "$v2_project/tasks.md" <<'MD'
+| Task ID | Title | Risk | Status | Task Card | Spec | Quality |
+| --- | --- | --- | --- | --- | --- | --- |
+| LV-CORE-001-verdict-integrity | Synthetic | high | ready | none | none | none |
+MD
+v2_input_sha="$(shasum -a 256 "$v2_project/specs/fixture.md" | awk '{print $1}')"
+v2_digest="$(printf 'owning-project-evidence:specs/fixture.md=%s\n' "$v2_input_sha" | shasum -a 256 | awk '{print $1}')"
+v2_report="$v2_project/quality/phase-3-lv-core-001-verdict-integrity-spec-qa.md"
+cat > "$v2_report" <<MD
+# Synthetic V2 Spec QA
+
+QA verification contract: \`full-qa-verification-v2\`
+
+## Current QA Run
+
+- Run ID: v2-current-001
+- Artifact kind: spec-qa
+- Project/task identity: qa-reader-smoke:LV-CORE-001-verdict-integrity
+- Assessed source HEAD: f362ce3c0ebb16c36e54bc48bb11b9a71db1548d
+- Assessed worktree digest: $v2_digest
+- Input artifacts: see table
+- Verdict: PASS
+- Gate Decision: PASS
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | specs/fixture.md | $v2_input_sha |
+
+### Findings
+
+- Blockers: none
+- Unresolved findings: none
+
+### Evidence
+
+- command: synthetic fixture check exited 0.
+
+### Review Completeness Gate
+
+- Status: complete
+- Reviewed baseline: synthetic fixture version 1
+- Closure freshness: current
+- Post-fix full re-review: not-required
+- Policy-boundary adversarial matrix: not-applicable
+- Producer-consumer field audit: completed
+- Required-field mapping: complete
+
+### QA Verification Scope
+
+- Synthetic specification readiness; no implementation verdict.
+
+### Artifact QA Completeness Gate
+
+- Owner intent and governing sources reviewed: synthetic owner instruction and accepted specification
+- DoD / phase acceptance criteria reviewed: yes
+- Scope and out-of-scope consistency: aligned
+- Artifact / relevant diff review: completed
+- Findings-first review: completed
+- Failure / rework / dependency scenarios: completed
+- Repository and source compatibility: aligned
+- Post-fix full artifact re-review: not-required
+- Evidence reviewed: synthetic fixture and expected status transition
+- Skipped or unreadable sources: none
+- Residual risk: synthetic fixture only
+- Closure freshness: current
+
+### Gate Decision
+
+- Spec QA result: PASS
+- Can enter implementation: yes
+- Required next phase: implementation
+
+## Historical Runs
+
+- Run ID: v2-old-001; Verdict: FAIL.
+MD
+cp "$v2_report" "$tmp/v2-report.orig"
+run_must_pass "qa-evidence-v2-current-valid" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+run_must_pass "status-consistency-v2-current-valid" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-status-consistency --project qa-reader-smoke
+
+sed 's/- Spec QA result: PASS/- Spec QA result: FAIL/' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-subsection-result-conflict" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+sed 's/- Can enter implementation: yes/- Can enter implementation: no/' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-subsection-progression" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+sed 's/- Required next phase: implementation/- Required next phase: 3.7. SPEC FIX LOOP/' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-pass-fix-loop-route" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+perl -0pe 's/^### Gate Decision$/### Checks\n\n| Check | Result | Evidence |\n| --- | --- | --- |\n| Source compatibility | FAIL | Synthetic mismatch |\n\n### Gate Decision/m' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-failed-artifact-check" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+cp "$tmp/v2-report.orig" "$v2_report"
+
+cp "$v2_project/status.md" "$v2_project/status.md.bak"
+sed 's/LV-CORE-001-verdict-integrity/LV-CORE-002-verdict-integrity/' "$v2_project/status.md.bak" > "$v2_project/status.md"
+run_must_fail "status-consistency-v2-rejects-unmatched-task" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-status-consistency --project qa-reader-smoke
+mv "$v2_project/status.md.bak" "$v2_project/status.md"
+
+perl -0pe 's/^- Run ID: v2-current-001$/```md\n- Run ID: fake-history\n```\n- Run ID: v2-current-001/m' "$tmp/v2-report.orig" > "$v2_report"
+run_must_pass "qa-evidence-v2-ignores-fenced-metadata" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+cp "$tmp/v2-report.orig" "$v2_report"
+
+perl -0pe 's/^- Verdict: PASS$/```md\n- Verdict: PASS\n```/m' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-fenced-verdict" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+cp "$tmp/v2-report.orig" "$v2_report"
+
+target_source="$tmp/target-source"
+mkdir -p "$target_source"
+printf 'Synthetic target input.\n' > "$target_source/fixture.md"
+target_input_sha="$(shasum -a 256 "$target_source/fixture.md" | awk '{print $1}')"
+target_digest="$(printf 'approved-target-source:fixture.md=%s\n' "$target_input_sha" | shasum -a 256 | awk '{print $1}')"
+sed -e "s/owning-project-evidence | specs\/fixture.md | $v2_input_sha/approved-target-source | fixture.md | $target_input_sha/" -e "s/$v2_digest/$target_digest/" "$tmp/v2-report.orig" > "$v2_report"
+run_must_pass "qa-evidence-v2-accepts-approved-target-root" python3 .systems/scripts/lib/qa-evidence.py "$v2_report" --workflow-root "$tmp" --workspace-root "$tmp/ai-workflow-workspace" --project qa-reader-smoke --approved-target-root "$target_source"
+run_must_fail "qa-evidence-v2-rejects-unapproved-target-root" python3 .systems/scripts/lib/qa-evidence.py "$v2_report" --workflow-root "$tmp" --workspace-root "$tmp/ai-workflow-workspace" --project qa-reader-smoke
+printf 'Synthetic external input.\n' > "$tmp/outside-input.md"
+ln -s "$tmp/outside-input.md" "$target_source/linked.md"
+linked_sha="$(shasum -a 256 "$tmp/outside-input.md" | awk '{print $1}')"
+sed -e "s/fixture.md | $target_input_sha/linked.md | $linked_sha/" "$v2_report" > "$v2_report.bak"
+mv "$v2_report.bak" "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-escaping-symlink" python3 .systems/scripts/lib/qa-evidence.py "$v2_report" --workflow-root "$tmp" --workspace-root "$tmp/ai-workflow-workspace" --project qa-reader-smoke --approved-target-root "$target_source"
+cp "$tmp/v2-report.orig" "$v2_report"
+
+cp "$tmp/v2-report.orig" "$v2_project/quality/recovery-phase-3-lv-core-001-verdict-integrity-spec-qa.md"
+run_must_fail "status-consistency-v2-rejects-two-current-assessments" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-status-consistency --project qa-reader-smoke
+rm "$v2_project/quality/recovery-phase-3-lv-core-001-verdict-integrity-spec-qa.md"
+
+printf '\n## Current QA Run\n- Verdict: PASS\n' >> "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-duplicate-current" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+cp "$tmp/v2-report.orig" "$v2_report"
+
+sed 's/v2-old-001/v2-current-001/' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-duplicate-run-id" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+cp "$tmp/v2-report.orig" "$v2_report"
+
+printf 'Changed synthetic specification.\n' > "$v2_project/specs/fixture.md"
+run_must_fail "qa-evidence-v2-rejects-stale-input" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+run_must_fail "status-consistency-v2-rejects-stale-input" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-status-consistency --project qa-reader-smoke
+printf 'Synthetic accepted specification.\n' > "$v2_project/specs/fixture.md"
+
+sed 's@specs/fixture.md@../specs/fixture.md@' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-traversal" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+cp "$tmp/v2-report.orig" "$v2_report"
+
+sed 's@- Gate Decision: PASS@- Gate Decision: FAIL@' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-conflicting-gate" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+sed -e 's@- Verdict: PASS@- Verdict: FAIL@' -e 's@- Gate Decision: PASS@- Gate Decision: FAIL@' -e 's@- Spec QA result: PASS@- Spec QA result: FAIL@' -e 's@- Can enter implementation: yes@- Can enter implementation: no@' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "status-consistency-v2-rejects-current-fail" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-status-consistency --project qa-reader-smoke
+perl -0pe 's/^### Findings\n.*?^### Evidence\n/```md\n### Findings\n- Blockers: none\n```\n/ms' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-fenced-fake-section" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+sed 's/qa-reader-smoke:LV-CORE-001-verdict-integrity/qa-reader-smoke:WRONG-01/' "$tmp/v2-report.orig" > "$v2_report"
+run_must_fail "qa-evidence-v2-rejects-wrong-task-identity" env AI_WORKFLOW_WORKSPACE_HOME="$tmp/ai-workflow-workspace" .systems/scripts/check-qa-evidence --project qa-reader-smoke
+rm -rf "$v2_project"
 
 negative_final_check="$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-negative-final-check.md"
 cat > "$negative_final_check" <<'MD'
@@ -3239,6 +3923,11 @@ perl -0pi -e 's/## Artifact QA Completeness Gate/## Missing Artifact Gate/' "$tm
 run_must_fail "full-qa-verification-requires-artifact-completeness-gate" .systems/scripts/check-full-qa-verification
 mv "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-1-architecture-qa.template.md"
 
+cp "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak"
+perl -0pi -e 's/^## Current QA Run$/## Missing Current QA Run/m' "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+run_must_fail "full-qa-verification-requires-current-phase5-run" .systems/scripts/check-full-qa-verification
+mv "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md.bak" "$tmp/.systems/ai/templates/workflow/phase-5-quality.template.md"
+
 cp "$tmp/.systems/ai/core/full-qa-verification.md" "$tmp/.systems/ai/core/full-qa-verification.md.bak"
 printf '\nTechnical checks are enough without owner intent.\n' >> "$tmp/.systems/ai/core/full-qa-verification.md"
 run_must_fail "full-qa-verification-blocks-technical-only-qa" .systems/scripts/check-full-qa-verification
@@ -3255,7 +3944,7 @@ run_must_fail "qa-evidence-requires-artifact-completeness-for-pass" .systems/scr
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
 
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak"
-perl -0pi -e 's/- QA verification contract: `full-qa-verification-v1`\n//' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
+perl -0pi -e 's/- QA verification contract: `full-qa-verification-v2`\n//' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
 run_must_fail "qa-evidence-requires-contract-marker-for-formal-pass" .systems/scripts/check-qa-evidence
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md"
 
@@ -3372,7 +4061,21 @@ run_must_fail "qa-evidence-rejects-unsafe-project" .systems/scripts/check-qa-evi
 run_must_fail "qa-evidence-rejects-missing-project" .systems/scripts/check-qa-evidence --project absent-project
 
 v1_recovery="${v1_incomplete%/*}/recovery-phase-1-architecture-qa.md"
-cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$v1_recovery"
+write_v1_compat_fixture() {
+  local source="$1" destination="$2" first_section="$3"
+  awk -v first_section="$first_section" '
+    $0 == "## Current QA Run" { in_run=1; emitting=0; next }
+    in_run && $0 == first_section { emitting=1 }
+    in_run && !emitting { next }
+    /Example hashes below are schema illustrations/ { next }
+    {
+      gsub(/full-qa-verification-v2/, "full-qa-verification-v1")
+      if ($0 ~ /^### /) sub(/^### /, "## ")
+      print
+    }
+  ' "$source" > "$destination"
+}
+write_v1_compat_fixture "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-1-architecture-qa.md" "$v1_recovery" '### QA Verification Scope'
 v1_checksum="$(shasum -a 256 "$v1_incomplete" | awk '{print $1}')"
 recovery_checksum="$(shasum -a 256 "$v1_recovery" | awk '{print $1}')"
 write_recovery_registry() {
@@ -3429,7 +4132,7 @@ cat > "$phase5_original" <<'MD'
 
 Result: `PASS`
 MD
-cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$phase5_recovery"
+write_v1_compat_fixture "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$phase5_recovery" '### Definition Of Done Validation'
 perl -0pi -e 's/Applicability: `required`/Applicability: `not-applicable`\n- Not-applicable reason: recovery does not add a data integration./' "$phase5_recovery"
 cat > "$legacy_registry" <<EOF
 # Legacy QA Evidence Registry
@@ -3476,7 +4179,79 @@ perl -0pi -e 's/## Adaptive Data \/ Integration Verification Matrix/## Missing A
 run_must_fail "qa-evidence-requires-adaptive-matrix-for-phase-5-pass" .systems/scripts/check-qa-evidence
 mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
 
-run_must_pass "qa-evidence-allows-complete-phase-5-v1-pass" .systems/scripts/check-qa-evidence
+run_must_pass "qa-evidence-allows-complete-phase-5-v2-pass" .systems/scripts/check-qa-evidence
+
+phase5_v2="$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/^- Result: `PASS`$/- Result: `FAIL`/m' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-report-level-result-conflict" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+printf '\n## Validation Execution Record\n\n- Final verdict: FAIL\n' >> "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-final-verdict-conflict" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/(^### Gate Decision\n(?:(?!^## ).)*?\bresult: )PASS/${1}FAIL/ms' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-phase5-subsection-conflict" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+sed 's/required-next-phase: "phase-6-distillation"/required-next-phase: "phase-5-fix-loop"/' "$phase5_v2.bak" > "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-phase5-fix-loop-route" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/(- Quality result: `PASS`\n)/$1- Required next phase: phase-5-fix-loop\n/' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-quality-gate-fix-loop-route" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/^### Gate Decision$/### Edge Cases\n\n| Edge Case | Result | Evidence |\n| --- | --- | --- |\n| Empty input | FAIL | Missing coverage |\n\n### Gate Decision/m' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-failed-edge-case" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/^(- Cross-contract consistency aligned: `yes`)$/```md\n$1\n```/m' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-fenced-quality-field" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/Owner instruction mismatch: `no`/Owner instruction mismatch: `yes`/' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-owner-mismatch" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/Negative-space \/ adversarial review: `completed`/Negative-space \/ adversarial review: `incomplete`/' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-incomplete-adversarial-review" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/Cross-contract consistency aligned: `yes`/Cross-contract consistency aligned: `no`/' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-unverified-quality-gate" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+cp "$phase5_v2" "$phase5_v2.bak"
+perl -0pi -e 's/Applicability: `not-applicable`/Applicability: `required`/; s/\| \| \| \| \| \| \| \|/| input record | canonical profile | derived output | wrong profile | explicit error | integration test | |/' "$phase5_v2"
+run_must_fail "qa-evidence-v2-rejects-incomplete-matrix-row" .systems/scripts/check-qa-evidence
+mv "$phase5_v2.bak" "$phase5_v2"
+
+phase8_v2="$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-final-check.md"
+cp "$phase8_v2" "$phase8_v2.bak"
+perl -0pi -e 's/Example artifacts present and internally linked \| PASS/Example artifacts present and internally linked | FAIL/' "$phase8_v2"
+run_must_fail "qa-evidence-v2-rejects-failed-completion-row" .systems/scripts/check-qa-evidence
+mv "$phase8_v2.bak" "$phase8_v2"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak"
+perl -0pi -e 's/^### Definition Of Done Validation$/### Missing DoD Validation/m' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+run_must_fail "qa-evidence-v2-rejects-missing-current-dod" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
+
+cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-final-check.md" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-final-check.md.bak"
+perl -0pi -e 's/Can close active plan: awaiting-owner/Can close active plan: yes/' "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-final-check.md"
+run_must_fail "qa-evidence-v2-rejects-final-owner-bypass" .systems/scripts/check-qa-evidence
+mv "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-final-check.md.bak" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-final-check.md"
 
 for heading in \
   'Definition Of Done Validation' \
@@ -3722,3 +4497,4 @@ grep -q "FF_ONLY_EXTERNAL_WORKSPACE_MARKER" "$target_workspace/repo/core/status.
 rm -rf "$update_fixture"
 
 echo "Validator smoke tests passed."
+smoke_suite_completed=1

@@ -7,15 +7,46 @@
 - Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Workflow phase: `2.9. PACKAGING QA`
 - Result: `<PASS|FAIL|skipped>`
-- QA verification contract: `full-qa-verification-v1`
+- QA verification contract: `full-qa-verification-v2` (remove this marker and Current QA Run when packaging is skipped; skipped is not a QA PASS)
 - Owner-requested packaging: `<yes|no>`
 
-## QA Verification Scope
+## Current QA Run
+
+- Run ID: `<unique-kebab-case-id>`
+- Artifact kind: packaging-qa
+- Project/task identity: `<project>`
+- Assessed source HEAD: `<40-hex-commit>`
+- Assessed worktree digest: `<64-hex-digest>`
+- Input artifacts: see table
+- Verdict: `<PASS|FAIL>`
+- Gate Decision: `<PASS|FAIL>`
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | planning/phase-2-project-plan.md | `<64-hex-sha256>` |
+
+### Evidence
+
+- Reviewed input hashes, semantic QA checks and findings for this run:
+
+### Review Completeness Gate
+
+- Status: `<complete|incomplete>`
+- Reviewed baseline: `<HEAD/worktree/artifact identifiers>`
+- Closure freshness: `<current|stale>`
+- Post-fix full re-review: `<completed|not-required|incomplete>`
+- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`
+- Producer-consumer field audit: `<completed|not-applicable|incomplete>`
+- Required-field mapping: `<complete|not-applicable|partial|mismatch>`
+
+### QA Verification Scope
 
 - Full QA contract: `.systems/ai/core/full-qa-verification.md`
 - QA subject: `task packages and their dependencies; not implementation code review`
 
-## Artifact QA Completeness Gate
+### Artifact QA Completeness Gate
 
 - Owner intent and governing sources reviewed: `<paths|missing>`
 - DoD / phase acceptance criteria reviewed: `<yes|no>`
@@ -30,12 +61,12 @@
 - Residual risk: `<none|list>`
 - Closure freshness: `<current|stale>`
 
-## Skip Check
+### Skip Check
 
 - Packages created: `<yes|no>`
 - If no packages created, result must be `skipped` and next phase is `3. FAZA SPECYFIKACJI`.
 
-## Checks
+### Checks
 
 | Check | Result | Evidence | Finding |
 | --- | --- | --- | --- |
@@ -46,17 +77,20 @@
 | Architecture consistency | `<PASS|FAIL|n/a>` | | |
 | No false independence | `<PASS|FAIL|n/a>` | | |
 
-## Findings
+### Findings
 
-### Critical Errors
+- Blockers: `<none|resolved|list>`
+- Unresolved findings: `<none|list>`
+
+#### Critical Errors
 
 - 
 
-### Warnings
+#### Warnings
 
 - 
 
-## Gate Decision
+### Gate Decision
 
 - Packaging QA result: `<PASS|FAIL|skipped>`
 - Can proceed to Specification: `<yes|no>`

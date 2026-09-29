@@ -76,13 +76,27 @@ for template in \
   .systems/ai/templates/workflow/phase-2-packaging-qa.template.md \
   .systems/ai/templates/workflow/phase-3-spec-qa.template.md
 do
-  require_ref "$template" 'QA verification contract: `full-qa-verification-v1`' 'V1 QA runtime marker'
+  require_ref "$template" 'QA verification contract: `full-qa-verification-v2`' 'V2 QA runtime marker'
+  for section in '## Current QA Run' '### Input Artifacts' '### Evidence' '### Review Completeness Gate' '### QA Verification Scope' '### Artifact QA Completeness Gate' '### Findings'; do
+    require_ref "$template" "$section" "current artifact QA section: $section"
+  done
   for field in "${artifact_fields[@]}"; do
     require_ref "$template" "$field" "artifact QA template field: $field"
   done
 done
 
-require_ref .systems/ai/templates/workflow/phase-5-quality.template.md 'QA verification contract: `full-qa-verification-v1`' 'phase 5 V1 QA runtime marker'
+for template in .systems/ai/templates/workflow/phase-5-quality.template.md .systems/ai/templates/workflow/phase-8-final-check.template.md; do
+  require_ref "$template" 'QA verification contract: `full-qa-verification-v2`' 'V2 QA runtime marker'
+  for section in '## Current QA Run' '### Input Artifacts' '### Evidence' '### Review Completeness Gate' '### Findings'; do
+    require_ref "$template" "$section" "current quality section: $section"
+  done
+done
+for section in '### Definition Of Done Validation' '### Intent / Plan / Spec Compliance' '### Adaptive Data / Integration Verification Matrix' '### Quality Gate'; do
+  require_ref .systems/ai/templates/workflow/phase-5-quality.template.md "$section" "current Phase 5 section: $section"
+done
+for section in '### Completion Review' '### Owner Approval' '### Final Gate'; do
+  require_ref .systems/ai/templates/workflow/phase-8-final-check.template.md "$section" "current Phase 8 section: $section"
+done
 
 for file in \
   .systems/ai/workflow/phase-5-quality.md \

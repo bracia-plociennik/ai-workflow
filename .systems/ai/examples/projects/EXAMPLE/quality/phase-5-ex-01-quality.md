@@ -7,15 +7,34 @@
 - Artifact under review: `.systems/ai/examples/projects/EXAMPLE/quality/phase-4-ex-01-implementation-result.md`
 - Workflow phase: `phase-5-quality`
 - Result: `PASS`
-- QA verification contract: `full-qa-verification-v1`
+- QA verification contract: `full-qa-verification-v2`
+- Example hashes below are schema illustrations, not runtime validation evidence.
 
-## Definition Of Done Validation
+## Current QA Run
+
+- Run ID: example-quality-001
+- Artifact kind: implementation-quality
+- Project/task identity: EXAMPLE:EX-01
+- Assessed source HEAD: 0000000000000000000000000000000000000000
+- Assessed worktree digest: 0000000000000000000000000000000000000000000000000000000000000000
+- Input artifacts: see table
+- Verdict: PASS
+- Gate Decision: PASS
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | specs/phase-3-ex-01-example-task-specification.md | 0000000000000000000000000000000000000000000000000000000000000000 |
+| owning-project-evidence | quality/phase-4-ex-01-implementation-result.md | 0000000000000000000000000000000000000000000000000000000000000000 |
+
+### Definition Of Done Validation
 
 | DoD Item | Result | Evidence |
 | --- | --- | --- |
 | Example artifact flow is linked and internally consistent | PASS | Manual artifact review and linked task/spec evidence |
 
-## Intent / Plan / Spec Compliance
+### Intent / Plan / Spec Compliance
 
 - Result: `PASS`
 - Owner instruction reviewed: `yes`
@@ -34,8 +53,9 @@
 - Overbuild: `no`
 - Evidence: Example task, specification, implementation result, and quality artifact were compared.
 
-## Review Completeness Gate
+### Review Completeness Gate
 
+- Status: complete
 - Cross-contract consistency: `aligned`
 - Risk/work mode compatibility: `aligned`
 - Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: `yes`
@@ -52,7 +72,7 @@
 - Required-field mapping: `not-applicable`
 - Evidence: Manual example artifact review and linked artifact comparison.
 
-## Adaptive Data / Integration Verification Matrix
+### Adaptive Data / Integration Verification Matrix
 
 - Applicability: `not-applicable`
 - Not-applicable reason: `Example implementation creates no data, integration, parser, state-flow, or executable entrypoint.`
@@ -61,7 +81,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | | | | | | | |
 
-## Evidence
+### Evidence
 
 ```yaml
 commands:
@@ -82,13 +102,15 @@ artifacts-reviewed:
 skipped-checks: []
 ```
 
-## Findings
+### Findings
 
+- Blockers: none
+- Unresolved findings: none
 - Critical errors: none.
 - Warnings: none.
 - Residual risk: example-only artifact.
 
-## Quality Gate
+### Quality Gate
 
 - Intent / Plan / Spec Compliance PASS: `yes`
 - Review Completeness Gate PASS: `yes`
@@ -109,7 +131,7 @@ skipped-checks: []
 - Explicit evidence attached: `yes`
 - Quality result: `PASS`
 
-## Gate Decision
+### Gate Decision
 
 ```yaml
 result: PASS

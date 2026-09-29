@@ -6,15 +6,47 @@
 - Date: `<YYYY-MM-DD>`
 - Workflow phase: `8. FINAL CHECK`
 - Result: `<PASS|FAIL|awaiting-owner-final-yes>`
+- QA verification contract: `full-qa-verification-v2` (technical assessment only; owner approval remains separate)
 
-## Scope Under Final Check
+## Current QA Run
+
+- Run ID: `<unique-kebab-case-id>`
+- Artifact kind: final-check
+- Project/task identity: `<project>`
+- Assessed source HEAD: `<40-hex-commit>`
+- Assessed worktree digest: `<64-hex-digest>`
+- Input artifacts: see table
+- Verdict: `<PASS|FAIL>`
+- Gate Decision: `<PASS|FAIL>`
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | status.md | `<64-hex-sha256>` |
+
+### Evidence
+
+- Reviewed input hashes, completion matrix, unresolved decisions and findings for this run:
+
+### Review Completeness Gate
+
+- Status: `<complete|incomplete>`
+- Reviewed baseline: `<HEAD/worktree/artifact identifiers>`
+- Closure freshness: `<current|stale>`
+- Post-fix full re-review: `<completed|not-required|incomplete>`
+- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`
+- Producer-consumer field audit: `<completed|not-applicable|incomplete>`
+- Required-field mapping: `<complete|not-applicable|partial|mismatch>`
+
+### Scope Under Final Check
 
 - Plan artifact:
 - Completed tasks/packages:
 - Deferred tasks/packages:
 - Out-of-scope:
 
-## Completion Review
+### Completion Review
 
 | Area | Result | Evidence |
 | --- | --- | --- |
@@ -28,34 +60,37 @@
 | No unresolved blocking decisions | `<PASS|FAIL>` | |
 | No open blocking change requests | `<PASS|FAIL>` | `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/change-requests.md` |
 
-## Findings
+### Findings
 
-### Critical Errors
+- Blockers: `<none|resolved|list>`
+- Unresolved findings: `<none|list>`
 
-- 
-
-### Warnings
-
-- 
-
-### Residual Risks
+#### Critical Errors
 
 - 
 
-## Owner Approval
+#### Warnings
+
+- 
+
+#### Residual Risks
+
+- 
+
+### Owner Approval
 
 - Technical final check result: `<PASS|FAIL>`
 - Owner approval required: `yes`
 - Owner decision: `<awaiting|approved|rejected>`
 - Owner comments captured as change request: `<yes|no|not-applicable>`
 
-## Change Request Review
+### Change Request Review
 
 | Change request | Timing | Status | Blocks final-owner-yes? | Route |
 | --- | --- | --- | --- | --- |
 | `<none|CR ID>` | `<pre-final-approval|post-final-approval>` | `<status>` | `<yes|no|not-applicable>` | `<route>` |
 
-## Final Gate
+### Final Gate
 
 - Can close active plan: `<yes|no|awaiting-owner>`
 - Required next phase: `<owner approval|change-request-triage|fix loop|closed>`

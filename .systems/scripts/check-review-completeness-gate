@@ -96,6 +96,27 @@ for template in "${quality_templates[@]}"; do
   done
 done
 
+phase5_current_gate="$(awk '
+  $0 == "## Current QA Run" { current=1; next }
+  current && /^## / { exit }
+  current && $0 == "### Review Completeness Gate" { in_gate=1; next }
+  in_gate && /^### / { exit }
+  in_gate { print }
+' .systems/ai/templates/workflow/phase-5-quality.template.md)"
+for field in \
+  '- Status: `<complete|incomplete>`' \
+  '- Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`' \
+  '- Closure freshness: `<current|stale>`' \
+  '- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`' \
+  '- Producer-consumer field audit: `<completed|not-applicable|incomplete>`' \
+  '- Required-field mapping: `<complete|partial|mismatch|not-applicable>`'
+do
+  if ! printf '%s\n' "$phase5_current_gate" | rg -qF -- "$field"; then
+    echo "Missing current Phase 5 Review Completeness Gate field: $field"
+    fail=1
+  fi
+done
+
 review_template_gate="$(awk '
   $0 == "## Review Completeness Gate" { in_section=1; next }
   in_section && /^## / { exit }

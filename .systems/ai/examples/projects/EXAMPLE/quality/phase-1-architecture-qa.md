@@ -7,14 +7,42 @@
 - Artifact under review: `.systems/ai/examples/projects/EXAMPLE/architecture/phase-1-architecture.md`
 - Workflow phase: `phase-1-architecture-qa`
 - Result: `PASS`
-- QA verification contract: `full-qa-verification-v1`
+- QA verification contract: `full-qa-verification-v2`
+- Example hashes below are schema illustrations, not runtime validation evidence.
 
-## QA Verification Scope
+## Current QA Run
+
+- Run ID: example-architecture-qa-001
+- Artifact kind: architecture-qa
+- Project/task identity: EXAMPLE
+- Assessed source HEAD: 0000000000000000000000000000000000000000
+- Assessed worktree digest: 0000000000000000000000000000000000000000000000000000000000000000
+- Input artifacts: see table
+- Verdict: PASS
+- Gate Decision: PASS
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | architecture/phase-1-architecture.md | 0000000000000000000000000000000000000000000000000000000000000000 |
+
+### Review Completeness Gate
+
+- Status: complete
+- Reviewed baseline: illustrative EXAMPLE architecture
+- Closure freshness: current
+- Post-fix full re-review: not-required
+- Policy-boundary adversarial matrix: not-applicable
+- Producer-consumer field audit: not-applicable
+- Required-field mapping: complete
+
+### QA Verification Scope
 
 - Full QA contract: `.systems/ai/core/full-qa-verification.md`
 - QA subject: architecture artifact only; no implementation code exists.
 
-## Artifact QA Completeness Gate
+### Artifact QA Completeness Gate
 
 - Owner intent and governing sources reviewed: `.systems/ai/examples/projects/EXAMPLE/architecture/phase-1-architecture.md`
 - DoD / phase acceptance criteria reviewed: `yes`
@@ -29,7 +57,7 @@
 - Residual risk: `example-only artifact`
 - Closure freshness: `current`
 
-## Evidence
+### Evidence
 
 ```yaml
 commands:
@@ -48,13 +76,15 @@ artifacts-reviewed:
 skipped-checks: []
 ```
 
-## Findings
+### Findings
 
+- Blockers: none
+- Unresolved findings: none
 - Critical errors: none.
 - Warnings: none.
 - Residual risk: example-only artifact.
 
-## Gate Decision
+### Gate Decision
 
 ```yaml
 result: PASS

@@ -8,14 +8,45 @@
 - Artifact under review: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/specs/phase-3-<task-id>-specification.md`
 - Workflow phase: `3.5. SPEC QA`
 - Result: `<PASS|FAIL>`
-- QA verification contract: `full-qa-verification-v1`
+- QA verification contract: `full-qa-verification-v2`
 
-## QA Verification Scope
+## Current QA Run
+
+- Run ID: `<unique-kebab-case-id>`
+- Artifact kind: spec-qa
+- Project/task identity: `<project>:<task-id>`
+- Assessed source HEAD: `<40-hex-commit>`
+- Assessed worktree digest: `<64-hex-digest>`
+- Input artifacts: see table
+- Verdict: `<PASS|FAIL>`
+- Gate Decision: `<PASS|FAIL>`
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | specs/phase-3-<task-id>-specification.md | `<64-hex-sha256>` |
+
+### Evidence
+
+- Reviewed input hashes, semantic QA checks and findings for this run:
+
+### Review Completeness Gate
+
+- Status: `<complete|incomplete>`
+- Reviewed baseline: `<HEAD/worktree/artifact identifiers>`
+- Closure freshness: `<current|stale>`
+- Post-fix full re-review: `<completed|not-required|incomplete>`
+- Policy-boundary adversarial matrix: `<completed|not-applicable|incomplete>`
+- Producer-consumer field audit: `<completed|not-applicable|incomplete>`
+- Required-field mapping: `<complete|not-applicable|partial|mismatch>`
+
+### QA Verification Scope
 
 - Full QA contract: `.systems/ai/core/full-qa-verification.md`
 - QA subject: `specification readiness and correctness; not implementation code review`
 
-## Artifact QA Completeness Gate
+### Artifact QA Completeness Gate
 
 - Owner intent and governing sources reviewed: `<paths|missing>`
 - DoD / phase acceptance criteria reviewed: `<yes|no>`
@@ -30,7 +61,7 @@
 - Residual risk: `<none|list>`
 - Closure freshness: `<current|stale>`
 
-## Checks
+### Checks
 
 | Check | Result | Evidence | Finding |
 | --- | --- | --- | --- |
@@ -43,17 +74,20 @@
 | No hidden decisions | `<PASS|FAIL>` | | |
 | Tests and edge cases adequate | `<PASS|FAIL>` | | |
 
-## Findings
+### Findings
 
-### Critical Errors
+- Blockers: `<none|resolved|list>`
+- Unresolved findings: `<none|list>`
+
+#### Critical Errors
 
 - 
 
-### Warnings
+#### Warnings
 
 - 
 
-## Gate Decision
+### Gate Decision
 
 - Spec QA result: `<PASS|FAIL>`
 - Can enter implementation: `<yes|no>`

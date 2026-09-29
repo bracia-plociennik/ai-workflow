@@ -8,15 +8,37 @@
 - Implementation/spec under review:
 - Workflow phase: `5. FAZA JAKOŚCI`
 - Result: `<PASS|FAIL>`
-- QA verification contract: `full-qa-verification-v1`
+- QA verification contract: `full-qa-verification-v2`
 
-## Definition Of Done Validation
+## Current QA Run
+
+- Run ID: `<unique-kebab-case-id>`
+- Artifact kind: implementation-quality
+- Project/task identity: `<project>:<task-id>`
+- Assessed source HEAD: `<40-hex-commit>`
+- Assessed worktree digest: `<64-hex-digest>`
+- Input artifacts: see table
+- Verdict: `<PASS|FAIL>`
+- Gate Decision: `<PASS|FAIL>`
+
+### Input Artifacts
+
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | specs/phase-3-<task-id>-specification.md | `<64-hex-sha256>` |
+| owning-project-evidence | implementation/phase-4-<task-id>-implementation.md | `<64-hex-sha256>` |
+
+### Evidence
+
+- Reviewed input hashes, implementation diff, checks, manual traces and findings for this run:
+
+### Definition Of Done Validation
 
 | DoD Item | Result | Evidence |
 | --- | --- | --- |
 | | `<PASS|FAIL>` | |
 
-## Intent / Plan / Spec Compliance
+### Intent / Plan / Spec Compliance
 
 - Result: `<PASS|FAIL>`
 - Owner instruction reviewed: `<yes|no|missing>`
@@ -35,7 +57,9 @@
 - Overbuild: `<yes|no>`
 - Evidence:
 
-## Review Completeness Gate
+### Review Completeness Gate
+
+- Status: `<complete|incomplete>`
 
 - Cross-contract consistency: `<aligned|partial|mismatch|unknown>`
 - Risk/work mode compatibility: `<aligned|partial|mismatch|unknown>`
@@ -53,19 +77,19 @@
 - Required-field mapping: `<complete|partial|mismatch|not-applicable>`
 - Evidence:
 
-## Commands
+### Commands
 
 | Command | Result | Notes |
 | --- | --- | --- |
 | | `<PASS|FAIL|not-run>` | |
 
-## Manual Checks
+### Manual Checks
 
 | Check | Result | Notes |
 | --- | --- | --- |
 | | `<PASS|FAIL|not-run>` | |
 
-## Adaptive Data / Integration Verification Matrix
+### Adaptive Data / Integration Verification Matrix
 
 - Applicability: `<required|not-applicable>`
 - Not-applicable reason: `<reason|required when not-applicable>`
@@ -74,35 +98,38 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | | | | | | | |
 
-## Edge Cases
+### Edge Cases
 
 | Edge Case | Result | Evidence |
 | --- | --- | --- |
 | | `<PASS|FAIL|not-applicable>` | |
 
-## Regression Review
+### Regression Review
 
 - Changed paths reviewed:
 - Direct dependencies reviewed:
 - Regression risk:
 
-## Findings
+### Findings
 
-### Bugs In Scope
+- Blockers: `<none|resolved|list>`
+- Unresolved findings: `<none|list>`
+
+#### Bugs In Scope
 
 - 
 
-### Warnings
+#### Warnings
 
 - 
 
-### Skipped Checks
+#### Skipped Checks
 
 | Check | Reason | Affects PASS? |
 | --- | --- | --- |
 | | | `<yes|no>` |
 
-## Quality Gate
+### Quality Gate
 
 - Intent / Plan / Spec Compliance PASS: `<yes|no>`
 - Review Completeness Gate PASS: `<yes|no>`

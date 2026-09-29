@@ -21,6 +21,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 source "$script_dir/resolve-workflow-env"
 repo_root="$AI_WORKFLOW_HOME"
 target_repo_root="$TARGET_REPO_ROOT"
+qa_target_args=(--approved-target-root "$target_repo_root")
 workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
 cd "$repo_root"
 
@@ -144,6 +145,69 @@ validate_result_value() {
 
   if [[ ! "$value" =~ ^(not-started|in-progress|PASS|FAIL|completed|blocked|skipped|awaiting-owner-final-yes|none|example-only)$ ]]; then
     echo "${file#./} has invalid phase-result: $value"
+    fail=1
+  fi
+}
+
+validate_v2_current_status() {
+  local file="$1" phase="$2" result="$3"
+  local project_dir project_name task_id filename kind expected_identity candidate count=0 assessment
+  local phase_v2_count=0
+  local phase_reports=("")
+  [[ "$result" == PASS && -n "$workspace_home" && "$file" == "$workspace_home"/projects/*/status.md ]] || return 0
+  project_dir="${file%/status.md}"
+  project_name="${project_dir##*/}"
+  task_id="$(value_for current-task "$file")"
+  expected_identity="$project_name"
+  case "$phase" in
+    phase-1-architecture-qa) filename='phase-1-architecture-qa.md'; kind=architecture-qa ;;
+    phase-2-plan-qa) filename='phase-2-plan-qa.md'; kind=plan-qa ;;
+    phase-2-packaging-qa) filename='phase-2-packaging-qa.md'; kind=packaging-qa ;;
+    phase-3-spec-qa)
+      phase_reports=("$project_dir"/quality/phase-3-*-spec-qa.md "$project_dir"/quality/recovery-phase-3-*-spec-qa.md)
+      kind=spec-qa
+      if [[ "$task_id" != none && -n "$task_id" ]]; then
+        filename="phase-3-$(printf '%s' "$task_id" | tr '[:upper:]' '[:lower:]')-spec-qa.md"
+        expected_identity="$project_name:$task_id"
+      fi
+      ;;
+    phase-5-quality)
+      phase_reports=("$project_dir"/quality/phase-5-*-quality.md "$project_dir"/quality/recovery-phase-5-*-quality.md)
+      kind=implementation-quality
+      if [[ "$task_id" != none && -n "$task_id" ]]; then
+        filename="phase-5-$(printf '%s' "$task_id" | tr '[:upper:]' '[:lower:]')-quality.md"
+        expected_identity="$project_name:$task_id"
+      fi
+      ;;
+    phase-8-final-check) filename='phase-8-final-check.md'; kind=final-check ;;
+    *) return 0 ;;
+  esac
+
+  for candidate in "${phase_reports[@]}"; do
+    [[ -f "$candidate" ]] || continue
+    if rg -qF 'QA verification contract: `full-qa-verification-v2`' "$candidate"; then
+      phase_v2_count=$((phase_v2_count + 1))
+    fi
+  done
+  if [[ "$phase_v2_count" -gt 0 && ( -z "${filename:-}" || ( ! -f "$project_dir/quality/$filename" && ! -f "$project_dir/quality/recovery-$filename" ) ) ]]; then
+    echo "$(display_path "$file") has no QA assessment for its current task despite V2 reports for this phase"
+    fail=1
+    return
+  fi
+  [[ -n "${filename:-}" ]] || return 0
+
+  for candidate in "$project_dir/quality/$filename" "$project_dir/quality/recovery-$filename"; do
+    [[ -f "$candidate" ]] || continue
+    if rg -qF 'QA verification contract: `full-qa-verification-v2`' "$candidate"; then
+      count=$((count + 1))
+      if ! assessment="$(python3 "$script_dir/lib/qa-evidence.py" "$candidate" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$project_name" --expected-kind "$kind" --expected-identity "$expected_identity" --require-pass "${qa_target_args[@]}" 2>&1)"; then
+        echo "$(display_path "$file") has invalid current V2 QA assessment: $assessment"
+        fail=1
+      fi
+    fi
+  done
+  if [[ "$count" -gt 1 ]]; then
+    echo "$(display_path "$file") has multiple V2 assessments for current phase/task"
     fail=1
   fi
 }
@@ -284,6 +348,7 @@ validate_status_file() {
     echo "${file#./} has invalid phase transition: $current_phase + $phase_result -> $next_phase"
     fail=1
   fi
+  validate_v2_current_status "$file" "$current_phase" "$phase_result"
 }
 
 tasks_required_for_status() {

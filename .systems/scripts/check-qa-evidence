@@ -21,6 +21,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 source "$script_dir/resolve-workflow-env"
 repo_root="$AI_WORKFLOW_HOME"
 workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
+qa_target_args=(--approved-target-root "$TARGET_REPO_ROOT")
 cd "$repo_root"
 
 if [[ -d "$workspace_home" ]]; then
@@ -90,6 +91,26 @@ is_registered_legacy_evidence() {
   return 0
 }
 
+legacy_registry_class_for_path() {
+  local file="$1" relative_path
+  [[ -n "$workspace_home" && -f "$legacy_registry" && "$file" == "$workspace_home"/* ]] || return 1
+  relative_path="${file#"$workspace_home"/}"
+  awk -F'|' -v expected_path="$relative_path" '
+    function trim(value) {
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+      if (value ~ /^`[^`]*`$/) value=substr(value, 2, length(value)-2)
+      return value
+    }
+    NF >= 4 {
+      if (trim($2) ~ /^projects\//) { kind="legacy"; path=trim($2) }
+      else if (NF >= 7 && trim($3) ~ /^projects\//) { kind=trim($2); path=trim($3) }
+      else next
+      if (path == expected_path) { found++; result=kind }
+    }
+    END { if (found == 1) print result; else exit 1 }
+  ' "$legacy_registry"
+}
+
 declared_result_values() {
   local file="$1"
   awk '
@@ -118,6 +139,10 @@ has_pass_result() {
 has_v1_contract() {
   local file="$1"
   rg -qF -- 'QA verification contract: `full-qa-verification-v1`' "$file"
+}
+
+has_v2_contract() {
+  rg -qF -- 'QA verification contract: `full-qa-verification-v2`' "$1"
 }
 
 is_formal_qa_filename() {
@@ -155,6 +180,26 @@ validate_evidence_file() {
   local qa_filename="${file##*/}"
   qa_filename="${qa_filename#recovery-}"
 
+  if has_v2_contract "$file"; then
+    local owning_project assessment
+    if [[ "$file" == "$repo_root"/.systems/ai/examples/projects/EXAMPLE/quality/*.md ]]; then
+      if ! assessment="$(python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project EXAMPLE --schema-only 2>&1)"; then
+        reject_pass_file "$file" "$assessment"
+      fi
+      return
+    fi
+    if [[ -z "$workspace_home" || "$file" != "$workspace_home"/projects/*/quality/*.md ]]; then
+      reject_pass_file "$file" 'V2 assessment must be in its owning workspace project quality root'
+      return
+    fi
+    owning_project="${file#"$workspace_home"/projects/}"
+    owning_project="${owning_project%%/*}"
+    if ! assessment="$(python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$owning_project" "${qa_target_args[@]}" 2>&1)"; then
+      reject_pass_file "$file" "$assessment"
+    fi
+    return
+  fi
+
   if [[ "$(declared_result_values "$file")" == $'fail\npass' ]]; then
     reject_pass_file "$file" 'conflicting declared result and gate decision'
     return
@@ -167,7 +212,14 @@ validate_evidence_file() {
       # registered quality artifact. A V1-marked original is admitted only
       # by a verified superseded-invalid-v1 recovery artifact.
       return 0
+    elif [[ "$(legacy_registry_class_for_path "$file" || true)" == "superseded-invalid-v1" ]]; then
+      reject_pass_file "$file" 'registered V1 original or recovery fingerprint mismatch'
+      return
     elif has_v1_contract "$file"; then
+      if [[ "$(legacy_registry_class_for_path "$file" || true)" =~ ^(legacy|pre-v1)$ ]]; then
+        reject_pass_file "$file" 'V1 marker takes precedence over pre-V1 legacy admission'
+        return
+      fi
       v1_contract=true
     elif is_formal_qa_filename "$file"; then
       reject_pass_file "$file" 'missing V1 QA marker or registered legacy evidence fingerprint'
@@ -405,7 +457,7 @@ validate_evidence_file() {
   fi
 }
 
-project_roots=(".systems/ai/examples/projects")
+project_roots=("$repo_root/.systems/ai/examples/projects")
 if [[ -n "$workspace_home" && -d "$workspace_home/projects" ]]; then
   if [[ -n "$project" ]]; then
     project_roots+=("$workspace_home/projects/$project")
