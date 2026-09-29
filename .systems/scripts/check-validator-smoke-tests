@@ -3146,6 +3146,79 @@ MD
 run_must_fail "pass-with-failed-command" .systems/scripts/check-qa-evidence
 cp "$tmp/example-phase5-quality.orig" "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md"
 
+negative_final_check="$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-8-negative-final-check.md"
+cat > "$negative_final_check" <<'MD'
+# Negative final check
+
+## Metadata
+
+- Technical result: `FAIL`
+
+## Completion Review
+
+| Area | Result | Evidence |
+| --- | --- | --- |
+| Product checks | PASS | Focused checks completed. |
+| Historical evidence | FAIL | The required registry is unresolved. |
+
+## Evidence
+
+- Command: focused check exited 0; this does not establish overall PASS.
+
+## Gate Decision
+
+- Result: FAIL
+- Can-proceed: false
+MD
+run_must_pass "qa-evidence-ignores-component-pass-in-negative-final-check" .systems/scripts/check-qa-evidence
+
+cat > "$negative_final_check" <<'MD'
+# Incomplete positive final check
+
+## Gate Decision
+
+- Result: PASS
+- Can-proceed: true
+MD
+run_must_fail "qa-evidence-positive-gate-still-requires-evidence" .systems/scripts/check-qa-evidence
+
+cat > "$negative_final_check" <<'MD'
+# Incomplete punctuated final check
+
+## Gate Decision
+
+- Result: PASS.
+MD
+run_must_fail "qa-evidence-punctuated-positive-still-requires-evidence" .systems/scripts/check-qa-evidence
+
+cat > "$negative_final_check" <<'MD'
+# Incomplete gate-only decision
+
+## Gate Decision
+
+- Can-proceed: true
+MD
+run_must_fail "qa-evidence-gate-only-positive-still-requires-evidence" .systems/scripts/check-qa-evidence
+
+cat > "$negative_final_check" <<'MD'
+# Contradictory final check
+
+## Metadata
+
+- Result: FAIL
+
+## Evidence
+
+- Command: focused check exited 0.
+
+## Gate Decision
+
+- Result: PASS
+- Can-proceed: true
+MD
+run_must_fail "qa-evidence-rejects-conflicting-declared-results" .systems/scripts/check-qa-evidence
+rm "$negative_final_check"
+
 run_must_pass "full-qa-verification-valid" .systems/scripts/check-full-qa-verification
 
 for legacy_contract_field in \
