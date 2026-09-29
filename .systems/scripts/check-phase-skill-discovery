@@ -50,6 +50,13 @@ done
 require_ref ".systems/ai/core/operating-model.md" 'check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first' "workspace skills first"
 require_ref ".systems/ai/core/operating-model.md" 'check `.systems/ai/skills/` second' "system skills second"
 require_ref ".systems/ai/core/operating-model.md" 'V1 does not create phase-dedicated skills' "no phase skills"
+for file in AGENTS.md .systems/ai/core/operating-model.md; do
+  require_ref "$file" 'frontmatter.*name.*description' "metadata-first candidate selection"
+  require_ref "$file" '[Dd]o not read the full body of a non-matching skill' "no unrelated full-body read"
+  require_ref "$file" 'full active `SKILL.md`.*plausible match' "full contract after match"
+  require_ref "$file" 'closing `---` delimiter' "frontmatter boundary"
+done
+require_ref AGENTS.md 'product-code file with `skill` in its name is not itself skill-artifact work' "filename collision boundary"
 require_ref ".systems/ai/core/command-routing.md" 'workspace skill|AI_WORKFLOW_WORKSPACE_HOME/skills/' "command routing workspace skill"
 require_ref "HUMANS.md" 'Phase Skill Discovery' "human guidance"
 require_ref "README.md" 'check-phase-skill-discovery' "README validator list"

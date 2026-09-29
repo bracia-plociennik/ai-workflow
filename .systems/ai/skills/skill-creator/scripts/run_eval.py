@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import re
 import sys
 from datetime import datetime, timezone
@@ -45,13 +47,17 @@ def validate_plan(plan: dict, source: Path) -> list[dict]:
     evals = plan.get("evals")
     if not isinstance(evals, list) or not evals:
         raise ValueError(f"Eval plan must contain a non-empty evals list: {source}")
+    seen_ids: set[str] = set()
     for item in evals:
         if not isinstance(item, dict):
             raise ValueError("Each eval must be an object")
         for key in ("id", "prompt", "expected_behavior"):
             if key not in item:
                 raise ValueError(f"Eval missing required key '{key}': {item}")
-        safe_dir_name(item["id"], "eval id")
+        eval_id = safe_dir_name(item["id"], "eval id")
+        if eval_id in seen_ids:
+            raise ValueError(f"Duplicate eval id in {source}: {eval_id}")
+        seen_ids.add(eval_id)
         if not isinstance(item["expected_behavior"], list) or not item["expected_behavior"]:
             raise ValueError(f"Eval expected_behavior must be a non-empty list: {item.get('id')}")
         assertions = item.get("assertions", [])
@@ -67,7 +73,10 @@ def plan_configurations(plan: dict, override: str | None) -> list[str]:
         configs = plan.get("configurations", list(DEFAULT_CONFIGURATIONS))
     if not isinstance(configs, list) or not configs:
         raise ValueError("Configurations must be a non-empty list")
-    return [safe_dir_name(config, "configuration") for config in configs]
+    names = [safe_dir_name(config, "configuration") for config in configs]
+    if len(names) != len(set(names)):
+        raise ValueError("Configurations must be unique")
+    return names
 
 
 def eval_assertions(item: dict) -> list[dict]:
@@ -84,13 +93,39 @@ def eval_assertions(item: dict) -> list[dict]:
     ]
 
 
+def plan_fingerprint(plan: dict) -> str:
+    payload = json.dumps(plan, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def preflight_graded_run(run_dir: Path, manifest: dict, metadata_by_id: dict[str, dict]) -> None:
+    grades = sorted(run_dir.rglob("grading.json")) if run_dir.is_dir() else []
+    if not grades:
+        return
+
+    fresh_run = "Use a fresh --output-dir; existing grading.json evidence was not changed."
+    old_manifest_path = run_dir / "run.json"
+    if not old_manifest_path.is_file():
+        raise ValueError(f"Graded run lacks run.json. {fresh_run}")
+    old_manifest = load_json(old_manifest_path)
+    stable_fields = ("source_plan", "skill_name", "target_path", "mode", "configurations", "eval_count", "plan_sha256")
+    if any(old_manifest.get(field) != manifest[field] for field in stable_fields):
+        raise ValueError(f"Graded run does not match the current eval plan or lacks its fingerprint. {fresh_run}")
+
+    allowed_configs = set(manifest["configurations"])
+    for grade in grades:
+        parts = grade.relative_to(run_dir).parts
+        if len(parts) != 3 or parts[2] != "grading.json" or parts[0] not in metadata_by_id or parts[1] not in allowed_configs:
+            raise ValueError(f"Orphan or unexpected grading file: {grade}. {fresh_run}")
+        metadata_path = run_dir / parts[0] / "eval_metadata.json"
+        if not metadata_path.is_file() or load_json(metadata_path) != metadata_by_id[parts[0]]:
+            raise ValueError(f"Grading metadata is missing or stale for {grade}. {fresh_run}")
+
+
 def create_run(plan_path: Path, output_dir: Path, overwrite: bool, config_override: str | None) -> Path:
     plan = load_json(plan_path)
     evals = validate_plan(plan, plan_path)
     configurations = plan_configurations(plan, config_override)
-    run_dir = output_dir
-    run_dir.mkdir(parents=True, exist_ok=True)
-
     run_manifest = {
         "source_plan": str(plan_path),
         "skill_name": plan.get("skill_name", "unknown"),
@@ -99,14 +134,12 @@ def create_run(plan_path: Path, output_dir: Path, overwrite: bool, config_overri
         "configurations": configurations,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "eval_count": len(evals),
+        "plan_sha256": plan_fingerprint(plan),
     }
-    dump_json(run_dir / "run.json", run_manifest, overwrite=overwrite)
-
+    metadata_by_id = {}
     for item in evals:
         eval_id = safe_dir_name(item["id"], "eval id")
-        eval_dir = run_dir / eval_id
-        eval_dir.mkdir(parents=True, exist_ok=True)
-        metadata = {
+        metadata_by_id[eval_id] = {
             "eval_id": eval_id,
             "eval_name": item.get("name", eval_id),
             "prompt": item["prompt"],
@@ -116,6 +149,15 @@ def create_run(plan_path: Path, output_dir: Path, overwrite: bool, config_overri
             "forbidden_behavior": item.get("forbidden_behavior", []),
             "configurations": configurations,
         }
+
+    run_dir = output_dir
+    preflight_graded_run(run_dir, run_manifest, metadata_by_id)
+    run_dir.mkdir(parents=True, exist_ok=True)
+    dump_json(run_dir / "run.json", run_manifest, overwrite=overwrite)
+
+    for eval_id, metadata in metadata_by_id.items():
+        eval_dir = run_dir / eval_id
+        eval_dir.mkdir(parents=True, exist_ok=True)
         dump_json(eval_dir / "eval_metadata.json", metadata, overwrite=overwrite)
 
         for config in configurations:

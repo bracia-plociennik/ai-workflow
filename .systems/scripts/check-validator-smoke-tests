@@ -2308,6 +2308,22 @@ run_must_fail "response-evidence-trace-requires-agents-routing" .systems/scripts
 mv "$tmp/AGENTS.md.bak" "$tmp/AGENTS.md"
 
 run_must_pass "phase-skill-discovery-valid" .systems/scripts/check-phase-skill-discovery
+run_must_pass "skill-eval-freshness-regression" python3 .systems/scripts/test-skill-eval-freshness
+
+cp "$tmp/AGENTS.md" "$tmp/AGENTS.md.bak"
+perl -0pi -e 's/[Dd]o not read the full body of a non-matching skill/read every skill body before selection/' "$tmp/AGENTS.md"
+run_must_fail "phase-skill-discovery-requires-metadata-first-agents" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/AGENTS.md.bak" "$tmp/AGENTS.md"
+
+cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
+perl -0pi -e 's/[Dd]o not read the full body of a non-matching skill/read every skill body before selection/' "$tmp/.systems/ai/core/operating-model.md"
+run_must_fail "phase-skill-discovery-requires-metadata-first-operating-model" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/.systems/ai/core/operating-model.md.bak" "$tmp/.systems/ai/core/operating-model.md"
+
+cp "$tmp/AGENTS.md" "$tmp/AGENTS.md.bak"
+perl -0pi -e 's/closing `---` delimiter/fixed line count/' "$tmp/AGENTS.md"
+run_must_fail "phase-skill-discovery-requires-frontmatter-boundary" .systems/scripts/check-phase-skill-discovery
+mv "$tmp/AGENTS.md.bak" "$tmp/AGENTS.md"
 
 cp "$tmp/.systems/ai/core/operating-model.md" "$tmp/.systems/ai/core/operating-model.md.bak"
 perl -0pi -e 's/Phase Skill Discovery/Phase Skill Lookup/g' "$tmp/.systems/ai/core/operating-model.md"

@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""Regression tests for graded skill-eval scaffold freshness."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[2]
+SCRIPTS = ROOT / ".systems/ai/skills/skill-creator/scripts"
+SKILL = ROOT / ".systems/ai/skills/skill-creator"
+
+
+def write_json(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
+
+
+def read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def tree_digest(root: Path) -> dict[str, str]:
+    return {
+        str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted(root.rglob("*"))
+        if path.is_file()
+    }
+
+
+def run(script: str, *args: str, expected: int = 0) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS / script), *args],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if (result.returncode == 0) != (expected == 0):
+        raise RuntimeError(f"{script} returned {result.returncode}, expected {expected}: {result.stderr}")
+    return result
+
+
+def plan(prompt: str = "Review a synthetic skill") -> dict:
+    return {
+        "skill_name": "skill-creator",
+        "mode": "manual-review",
+        "configurations": ["with_skill"],
+        "evals": [
+            {
+                "id": "case-one",
+                "prompt": prompt,
+                "expected_behavior": ["Identify the intended behavior"],
+                "assertions": [{"text": "Bounded review", "type": "required", "method": "manual-review"}],
+            }
+        ],
+    }
+
+
+def scaffold(plan_path: Path, run_dir: Path) -> None:
+    run("run_eval.py", str(plan_path), "--output-dir", str(run_dir), "--overwrite")
+
+
+def grade(run_dir: Path, eval_id: str = "case-one", config: str = "with_skill") -> Path:
+    path = run_dir / eval_id / config / "grading.json"
+    write_json(path, {"passed": True, "eval_id": eval_id, "configuration": config})
+    return path
+
+
+def reject_without_mutation(plan_path: Path, run_dir: Path, script: str = "run_eval.py") -> None:
+    before = tree_digest(run_dir)
+    if script == "run_loop.py":
+        result = run(script, str(SKILL), "--evals-json", str(plan_path), "--run-dir", str(run_dir), expected=1)
+    else:
+        result = run(script, str(plan_path), "--output-dir", str(run_dir), "--overwrite", expected=1)
+    if "fresh --output-dir" not in result.stderr:
+        raise RuntimeError(f"Missing actionable rejection: {result.stderr}")
+    if tree_digest(run_dir) != before:
+        raise RuntimeError("Rejected graded run was mutated")
+
+
+def main() -> None:
+    with tempfile.TemporaryDirectory(prefix="ai-workflow-skill-eval-freshness-") as temporary:
+        root = Path(temporary)
+
+        for case in ("prompt", "expected", "assertions", "forbidden", "files", "config", "membership", "source"):
+            case_dir = root / case
+            plan_path = case_dir / "evals.json"
+            run_dir = case_dir / "run"
+            original = plan()
+            write_json(plan_path, original)
+            scaffold(plan_path, run_dir)
+            grade(run_dir)
+            changed = plan()
+            if case == "prompt":
+                changed["evals"][0]["prompt"] = "Different prompt"
+            elif case == "expected":
+                changed["evals"][0]["expected_behavior"] = ["Different expected behavior"]
+            elif case == "assertions":
+                changed["evals"][0]["assertions"][0]["text"] = "Different assertion"
+            elif case == "forbidden":
+                changed["evals"][0]["forbidden_behavior"] = ["Unsafe behavior"]
+            elif case == "files":
+                changed["evals"][0]["files"] = ["different-input.md"]
+            elif case == "config":
+                changed["configurations"] = ["baseline"]
+            elif case == "membership":
+                changed["evals"].append({"id": "case-two", "prompt": "Other", "expected_behavior": ["Other"]})
+            else:
+                moved = case_dir / "renamed.json"
+                write_json(moved, original)
+                reject_without_mutation(moved, run_dir)
+                continue
+            write_json(plan_path, changed)
+            reject_without_mutation(plan_path, run_dir, "run_loop.py" if case == "prompt" else "run_eval.py")
+
+        compatible = root / "compatible"
+        compatible_plan = compatible / "evals.json"
+        compatible_run = compatible / "run"
+        write_json(compatible_plan, plan())
+        scaffold(compatible_plan, compatible_run)
+        grade_path = grade(compatible_run)
+        grade_digest = hashlib.sha256(grade_path.read_bytes()).hexdigest()
+        run("run_loop.py", str(SKILL), "--evals-json", str(compatible_plan), "--run-dir", str(compatible_run))
+        if hashlib.sha256(grade_path.read_bytes()).hexdigest() != grade_digest:
+            raise RuntimeError("Compatible rerun changed the grade")
+        if not (compatible_run / "benchmark.json").is_file():
+            raise RuntimeError("Compatible graded rerun did not aggregate")
+
+        ungraded = root / "ungraded"
+        ungraded_plan = ungraded / "evals.json"
+        ungraded_run = ungraded / "run"
+        write_json(ungraded_plan, plan())
+        scaffold(ungraded_plan, ungraded_run)
+        write_json(ungraded_plan, plan("Changed but ungraded"))
+        scaffold(ungraded_plan, ungraded_run)
+        if read_json(ungraded_run / "case-one/eval_metadata.json")["prompt"] != "Changed but ungraded":
+            raise RuntimeError("Ungraded overwrite did not refresh metadata")
+
+        for case in ("orphan", "unexpected-config", "missing-metadata", "changed-metadata", "legacy"):
+            case_dir = root / case
+            plan_path = case_dir / "evals.json"
+            run_dir = case_dir / "run"
+            write_json(plan_path, plan())
+            scaffold(plan_path, run_dir)
+            if case == "orphan":
+                grade(run_dir, eval_id="unlisted")
+            elif case == "unexpected-config":
+                grade(run_dir, config="unlisted")
+            else:
+                grade(run_dir)
+                if case == "missing-metadata":
+                    (run_dir / "case-one/eval_metadata.json").unlink()
+                elif case == "changed-metadata":
+                    metadata_path = run_dir / "case-one/eval_metadata.json"
+                    metadata = read_json(metadata_path)
+                    metadata["prompt"] = "Stale prompt"
+                    write_json(metadata_path, metadata)
+                else:
+                    manifest = read_json(run_dir / "run.json")
+                    del manifest["plan_sha256"]
+                    write_json(run_dir / "run.json", manifest)
+            reject_without_mutation(plan_path, run_dir)
+
+        override = root / "override"
+        override_plan = override / "evals.json"
+        override_run = override / "run"
+        write_json(override_plan, plan())
+        scaffold(override_plan, override_run)
+        grade(override_run)
+        before = tree_digest(override_run)
+        result = run(
+            "run_eval.py", str(override_plan), "--output-dir", str(override_run),
+            "--configs", "baseline", "--overwrite", expected=1,
+        )
+        if "fresh --output-dir" not in result.stderr or tree_digest(override_run) != before:
+            raise RuntimeError("Changed configuration override reused or mutated grading evidence")
+
+        invalid_plan = root / "invalid/evals.json"
+        duplicate = plan()
+        duplicate["evals"].append(dict(duplicate["evals"][0]))
+        write_json(invalid_plan, duplicate)
+        result = run("run_eval.py", str(invalid_plan), "--output-dir", str(root / "invalid/run"), expected=1)
+        if "Duplicate eval id" not in result.stderr or (root / "invalid/run").exists():
+            raise RuntimeError("Duplicate eval ID was not rejected before writes")
+
+        duplicate_config = plan()
+        duplicate_config["configurations"] = ["with_skill", "with_skill"]
+        write_json(invalid_plan, duplicate_config)
+        result = run("run_eval.py", str(invalid_plan), "--output-dir", str(root / "invalid/run"), expected=1)
+        if "Configurations must be unique" not in result.stderr or (root / "invalid/run").exists():
+            raise RuntimeError("Duplicate configuration was not rejected before writes")
+
+    print("Skill eval freshness regression: pass")
+
+
+if __name__ == "__main__":
+    main()

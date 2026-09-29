@@ -102,7 +102,9 @@ Before idea validation, architecture, planning, specification, implementation, Q
 - identify the project domain and task type from repo intake, accepted project context, status, plan, spec, user prompt, and existing artifact names;
 - check `AI_WORKFLOW_WORKSPACE_HOME/skills/` first;
 - check `.systems/ai/skills/` second;
-- use only active skills that contain `SKILL.md`;
+- consider only active skills that contain `SKILL.md`; inspect only `SKILL.md` frontmatter `name` and `description` while selecting candidates, stopping at the closing `---` delimiter rather than guessing a fixed line count;
+- do not read the full body of a non-matching skill; load the full active `SKILL.md` only after its frontmatter makes it a plausible match, then load only needed resources;
+- if several skills plausibly match, inspect their full contracts as needed and explain the selection; a product-code filename containing `skill` is not by itself a skill-artifact review trigger;
 - prefer the workspace skill when a workspace skill and system skill both match;
 - report the selected skill and reason in `Execution Trace`;
 - if no matching skill exists, continue normally and report `Skills used: none`.
