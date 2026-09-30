@@ -8,6 +8,7 @@ test_timeout_seconds="180"
 smoke_started_at=$SECONDS
 smoke_completion_emitted=0
 smoke_suite_completed=0
+smoke_final_status=0
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
@@ -53,6 +54,15 @@ if ! [[ "$test_timeout_seconds" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ "$test_timeout_
 fi
 
 timeout_runner="$(pwd -P)/.systems/scripts/run-with-timeout"
+timing_helper="$(pwd -P)/.systems/scripts/lib/validation-timing.py"
+smoke_timing_start=""
+smoke_timing_run_id="${AI_WORKFLOW_TIMING_RUN_ID:-$(date -u +%Y%m%dT%H%M%S)-$$}"
+if [[ -n "${AI_WORKFLOW_TIMING_OUTPUT:-}" ]]; then
+  if [[ ! -e "$AI_WORKFLOW_TIMING_OUTPUT" ]]; then
+    python3 "$timing_helper" init "$AI_WORKFLOW_TIMING_OUTPUT"
+  fi
+  smoke_timing_start="$(python3 "$timing_helper" now)"
+fi
 
 finish_smoke() {
   local status="${1:-$?}"
@@ -60,6 +70,14 @@ finish_smoke() {
   if [[ "$status" -eq 0 ]]; then result="pass"; fi
   if [[ "$status" -eq 124 ]]; then result="timeout"; fi
   if [[ "$status" -eq 130 || "$status" -eq 143 ]]; then result="interrupted"; fi
+  if [[ -n "${AI_WORKFLOW_TIMING_OUTPUT:-}" && -n "$smoke_timing_start" ]]; then
+    if ! python3 "$timing_helper" record "$AI_WORKFLOW_TIMING_OUTPUT" "$smoke_timing_run_id" smoke-suite-wall smoke "$result" "smoke-$smoke_group" wall validation-wall "$smoke_timing_start"; then
+      echo "Smoke timing wall record failed" >&2
+      status=1
+      result="fail"
+    fi
+  fi
+  smoke_final_status="$status"
   if [[ "$smoke_completion_emitted" -eq 0 ]]; then
     smoke_completion_emitted=1
     printf 'AI_WORKFLOW_SMOKE_COMPLETE group=%s result=%s exit_code=%s duration_seconds=%s\n' \
@@ -79,7 +97,7 @@ on_smoke_exit() {
   finish_smoke "$status"
   cleanup
   trap - EXIT
-  exit "$status"
+  exit "$smoke_final_status"
 }
 trap 'on_smoke_exit "$?"' EXIT
 trap 'exit 130' INT
@@ -100,11 +118,17 @@ run_must_fail() {
   fi
   local output="$tmp/${name}.out"
   local started=$SECONDS
+  local started_ns=""
+  [[ -z "${AI_WORKFLOW_TIMING_OUTPUT:-}" ]] || started_ns="$(python3 "$timing_helper" now)"
   local status
   local expected_status=1
   local expected_diagnostic='[[:graph:]]'
 
   case "$name" in
+    validation-timing-rejects-existing-output|validation-timing-rejects-escaping-output|validation-timing-rejects-symlink|validation-timing-rejects-tmpdir-override|validation-timing-rejects-tracked-temporary-output|validation-timing-rejects-unignored-temporary-repo-output|validation-timing-rejects-foreign-tracked-output|validation-timing-rejects-foreign-deleted-tracked-output|validation-timing-rejects-foreign-unignored-output|validation-comparison-rejects-incomplete|validation-comparison-rejects-source-mismatch|validation-comparison-rejects-duplicate-record|validation-comparison-rejects-missing-smoke-check|validation-comparison-rejects-nonfinite-duration|validation-comparison-rejects-separate-output|validation-comparison-rejects-oversized-smoke-wall|validation-comparison-rejects-private-fingerprint)
+      expected_status=2
+      expected_diagnostic='Validation (timing|comparison) error:'
+      ;;
     validate-workflow-emits-failure-marker)
       expected_status=7
       expected_diagnostic='^AI_WORKFLOW_VALIDATE_COMPLETE .*result=fail .*exit_code=7'
@@ -584,7 +608,7 @@ run_must_fail() {
     mkdir -p "$(dirname "$AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT")"
     printf '%s\t%s\t%s\n' "$name" "$status" "$(sed -n '/[^[:space:]]/{p;q;}' "$output")" >> "$AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT"
   fi
-  record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -eq "$expected_status" ]] && echo pass || echo fail)"
+  record_smoke_timing "$name" "$started_ns" "$([[ "$status" -eq "$expected_status" ]] && echo pass || echo fail)"
   if [[ "$status" -ne "$expected_status" ]]; then
     echo "Validator smoke test returned $status instead of expected $expected_status: $name"
     cat "$output"
@@ -620,6 +644,8 @@ run_must_pass() {
   shift
   local output="$tmp/${name}.out"
   local started=$SECONDS
+  local started_ns=""
+  [[ -z "${AI_WORKFLOW_TIMING_OUTPUT:-}" ]] || started_ns="$(python3 "$timing_helper" now)"
   local status
 
   should_run_smoke_test "$name" || return 0
@@ -632,7 +658,7 @@ run_must_pass() {
   (cd "$tmp" && "$timeout_runner" --timeout-seconds "$test_timeout_seconds" "$@") >"$output" 2>&1
   status=$?
   set -e
-  record_smoke_timing "$name" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  record_smoke_timing "$name" "$started_ns" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
   if [[ "$status" -ne 0 ]]; then
     echo "Validator smoke test unexpectedly failed: $name"
     cat "$output"
@@ -662,16 +688,82 @@ should_run_smoke_test() {
 
 record_smoke_timing() {
   local name="$1"
-  local duration="$2"
+  local started_ns="$2"
   local result="$3"
   local output_path="${AI_WORKFLOW_TIMING_OUTPUT:-}"
   [[ -n "$output_path" ]] || return 0
-  mkdir -p "$(dirname "$output_path")"
-  if [[ ! -f "$output_path" ]]; then
-    printf 'command/check_id\tgroup\tduration_seconds\tresult\tprofile\n' > "$output_path"
-  fi
-  printf '%s\t%s\t%s\t%s\t%s\n' "$name" "$(smoke_test_group "$name")" "$duration" "$result" "smoke-$smoke_group" >> "$output_path"
+  python3 "$timing_helper" record "$output_path" "$smoke_timing_run_id" "$name" "$(smoke_test_group "$name")" "$result" "smoke-$smoke_group" child smoke-suite-wall "$started_ns"
 }
+
+synthetic_source_digest="$(.systems/scripts/report-validation-comparison source-digest)"
+run_must_fail "validation-timing-rejects-existing-output" --expect-literal 'File exists' python3 "$timing_helper" init "$tmp/AGENTS.md"
+run_must_fail "validation-timing-rejects-escaping-output" --expect-literal 'must be under ignored workspace or tmp' python3 "$timing_helper" init "$(pwd -P)/.systems/scripts/invalid-timing.tsv"
+# Avoid macOS developer-tool wrappers writing their cache into the hostile TMPDIR.
+timing_python="$(python3 -c 'import sys; print(sys.executable)')"
+timing_git="$(command -v git)"
+if [[ "$(uname -s)" == Darwin ]]; then
+  timing_git="$(xcrun --find git)"
+fi
+run_must_fail "validation-timing-rejects-tmpdir-override" --expect-literal 'must be under ignored workspace or tmp' env TMPDIR="$(pwd -P)" PATH="$(dirname "$timing_git"):$PATH" "$timing_python" "$timing_helper" init "$(pwd -P)/.systems/scripts/invalid-tmpdir-timing.tsv"
+ln -s "$tmp/AGENTS.md" "$tmp/lv002-timing-link.tsv"
+run_must_fail "validation-timing-rejects-symlink" --expect-literal 'must not be a symlink' python3 "$timing_helper" init "$tmp/lv002-timing-link.tsv"
+python3 "$timing_helper" init "$tmp/lv002-precision.tsv"
+mkdir -p "$tmp/lv002-tracked-output"
+git init -q "$tmp/lv002-tracked-output"
+cp "$tmp/lv002-precision.tsv" "$tmp/lv002-tracked-output/tracked.tsv"
+git -C "$tmp/lv002-tracked-output" add tracked.tsv
+run_must_fail "validation-timing-rejects-tracked-temporary-output" --expect-literal 'tracked by git' bash -c 'cd "$1" && shift && exec "$@"' _ "$tmp/lv002-tracked-output" python3 "$timing_helper" init "$tmp/lv002-tracked-output/tracked.tsv"
+run_must_fail "validation-timing-rejects-unignored-temporary-repo-output" --expect-literal 'must be under ignored workspace or tmp' bash -c 'cd "$1" && shift && exec "$@"' _ "$tmp/lv002-tracked-output" python3 "$timing_helper" init "$tmp/lv002-tracked-output/unignored.tsv"
+run_must_fail "validation-timing-rejects-foreign-tracked-output" --expect-literal 'tracked by git' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" python3 "$timing_helper" init "$tmp/lv002-tracked-output/tracked.tsv"
+rm "$tmp/lv002-tracked-output/tracked.tsv"
+run_must_fail "validation-timing-rejects-foreign-deleted-tracked-output" --expect-literal 'tracked by git' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" python3 "$timing_helper" init "$tmp/lv002-tracked-output/tracked.tsv"
+run_must_fail "validation-timing-rejects-foreign-unignored-output" --expect-literal 'must be under ignored workspace or tmp' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" python3 "$timing_helper" init "$tmp/lv002-tracked-output/unignored.tsv"
+precision_start="$(python3 "$timing_helper" now)"
+sleep 0.02
+python3 "$timing_helper" record "$tmp/lv002-precision.tsv" precision-run short-check core pass full child validation-wall "$precision_start"
+awk -F '\t' 'NR == 2 { if ($3 <= 0 || $3 >= 1) exit 1; found=1 } END { if (!found) exit 1 }' "$tmp/lv002-precision.tsv" || { echo "LV002 sub-second duration was not recorded precisely"; exit 1; }
+
+for synthetic_run in 1 2 3 4 5 6; do
+  synthetic_timing="$tmp/lv002-synthetic-$synthetic_run.tsv"
+  {
+    printf 'command/check_id\tgroup\tduration_seconds\tresult\tprofile\tschema_version\trun_id\trecord_kind\tparent_id\n'
+    printf 'check-required-artifacts\tvalidator\t2.000000\tpass\tfull\t2\t%s-synthetic-%s\tchild\tvalidation-wall\n' "$synthetic_source_digest" "$synthetic_run"
+    printf 'check-validator-smoke-tests\tsmoke\t7.000000\tpass\tfull\t2\t%s-synthetic-%s\tchild\tvalidation-wall\n' "$synthetic_source_digest" "$synthetic_run"
+    printf 'one-smoke\tcore\t3.000000\tpass\tsmoke-all\t2\t%s-synthetic-%s\tchild\tsmoke-suite-wall\n' "$synthetic_source_digest" "$synthetic_run"
+    printf 'smoke-suite-wall\tsmoke\t6.000000\tpass\tsmoke-all\t2\t%s-synthetic-%s\twall\tvalidation-wall\n' "$synthetic_source_digest" "$synthetic_run"
+    printf 'validation-wall\twall\t10.000000\tpass\tfull\t2\t%s-synthetic-%s\twall\tnone\n' "$synthetic_source_digest" "$synthetic_run"
+  } > "$synthetic_timing"
+  run_must_pass "validation-comparison-captures-$synthetic_run" bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$synthetic_timing" --output "$tmp/lv002-synthetic-$synthetic_run.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+done
+python3 - "$tmp/lv002-synthetic-1.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+manifest = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+if manifest["schema_version"] != 2 or manifest["timing_file"] != "lv002-synthetic-1.tsv":
+    raise SystemExit("LV002 manifest leaked an absolute timing path")
+PY
+run_must_pass "validation-comparison-summarizes-complete" .systems/scripts/report-validation-comparison summarize "$tmp/lv002-synthetic-1.json" "$tmp/lv002-synthetic-2.json" "$tmp/lv002-synthetic-3.json"
+run_must_pass "validation-comparison-preserves-inconclusive" .systems/scripts/report-validation-comparison compare --baseline "$tmp/lv002-synthetic-1.json" "$tmp/lv002-synthetic-2.json" "$tmp/lv002-synthetic-3.json" --candidate "$tmp/lv002-synthetic-4.json" "$tmp/lv002-synthetic-5.json" "$tmp/lv002-synthetic-6.json"
+rg -q '"result": "complete-baseline"' "$tmp/validation-comparison-summarizes-complete.out" || { echo "LV002 complete baseline summary missing"; exit 1; }
+rg -q '"result": "inconclusive"' "$tmp/validation-comparison-preserves-inconclusive.out" || { echo "LV002 no-gain comparison claimed improvement"; exit 1; }
+rg -v '^smoke-suite-wall' "$tmp/lv002-synthetic-1.tsv" | sed 's/synthetic-1/synthetic-incomplete/g' > "$tmp/lv002-incomplete.tsv"
+run_must_pass "validation-comparison-captures-incomplete" bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-incomplete.tsv" --output "$tmp/lv002-incomplete.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+run_must_fail "validation-comparison-rejects-incomplete" --expect-literal 'incomplete or failed run cannot be a baseline' .systems/scripts/report-validation-comparison summarize "$tmp/lv002-synthetic-1.json" "$tmp/lv002-synthetic-2.json" "$tmp/lv002-incomplete.json"
+sed "s/$synthetic_source_digest/0000000000000000000000000000000000000000000000000000000000000000/g" "$tmp/lv002-synthetic-1.tsv" > "$tmp/lv002-wrong-source.tsv"
+run_must_fail "validation-comparison-rejects-source-mismatch" --expect-literal 'source does not match the timed run identity' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-wrong-source.tsv" --output "$tmp/lv002-wrong-source.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+cp "$tmp/lv002-synthetic-1.tsv" "$tmp/lv002-duplicate.tsv"
+rg '^one-smoke' "$tmp/lv002-synthetic-1.tsv" >> "$tmp/lv002-duplicate.tsv"
+run_must_fail "validation-comparison-rejects-duplicate-record" --expect-literal 'duplicate timing identity' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-duplicate.tsv" --output "$tmp/lv002-duplicate.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+awk -F '\t' '$1 != "check-validator-smoke-tests"' "$tmp/lv002-synthetic-1.tsv" > "$tmp/lv002-missing-smoke-check.tsv"
+run_must_fail "validation-comparison-rejects-missing-smoke-check" --expect-literal 'smoke wall has no top-level smoke check' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-missing-smoke-check.tsv" --output "$tmp/lv002-missing-smoke-check.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+sed 's/10.000000/Infinity/' "$tmp/lv002-synthetic-1.tsv" > "$tmp/lv002-nonfinite.tsv"
+run_must_fail "validation-comparison-rejects-nonfinite-duration" --expect-literal 'invalid timing duration' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-nonfinite.tsv" --output "$tmp/lv002-nonfinite.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+run_must_fail "validation-comparison-rejects-separate-output" --expect-literal 'must share a directory' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-synthetic-1.tsv" --output "$tmp/lv002-manifests/separate.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+sed 's/6.000000/8.000000/' "$tmp/lv002-synthetic-1.tsv" > "$tmp/lv002-oversized-smoke-wall.tsv"
+run_must_fail "validation-comparison-rejects-oversized-smoke-wall" --expect-literal 'smoke wall exceeds its top-level check' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-oversized-smoke-wall.tsv" --output "$tmp/lv002-oversized-smoke-wall.json" --scope-fingerprint synthetic-full --input-fingerprint synthetic-input --setup-regime ordinary
+run_must_fail "validation-comparison-rejects-private-fingerprint" --expect-literal 'unsafe field' bash -c 'cd "$1" && shift && exec "$@"' _ "$(pwd -P)" .systems/scripts/report-validation-comparison capture --timing "$tmp/lv002-synthetic-1.tsv" --output "$tmp/lv002-private-fingerprint.json" --scope-fingerprint synthetic-full --input-fingerprint '/private/client/path' --setup-regime ordinary
 
 for infrastructure_case in unexpected-timeout missing-source wrong-error-code wrong-diagnostic; do
   case "$infrastructure_case" in

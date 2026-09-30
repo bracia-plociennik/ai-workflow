@@ -149,11 +149,27 @@ finish_validation() {
   elif [[ "$status" -eq 130 || "$status" -eq 143 ]]; then
     result="interrupted"
   fi
+  if [[ -n "$timing_output" && "${timing_initialized:-0}" -eq 1 ]]; then
+    local final_source_digest=""
+    final_source_digest="$(.systems/scripts/report-validation-comparison source-digest)" || final_source_digest="unavailable"
+    if [[ "$final_source_digest" != "$timing_source_digest" ]]; then
+      echo "Validation source changed during timed run; result is incomplete" >&2
+      status=1
+      result="fail"
+    fi
+    if ! python3 "$timing_helper" record "$timing_output" "$timing_run_id" validation-wall wall "$result" "$profile" wall none "$timing_wall_start"; then
+      echo "Validation timing wall record failed" >&2
+      status=1
+      result="fail"
+    fi
+  fi
   if [[ "$validation_started" -eq 1 && "$completion_emitted" -eq 0 ]]; then
     completion_emitted=1
     printf 'AI_WORKFLOW_VALIDATE_COMPLETE profile=%s result=%s exit_code=%s duration_seconds=%s stage=%s check=%s\n' \
       "$profile" "$result" "$status" "$((SECONDS - validation_started_at))" "$current_stage" "$current_check"
   fi
+  trap - EXIT
+  exit "$status"
 }
 
 validation_started_at=$SECONDS
@@ -161,22 +177,34 @@ trap finish_validation EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+timing_helper=".systems/scripts/lib/validation-timing.py"
+timing_run_id="$(date -u +%Y%m%dT%H%M%S)-$$"
+timing_wall_start=""
+timing_initialized=0
+if [[ -n "$timing_output" ]]; then
+  timing_wall_start="$(python3 "$timing_helper" now)"
+  python3 "$timing_helper" init "$timing_output"
+  timing_output="$(cd "$(dirname "$timing_output")" && pwd -P)/$(basename "$timing_output")"
+  timing_source_digest="$(.systems/scripts/report-validation-comparison source-digest)"
+  timing_run_id="$timing_source_digest-$timing_run_id"
+  timing_initialized=1
+  export AI_WORKFLOW_TIMING_RUN_ID="$timing_run_id"
+fi
+
 record_timing() {
   local check_name="$1"
-  local duration="$2"
+  local started_ns="$2"
   local result="$3"
   [[ -n "$timing_output" ]] || return 0
-  mkdir -p "$(dirname "$timing_output")"
-  if [[ ! -f "$timing_output" ]]; then
-    printf 'command/check_id\tgroup\tduration_seconds\tresult\tprofile\n' > "$timing_output"
-  fi
   local group="validator"
   [[ "$check_name" == "check-validator-smoke-tests" ]] && group="smoke"
-  printf '%s\t%s\t%s\t%s\t%s\n' "$check_name" "$group" "$duration" "$result" "$profile" >> "$timing_output"
+  python3 "$timing_helper" record "$timing_output" "$timing_run_id" "$check_name" "$group" "$result" "$profile" child validation-wall "$started_ns"
 }
 
 run_cmd() {
   local started=$SECONDS
+  local started_ns=""
+  [[ -z "$timing_output" ]] || started_ns="$(python3 "$timing_helper" now)"
   local status
   current_stage="validator"
   current_check="$*"
@@ -196,7 +224,7 @@ run_cmd() {
   fi
   status=$?
   set -e
-  record_timing "$(basename "$1")" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  record_timing "$(basename "$1")" "$started_ns" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
   if [[ "$progress" != "quiet" ]]; then
     printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=%s duration_seconds=%s\n' \
       "$current_stage" "$current_check" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)" "$((SECONDS - started))"

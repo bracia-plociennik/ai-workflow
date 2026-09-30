@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Capture and compare complete validation runs without reading command output."""
+
+import argparse
+import csv
+import hashlib
+import importlib.util
+import json
+import math
+import os
+from pathlib import Path
+import platform
+import re
+import statistics
+import subprocess
+import sys
+
+
+HELPER = Path(__file__).parent / "lib" / "validation-timing.py"
+spec = importlib.util.spec_from_file_location("validation_timing", HELPER)
+timing = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(timing)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def source_digest():
+    paths = subprocess.check_output(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"]
+    ).split(b"\0")
+    h = hashlib.sha256()
+    for raw in sorted(p for p in paths if p):
+        path = Path(os.fsdecode(raw))
+        h.update(raw + b"\0")
+        if path.is_symlink():
+            h.update(os.fsencode(os.readlink(path)))
+        elif path.is_file():
+            h.update(path.read_bytes())
+        else:
+            h.update(b"MISSING")
+        h.update(b"\0")
+    return h.hexdigest()
+
+
+def timing_rows(path):
+    with timing.safe_output(str(path)).open(newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream, delimiter="\t")
+        if reader.fieldnames != timing.HEADER.rstrip("\n").split("\t"):
+            raise ValueError("incompatible timing schema")
+        rows = list(reader)
+    if not rows or any(None in row or not all(row.values()) for row in rows):
+        raise ValueError("empty or malformed timing records")
+    for row in rows:
+        if row["schema_version"] != "2":
+            raise ValueError("unsupported timing record version")
+        try:
+            value = float(row["duration_seconds"])
+        except ValueError as exc:
+            raise ValueError("invalid timing duration") from exc
+        if not math.isfinite(value) or value <= 0:
+            raise ValueError("invalid timing duration")
+    return rows
+
+
+def characterize(rows):
+    ids = {row["run_id"] for row in rows}
+    if len(ids) != 1:
+        raise ValueError("mixed run IDs")
+    identities = [
+        (row["record_kind"], row["command/check_id"], row["parent_id"])
+        for row in rows
+    ]
+    if len(identities) != len(set(identities)):
+        raise ValueError("duplicate timing identity")
+    wall = [row for row in rows if row["command/check_id"] == "validation-wall"]
+    smoke_wall = [row for row in rows if row["command/check_id"] == "smoke-suite-wall"]
+    if len(wall) > 1 or len(smoke_wall) > 1:
+        raise ValueError("duplicate wall record")
+    if wall and (wall[0]["record_kind"], wall[0]["parent_id"], wall[0]["group"]) != ("wall", "none", "wall"):
+        raise ValueError("invalid validation wall relationship")
+    if smoke_wall and (smoke_wall[0]["record_kind"], smoke_wall[0]["parent_id"], smoke_wall[0]["group"]) != ("wall", "validation-wall", "smoke"):
+        raise ValueError("invalid smoke wall relationship")
+    tests = [
+        row for row in rows
+        if row["record_kind"] == "child" and row["parent_id"] == "smoke-suite-wall"
+    ]
+    checks = [
+        row for row in rows
+        if row["record_kind"] == "child" and row["parent_id"] == "validation-wall"
+    ]
+    smoke_check = next((
+        row for row in checks
+        if row["command/check_id"] == "check-validator-smoke-tests" and row["group"] == "smoke"
+    ), None)
+    if smoke_wall and smoke_check is None:
+        raise ValueError("smoke wall has no top-level smoke check")
+    if not rows:
+        raise ValueError("empty timing run")
+    smoke_total = sum(float(row["duration_seconds"]) for row in tests)
+    smoke_duration = float(smoke_wall[0]["duration_seconds"]) if smoke_wall else 0.0
+    if smoke_wall and smoke_check and smoke_duration > float(smoke_check["duration_seconds"]) + 0.01:
+        raise ValueError("smoke wall exceeds its top-level check")
+    validation_total = sum(float(row["duration_seconds"]) for row in checks)
+    validation_duration = float(wall[0]["duration_seconds"]) if wall else 0.0
+    if (smoke_wall and smoke_total > smoke_duration + 0.01) or (wall and validation_total > validation_duration + 0.01):
+        raise ValueError("child intervals exceed parent wall time")
+    complete = len(wall) == 1 and len(smoke_wall) == 1 and bool(tests) and bool(checks) and all(row["result"] == "pass" for row in rows) and all(
+        row["profile"] == "full" for row in checks + wall
+    ) and all(row["profile"] == "smoke-all" for row in tests + smoke_wall)
+    return {
+        "run_id": next(iter(ids)),
+        "status": "complete" if complete else "incomplete",
+        "wall_seconds": validation_duration,
+        "smoke_wall_seconds": smoke_duration,
+        "smoke_unattributed_seconds": round(max(0.0, smoke_duration - smoke_total), 6),
+        "validation_unattributed_seconds": round(max(0.0, validation_duration - validation_total), 6),
+        "checks": sorted(row["command/check_id"] for row in checks),
+        "tests": sorted(row["command/check_id"] for row in tests),
+    }
+
+
+def capture(args):
+    scope_fingerprint = timing.field(args.scope_fingerprint)
+    input_fingerprint = timing.field(args.input_fingerprint)
+    setup_regime = timing.field(args.setup_regime)
+    path = timing.safe_output(args.timing)
+    output = timing.safe_output(args.output)
+    if path.parent.resolve() != output.parent.resolve():
+        raise ValueError("timing file and manifest must share a directory")
+    rows = timing_rows(path)
+    info = characterize(rows)
+    match = re.match(r"^([0-9a-f]{64})-", info["run_id"])
+    if not match:
+        raise ValueError("timed run identity has no source digest")
+    timed_source_digest = match.group(1)
+    observed_source_digest = source_digest()
+    if info["status"] == "complete" and timed_source_digest != observed_source_digest:
+        raise ValueError("source does not match the timed run identity")
+    manifest = {
+        "schema_version": 2,
+        "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "source_digest": timed_source_digest,
+        "capture_source_digest": observed_source_digest,
+        "source_drift": timed_source_digest != observed_source_digest,
+        "runtime": f"{platform.system()}-{platform.release()}-python-{platform.python_version()}",
+        "profile": "full",
+        "scope_fingerprint": scope_fingerprint,
+        "input_fingerprint": input_fingerprint,
+        "setup_regime": setup_regime,
+        "timing_file": path.name,
+        "timing_digest": digest(path.read_bytes()),
+        **info,
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    with os.fdopen(os.open(output, flags, 0o600), "w", encoding="utf-8") as stream:
+        json.dump(manifest, stream, indent=2, sort_keys=True)
+        stream.write("\n")
+    print(json.dumps({"status": info["status"], "run_id": info["run_id"]}))
+
+
+def load_manifest(raw):
+    path = timing.safe_output(raw)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    required = (
+        "revision", "source_digest", "runtime", "profile", "scope_fingerprint",
+        "input_fingerprint", "setup_regime", "timing_file", "timing_digest",
+        "run_id", "status", "wall_seconds", "checks", "tests",
+    )
+    if data.get("schema_version") not in (1, 2) or any(key not in data for key in required):
+        raise ValueError("incomplete comparison manifest")
+    if not data["run_id"].startswith(data["source_digest"] + "-"):
+        raise ValueError("source does not match its manifest")
+    if data.get("source_drift") and data["status"] == "complete":
+        raise ValueError("complete run has source drift")
+    timing_name = data["timing_file"]
+    if not isinstance(timing_name, str) or timing_name in ("", ".", ".."):
+        raise ValueError("manifest contains an unsafe timing file name")
+    if data["schema_version"] == 1:
+        timing_path = timing.safe_output(timing_name)
+        if timing_path.parent.resolve() != path.parent.resolve():
+            raise ValueError("legacy timing file is outside its manifest directory")
+    else:
+        if Path(timing_name).name != timing_name:
+            raise ValueError("manifest contains an unsafe timing file name")
+        timing_path = timing.safe_output(str(path.parent / timing_name))
+    if digest(timing_path.read_bytes()) != data["timing_digest"]:
+        raise ValueError("timing file differs from its manifest")
+    observed = characterize(timing_rows(timing_path))
+    if any(data[key] != observed[key] for key in observed):
+        raise ValueError("manifest differs from timing records")
+    return data
+
+
+def summarize(args):
+    runs = [load_manifest(path) for path in args.manifests]
+    if len(runs) < 3:
+        raise ValueError("at least three runs are required")
+    stable = ("revision", "source_digest", "runtime", "profile", "scope_fingerprint", "input_fingerprint", "setup_regime", "checks", "tests")
+    if len({run["run_id"] for run in runs}) != len(runs):
+        raise ValueError("duplicate run IDs")
+    if any(run["status"] != "complete" for run in runs):
+        raise ValueError("incomplete or failed run cannot be a baseline")
+    if any(any(run[key] != runs[0][key] for key in stable) for run in runs[1:]):
+        raise ValueError("source, environment, input or coverage drift")
+    durations = [run["wall_seconds"] for run in runs]
+    return {
+        "result": "complete-baseline",
+        "run_count": len(runs),
+        "median_seconds": statistics.median(durations),
+        "min_seconds": min(durations),
+        "max_seconds": max(durations),
+        "runs": runs,
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="action", required=True)
+    sub.add_parser("source-digest")
+    cap = sub.add_parser("capture")
+    cap.add_argument("--timing", required=True)
+    cap.add_argument("--output", required=True)
+    cap.add_argument("--scope-fingerprint", required=True)
+    cap.add_argument("--input-fingerprint", required=True)
+    cap.add_argument("--setup-regime", required=True)
+    summary = sub.add_parser("summarize")
+    summary.add_argument("manifests", nargs="+")
+    compare = sub.add_parser("compare")
+    compare.add_argument("--baseline", nargs="+", required=True)
+    compare.add_argument("--candidate", nargs="+", required=True)
+    args = parser.parse_args()
+    if args.action == "source-digest":
+        print(source_digest())
+        return
+    if args.action == "capture":
+        capture(args)
+        return
+    if args.action == "summarize":
+        result = summarize(args)
+        result.pop("runs")
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return
+    baseline = summarize(argparse.Namespace(manifests=args.baseline))
+    candidate = summarize(argparse.Namespace(manifests=args.candidate))
+    if {run["run_id"] for run in baseline["runs"]} & {run["run_id"] for run in candidate["runs"]}:
+        raise ValueError("baseline and candidate reuse a run ID")
+    comparable = ("runtime", "profile", "scope_fingerprint", "input_fingerprint", "setup_regime", "checks", "tests")
+    if any(baseline["runs"][0][key] != candidate["runs"][0][key] for key in comparable):
+        raise ValueError("baseline and candidate inputs or coverage differ")
+    before = [run["wall_seconds"] for run in baseline["runs"]]
+    after = [run["wall_seconds"] for run in candidate["runs"]]
+    median_gain = (statistics.median(before) - statistics.median(after)) / statistics.median(before)
+    qualified = max(after) < min(before) and median_gain > 0.05
+    print(json.dumps({
+        "result": "qualified-improvement" if qualified else "inconclusive",
+        "baseline_median_seconds": statistics.median(before),
+        "candidate_median_seconds": statistics.median(after),
+        "median_gain_fraction": round(median_gain, 4),
+        "baseline_range_seconds": [min(before), max(before)],
+        "candidate_range_seconds": [min(after), max(after)],
+        "paired_differences_seconds": [round(b - c, 6) for b, c in zip(before, after)],
+        "coverage_identity": True,
+        "limitation": "Three-run screening rule; not statistical certainty",
+    }, indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (ValueError, OSError, subprocess.CalledProcessError, json.JSONDecodeError) as exc:
+        print(f"Validation comparison error: {exc}", file=sys.stderr)
+        raise SystemExit(2)
