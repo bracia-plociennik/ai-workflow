@@ -25,12 +25,20 @@ Green scripts do not equal `PASS`. A semantic mismatch, unresolved blocker, mate
 | Architecture, Plan, Packaging, and Spec QA | artifact-semantic QA first | targeted artifact validators only when applicable |
 | Product phase 5 | product tests and full implementation QA | only when workflow contracts or runtime artifacts changed |
 | Phase 6 distillation | capture, privacy, source, and state review | only required capture/privacy/state checks |
-| Phase 7 checkpoint | checkpoint semantic review first | explicit `full` profile when required by checkpoint policy |
+| Phase 7 checkpoint | checkpoint semantic review first | explicit `full` for source/system impact; bounded runtime-only scoped evidence only under the manifest policy |
 | CI, final system verification, high-impact workflow maintenance | full semantic current-diff review first | explicit `full` profile |
 
 Ordinary product implementation, PDF generation, document work, design work, and other non-workflow implementation must not run broad AI Workflow validation solely because AI Workflow governs the task.
 
 ## Required Evidence
+
+For scoped execution, use the strict scope manifest and explicit dependency
+registry in `validation-profiles.md`. Report execution separately from coverage
+(`complete|incomplete|unverified`) and final-evidence eligibility. Bare `--checks`
+has unverified coverage. Runtime-only checkpoint eligibility requires all owned
+status/QA/capture/privacy/state consumers, unchanged framework source and fresh
+input hashes; shared source changes, CI and upstream updates remain full-required.
+Neither coverage completeness nor a green subset grants semantic PASS.
 
 QA artifacts and substantive closures record:
 

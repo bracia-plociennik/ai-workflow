@@ -42,6 +42,7 @@
 - Drift findings, memory updates, checkpoint decision, and next state.
 - Privacy/scope validation for any accepted System Insight.
 - Residual risk.
+- Validation scope, execution result, coverage result, required/executed/skipped checks and final-evidence eligibility. Use explicit `full` for shared/system source impact. A runtime-only checkpoint may use a fresh strict scope manifest and complete required dependencies under `.systems/ai/core/validation-profiles.md`; no-manifest or stale/incomplete coverage is insufficient. Semantic QA and privacy/capture approval remain required.
 
 ### Next allowed phases
 

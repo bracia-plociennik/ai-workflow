@@ -3,6 +3,8 @@ set -euo pipefail
 
 fail=0
 project=""
+runtime_only=0
+scope_root=""
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --project)
@@ -10,6 +12,10 @@ while [[ "$#" -gt 0 ]]; do
       project="$2"
       shift 2
       ;;
+    --runtime-only) runtime_only=1; shift ;;
+    --scope-root)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --scope-root" >&2; exit 2; }
+      scope_root="$2"; shift 2 ;;
     *) echo "Unknown check-status-consistency argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -24,6 +30,19 @@ target_repo_root="$TARGET_REPO_ROOT"
 qa_target_args=(--approved-target-root "$target_repo_root")
 workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
 cd "$repo_root"
+
+scope_files=""
+if [[ "$runtime_only" == 1 ]]; then
+  [[ -n "$scope_root" ]] || { echo "--runtime-only requires --scope-root" >&2; exit 2; }
+  [[ -z "$project" || "$scope_root" == "projects/$project" ]] || { echo "Project/root conflict" >&2; exit 2; }
+  scope_files="$(mktemp)"
+  trap 'rm -f "$scope_files"' EXIT
+  python3 "$script_dir/lib/validation-scope.py" runtime-files --workspace "$workspace_home" --root "$scope_root" > "$scope_files"
+  if [[ "$scope_root" == projects/* ]]; then project="${scope_root#projects/}"; fi
+elif [[ -n "$scope_root" ]]; then
+  echo "--scope-root requires --runtime-only" >&2
+  exit 2
+fi
 
 if [[ -d "$workspace_home" ]]; then
   workspace_home="$(cd "$workspace_home" && pwd -P)"
@@ -100,6 +119,14 @@ display_path() {
 
 resolve_artifact_path() {
   local path="$1"
+  if [[ "$runtime_only" -eq 1 ]]; then
+    case "$path" in
+      AI_WORKFLOW_WORKSPACE_HOME/*) path="$workspace_home/${path#AI_WORKFLOW_WORKSPACE_HOME/}" ;;
+      ai-workflow-workspace/*) path="$target_repo_root/$path" ;;
+    esac
+    python3 "$script_dir/lib/validation-scope.py" resolve-artifact --workspace "$workspace_home" --root "$scope_root" --path "$path"
+    return
+  fi
   case "$path" in
     AI_WORKFLOW_WORKSPACE_HOME/*)
       if [[ -n "${workspace_home:-}" ]]; then
@@ -471,6 +498,21 @@ validate_tasks_file() {
     fail=1
   fi
 }
+
+if [[ "$runtime_only" -eq 1 ]]; then
+  scoped_status="$workspace_home/$scope_root/status.md"
+  [[ -f "$scoped_status" ]] || { echo "Missing scoped runtime status" >&2; exit 1; }
+  validate_status_file "$scoped_status"
+  if [[ "$scope_root" == projects/* ]]; then
+    scoped_tasks="$workspace_home/$scope_root/tasks.md"
+    [[ -f "$scoped_tasks" ]] || { echo "Missing scoped runtime task index" >&2; exit 1; }
+    validate_project_context "$workspace_home/$scope_root" "$(value_for current-phase "$scoped_status")" "$(value_for phase-result "$scoped_status")"
+    validate_tasks_file "$scoped_tasks" "$(value_for current-phase "$scoped_status")" "$(value_for phase-result "$scoped_status")"
+  else
+    require_key active-project "$scoped_status"
+  fi
+  exit "$fail"
+fi
 
 if [[ -n "$status" && -z "$project" ]]; then
   validate_status_file "$status"

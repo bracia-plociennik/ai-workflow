@@ -2,6 +2,33 @@
 set -euo pipefail
 
 source "$(dirname "$0")/lib/policy-boundaries.sh"
+source "$(dirname "$0")/resolve-workflow-env"
+project=""
+runtime_only=0
+scope_root=""
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --project|--scope-root)
+      [[ "$#" -ge 2 ]] || { echo "Missing runtime scope argument" >&2; exit 2; }
+      if [[ "$1" == --project ]]; then project="$2"; else scope_root="$2"; fi
+      shift 2 ;;
+    --runtime-only) runtime_only=1; shift ;;
+    *) echo "Unknown distillation scope argument" >&2; exit 2 ;;
+  esac
+done
+if [[ -n "$project" ]]; then
+  [[ "$project" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || { echo "Unsafe project slug" >&2; exit 2; }
+  [[ -z "$scope_root" || "$scope_root" == "projects/$project" ]] || { echo "Project/root conflict" >&2; exit 2; }
+  scope_root="projects/$project"
+fi
+if [[ "$runtime_only" -eq 1 ]]; then
+  [[ -n "$scope_root" ]] || { echo "--runtime-only requires --scope-root" >&2; exit 2; }
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/validation-scope.py" distillation --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --root "$scope_root" --repo "$TARGET_REPO_ROOT"
+  exit 0
+elif [[ -n "$scope_root" ]]; then
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/validation-scope.py" distillation --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --root "$scope_root" --repo "$TARGET_REPO_ROOT"
+fi
+cd "$AI_WORKFLOW_HOME"
 
 fail=0
 

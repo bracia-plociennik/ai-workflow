@@ -28,6 +28,9 @@ require_ref "$contract" 'Green scripts do not equal `PASS`' "PASS boundary"
 require_ref "$contract" 'no broad AI Workflow validation' "implementation boundary"
 require_ref "$contract" 'Phase 7 checkpoint' "checkpoint full route"
 require_ref "$contract" 'Phase 6 distillation' "distillation targeted route"
+require_ref "$contract" 'execution separately from coverage' "scoped execution/coverage boundary"
+require_ref "$contract" 'unchanged framework source' "runtime checkpoint framework boundary"
+require_ref .systems/ai/workflow/phase-7-checkpoint.md 'fresh strict scope manifest' "checkpoint scope policy"
 
 templates=(
   .systems/ai/templates/workflow/phase-1-architecture-qa.template.md

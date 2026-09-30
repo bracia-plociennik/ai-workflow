@@ -65,6 +65,8 @@ required_files=(
   ".systems/ai/core/validation-profiles.md"
   ".systems/scripts/validate-workflow"
   ".systems/scripts/check-validation-profiles"
+  ".systems/scripts/lib/validation-scope.py"
+  ".systems/scripts/lib/validation-checks.json"
 )
 
 for path in "${required_files[@]}"; do
@@ -106,7 +108,7 @@ for term in \
   '--explain' \
   'run_fast_checks' \
   'run_core_validators' \
-  'run_named_check' \
+  'scope_plan' \
   'check-validator-smoke-tests' \
   'Final validation evidence: yes for ordinary work' \
   'Final validation evidence: no' \
@@ -118,6 +120,29 @@ done
 require_ref "$validate" 'if \[\[ "\$profile" == "full" && "\$\{AI_WORKFLOW_SKIP_SMOKE_TESTS:-0\}" != "1" \]\]' "full profile smoke gate"
 require_ref "$validate" '--profile scoped requires --checks' "scoped requires explicit checks"
 require_ref "$validate" '--checks is valid only with --profile scoped' "checks scoped-only"
+for term in '--scope-manifest' 'coverage_result' 'final_evidence_eligible' 'full-required-source-impact' 'unverified' 'runtime_required'; do
+  require_ref "$contract" "$term|${term//_/[- ]}" "scoped coverage term: $term"
+done
+for field in 'Scope manifest path' 'Execution result' 'Coverage result' 'Final-evidence eligibility'; do
+  require_ref .systems/ai/templates/workflow/phase-7-checkpoint.template.md "$field" "checkpoint scoped evidence: $field"
+done
+if ! python3 - <<'PY'
+import importlib.util
+from pathlib import Path
+path = Path('.systems/scripts/lib/validation-scope.py')
+spec = importlib.util.spec_from_file_location('validation_scope', path)
+scope = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(scope)
+scope.registry(Path('.systems/scripts/lib/validation-checks.json'), Path.cwd())
+runner = Path('.systems/scripts/validate-workflow').read_text()
+block = runner.split('if [[ "$profile" == "scoped" ]]; then', 1)[1].split('\nrun_core_validators', 1)[0]
+if 'run_fast_checks' in block:
+    raise ValueError('scoped profile has unconditional fast prelude')
+PY
+then
+  echo "Invalid scoped validation dependency registry or dispatch"
+  fail=1
+fi
 
 for file in AGENTS.md README.md HUMANS.md .systems/ai/core/commands.md .systems/ai/core/contract-compliance.md; do
   require_ref "$file" 'validation-profiles\.md|Validation Profiles|validation profile' "$file validation profile guidance"
@@ -162,6 +187,7 @@ unsafe_patterns=(
   'fast.*final validation evidence: yes'
   'scoped.*final validation evidence: yes'
   'standard.*final validation evidence: yes'
+  'scoped[^.\n]{0,100}coverage[^.\n]{0,100}grants?[^.\n]{0,60}\bPASS\b'
 )
 
 for pattern in "${unsafe_patterns[@]}"; do

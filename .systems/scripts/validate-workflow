@@ -4,6 +4,10 @@ set -euo pipefail
 profile="standard"
 project=""
 checks=""
+scope_manifest=""
+scope_plan=""
+scope_executed=""
+scope_current_id=""
 explain=0
 timing_output=""
 progress="summary"
@@ -17,12 +21,12 @@ current_check="none"
 usage() {
   cat <<'EOF'
 Usage:
-  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--project slug] [--checks check-a,check-b] [--timing-output path] [--progress quiet|summary|verbose] [--timeout-seconds seconds] [--explain]
+  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--project slug] [--checks check-a,check-b] [--scope-manifest path] [--timing-output path] [--progress quiet|summary|verbose] [--timeout-seconds seconds] [--explain]
 
 Profiles:
   standard  Core validator/structure checks without embedded smoke tests. Default daily validator.
   full      Complete validation, including check-validator-smoke-tests. Explicit heavy validator.
-  scoped    Fast base checks plus explicit --checks validators. Iteration only.
+  scoped    Explicit --checks plus declared dependency closure. Coverage requires a current manifest.
   fast      Cheap sanity checks. Iteration only.
 EOF
 }
@@ -51,6 +55,11 @@ while [[ "$#" -gt 0 ]]; do
         exit 1
       fi
       checks="$2"
+      shift 2
+      ;;
+    --scope-manifest)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --scope-manifest" >&2; exit 1; }
+      scope_manifest="$2"
       shift 2
       ;;
     --explain)
@@ -131,6 +140,12 @@ if [[ "$profile" == "scoped" && -z "$checks" ]]; then
   exit 1
 fi
 
+if [[ -n "$scope_manifest" && "$profile" != "scoped" ]]; then
+  echo "--scope-manifest is valid only with --profile scoped" >&2
+  exit 1
+fi
+source "$(dirname "$0")/resolve-workflow-env"
+
 if ! command -v rg >/dev/null 2>&1; then
   echo "Missing required command: rg"
   exit 1
@@ -148,6 +163,14 @@ finish_validation() {
     result="timeout"
   elif [[ "$status" -eq 130 || "$status" -eq 143 ]]; then
     result="interrupted"
+  fi
+  if [[ -n "$scope_plan" ]]; then
+    if ! python3 .systems/scripts/lib/validation-scope.py finish --repo "$TARGET_REPO_ROOT" --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --plan "$scope_plan" --status "$status" --executed "$scope_executed"; then
+      if [[ "$status" -eq 0 ]]; then
+        status=1
+        result="fail"
+      fi
+    fi
   fi
   if [[ -n "$timing_output" && "${timing_initialized:-0}" -eq 1 ]]; then
     local final_source_digest=""
@@ -224,7 +247,7 @@ run_cmd() {
   fi
   status=$?
   set -e
-  record_timing "$(basename "$1")" "$started_ns" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  record_timing "${scope_current_id:-$(basename "$1")}" "$started_ns" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
   if [[ "$progress" != "quiet" ]]; then
     printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=%s duration_seconds=%s\n' \
       "$current_stage" "$current_check" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)" "$((SECONDS - started))"
@@ -262,6 +285,7 @@ explain_profile() {
       echo "Scoped checks: $checks"
       echo "Smoke tests: skipped"
       echo "Final validation evidence: no, unless owner explicitly accepts narrow validation with residual risk"
+      echo "Coverage and runtime-only checkpoint eligibility are reported separately after manifest/dependency verification. No manifest: unverified."
       ;;
     fast)
       echo "Validation profile: fast"
@@ -293,27 +317,6 @@ run_fast_checks() {
   run_runtime_check .systems/scripts/check-qa-evidence
   run_cmd .systems/scripts/check-full-qa-verification
   run_cmd .systems/scripts/check-contract-compliance
-}
-
-run_named_check() {
-  local check_name="$1"
-  local check_path
-
-  if [[ ! "$check_name" =~ ^check-[a-z0-9-]+$ ]]; then
-    echo "Invalid scoped check name: $check_name"
-    exit 1
-  fi
-
-  check_path=".systems/scripts/$check_name"
-  if [[ ! -f "$check_path" ]]; then
-    echo "Unknown scoped check: $check_name"
-    exit 1
-  fi
-
-  case "$check_name" in
-    check-naming|check-status-consistency|check-qa-evidence) run_runtime_check "$check_path" ;;
-    *) run_cmd "$check_path" ;;
-  esac
 }
 
 run_core_validators() {
@@ -368,16 +371,24 @@ fi
 
 if [[ "$profile" == "scoped" ]]; then
   current_stage="scoped-profile"
-  run_fast_checks
-  IFS=',' read -r -a selected_checks <<< "$checks"
-  for check_name in "${selected_checks[@]}"; do
-    check_name="${check_name//[[:space:]]/}"
-    if [[ -z "$check_name" ]]; then
-      echo "Empty scoped check name in --checks"
-      exit 1
+  scope_args=(--checks "$checks" --repo "$TARGET_REPO_ROOT" --workspace "$AI_WORKFLOW_WORKSPACE_HOME")
+  [[ -z "$scope_manifest" ]] || scope_args+=(--manifest "$scope_manifest")
+  [[ -z "$project" ]] || scope_args+=(--project "$project")
+  scope_plan="$(python3 .systems/scripts/lib/validation-scope.py plan "${scope_args[@]}")"
+  scope_lines="$(python3 .systems/scripts/lib/validation-scope.py lines --plan "$scope_plan")"
+  while IFS=$'\t' read -r check_name scope_root scope_project scope_current_id; do
+    check_args=()
+    if [[ "$scope_root" != "-" ]]; then
+      check_args+=(--runtime-only --scope-root "$scope_root")
+    elif [[ "$scope_project" != "-" ]]; then
+      case "$check_name" in
+        check-naming|check-status-consistency|check-qa-evidence|check-distillation-state) check_args+=(--project "$scope_project") ;;
+      esac
     fi
-    run_named_check "$check_name"
-  done
+    scope_executed="${scope_executed:+$scope_executed,}$scope_current_id"
+    run_cmd ".systems/scripts/$check_name" ${check_args[@]+"${check_args[@]}"}
+  done <<< "$scope_lines"
+  scope_current_id=""
   exit 0
 fi
 

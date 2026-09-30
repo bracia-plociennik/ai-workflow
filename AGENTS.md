@@ -331,6 +331,13 @@ Workspace-owned advisory/supporting artifacts:
 
 ## Commands
 
+Scoped validation uses explicit checks plus declared dependencies, with no fast
+prelude. `--scope-manifest` binds Git and owned runtime inputs; report execution
+separately from coverage and eligibility. Bare checks are unverified. Only a
+fresh runtime-only checkpoint with all required consumers and semantic/privacy
+evidence may qualify under `validation-profiles.md`; shared source, CI and updater
+remain full-required. Manifest evidence never grants writes or PASS.
+
 For new implementation work, apply `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or bounded owner opt-out before dependent writes. Deadline pressure cannot bypass DoD, QA, risk, permissions, evidence, or approvals.
 
 For knowledge capture, apply `.systems/ai/core/distillation-state.md`. `is_distilled` is derived from `State: completed` and never grants write authority. Dreaming only reports the `Undistilled Work Queue` and remains advisory-only.

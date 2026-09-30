@@ -59,6 +59,12 @@ The selected mode must match risk, scope, approvals, write set, and artifacts. I
 
 ## Compliance Questions
 
+Scoped validation reports execution and coverage separately. A runtime-only
+checkpoint may use `final_evidence_eligible: true` only under the strict manifest
+and required-dependency rules of `validation-profiles.md`, after semantic review.
+Unverified/incomplete coverage cannot satisfy it. CI, updater and shared-source
+workflow changes remain full-required; no manifest grants approval or PASS.
+
 Answer these before commit or handoff:
 
 - `Work mode compliance: pass|warning|blocked`

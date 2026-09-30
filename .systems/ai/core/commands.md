@@ -1,5 +1,22 @@
 # commands.md
 
+## Explicit Scoped Evidence
+
+Generate a manifest read-only, then pass its unchanged path to scoped validation:
+
+```sh
+python3 .systems/scripts/lib/validation-scope.py snapshot --repo "$TARGET_REPO_ROOT" --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --base <approved-base> --scope <approved-path> --runtime-root projects/<project> --intent checkpoint
+.systems/scripts/validate-workflow --profile scoped --checks check-distillation-state --scope-manifest <saved-json> --explain
+```
+
+The snapshot command emits JSON only; the owner-approved local artifact writer
+may save it outside tracked source. `--scope` and `--runtime-root` may repeat.
+Select checks explicitly; the registry adds dependencies but never infers
+selection. Include all runtime-required checks for checkpoint eligibility:
+`check-distillation-state,check-qa-evidence,check-status-consistency,check-naming,check-contract-compliance,check-full-qa-verification`.
+No manifest means unverified coverage. Report execution/coverage/eligibility
+separately; source/system impact escalates to full. CI/updater stay explicit full.
+
 ## Purpose
 
 Codex must know how to verify work. Repository-specific commands live in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`. This file defines the required command categories and workflow-template checks.

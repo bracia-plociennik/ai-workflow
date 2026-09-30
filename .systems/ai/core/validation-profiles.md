@@ -14,7 +14,7 @@ Profiles may reduce iteration time, but they must not change Definition of Done,
 | --- | --- | --- |
 | `full` | Checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes | `yes`, unless smoke tests are explicitly skipped and residual risk is reported |
 | `standard` | Daily AI Workflow iteration and normal workflow-maintenance checks when workflow validation is applicable | `yes` for applicable ordinary workflow work; `no` when a full-required gate applies |
-| `scoped` | Local iteration for one or more explicitly selected validators | `no` unless the owner explicitly accepts narrow validation with residual risk |
+| `scoped` | Explicit checks and dependency closure, bounded to declared runtime roots | Conditional runtime-only checkpoint evidence; otherwise iteration or owner-accepted narrow evidence |
 | `fast` | Quick sanity check during editing | `no` |
 
 ## Script Interface
@@ -28,6 +28,7 @@ Profiles may reduce iteration time, but they must not change Definition of Done,
 - `--profile fast`;
 - `--project <slug>` with any profile to scope runtime status, QA evidence, and naming to one existing project while retaining global product and non-project workspace checks;
 - `--explain` with any profile.
+- `--scope-manifest <path>` only with `scoped`; optional, but necessary for verified coverage.
 
 `--checks` is valid only with `--profile scoped`. Scoped checks must be explicit script basenames such as `check-validation-profiles`; automatic changed-file inference is intentionally out of scope for v1.
 
@@ -52,15 +53,67 @@ Use `.systems/ai/core/validation-routing.md` to decide applicability. Workflow s
 
 Use it for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
 
+The only checkpoint exception is the bounded runtime-only manifest policy below.
+It does not apply to source/system-impact checkpoints or broader memory namespaces.
+
 CI must call `.systems/scripts/validate-workflow --profile full` explicitly.
 
 If `AI_WORKFLOW_SKIP_SMOKE_TESTS=1` is used, the result is not eligible for full validation evidence unless the owner explicitly accepts the residual risk.
 
 ## Scoped Profile
 
-`scoped` runs fast base checks and the explicit validators named in `--checks`.
+`scoped` runs only explicit checks and their declared dependency closure from
+`.systems/scripts/lib/validation-checks.json`. It has no unconditional fast
+prelude. Identical check/root/project invocations run once; different runtime
+roots receive separate invocations and privacy-safe timing IDs. Framework
+policy checks run once, not once per project.
 
-Use it only when iterating on a known validator or small docs area. It must not be described as enough before commit, enough before push, or equivalent to `full`.
+The strict JSON scope manifest is generated read-only by
+`.systems/scripts/lib/validation-scope.py snapshot`. It binds canonical repository
+and workspace identity, approved Git base, observed HEAD, implementation scope,
+NUL-safe committed/staged/unstaged/untracked/rename/deletion inventory and hashes,
+framework source digest, and a separate ignored-runtime inventory. It must be
+fresh before and after execution. It is evidence, never permission or secret-read
+approval. All Git changes must fit the declared scope; deleted required sources,
+missing/unreadable roots, unknown dependencies, cycles and symlink escapes fail.
+
+Supported runtime roots are `repo/core` and `projects/<slug>`. Canonical direct
+Markdown and project-owned artifact directories are inspected; raw `context/`,
+eval fixture, legacy and dump trees are supporting data, not active producers.
+Foreign repositories or links in owned artifact directories are rejected. The
+legacy QA registry is separately bound as supporting evidence when present.
+Known tracked runtime edits inside those selected owned roots are bound by both
+Git and runtime inventories; they do not become framework changes solely because
+the target workspace is tracked. Missing/deleted artifacts, raw supporting trees
+or edits outside the selected roots cannot qualify as complete scoped coverage.
+Repo status with an active project requires that project's root too. Capture to
+External Memory/System Insights or another unsupported namespace requires its
+applicable checks and escalation; it cannot be called complete by this manifest.
+
+Output distinguishes `execution_result` from `coverage_result`:
+`complete|incomplete|unverified`, with requested, required, executed, skipped IDs,
+reason and `final_evidence_eligible`. No manifest means unverified/ineligible.
+A changed shared/framework source or unknown Git impact means
+`full-required-source-impact`, even when every requested check passes.
+
+A runtime-only checkpoint may use scoped evidence only when the manifest has
+`intent: checkpoint`, all runtime-required dependencies are included, framework
+source is unchanged, all selected artifacts are bounded and fresh, checks pass,
+and semantic QA/privacy/capture applicability is separately established. This
+does not replace formal QA, owner approvals or full-required gates for source
+changes, CI, updater, release, major verification or high-impact maintenance.
+`complete` for an iteration manifest is still ineligible for checkpoint closure.
+
+Save the manifest and live timing/log output outside the assessed runtime roots
+(for example in approved standalone `/tmp` artifacts). They must not mutate the
+frozen input inventory during execution. Record the finished result in project
+evidence afterward; a subsequent validation needs a new snapshot. Runtime scans
+do not inspect raw supporting trees, and manifest generation is not permission
+to read secret-bearing inputs.
+
+Outside that bounded checkpoint case, use it for iteration on known validators
+or small docs areas. It must not be described as enough before commit, enough
+before push, or equivalent to `full`.
 
 ## Fast Profile
 

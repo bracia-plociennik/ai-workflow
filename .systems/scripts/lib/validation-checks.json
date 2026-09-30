@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "checks": {
+    "check-required-artifacts": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-branch-policy": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-naming": {
+      "dependencies": [],
+      "scope": "runtime"
+    },
+    "check-status-consistency": {
+      "dependencies": [
+        "check-qa-evidence",
+        "check-naming"
+      ],
+      "scope": "runtime"
+    },
+    "check-qa-evidence": {
+      "dependencies": [
+        "check-full-qa-verification"
+      ],
+      "scope": "runtime"
+    },
+    "check-full-qa-verification": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-contract-compliance": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-prompt-composition": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-system-insights": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-system-skills": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-knowledge-capture-gate": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-default-quality-phase-chaining": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-dreaming-mode": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-global-quality-review-stance": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-review-completeness-gate": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-intent-plan-spec-compliance-review": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-implementation-slicing": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-plan-quality-contract": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-validation-profiles": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-knowledge-capture-reminder": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-instruction-adherence-refresh": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-owner-decision-checkpoints": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-request-batch-triage": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-response-evidence-trace": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-phase-skill-discovery": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-default-quality-closure": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-default-idea-validation-opt-out": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-end-of-task-capture": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-cross-system-upgrade-handoff": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-worktree-bootstrap": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-validation-routing": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-model-selection-guidance": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-delivery-constraints": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-distillation-state": {
+      "dependencies": [
+        "check-status-consistency",
+        "check-contract-compliance"
+      ],
+      "scope": "runtime"
+    },
+    "check-workspace-freshness": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-contract-topology": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-validation-observability": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-validation-completion": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-skill-evaluation-contract": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-validator-smoke-tests": {
+      "dependencies": [],
+      "scope": "framework"
+    }
+  },
+  "runtime_required": [
+    "check-distillation-state",
+    "check-qa-evidence",
+    "check-status-consistency",
+    "check-naming",
+    "check-contract-compliance",
+    "check-full-qa-verification"
+  ]
+}

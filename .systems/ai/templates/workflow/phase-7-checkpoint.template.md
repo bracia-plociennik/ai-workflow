@@ -23,6 +23,21 @@
 - Project plan: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2-project-plan.md`
 - Repo state checked:
 
+## Validation Scope Evidence
+
+- Profile and applicability:
+- Scope manifest path / digest / freshness:
+- Execution result:
+- Coverage result: `<complete|incomplete|unverified>`
+- Requested / required / executed / skipped check IDs:
+- Final-evidence eligibility / reason:
+- Semantic review and privacy/capture evidence:
+- Full-required impact: `<yes|no>`; CI/updater/shared source stays full-required.
+
+Runtime-only scoped checkpoint evidence follows `validation-profiles.md`; a
+manifest does not authorize writes or replace formal gates. Finalize this record
+after validation so the frozen assessed inputs are not changed during the run.
+
 ## Distillations Processed
 
 | Distillation | memory-in-repo-memory Before | Processed? | memory-in-repo-memory After |

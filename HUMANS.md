@@ -844,6 +844,13 @@ End-of-Task Capture może pomóc podjąć tę decyzję przy zakończeniu rozmowy
 
 ### Validation Profiles
 
+Profil scoped uruchamia wybrane checki i zadeklarowane zależności tylko raz na
+znormalizowany zakres; nie odpala automatycznie fast. `--scope-manifest` wiąże
+Git, framework i ignored runtime. Bez manifestu pokrycie to `unverified`, nie
+końcowe evidence. Runtime-only checkpoint może użyć kompletnego świeżego
+manifestu i wymaganych consumers po semantic/privacy review; zmiany kontraktów,
+CI i updater nadal wymagają full. Execution success nie oznacza coverage ani PASS.
+
 Profile walidacji są opisane w `.systems/ai/core/validation-profiles.md`. Zwykłe `.systems/scripts/validate-workflow` uruchamia profil `standard`, czyli lżejszą walidację do codziennej iteracji nad AI Workflow. Nie jest to domyślne QA implementacji produktu. Najpierw wykonaj semantic/code/diff review, DoD, findings/blockers i testy produktu; dopiero potem uruchom adekwatne skrypty workflow jako supporting evidence.
 
 Używaj `.systems/scripts/validate-workflow --profile fast --explain` do szybkiego sanity checku w trakcie edycji. Używaj `.systems/scripts/validate-workflow --profile scoped --checks check-validation-profiles --explain`, gdy świadomie iterujesz nad konkretnym walidatorem. Używaj `.systems/scripts/validate-workflow --profile full` przy checkpoint validation, dużej destylacji, dużej weryfikacji, CI, release/final confidence albo zmianach wysokiego wpływu w kontraktach, fazach, template’ach, validatorach, `AGENTS.md`, `HUMANS.md` lub `README.md`.

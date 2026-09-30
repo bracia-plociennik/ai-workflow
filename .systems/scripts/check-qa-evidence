@@ -3,6 +3,8 @@ set -euo pipefail
 
 fail=0
 project=""
+runtime_only=0
+scope_root=""
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --project)
@@ -10,6 +12,10 @@ while [[ "$#" -gt 0 ]]; do
       project="$2"
       shift 2
       ;;
+    --runtime-only) runtime_only=1; shift ;;
+    --scope-root)
+      [[ "$#" -ge 2 ]] || { echo "Missing value for --scope-root" >&2; exit 2; }
+      scope_root="$2"; shift 2 ;;
     *) echo "Unknown check-qa-evidence argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -23,6 +29,19 @@ repo_root="$AI_WORKFLOW_HOME"
 workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
 qa_target_args=(--approved-target-root "$TARGET_REPO_ROOT")
 cd "$repo_root"
+
+scope_files=""
+if [[ "$runtime_only" == 1 ]]; then
+  [[ -n "$scope_root" ]] || { echo "--runtime-only requires --scope-root" >&2; exit 2; }
+  [[ -z "$project" || "$scope_root" == "projects/$project" ]] || { echo "Project/root conflict" >&2; exit 2; }
+  scope_files="$(mktemp)"
+  trap 'rm -f "$scope_files"' EXIT
+  python3 "$script_dir/lib/validation-scope.py" runtime-files --workspace "$workspace_home" --root "$scope_root" > "$scope_files"
+  if [[ "$scope_root" == projects/* ]]; then project="${scope_root#projects/}"; fi
+elif [[ -n "$scope_root" ]]; then
+  echo "--scope-root requires --runtime-only" >&2
+  exit 2
+fi
 
 if [[ -d "$workspace_home" ]]; then
   workspace_home="$(cd "$workspace_home" && pwd -P)"
@@ -456,6 +475,15 @@ validate_evidence_file() {
     fi
   fi
 }
+
+if [[ "$runtime_only" -eq 1 ]]; then
+  while IFS= read -r -d '' file; do
+    case "$file" in
+      "$workspace_home"/projects/*/quality/*.md) validate_evidence_file "$file" ;;
+    esac
+  done < "$scope_files"
+  exit "$fail"
+fi
 
 project_roots=("$repo_root/.systems/ai/examples/projects")
 if [[ -n "$workspace_home" && -d "$workspace_home/projects" ]]; then

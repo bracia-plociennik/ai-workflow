@@ -251,6 +251,13 @@ The included `EXAMPLE` workspaces are illustrative only. Do not treat them as ac
 
 ## Validation Before Reuse
 
+For iteration, scoped checks use explicit dependency closure without a fast
+prelude. `--scope-manifest` binds Git/framework/runtime facts and reports
+execution separately from coverage/eligibility. Without it, coverage is
+unverified. A runtime-only checkpoint can qualify only under the complete
+manifest policy in `validation-profiles.md`; source changes, CI and updater
+still require full, and scripts do not grant semantic PASS.
+
 Inside the `ai-workflow/` clone, run the explicit `full` profile before reuse. The no-arg `.systems/scripts/validate-workflow` is the `standard` profile for daily iteration.
 
 ```bash
