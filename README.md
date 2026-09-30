@@ -206,6 +206,17 @@ Validation profiles use `.systems/ai/core/validation-profiles.md`. `.systems/scr
 
 For measured optimization, add `--timing-output <new-ignored-or-tmp-path>` and freeze each run with `.systems/scripts/report-validation-comparison capture`; the tool can summarize three complete runs or compare matched baseline/candidate manifests. Incomplete or failed runs are never speed evidence. Run the smoke suite with `--group all|core|policy|quality|skills|workspace`. Preserve the full group until a three-run baseline and equivalence audit justify a split. Validation emits lifecycle markers and progress; a timeout is a failed validation, not a PASS. Workspace freshness and contract topology reports are advisory only. Optional skill behavioral evals use `.systems/ai/core/skill-behavioral-evaluation.md` and do not require backfill.
 
+Smoke groups now run independently with manifest-bound test/assertion ownership
+and fresh fixtures. `--group all` and full/CI retain every reference case plus
+supplemental regressions; a subset is not full evidence. Use
+`check-validator-smoke-tests --verify-manifest` for structural checks only.
+One public completion marker/timing wall covers the run; group markers are
+separate. Python 3 and local `ps` metadata are required for owned-tree cleanup;
+denied capability, timeout, failure or incomplete coverage fails explicitly.
+Group/source edits require atomic manifest updates and the actual equivalence
+audit described in `.systems/ai/core/validation-observability.md`. Partitioning
+does not itself establish a full-suite speed improvement or implementation PASS.
+
 Nested-clone updates report `equal`, `behind`, `ahead`, or `diverged` state. An `ahead` or `diverged` target clone is stopped and is never reset automatically. Full validation emits `AI_WORKFLOW_VALIDATE_COMPLETE` exactly once.
 
 Validation routing uses `.systems/ai/core/validation-routing.md`. QA starts with owner intent, DoD, scope, findings-first diff/code/artifact review, failure paths, and target-product checks. Applicable `.systems/scripts/**` commands run afterward as supporting evidence. Green scripts never equal `PASS`.

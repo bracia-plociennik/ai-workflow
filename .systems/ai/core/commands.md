@@ -140,6 +140,15 @@ Use `.systems/ai/core/full-qa-verification.md` to decide the required QA lens. E
 
 `.systems/scripts/validate-workflow --timing-output <new-ignored-or-tmp-path>` records monotonic, versioned command and smoke timing metadata without repository content. Use `.systems/scripts/report-validation-comparison capture --timing <path> --output <new-manifest-path> --scope-fingerprint <id> --input-fingerprint <id> --setup-regime <id>` after each run, then `summarize <manifest...>` for at least three complete full runs or `compare --baseline <manifest...> --candidate <manifest...>` for conservative same-coverage comparison. Failed runs remain evidence but cannot enter a speed comparison. `.systems/scripts/check-validator-smoke-tests --group <all|core|policy|quality|skills|workspace>` supports measured group runs; `--group all` preserves full coverage and remains the default.
 
+Named smoke groups execute only their manifest-owned tests/assertions in fresh
+fixtures; full/CI still execute all groups. Use the public entrypoint, never
+internal `smoke/*.sh` directly. `--verify-manifest` checks structural integrity
+only and is not execution or QA evidence. The public completion/timing parent
+is unique; group markers are namespaced. Cleanup needs local `ps` metadata and
+fails closed if the platform denies it. Read `validation-observability.md`
+before changing membership, preserved reference regions or shared helpers;
+update hashes/field mapping and repeat the actual equivalence/failure audit.
+
 `check-workspace-freshness`, `check-contract-topology`, `check-validation-observability`, and `check-validation-completion` validate advisory reporting, measurement, lifecycle markers, canonical update boundaries, and timeout safety. `check-skill-evaluation-contract` validates optional behavioral skill evals; existing skills without evals remain valid.
 
 Before creating a commit, also apply `.systems/ai/core/contract-compliance.md` and report the advisory work mode compliance plus knowledge capture decision. If capture is required, run the appropriate phase/artifact path before committing.

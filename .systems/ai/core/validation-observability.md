@@ -70,12 +70,47 @@ median gain above five percent; other results are inconclusive, not slower
 or faster proof. Source/code changes after a capture invalidate comparisons
 unless each run's frozen manifest still matches its timing and source evidence.
 
-The default `--group all` preserves the complete smoke suite. In v1, named
-groups are compatibility labels for timing runs and still execute the complete
-monolith because shared setup/assertions have not passed an equivalence audit.
-A future split must preserve every existing smoke-test ID exactly once and pass
-that audit before it changes execution. If equivalence is incomplete, retain
-the monolith and ship observability only.
+The default `--group all` preserves the complete smoke suite. Named groups now
+execute only their owned cases, assertions and setup in independent disposable
+source fixtures. The public dispatcher validates `smoke/manifest.json` and its
+live coverage index before launching any group. Group files are internal:
+invoke them through `check-validator-smoke-tests`, not as public entrypoints.
+
+The accepted partition preserves 674 reference IDs, 110 audited outside-wrapper
+points (including failure branches and a failure fixture), and 34 nested Python
+assertions. Whole reference regions retain their exact bytes and transaction
+boundaries; pure helpers live in `smoke/common.sh`. Additional regression cases
+are explicitly supplemental, not replacements for old cases. The manifest binds
+each test's group, command/outcome contract, setup, mutation and cleanup, each
+assertion's actual source line, frozen region digests and current group/helper
+digests. Missing, duplicate, moved or unmapped coverage fails closed.
+
+Public lifecycle markers remain `AI_WORKFLOW_SMOKE_START` and exactly one
+`AI_WORKFLOW_SMOKE_COMPLETE`; group markers use `AI_WORKFLOW_SMOKE_GROUP_START`
+and `AI_WORKFLOW_SMOKE_GROUP_COMPLETE`. An all run has one `smoke-suite-wall`
+timing parent, while all child records retain profile `smoke-all`. A named group
+has a subset profile and is not full validation evidence. Full and CI still run
+all five groups sequentially, including supplemental cases.
+
+The supervisor requires Python 3 and local `ps` process metadata (PID, PPID,
+start time and status) for identity-bound cleanup. It checks that capability
+before launching children. A sandbox that denies it fails explicitly; request
+only the needed platform permission rather than disabling cleanup. Interrupt,
+timeout, child failure, incomplete execution or cleanup failure cannot yield a
+successful completion. The supervisor retains observed owned descendants while
+the group runs; it is not a sandbox for arbitrary malicious detached processes.
+
+Maintain the manifest atomically with group/helper changes. New cases need
+unique supplemental IDs and command/outcome contracts; a change to a preserved
+reference region requires a fresh assertion/behavior audit, not only a new
+file hash. Before accepting membership or helper changes, compare the frozen
+reference and candidate, repeat standalone groups in a different order, compare
+typed rejection diagnostics and protected mutations, and test lifecycle/tree
+cleanup. Recover the pre-partition reference from the reviewed parent revision
+when needed. If equivalence is incomplete, retain or restore the monolith via
+the approved fix/rollback route; do not reduce coverage to meet a timebox.
+Group isolation reduces the eligible iteration scope, not the full safety gate.
+No full-suite speedup follows merely from this partition or one timing run.
 
 Green workflow scripts remain supporting evidence. Semantic QA, product checks,
 DoD, findings, blockers, and residual risk determine quality.

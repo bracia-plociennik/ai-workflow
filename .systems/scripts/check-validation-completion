@@ -6,6 +6,8 @@ fail=0
 required_files=(
   ".systems/scripts/validate-workflow"
   ".systems/scripts/check-validator-smoke-tests"
+  ".systems/scripts/smoke/common.sh"
+  ".systems/scripts/smoke/manifest.json"
   ".systems/scripts/update-from-upstream"
   ".systems/scripts/run-with-timeout"
   ".systems/ai/core/validation-observability.md"
@@ -36,8 +38,13 @@ for marker in \
   require_text .systems/scripts/validate-workflow "$marker" "validate marker $marker"
 done
 
-for marker in "AI_WORKFLOW_SMOKE_START" "AI_WORKFLOW_SMOKE_PROGRESS" "AI_WORKFLOW_SMOKE_COMPLETE"; do
+for marker in "AI_WORKFLOW_SMOKE_START" "AI_WORKFLOW_SMOKE_COMPLETE"; do
   require_text .systems/scripts/check-validator-smoke-tests "$marker" "smoke marker $marker"
+done
+
+for group in core policy quality skills workspace; do
+  require_text ".systems/scripts/smoke/$group.sh" "AI_WORKFLOW_SMOKE_GROUP_START" "group start $group"
+  require_text ".systems/scripts/smoke/$group.sh" "AI_WORKFLOW_SMOKE_GROUP_COMPLETE" "group completion $group"
 done
 
 require_text .systems/scripts/validate-workflow "--progress" "validate progress option"
@@ -57,7 +64,7 @@ require_text .systems/scripts/update-from-upstream "--profile full --progress su
 require_text .systems/scripts/update-from-upstream "git merge --ff-only FETCH_HEAD" "fast-forward-only update"
 
 require_text .systems/scripts/check-validator-smoke-tests "--test-timeout-seconds" "smoke test timeout option"
-require_text .systems/scripts/check-validator-smoke-tests "AI_WORKFLOW_SMOKE_PROGRESS" "smoke progress marker"
+require_text .systems/scripts/smoke/common.sh "AI_WORKFLOW_SMOKE_PROGRESS" "smoke progress marker"
 
 require_text .systems/scripts/run-with-timeout "start_new_session=True" "isolated process group"
 if rg -q "shell=True" .systems/scripts/run-with-timeout; then
