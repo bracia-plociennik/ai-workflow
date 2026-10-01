@@ -8,7 +8,13 @@ The response contract is communication policy. It does not create a new workflow
 
 ## When It Applies
 
-Every substantive response to the user must end with a `Co dalej?` footer.
+### Response Mode
+
+Choose `compact` only for a simple answer or eligible `micro-exempt` completed work with no formal phase, owner decision, blocker, handoff or material uncertainty. Compact output includes result, sources/check evidence, skipped checks and limits; it does not abbreviate the actual QA procedure. Any material decision, conflict, formal phase or handoff uses `full` with the fields below. Full trace and final footer requirements below apply to full-mode substantive responses.
+
+Compact trace preserves source/check results, any performed refresh, exemption reason and remaining risk in short prose. It never hides a failed check or implies formal PASS. Scope growth or material limits switch to full. Strict machine payloads remain versioned; put human disclosure outside the payload.
+
+Every full-mode substantive response to the user must end with a `Co dalej?` footer.
 
 Substantive responses include:
 
@@ -22,7 +28,7 @@ Do not append the footer inside strict machine-readable output such as JSON-only
 
 ## Execution Trace
 
-Every substantive response must include an `Execution Trace` block immediately before the final `Co dalej?` footer.
+Every substantive response must include an `Execution Trace` block immediately before the final `Co dalej?` footer in full mode. Eligible compact responses use the concise trace defined above.
 
 The block is an audit summary for the owner. It does not create a new gate and does not replace phase evidence, quality artifacts, status, approvals, or Definition of Done.
 
@@ -65,7 +71,7 @@ Owner decision interaction:
 - Auto-resolved decisions: <ids|none>
 
 Model recommendation:
-- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High|not-applicable>
+- Recommended: <efficient-reasoning|strong-reasoning|source-backed available model|not-applicable>
 - Reason:
 - Criticality:
 - Current model known: <yes|no|not-applicable>
@@ -74,13 +80,13 @@ Model recommendation:
 
 Keep the trace concise. For very small substantive answers, each field may be a single line. For strict JSON-only, patch-only, or exact-template output, include the trace in the nearest surrounding human-facing response instead of inside the constrained payload.
 
-Instruction refresh fields are always present in substantive responses. Use `.systems/ai/core/instruction-adherence-refresh.md` to decide whether the status is `performed-targeted`, `performed-full`, `not-needed`, or `blocked`. A performed refresh must list the contracts and reviewed baseline. `not-needed` is allowed only when no new refresh trigger occurred.
+Instruction refresh fields are always present in full-mode substantive responses. Use `.systems/ai/core/instruction-adherence-refresh.md` to decide whether the status is `performed-targeted`, `performed-full`, `not-needed`, or `blocked`. A performed refresh must list the contracts and reviewed baseline. `not-needed` is allowed only when no new refresh trigger occurred.
 
 When refresh detects drift or source conflict, include the required `Drift Warning` block before `Co dalej?`. A blocked conflict stops implementation-class writes and must be reflected under limits/residual uncertainty.
 
-Owner decision interaction fields are always present in substantive responses. Use `.systems/ai/core/owner-decision-checkpoints.md`. For queued decisions, the `Co dalej?` recommendation must point to the highest-priority decision batch. If no material choice exists, report `Mode: none-needed` and `No owner decision needed` rather than inventing a question.
+Owner decision interaction fields are always present in full-mode substantive responses. Use `.systems/ai/core/owner-decision-checkpoints.md`. For queued decisions, the `Co dalej?` recommendation must point to the highest-priority decision batch. If no material choice exists, report `Mode: none-needed` and `No owner decision needed` rather than inventing a question.
 
-For new planning, implementation, or QA scopes, the Model recommendation fields are required and follow `.systems/ai/core/model-selection-guidance.md`. For unrelated substantive responses use `not-applicable`. A model recommendation is advisory-only and always uses `Blocking: no`.
+When capability choice is material to a planning, implementation, or QA scope, the Model recommendation fields are required and follow `.systems/ai/core/model-selection-guidance.md`. For unrelated substantive responses use `not-applicable`. A model recommendation is advisory-only and always uses `Blocking: no`.
 
 For substantive workflow-maintenance upgrades, include the `Cross-system impact` block from `.systems/ai/core/cross-system-upgrade-handoff.md` before commit or handoff.
 
@@ -122,7 +128,7 @@ Napisz:
 
 Do not provide a long option menu. Include `Inny pomysł:` only when the user explicitly asks for extra ideas or when the current interaction is brainstorming.
 
-`Co dalej?` must remain the final human-facing section of every substantive response. `Execution Trace` must appear before it, not after it.
+`Co dalej?` must remain the final human-facing section of every full-mode substantive response. `Execution Trace` must appear before it, not after it.
 
 ## Recommendation Sources
 

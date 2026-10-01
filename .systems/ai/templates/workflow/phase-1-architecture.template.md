@@ -121,7 +121,8 @@
 
 ## Model Recommendation
 
-- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Recommended: <efficient-reasoning|strong-reasoning|source-backed available model>
+- Availability source: <current authoritative catalog/docs|unknown, capability class only>
 - Reason:
 - Criticality:
 - Current model known: <yes|no>

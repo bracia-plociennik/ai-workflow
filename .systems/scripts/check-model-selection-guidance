@@ -20,8 +20,10 @@ require_ref() {
 
 contract=".systems/ai/core/model-selection-guidance.md"
 require_ref "$contract" '^# model-selection-guidance\.md$' "core contract"
-require_ref "$contract" 'GPT-5\.6 Luna High' "Luna option"
-require_ref "$contract" 'GPT-5\.6 Sol High' "Sol option"
+require_ref "$contract" 'efficient-reasoning' "efficient capability option"
+require_ref "$contract" 'strong-reasoning' "strong capability option"
+require_ref "$contract" 'current authoritative availability source' "source-backed named model"
+require_ref "$contract" 'do not guess' "unknown availability fallback"
 require_ref "$contract" 'bounded, reversible' "Luna classification"
 require_ref "$contract" 'security, billing, migrations, production' "Sol classification"
 require_ref "$contract" 'advisory-only' "authority boundary"
@@ -52,7 +54,7 @@ done
 
 require_ref ".systems/ai/core/response-contract.md" 'Model recommendation:' "response producer"
 require_ref "AGENTS.md" 'model-selection-guidance\.md' "AGENTS integration"
-require_ref "HUMANS.md" 'Rekomendacja Luna / Sol' "HUMANS integration"
+require_ref "HUMANS.md" 'Rekomendacja modelu' "HUMANS integration"
 require_ref "README.md" 'model-selection-guidance\.md' "README integration"
 require_ref ".systems/ai/core/commands.md" 'check-model-selection-guidance' "commands integration"
 require_ref ".systems/scripts/validate-workflow" 'check-model-selection-guidance' "workflow validation"

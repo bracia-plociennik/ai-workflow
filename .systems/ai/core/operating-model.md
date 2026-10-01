@@ -146,7 +146,7 @@ Use `.systems/ai/core/validation-routing.md` for every QA closure. Semantic and 
 
 ## Model Selection Guidance
 
-Every new planning, implementation, and QA scope reports the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Model choice is non-blocking and cannot modify workflow authority or quality requirements.
+When capability choice is material to planning, implementation, or QA, report the advisory model recommendation from `.systems/ai/core/model-selection-guidance.md`. Routine tiny scopes do not repeat it. Model choice is non-blocking and cannot modify workflow authority or quality requirements.
 
 ## Cross-System Upgrade Handoff
 

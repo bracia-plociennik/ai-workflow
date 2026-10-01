@@ -2,6 +2,15 @@
 set -euo pipefail
 
 required=(
+  ".systems/ai/core/runtime-integrity.md"
+  ".systems/scripts/check-runtime-integrity"
+  ".systems/scripts/report-coordinator-status"
+  ".systems/scripts/lib/capture-state.py"
+  ".systems/scripts/lib/smoke-fixture.py"
+  ".systems/scripts/lib/command-read-evidence.py"
+  ".systems/scripts/lib/work-policy.py"
+  ".systems/scripts/lib/coordinator-status.py"
+  ".systems/scripts/tests/runtime-integrity.py"
   "AGENTS.md"
   "HUMANS.md"
   "README.md"

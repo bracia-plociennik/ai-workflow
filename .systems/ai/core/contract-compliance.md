@@ -2,6 +2,8 @@
 
 ## Purpose
 
+For exact micro-exempt eligibility under delivery-constraints.md, report the reason and focused QA instead of creating a per-work capture record. This is not completed distillation and no is_distilled=true may be invented. Formal work, excluded boundaries, decisions and blockers use full compliance evidence.
+
 This policy defines the advisory work-mode compliance check and the commit readiness / knowledge capture gate.
 
 It exists to make every commit decision explicit without creating a mechanical requirement to write memory, distillation, or checkpoint artifacts for every commit.

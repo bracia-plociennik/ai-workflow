@@ -705,7 +705,8 @@
     "smoke-observability-rejects-unless",
     "smoke-observability-rejects-yet",
     "smoke-observability-rejects-semicolon",
-    "smoke-observability-rejects-missing-source"
+    "smoke-observability-rejects-missing-source",
+    "runtime-integrity-synthetic-regressions"
   ],
   "external_assertion_audit": [
     {
@@ -2974,7 +2975,8 @@
     "smoke-observability-rejects-unless": "core",
     "smoke-observability-rejects-yet": "core",
     "smoke-observability-rejects-semicolon": "core",
-    "smoke-observability-rejects-missing-source": "core"
+    "smoke-observability-rejects-missing-source": "core",
+    "runtime-integrity-synthetic-regressions": "core"
   },
   "tests": [
     {
@@ -10610,14 +10612,25 @@
       "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
       "mutation_id": "smoke-observability-rejects-missing-source",
       "expected_outcome": "exact typed nonzero status, specific diagnostic and expected literal when specified"
+    },
+    {
+      "id": "runtime-integrity-synthetic-regressions",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"runtime-integrity-synthetic-regressions\" bash .systems/scripts/check-runtime-integrity",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
+      "mutation_id": "runtime-integrity-synthetic-regressions",
+      "expected_outcome": "exit 0"
     }
   ],
   "files_sha256": {
     "common.sh": "3caa22344730df6b565b687eb0d68e2964ed0d143ee69c27c218508e03aa1db9",
-    "quality.sh": "e45a8254d9739094962dde329847ddfe117672f9b4f126254f623d848c396de6",
-    "workspace.sh": "7e9a435dcbaae8f5e5357ad50e68236e2c1eaa040134017d4b7d2f0ef6e07d68",
-    "skills.sh": "99c5db23482ea390c991973d4f6a11155a4f88365d50f65df661ad6e99b6a30b",
-    "policy.sh": "9260731823487ef869be343da6ef8f3754d7b56dcc39c5edb44be17df85331b5",
-    "core.sh": "fbb76e3894444f91a527ce41628ea984c0ec7d8ff811a3587077f8e11bd2ba2d"
+    "quality.sh": "df3e514dd8945369367a4a2d024f2ec121ac9f416db8a8f1e1f411c3e1fc08da",
+    "workspace.sh": "6b81e3c2400b7c4b0d686f8e872fe869fee13550ee275086622316ef72891235",
+    "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
+    "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
+    "core.sh": "69015e051d6c2e89ff331e136822d653c9db39680e3477837ca0225091999b50"
   }
 }

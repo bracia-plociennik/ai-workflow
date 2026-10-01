@@ -2,6 +2,8 @@
 
 ## Purpose
 
+An eligible micro-exempt change still needs compact testable DoD, one-slice plan and focused quality closure. Exempt communication/delivery overhead is not exempt implementation quality; scope growth follows delivery-constraints.md reclassification.
+
 Implementation Slicing is the execution discipline for implementation-class writes. Before changing source, docs, templates, validators, scripts, or runtime artifacts as part of implementation work, the agent must create an `Implementation Slice Plan` and then execute slices sequentially with evidence.
 
 This contract applies to:

@@ -35,7 +35,8 @@
 
 ## Model Recommendation
 
-- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Recommended: <efficient-reasoning|strong-reasoning|source-backed available model>
+- Availability source: <current authoritative catalog/docs|unknown, capability class only>
 - Reason:
 - Criticality:
 - Current model known: <yes|no>
@@ -59,6 +60,9 @@
 - Overrun checkpoint:
 
 ## Distillation State
+
+- Exemption eligibility: `<not-eligible|micro-exempt with reason>`
+- For exact micro-exempt eligibility under delivery-constraints.md, report the reason instead of creating a per-work capture file; keep DoD/slices/focused QA and reclassify scope growth.
 
 - Work ID:
 - State: `<pending-quality|ready|completed|deferred|owner-skipped|blocked|not-applicable>`

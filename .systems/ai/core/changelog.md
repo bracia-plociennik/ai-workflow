@@ -1,5 +1,13 @@
 # changelog.md
 
+## Runtime Integrity And Selective Overhead - 2026-10-01
+
+- Added owning-namespace capture inventory with current QA verification and immutable historical evidence.
+- Isolated smoke inputs to selected tracked current-worktree source, preserving synthetic examples and existing test coverage.
+- Added conservative command-read evidence, narrow micro-exempt eligibility and compact response rules without weakening QA.
+- Replaced frozen model recommendations with source-backed capability guidance.
+- Added a versioned read-only coordinator status interface, supporting regression tests and workflow integration.
+
 ## 2026-10-01 - Lean Validation Integration
 
 - Hardened smoke negative outcomes and source-bound current QA assessments; historical verdicts do not substitute for current evidence.

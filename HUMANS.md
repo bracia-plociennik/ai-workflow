@@ -1,5 +1,9 @@
 # HUMANS.md
 
+Małe, odwracalne lokalne zmiany low-risk mogą użyć micro-exempt tylko zgodnie z delivery-constraints.md: maksymalnie trzy pliki wraz z testami, żadnych zmian API/policy/security ani skutków zewnętrznych. DoD, slice plan i QA zostają. Proste odpowiedzi mogą być compact; fazy, decyzje, blockers i handoffy nadal wymagają pełnego raportu.
+
+Read-only raport dla koordynatora: .systems/scripts/report-coordinator-status --project <slug> --format human. Wynik nie jest zgodą na wykonanie ani zamknięcie projektu.
+
 ## Cel dokumentu
 
 ## System Health Reports
@@ -867,9 +871,9 @@ QA zawsze zaczyna się od intencji ownera, DoD, planu/speca/scope, findings-firs
 
 Jeśli nowy worktree ma mocny marker instalacji AI Workflow, ale nie ma `ai-workflow/`, Codex używa `.systems/ai/core/worktree-bootstrap.md`. Po platform approval uruchamia kanoniczny clone, weryfikuje origin i zawartość, a potem `init-workspace`. Istniejący root `AGENTS.md`, zły origin, dirty clone, słaby marker albo self-clone zatrzymują pracę.
 
-### Rekomendacja Luna / Sol
+### Rekomendacja modelu
 
-Każdy nowy zakres planowania, implementacji i QA raportuje rekomendację modelu. `GPT-5.6 Luna High` jest domyślna dla jasnych, ograniczonych i odwracalnych zadań. `GPT-5.6 Sol High` jest rekomendowana dla trudnej architektury, dużej niejednoznaczności, security, billing, migracji, produkcji, szerokich integracji, recovery, adversarial review i high-impact policy work. Rekomendacja jest advisory-only i ma `Blocking: no`.
+Istotny wybór capability podczas planowania, implementacji lub QA raportuje rekomendację modelu. Konkretną nazwę wybieramy wyłącznie z aktualnego autorytatywnego katalogu; bez niego raportujemy klasę capability. `efficient-reasoning` jest domyślna dla jasnych, ograniczonych i odwracalnych zadań. `strong-reasoning` jest rekomendowana dla trudnej architektury, dużej niejednoznaczności, security, billing, migracji, produkcji, szerokich integracji, recovery, adversarial review i high-impact policy work. Rekomendacja jest advisory-only i ma `Blocking: no`.
 
 ### Cross-System Upgrade Handoff
 

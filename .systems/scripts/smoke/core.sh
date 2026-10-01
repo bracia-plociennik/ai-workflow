@@ -109,7 +109,7 @@ trap 'exit 143' TERM
 
 printf 'AI_WORKFLOW_SMOKE_GROUP_START group=%s progress=%s\n' "$smoke_group" "$progress"
 
-tar --exclude='.git' --exclude='ai-workflow-workspace' -cf - . | tar -xf - -C "$tmp"
+python3 .systems/scripts/lib/smoke-fixture.py --repo "$(pwd -P)" --output "$tmp"
 
 source "$(pwd -P)/.systems/scripts/smoke/common.sh"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
@@ -724,6 +724,8 @@ done
 mv "$tmp/.systems/ai/core/validation-observability.md" "$tmp/.systems/ai/core/validation-observability.md.bak"
 run_must_fail "smoke-observability-rejects-missing-source" --expect-literal 'Policy-boundary scan failed' bash .systems/scripts/check-validation-observability
 mv "$tmp/.systems/ai/core/validation-observability.md.bak" "$tmp/.systems/ai/core/validation-observability.md"
+
+run_must_pass "runtime-integrity-synthetic-regressions" bash .systems/scripts/check-runtime-integrity
 
 echo "Owned smoke group passed."
 smoke_suite_completed=1

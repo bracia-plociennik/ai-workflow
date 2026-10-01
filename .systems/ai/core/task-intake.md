@@ -2,6 +2,8 @@
 
 ## Purpose
 
+For a candidate tiny implementation, check narrow micro-exempt criteria in delivery-constraints.md before separate delivery questions or capture state. Reclassify growth; retain compact DoD, slice plan, permission, focused QA and disclosed evidence.
+
 Task Idea Validation is the default pre-routing lens for any single new task, new idea, planning request, approach request, uncertainty request, side task, micro-task, change request, or autopilot request.
 
 It is not a workflow phase and it does not grant write permission. It decides whether the user's raw request is clear, safe, complete, and routed to the correct workflow path before planning, specification, implementation, or automation begins.

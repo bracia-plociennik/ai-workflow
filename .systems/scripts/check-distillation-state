@@ -27,6 +27,8 @@ if [[ "$runtime_only" -eq 1 ]]; then
   exit 0
 elif [[ -n "$scope_root" ]]; then
   python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/validation-scope.py" distillation --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --root "$scope_root" --repo "$TARGET_REPO_ROOT"
+else
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/capture-state.py" --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --workflow "$AI_WORKFLOW_HOME" --repo "$TARGET_REPO_ROOT"
 fi
 cd "$AI_WORKFLOW_HOME"
 

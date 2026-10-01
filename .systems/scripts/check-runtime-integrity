@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd "$(dirname "$0")/../.." && pwd -P)"
+cd "$root"
+source "$root/.systems/scripts/lib/policy-boundaries.sh"
+fail=0
+python3 "$root/.systems/scripts/tests/runtime-integrity.py"
+policy_reject_unsafe_pattern \
+  '(micro-exempt|compact response|compact output)[^.\n]{0,100}\b(may|can|allows?)\b[^.\n]{0,80}\b(skip|bypass|omit|hide)\b[^.\n]{0,80}\b(QA|DoD|approval|blockers|failures|evidence)\b' \
+  'Runtime exemption weakens quality or disclosure' \
+  AGENTS.md .systems/ai/core .systems/ai/templates
+policy_reject_unsafe_pattern \
+  '(coordinator|capture inventory|scorer)[^.\n]{0,100}\b(may|can|allows?)\b[^.\n]{0,80}\b(approve|authorize|grant)\b[^.\n]{0,80}\b(writes|execution|PASS|approval)\b' \
+  'Runtime evidence grants authority' \
+  AGENTS.md .systems/ai/core .systems/ai/templates
+policy_reject_unsafe_pattern \
+  '(historical completion|command text|completed state)[^.\n]{0,100}\b(proves|guarantees|is enough for)\b[^.\n]{0,80}\b(current QA|PASS|read)\b' \
+  'Runtime declaration substitutes for evidence' \
+  AGENTS.md .systems/ai/core .systems/ai/templates
+exit "$fail"

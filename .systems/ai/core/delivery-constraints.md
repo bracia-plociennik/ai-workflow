@@ -18,7 +18,7 @@ Implementation-capable plans and work artifacts should include:
 
 ```text
 Delivery Constraints
-- Mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>
+- Mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|micro-exempt|not-set>
 - Deadline: <timestamp|none>
 - Timezone: <IANA timezone|none>
 - Time budget: <duration|none>
@@ -33,6 +33,12 @@ Delivery Constraints
 ```
 
 ## Scope And Quality Boundaries
+
+### Narrow Micro-Exempt Route
+
+`Mode: micro-exempt` is allowed only for one bounded, reversible, local low-risk change touching at most three files including tests, outside active formal plan scope. It omits a separate deadline question and per-work capture file, not DoD, slice planning, focused QA, evidence or owner permission.
+
+Exclude API, schema, protocol, policy, routing, approval, privacy, permissions, security, migration, client, production, external effects, dependency and cross-module behavior changes. When scope grows or any exclusion appears, reclassify before further writes and resolve normal delivery/capture requirements. Report eligibility and reason; do not invent `is_distilled=true` for exempt work.
 
 - The must-have outcome and quality floor are protected.
 - AI may defer stretch scope and, when safe, should-have scope, but must report the change.

@@ -19,6 +19,8 @@ separately; source/system impact escalates to full. CI/updater stay explicit ful
 
 ## Purpose
 
+Runtime integrity: `.systems/scripts/check-runtime-integrity` runs synthetic regressions; `.systems/scripts/report-coordinator-status --project <slug> --format json|human` is read-only and never grants execution authority. See runtime-integrity.md for canonical capture inventory and safe fixture/scorer inputs.
+
 Codex must know how to verify work. Repository-specific commands live in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`. This file defines the required command categories and workflow-template checks.
 
 ## Required Command Categories

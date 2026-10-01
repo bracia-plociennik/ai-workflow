@@ -1,5 +1,7 @@
 # AI Workflow Template
 
+Runtime integrity: .systems/ai/core/runtime-integrity.md documents canonical capture inventory, tracked-worktree smoke fixtures, conservative command-read evidence and .systems/scripts/report-coordinator-status --project <slug>. Compact responses and micro-exempt delivery reduce overhead only for strictly eligible tiny work; formal QA is unchanged. Capability recommendations replace fixed model names. Regression coverage: .systems/scripts/check-runtime-integrity.
+
 ## Purpose
 
 This repository is a portable workflow system for AI-assisted planning, gated implementation, QA evidence, distillation, checkpoints, and optional autopilot execution.

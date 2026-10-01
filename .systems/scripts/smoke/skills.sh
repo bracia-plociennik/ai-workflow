@@ -109,7 +109,7 @@ trap 'exit 143' TERM
 
 printf 'AI_WORKFLOW_SMOKE_GROUP_START group=%s progress=%s\n' "$smoke_group" "$progress"
 
-tar --exclude='.git' --exclude='ai-workflow-workspace' -cf - . | tar -xf - -C "$tmp"
+python3 .systems/scripts/lib/smoke-fixture.py --repo "$(pwd -P)" --output "$tmp"
 
 source "$(pwd -P)/.systems/scripts/smoke/common.sh"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$tmp/example-status.orig"

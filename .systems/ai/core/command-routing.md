@@ -2,11 +2,13 @@
 
 ## Purpose
 
+Use runtime-integrity.md for canonical capture inventory, safe smoke fixtures, read-evidence scoring and the read-only coordinator interface. Narrow micro-exempt delivery/capture routing follows delivery-constraints.md; compact/full communication follows response-contract.md without reducing QA. Model recommendations use capability/source-backed guidance, not a frozen model pair.
+
 This file defines how agents should interpret user-facing workflow commands.
 
 It covers natural-language prompts, not shell verification commands. Shell commands for install, lint, test, build, and validation live in `.systems/ai/core/commands.md` and `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`.
 
-For every new planning, implementation, or QA scope, append the advisory Model recommendation from `.systems/ai/core/model-selection-guidance.md`. The recommendation is non-blocking and does not modify any workflow gate.
+When capability choice is material to planning, implementation, or QA, append the advisory Model recommendation from `.systems/ai/core/model-selection-guidance.md`. Routine tiny scopes do not repeat it. The recommendation is non-blocking and does not modify any workflow gate.
 
 For substantive workflow-maintenance upgrades, route the shared-impact owner decision through `.systems/ai/core/cross-system-upgrade-handoff.md` before commit or handoff.
 

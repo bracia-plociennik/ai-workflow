@@ -24,6 +24,8 @@ When AI Workflow is used as a nested clone:
 
 ## Always Read First
 
+For canonical capture inventory, smoke fixture inputs, conservative eval-read evidence and read-only coordinator status, use .systems/ai/core/runtime-integrity.md. Tiny low-risk work may use only the exact micro-exempt rule in delivery constraints. Response mode is compact only for eligible unblocked tiny work/simple answers; formal phases, decisions and handoffs use full trace and footer. Quality depth is unchanged.
+
 Always read this file and, from `.systems/ai/core/`, `operating-model.md`, `command-routing.md`, `risk-model.md`, and `permissions.md`. Inspect git, status/intake and repository mode. References below are routes, not a blanket instruction to open every file: read task/phase/risk/domain-triggered contracts and their dependencies.
 
 - New work or a list: `task-intake.md`, and `request-batch-triage.md` for 2+ items; use `owner-decision-checkpoints.md` for material choices.
@@ -94,7 +96,7 @@ If the user says the task is done and asks to preserve learnings, for example `K
 
 After implementation, fixes, quality closure, handoff, commit readiness, or before switching to a new unrelated task with unresolved capture value, use `.systems/ai/core/knowledge-capture-reminder.md`. Knowledge Capture Reminder is advisory unless an existing gate requires capture. It may propose distillation, checkpoint, memory, External Memory, System Insights, or status/evidence targets, but it must not automatically write them, commit ignored workspace artifacts, or push.
 
-For new planning, implementation or QA scope, report advisory `Model recommendation` per `.systems/ai/core/model-selection-guidance.md`; it never changes risk, permissions, DoD, QA or approval.
+When capability choice is material to a new planning, implementation or QA scope, report advisory `Model recommendation` per `.systems/ai/core/model-selection-guidance.md`; it never changes risk, permissions, DoD, QA or approval.
 
 For substantive workflow-maintenance upgrades, apply `.systems/ai/core/cross-system-upgrade-handoff.md` before commit or handoff. Ask the owner whether the upgrade should affect the counterpart system. `pending` blocks commit/handoff; `yes` requires one privacy-safe External Memory handoff for the full scope. No-question opt-out cannot decide shared impact, and active autopilot queues the decision.
 
@@ -124,9 +126,9 @@ Never interpret a user command as permission to bypass risk policy, permissions,
 
 Use `.systems/ai/core/response-contract.md` for final user-facing responses.
 
-Every substantive response must end with `Co dalej?`, containing exactly one recommendation with impact and exactly one safe alternative with impact. Each path must include `Napisz:` with a direct copy-paste prompt for the user. Choose the recommendation from the current user intent, phase `Next allowed phases`, status, task artifacts, quality evidence, blockers, risk model, and guide/command routing. If sources conflict, recommend recovery or reconciliation instead of guessing.
+Every full-mode substantive response must end with `Co dalej?`, containing exactly one recommendation with impact and exactly one safe alternative with impact. Each path must include `Napisz:` with a direct copy-paste prompt for the user. Choose the recommendation from the current user intent, phase `Next allowed phases`, status, task artifacts, quality evidence, blockers, risk model, and guide/command routing. If sources conflict, recommend recovery or reconciliation instead of guessing.
 
-Every substantive response must include `Execution Trace` immediately before `Co dalej?`, with sources used, evidence reviewed, workflow procedures used, skills/roles used, commands/checks run, skipped/unreadable sources, and limits/residual uncertainty.
+Every full-mode substantive response must include `Execution Trace` immediately before `Co dalej?`, with sources used, evidence reviewed, workflow procedures used, skills/roles used, commands/checks run, skipped/unreadable sources, and limits/residual uncertainty.
 
 Do not use the footer to bypass gates, evidence, approval, risk policy, Definition of Done, stop conditions, or final owner approval.
 

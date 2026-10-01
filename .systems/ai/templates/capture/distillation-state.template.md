@@ -1,5 +1,8 @@
 # Distillation State
 
+- Capture schema: `<1|2>`
+- Schema selection: `2 for current formal QA; 1 for advisory-only capture, no formal PASS claim`
+
 - Work ID: `<id>`
 - Work mode: `<mode>`
 - Project/repo scope: `<scope>`

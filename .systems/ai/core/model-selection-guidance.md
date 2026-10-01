@@ -2,13 +2,14 @@
 
 ## Purpose
 
-Give the owner an advisory model recommendation for each new planning, implementation, and QA scope.
+Give the owner an advisory model recommendation when capability choice is material to planning, implementation, or QA. Routine tiny scopes do not require a repeated recommendation.
 
 ## Required Output
 
 ```text
 Model recommendation:
-- Recommended: <GPT-5.6 Luna High|GPT-5.6 Sol High>
+- Recommended: <efficient-reasoning|strong-reasoning|source-backed available model>
+- Availability source: <current authoritative catalog/docs|unknown, capability class only>
 - Reason:
 - Criticality:
 - Current model known: <yes|no>
@@ -19,9 +20,11 @@ Use `Current model known: no` when the runtime does not expose the active model.
 
 ## Recommendation Rules
 
-Recommend `GPT-5.6 Luna High` for clear, bounded, reversible work with testable DoD and low or medium risk, including routine implementation and targeted review.
+Recommend `efficient-reasoning` for clear, bounded, reversible work with testable DoD and low or medium risk, including routine implementation and targeted review.
 
-Recommend `GPT-5.6 Sol High` for difficult architecture, substantial ambiguity, security, billing, migrations, production changes, broad integrations, recovery, adversarial review, high-risk work, or high-impact workflow policy changes.
+Recommend `strong-reasoning` for difficult architecture, substantial ambiguity, security, billing, migrations, production changes, broad integrations, recovery, adversarial review, high-risk work, or high-impact workflow policy changes.
+
+Name a specific model only from a current authoritative availability source (runtime model catalog or official current documentation). Record that source. If unavailable, report the capability class; do not guess or freeze an obsolete pair. Model choice is not quality evidence.
 
 Deadline pressure, current model availability, or cost preference does not justify recommending a weaker model for critical work. If the owner continues with another model, keep the workflow requirements unchanged.
 

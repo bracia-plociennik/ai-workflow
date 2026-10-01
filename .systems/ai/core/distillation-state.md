@@ -6,7 +6,13 @@
 
 ## State Record
 
-Every implementation-class write must create or update a scoped record before quality closure. A meaningful fix, quality closure, handoff, or owner capture decision may then update that same record under project or repo workspace:
+The narrow `micro-exempt` eligibility in `delivery-constraints.md` permits a response disposition instead of a per-work state file. Non-exempt writes still create scoped state; preserve focused DoD/QA and reclassify scope growth. Exemption is not completed distillation and never produces a fake `is_distilled=true`.
+
+Canonical inventory is provided by `lib/capture-state.py`: `repo/capture-state/` and `projects/<slug>/capture-state/` are record namespaces, while `repo/` or the owning project is the evidence root. Old scoped manifest schema 1 retains its existing `repo/core` and project populations; it does not silently expand. No-arg state validation reports total, invalid, unresolved and skipped entries across canonical owners.
+
+New formal records use `Capture schema: 2`. Ready/completed schema-2 records require current owning-project formal QA and completed records require one unique accepted owned distillation. Schema 1 remains available for advisory capture but never claims verified formal QA. Historical/advisory records remain immutable; missing derived output may be derived for presentation only and quality is explicitly `unknown-historical-or-advisory` unless current formal evidence is independently verified. Historical completion is not current QA PASS. Links, traversal and foreign runtime roots are rejected or explicitly skipped, never imported.
+
+Every implementation-class write must create or update a scoped record before quality closure unless the exact narrow micro-exempt criteria above apply. A meaningful fix, quality closure, handoff, or owner capture decision may then update that same record under project or repo workspace:
 
 ```text
 Distillation State

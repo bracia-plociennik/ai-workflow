@@ -353,12 +353,13 @@ run_core_validators() {
   run_cmd .systems/scripts/check-validation-routing
   run_cmd .systems/scripts/check-model-selection-guidance
   run_cmd .systems/scripts/check-delivery-constraints
-  run_cmd .systems/scripts/check-distillation-state
+  run_runtime_check .systems/scripts/check-distillation-state
   run_cmd .systems/scripts/check-workspace-freshness
   run_cmd .systems/scripts/check-contract-topology
   run_cmd .systems/scripts/check-validation-observability
   run_cmd .systems/scripts/check-validation-completion
   run_cmd .systems/scripts/check-skill-evaluation-contract
+  run_cmd .systems/scripts/check-runtime-integrity
 }
 
 explain_profile

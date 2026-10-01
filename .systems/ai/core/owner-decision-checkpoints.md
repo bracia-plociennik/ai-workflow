@@ -152,7 +152,7 @@ When `.systems/ai/core/delivery-constraints.md` applies, treat deadline, timezon
 
 ## Response Trace
 
-Every substantive response reports:
+Every substantive response reports the following in full mode. Eligible compact output is allowed only when no material decision is pending; a decision or blocker switches to full under response-contract.md.
 
 ```text
 Owner decision interaction:
