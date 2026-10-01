@@ -1,5 +1,13 @@
 # changelog.md
 
+## 2026-10-01 - Lean Validation Integration
+
+- Hardened smoke negative outcomes and source-bound current QA assessments; historical verdicts do not substitute for current evidence.
+- Added immutable, source-bound validation timing baselines and comparison eligibility checks. Different inputs, test populations or runtime regimes cannot establish a speed improvement.
+- Added explicit scoped validation dependency closure and owned-runtime manifests. Execution success, scope coverage and semantic quality remain separate; full-required gates are unchanged.
+- Split smoke execution into manifest-owned groups with fresh fixtures, exact test/assertion ownership, failure propagation and process cleanup. Full validation, CI and the updater still execute all groups; structural manifest verification or a subset is not full execution evidence.
+- Instruction-efficiency work remains deferred pending proven model-context isolation; no behavioral improvement is claimed. Semantic QA, Phase 6, the final checkpoint and owner-triggered final check retain their distinct approvals.
+
 ## 0.8.25 - 2026-08-10
 
 - Added advisory Workspace Freshness Ledger and Contract Topology Map reports.
