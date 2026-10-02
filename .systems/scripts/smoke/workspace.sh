@@ -902,7 +902,7 @@ git -C "$bootstrap_source" config user.name "AI Workflow Smoke"
 git -C "$bootstrap_source" add .
 git -C "$bootstrap_source" commit -q -m "bootstrap fixture"
 git -C "$bootstrap_source" branch -M main
-git init -q --bare "$bootstrap_remote"
+git init -q --bare --initial-branch=main "$bootstrap_remote"
 git -C "$bootstrap_source" push -q "$bootstrap_remote" main
 
 bootstrap_target="$bootstrap_v1/target"
@@ -992,7 +992,7 @@ git -C "$remote_work" config user.email "smoke@example.invalid"
 git -C "$remote_work" config user.name "AI Workflow Smoke"
 git -C "$remote_work" add -A
 git -C "$remote_work" commit -q -m "initial"
-git init -q --bare "$remote_bare"
+git init -q --bare --initial-branch=main "$remote_bare"
 git -C "$remote_work" push -q "$remote_bare" main
 git clone -q "$remote_bare" "$target_work"
 git -C "$remote_work" remote add origin "$remote_bare"
