@@ -727,5 +727,80 @@ mv "$tmp/.systems/ai/core/validation-observability.md.bak" "$tmp/.systems/ai/cor
 
 run_must_pass "runtime-integrity-synthetic-regressions" bash .systems/scripts/check-runtime-integrity
 
+# Exercise the actual assertion consumer without depending on host rg wording.
+for diagnostic_case in short long missing-marker wrong-status-zero wrong-status-two; do
+  run_must_pass "smoke-diagnostic-contract-$diagnostic_case" bash -lc '
+    set -euo pipefail
+    fixture_root="$1"
+    diagnostic_case="$2"
+    tmp="$(mktemp -d)"
+    trap '\''rm -rf "$tmp"'\'' EXIT
+    unset AI_WORKFLOW_TIMING_OUTPUT AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT
+    source "$fixture_root/.systems/scripts/smoke/common.sh"
+    should_run_smoke_test() { return 0; }
+    progress=quiet
+    test_timeout_seconds=10
+    timeout_runner="$fixture_root/.systems/scripts/run-with-timeout"
+
+    set +e
+    (
+      run_must_fail "policy-boundaries-fails-missing-source" bash -c '\''
+        diagnostic_case="$1"
+        case "$diagnostic_case" in
+          short|long)
+            rg() {
+              if [[ "$diagnostic_case" == short ]]; then
+                echo "rg: /definitely/missing/policy-source.md: No such file or directory (os error 2)" >&2
+              else
+                echo "rg: /definitely/missing/policy-source.md: IO error for operation on /definitely/missing/policy-source.md: No such file or directory (os error 2)" >&2
+              fi
+              return 2
+            }
+            source "$2/.systems/scripts/lib/policy-boundaries.sh"
+            fail=0
+            policy_reject_unsafe_pattern "unsafe policy wording" "missing source test" /definitely/missing/policy-source.md
+            exit "$fail"
+            ;;
+          missing-marker)
+            echo "rg: /definitely/missing/policy-source.md: No such file or directory (os error 2)"
+            exit 1
+            ;;
+          wrong-status-zero|wrong-status-two)
+            echo "Policy-boundary scan failed: missing source test"
+            [[ "$diagnostic_case" != wrong-status-zero ]] || exit 0
+            exit 2
+            ;;
+        esac
+      '\'' _ "$diagnostic_case" "$fixture_root"
+    ) > "$tmp/assertion.out" 2>&1
+    assertion_status=$?
+    set -e
+    case "$diagnostic_case" in
+      short|long)
+        expected_status=0
+        expected_message=""
+        ;;
+      missing-marker)
+        expected_status=1
+        expected_message="Validator smoke test lacks expected diagnostic: policy-boundaries-fails-missing-source"
+        ;;
+      wrong-status-zero|wrong-status-two)
+        expected_status=1
+        expected_message="Validator smoke test returned"
+        ;;
+    esac
+    if [[ "$assertion_status" -ne "$expected_status" ]]; then
+      cat "$tmp/assertion.out"
+      echo "Diagnostic assertion regression failed: $diagnostic_case"
+      exit 1
+    fi
+    if [[ -n "$expected_message" ]] && ! grep -Fq "$expected_message" "$tmp/assertion.out"; then
+      cat "$tmp/assertion.out"
+      echo "Diagnostic assertion rejected for the wrong reason: $diagnostic_case"
+      exit 1
+    fi
+  ' _ "$tmp" "$diagnostic_case"
+done
+
 echo "Owned smoke group passed."
 smoke_suite_completed=1

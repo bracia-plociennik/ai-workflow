@@ -419,7 +419,7 @@ run_must_fail() {
       review-completeness-gate-requires-shared-policy-helper) expected_diagnostic='Missing review completeness gate reference in \.systems/scripts/check-owner-decision-checkpoints: shared policy helper use';;
       review-completeness-gate-audits-full-qa-policy-validator) expected_diagnostic='Missing full QA policy validator from Review Completeness Gate audit';;
       review-completeness-gate-requires-review-baseline-and-freshness-inside-gate) expected_diagnostic='Missing review-template Review Completeness Gate field: - Reviewed baseline: `<HEAD/worktree/diff/artifact identifiers>`';;
-      policy-boundaries-fails-missing-source) expected_diagnostic='rg: /definitely/missing/policy-source\.md: IO error for operation on /definitely/missing/policy-source\.md: No such file or directory \(os error 2\)';;
+      policy-boundaries-fails-missing-source) expected_diagnostic='^Policy-boundary scan failed: missing source test$';;
       policy-boundaries-blocks-repeated-unsafe-match-after-safe-quote) expected_diagnostic='Do not say `no sources needed`; no sources needed\.';;
       cross-system-yes-without-handoff-fails) expected_diagnostic='Shared-impact yes requires handoff path';;
       cross-system-pending-blocks-handoff) expected_diagnostic='Shared-impact decision pending blocks commit/handoff';;

@@ -706,7 +706,12 @@
     "smoke-observability-rejects-yet",
     "smoke-observability-rejects-semicolon",
     "smoke-observability-rejects-missing-source",
-    "runtime-integrity-synthetic-regressions"
+    "runtime-integrity-synthetic-regressions",
+    "smoke-diagnostic-contract-short",
+    "smoke-diagnostic-contract-long",
+    "smoke-diagnostic-contract-missing-marker",
+    "smoke-diagnostic-contract-wrong-status-zero",
+    "smoke-diagnostic-contract-wrong-status-two"
   ],
   "external_assertion_audit": [
     {
@@ -2976,7 +2981,12 @@
     "smoke-observability-rejects-yet": "core",
     "smoke-observability-rejects-semicolon": "core",
     "smoke-observability-rejects-missing-source": "core",
-    "runtime-integrity-synthetic-regressions": "core"
+    "runtime-integrity-synthetic-regressions": "core",
+    "smoke-diagnostic-contract-short": "core",
+    "smoke-diagnostic-contract-long": "core",
+    "smoke-diagnostic-contract-missing-marker": "core",
+    "smoke-diagnostic-contract-wrong-status-zero": "core",
+    "smoke-diagnostic-contract-wrong-status-two": "core"
   },
   "tests": [
     {
@@ -10623,14 +10633,69 @@
       "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
       "mutation_id": "runtime-integrity-synthetic-regressions",
       "expected_outcome": "exit 0"
+    },
+    {
+      "id": "smoke-diagnostic-contract-short",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"smoke-diagnostic-contract-$diagnostic_case\" bash -lc",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "nested-assertion-temp-exit-trap-and-owned-group-cleanup",
+      "mutation_id": "smoke-diagnostic-contract-short",
+      "expected_outcome": "exit 0; assertion accepts portable rejection or rejects invalid evidence"
+    },
+    {
+      "id": "smoke-diagnostic-contract-long",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"smoke-diagnostic-contract-$diagnostic_case\" bash -lc",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "nested-assertion-temp-exit-trap-and-owned-group-cleanup",
+      "mutation_id": "smoke-diagnostic-contract-long",
+      "expected_outcome": "exit 0; assertion accepts portable rejection or rejects invalid evidence"
+    },
+    {
+      "id": "smoke-diagnostic-contract-missing-marker",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"smoke-diagnostic-contract-$diagnostic_case\" bash -lc",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "nested-assertion-temp-exit-trap-and-owned-group-cleanup",
+      "mutation_id": "smoke-diagnostic-contract-missing-marker",
+      "expected_outcome": "exit 0; assertion accepts portable rejection or rejects invalid evidence"
+    },
+    {
+      "id": "smoke-diagnostic-contract-wrong-status-zero",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"smoke-diagnostic-contract-$diagnostic_case\" bash -lc",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "nested-assertion-temp-exit-trap-and-owned-group-cleanup",
+      "mutation_id": "smoke-diagnostic-contract-wrong-status-zero",
+      "expected_outcome": "exit 0; assertion accepts portable rejection or rejects invalid evidence"
+    },
+    {
+      "id": "smoke-diagnostic-contract-wrong-status-two",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"smoke-diagnostic-contract-$diagnostic_case\" bash -lc",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "nested-assertion-temp-exit-trap-and-owned-group-cleanup",
+      "mutation_id": "smoke-diagnostic-contract-wrong-status-two",
+      "expected_outcome": "exit 0; assertion accepts portable rejection or rejects invalid evidence"
     }
   ],
   "files_sha256": {
-    "common.sh": "3caa22344730df6b565b687eb0d68e2964ed0d143ee69c27c218508e03aa1db9",
+    "common.sh": "d27babc3927de3538a42ccbd7dbc98251092e388fddf2745e0962f124453d688",
     "quality.sh": "df3e514dd8945369367a4a2d024f2ec121ac9f416db8a8f1e1f411c3e1fc08da",
     "workspace.sh": "6b81e3c2400b7c4b0d686f8e872fe869fee13550ee275086622316ef72891235",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
-    "core.sh": "69015e051d6c2e89ff331e136822d653c9db39680e3477837ca0225091999b50"
+    "core.sh": "abef95ee2a87a3f797e4b8979fb3416536d5a69bb79c9d65727567dd46cedf0a"
   }
 }
