@@ -1,5 +1,7 @@
 # workflow.md
 
+Use `.systems/ai/core/execution-efficiency.md` for artifact-only Phase 6/7/8 checks after authenticated fresh full source verification. Formal routes, owner approvals and semantic quality remain unchanged. Historical QA is integrity-only and cannot advance the current workflow.
+
 ## Purpose
 
 This file is the operational phase router. Detailed policies live in dedicated `.systems/ai/core/*.md` policy files. Detailed phase contracts live in `.systems/ai/workflow/`.

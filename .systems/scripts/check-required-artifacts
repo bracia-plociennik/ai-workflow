@@ -2,6 +2,16 @@
 set -euo pipefail
 
 required=(
+  ".systems/ai/core/execution-efficiency.md"
+  ".systems/ai/capabilities/execution-efficiency-v1.json"
+  ".systems/scripts/check-execution-efficiency"
+  ".systems/scripts/prepare-quality-record"
+  ".systems/scripts/lib/quality-record.py"
+  ".systems/scripts/lib/execution-efficiency.py"
+  ".systems/scripts/tests/execution-efficiency.py"
+  ".systems/ai/templates/efficiency/bounded-defect.template.json"
+  ".systems/ai/templates/efficiency/check-plan.template.json"
+  ".systems/ai/templates/efficiency/process-timing.template.json"
   ".systems/ai/core/runtime-integrity.md"
   ".systems/scripts/check-runtime-integrity"
   ".systems/scripts/report-coordinator-status"

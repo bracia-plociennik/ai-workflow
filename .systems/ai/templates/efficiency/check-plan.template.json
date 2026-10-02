@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "purpose": "iteration",
+  "workflow_root": "<absolute-workflow-root>",
+  "scope_manifest": null,
+  "checks": [
+    {
+      "id": "check-required-artifacts",
+      "category": "product",
+      "inputs": [
+        "AGENTS.md"
+      ],
+      "arguments": [],
+      "coverage": [
+        "structure"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+behavioral=0
+if [[ "${1:-}" == --behavioral && "$#" == 1 ]]; then
+  behavioral=1
+elif [[ "$#" != 0 ]]; then
+  echo "Unknown execution efficiency validator argument" >&2
+  exit 1
+fi
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+fail=0
+for path in .systems/ai/core/execution-efficiency.md .systems/scripts/lib/execution-efficiency.py .systems/scripts/lib/quality-record.py .systems/scripts/prepare-quality-record .systems/ai/capabilities/execution-efficiency-v1.json .systems/scripts/tests/execution-efficiency.py; do
+  [[ -f "$path" ]] || { echo "Missing execution efficiency artifact: $path"; fail=1; }
+done
+[[ "$fail" == 0 ]] || exit "$fail"
+for path in AGENTS.md HUMANS.md README.md .systems/ai/core/commands.md .systems/ai/core/validation-routing.md .systems/ai/core/validation-profiles.md .systems/ai/core/operating-model.md .systems/ai/core/instruction-adherence-refresh.md; do
+  rg -qF 'execution-efficiency.md' "$path" || { echo "Missing efficiency integration: $path"; fail=1; }
+done
+for pattern in \
+  'reuse (may|can) replace semantic review' \
+  'historical QA (may|can) supply current PASS' \
+  'technical PASS (may|can) grant final-owner-yes' \
+  'bounded defect (may|can) bypass (risk|permissions|QA|approvals)'
+do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe execution efficiency wording" .systems/ai/core/execution-efficiency.md
+done
+[[ "$fail" == 0 ]] || exit "$fail"
+[[ "$behavioral" != 1 ]] || python3 .systems/scripts/tests/execution-efficiency.py

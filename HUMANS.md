@@ -1,5 +1,7 @@
 # HUMANS.md
 
+Execution efficiency uses `.systems/ai/core/execution-efficiency.md`: plan applicable checks once, preserve fresh semantic QA, and use authenticated unchanged-source evidence only within its documented boundaries. Technical Phase 8 never implies final-owner-yes.
+
 Małe, odwracalne lokalne zmiany low-risk mogą użyć micro-exempt tylko zgodnie z delivery-constraints.md: maksymalnie trzy pliki wraz z testami, żadnych zmian API/policy/security ani skutków zewnętrznych. DoD, slice plan i QA zostają. Proste odpowiedzi mogą być compact; fazy, decyzje, blockers i handoffy nadal wymagają pełnego raportu.
 
 Read-only raport dla koordynatora: .systems/scripts/report-coordinator-status --project <slug> --format human. Wynik nie jest zgodą na wykonanie ani zamknięcie projektu.

@@ -1,5 +1,14 @@
 # changelog.md
 
+## Validation And Closure Efficiency - 2026-10-02
+
+- Added explicit iteration check plans and conservative authenticated source-bound reuse.
+- Separated fresh full source verification from subsequent owned artifact-only closure.
+- Added immutable historical QA admission and schema-driven reviewer-supplied records.
+- Added compact bounded-defect eligibility, selective refresh fingerprints and early preflight.
+- Added privacy-minimal whole-process interval accounting and behavioral/adversarial tests.
+- Kept semantic QA, CI/updater fresh execution, owner approval and risk boundaries intact.
+
 ## Runtime Integrity And Selective Overhead - 2026-10-01
 
 - Added owning-namespace capture inventory with current QA verification and immutable historical evidence.

@@ -1,5 +1,7 @@
 # implementation-slicing.md
 
+For eligible reversible bounded defects, `.systems/ai/core/execution-efficiency.md` permits one compact work record in existing project/workflow-maintenance mode. Slice scope, DoD, known consumers, regression evidence, approvals and semantic QA still apply; this does not bypass an active formal phase path or create a medium-risk micro-work exemption.
+
 ## Purpose
 
 An eligible micro-exempt change still needs compact testable DoD, one-slice plan and focused quality closure. Exempt communication/delivery overhead is not exempt implementation quality; scope growth follows delivery-constraints.md reclassification.

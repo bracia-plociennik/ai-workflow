@@ -1,5 +1,7 @@
 # 5. Quality
 
+Execution efficiency (when applicable): record check applicability, invocation reason, executed/reused/invalidated evidence, source receipt and fresh artifact checks under .systems/ai/core/execution-efficiency.md. Supplied reviewer evidence may use prepare-quality-record; technical verification does not grant owner approval.
+
 ## Metadata
 
 - Project: `<project>`

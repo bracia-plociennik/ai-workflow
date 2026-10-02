@@ -1,5 +1,7 @@
 # AI Workflow Template
 
+See `.systems/ai/core/execution-efficiency.md` and `.systems/scripts/check-execution-efficiency` for explicit iteration reuse, source-backed artifact closure, immutable QA lifecycle, reviewer-supplied quality records, bounded-defect eligibility and process timing. CI and updater full checks remain fresh.
+
 Runtime integrity: .systems/ai/core/runtime-integrity.md documents canonical capture inventory, tracked-worktree smoke fixtures, conservative command-read evidence and .systems/scripts/report-coordinator-status --project <slug>. Compact responses and micro-exempt delivery reduce overhead only for strictly eligible tiny work; formal QA is unchanged. Capability recommendations replace fixed model names. Regression coverage: .systems/scripts/check-runtime-integrity.
 
 ## Purpose

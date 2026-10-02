@@ -1,5 +1,7 @@
 # validation-profiles.md
 
+`.systems/ai/core/execution-efficiency.md` adds a distinct source-backed artifact-closure route: after one fresh full gate for unchanged sources, validate new owned Phase 6/7/8 artifacts with fresh runtime consumers. This is not arbitrary scoped final evidence and not a full-profile cache. Iteration `--execution-plan` evidence remains unverified/non-final. CI/updater/release full execution is unchanged.
+
 ## Purpose
 
 Validation Profiles define faster local validation paths without weakening the final safety gate.
@@ -53,7 +55,8 @@ Use `.systems/ai/core/validation-routing.md` to decide applicability. Workflow s
 
 Use it for checkpoint validation, major distillation, major verification, CI, release/final confidence checks, and high-impact workflow-template changes.
 
-The only checkpoint exception is the bounded runtime-only manifest policy below.
+Checkpoint exceptions are the bounded runtime-only manifest policy below and
+the explicit authenticated source-backed artifact-closure route in execution-efficiency.md.
 It does not apply to source/system-impact checkpoints or broader memory namespaces.
 
 CI must call `.systems/scripts/validate-workflow --profile full` explicitly.

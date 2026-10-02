@@ -1,5 +1,7 @@
 # risk-model.md
 
+Bounded-defect handling under `.systems/ai/core/execution-efficiency.md` is a compact record within existing formal-project/workflow-maintenance modes, not risk reclassification. Medium risk still requires accepted plan and QA; high/critical or unknown impact excludes this route.
+
 ## Risk Classes
 
 | Risk | Examples | Mode |

@@ -199,6 +199,16 @@ validate_evidence_file() {
   local qa_filename="${file##*/}"
   qa_filename="${qa_filename#recovery-}"
 
+  if rg -qF 'Owner approval contract: owner-approval-v1' "$file"; then
+    local owner_project
+    owner_project="${file#"$workspace_home"/projects/}"
+    owner_project="${owner_project%%/*}"
+    if ! python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$owner_project" --owner-approval; then
+      reject_pass_file "$file" 'invalid explicit owner approval provenance'
+    fi
+    return
+  fi
+
   if has_v2_contract "$file"; then
     local owning_project assessment
     if [[ "$file" == "$repo_root"/.systems/ai/examples/projects/EXAMPLE/quality/*.md ]]; then
@@ -213,7 +223,7 @@ validate_evidence_file() {
     fi
     owning_project="${file#"$workspace_home"/projects/}"
     owning_project="${owning_project%%/*}"
-    if ! assessment="$(python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$owning_project" "${qa_target_args[@]}" 2>&1)"; then
+    if ! assessment="$(python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$owning_project" --history-integrity "${qa_target_args[@]}" 2>&1)"; then
       reject_pass_file "$file" "$assessment"
     fi
     return

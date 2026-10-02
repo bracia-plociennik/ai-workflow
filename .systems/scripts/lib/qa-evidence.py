@@ -406,8 +406,78 @@ def report_kind_and_identity(report, project):
     raise InvalidAssessment("V2 report filename does not identify a formal QA phase")
 
 
-def assess(report, workflow_root, workspace_root, project, target_root=None, expected_kind=None, expected_identity=None, schema_only=False, require_pass=False):
-    report = report.resolve(strict=True)
+def owner_approval(report, workflow, workspace, project, document=None):
+    if report.is_symlink() or any(parent.is_symlink() for parent in report.parents if parent != Path("/")):
+        raise InvalidAssessment("linked owner approval report")
+    owner = workspace.resolve(strict=True) / "projects" / project
+    if report.parent.resolve(strict=True) != (owner / "quality").resolve(strict=True):
+        raise InvalidAssessment("approval is outside owning quality root")
+    text = report.read_text() if document is None else document
+    values = section_fields(text.splitlines())
+    require_values(values, {"Owner approval contract": {"owner-approval-v1"}, "Scope": {project},
+                           "Owner decision": {"final-owner-yes"}, "Approval reference": None,
+                           "Approval SHA-256": None, "Final check": None, "Final check SHA-256": None},
+                   "Owner Approval")
+    approval = contained(owner, values["Approval reference"])
+    if not values["Approval reference"].startswith("decisions/"):
+        raise InvalidAssessment("approval requires explicit owning decision")
+    final = contained(owner, values["Final check"])
+    if hashlib.sha256(approval.read_bytes()).hexdigest() != values["Approval SHA-256"]:
+        raise InvalidAssessment("approval reference integrity mismatch")
+    if hashlib.sha256(final.read_bytes()).hexdigest() != values["Final check SHA-256"]:
+        raise InvalidAssessment("final check integrity mismatch")
+    decision = section_fields(approval.read_text().splitlines())
+    require_values(decision, {"Owner decision": {"final-owner-yes"}, "Approved scope": {project},
+                             "Source": None}, "Explicit owner decision")
+    assess(final, workflow, workspace, project, expected_kind="final-check", require_pass=True)
+    return {"owner_decision": "final-owner-yes", "scope": project, "reference": values["Approval reference"]}
+
+
+def history_entry(report, owner_project_root):
+    registry = owner_project_root / "quality-assessments.json"
+    if not registry.exists():
+        return None
+    if registry.is_symlink():
+        raise InvalidAssessment("linked history registry")
+    def unique_pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise InvalidAssessment("duplicate history field")
+            result[key] = value
+        return result
+    data = json.loads(registry.read_text(), object_pairs_hook=unique_pairs)
+    if set(data) != {"schema", "assessments"} or data["schema"] != 1 or not isinstance(data["assessments"], list):
+        raise InvalidAssessment("invalid history registry")
+    selected = None
+    seen = set()
+    for entry in data["assessments"]:
+        if set(entry) != {"path", "sha256", "state", "assessed_head", "decision", "decision_sha256"}:
+            raise InvalidAssessment("invalid historical assessment fields")
+        if entry["state"] not in {"historical", "superseded"} or entry["path"] in seen:
+            raise InvalidAssessment("invalid or duplicate historical assessment")
+        seen.add(entry["path"])
+        original = contained(owner_project_root, entry["path"])
+        if original.parent != owner_project_root / "quality":
+            raise InvalidAssessment("historical report must stay in owning quality root")
+        decision = contained(owner_project_root, entry["decision"])
+        if not entry["decision"].startswith("decisions/") or not decision.read_text().strip():
+            raise InvalidAssessment("history requires an explicit decision artifact")
+        permission = section_fields(decision.read_text().splitlines())
+        require_values(permission, {"History decision": {"approved"}, "Approved report": {entry["path"]},
+                                   "Approved state": {entry["state"]}, "Source": None}, "Historical admission")
+        for source, field in ((original, "sha256"), (decision, "decision_sha256")):
+            if not re.fullmatch(r"[0-9a-f]{64}", entry[field]) or hashlib.sha256(source.read_bytes()).hexdigest() != entry[field]:
+                raise InvalidAssessment("historical integrity mismatch")
+        if not re.fullmatch(r"[0-9a-f]{40}", entry["assessed_head"]):
+            raise InvalidAssessment("invalid historical baseline")
+        if original == report:
+            selected = entry
+    return selected
+
+
+def assess(report, workflow_root, workspace_root, project, target_root=None, expected_kind=None, expected_identity=None, schema_only=False, require_pass=False, document=None, verify_inputs=True, history_integrity=False):
+    report = report.resolve(strict=document is None)
     workflow_root = workflow_root.resolve(strict=True)
     workspace_root = workspace_root.resolve(strict=not schema_only)
     if schema_only:
@@ -419,10 +489,17 @@ def assess(report, workflow_root, workspace_root, project, target_root=None, exp
     owner_root = (owner_project_root / "quality").resolve(strict=True)
     if os.path.commonpath((str(owner_root), str(report))) != str(owner_root):
         raise InvalidAssessment("assessment is outside its owning project quality root")
-    lines = report.read_text(encoding="utf-8").splitlines()
+    historical = None if schema_only or document is not None else history_entry(report, owner_project_root)
+    if historical:
+        if not history_integrity or require_pass:
+            raise InvalidAssessment("historical assessment cannot supply current PASS")
+        verify_inputs = False
+    lines = (report.read_text(encoding="utf-8") if document is None else document).splitlines()
     if "QA verification contract: `full-qa-verification-v2`" not in "\n".join(lines):
         raise InvalidAssessment("missing V2 contract marker")
     metadata, sections = read_current(lines)
+    if historical and metadata["Assessed source HEAD"] != historical["assessed_head"]:
+        raise InvalidAssessment("historical baseline does not match registered assessment")
     verify_run_ids(lines, metadata["Run ID"])
     if metadata["Artifact kind"] not in KINDS:
         raise InvalidAssessment("invalid artifact kind")
@@ -480,6 +557,14 @@ def assess(report, workflow_root, workspace_root, project, target_root=None, exp
             if any(part.lower() in FORBIDDEN_PARTS for part in path.parts):
                 raise InvalidAssessment("sensitive example input path")
             continue
+        if not verify_inputs:
+            path = PurePosixPath(relative)
+            if not relative or "\\" in relative or path.is_absolute() or any(part in ("", ".", "..") for part in relative.split("/")):
+                raise InvalidAssessment("unsafe historical input path")
+            if any(part.lower() in FORBIDDEN_PARTS or part.lower().endswith((".pem", ".key")) for part in path.parts):
+                raise InvalidAssessment("sensitive historical input path")
+            digest_lines.append(key + "=" + checksum + "\n")
+            continue
         source = contained(allowed[root_kind].resolve(strict=True), relative)
         if source == report:
             raise InvalidAssessment("assessment cannot hash itself")
@@ -512,6 +597,8 @@ def assess(report, workflow_root, workspace_root, project, target_root=None, exp
         "worktree_digest": digest,
         "verdict": verdict,
         "input_count": len(seen),
+        "lifecycle": historical["state"] if historical else "current",
+        "current_gate_eligible": historical is None,
     }
 
 
@@ -526,10 +613,15 @@ def main():
     parser.add_argument("--expected-identity")
     parser.add_argument("--schema-only", action="store_true", help="Validate bundled EXAMPLE structure without claiming runtime hash evidence")
     parser.add_argument("--require-pass", action="store_true", help="Require current QA verdict PASS for status progression")
+    parser.add_argument("--history-integrity", action="store_true", help="Validate explicitly registered immutable history, never current progression")
+    parser.add_argument("--owner-approval", action="store_true", help="Validate explicit owner approval provenance")
     args = parser.parse_args()
     if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", args.project) and not (args.schema_only and args.project == "EXAMPLE"):
         parser.error("unsafe project slug")
     try:
+        if args.owner_approval:
+            print(json.dumps(owner_approval(args.report, args.workflow_root, args.workspace_root, args.project), sort_keys=True))
+            return 0
         result = assess(
             args.report,
             args.workflow_root,
@@ -540,8 +632,9 @@ def main():
             args.expected_identity,
             args.schema_only,
             args.require_pass,
+            history_integrity=args.history_integrity,
         )
-    except (InvalidAssessment, OSError, UnicodeError) as error:
+    except (ValueError, TypeError, KeyError, OSError, UnicodeError) as error:
         print("Invalid current QA assessment: " + str(error), file=sys.stderr)
         return 1
     print(json.dumps(result, sort_keys=True))

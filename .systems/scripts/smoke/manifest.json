@@ -686,6 +686,9 @@
   ],
   "reference_ids_sha256": "2a14d592429cbd73f021f622879346142d2fd0423d7b76073de4c8924accc0c4",
   "supplemental_test_ids": [
+    "execution-efficiency-behavioral",
+    "execution-efficiency-compound-boundary",
+    "execution-efficiency-missing-contract",
     "smoke-partition-manifest-valid",
     "smoke-partition-rejects-missing-id",
     "smoke-partition-rejects-duplicate-id",
@@ -2287,6 +2290,9 @@
     }
   ],
   "test_groups": {
+    "execution-efficiency-behavioral": "core",
+    "execution-efficiency-compound-boundary": "core",
+    "execution-efficiency-missing-contract": "core",
     "validation-timing-rejects-existing-output": "core",
     "validation-timing-rejects-escaping-output": "core",
     "validation-timing-rejects-tmpdir-override": "core",
@@ -2989,6 +2995,39 @@
     "smoke-diagnostic-contract-wrong-status-two": "core"
   },
   "tests": [
+    {
+      "id": "execution-efficiency-behavioral",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"execution-efficiency-behavioral\" python3 \"$(pwd -P)/.systems/scripts/tests/execution-efficiency.py\"",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
+      "mutation_id": "execution-efficiency-behavioral",
+      "expected_outcome": "exit 0; synthetic behavioral assertions pass"
+    },
+    {
+      "id": "execution-efficiency-compound-boundary",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_fail",
+      "command_contract": "run_must_fail \"execution-efficiency-compound-boundary\" --expect-literal 'Unsafe execution efficiency wording' bash .systems/scripts/check-execution-efficiency",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
+      "mutation_id": "execution-efficiency-compound-boundary",
+      "expected_outcome": "exit 1; unsafe enabling clause rejected"
+    },
+    {
+      "id": "execution-efficiency-missing-contract",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_fail",
+      "command_contract": "run_must_fail \"execution-efficiency-missing-contract\" --expect-literal 'Missing execution efficiency artifact' bash .systems/scripts/check-execution-efficiency",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
+      "mutation_id": "execution-efficiency-missing-contract",
+      "expected_outcome": "exit 1; missing core contract rejected"
+    },
     {
       "id": "validation-timing-rejects-existing-output",
       "group": "core",
@@ -10696,6 +10735,6 @@
     "workspace.sh": "1c36c1035dfaba35a3722536cea159ec6a39dc7c8e8e346da37a3e02a4091c4c",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
-    "core.sh": "abef95ee2a87a3f797e4b8979fb3416536d5a69bb79c9d65727567dd46cedf0a"
+    "core.sh": "8c906cc763765c740a59512167c06998c5a68c3921e7817715d05df78801fed9"
   }
 }

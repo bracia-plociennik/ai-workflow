@@ -1,5 +1,7 @@
 # **8. FINAL CHECK - Codex**
 
+Validation applicability: `.systems/ai/core/execution-efficiency.md` separates technical final verification from owner approval. Source-backed artifact checks require current full-source evidence and fresh runtime consumers. The quality producer leaves technical Phase 8 awaiting owner; it cannot grant final-owner-yes.
+
 ## Gate Conditions
 
 ### Input required

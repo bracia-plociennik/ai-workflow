@@ -1,0 +1,18 @@
+{
+  "risk": "<low|medium>",
+  "scope": "<approved scope>",
+  "dod": [
+    "<testable condition>"
+  ],
+  "consumers": [
+    "<known consumer>"
+  ],
+  "reversible": true,
+  "approval": "<owner decision path>",
+  "regressions": [
+    "<regression evidence>"
+  ],
+  "semantic_review": "<current review evidence>",
+  "impacts": [],
+  "capture": "<capture disposition>"
+}

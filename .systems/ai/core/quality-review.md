@@ -1,5 +1,7 @@
 # quality-review.md
 
+Efficiency evidence follows `.systems/ai/core/execution-efficiency.md`. Reused script results are not fresh semantic review. Audit authenticated bindings, applicable consumers, failure paths, immutable historical records and technical-versus-owner closure before a clean verdict.
+
 ## Purpose
 
 `global-quality-review-stance` is the default read-only/advisory review protocol for review, code review, final review, findings, blockers, and risk-check requests when the request is not clearly a formal workflow phase.

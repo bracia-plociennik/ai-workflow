@@ -1,5 +1,7 @@
 # operating-model.md
 
+Under `.systems/ai/core/execution-efficiency.md`, an eligible low/medium reversible bounded defect can use a compact work record in existing full-project or workflow-maintenance mode, only when not already bound to formal phases. It is not a medium-risk micro-task exemption. Accepted scope, DoD, consumers, regressions, semantic QA and capture remain required; excluded impacts reroute.
+
 ## Primary Objective
 
 Make repository work safe, verifiable, and resumable without turning documentation into theatre. The workflow exists to block bad changes, force evidence, and keep status unambiguous.

@@ -1,5 +1,7 @@
 # 6. FAZA DESTYLACJI - Codex
 
+Validation applicability: `.systems/ai/core/execution-efficiency.md` permits fresh owned artifact checks backed by an authenticated current full source receipt when distillation changes only project runtime. Broader capture/privacy changes need their own checks. Quality PASS is still required before formal distillation.
+
 ## Gate Conditions
 
 ### Input required

@@ -1,5 +1,7 @@
 # 7. CHECKPOINT PROJEKTU - Codex
 
+Validation applicability: `.systems/ai/core/execution-efficiency.md` permits source-backed artifact-only checkpoint closure after current full source verification. Fresh naming, QA, status and capture-state checks plus semantic/privacy review remain required; source/environment drift or broader namespaces invalidate this route.
+
 ## Gate Conditions
 
 ### Input required

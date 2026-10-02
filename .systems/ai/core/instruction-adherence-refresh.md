@@ -1,5 +1,7 @@
 # instruction-adherence-refresh.md
 
+`.systems/ai/core/execution-efficiency.md` permits fingerprint verification of previously opened unchanged sources during full refresh. Verify current repository/status, scope, approval and authority inputs; reread changed and stage-relevant sources. Resume/compaction still require full refresh, never automatic not-needed. A verified snapshot alone cannot report performed-full or grant writes.
+
 ## Purpose
 
 `Instruction Adherence Refresh` re-anchors workflow-governed work on current repository state and current AI Workflow contracts when a session boundary, execution boundary, or source conflict could make chat memory stale.

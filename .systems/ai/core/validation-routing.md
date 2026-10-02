@@ -1,5 +1,7 @@
 # validation-routing.md
 
+Use `.systems/ai/core/execution-efficiency.md` to classify a check plan into product, runtime-artifact, integration and environment checks. After fresh full source verification, artifact-only Phase 6/7/8 may use authenticated source evidence plus freshly executed owned artifact consumers. Unknown coverage, source/tool changes, CI, updater and release require their existing fresh checks; scripts never supply semantic PASS.
+
 ## Purpose
 
 Separate semantic and product QA from AI Workflow script validation. Workflow scripts are applicable supporting evidence, never the source of a quality verdict.

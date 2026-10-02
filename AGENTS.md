@@ -1,5 +1,7 @@
 # AGENTS.md
 
+Use `.systems/ai/core/execution-efficiency.md` when check reuse, artifact-only closure, historical QA, schema-driven quality records, bounded defects, refresh fingerprints or process timing are relevant. These capabilities preserve semantic QA, risk and approvals; missing installed capability uses the existing route.
+
 ## Purpose
 
 This file is the execution router for agents working in a repository that uses this workflow template.

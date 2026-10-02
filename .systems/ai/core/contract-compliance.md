@@ -1,5 +1,7 @@
 # contract-compliance.md
 
+`.systems/ai/core/execution-efficiency.md` permits source-backed artifact closure only after a current authenticated full source gate and fresh owned runtime checks. Commit readiness still checks actual staged scope, current semantic QA, capture and approvals; neither iteration reuse nor a receipt grants permission.
+
 ## Purpose
 
 For exact micro-exempt eligibility under delivery-constraints.md, report the reason and focused QA instead of creating a per-work capture record. This is not completed distillation and no is_distilled=true may be invented. Formal work, excluded boundaries, decisions and blockers use full compliance evidence.

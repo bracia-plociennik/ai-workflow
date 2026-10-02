@@ -87,7 +87,7 @@ def runtime_files(workspace, raw):
     for item in sorted(root.iterdir()):
         if item.is_symlink():
             raise ValueError("symlink runtime input")
-        if item.is_file() and item.suffix == ".md":
+        if item.is_file() and (item.suffix == ".md" or item.name == "quality-assessments.json"):
             relative(str(item.relative_to(workspace)))
             files.append(item)
         elif item.is_dir() and raw.startswith("projects/") and item.name in PROJECT_DIRS:

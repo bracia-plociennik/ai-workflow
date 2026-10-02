@@ -1,5 +1,7 @@
 # commands.md
 
+Execution efficiency commands follow `.systems/ai/core/execution-efficiency.md`. Use `prepare-quality-record --review <supplied-json> --workflow-root <root> --workspace-root <workspace> --project <slug>` for canonical QA publication. `check-execution-efficiency` checks contracts; `check-execution-efficiency --behavioral` tests the seven capabilities, also exercised by full smoke. Full source receipts and fresh artifact closure are explicit commands, not automatic skip flags.
+
 ## Explicit Scoped Evidence
 
 Generate a manifest read-only, then pass its unchanged path to scoped validation:

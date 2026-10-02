@@ -802,5 +802,14 @@ for diagnostic_case in short long missing-marker wrong-status-zero wrong-status-
   ' _ "$tmp" "$diagnostic_case"
 done
 
+run_must_pass "execution-efficiency-behavioral" python3 "$(pwd -P)/.systems/scripts/tests/execution-efficiency.py"
+cp "$tmp/.systems/ai/core/execution-efficiency.md" "$tmp/eff-contract.orig"
+printf '\nReuse must not replace semantic review, but reuse may replace semantic review.\n' >> "$tmp/.systems/ai/core/execution-efficiency.md"
+run_must_fail "execution-efficiency-compound-boundary" --expect-literal 'Unsafe execution efficiency wording' bash .systems/scripts/check-execution-efficiency
+mv "$tmp/eff-contract.orig" "$tmp/.systems/ai/core/execution-efficiency.md"
+mv "$tmp/.systems/ai/core/execution-efficiency.md" "$tmp/eff-contract.orig"
+run_must_fail "execution-efficiency-missing-contract" --expect-literal 'Missing execution efficiency artifact' bash .systems/scripts/check-execution-efficiency
+mv "$tmp/eff-contract.orig" "$tmp/.systems/ai/core/execution-efficiency.md"
+
 echo "Owned smoke group passed."
 smoke_suite_completed=1

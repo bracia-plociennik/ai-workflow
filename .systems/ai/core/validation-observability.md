@@ -1,5 +1,7 @@
 # Validation Observability And Smoke Partition
 
+Whole-process timing follows `.systems/ai/core/execution-efficiency.md`: observed monotonic intervals, union of overlaps, rerun reason and input fingerprints. Keep model/reading time unknown without telemetry and estimates separate; synthetic script savings cannot prove whole-agent speedup.
+
 ## Purpose
 
 Validation observability measures cost before changing validation coverage. It

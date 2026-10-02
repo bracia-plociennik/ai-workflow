@@ -1,0 +1,12 @@
+{
+  "contract": 1,
+  "capabilities": {
+    "source-bound-check-reuse": true,
+    "project-artifact-validation": true,
+    "bounded-defect": true,
+    "historical-qa-lifecycle": true,
+    "quality-record-producer": true,
+    "selective-refresh": true,
+    "process-timing": true
+  }
+}

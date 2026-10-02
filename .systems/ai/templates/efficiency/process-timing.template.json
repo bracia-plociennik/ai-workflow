@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "clock": "monotonic",
+  "intervals": [],
+  "unknown": [
+    "discovery-refresh",
+    "implementation",
+    "review",
+    "product-tests",
+    "artifact-work",
+    "artifact-rework",
+    "owner-waiting",
+    "publication"
+  ]
+}

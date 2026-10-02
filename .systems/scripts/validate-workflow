@@ -12,6 +12,13 @@ explain=0
 timing_output=""
 progress="summary"
 timeout_seconds="1200"
+execution_plan=""
+evidence_output=""
+receipt_key_file=""
+reuse_record=""
+source_receipt=""
+source_start=""
+executed_checks=""
 
 validation_started=0
 completion_emitted=0
@@ -28,11 +35,27 @@ Profiles:
   full      Complete validation, including check-validator-smoke-tests. Explicit heavy validator.
   scoped    Explicit --checks plus declared dependency closure. Coverage requires a current manifest.
   fast      Cheap sanity checks. Iteration only.
+
+Evidence:
+  scoped --execution-plan path --evidence-output path --receipt-key-file path [--reuse-record path]
+  full --source-receipt path --receipt-key-file path
+  Evidence outputs must be new files in ignored workspace or system temporary storage.
 EOF
 }
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
+    --execution-plan|--evidence-output|--receipt-key-file|--reuse-record|--source-receipt)
+      [[ "$#" -ge 2 ]] || { echo "Missing evidence argument" >&2; exit 1; }
+      case "$1" in
+        --execution-plan) execution_plan="$2" ;;
+        --evidence-output) evidence_output="$2" ;;
+        --receipt-key-file) receipt_key_file="$2" ;;
+        --reuse-record) reuse_record="$2" ;;
+        --source-receipt) source_receipt="$2" ;;
+      esac
+      shift 2
+      ;;
     --profile)
       if [[ "$#" -lt 2 ]]; then
         echo "Missing value for --profile"
@@ -135,7 +158,7 @@ if [[ -n "$checks" && "$profile" != "scoped" ]]; then
   exit 1
 fi
 
-if [[ "$profile" == "scoped" && -z "$checks" ]]; then
+if [[ "$profile" == "scoped" && -z "$checks" && -z "$execution_plan" ]]; then
   echo "--profile scoped requires --checks <check-a,check-b>"
   exit 1
 fi
@@ -145,6 +168,26 @@ if [[ -n "$scope_manifest" && "$profile" != "scoped" ]]; then
   exit 1
 fi
 source "$(dirname "$0")/resolve-workflow-env"
+
+if [[ -n "$execution_plan" ]]; then
+  [[ "$profile" == scoped && -z "$checks$scope_manifest$source_receipt$timing_output$project" && -n "$evidence_output" && -n "$receipt_key_file" ]] || {
+    echo "Execution plan requires scoped iteration, output/key and no other scope" >&2; exit 1;
+  }
+  reuse_args=()
+  [[ -z "$reuse_record" ]] || reuse_args+=(--reuse "$reuse_record")
+fi
+[[ -n "$execution_plan" || -z "$reuse_record$evidence_output" ]] || { echo "Reuse requires an execution plan" >&2; exit 1; }
+if [[ -n "$source_receipt" ]]; then
+  [[ "$profile" == full && -n "$receipt_key_file" && "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != 1 ]] || {
+    echo "Source receipt requires fresh full validation and key" >&2; exit 1;
+  }
+  source_start="$(mktemp)"
+  rm "$source_start"
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/execution-efficiency.py" preflight --output "$source_receipt"
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/execution-efficiency.py" source-start --output "$source_start" --key-file "$receipt_key_file"
+elif [[ -n "$receipt_key_file" && -z "$execution_plan" ]]; then
+  echo "Receipt key requires an execution plan or source receipt" >&2; exit 1
+fi
 
 if ! command -v rg >/dev/null 2>&1; then
   echo "Missing required command: rg"
@@ -186,6 +229,15 @@ finish_validation() {
       result="fail"
     fi
   fi
+  if [[ -n "$source_start" ]]; then
+    if ! python3 .systems/scripts/lib/execution-efficiency.py source-finish --start "$source_start" --output "$source_receipt" --key-file "$receipt_key_file" --status "$status" --checks "$executed_checks"; then
+      if [[ "$status" -eq 0 ]]; then
+        status=1
+        result="fail"
+      fi
+    fi
+    rm -f "$source_start"
+  fi
   if [[ "$validation_started" -eq 1 && "$completion_emitted" -eq 0 ]]; then
     completion_emitted=1
     printf 'AI_WORKFLOW_VALIDATE_COMPLETE profile=%s result=%s exit_code=%s duration_seconds=%s stage=%s check=%s\n' \
@@ -199,6 +251,20 @@ validation_started_at=$SECONDS
 trap finish_validation EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
+
+if [[ -n "$execution_plan" ]]; then
+  current_stage="iteration-plan"
+  current_check="execution-efficiency"
+  [[ "$explain" != 1 ]] || echo 'Execution plan: iteration-only; coverage unverified; final validation evidence: no'
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/execution-efficiency.py" execute --plan "$execution_plan" --output "$evidence_output" --key-file "$receipt_key_file" --progress "$progress" ${reuse_args[@]+"${reuse_args[@]}"}
+  exit 0
+fi
+
+if [[ "$profile" == full && -z "$source_start" ]]; then
+  current_stage="preflight"
+  current_check="execution-capabilities"
+  python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/execution-efficiency.py" preflight
+fi
 
 timing_helper=".systems/scripts/lib/validation-timing.py"
 timing_run_id="$(date -u +%Y%m%dT%H%M%S)-$$"
@@ -247,6 +313,9 @@ run_cmd() {
   fi
   status=$?
   set -e
+  if [[ "$status" -eq 0 ]]; then
+    executed_checks="${executed_checks:+$executed_checks,}$(basename "$1")"
+  fi
   record_timing "${scope_current_id:-$(basename "$1")}" "$started_ns" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
   if [[ "$progress" != "quiet" ]]; then
     printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=%s duration_seconds=%s\n' \
@@ -320,6 +389,7 @@ run_fast_checks() {
 }
 
 run_core_validators() {
+  run_cmd .systems/scripts/check-execution-efficiency
   run_cmd .systems/scripts/check-required-artifacts
   run_cmd .systems/scripts/check-prompt-composition
   run_cmd .systems/scripts/check-branch-policy
