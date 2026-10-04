@@ -114,6 +114,27 @@ def declared_report_results(lines):
     return results
 
 
+def wire_version(lines):
+    section, versions = None, []
+    for _, line in outside_fences(lines):
+        if line.startswith('## '):
+            section = line[3:]
+        declaration = re.fullmatch(r'\s*-\s*QA verification contract\s*:\s*(.*?)\s*', line, re.I)
+        if declaration:
+            match = re.fullmatch(r'\x60full-qa-verification-v([0-9]+)\x60', declaration.group(1))
+            if not match or section not in {None, 'Metadata'}:
+                raise InvalidAssessment('malformed or misplaced QA wire declaration')
+            version = int(match.group(1))
+            if section is None and version != 2:
+                raise InvalidAssessment('nonlegacy QA wire requires Metadata')
+            versions.append(version)
+    if not versions:
+        return 2  # A legacy marker is still required by the ordinary V2 parser.
+    if len(versions) != 1 or versions[0] not in {1, 2, 3}:
+        raise InvalidAssessment('exactly one metadata QA wire version is required')
+    return versions[0]
+
+
 def read_current(lines):
     start, end = current_section(lines)
     subsection_headings = {
@@ -476,7 +497,7 @@ def history_entry(report, owner_project_root):
     return selected
 
 
-def assess(report, workflow_root, workspace_root, project, target_root=None, expected_kind=None, expected_identity=None, schema_only=False, require_pass=False, document=None, verify_inputs=True, history_integrity=False):
+def assess(report, workflow_root, workspace_root, project, target_root=None, expected_kind=None, expected_identity=None, schema_only=False, require_pass=False, document=None, verify_inputs=True, history_integrity=False, _v3_normalized=False):
     report = report.resolve(strict=document is None)
     workflow_root = workflow_root.resolve(strict=True)
     workspace_root = workspace_root.resolve(strict=not schema_only)
@@ -495,6 +516,16 @@ def assess(report, workflow_root, workspace_root, project, target_root=None, exp
             raise InvalidAssessment("historical assessment cannot supply current PASS")
         verify_inputs = False
     lines = (report.read_text(encoding="utf-8") if document is None else document).splitlines()
+    if not _v3_normalized and wire_version(lines) == 3:
+        if historical:
+            raise InvalidAssessment('historical V3 cannot supply current eligibility')
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('qa_binding', Path(__file__).with_name('qa-commit-binding.py'))
+        binding = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(binding)
+        return binding.assess_v3(report, workflow_root, workspace_root, project, target_root,
+                                 expected_kind, expected_identity, schema_only, require_pass,
+                                 document, verify_inputs, False, sys.modules[__name__] if __name__ in sys.modules else binding.load('qa-evidence'))
     if "QA verification contract: `full-qa-verification-v2`" not in "\n".join(lines):
         raise InvalidAssessment("missing V2 contract marker")
     metadata, sections = read_current(lines)

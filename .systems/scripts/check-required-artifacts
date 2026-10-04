@@ -2,6 +2,19 @@
 set -euo pipefail
 
 required=(
+  ".systems/ai/core/parallel-compatibility.md"
+  ".systems/ai/templates/orchestration/compatibility.template.json"
+  ".systems/scripts/lib/parallel-compatibility.py"
+  ".systems/scripts/inspect-parallel-compatibility"
+  ".systems/scripts/tests/parallel-compatibility.py"
+  ".systems/ai/core/phase-commit-policy.md"
+  ".systems/ai/capabilities/phase-commit-policy-v1.json"
+  ".systems/scripts/check-phase-commit-policy"
+  ".systems/scripts/verify-qa-commit-binding"
+  ".systems/scripts/lib/qa-commit-binding.py"
+  ".systems/scripts/tests/phase-commit-policy.py"
+  ".systems/ai/core/parallel-task-orchestration.md"
+  ".systems/scripts/check-parallel-task-orchestration"
   ".systems/ai/core/execution-efficiency.md"
   ".systems/ai/capabilities/execution-efficiency-v1.json"
   ".systems/scripts/check-execution-efficiency"

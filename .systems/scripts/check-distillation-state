@@ -48,6 +48,8 @@ require_ref() {
 }
 
 contract=.systems/ai/core/distillation-state.md
+require_ref .systems/scripts/lib/capture-state.py "load\('capture-record'\)" 'shared canonical capture semantics'
+require_ref .systems/scripts/lib/validation-scope.py 'load\("capture-record"\).collection' 'shared scoped capture semantics'
 template=.systems/ai/templates/capture/distillation-state.template.md
 require_ref "$contract" '^# distillation-state\.md$' 'core contract'
 require_ref "$contract" '`is_distilled` is compatibility output only' 'derived boolean rule'

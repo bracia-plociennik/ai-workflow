@@ -1,4 +1,6 @@
 # HUMANS.md
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
 
 Execution efficiency uses `.systems/ai/core/execution-efficiency.md`: plan applicable checks once, preserve fresh semantic QA, and use authenticated unchanged-source evidence only within its documented boundaries. Technical Phase 8 never implies final-owner-yes.
 
@@ -1546,7 +1548,7 @@ Jeśli status mówi, że następna faza to `phase-4-implementation`, ale spec ni
 
 Formalna polityka jest w `.systems/ai/core/parallel-work-policy.md`.
 
-Model v1 jest status-only:
+Koordynacja niezaleznych watkow pozostaje status-only:
 
 - jeden main chat koordynuje target repo, repo status, konflikty, decyzje ownera, repo memory i cross-project write-sety;
 - osobny project chat pracuje tylko w jednym `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/` i na jednym zatwierdzonym tasku, paczce albo fazie naraz;
@@ -1564,6 +1566,22 @@ Zatrzymaj równoległą pracę i wróć do main chat, jeśli:
 - status, memory, checkpoint albo evidence zaczynają sobie przeczyć.
 
 ## Jak Pracować Z Codexem
+
+### Delegowane Jednostki Jednego Runu
+
+`.systems/ai/core/parallel-task-orchestration.md` rozszerza prace o jednostki
+istniejacego taska/slice, bez drugiego implementation-range. Jeden execution owner
+dobiera liczbe subagentow dynamicznie z gotowych zaleznosci, rzeczywistej wolnej
+pojemnosci, zasobow i miejsc checkpointu. Nie ma stalego limitu protokolu.
+Prompt nie jest sandboxem; worktree nie izoluje baz, portow ani uslug.
+Submitted nie oznacza accepted, a integracja nie oznacza task PASS. Po odebraniu
+i liniowej integracji wymagane jest wspolne QA oraz normalne phase6/7.
+
+V1 udostepnia protokol i offline testy, nie zweryfikowany natywny backend.
+`report-coordinator-status --project <slug> --schema-version 2` jawnie pokazuje
+ten stan; domyslna schema1 pozostaje bez zmian. Niezweryfikowana izolacja lub
+pojemnosc oznacza zwykla prace liniowa, bez dispatchu subagenta. Brak obietnicy
+przyspieszenia modelu; native verification wymaga osobnego zatwierdzonego testu.
 
 Najbezpieczniej wydawać polecenia fazami:
 

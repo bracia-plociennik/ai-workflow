@@ -1,6 +1,14 @@
 {
   "schema_version": 1,
   "checks": {
+    "check-phase-commit-policy": {
+      "dependencies": [],
+      "scope": "framework"
+    },
+    "check-parallel-task-orchestration": {
+      "dependencies": [],
+      "scope": "framework"
+    },
     "check-execution-efficiency": {
       "dependencies": [],
       "scope": "framework"

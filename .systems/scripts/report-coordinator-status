@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 source "$(dirname "$0")/resolve-workflow-env"
+# Schema 1 remains the default; schema 2 is an explicit, read-only protocol query.
 exec python3 "$AI_WORKFLOW_HOME/.systems/scripts/lib/coordinator-status.py" \
   --workflow "$AI_WORKFLOW_HOME" --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --repo "$TARGET_REPO_ROOT" "$@"

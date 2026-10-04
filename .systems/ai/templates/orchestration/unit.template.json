@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "unit-a",
+  "task_id": "TASK-001",
+  "package_id": null,
+  "slice_id": "slice-a",
+  "goal": "Bounded approved change",
+  "dod": [
+    "Observable assertion"
+  ],
+  "approval_reference": "decisions/implementation-approval.md",
+  "priority": 0,
+  "dependencies": [],
+  "expected_inputs": {},
+  "read_set": [],
+  "write_set": [
+    "src/a.py"
+  ],
+  "resources": [],
+  "state": "planned",
+  "accepted_output": null,
+  "execution": null
+}

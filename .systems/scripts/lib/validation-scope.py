@@ -78,6 +78,28 @@ def owned_root(workspace, raw):
         raise ValueError("foreign repository in owned runtime root")
     return path
 
+
+def orchestration_runtime_files(root):
+    # Exact active records only; never recursively ingest worker trees or logs.
+    spec = __import__("importlib.util", fromlist=["util"]).spec_from_file_location(
+        "owned_parallel", Path(__file__).with_name("parallel-orchestration.py"))
+    module = __import__("importlib.util", fromlist=["util"]).module_from_spec(spec)
+    spec.loader.exec_module(module)
+    runs = root / "runs"
+    if root.is_symlink() or not root.is_dir() or not runs.is_dir() or runs.is_symlink():
+        raise ValueError("invalid orchestration runtime root")
+    if set(p.name for p in root.iterdir()) != {"runs"}:
+        raise ValueError("unknown orchestration runtime namespace")
+    result = []
+    for run in sorted(runs.iterdir()):
+        manifest, records = module.inspect_run(run)
+        if (run / ".update.lock").exists():
+            raise ValueError("active/stale orchestration lock prevents fresh inventory")
+        result.append(run / "manifest.json")
+        result.extend(run / name for name in sorted(records))
+    return result
+
+
 def runtime_files(workspace, raw):
     root = owned_root(workspace, raw)
     legacy = workspace / "repo/core/legacy-qa-evidence-v1.md"
@@ -90,6 +112,8 @@ def runtime_files(workspace, raw):
         if item.is_file() and (item.suffix == ".md" or item.name == "quality-assessments.json"):
             relative(str(item.relative_to(workspace)))
             files.append(item)
+        elif item.is_dir() and raw.startswith("projects/") and item.name == "orchestration":
+            files.extend(orchestration_runtime_files(item))
         elif item.is_dir() and raw.startswith("projects/") and item.name in PROJECT_DIRS:
             def unreadable(_):
                 raise ValueError("unreadable runtime directory")
@@ -303,6 +327,9 @@ def owned_runtime_input(repo, workspace, roots, row):
             return True
         if raw.startswith("projects/") and len(parts) > 1 and parts[0] in PROJECT_DIRS:
             return True
+        if raw.startswith("projects/") and len(parts) > 1 and parts[0] == "orchestration":
+            active = orchestration_runtime_files(workspace / raw / "orchestration")
+            return path in active
     return False
 
 def plan(args):
@@ -354,53 +381,26 @@ def plan(args):
             "registry_sha256": digest(args.registry), "registry": str(args.registry.resolve()), "workflow": str(workflow)}
 
 def validate_distillation(workspace, raw, workflow, repo):
+    # Selection remains scoped; share semantics, never broaden the manifest population.
+    import importlib.util
+    scope = sys.modules.get(__name__)
+    if scope is None:
+        from types import SimpleNamespace
+        scope = SimpleNamespace(contained=contained, git=git)
+    def load(name):
+        spec = importlib.util.spec_from_file_location(name.replace("-", "_"), Path(__file__).with_name(name + ".py"))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
     root = owned_root(workspace, raw)
     files = [p for p in runtime_files(workspace, raw) if p.parent == root / "capture-state" and p.suffix == ".md"]
-    required = {"Work ID", "Work mode", "Project/repo scope", "Source artifact", "Quality artifact", "State", "Distillation artifact", "Last reminder", "Owner disposition", "Privacy/scope check", "Residual risk"}
-    for file in files:
-        values = {}
-        text = file.read_text()
-        for key, value in re.findall(r"^- ([^:\n]+):\s*([^\n]+)$", text, re.M):
-            key, value = key.strip("` "), value.strip("` ")
-            if key in values:
-                raise ValueError("duplicate distillation field")
-            values[key] = value
-        if not required <= values.keys() or any(not values[key] or "<" in values[key] for key in required):
-            raise ValueError("incomplete distillation state")
-        state = values["State"]
-        if state not in {"pending-quality", "ready", "completed", "deferred", "owner-skipped", "blocked", "not-applicable"}:
-            raise ValueError("invalid distillation state")
-        if values.get("is_distilled` derived value", values.get("is_distilled derived value")) != ("true" if state == "completed" else "false"):
-            raise ValueError("distillation derived boolean mismatch")
-        if state in {"ready", "completed"} and not re.fullmatch(r"pass(?: for [^<>\n]+)?", values["Privacy/scope check"]):
-            raise ValueError("distillation privacy check is not pass")
-        for key in ("Source artifact", "Quality artifact", "Distillation artifact"):
-            values[key] = values[key].split(";", 1)[0].strip()
-            if values[key] != "none":
-                contained(root, values[key])
-        if state in {"ready", "completed"}:
-            if values["Quality artifact"] == "none":
-                raise ValueError("distillation lacks quality evidence")
-            if not raw.startswith("projects/"):
-                raise ValueError("formal distillation requires a project scope")
-            qa = workflow / ".systems/scripts/lib/qa-evidence.py"
-            checked = subprocess.run([sys.executable, str(qa), str(root / values["Quality artifact"]),
-                            "--workflow-root", str(workflow), "--workspace-root", str(workspace),
-                            "--project", raw.split("/")[1], "--approved-target-root", str(repo),
-                            "--expected-kind", "implementation-quality",
-                            "--expected-identity", raw.split("/")[1] + ":" + values["Work ID"],
-                            "--require-pass"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if checked.returncode:
-                raise ValueError("distillation current QA evidence invalid")
-        if state == "completed" and values["Distillation artifact"] == "none":
-            raise ValueError("completed distillation lacks artifact")
-        if state == "completed":
-            distilled = contained(root, values["Distillation artifact"]).read_text()
-            ids = re.findall(r"^- Task/package ID:\s*([^\n]+)$", distilled, re.M)
-            if ids != [values["Work ID"]]:
-                raise ValueError("distillation artifact identity mismatch")
-            if not re.search(r"^## Distillation Gate\s*$", distilled, re.M) or not re.search(r"^- Ready for checkpoint processing:\s*yes(?:[;,].*)?$", distilled, re.M):
-                raise ValueError("distillation artifact lacks accepted gate evidence")
+    project = raw.split("/")[1] if raw.startswith("projects/") else None
+    result = load("capture-record").collection(files, workspace, root, workflow, repo, project,
+                                              scope, load("qa-evidence"))
+    if result["invalid"]:
+        raise ValueError("invalid distillation collection: " + "; ".join(
+            row["path"] + ": " + row["reason"] for row in result["invalid"]))
+    return result
 
 def main():
     parser = argparse.ArgumentParser()

@@ -209,7 +209,7 @@ validate_evidence_file() {
     return
   fi
 
-  if has_v2_contract "$file"; then
+  if has_v2_contract "$file" || rg -qF 'QA verification contract: `full-qa-verification-v3`' "$file"; then
     local owning_project assessment
     if [[ "$file" == "$repo_root"/.systems/ai/examples/projects/EXAMPLE/quality/*.md ]]; then
       if ! assessment="$(python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project EXAMPLE --schema-only 2>&1)"; then

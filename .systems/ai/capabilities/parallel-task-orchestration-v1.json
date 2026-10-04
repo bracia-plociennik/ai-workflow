@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "feature": "parallel-task-orchestration-v1",
+  "protocol_version": 1,
+  "manifest_schema": 1,
+  "unit_schema": 1,
+  "result_schema": 1,
+  "installed_modes": ["serial", "parallel-read-only", "parallel-implementation"],
+  "installed_sources_sha256": {
+    ".systems/scripts/lib/parallel-orchestration.py": "1cc2602e2bc8840f02fa155807a2f266c6da1628ad4e1388ae1b25e3648db911",
+    ".systems/scripts/plan-parallel-work": "55a0b476fef10e7c6b7d0b97a73a8938ecd9897289037ae8dfbfca61f43ad5e1",
+    ".systems/scripts/manage-parallel-run": "03f4c895af08dd4235eecd85271c4fb1088a542ebf4a5de6733ac9186862edd2",
+    ".systems/ai/templates/orchestration/run.template.json": "599c32998dd70bb8757c902f3e30b97ee75766424ccd7a5e150bc79d111406c5",
+    ".systems/ai/templates/orchestration/unit.template.json": "11200b0f6124c13a8532bb4e0c9ce149335edbedb5268a219afe84f5091b5b22",
+    ".systems/ai/templates/orchestration/result.template.json": "85f5d6ea5e5a9aa585372e4cbcc914abdea542111f764ffa83f14017f9d4d91b"
+  },
+  "native_backend": {
+    "verification": "unverified",
+    "isolation": "unknown",
+    "capacity": null,
+    "tested_backends": []
+  },
+  "fallback": "serial",
+  "execution_authorized": false
+}

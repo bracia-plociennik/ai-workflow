@@ -56,7 +56,10 @@ def render(record, workflow, workspace, project):
         qa.owner_approval(output, workflow, workspace, project, document=body)
         return output, body
     required = {"schema", "kind", "task", "run_id", "verdict", "inputs", "sections", "date"}
-    if set(record) != required or record["schema"] != 1:
+    bound_record = record.get('schema') == 2
+    if bound_record:
+        required.add('binding')
+    if set(record) != required or type(record["schema"]) is not int or record["schema"] not in {1, 2}:
         raise ValueError("invalid reviewer record")
     kind = record["kind"]
     if kind not in qa.KINDS or record["verdict"] not in {"PASS", "FAIL"}:
@@ -116,6 +119,20 @@ def render(record, workflow, workspace, project):
         body += f"| {root} | {path} | {checksum} |\n"
     for heading, content in sections.items():
         body += f"\n### {heading}\n{content.rstrip()}\n"
+    if bound_record:
+        binding = record['binding']
+        if not isinstance(binding, dict) or set(binding) != {'snapshot', 'receipt'} or kind != 'implementation-quality':
+            raise ValueError('invalid bound reviewer record')
+        snapshot = qa.contained(owner, binding['snapshot'])
+        receipt = qa.contained(owner, binding['receipt'])
+        body = body.replace('`full-qa-verification-v2`', '`full-qa-verification-v3`')
+        body = body.replace('- Artifact kind: implementation-quality', '- Artifact kind: bound:implementation-quality')
+        fields = ('- Binding capability: phase-commit-policy-v1\n'
+                  f"- Source snapshot: {binding['snapshot']}\n"
+                  f"- Source snapshot SHA-256: {eff.file_hash(snapshot)}\n"
+                  f"- Full source receipt: {binding['receipt']}\n"
+                  f"- Full source receipt SHA-256: {eff.file_hash(receipt)}\n")
+        body = body.replace('\n### Input Artifacts', '\n' + fields + '\n### Input Artifacts', 1)
     qa.assess(output, workflow, workspace, project, document=body)
     return output, body
 
@@ -143,8 +160,13 @@ def main():
     parser.add_argument("--workspace-root", type=Path, required=True)
     parser.add_argument("--project", required=True)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--binding-key-file", type=Path, help="Explicit owner-only HMAC key for opt-in V3 evidence")
     args = parser.parse_args()
     try:
+        if args.binding_key_file:
+            eff.key_bytes(args.binding_key_file)
+            if os.environ.get('AI_WORKFLOW_QA_BINDING_KEY_FILE') != str(eff.canonical_path(args.binding_key_file)):
+                raise ValueError('declare binding key transport before snapshot/receipt')
         workflow = eff.canonical_path(args.workflow_root).resolve(strict=True)
         workspace = eff.canonical_path(args.workspace_root).resolve(strict=True)
         owner = qa.contained(workspace, "projects/" + args.project + "/context.md").parent

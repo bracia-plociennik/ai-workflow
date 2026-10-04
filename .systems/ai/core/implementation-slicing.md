@@ -162,6 +162,11 @@ Compact mode must still end with evidence and quality closure unless the owner e
 
 ## Formal Phase-4 Use
 
+Within one coordinator-owned run, independent units of approved slices may use
+`.systems/ai/core/parallel-task-orchestration.md`. Sequential execution remains
+fallback. Units do not create phase chains; integrate serially and perform common
+QA. Delegation does not replace the slice plan, accepted spec or permissions.
+
 For formal `phase-4-implementation`:
 
 - derive slices from the accepted spec and Spec QA evidence;

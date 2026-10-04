@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "run_id": "run-001",
+  "project": "example-project",
+  "repository_root": "/replace-with-verified-repository-root",
+  "execution_owner": "ai-workflow",
+  "coordinator_id": "coordinator-001",
+  "revision": 0,
+  "source_snapshot": "0000000000000000000000000000000000000000000000000000000000000000",
+  "capacity": {
+    "verified": false,
+    "total": null,
+    "active_workers": 0
+  },
+  "isolation_verified": false,
+  "checkpoint": {
+    "known": false,
+    "completed_since_checkpoint": 0,
+    "active_tasks": []
+  },
+  "reservations": [],
+  "lifecycle": null,
+  "units": [
+    {
+      "schema": 1,
+      "id": "unit-a",
+      "task_id": "TASK-001",
+      "package_id": null,
+      "slice_id": "slice-a",
+      "goal": "Bounded approved change",
+      "dod": [
+        "Observable assertion"
+      ],
+      "approval_reference": "decisions/implementation-approval.md",
+      "priority": 0,
+      "dependencies": [],
+      "expected_inputs": {},
+      "read_set": [],
+      "write_set": [
+        "src/a.py"
+      ],
+      "resources": [],
+      "state": "planned",
+      "accepted_output": null
+    }
+  ]
+}

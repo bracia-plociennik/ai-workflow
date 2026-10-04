@@ -1,4 +1,13 @@
 # workflow.md
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
+
+## Delegated Execution Within A Phase
+
+`.systems/ai/core/parallel-task-orchestration.md` permits independent units inside
+one approved run with dynamic observed allocation. It creates no new phase and
+never bypasses QA, owner gates, distillation/checkpoint cadence or Phase 8 triggers.
+Task Packaging stays optional and owner-requested.
 
 Use `.systems/ai/core/execution-efficiency.md` for artifact-only Phase 6/7/8 checks after authenticated fresh full source verification. Formal routes, owner approvals and semantic quality remain unchanged. Historical QA is integrity-only and cannot advance the current workflow.
 

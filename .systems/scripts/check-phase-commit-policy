@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd "$(dirname "$0")/../.." && pwd -P)"
+cd "$root"
+source "$root/.systems/scripts/lib/policy-boundaries.sh"
+fail=0
+contract=.systems/ai/core/phase-commit-policy.md
+for phrase in 'planning-range end' 'phase-6-distillation' 'phase-7-checkpoint' \
+  'phase-8-final-check' 'final-owner-yes' 'not retroactive' 'no-commit' \
+  'Ignored-only/no-op' 'cross-system impact' 'source_equivalence_verified' \
+  'full-qa-verification-v3' 'Capture schema3' 'immutable' 'environment'; do
+  if ! rg -qiF "$phrase" "$contract"; then
+    echo "Phase commit contract missing: $phrase"
+    fail=1
+  fi
+done
+for source in AGENTS.md HUMANS.md README.md \
+  .systems/ai/core/{autopilot,permissions,contract-compliance,execution-efficiency,distillation-state,command-routing,commands,workflow,parallel-task-orchestration,repository-modes}.md \
+  .systems/ai/workflow/{phase-6-distillation,phase-7-checkpoint,phase-8-final-check}.md; do
+  if ! rg -qF 'phase-commit-policy.md' "$source"; then
+    echo "Phase commit integration missing: $source"
+    fail=1
+  fi
+done
+for template in .systems/ai/templates/workflow/{phase-6-distillation,phase-7-checkpoint,phase-8-final-check}.template.md \
+  .systems/ai/templates/autopilot/{readiness,state}.template.md; do
+  for field in 'Phase Commit Boundary' 'Commit disposition' 'Approved tracked scope' \
+    'Current QA source binding' 'Fresh artifact closure' 'Push authority'; do
+    if ! rg -qF "$field" "$template"; then
+      echo "Phase commit template missing: $template: $field"
+      fail=1
+    fi
+  done
+done
+for file in .systems/ai/capabilities/phase-commit-policy-v1.json \
+  .systems/scripts/lib/qa-commit-binding.py .systems/scripts/verify-qa-commit-binding \
+  .systems/scripts/tests/phase-commit-policy.py; do
+  [[ -f "$file" && ! -L "$file" ]] || { echo "Phase commit artifact missing: $file"; fail=1; }
+done
+policy_reject_unsafe_pattern \
+  '(phase commit|commit policy|snapshot|binding|source equivalence)[^.\n]{0,80}\b(may|can|allows?)\b[^.\n]{0,80}\b(skip|bypass|grant|authorize|replace)\b[^.\n]{0,80}\b(QA|approval|permissions|push|final-owner-yes|DoD)\b' \
+  'Unsafe phase commit authority wording' \
+  "$contract" AGENTS.md .systems/ai/core/permissions.md .systems/ai/core/autopilot.md
+exit "$fail"

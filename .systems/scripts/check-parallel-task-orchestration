@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+fail=0
+contract=".systems/ai/core/parallel-task-orchestration.md"
+require() {
+  local path="$1" value="$2"
+  if [[ ! -f "$path" ]] || ! rg -qF -- "$value" "$path"; then
+    echo "Missing parallel orchestration contract: $path: $value"
+    fail=1
+  fi
+}
+for term in \
+  'One execution owner' 'AI Workflow or AI System' 'Dynamic subagent count' \
+  'verified free backend capacity' 'Unknown capacity' \
+  'Task Packaging remains optional' 'must not recursively' \
+  'Submitted is not accepted' 'accepted immutable snapshot' \
+  'Common integrated QA is mandatory' 'Checkpoint reservation precedes dispatch' \
+  'distinct active parent tasks' 'Cancellation requested is not observed termination' \
+  'expected revision' 'exclusive local' 'Unknown liveness retains reservations' \
+  'execution_authorized: false' 'at least three paired' 'owner-triggered'
+do
+  require "$contract" "$term"
+done
+consumers=(
+  .systems/ai/core/parallel-compatibility.md
+  "$contract"
+  .systems/ai/core/parallel-work-policy.md .systems/ai/core/autopilot.md
+  .systems/ai/core/implementation-slicing.md .systems/ai/core/command-routing.md
+  .systems/ai/core/operating-model.md .systems/ai/core/workflow.md
+  .systems/ai/workflow/phase-2-project-plan.md
+  .systems/ai/templates/autopilot/readiness.template.md
+  .systems/ai/templates/autopilot/state.template.md
+)
+for path in \
+  .systems/ai/core/parallel-work-policy.md .systems/ai/core/autopilot.md \
+  .systems/ai/core/implementation-slicing.md .systems/ai/core/command-routing.md \
+  .systems/ai/core/operating-model.md .systems/ai/core/workflow.md \
+  .systems/ai/workflow/phase-2-project-plan.md \
+  .systems/ai/templates/autopilot/readiness.template.md \
+  .systems/ai/templates/autopilot/state.template.md
+do
+  require "$path" 'parallel-task-orchestration.md'
+done
+for path in .systems/scripts/validate-workflow .systems/scripts/check-required-artifacts \
+  .systems/scripts/lib/validation-checks.json .systems/scripts/check-review-completeness-gate \
+  .systems/scripts/check-validator-smoke-tests .systems/scripts/smoke/core.sh
+do
+  require "$path" 'check-parallel-task-orchestration'
+done
+policy_reject_unsafe_pattern \
+  '(delegation|workers?|subagents?).*?(may|can|will|automatically)[[:space:]]+(freely[[:space:]]+|always[[:space:]]+)?(grant.*?permission|bypass.*?(approval|QA|quality|checkpoint|risk|permission)|skip.*?(QA|quality|checkpoint|distillation|phase[[:space:]]*[5678])|push automatically|automatically push|create final-owner-yes|expand.*?scope|change.*?risk|delegate.*?recursively|run.*?phase[[:space:]]*8|approve.*?implementation)' \
+  'Unsafe parallel orchestration wording' "${consumers[@]}"
+policy_reject_unsafe_pattern \
+  '(submitted|green unit tests|worker.*?(done|completion)).*?(means|equals|suffices for|is sufficient for|may count as).*?(accepted|PASS)|(two|multiple).*?implementation-range.*?(may|can|will)[[:space:]]+run.*?same project|unknown capacity.*?(means|allows|permits)[[:space:]]+unlimited' \
+  'Unsafe parallel orchestration acceptance' "${consumers[@]}"
+require '.systems/ai/core/autopilot.md' 'Exception for explicitly independent approved parent tasks'
+require '.systems/ai/core/autopilot.md' 'A real dependency on that task remains blocked'
+if [[ -e .systems/ai/capabilities/parallel-task-orchestration-v1.json || -L .systems/ai/capabilities/parallel-task-orchestration-v1.json ]]; then
+  if ! python3 - <<'PY'
+import importlib.util
+from pathlib import Path
+path = Path('.systems/scripts/lib/coordinator-status.py')
+spec = importlib.util.spec_from_file_location('coordinator', path)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+if module.parallel_capability(Path.cwd())['state'] != 'installed':
+    raise SystemExit('Invalid or unsupported parallel capability')
+PY
+  then fail=1; fi
+  require .systems/ai/core/runtime-integrity.md 'Installed modes are protocol vocabulary'
+  require .systems/ai/core/runtime-integrity.md 'Serial fallback means ordinary serial work'
+fi
+[[ "$fail" == 0 ]] || exit 1
+for term in 'execution_authorized: false' 'operational_support: false' \
+  'workers and reviewers across both systems' 'accepted-needs-local-receipt' \
+  'adapter-required' 'Logical rebase' 'caller-supplied' 'Cross-task delivery'; do
+  require .systems/ai/core/parallel-compatibility.md "$term"
+done
+for path in .systems/ai/templates/orchestration/compatibility.template.json \
+  .systems/scripts/lib/parallel-compatibility.py .systems/scripts/inspect-parallel-compatibility \
+  .systems/scripts/tests/parallel-compatibility.py; do
+  [[ -f "$path" ]] || { echo "Missing parallel compatibility artifact: $path"; fail=1; }
+done
+require "$contract" 'parallel-compatibility.md'
+require .systems/ai/core/commands.md 'inspect-parallel-compatibility'
+require .systems/scripts/smoke/core.sh 'parallel-cross-system-offline-regressions'
+[[ "$fail" == 0 ]] || exit 1
+echo 'Parallel task orchestration contract passed.'

@@ -811,5 +811,140 @@ mv "$tmp/.systems/ai/core/execution-efficiency.md" "$tmp/eff-contract.orig"
 run_must_fail "execution-efficiency-missing-contract" --expect-literal 'Missing execution efficiency artifact' bash .systems/scripts/check-execution-efficiency
 mv "$tmp/eff-contract.orig" "$tmp/.systems/ai/core/execution-efficiency.md"
 
+run_must_pass "parallel-task-orchestration-valid" bash .systems/scripts/check-parallel-task-orchestration
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nWorkers may not bypass QA.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_pass "parallel-task-orchestration-may-not-prohibition" bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nWorkers can skip Phase 7.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_fail "parallel-task-orchestration-phase-seven-bypass" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nTwo implementation-range autopilots can run in the same project.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_fail "parallel-task-orchestration-dual-owners" --expect-literal 'Unsafe parallel orchestration acceptance' bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+for pto_consumer in parallel-work-policy autopilot implementation-slicing command-routing operating-model workflow; do
+  cp "$tmp/.systems/ai/core/$pto_consumer.md" "$tmp/pto-consumer.orig"
+  printf '\nDelegation may bypass QA.\n' >> "$tmp/.systems/ai/core/$pto_consumer.md"
+  run_must_fail "parallel-task-orchestration-consumer-$pto_consumer" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+  mv "$tmp/pto-consumer.orig" "$tmp/.systems/ai/core/$pto_consumer.md"
+done
+for pto_artifact in project-plan readiness state; do
+  case "$pto_artifact" in
+    project-plan) pto_path='.systems/ai/workflow/phase-2-project-plan.md' ;;
+    readiness) pto_path='.systems/ai/templates/autopilot/readiness.template.md' ;;
+    state) pto_path='.systems/ai/templates/autopilot/state.template.md' ;;
+  esac
+  cp "$tmp/$pto_path" "$tmp/pto-consumer.orig"
+  printf '\nDelegation may bypass QA.\n' >> "$tmp/$pto_path"
+  run_must_fail "parallel-task-orchestration-artifact-$pto_artifact" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+  mv "$tmp/pto-consumer.orig" "$tmp/$pto_path"
+done
+for pto_unsafe in recursive scope phase-eight; do
+  case "$pto_unsafe" in
+    recursive) pto_claim='Workers may delegate recursively.' ;;
+    scope) pto_claim='Workers may expand scope.' ;;
+    phase-eight) pto_claim='Workers may run Phase 8.' ;;
+  esac
+  cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+  printf '\n%s\n' "$pto_claim" >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+  run_must_fail "parallel-task-orchestration-authority-$pto_unsafe" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+  mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+done
+for pto_equivalent in auto-push completion-capacity unlimited-capacity; do
+  case "$pto_equivalent" in
+    auto-push) pto_claim='Workers may automatically push.'; pto_diagnostic='Unsafe parallel orchestration wording' ;;
+    completion-capacity) pto_claim='Worker completion is sufficient for PASS.'; pto_diagnostic='Unsafe parallel orchestration acceptance' ;;
+    unlimited-capacity) pto_claim='Unknown capacity allows unlimited workers.'; pto_diagnostic='Unsafe parallel orchestration acceptance' ;;
+  esac
+  cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+  printf '\n%s\n' "$pto_claim" >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+  run_must_fail "parallel-task-orchestration-equivalent-$pto_equivalent" --expect-literal "$pto_diagnostic" bash .systems/scripts/check-parallel-task-orchestration
+  mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+done
+for pto_reverse in but however period colon semicolon unless yet; do
+  case "$pto_reverse" in
+    but) pto_join=', but ' ;;
+    however) pto_join=', however ' ;;
+    period) pto_join='. ' ;;
+    colon) pto_join=': ' ;;
+    semicolon) pto_join='; ' ;;
+    unless) pto_join=' unless ' ;;
+    yet) pto_join=', yet ' ;;
+  esac
+  cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+  printf '\nDelegation may bypass QA%sworkers must not bypass approvals.\n' "$pto_join" >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+  run_must_fail "parallel-task-orchestration-reverse-$pto_reverse" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+  mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+done
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nDelegation must not bypass QA.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_pass "parallel-task-orchestration-safe-prohibition" bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nDelegation may bypass QA.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_fail "parallel-task-orchestration-direct-boundary" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+for pto_separator in however period colon semicolon unless yet; do
+  case "$pto_separator" in
+    however) pto_join=', however ' ;;
+    period) pto_join='. ' ;;
+    colon) pto_join=': ' ;;
+    semicolon) pto_join='; ' ;;
+    unless) pto_join=' unless ' ;;
+    yet) pto_join=', yet ' ;;
+  esac
+  cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+  printf '\nDelegation must not bypass QA%sdelegation may bypass QA.\n' "$pto_join" >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+  run_must_fail "parallel-task-orchestration-separator-$pto_separator" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+  mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+done
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nDelegation must not bypass QA, but delegation may bypass QA.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_fail "parallel-task-orchestration-compound-boundary" --expect-literal 'Unsafe parallel orchestration wording' bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+cp "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+printf '\nSubmitted may count as accepted.\n' >> "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+run_must_fail "parallel-task-orchestration-submitted-is-not-accepted" --expect-literal 'Unsafe parallel orchestration acceptance' bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+mv "$tmp/.systems/ai/core/parallel-task-orchestration.md" "$tmp/pto-contract.orig"
+run_must_fail "parallel-task-orchestration-missing-contract" --expect-literal 'Missing parallel orchestration contract' bash .systems/scripts/check-parallel-task-orchestration
+mv "$tmp/pto-contract.orig" "$tmp/.systems/ai/core/parallel-task-orchestration.md"
+
+run_must_pass "parallel-planner-offline-regressions" python3 .systems/scripts/lib/parallel-orchestration-tests.py --case planner
+run_must_pass "parallel-protocol-offline-regressions" python3 .systems/scripts/lib/parallel-orchestration-tests.py --case protocol
+run_must_pass "parallel-lifecycle-offline-regressions" python3 .systems/scripts/lib/parallel-orchestration-tests.py --case lifecycle
+run_must_pass "parallel-integration-offline-regressions" python3 .systems/scripts/lib/parallel-orchestration-tests.py --case integration
+run_must_pass "parallel-compatibility-offline-regressions" python3 .systems/scripts/lib/parallel-orchestration-tests.py --case compatibility
+
+run_must_pass "phase-commit-policy-valid" bash .systems/scripts/check-phase-commit-policy
+run_must_pass "phase-commit-policy-offline-regressions" python3 .systems/scripts/tests/phase-commit-policy.py
+cp "$tmp/.systems/ai/core/phase-commit-policy.md" "$tmp/phase-commit.orig"
+printf '\nBinding must not bypass QA.\n' >> "$tmp/.systems/ai/core/phase-commit-policy.md"
+run_must_pass "phase-commit-policy-safe-prohibition" bash .systems/scripts/check-phase-commit-policy
+mv "$tmp/phase-commit.orig" "$tmp/.systems/ai/core/phase-commit-policy.md"
+for phase_join in direct but however period colon semicolon unless yet; do
+  case "$phase_join" in
+    direct) phase_prefix='' ;;
+    but) phase_prefix='Binding must not bypass QA, but ' ;;
+    however) phase_prefix='Binding must not bypass QA, however ' ;;
+    period) phase_prefix='Binding must not bypass QA. ' ;;
+    colon) phase_prefix='Binding must not bypass QA: ' ;;
+    semicolon) phase_prefix='Binding must not bypass QA; ' ;;
+    unless) phase_prefix='Binding must not bypass QA unless ' ;;
+    yet) phase_prefix='Binding must not bypass QA, yet ' ;;
+  esac
+  cp "$tmp/.systems/ai/core/phase-commit-policy.md" "$tmp/phase-commit.orig"
+  printf '\n%sbinding may bypass QA.\n' "$phase_prefix" >> "$tmp/.systems/ai/core/phase-commit-policy.md"
+  run_must_fail "phase-commit-policy-boundary-$phase_join" --expect-literal 'Unsafe phase commit authority wording' bash .systems/scripts/check-phase-commit-policy
+  mv "$tmp/phase-commit.orig" "$tmp/.systems/ai/core/phase-commit-policy.md"
+done
+mv "$tmp/.systems/ai/core/phase-commit-policy.md" "$tmp/phase-commit.orig"
+run_must_fail "phase-commit-policy-missing-source" --expect-literal 'Policy-boundary scan failed' bash .systems/scripts/check-phase-commit-policy
+mv "$tmp/phase-commit.orig" "$tmp/.systems/ai/core/phase-commit-policy.md"
+
+run_must_pass "parallel-cross-system-offline-regressions" python3 .systems/scripts/tests/parallel-compatibility.py
+
 echo "Owned smoke group passed."
 smoke_suite_completed=1

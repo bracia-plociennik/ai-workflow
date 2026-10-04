@@ -85,6 +85,13 @@ If a later review finds a material issue that the required review lens should ha
 
 ## Review Procedure
 
+For delegated work, apply `.systems/ai/core/parallel-task-orchestration.md` and
+review the integration, not a sum of worker verdicts. Verify accepted attempt
+provenance, immutable dependency delivery, actual destination before/after, serial
+integration ownership, conflicts and preserved independent results. Re-review the
+integrated consumers, success/failure paths and regressions. A verified integration
+record is supporting evidence only; an unresolved reservation blocks closure.
+
 Read-only review and QA use the non-interactive path from `.systems/ai/core/owner-decision-checkpoints.md`. Finish evidence review before presenting owner decisions. Do not interrupt mid-review; report missing material sources as `unknown`, a blocker, or formal `FAIL` when the formal phase requires it, then queue decisions at the end.
 
 Apply the same quality lenses as `phase-5-quality` where relevant:

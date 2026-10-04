@@ -40,6 +40,8 @@ require_literal "$helper" 'policy_reject_unsafe_pattern' "shared policy helper"
 require_literal "$helper" 'Policy-boundary scan failed' "fail-closed source handling"
 
 policy_validators=(
+  .systems/scripts/check-parallel-task-orchestration
+  .systems/scripts/check-phase-commit-policy
   .systems/scripts/check-execution-efficiency
   .systems/scripts/check-runtime-integrity
   .systems/scripts/check-response-evidence-trace

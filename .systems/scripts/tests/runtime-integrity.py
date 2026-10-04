@@ -5,6 +5,7 @@ import importlib.util
 import json
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -30,11 +31,38 @@ def git(root, *args):
     return subprocess.check_output(['git', '-C', str(root), *args], stderr=subprocess.PIPE)
 
 
+def public_fixture(root, destination, extras=()):
+    try:
+        git_root = Path(os.fsdecode(git(root, 'rev-parse', '--show-toplevel').strip())).resolve()
+    except subprocess.CalledProcessError:
+        git_root = None
+    if git_root is not None:
+        if git_root != root:
+            raise ValueError('public fixture source is not a Git root')
+        return fixture.build(root, destination, extras)
+    # Only the dispatcher's already-selected, isolated product copy is Gitless.
+    temporary_root = Path(os.environ.get('TMPDIR', tempfile.gettempdir())).resolve()
+    if os.environ.get('AI_WORKFLOW_SMOKE_CHILD') != '1' or not root.is_relative_to(temporary_root):
+        raise ValueError('unknown Gitless product source')
+    destination.mkdir()
+    for top in sorted(fixture.TOP):
+        entry = root / top
+        paths = entry.rglob('*') if entry.is_dir() else [entry]
+        for path in paths:
+            raw = path.relative_to(root).as_posix()
+            if not path.is_file() or not fixture.selected(raw):
+                continue
+            fixture.scope.contained(root, raw)
+            target = destination / raw
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, target)
+
+
 class RuntimeTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(prefix='runtime-integrity-')
         self.addCleanup(self.tmp.cleanup)
-        self.home = Path(self.tmp.name)
+        self.home = Path(self.tmp.name).resolve()
         self.repo = self.home / 'repo'
         self.repo.mkdir()
         git(self.repo, 'init', '-q')
@@ -126,6 +154,225 @@ class RuntimeTests(unittest.TestCase):
         self.state()
         files=capture.scope.runtime_files(self.workspace,'repo/core')
         self.assertEqual([p.name for p in files],['status.md'])
+
+    def capture_paths(self, project=True):
+        if project:
+            self.owner = self.workspace / 'projects/synthetic'
+            self.ns = self.owner / 'capture-state'
+            self.ns.mkdir(parents=True)
+        return self.owner
+
+    def capture_parity(self):
+        inventory = capture.inventory(self.workspace, ROOT, self.repo, 'synthetic')
+        try:
+            scoped = capture.scope.validate_distillation(self.workspace, 'projects/synthetic', ROOT, self.repo)
+        except ValueError:
+            scoped = None
+        self.assertEqual(bool(inventory['invalid']), scoped is None)
+        if scoped is not None:
+            self.assertEqual(inventory['records'], scoped['records'])
+        return inventory
+
+    def test_capture_legacy_absent_derived_and_legacy_gate_parity(self):
+        self.capture_paths()
+        file = self.state()
+        file.write_text(file.read_text().replace('- is_distilled derived value: true\n', ''))
+        (self.owner / 'distillations/work.md').write_text(
+            '- Work ID: WORK-001\n- State after accepted distillation: completed\n')
+        out = self.capture_parity()
+        self.assertFalse(out['invalid'])
+        self.assertEqual(out['records'][0]['quality_verification'], 'unknown-historical-or-advisory')
+        self.assertTrue(out['records'][0]['is_distilled'])
+
+    def test_capture_duplicate_invalid_claim_still_blocks_valid_sibling(self):
+        self.capture_paths()
+        file = self.state()
+        (self.ns / 'invalid.md').write_text(file.read_text().replace('- Privacy/scope check: pass\n', ''))
+        out = self.capture_parity()
+        self.assertTrue(out['invalid'])
+        self.assertEqual(out['records'], [])
+
+    def test_capture_reused_distillation_invalid_identity_still_blocks(self):
+        self.capture_paths()
+        file = self.state()
+        (self.ns / 'second.md').write_text(file.read_text().replace('WORK-001', 'WORK-002'))
+        out = self.capture_parity()
+        self.assertTrue(out['invalid'])
+        self.assertEqual(out['records'], [])
+
+    def test_capture_normalized_duplicate_claims_share_record_parser(self):
+        self.capture_paths()
+        file = self.state('pending-quality')
+        (self.ns / 'second.md').write_text(file.read_text().replace('WORK-001', 'WO`RK-001'))
+        out = self.capture_parity()
+        self.assertTrue(out['invalid'])
+        self.assertEqual(out['records'], [])
+
+    def test_capture_pending_quality_without_quality_and_ready_without_distillation(self):
+        self.capture_paths()
+        file = self.state('pending-quality', '2')
+        file.write_text(file.read_text().replace('Quality artifact: quality.md', 'Quality artifact: none'))
+        self.assertFalse(self.capture_parity()['invalid'])
+        file = self.state('ready', '1')
+        self.assertFalse(self.capture_parity()['invalid'])
+
+    def test_capture_schema2_real_current_qa_and_negative_parity(self):
+        self.capture_paths()
+        file = self.state('ready', '2')
+        (self.owner / 'quality').mkdir()
+        producer = load('quality-record')
+        compliance = {
+            'Result': 'PASS', 'Owner instruction reviewed': 'yes', 'Accepted plan reviewed': 'yes',
+            'Accepted spec reviewed': 'yes', 'Scope/out-of-scope reviewed': 'yes',
+            'Acceptance criteria reviewed': 'yes', 'Compliance status': 'aligned',
+            'Wrong problem solved': 'no', 'Owner instruction mismatch': 'no',
+            'Accepted plan mismatch': 'no', 'Accepted spec mismatch': 'no',
+            'Acceptance criteria gap': 'no', 'Scope creep': 'no', 'Underbuild': 'no',
+            'Overbuild': 'no', 'Evidence': 'synthetic accepted source'}
+        completeness = {
+            'Status': 'complete', 'Reviewed baseline': 'synthetic repository/source',
+            'Closure freshness': 'current', 'Post-fix full re-review': 'not-required',
+            'Policy-boundary adversarial matrix': 'completed', 'Producer-consumer field audit': 'completed',
+            'Required-field mapping': 'complete', 'Cross-contract consistency': 'aligned',
+            'Risk/work mode compatibility': 'aligned',
+            'Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed': 'yes',
+            'Negative-space / adversarial review': 'completed', 'Automated evidence role': 'supporting-only',
+            'Instruction refresh': 'performed-targeted', 'Instruction baseline': 'current',
+            'Producers/consumers reviewed': 'synthetic accepted input and QA', 'Evidence': 'synthetic regression'}
+        flags = ('Intent / Plan / Spec Compliance PASS', 'Review Completeness Gate PASS',
+                 'Cross-contract consistency aligned', 'Risk/work mode compatibility aligned',
+                 'Negative-space / adversarial review complete or not applicable',
+                 'Automated evidence treated as supporting-only', 'Post-fix full re-review complete or not required',
+                 'Instruction baseline current', 'Closure freshness current',
+                 'Policy-boundary adversarial matrix complete or not applicable',
+                 'Producer-consumer field audit complete or not applicable',
+                 'Required-field mapping complete or not applicable', '100% DoD satisfied',
+                 'No known bug in scope', 'No regression in changed/direct paths',
+                 'Edge cases covered or explicitly rejected', 'Explicit evidence attached')
+        bullets = lambda fields: '\n'.join('- ' + key + ': ' + val for key, val in fields.items())
+        sections = {
+            'Findings': '- Blockers: none\n- Unresolved findings: none',
+            'Evidence': 'Synthetic fixture with actual complete QA consumer verification.',
+            'Definition Of Done Validation': '| DoD Item | Result | Evidence |\n| --- | --- | --- |\n| Synthetic source | PASS | fixture |',
+            'Intent / Plan / Spec Compliance': bullets(compliance),
+            'Review Completeness Gate': bullets(completeness),
+            'Adaptive Data / Integration Verification Matrix': '- Applicability: not-applicable\n- Not-applicable reason: isolated synthetic input',
+            'Quality Gate': '\n'.join('- ' + key + ': yes' for key in flags) + '\n- Quality result: PASS\n- Required next phase: phase-6-distillation',
+            'Gate Decision': '- Quality result: PASS\n- Required next phase: phase-6-distillation'}
+        review = {'schema': 1, 'kind': 'implementation-quality', 'task': 'WORK-001',
+                  'run_id': 'synthetic-capture-current', 'verdict': 'PASS', 'date': '2026-10-04',
+                  'inputs': [{'root': 'owning-project-evidence', 'path': 'source.md'}], 'sections': sections}
+        report, body = producer.render(review, self.repo, self.workspace, 'synthetic')
+        producer.publish(report, body)
+        file.write_text(file.read_text().replace('quality.md', 'quality/' + report.name))
+        valid = file.read_text()
+        self.assertEqual(self.capture_parity()['records'][0]['quality_verification'], 'verified-current')
+        for mutation in ('derived', 'identity', 'head', 'hash', 'gate', 'kind', 'unbound-source'):
+            with self.subTest(mutation=mutation):
+                file.write_text(valid)
+                report.write_text(body)
+                if mutation == 'derived':
+                    file.write_text(valid.replace('derived value: false', 'derived value: true'))
+                elif mutation == 'identity':
+                    report.write_text(body.replace('synthetic:WORK-001', 'synthetic:WORK-002'))
+                elif mutation == 'head':
+                    report.write_text(body.replace(git(self.repo, 'rev-parse', 'HEAD').decode().strip(), '0' * 40))
+                elif mutation == 'hash':
+                    (self.owner / 'source.md').write_text('changed source')
+                elif mutation == 'gate':
+                    report.write_text(body.replace('- Verdict: PASS', '- Verdict: FAIL'))
+                elif mutation == 'unbound-source':
+                    (self.owner / 'other.md').write_text('existing unreviewed source')
+                    file.write_text(valid.replace('Source artifact: source.md', 'Source artifact: other.md'))
+                else:
+                    report.write_text(body.replace('Artifact kind: implementation-quality', 'Artifact kind: spec-qa'))
+                self.assertTrue(self.capture_parity()['invalid'])
+                (self.owner / 'source.md').write_text('accepted synthetic source')
+        report.write_text(body)
+        file.write_text(valid)
+        completed = valid.replace('State: ready', 'State: completed').replace(
+            'derived value: false', 'derived value: true').replace(
+            'Distillation artifact: none', 'Distillation artifact: distillations/work.md')
+        file.write_text(completed)
+        self.assertFalse(self.capture_parity()['invalid'])
+        orchestration = load('parallel-orchestration')
+        manifest = {'repository_root': str(self.repo)}
+        gate = lambda: orchestration.check_parent_gate(
+            self.owner, manifest, 'WORK-001', 'quality/' + report.name, 'capture-state/work.md')
+        gate()
+        accepted_text = (self.owner / 'distillations/work.md').read_text()
+        for bad_gate in (
+            accepted_text.replace('processing: yes', 'processing: no') +
+            '\n## Other\n- Ready for checkpoint processing: yes\n',
+            accepted_text + '- Ready for checkpoint processing: no\n',
+            accepted_text + '\n## Distillation Gate\n- Ready for checkpoint processing: yes\n'):
+            (self.owner / 'distillations/work.md').write_text(bad_gate)
+            self.assertTrue(self.capture_parity()['invalid'])
+            with self.assertRaisesRegex(ValueError, 'parent capture collection invalid'):
+                gate()
+        (self.owner / 'distillations/work.md').write_text(accepted_text)
+        vendor = self.owner / 'distillations/vendor'
+        vendor.mkdir()
+        (vendor / '.git').mkdir()
+        (vendor / 'work.md').write_text(accepted_text)
+        file.write_text(completed.replace('distillations/work.md', 'distillations/vendor/work.md'))
+        self.assertTrue(self.capture_parity()['invalid'])
+        with self.assertRaisesRegex(ValueError, 'parent capture collection invalid'):
+            gate()
+        # Do not leave a foreign root in the synthetic owner for subsequent public checks.
+        (vendor / 'work.md').unlink()
+        (vendor / '.git').rmdir()
+        vendor.rmdir()
+        file.write_text(completed)
+        for sibling in ('missing', 'duplicate', 'reuse', 'normalized-duplicate'):
+            with self.subTest(sibling=sibling):
+                bad = self.ns / 'sibling.md'
+                if sibling == 'missing':
+                    bad.write_text('- Work ID: OTHER-001\n')
+                elif sibling == 'duplicate':
+                    bad.write_text(completed)
+                elif sibling == 'normalized-duplicate':
+                    (self.owner / 'distillations/second.md').write_text(accepted_text)
+                    bad.write_text(completed.replace('WORK-001', 'WO`RK-001').replace(
+                        'distillations/work.md', 'distillations/second.md'))
+                else:
+                    bad.write_text(completed.replace('WORK-001', 'WORK-002'))
+                with self.assertRaisesRegex(ValueError, 'parent capture collection invalid'):
+                    gate()
+                bad.unlink()
+        (self.owner / 'distillations/work.md').write_text(
+            '- Task/package ID: WORK-001\n## Distillation Gate\n- Ready for checkpoint processing: no\n')
+        self.assertTrue(self.capture_parity()['invalid'])
+        (self.owner / 'distillations/work.md').write_text(
+            '- Task/package ID: WORK-001\n## Distillation Gate\n- Ready for checkpoint processing: yes\n')
+        file.write_text(valid)
+        # Exercise all public shell routes on the identical selected population.
+        installed = self.repo / 'ai-workflow'
+        public_fixture(ROOT, installed, ['.systems/scripts/lib/capture-record.py'])
+        env = {**os.environ, 'AI_WORKFLOW_MODE': 'target',
+               'AI_WORKFLOW_WORKSPACE_HOME': str(self.workspace)}
+        for args in ([], ['--project', 'synthetic'],
+                     ['--runtime-only', '--scope-root', 'projects/synthetic']):
+            result = subprocess.run(['bash', str(installed / '.systems/scripts/check-distillation-state'), *args],
+                                    env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_public_fixture_preserves_git_selected_privacy_boundary(self):
+        source = self.repo / '.systems/local-notes.md'
+        source.parent.mkdir()
+        source.write_text('synthetic excluded input')
+        (self.repo / '.git/info/exclude').write_text('.systems/local-notes.md\n')
+        output = self.home / 'public-fixture'
+        public_fixture(self.repo, output)
+        self.assertFalse((output / '.systems/local-notes.md').exists())
+        self.assertEqual((output / 'AGENTS.md').read_text(), 'baseline')
+
+    def test_public_fixture_rejects_unknown_gitless_source(self):
+        source = self.home / 'unknown-source'
+        source.mkdir()
+        with patch.dict(os.environ, {'AI_WORKFLOW_SMOKE_CHILD': '0'}):
+            with self.assertRaisesRegex(ValueError, 'unknown Gitless'):
+                public_fixture(source, self.home / 'unknown-output')
 
     def test_fixture_current_worktree_not_head(self):
         (self.repo/'AGENTS.md').write_text('current')

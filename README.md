@@ -1,10 +1,22 @@
 # AI Workflow Template
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
 
 See `.systems/ai/core/execution-efficiency.md` and `.systems/scripts/check-execution-efficiency` for explicit iteration reuse, source-backed artifact closure, immutable QA lifecycle, reviewer-supplied quality records, bounded-defect eligibility and process timing. CI and updater full checks remain fresh.
 
 Runtime integrity: .systems/ai/core/runtime-integrity.md documents canonical capture inventory, tracked-worktree smoke fixtures, conservative command-read evidence and .systems/scripts/report-coordinator-status --project <slug>. Compact responses and micro-exempt delivery reduce overhead only for strictly eligible tiny work; formal QA is unchanged. Capability recommendations replace fixed model names. Regression coverage: .systems/scripts/check-runtime-integrity.
 
 ## Purpose
+
+Parallel delegated units use `.systems/ai/core/parallel-task-orchestration.md` and
+the templates in `.systems/ai/templates/orchestration/`. One execution owner
+chooses a dynamic count from verified capacity, dependency/resource conflicts
+and parent checkpoint slots. Units reference existing tasks/slices; common
+integrated QA, formal task approval and capture remain mandatory.
+This release is protocol-only: native backend verification is deferred/unverified.
+Optional coordinator schema2 reports installed consistency, never execution
+permission; default schema1 is unchanged. Unknown isolation/capacity uses ordinary
+serial work, not unverified native dispatch. No model speedup is claimed.
 
 This repository is a portable workflow system for AI-assisted planning, gated implementation, QA evidence, distillation, checkpoints, and optional autopilot execution.
 

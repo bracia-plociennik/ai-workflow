@@ -8,6 +8,12 @@ QA is a findings-first verification of the relevant artifact or implementation a
 
 ## Artifact-Appropriate Scope
 
+Delegated implementation also reviews accepted unit provenance and the actual
+integrated destination under `.systems/ai/core/parallel-task-orchestration.md`.
+The adaptive matrix covers copied dependency drift, integration conflicts/partial
+effects, stale review, integrated consumer failures and checkpoint cadence. Local
+unit checks and verified integration metadata cannot supply the parent task PASS.
+
 Every QA run must review the following where applicable:
 
 - owner instruction and intended outcome;

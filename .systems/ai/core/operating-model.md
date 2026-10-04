@@ -1,5 +1,9 @@
 # operating-model.md
 
+Approved slices may use `.systems/ai/core/parallel-task-orchestration.md` under one
+execution owner. Units are not new work modes or workflows. Shared routers,
+integration, common QA and capture remain owned by the orchestrator.
+
 Under `.systems/ai/core/execution-efficiency.md`, an eligible low/medium reversible bounded defect can use a compact work record in existing full-project or workflow-maintenance mode, only when not already bound to formal phases. It is not a medium-risk micro-task exemption. Accepted scope, DoD, consumers, regressions, semantic QA and capture remain required; excluded impacts reroute.
 
 ## Primary Objective

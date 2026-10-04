@@ -4,6 +4,10 @@
 
 ### Input required
 
+- When units were delegated, accepted unit provenance, verified serial integration
+  before/after evidence and current integrated consumer checks must be available
+  under `.systems/ai/core/parallel-task-orchestration.md`. Unresolved integration
+  effects block this gate; worker PASS or verified metadata is not parent PASS.
 - Implementation result exists for the selected task/package.
 - Accepted spec, task index, optional task card, repo command map, and changed-file list are available.
 - Safe verification commands are known or skipped checks have explicit impact analysis.

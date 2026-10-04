@@ -1,4 +1,6 @@
 # distillation-state.md
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
 
 ## Purpose
 
@@ -9,6 +11,15 @@
 The narrow `micro-exempt` eligibility in `delivery-constraints.md` permits a response disposition instead of a per-work state file. Non-exempt writes still create scoped state; preserve focused DoD/QA and reclassify scope growth. Exemption is not completed distillation and never produces a fake `is_distilled=true`.
 
 Canonical inventory is provided by `lib/capture-state.py`: `repo/capture-state/` and `projects/<slug>/capture-state/` are record namespaces, while `repo/` or the owning project is the evidence root. Old scoped manifest schema 1 retains its existing `repo/core` and project populations; it does not silently expand. No-arg state validation reports total, invalid, unresolved and skipped entries across canonical owners.
+
+All selected records use the bounded shared semantics in `lib/capture-record.py`.
+No-arg, project and runtime-only readers keep their existing population selectors;
+identical selected records receive identical structural and quality classification.
+Duplicate Work IDs and distillation reuse are audited across all selected claims,
+including otherwise invalid records. A single-record structural read cannot prove
+collection eligibility. Parent and checkpoint consumers validate the complete
+owning collection before selecting the requested completed, verified-current row.
+Invalid sibling records block that gate without scanning other projects.
 
 New formal records use `Capture schema: 2`. Ready/completed schema-2 records require current owning-project formal QA and completed records require one unique accepted owned distillation. Schema 1 remains available for advisory capture but never claims verified formal QA. Historical/advisory records remain immutable; missing derived output may be derived for presentation only and quality is explicitly `unknown-historical-or-advisory` unless current formal evidence is independently verified. Historical completion is not current QA PASS. Links, traversal and foreign runtime roots are rejected or explicitly skipped, never imported.
 

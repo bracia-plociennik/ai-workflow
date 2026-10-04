@@ -1,5 +1,36 @@
 # changelog.md
 
+## 2026-10-04 - Read-only parallel compatibility adaptation
+- Add a closed contract-1 inspector for source/identity, global worker/reviewer
+  budget, state receipt and fail-closed transport/recovery differences.
+- Inspection never dispatches or claims native operational support. Counterpart
+  implementation/rollout remains separately owned; offline regressions preserve
+  existing smoke coverage and local gates.
+
+## PTO-009 Phase Commit Boundaries And Opt-in Source Binding
+
+- Define future planning/Phase6/7/8 local commit boundaries; explicit no-commit and ignored-only/no-op remain stronger.
+- Add immutable snapshots and distinct current-only V3/schema3 evidence with shared live source-equivalence verification.
+- Compare complete source populations, committed trees, index, file modes, stable owned evidence and authenticated full-source coverage.
+- Reject unsupported target coverage and runtime commit chains; require fresh QA rather than reuse by ancestry or workspace prefix.
+- Keep fresh artifact closure, native-unverified limitations, cross-system decisions and no inferred push/final-owner-yes.
+
+## PTO-008 Capture Reader Parity
+
+- Share selected-record semantics across canonical and scoped capture readers.
+- Preserve schema1 historical/advisory validity without granting current QA.
+- Audit invalid sibling claims before parent/checkpoint capture selection.
+- Preserve population isolation and schema2 current-QA requirements.
+
+## Parallel Task Orchestration Protocol V1 - 2026-10-04
+
+- Added one-owner delegated units, dynamic dependency/capacity/resource allocation and parent checkpoint reservations.
+- Added bounded filesystem preflight, submitted-vs-accepted results, immutable attempts and single-writer revision/recovery records.
+- Added separately approved serial integration, copied-input integrity and common integrated QA; metadata never grants task PASS.
+- Added explicit coordinator schema2 capability with installed-source pins and conservative malformed/deep-input fallback; schema1 remains default.
+- Added offline adversarial fixtures and three paired synthetic-only measurements; no native/model speed claim.
+- Native backend verification is explicitly deferred/unverified after isolation preflight stopped without dispatch. No scheduler, automatic transport, recursive delegation, counterpart update or approval expansion.
+
 ## Validation And Closure Efficiency - 2026-10-02
 
 - Added explicit iteration check plans and conservative authenticated source-bound reuse.

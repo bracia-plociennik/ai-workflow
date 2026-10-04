@@ -1,5 +1,10 @@
 # 2. FAZA PLANU PROJEKTU - Codex
 
+Assess independent units, shared files/resources and integration cost using
+`.systems/ai/core/parallel-task-orchestration.md`. Record dependencies and proposed
+mode; dispatch requires implementation readiness and verified capability. Do not
+invent a fixed subagent count or require optional Task Packaging.
+
 ## Gate Conditions
 
 ### Input required

@@ -1,6 +1,25 @@
 # state.md
 
+## Phase Commit Boundary
+- Commit disposition: <permitted|forbidden|not-required|blocked>
+- Approved tracked scope: <paths|none>
+- Current QA source binding: <strict-current|verified-v3|refresh-required>
+- Fresh artifact closure: <evidence|pending>
+- Push authority: <explicit-reference|none>
+- Owner approval / no-commit override: <reference>
+- Cross-system impact decision: <yes|no|pending>
+- Branch ownership / index isolation: <evidence>
+- Result commit: <actual-SHA|none>
+
+Use phase-commit-policy.md. This template grants no Git authority; pending proof,
+explicit no-commit, ignored-only/no-op and missing final-owner-yes preserve their
+required boundary. Actual result SHA is recorded only after successful commit.
+
 Purpose: runtime state for one Codex Autopilot run.
+
+Delegated units use `.systems/ai/core/parallel-task-orchestration.md` and one scoped
+ledger. Keep task-level state single-writer; the legacy serial budget remains valid.
+Record observed allocation in the ledger, not a fabricated global capacity.
 
 This file records state. It does not replace `status.md`, `.systems/ai/workflow/`, `.systems/ai/core/workflow.md`, `AGENTS.md`, or repository state.
 

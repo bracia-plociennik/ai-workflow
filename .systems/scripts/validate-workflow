@@ -430,6 +430,8 @@ run_core_validators() {
   run_cmd .systems/scripts/check-validation-completion
   run_cmd .systems/scripts/check-skill-evaluation-contract
   run_cmd .systems/scripts/check-runtime-integrity
+  run_cmd .systems/scripts/check-parallel-task-orchestration
+  run_cmd .systems/scripts/check-phase-commit-policy
 }
 
 explain_profile

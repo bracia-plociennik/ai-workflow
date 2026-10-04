@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "peer_contract": 1,
+  "workflow_protocol": 1,
+  "run_id": "example-run",
+  "coordinator_id": "owner-facing-coordinator",
+  "project": "example-project",
+  "unit_mapping": [{"unit_id": "example-review", "task_id": "TASK-001", "slice_id": "slice-a", "read_paths": []}],
+  "capacity": {"known": false, "complete": false, "total": null, "actors": []}
+}

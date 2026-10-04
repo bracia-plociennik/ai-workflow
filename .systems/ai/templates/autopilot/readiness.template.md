@@ -1,5 +1,20 @@
 # readiness.md
 
+## Phase Commit Boundary
+- Commit disposition: <permitted|forbidden|not-required|blocked>
+- Approved tracked scope: <paths|none>
+- Current QA source binding: <strict-current|verified-v3|refresh-required>
+- Fresh artifact closure: <evidence|pending>
+- Push authority: <explicit-reference|none>
+- Owner approval / no-commit override: <reference>
+- Cross-system impact decision: <yes|no|pending>
+- Branch ownership / index isolation: <evidence>
+- Result commit: <actual-SHA|none>
+
+Use phase-commit-policy.md. This template grants no Git authority; pending proof,
+explicit no-commit, ignored-only/no-op and missing final-owner-yes preserve their
+required boundary. Actual result SHA is recorded only after successful commit.
+
 Purpose: pre-start and pre-resume readiness audit for one autopilot run.
 
 Autopilot must not enter `running` until `readiness-result` is `ready`.
@@ -150,6 +165,11 @@ owner-prompt:
 ```
 
 ## Readiness Decision
+
+Delegated execution additionally follows `.systems/ai/core/parallel-task-orchestration.md`.
+Record execution owner, backend/capacity evidence, DAG, write/resource reservations,
+integration owner and remaining checkpoint task slots. Unverified capability means
+serial fallback, not readiness for isolated writes.
 
 `ready` is allowed only when every blocking item is `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied.
 

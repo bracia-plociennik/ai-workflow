@@ -1,4 +1,10 @@
 # commands.md
+Read-only cross-system inspection: `.systems/scripts/inspect-parallel-compatibility
+--workflow PATH --repo PATH --run FILE --mapping FILE`. See
+`parallel-compatibility.md` and `compatibility.template.json`. Exit0 means static
+inspection only; no native dispatch, operational support, saved transition or PASS.
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
 
 Execution efficiency commands follow `.systems/ai/core/execution-efficiency.md`. Use `prepare-quality-record --review <supplied-json> --workflow-root <root> --workspace-root <workspace> --project <slug>` for canonical QA publication. `check-execution-efficiency` checks contracts; `check-execution-efficiency --behavioral` tests the seven capabilities, also exercised by full smoke. Full source receipts and fresh artifact closure are explicit commands, not automatic skip flags.
 
@@ -26,6 +32,22 @@ Runtime integrity: `.systems/scripts/check-runtime-integrity` runs synthetic reg
 Codex must know how to verify work. Repository-specific commands live in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`. This file defines the required command categories and workflow-template checks.
 
 ## Required Command Categories
+
+### Parallel Protocol Commands
+
+See `parallel-task-orchestration.md` and `runtime-integrity.md` before use.
+`plan-parallel-work --manifest <owned-manifest> --format json|human` is a read-only
+allocation proposal, not dispatch. `manage-parallel-run --run-root <owned-run>
+--coordinator-id <owner> validate|reconcile` inspects state. Explicit `transition
+--expected-revision <n> --request <closed-json>` requires the existing approved
+write scope; it records metadata, never spawns, copies, merges or approves work.
+`report-coordinator-status --project <slug> --schema-version 2` opts into installed
+protocol metadata; schema1 remains default. Native backend is unverified, all
+execution authority false; missing/unsafe capability uses unknown/serial.
+Verification: `check-parallel-task-orchestration` and offline
+`python3 .systems/scripts/lib/parallel-orchestration-tests.py --case
+planner|protocol|lifecycle|integration|compatibility`. These are supporting checks,
+not a replacement for integrated semantic QA or authentic runtime isolation.
 
 Each target repository should define these in `AI_WORKFLOW_WORKSPACE_HOME/repo/core/repo-intake.md`:
 

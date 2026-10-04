@@ -1,4 +1,6 @@
 # AGENTS.md
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
 
 Use `.systems/ai/core/execution-efficiency.md` when check reuse, artifact-only closure, historical QA, schema-driven quality records, bounded defects, refresh fingerprints or process timing are relevant. These capabilities preserve semantic QA, risk and approvals; missing installed capability uses the existing route.
 
@@ -52,6 +54,8 @@ For installing this workflow into a repository, running `phase-0-init`, or runni
 For updating a target repository's nested `ai-workflow/` clone from upstream, also read `.systems/ai/core/update-from-upstream.md`.
 
 ## Command Routing
+
+For potentially independent approved units, use `.systems/ai/core/parallel-task-orchestration.md` before dispatch. One execution owner selects a dynamic count from verified capacity, conflicts/resources and parent checkpoint slots; units are not independent workflows. Common integrated QA and all parent gates remain required. Installed protocol metadata is not native backend support or permission; unverified isolation uses ordinary serial work, not unverified worker dispatch.
 
 Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow commands, including short prompts, full prompts, Polish prompts, English prompts, phase aliases, owner request batches, side tasks, autopilot, decision review, rollback, recovery, parallel work questions, prompt composition, role and variable questions, guide requests, and unsafe bypass requests.
 

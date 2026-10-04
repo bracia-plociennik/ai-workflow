@@ -1,5 +1,20 @@
 # 8. Final Check
 
+## Phase Commit Boundary
+- Commit disposition: <permitted|forbidden|not-required|blocked>
+- Approved tracked scope: <paths|none>
+- Current QA source binding: <strict-current|verified-v3|refresh-required>
+- Fresh artifact closure: <evidence|pending>
+- Push authority: <explicit-reference|none>
+- Owner approval / no-commit override: <reference>
+- Cross-system impact decision: <yes|no|pending>
+- Branch ownership / index isolation: <evidence>
+- Result commit: <actual-SHA|none>
+
+Use phase-commit-policy.md. This template grants no Git authority; pending proof,
+explicit no-commit, ignored-only/no-op and missing final-owner-yes preserve their
+required boundary. Actual result SHA is recorded only after successful commit.
+
 Execution efficiency (when applicable): record check applicability, invocation reason, executed/reused/invalidated evidence, source receipt and fresh artifact checks under .systems/ai/core/execution-efficiency.md. Supplied reviewer evidence may use prepare-quality-record; technical verification does not grant owner approval.
 
 ## Metadata

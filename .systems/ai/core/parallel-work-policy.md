@@ -4,7 +4,9 @@
 
 This policy defines how multiple Codex threads, project workspaces, micro-tasks, and micro-projects may operate against one target repository without corrupting status, memory, evidence, or product-code write sets.
 
-This is a status-only coordination policy for v1. It does not introduce lock files, new status fields, or a scheduler.
+Independent-thread coordination is status-only; it is not a scheduler.
+Delegated units inside one run follow `.systems/ai/core/parallel-task-orchestration.md`
+and its scoped local ledger, not independent implementation-range autopilots.
 
 ## Coordination Model
 
@@ -30,7 +32,7 @@ Parallel work is allowed only when all of the following are true:
 - no shared risky integration is being changed from multiple threads;
 - each thread can produce its own evidence without relying on another in-progress thread's unverified result.
 
-Because v1 has no lock files, scheduler state, or active-thread registry, active parallel work is known only from owner direction, the main repo coordination thread, current status artifacts, and current repository state. If the active threads or their intended write sets are unknown, treat overlap as unknown and stop before writing.
+Independent threads have no global active-thread registry. Determine active work from owner direction, the coordination thread, status and repo state. Delegated runs additionally own the bounded ledger in parallel-task-orchestration.md. Unknown threads or write sets require stopping before writes.
 
 Default to linear execution when independence is uncertain.
 
@@ -77,6 +79,10 @@ Within one project, parallel task/package threads are read-only, planning, or sp
 ## Autopilot
 
 Do not run two implementation-range autopilots in the same project at the same time.
+
+One run may dispatch units under parallel-task-orchestration.md after capability,
+dependency, resource and write-isolation preflight. This is one execution owner,
+not two independent runs. Default serial behavior remains valid.
 
 Parallel planning-range autopilots are allowed only when their project workspaces, owner decisions, architecture scope, and write sets are independent.
 

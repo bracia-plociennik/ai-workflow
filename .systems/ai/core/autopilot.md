@@ -1,4 +1,6 @@
 # autopilot.md
+For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+
 
 ## Purpose
 
@@ -54,7 +56,16 @@ phase-3-specification refresh for current task/package when needed
 -> stop before phase 8
 ```
 
-Before implementing task/package `N+1`, Codex must review the previous implementation result, quality evidence, distillation, checkpoint state, project memory, repo memory, decisions, and drift findings. If task/package `N` changed assumptions for `N+1`, Codex must refresh the `N+1` spec and rerun Spec QA before implementation.
+Before implementing task/package `N+1` on the default sequential route, Codex must review the previous implementation result, quality evidence, distillation, checkpoint state, project memory, repo memory, decisions, and drift findings. If task/package `N` changed assumptions for `N+1`, Codex must refresh the `N+1` spec and rerun Spec QA before implementation.
+
+Exception for explicitly independent approved parent tasks: one execution owner
+may dispatch them together under parallel-task-orchestration.md after current
+Spec QA, actual prerequisite gates, capability/isolation/resource checks and
+checkpoint-slot reservation. Before dispatch, review latest completed task
+evidence, capture, checkpoint, memory and decisions; do not invent completion of
+a still-running task. A real dependency on that task remains blocked until its
+formal Quality and required capture gates complete. After integration, re-review
+affected task assumptions and evidence before accepting dependent execution.
 
 For implementation-range, checkpoint after every 3 completed tasks/packages and after the final task/package is a hard autopilot gate. Autopilot must stop or run `phase-7-checkpoint` before continuing when the checkpoint cadence is reached.
 
@@ -149,7 +160,7 @@ Use the range state machines above. Do not run `phase-8-final-check` from autopi
 
 ## Default Execution Rules
 
-- Execute sequentially unless task packaging explicitly permits a package or parallel execution.
+- Execute sequentially unless one execution owner verifies delegated units under `.systems/ai/core/parallel-task-orchestration.md`. Optional packaging is not required for delegation.
 - Continue only after evidence-backed `PASS`.
 - STOP on critical risk, retry limit, blocking drift, or missing required evidence.
 - Record auto-resolvable decisions before continuing.
@@ -170,6 +181,7 @@ Before `running`, implementation-range readiness must record a resolved delivery
 - Max 2 Quality fix loops per task/package.
 - Max 32 total retries per 16-task autopilot run unless a project decision overrides it.
 - Checkpoint after every 3 completed tasks/packages and after the final task/package.
+- Before delegated dispatch, reserve parent-task slots under parallel-task-orchestration.md: completed tasks since checkpoint plus distinct active parent tasks cannot exceed three. Units of one task share its slot.
 - In `implementation-range`, checkpoint cadence is a hard gate. Do not continue to the next task/package when the cadence is reached until `phase-7-checkpoint` is complete or the owner explicitly stops autopilot.
 
 ## Git Policy
