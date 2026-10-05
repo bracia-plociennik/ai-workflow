@@ -638,6 +638,7 @@ mv "$tmp/.systems/ai/core/validation-observability.md.bak" "$tmp/.systems/ai/cor
 # END FROZEN region-4867-4872
 
 # Dispatcher regressions are additional to the frozen 674-case inventory.
+run_must_pass "validation-scope-dependencies" python3 .systems/scripts/tests/runtime-dependency-scope.py
 run_must_pass "smoke-partition-manifest-valid" bash .systems/scripts/check-validator-smoke-tests --verify-manifest
 for partition_case in missing-id duplicate-id missing-region missing-audit missing-nested-audit wrong-assertion-line wrong-nested-owner wrong-test-region; do
   cp "$tmp/.systems/scripts/smoke/manifest.json" "$tmp/.systems/scripts/smoke/manifest.json.bak"

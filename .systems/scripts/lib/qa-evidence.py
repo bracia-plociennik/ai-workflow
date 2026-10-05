@@ -179,6 +179,9 @@ def contained(root, relative):
         raise InvalidAssessment("unsafe input path")
     if any(part.lower() in FORBIDDEN_PARTS or part.lower().endswith((".pem", ".key")) for part in path.parts):
         raise InvalidAssessment("sensitive input path is not approved for hashing")
+    if any(path.parts[index:index + 3] == ("quality", "artifacts", "node_modules")
+           for index in range(len(path.parts) - 2)):
+        raise InvalidAssessment("runtime dependency directory is not evidence")
     candidate = root.joinpath(*path.parts)
     try:
         resolved = candidate.resolve(strict=True)

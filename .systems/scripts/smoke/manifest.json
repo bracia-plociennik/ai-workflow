@@ -769,7 +769,8 @@
     "phase-commit-policy-boundary-unless",
     "phase-commit-policy-boundary-yet",
     "phase-commit-policy-missing-source",
-    "parallel-cross-system-offline-regressions"
+    "parallel-cross-system-offline-regressions",
+    "validation-scope-dependencies"
   ],
   "external_assertion_audit": [
     {
@@ -3102,7 +3103,8 @@
     "phase-commit-policy-boundary-unless": "core",
     "phase-commit-policy-boundary-yet": "core",
     "phase-commit-policy-missing-source": "core",
-    "parallel-cross-system-offline-regressions": "core"
+    "parallel-cross-system-offline-regressions": "core",
+    "validation-scope-dependencies": "core"
   },
   "tests": [
     {
@@ -3488,6 +3490,17 @@
       "setup_id": "owned-group-disposable-source-fixture",
       "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
       "mutation_id": "validation-scope-*",
+      "expected_outcome": "exit 0"
+    },
+    {
+      "id": "validation-scope-dependencies",
+      "group": "core",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"validation-scope-dependencies\" python3 .systems/scripts/tests/runtime-dependency-scope.py",
+      "setup_id": "owned-group-disposable-source-fixture",
+      "cleanup_id": "owned-group-exit-trap-and-supervisor-tree-cleanup",
+      "mutation_id": "validation-scope-dependencies",
       "expected_outcome": "exit 0"
     },
     {
@@ -11450,6 +11463,6 @@
     "workspace.sh": "1c36c1035dfaba35a3722536cea159ec6a39dc7c8e8e346da37a3e02a4091c4c",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
-    "core.sh": "e39c51f6aca5c3faae5b972c89965550c030607f30fd422d80d41bf23c5020be"
+    "core.sh": "2fa1ac0c1d34a9622b865e4b3881b2b895ac8020fec905374bb19dcb4189894a"
   }
 }

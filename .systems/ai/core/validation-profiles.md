@@ -84,6 +84,13 @@ Supported runtime roots are `repo/core` and `projects/<slug>`. Canonical direct
 Markdown and project-owned artifact directories are inspected; raw `context/`,
 eval fixture, legacy and dump trees are supporting data, not active producers.
 Foreign repositories or links in owned artifact directories are rejected. The
+single project-relative dependency directory `quality/artifacts/node_modules`
+is supporting tooling, not active evidence: inventory explicitly reports and
+prunes this directory (including a symlink or dangling symlink) without following
+it. No other `node_modules` path or symlink is exempt. Direct evidence references
+into this excluded directory are rejected even when it is a real directory.
+This fixed classification adds no arbitrary exclusions or permission to read
+dependency targets; schema1 still inventories only active owned files. The
 legacy QA registry is separately bound as supporting evidence when present.
 Known tracked runtime edits inside those selected owned roots are bound by both
 Git and runtime inventories; they do not become framework changes solely because

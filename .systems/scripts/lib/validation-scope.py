@@ -46,9 +46,16 @@ def relative(raw):
         raise ValueError("sensitive input path is not authorized")
     return raw
 
+def dependency_path(path):
+    parts = path.parts
+    return any(parts[index:index + 3] == ("quality", "artifacts", "node_modules")
+               for index in range(len(parts) - 2))
+
 def contained(root, raw, exists=True):
     relative(raw)
     path = root / raw
+    if dependency_path(path):
+        raise ValueError("runtime dependency directory is not evidence")
     if not path.resolve().is_relative_to(root.resolve()):
         raise ValueError("escaping scope path")
     # Reject links even when they happen to point inside this root.
@@ -123,6 +130,18 @@ def runtime_files(workspace, raw):
                     raise ValueError("unreadable runtime directory")
                 if (parent / ".git").exists():
                     raise ValueError("foreign repository in owned runtime artifacts")
+                # Dependency storage is not an evidence producer. Prune before
+                # link checks and never inspect the destination's contents.
+                excluded = parent / "node_modules"
+                if excluded.relative_to(root).parts == ("quality", "artifacts", "node_modules") and "node_modules" in dirs + names:
+                    if not excluded.is_symlink() and not excluded.is_dir():
+                        raise ValueError("runtime dependency path is not a directory or symlink")
+                    if "node_modules" in dirs:
+                        dirs.remove("node_modules")
+                    if "node_modules" in names:
+                        names.remove("node_modules")
+                    print("Validation scope excludes supporting dependency directory: "
+                          "quality/artifacts/node_modules (not evidence; no traversal)", file=sys.stderr)
                 for name in dirs:
                     if (parent / name).is_symlink():
                         raise ValueError("symlink runtime directory")
