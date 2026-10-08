@@ -85,7 +85,7 @@ Use `.systems/ai/core/task-intake.md` as the Default Idea Validation pre-routing
 
 Use `.systems/ai/core/plan-quality-contract.md` for every substantive plan, including Codex `/plan`, formal architecture/project-plan/specification artifacts, and micro-work plans. An implementation-capable plan needs a testable DoD, artifact QA route, implementation quality-closure route, verification criteria, and blocking-decision route before implementation-class writes. A genuinely read-only plan may use `not-applicable` only with a reason and no implementation writes.
 
-Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation or batch triage and before dependent planning, specification, implementation, or owner-sensitive writes. Ask 1-3 material questions by default, disclose reversible auto-resolved decisions, and do not ask for repo-discoverable facts. Active autopilot, Dreaming/automations, and read-only review queue decisions rather than interrupting mid-run.
+Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation or batch triage and before dependent planning, specification, implementation, or owner-sensitive writes. In Human Coop, ask 1-3 material questions; Auto chooses covered reversible options and queues owner-only decisions. Disclose reversible auto-resolved decisions and do not ask for repo-discoverable facts. Active autopilot, Dreaming/automations, and read-only review queue decisions rather than interrupting mid-run.
 
 Use `.systems/ai/core/response-contract.md` for the required `Co dalej?` footer after phase summaries, blocker reports, implementation summaries, QA reports, guide responses, side-task responses, micro-task responses, micro-project responses, and autopilot responses.
 

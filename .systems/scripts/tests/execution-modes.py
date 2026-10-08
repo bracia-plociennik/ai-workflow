@@ -48,6 +48,11 @@ class ExecutionModes(unittest.TestCase):
                 self.record["execution"]["mode"] = invalid
                 em.assess(self.record)
 
+    def test_workflow_shortcut_qualifies_interactive_questions(self):
+        workflow = (ROOT / ".systems/ai/core/workflow.md").read_text()
+        self.assertNotIn("Ask 1-3 material questions by default", workflow)
+        self.assertIn("In Human Coop, ask 1-3 material questions; Auto chooses covered reversible options and queues owner-only decisions", workflow)
+
     def test_auto_reversible_preference(self):
         self.decision("agent-choice")
         self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
