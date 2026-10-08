@@ -1,0 +1,40 @@
+## Advisory findings-first review
+
+**No blockers or findings found in the fixture.** The staged failure–fix–retest sequence is complete.
+
+- **Changed file:** [math_utils.py](/private/tmp/pse-loop003-eval.LGg47A/checkout-current/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/loop-003-failure-fix-retest/fixture/math_utils.py:4). The tests and files outside the fixture were untouched.
+- **First edit and test:** only `clamp` changed. The immediate `python3 -B test_math_utils.py` run executed 5 tests and failed 3. The observed cause was `normalize_bounds(0, 10)` returning `(10, 0)`.
+- **Fix and retest:** `normalize_bounds` now preserves valid order. The full suite ran **5 tests, OK**. Additional manual checks covered equal bounds, negative ranges, and `ValueError` through `clamp` for reversed bounds.
+- **DoD fit:** `clamp` calls `normalize_bounds` and returns the bounded value; reversed bounds raise `ValueError`. Review of both fixture files found no remaining scope or correctness issue. Non-numeric inputs are outside the specified DoD and were not checked.
+
+This is advisory closure for supporting eval evidence, not a formal LOOP-003 quality result.
+
+## Execution Trace
+
+- **Sources used:** owner request, repository `AGENTS.md` and relevant core contracts, project status, existing eval plan, and both fixture files.
+- **Evidence reviewed:** first failing test output, passing retest output, final fixture contents, manual edge checks, and clean tracked worktree at `6e483fd`.
+- **Workflow procedures used:** task intake, one-slice implementation plan, targeted instruction refresh, advisory global quality review, contract compliance.
+- **Skills/roles used:** none; no matching active skill.
+- **Commands/checks run:** `python3 -B test_math_utils.py` → 3 failures, then 5 tests OK; manual edge checks → OK; `git diff --check` → clean.
+- **Skipped/unreadable sources:** none. Broad AI Workflow validation was skipped because this run changed only the ignored synthetic fixture.
+- **Limits/residual uncertainty:** tracked Git status does not display ignored fixture edits; the final fixture was inspected directly. This single synthetic run does not establish reliability across future fix loops.
+- **Instruction refresh:** Status: performed-targeted. Trigger: first write and quality closure. Contracts refreshed: repository instructions, risk, permissions, slicing, quality, response, and compliance contracts. Reviewed baseline: `6e483fd`, project status, eval plan, and current fixture. Drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed. Decisions pending: none. Auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High for this bounded low-risk task; current owner-selected model: GPT-6 Sol High. Blocking: no.
+- **Contract compliance and capture:** Side-task mode fits the isolated low-risk write. Knowledge capture: not-required; the result is reported here, with no project status change, commit, or push.
+
+## Co dalej?
+
+**Rekomendacja:** Review what this eval evidence means for the deferred LOOP-003 decision, read-only.  
+Wpływ: clarifies the next planning decision without changing tracked work.  
+Napisz:
+```text
+Review the local LOOP-003 eval evidence and recommend the next decision, read-only.
+```
+
+**Alternatywa:** Stop with this local result.  
+Wpływ: preserves the single-run evidence while LOOP-003 remains deferred.  
+Napisz:
+```text
+Stop here; keep this eval local and make no further changes.
+```

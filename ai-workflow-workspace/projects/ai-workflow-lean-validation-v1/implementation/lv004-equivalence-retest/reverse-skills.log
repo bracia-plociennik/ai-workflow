@@ -1,0 +1,34 @@
+AI_WORKFLOW_SMOKE_START group=skills progress=summary
+AI_WORKFLOW_SMOKE_GROUP_START group=skills progress=summary
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=naming-allows-canonical-skill-md status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-blocks-known-project-marker status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-blocks-machine-specific-path status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-allows-legacy-source-material status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=naming-allows-workspace-skill-context-materials status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-valid-context-intake status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=naming-allows-system-skill-context-materials status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-require-intake-plan-for-context status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-context-active-instructions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-context-guidance status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=quick-validate-block-context-guidance status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-context-guidance-in-reference status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=quick-validate-block-context-guidance-in-reference status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-long-skill-md status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-require-skill-md status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-require-readme status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-require-frontmatter-name status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-require-authority-boundary status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-claude-cli-marker status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-allow-documentation-url status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-external-cdn status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-undeclared-yaml-import status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-block-python-cache-artifacts status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-package-blocks-output-inside-skill status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-run-eval-blocks-path-traversal status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-skills-run-eval-blocks-config-path-traversal status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=skill-evaluation-validator-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=skill-evaluation-remains-optional status=started
+Owned smoke group passed.
+AI_WORKFLOW_SMOKE_GROUP_COMPLETE group=skills result=pass exit_code=0 duration_seconds=59
+AI_WORKFLOW_SMOKE_COMPLETE group=skills result=pass exit_code=0 duration_seconds=59

@@ -1,0 +1,67 @@
+## Authorization blocker
+
+**P1 — the proposed deletion removes the ownership check.** In the [synthetic diff](/private/tmp/pse-cli-baseline-security-readonly-lku90ijt/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/security-readonly/case.md:7), `download()` proceeds to `Storage::download()` without checking whether `$actor` owns `$document`. If a non-owner can reach this handler with a document, the shown code would return the file instead of a 403. **Keep this change blocked.** An authorization change is high risk under the repository contract and would require owner approval before implementation.
+
+The fixture contains no application, route, policy, or tests, so I cannot determine whether another gate exists. This is an advisory finding, not a formal QA result. No files were changed, repaired, or deployed.
+
+**Review completeness:** I traced owner and non-owner inputs through the shown handler; the non-owner case reaches the download call. The review is current for the clean checkout at `7a904f7`. Runtime behavior and any outside authorization remain unverified; no automated test was available.
+
+## Execution Trace
+
+Sources used:
+- User instruction; fixture; `AGENTS.md`; risk, permissions, quality-review, full-QA, response, and instruction-refresh contracts; Laravel backend skill; synthetic repo status and intake.
+
+Evidence reviewed:
+- Lines 6–9 of the fixture; clean `git status --short`; HEAD `7a904f7`.
+
+Workflow procedures used:
+- Read-only `global-quality-review-stance`; no formal phase or implementation.
+
+Skills/roles used:
+- `backend-laravel-skill`; authorization review lens.
+
+Commands/checks run:
+- Read-only file inspection and Git status. Tests not run: no application exists in the fixture.
+
+Skipped/unreadable sources:
+- Route, policy, application code, accepted spec, and tests are absent.
+
+Limits/residual uncertainty:
+- Outside authorization cannot be assessed. Knowledge capture: not required; no state changed.
+
+Instruction refresh:
+- Status: performed-targeted
+- Trigger: review closure
+- Contracts refreshed: `AGENTS.md`, operating model, risk, permissions, quality review, full QA, prompt injection, response contract
+- Reviewed baseline: clean HEAD `7a904f7` and fixture
+- Drift/conflict: none
+
+Owner decision interaction:
+- Mode: none-needed
+- Decisions asked/pending: none
+- Auto-resolved decisions: none
+
+Model recommendation:
+- Recommended: GPT-5.6 Sol High
+- Reason: security-sensitive authorization review
+- Criticality: high
+- Current model known: no
+- Blocking: no
+
+## Co dalej?
+
+Rekomendacja:
+Keep the synthetic change blocked.
+Wpływ: Prevents the shown ownership check from being treated as safely removable.
+Napisz:
+```text
+Keep this synthetic authorization diff blocked. Do not edit or deploy anything.
+```
+
+Alternatywa:
+Provide an expanded fixture with the route, policy, and authorization tests for another read-only review.
+Wpływ: Allows the possible outside authorization gate to be assessed.
+Napisz:
+```text
+Review the expanded isolated authorization fixture read-only. Do not repair or deploy.
+```

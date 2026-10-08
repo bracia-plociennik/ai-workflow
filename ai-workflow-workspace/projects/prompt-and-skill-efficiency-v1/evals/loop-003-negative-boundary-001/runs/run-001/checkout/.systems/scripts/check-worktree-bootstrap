@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for worktree bootstrap check: $file"
+    fail=1
+  elif ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing worktree bootstrap requirement in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/worktree-bootstrap.md"
+shim=".systems/ai/templates/worktree/worktree-bootstrap-shim.template.md"
+script=".systems/scripts/bootstrap-target-worktree"
+
+require_ref "$contract" '^# worktree-bootstrap\.md$' "core contract"
+require_ref "$contract" 'ai-workflow-workspace/' "strong marker"
+require_ref "$contract" 'git clone https://github\.com/bracia-plociennik/ai-workflow\.git ai-workflow' "canonical clone"
+require_ref "$contract" 'platform approval' "approval boundary"
+require_ref "$contract" 'must never clone AI Workflow into itself' "self-clone boundary"
+require_ref "$contract" 'root .*AGENTS\.md.*already exists' "collision boundary"
+require_ref "$contract" 'wrong origin' "origin boundary"
+require_ref "$contract" 'dirty clone' "dirty boundary"
+require_ref "$contract" 'local bare remote' "smoke remote"
+require_ref "$contract" 'linked worktrees where `.git` is a file' "linked worktree support"
+require_ref "$contract" 'git rev-parse --git-path info/exclude' "portable exclude path"
+require_ref "$shim" 'git clone https://github\.com/bracia-plociennik/ai-workflow\.git ai-workflow' "portable shim clone"
+require_ref "$script" 'AI_WORKFLOW_BOOTSTRAP_TEST_MODE' "test-only remote"
+require_ref "$script" '--approved' "approval flag"
+require_ref ".systems/scripts/init-workspace" 'git-path info/exclude' "linked-worktree init consumer"
+require_ref ".systems/ai/core/installation.md" 'worktree-bootstrap\.md' "installation integration"
+require_ref "AGENTS.md" 'worktree-bootstrap\.md' "AGENTS integration"
+require_ref "HUMANS.md" 'Worktree Bootstrap' "HUMANS integration"
+require_ref "README.md" 'worktree-bootstrap\.md' "README integration"
+require_ref ".systems/ai/core/commands.md" 'check-worktree-bootstrap' "commands integration"
+require_ref ".systems/scripts/validate-workflow" 'check-worktree-bootstrap' "workflow validation"
+require_ref ".systems/scripts/check-required-artifacts" 'check-worktree-bootstrap' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'worktree-bootstrap-local-bare-remote' "smoke integration"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'worktree-bootstrap-linked-worktree' "linked worktree smoke"
+
+unsafe_patterns=(
+  'bootstrap[^.\n]{0,100}\b(may|can|should)\b[^.\n]{0,100}\b(without|skip)\b[^.\n]{0,80}\b(approval|marker|origin check)\b'
+  'bootstrap[^.\n]{0,100}\b(may|can|should)\b[^.\n]{0,100}\b(overwrite|replace|merge)\b[^.\n]{0,80}\bAGENTS\.md\b'
+  'official AI Workflow[^.\n]{0,100}\b(may|can|should)\b[^.\n]{0,80}\bclone itself\b'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe worktree bootstrap wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/templates
+done
+
+[[ -x "$script" ]] || { echo "bootstrap-target-worktree must be executable"; fail=1; }
+
+exit "$fail"

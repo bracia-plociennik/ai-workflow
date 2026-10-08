@@ -1,0 +1,25 @@
+**Selected skill:** [`skill-creator`](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/.systems/ai/skills/skill-creator/SKILL.md:1). Its frontmatter explicitly covers reviews of AI Workflow skills. The trigger fits this request, and every path listed in its resource routing exists in the fixture.
+
+### Findings
+
+- **P2 — Trigger evaluation can contaminate its holdout.** The skill calls for a train/holdout split before evaluating a proposed description, and the [schema](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/.systems/ai/skills/skill-creator/references/schemas.md:319) includes `holdout_fraction` and holdout results. The [description helper](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/.systems/ai/skills/skill-creator/scripts/improve_description.py:60) draws candidate terms from *all* queries and neither splits nor scores them. A later holdout check using those queries would no longer be independent. Use training queries only to generate a candidate, then record separate holdout results; or document that the helper only drafts text and that splitting and scoring are manual.
+- **P3 — The required validation command targets the wrong skill for general skill work.** The [required checks](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/.systems/ai/skills/skill-creator/SKILL.md:241) say they apply to AI Workflow system skill changes, but the `quick_validate.py` command always targets `skill-creator`. The [validator](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/.systems/ai/skills/skill-creator/scripts/quick_validate.py:240) accepts a target directory. Replace the hardcoded argument with the changed skill path, or label that command as a self-check.
+
+These are **inferences from opened files**, not results of executing the helper or validator. No files were edited.
+
+### Execution Trace
+
+Sources used: fixture `AGENTS.md`; the selected `SKILL.md`, README, schema, helper, validator, and offline trigger review asset; relevant fixture core review, routing, risk, permissions, and response contracts.  
+Evidence reviewed: actual file contents and referenced-path existence checks. The other routed resources were checked for existence; their bodies were not opened because they were not needed for this review.  
+Workflow procedures used: Phase Skill Discovery; advisory `global-quality-review-stance`; contract compliance. Skills/roles used: fixture `skill-creator`.  
+Commands/checks run: read-only `rg`, `cat`, `sed`, `nl`, `test`, and directory listing. A shell heredoc was rejected before execution; a read-only path check replaced it. Git status was unavailable because the fixture is not a Git repository. No validators or evals were run.  
+Skipped/unreadable sources: live repository, parent directories, external sources, and user files were excluded as requested. No fixture workspace skills, status, or intake files were present.  
+Limits/residual uncertainty: behavior is statically reviewed; no runtime eval result or formal QA verdict is claimed. Work mode: read-only advisory review; contract compliance: aligned; knowledge capture: not-required, with findings recorded here.  
+Instruction refresh: Status: performed-targeted; Trigger: review closure; Contracts refreshed: fixture `AGENTS.md` and applicable core review/routing contracts; Reviewed baseline: opened fixture artifacts, with no Git baseline available; Drift/conflict: none.  
+Owner decision interaction: Mode: none-needed; Decisions asked/pending: none; Auto-resolved decisions: none.  
+Model recommendation: Recommended: GPT-5.6 Luna High; Reason: bounded, read-only skill review; Criticality: low; Current model known: yes; Blocking: no.
+
+### Co dalej?
+
+- **Recommendation:** Correct the two routing issues in a separate writable task. Impact: validation will target the changed skill, and trigger evaluations can preserve an independent holdout. **Napisz:** “Prepare a scoped fix for the two skill-creator findings.”
+- **Safe alternative:** Keep the files as they are and perform trigger scoring and target-skill validation manually. Impact: the findings remain, but this fixture stays unchanged. **Napisz:** “Give me a manual verification procedure for these findings.”

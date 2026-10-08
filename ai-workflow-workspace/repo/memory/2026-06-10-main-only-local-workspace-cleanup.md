@@ -1,0 +1,24 @@
+# 2026-06-10 - Main-only Local Workspace Cleanup
+
+- Date: `2026-06-10`
+- Topic: `main-only local workspace cleanup`
+- Type: `repo-constraint`
+- Status: `active`
+- Scope: `repo-wide`
+- Source: `owner-approved cleanup and validation`
+- Evidence:
+  - `git status --short --branch` showed `main` synchronized with `origin/main` after push.
+  - `git branch --all` showed `main`, `origin/main`, and `origin/HEAD -> origin/main`.
+  - `git ls-files ai-workflow-workspace` returned no tracked files.
+  - `git check-ignore -v ai-workflow-workspace/repo/core/status.md` confirmed `/ai-workflow-workspace/` is ignored by `.gitignore`.
+  - `.systems/scripts/check-branch-policy` passed.
+  - `.systems/scripts/validate-workflow` passed with validator smoke tests.
+  - Commit `e52d407` removed the `dev` push trigger from `.github/workflows/ai-workflow-validate.yml`.
+- Summary: This official `ai-workflow` checkout uses `main` as the active public branch, and local `ai-workflow-workspace/` runtime must remain ignored and untracked. The previous local `dev` workspace model is no longer active in this repository.
+- Applies to:
+  - branch policy
+  - local runtime workspace
+  - GitHub Actions workflow validation
+  - repo-level runtime artifacts
+- Rule: Do not recreate a tracked or branch-specific `ai-workflow-workspace/` model in this official repository without an explicit owner decision. Treat `ai-workflow-workspace/` as private local runtime and verify it remains untracked before publishing template changes.
+- Review trigger: Revisit if a `dev` branch is intentionally restored, CI branch policy changes, or `ai-workflow-workspace/**` appears in `git ls-files`.

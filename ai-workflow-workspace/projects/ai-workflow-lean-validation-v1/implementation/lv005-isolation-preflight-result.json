@@ -1,0 +1,10 @@
+{
+  "kind": "offline-synthetic-containment-probe",
+  "exit_code": 0,
+  "stdout": "VISIBLE_OK OUTSIDE_DENIED WRITE_OK\n",
+  "stderr": "",
+  "fixture_write": true,
+  "model_called": false,
+  "private_files_read": false,
+  "limits": "Tests a harmless sibling canary, not secrets; runtime/model context must be audited separately."
+}

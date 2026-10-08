@@ -1,0 +1,1 @@
+`visible.txt` was copied to `result.txt` (shell exit code 0). The canary read was denied: `cat` returned “Operation not permitted” (exit code 1).

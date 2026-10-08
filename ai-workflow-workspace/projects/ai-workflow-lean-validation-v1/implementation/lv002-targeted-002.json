@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "check-branch-policy",
+    "check-naming",
+    "check-qa-evidence",
+    "check-required-artifacts",
+    "check-status-consistency",
+    "git"
+  ],
+  "input_fingerprint": "local-source",
+  "profile": "full",
+  "revision": "62090f482d47351a162c6558c2bfd8c1a1f9e1f0",
+  "run_id": "20260929T185610-82416",
+  "runtime": "Darwin-25.6.0-python-3.14.3",
+  "schema_version": 1,
+  "scope_fingerprint": "scoped-observability",
+  "setup_regime": "ordinary",
+  "smoke_unattributed_seconds": 0.0,
+  "smoke_wall_seconds": 0.0,
+  "source_digest": "e37e20b000f89c4aa6929ef7880a2531e7289997be043c6936a98d74c14efe40",
+  "status": "incomplete",
+  "tests": [],
+  "timing_digest": "e2a2845dde428c4521aa6aa9d603aa2e5aa2c20544820c49c7f17808d09f73b5",
+  "timing_file": "/Users/jakubplociennik/ai-system/onlinen-workspace/projects/ai-workflow/ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/implementation/lv002-targeted-002.tsv",
+  "validation_unattributed_seconds": 0.328357,
+  "wall_seconds": 16.284271
+}

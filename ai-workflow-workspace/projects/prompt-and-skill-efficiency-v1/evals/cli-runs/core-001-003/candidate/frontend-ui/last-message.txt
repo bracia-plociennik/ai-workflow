@@ -1,0 +1,78 @@
+## Task Idea Validation
+
+- **Co zostaje:** A responsive account settings screen with explicit loading, validation, and recovery behavior.
+- **Co jest słabe / do poprawy lub usunięcia:** The request does not identify editable fields or a data contract. The checkout contains evaluation fixtures, not a React app.
+- **Czego brakuje:** Field definitions, API behavior, design system, and test commands are needed before implementation.
+- **Blokery / decyzje:** None for this read-only plan. Those details block an implementation-ready specification.
+- **Rekomendowany routing:** Read-only synthetic frontend plan. No files will be changed.
+
+## Screen plan
+
+**Proposed scope:** A “Profile” section with editable display name and preferred language, plus a read-only email address. Treat email, password, and other security-sensitive changes as separate flows requiring their own requirements and approval.
+
+On wide screens, use a restrained settings navigation beside a single-column form. On narrow screens, stack the navigation, heading, fields, and actions; keep controls full width and prevent horizontal scrolling. Reuse the eventual project’s form, button, alert, and typography components.
+
+| State | Screen behavior | User action |
+| --- | --- | --- |
+| Initial loading | Show stable form-shaped placeholders; disable Save. | Wait for account data. |
+| Load failure | Show a clear error in the form area. | Retry loading. |
+| Ready, unchanged | Show current values and a disabled Save button. | Edit a field. |
+| Invalid input | Show a message beside each invalid field and an error summary on submit. Preserve values. | Correct and resubmit. |
+| Saving | Keep entered values visible; disable duplicate submission and show progress. | Wait for confirmation. |
+| Save success | Show a confirmation only after the server confirms; update the displayed values. | Continue editing if needed. |
+| Save failure or offline | Preserve edits, explain that changes were not saved, and offer Retry. | Retry or keep editing. |
+| Stale data conflict | Preserve edits and explain that account data changed elsewhere. | Reload current data, then review edits before saving. |
+
+Use labels and instructions that remain visible, keyboard-accessible controls, visible focus, and status announcements for loading, errors, and success. Keep error messages tied to their fields. A retry must not silently discard unsaved input.
+
+**Proposed implementation sequence, once a React project and scope are supplied:**
+
+1. Inspect its routes, design system, data contract, and test setup.
+2. Specify field rules and server error mapping; confirm whether stale-write detection is supported.
+3. Build the responsive layout and explicit state transitions.
+4. Verify keyboard flow, narrow and wide layouts, validation, failed load/save, retry, and confirmed success.
+
+## Plan Quality Contract
+
+- **Plan classification:** read-only; no implementation writes planned.
+- **DoD source:** this request.
+- **Testable DoD for this plan:** responsive layout, loading, validation, save, failure, and recovery behavior are specified; implementation assumptions are identified.
+- **Artifact QA route / trigger:** not-applicable; this is a response-only plan with no formal project phase or artifact.
+- **Implementation Quality Closure route:** not-applicable; no implementation occurs.
+- **Required verification now:** repository and contract inspection only. Future implementation would need product tests, responsive visual checks, and keyboard/accessibility review.
+- **Quality-ready criteria:** the plan covers the requested states without claiming the screen was built or tested.
+- **Owner opt-out:** none.
+- **Not-applicable reason:** the checkout has no React product surface and the user prohibited file changes.
+- **Blocking decision:** none for planning; field and API decisions remain open for implementation.
+- **Next route:** confirm product scope and inspect the actual React project before producing an implementation-ready spec.
+
+**Work mode compliance:** read-only synthetic planning; no commit or handoff artifact is proposed. **Knowledge capture:** not-required because no repository fact or implementation state changed.
+
+## Execution Trace
+
+- **Sources used:** user request; [AGENTS.md](/private/tmp/pse-cli-candidate-frontend-ui-0jr4sec1/checkout/AGENTS.md); repository status/intake; plan, risk, permission, and response contracts; frontend skill and its interaction/accessibility guidance.
+- **Evidence reviewed:** directory listing and Git status. The fixture has no React app or active project artifacts.
+- **Workflow procedures used:** task intake, owner decision discovery, Plan Quality Contract, contract compliance.
+- **Skills/roles used:** `frontend-skill` for UI planning and state coverage.
+- **Commands/checks run:** read-only file inspection and `git status --short`; no tests or build run because no implementation exists.
+- **Skipped/unreadable sources:** product routes, components, API contract, and test setup are absent.
+- **Limits/residual uncertainty:** field scope, persistence behavior, and visual conventions remain assumptions. `AGENTS.md` was already modified in the worktree; this task made no changes.
+- **Instruction refresh:** Status: performed-targeted. Trigger: new planning scope. Contracts refreshed: applicable repository, planning, risk, permission, and frontend contracts. Reviewed baseline: current worktree and synthetic status/intake. Drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed for this read-only plan. Decisions asked/pending: none. Auto-resolved decisions: a minimal profile form was used as a planning example, not accepted implementation scope.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High. Reason: bounded, reversible planning. Criticality: low for this read-only task. Current model known: yes. Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Confirm the fields and provide the synthetic React project for an implementation-ready specification.  
+**Wpływ:** This resolves the data and design assumptions before code work.  
+**Napisz:**
+```text
+Use this account settings plan. The editable fields are [fields]. Inspect the synthetic React project and prepare an implementation-ready specification; do not change files.
+```
+
+**Alternatywa:** Refine the screen as a read-only wireframe and interaction spec.  
+**Wpływ:** This settles the user experience while leaving integration details open.  
+**Napisz:**
+```text
+Refine the account settings plan into a read-only wireframe and interaction spec. Do not change files.
+```

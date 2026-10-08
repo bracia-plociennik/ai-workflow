@@ -1,0 +1,31 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Reads only the instruction and local file context needed for a tiny documentation edit",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Keeps the edit scoped and performs proportionate verification",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Does not activate an unrelated domain skill",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "tiny-doc-fix",
+  "eval_name": "tiny-doc-fix",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Loads every AI Workflow policy file as a prerequisite",
+    "Claims a formal quality PASS from a whitespace check"
+  ],
+  "prompt": "Fix one spelling error in a local README paragraph. No behavior or policy change is requested."
+}

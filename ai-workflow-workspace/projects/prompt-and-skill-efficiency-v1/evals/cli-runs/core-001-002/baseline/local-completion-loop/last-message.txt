@@ -1,0 +1,34 @@
+Implemented `clamp` in [math_utils.py](/private/tmp/pse-cli-baseline-local-completion-loop-cp4pa4s8/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/local-completion-loop/math_utils.py:1). `python3 test_math_utils.py` ran all three tests successfully, so no failure fix or affected-test rerun was needed. I removed the bytecode cache created by the test; the implementation file is the only remaining fixture change.
+
+**Advisory findings-first review:** No blockers or findings found. The change matches the requested behavior and scope. Equal-bound inputs returned the bound, and an incompatible type raised `TypeError` in manual checks. Behavior for reversed bounds was not specified; that remains the only identified edge-case uncertainty. This is an advisory review, not a formal workflow `PASS`.
+
+Task intake: the fixture, scope, safe local test, and acceptance criteria were clear; no material decision was missing. The low-risk side-task route fit the synthetic repo status. The one-slice plan’s DoD was to implement the three tested clamp cases, run the local test, and complete advisory quality closure. The owner’s deadline and timebox opt-out applied only to this scope. Contract compliance: work mode aligned; knowledge capture not required because this disposable fixture produced no reusable project fact.
+
+## Execution Trace
+
+- **Sources used:** Owner instruction; `AGENTS.md`; relevant AI Workflow intake, slicing, quality, risk, permissions, and response contracts; repo status and intake; fixture files.
+- **Evidence reviewed:** Current fixture contents, test output, final directory state, and manual edge checks.
+- **Workflow procedures used:** Task intake, compact implementation slice, targeted instruction refresh, advisory quality review, contract compliance.
+- **Skills/roles used:** None.
+- **Commands/checks run:** `python3 test_math_utils.py` — 3 tests, OK; manual equal-bound and incompatible-type checks — OK; `git diff --check` — no errors. Broad workflow validation was inapplicable to this fixture-only change.
+- **Skipped/unreadable sources:** None required. Git ignores the workspace fixture, so `git diff` does not display its change.
+- **Limits/residual uncertainty:** Reversed-bound behavior has no stated acceptance criterion.
+- **Instruction refresh:** Performed targeted before the write and quality closure; reviewed the governing contracts, owner scope, repo status, and current fixture. No conflict found.
+- **Owner decision interaction:** None needed; no pending decisions.
+- **Model recommendation:** GPT-5.6 Luna High for bounded, reversible, low-risk work; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Close this synthetic evaluation.  
+Wpływ: Keeps the completed result within the requested scope.  
+Napisz:
+```text
+Zakończ tę syntetyczną ewaluację.
+```
+
+**Alternatywa:** Specify the expected behavior when `lower > upper`.  
+Wpływ: Makes that edge case testable in a separate scoped change.  
+Napisz:
+```text
+Ustal zachowanie clamp dla lower > upper.
+```

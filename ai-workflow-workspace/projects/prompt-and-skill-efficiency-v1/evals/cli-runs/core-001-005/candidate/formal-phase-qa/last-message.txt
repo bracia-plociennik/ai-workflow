@@ -1,0 +1,39 @@
+## Architecture review
+
+**The proposal would fail the Architecture QA gate.** This is an advisory assessment of a synthetic fixture, not a formal phase result.
+
+- **P1 — Ownership is unenforced.** The download endpoint checks authentication, but the proposal does not check that the requested document belongs to the caller. An authenticated user could therefore view another user’s document under the described design. [case.md](/private/tmp/pse-cli-candidate-formal-phase-qa-sjxdn642/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:7)
+- **P1 — Failed uploads can leave visible records.** Metadata is written before bytes are uploaded, and HTTP 500 describes only the response. No transaction, cleanup, or visibility rule protects the owner’s stated outcome. [case.md](/private/tmp/pse-cli-candidate-formal-phase-qa-sjxdn642/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:3)
+- **P2 — The DoD is incomplete.** The proposal does not define storage access boundaries or testable acceptance criteria. Authentication is mentioned, but its relationship to document ownership is unresolved. [case.md](/private/tmp/pse-cli-candidate-formal-phase-qa-sjxdn642/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:5)
+
+A second, adversarial pass reaches the same blockers: an authenticated user requesting someone else’s document, and a storage failure after metadata is saved. Planning from this proposal would leave material security and failure behavior undecided. The [architecture QA contract](/private/tmp/pse-cli-candidate-formal-phase-qa-sjxdn642/checkout/.systems/ai/workflow/phase-1-architecture-qa.md) requires those gaps to be resolved before progression.
+
+The formal phase was **not** run: this fixture is not the required `architecture/phase-1-architecture.md` artifact, and repository status records no active project or phase. No files were changed.
+
+## Execution Trace
+
+- **Sources used:** Fixture owner intent, DoD, and proposal; `AGENTS.md`; architecture QA, full QA, quality review, risk, and response contracts; synthetic repo status and intake.
+- **Evidence reviewed:** Fixture lines 3–7; clean worktree at `7a904f7`; absence of a canonical architecture artifact.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; architecture QA criteria applied as an advisory lens. Intent/DoD compliance: **mismatch**. Review completeness: adversarial cases completed; closure current; formal gate ineligible.
+- **Skills/roles used:** None matched this generic fixture review. Model recommendation: **GPT-5.6 Sol High** for security-sensitive architecture review; current model known: yes; blocking: no.
+- **Commands/checks run:** Local file reads, artifact discovery, and `git status --short` (clean). No validators or product tests: this fixture contains no implementation to execute.
+- **Skipped/unreadable sources:** Formal architecture artifact and project phase evidence do not exist. Repository compatibility is therefore unknown.
+- **Limits/residual uncertainty:** Findings concern the stated proposal only. Work mode compliance: read-only advisory review; knowledge capture: not required because no durable project state changed.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: `AGENTS.md`, architecture QA, quality review, full QA, risk, permissions, and response contracts; reviewed baseline: `7a904f7` and fixture; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions asked/pending: none; auto-resolved decisions: none.
+
+## Co dalej?
+
+**Rekomendacja:** Revise the synthetic proposal to specify ownership enforcement, upload rollback or cleanup, storage boundaries, and acceptance cases.  
+Wpływ: Makes the architecture reviewable against the stated DoD.  
+Napisz:
+```text
+Draft a revised architecture proposal for the formal-phase-qa fixture in chat only. Do not edit files.
+```
+
+**Alternatywa:** Review only the two failure scenarios in more detail.  
+Wpływ: Clarifies the security and consistency requirements before revising the whole proposal.  
+Napisz:
+```text
+Analyze cross-user document access and failed-upload visibility scenarios for the formal-phase-qa fixture, read-only.
+```

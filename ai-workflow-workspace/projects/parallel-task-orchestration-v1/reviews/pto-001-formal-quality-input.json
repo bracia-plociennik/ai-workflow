@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "kind": "implementation-quality",
+  "task": "PTO-CORE-001-contract-routing",
+  "run_id": "pto-001-formal-quality-001",
+  "verdict": "PASS",
+  "date": "2026-10-03",
+  "inputs": [
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/autopilot.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/command-routing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/implementation-slicing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/operating-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/parallel-task-orchestration.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/parallel-work-policy.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/workflow.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/readiness.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/state.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-2-project-plan.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-parallel-task-orchestration"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-required-artifacts"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-review-completeness-gate"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-validator-smoke-tests"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-checks.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/core.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/manifest.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/validate-workflow"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-pto-core-001-contract-routing-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/phase-4-pto-core-001-contract-routing-implementation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/pto-001-quality-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/pto-001-quality-approval.md"
+    }
+  ],
+  "sections": {
+    "Evidence": "- Fresh unchanged eighteen-source snapshot verified against actual worktree on this continuation.\n- Full supporting validation passed, exit 0, duration 666 seconds; five groups and 740 smoke IDs, including 37 PTO regressions.\n- Semantic and independent adversarial review: reviews/pto-001-quality-review.md; six discovered defects corrected and fresh full-current-diff review complete.\n- Human high-risk approval: decisions/pto-001-quality-approval.md.",
+    "Definition Of Done Validation": "| DoD Item | Result | Evidence |\n| --- | --- | --- |\n| PTO-001-AC1 | PASS | One execution owner; delegated units are not independent autopilots |\n| PTO-001-AC2 | PASS | Dynamic verified-capacity policy and serial fallback; allocator belongs to PTO-002 |\n| PTO-001-AC3 | PASS | Optional packaging; common QA and parent-task capture |\n| PTO-001-AC4 | PASS | All nine consumers scanned; 37 positive/negative policy smoke tests and original coverage retained |",
+    "Intent / Plan / Spec Compliance": "- Result: PASS\n- Owner instruction reviewed: yes\n- Accepted plan reviewed: yes\n- Accepted spec reviewed: yes\n- Scope/out-of-scope reviewed: yes\n- Acceptance criteria reviewed: yes\n- Compliance status: aligned\n- Wrong problem solved: no\n- Owner instruction mismatch: no\n- Accepted plan mismatch: no\n- Accepted spec mismatch: no\n- Acceptance criteria gap: no\n- Scope creep: no\n- Underbuild: no\n- Overbuild: no\n- Evidence: exact eighteen-file PTO-001 scope; future runtime support not advertised.",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: 8a0eeef and reviews/pto-001-source-snapshot.json, all eighteen files unchanged\n- Closure freshness: current\n- Post-fix full re-review: completed\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete\n- Cross-contract consistency: aligned\n- Risk/work mode compatibility: aligned\n- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: yes\n- Negative-space / adversarial review: completed\n- Automated evidence role: supporting-only\n- Instruction refresh: performed-targeted\n- Instruction baseline: current\n- Producers/consumers reviewed: canonical policy, nine consumers, registry, runner and smoke manifest\n- Evidence: independent 47 lexical probes, 37 regressions, post-fix source review and manual dependency success/failure traces in reviews/pto-001-quality-review.md.",
+    "Adaptive Data / Integration Verification Matrix": "- Applicability: required\n| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States/Rows | Failure Behavior | Automated Check | Manual Trace |\n| --- | --- | --- | --- | --- | --- | --- |\n| one-owner approved policy | retained formal gates | valid serial/default route | competing owner or fake task completion | reject unsafe authority | dual-owner and consumer regressions | router to autopilot to acceptance |\n| safe prohibition plus unsafe clause | unsafe clause detected | nonzero diagnostic | false green from negation | reject | separator and reverse separator tests | unsafe clause through shared helper |\n| missing contract | missing source error | nonzero diagnostic | silent skip | fail closed | missing-contract regression | absent canonical input to checker |",
+    "Findings": "- Blockers: none\n- Unresolved findings: none\n- Resolved: six review findings; see reviews/pto-001-quality-review.md.\n- Residual risk: finite lexical coverage; runtime implementation and native verification belong to later tasks.",
+    "Quality Gate": "- Intent / Plan / Spec Compliance PASS: yes\n- Review Completeness Gate PASS: yes\n- Cross-contract consistency aligned: yes\n- Risk/work mode compatibility aligned: yes\n- Negative-space / adversarial review complete or not applicable: yes\n- Automated evidence treated as supporting-only: yes\n- Post-fix full re-review complete or not required: yes\n- Instruction baseline current: yes\n- Closure freshness current: yes\n- Policy-boundary adversarial matrix complete or not applicable: yes\n- Producer-consumer field audit complete or not applicable: yes\n- Required-field mapping complete or not applicable: yes\n- 100% DoD satisfied: yes\n- No known bug in scope: yes\n- No regression in changed/direct paths: yes\n- Edge cases covered or explicitly rejected: yes\n- Explicit evidence attached: yes\n- Quality result: PASS\n- Required next phase: phase-6-distillation",
+    "Owner Decision Checkpoint": "- Interaction mode: queued\n- Decision state: clear\n- Material decisions: pto-001-high-risk-quality-acceptance approved\n- Questions asked: none\n- Auto-resolved reversible decisions: none\n- Optional owner refinements: none\n- Decision artifacts: decisions/pto-001-quality-approval.md\n- Next route: phase-6-distillation",
+    "Optional Knowledge Capture": "- Capture recommended: yes\n- Target: project-memory\n- Reason: preserve policy boundaries and validator failure lessons\n- Owner decision required: no\n- Owner decision: defer-to-distillation\n- Privacy/scope check: pass\n- Suggested entry title: Single-owner delegated execution\n- Suggested entry summary: Authority and accepted evidence precede dynamic worker allocation"
+  }
+}

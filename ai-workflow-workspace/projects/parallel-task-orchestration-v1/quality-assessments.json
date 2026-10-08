@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "assessments": [
+    {
+      "path": "quality/recovery-phase-8-final-check.md",
+      "sha256": "4896697ce9080a51496042bc201fca843861273757068c6c9982b6fe3e964af2",
+      "state": "superseded",
+      "assessed_head": "8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1",
+      "decision": "decisions/phase-8-pre-cr-history-storage.md",
+      "decision_sha256": "8ac89a550b71abe95129289fc2be45443eac1c322e4bbd0f03eb7d21fc879a91"
+    }
+  ]
+}

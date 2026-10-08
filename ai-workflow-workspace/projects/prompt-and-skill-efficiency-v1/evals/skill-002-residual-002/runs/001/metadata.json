@@ -1,0 +1,21 @@
+{
+  "case": "routine-discovery-near-miss",
+  "repeat": "001",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "sandbox": "read-only",
+  "prompt_sha256": "de8df4e5cbb7d2ab3b17e012e2c9d9b996e0342486c00e1ad41394fb1622062f",
+  "fixture_before": {
+    "source": "b835c9235ec1a3437d23c2d775c19bd2006af7f29bcd68de24b0c72deb30e00a",
+    "skill": "645c67b7ae48994e1b337d6eec637e7510dd30b0d80d91f57288419ffa8284fd",
+    "agents": "eab833e37b454578891d7e36cc8f9a4fedf52ed1251dcd73b887f19e8e8330e2"
+  },
+  "fixture_after": {
+    "source": "b835c9235ec1a3437d23c2d775c19bd2006af7f29bcd68de24b0c72deb30e00a",
+    "skill": "645c67b7ae48994e1b337d6eec637e7510dd30b0d80d91f57288419ffa8284fd",
+    "agents": "eab833e37b454578891d7e36cc8f9a4fedf52ed1251dcd73b887f19e8e8330e2"
+  },
+  "fixture_unchanged": true,
+  "exit_code": 0,
+  "duration_seconds": 91.29
+}

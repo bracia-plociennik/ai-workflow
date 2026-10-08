@@ -1,0 +1,27 @@
+**Selected AI Workflow skill: none.** The fixture has no workspace skill directory. Its only active system skill is [skill-creator](/private/tmp/ai-workflow-skill-discovery-20260928/.systems/ai/skills/skill-creator/SKILL.md), whose stated scope is creating, reviewing, or evaluating *skills*. A future review of `src/report.py` does not match that scope based on the request alone. The fixture’s [AGENTS.md](/private/tmp/ai-workflow-skill-discovery-20260928/AGENTS.md) routes code reviews through its review procedures; those procedures are not skills.
+
+### Execution Trace
+
+- **Sources actually opened:** Fixture `AGENTS.md`; `operating-model.md`, `command-routing.md`, `risk-model.md`, `permissions.md`, `response-contract.md`, `instruction-adherence-refresh.md`; and `skill-creator/SKILL.md`. The combined output for the first group was truncated.
+- **Evidence reviewed:** Fixture file inventory and directory listing showed one active system skill and no workspace skill directory. Git status could not run because the fixture is not a Git repository.
+- **Workflow procedures used:** Skill discovery only. **Skills/roles used:** none.
+- **Commands/checks run:** Read-only `rg`, `ls`, `cat`, and attempted `git status`. No writes or tests.
+- **Skipped/unreadable sources:** `src/report.py` was deliberately not opened. No live repository, parent directory, external service, or user file was inspected.
+- **Limits/residual uncertainty:** Selection is based on the fixture’s skill contracts and the stated future task; the code’s contents played no part.
+- **Instruction refresh:** Status: performed-targeted; trigger: initial fixture routing; contracts refreshed: files listed above; reviewed baseline: fixture inventory, with no Git baseline; drift/conflict: none observed.
+- **Owner decision interaction:** Mode: none-needed; decisions: none.
+- **Model recommendation:** Recommended: not-applicable; reason: skill selection only; criticality: not-applicable; current model known: not-applicable; blocking: not-applicable.
+
+### Co dalej?
+
+**Rekomendacja:** Request the code review when ready. **Wpływ:** The reviewer can then inspect the file and apply the fixture’s review procedures.  
+**Napisz:**
+```text
+Review src/report.py using the fixture's AI Workflow review procedures.
+```
+
+**Alternatywa:** Specify the concern before requesting the review. **Wpływ:** This narrows the review focus.  
+**Napisz:**
+```text
+Before reviewing src/report.py, focus on [specific concern].
+```

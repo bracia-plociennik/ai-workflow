@@ -1,0 +1,69 @@
+{
+  "candidate_dispatcher_sha256": "d3c9aaad6766fc95e7fa65555ffbb7413694df42d3fe01d328d6d354b0e1bbba",
+  "probes": [
+    {
+      "case": "complete-live-manifest",
+      "result": "pass",
+      "ids": 681
+    },
+    {
+      "case": "duplicate-json-key",
+      "result": "pass",
+      "diagnostic": "duplicate JSON key"
+    },
+    {
+      "case": "missing-source",
+      "result": "pass",
+      "diagnostic": "common.sh"
+    },
+    {
+      "case": "source-drift",
+      "result": "pass",
+      "diagnostic": "source digest"
+    },
+    {
+      "case": "missing-test-contract",
+      "result": "pass",
+      "diagnostic": "test contract inventory"
+    },
+    {
+      "case": "wrong-coverage-command",
+      "result": "pass",
+      "diagnostic": "coverage index command"
+    },
+    {
+      "case": "early-zero-no-cases",
+      "result": "pass",
+      "exit_code": 1
+    },
+    {
+      "case": "child-failure-seven",
+      "result": "pass",
+      "exit_code": 7
+    },
+    {
+      "case": "interrupt-owned-tree",
+      "result": "pass",
+      "exit_code": 143,
+      "live_orphans": 0
+    },
+    {
+      "case": "timeout-owned-tree",
+      "result": "pass",
+      "exit_code": 124,
+      "live_orphans": 0
+    },
+    {
+      "case": "failure-owned-tree",
+      "result": "pass",
+      "exit_code": 7,
+      "live_orphans": 0
+    },
+    {
+      "case": "cleanup-failure",
+      "result": "pass",
+      "exit_code": 1
+    }
+  ],
+  "limits": "Synthetic fault paths and manifest integrity only; full old/new behavior, repetitions and source QA are separate."
+}

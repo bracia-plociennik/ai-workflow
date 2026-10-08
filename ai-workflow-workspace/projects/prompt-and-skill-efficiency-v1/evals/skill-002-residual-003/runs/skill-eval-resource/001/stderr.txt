@@ -1,0 +1,20 @@
+Reading additional input from stdin...
+2026-09-28T14:59:20.526152Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-09-28T14:59:20.544003Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-09-28T14:59:20.640627Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.647174Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.651489Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.655806Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.659974Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.664486Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.669103Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.673563Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.677896Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.683230Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.688581Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.692989Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.698998Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:20.704134Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T14:59:30.741752Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)
+2026-09-28T14:59:45.562278Z  WARN codex_core_plugins::manager: failed to refresh cached remote plugin catalog error=failed to parse remote plugin catalog response from https://chatgpt.com/backend-api/ps/plugins/list?scope=GLOBAL&limit=200: EOF while parsing a value at line 1 column 0 scope=Global
+2026-09-28T15:00:54.706900Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)

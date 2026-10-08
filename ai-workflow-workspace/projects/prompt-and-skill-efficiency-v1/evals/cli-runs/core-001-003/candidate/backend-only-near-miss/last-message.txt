@@ -1,0 +1,40 @@
+## Read-only review
+
+The synthetic fixture has three material findings:
+
+- **P1 — An authenticated user can select any account.** `authorize()` checks only that a user exists, and the service never checks whether `$actor` may debit the requested account. [case.md](</private/tmp/pse-cli-candidate-backend-only-near-miss-svoazmrv/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:8>)
+- **P1 — The balance can become negative.** The request requires a positive amount, but neither class checks available funds before subtracting it. [case.md](</private/tmp/pse-cli-candidate-backend-only-near-miss-svoazmrv/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:23>)
+- **P1 — Failure and concurrency can leave inconsistent records.** The balance is saved before `Transfer::create()`, with no transaction. A failed create can leave a debit without a transfer record; concurrent requests can also act on the same stale balance. [case.md](</private/tmp/pse-cli-candidate-backend-only-near-miss-svoazmrv/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:24>)
+
+The request’s positive-integer amount rule is useful. The fixture does not define an error response contract, so I cannot determine whether a missing account should produce a validation error or the current `findOrFail()` response. Remediation needs an explicit authorization rule, insufficient-funds behavior, and an atomic debit-and-record operation.
+
+**Review scope:** backend validation and error handling only; no user-facing interface change. This is an advisory review, not a formal QA result. No files were changed.
+
+### Execution Trace
+
+- **Sources used:** owner request, fixture, repository review contracts, Backend Laravel Skill and its Laravel reference.
+- **Evidence reviewed:** static PHP snippet; `git status` showed a pre-existing modification to `AGENTS.md`.
+- **Workflow procedures used:** read-only `global-quality-review-stance`; findings-first and failure-path review. Contract compliance: read-only scope respected; knowledge capture not required because no repository state or durable decision changed.
+- **Skills/roles used:** Backend Laravel Skill.
+- **Commands/checks run:** file reads, line-number inspection, `git status`. Runtime tests were not run: the fixture has no Laravel application or test suite. Workflow validators are not applicable to this unchanged fixture.
+- **Review completeness:** scope and risk mode aligned; adversarial cases examined for another user’s account, insufficient funds, failed record creation, and concurrent debits. Automated evidence is supporting-only; no post-fix review was needed. Closure is current for the inspected fixture.
+- **Limits/residual uncertainty:** model, database constraints, callers, and API error mapping are absent, so runtime behavior and the intended business policy remain unverified.
+- **Instruction refresh:** Status: performed-targeted. Trigger: review closure. Contracts refreshed: `AGENTS.md`, review, risk, permissions, validation, response, and Laravel skill contracts. Reviewed baseline: HEAD `7a904f7`, current worktree, fixture, repo status/intake. Drift/conflict: none affecting this read-only review.
+- **Owner decision interaction:** Mode: none-needed for review. Decisions asked/pending: none. Auto-resolved decisions: none.
+- **Model recommendation:** GPT-5.6 Sol High; security and balance consistency warrant adversarial review. Criticality: high. Current model known: yes. Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define the account authorization and insufficient-funds rules, then request a gated backend fix with transaction and concurrency tests.  
+**Wpływ:** Establishes the behavior needed to correct all three P1 findings safely.  
+**Napisz:**
+```text
+Define the transfer authorization and insufficient-funds policy for this synthetic fixture, then plan a gated backend fix and tests. Do not implement yet.
+```
+
+**Alternatywa:** Request a narrower read-only review of the intended backend error responses.  
+**Wpływ:** Clarifies missing-account and insufficient-funds error behavior before any implementation decision.  
+**Napisz:**
+```text
+Review the intended backend error responses for the synthetic transfer fixture read-only; do not change files.
+```

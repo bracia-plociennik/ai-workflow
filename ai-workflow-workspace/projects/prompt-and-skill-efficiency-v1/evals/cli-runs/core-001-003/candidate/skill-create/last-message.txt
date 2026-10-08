@@ -1,0 +1,68 @@
+## Task Idea Validation
+
+- **Co zostaje:** A reusable, read-only skill focused on reviewing *proposed local CLI commands* before execution.
+- **Co jest słabe / do poprawy lub usunięcia:** “Command safety” needs a narrow trigger so ordinary command execution and general security reviews do not load the skill.
+- **Czego brakuje:** No information is needed for this plan. A later request would need write authorization and an accepted implementation route.
+- **Blokery / decyzje:** None for planning. The checkout is read-only for this task.
+- **Rekomendowany routing:** Plan a system skill under `.systems/ai/skills/`; create no artifacts now.
+
+## Skill plan
+
+**Proposed name:** `review-local-cli-safety`
+
+**Trigger:** Use when the user asks to assess a specific local shell or CLI command, command sequence, or script invocation *before it runs*, including its effect on files, git state, credentials, processes, or network access.
+
+| Should trigger | Should not trigger |
+| --- | --- |
+| “Is `rm -rf build/` safe from this directory?” | “Run the configured unit tests.” |
+| “Review this `git clean` command before I use it.” | “Review this application code for security bugs.” |
+| “Could this shell pipeline expose secrets or write outside the checkout?” | “Explain what `git status` displays.” |
+| “Check the safety of this local migration command.” | “Lint this shell script for style.” |
+
+**Proposed behavior:** Identify the command’s working directory and target scope; account for shell expansion, quoting, pipes, redirection, and substitutions; classify observable reads, writes, deletion, network effects, and uncertainty. Report the specific risk, evidence needed, and a safer command or inspection step where useful. Never treat the skill as execution approval or run a command merely to review it. Defer to repository risk, permission, and phase gates.
+
+**Artifact map for a later authorized build:** A concise `SKILL.md` with trigger, review procedure, authority boundary, output format, and stop conditions; a short `README.md`. Add a reference only if real examples make the entrypoint too long. No script is justified for v1.
+
+**Validation plan:** Review a local, static set of positive and near-miss prompts for trigger precision. Check that reviews catch destructive targets, hidden shell effects, secrets, and external effects without executing commands. Then run the skill validator and applicable AI Workflow checks. A green validator alone would not establish behavioral quality.
+
+### Plan Quality Contract
+
+- **Classification:** Read-only; no implementation writes planned.
+- **DoD source:** Your request and the repository skill creator contract.
+- **Testable DoD:** The plan names the skill, its boundary, trigger and non-trigger cases, intended behavior, artifact map, and validation route.
+- **Artifact QA / implementation quality closure:** `not-applicable` to this planning-only response; no artifact is created.
+- **Required verification:** Read-only contract and fixture inspection, completed. Behavioral validation belongs to a later build.
+- **Quality-ready criteria:** A later skill must pass layout checks and the local trigger/safety review.
+- **Blocking route:** Resolve write authorization and implementation gates before creating files.
+- **Residual risk:** Trigger behavior remains untested until the skill exists.
+
+**Work mode compliance:** Read-only planning within the synthetic fixture; no files changed. **Knowledge capture:** not required for this plan.
+
+## Execution Trace
+
+- **Sources used:** [AGENTS.md](/private/tmp/pse-cli-candidate-skill-create-6fuc3jpa/checkout/AGENTS.md), [AI Workflow skill creator](/private/tmp/pse-cli-candidate-skill-create-6fuc3jpa/checkout/.systems/ai/skills/skill-creator/SKILL.md), relevant core contracts, repo status/intake, and the named fixture.
+- **Evidence reviewed:** `git status` showed a pre-existing modified `AGENTS.md`; fixture files contain no CLI safety cases. No files were changed.
+- **Workflow procedures used:** Task Idea Validation, skill discovery, read-only Plan Quality Contract.
+- **Skills/roles used:** AI Workflow skill creator; Codex skill creator guidance.
+- **Commands/checks run:** Read-only file inspection, search, and git status. Validators and behavioral evals were not run because no skill was created.
+- **Skipped/unreadable sources:** None required for this plan.
+- **Limits/residual uncertainty:** Proposed trigger behavior is untested.
+- **Instruction refresh:** Status: performed-targeted; trigger: new planning scope; contracts refreshed: AGENTS, task intake, plan quality, risk, permissions, skill creator, response contract; reviewed baseline: checkout status and fixture; drift/conflict: none affecting this plan.
+- **Owner decision interaction:** Mode: none-needed; decisions pending: none; auto-resolved: short skill name and v1 artifact shape.
+- **Model recommendation:** GPT-5.6 Sol High; reason: security-adjacent skill boundary; criticality: planning-only, low immediate risk; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Review this plan as the scope for a later, separately authorized skill build.  
+**Wpływ:** Keeps the trigger boundary and safety behavior explicit before files are created.  
+**Napisz:**
+```text
+Use this plan to create the local CLI command safety review skill in a writable, authorized checkout.
+```
+
+**Alternatywa:** Refine only the trigger examples.  
+**Wpływ:** Improves routing confidence while keeping the work read-only.  
+**Napisz:**
+```text
+Expand the trigger and non-trigger cases for the CLI command safety skill; plan only.
+```

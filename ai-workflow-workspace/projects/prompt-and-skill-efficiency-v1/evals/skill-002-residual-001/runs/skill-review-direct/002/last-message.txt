@@ -1,0 +1,32 @@
+**Finding — potential false positive in the trigger description.** The active [skill-creator description](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/SKILL.md:3) says to use it when work involves `SKILL.md` contracts. That can include the fixture’s explicit prompt, “Check whether a skill exists for this task,” which [command routing](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/core/command-routing.md:1317) treats as ordinary skill discovery. Narrowing that clause to work that **creates, adapts, reviews, evaluates, or packages a skill** would avoid the overlap. This is a wording-based risk; I did not run a trigger evaluation or observe an actual misroute.
+
+I found no demonstrated missing route for this review in [Resource Routing](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/SKILL.md:62). No files were changed, and no formal phase gate ran.
+
+### Execution Trace
+
+- Sources used: fixture [AGENTS.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/AGENTS.md:25), active skill contract, command routing, and the fixture’s review and response contracts.
+- Evidence reviewed: tool-opened fixture files and local path checks. The fixture has no `.git` directory or workspace runtime; local `git status` returned “not a git repository.”
+- Workflow procedures used: read-only `global-quality-review-stance`; no formal gate.
+- Skills/roles used: fixture `skill-creator` contract as the reviewed skill.
+- Commands/checks run: read-only file listing, searches, numbered file reads, path checks, and attempted local git status. No validators or tests ran.
+- Skipped/unreadable sources: git status and runtime artifacts were unavailable in this fixture.
+- Limits/residual uncertainty: the false positive is inferred from wording and routing examples, not measured activation.
+- Instruction refresh: **performed-targeted** for review closure; refreshed fixture AGENTS, operating model, routing, risk, permissions, and review contracts against the opened fixture files. No source conflict found.
+- Owner decision interaction: **none-needed**. Model recommendation: **GPT-5.6 Luna High**, for a bounded read-only review; non-blocking.
+- Contract compliance: read-only review, no writes. Knowledge capture: **not-required**; the finding is recorded here.
+
+### Co dalej?
+
+**Rekomendacja:** Prepare a read-only wording proposal for the trigger description.  
+Wpływ: Makes the distinction from routine skill discovery reviewable.  
+Napisz:
+```text
+Prepare a read-only replacement for the skill-creator trigger description that excludes ordinary skill discovery. Do not edit files.
+```
+
+**Alternatywa:** Review more fixture prompt examples before proposing wording.  
+Wpływ: Gives more evidence about the overlap, with no changes.  
+Napisz:
+```text
+Run a read-only review of fixture prompt examples for skill-creator trigger false positives. Do not edit files or run a formal phase gate.
+```

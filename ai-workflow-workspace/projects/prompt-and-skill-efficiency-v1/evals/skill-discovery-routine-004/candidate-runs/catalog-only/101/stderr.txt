@@ -1,0 +1,19 @@
+Reading additional input from stdin...
+2026-09-28T16:42:41.549100Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-09-28T16:42:41.566366Z ERROR codex_models_manager::manager: failed to refresh available models: request timed out
+2026-09-28T16:42:41.889117Z  WARN codex_core::agents_md: project doc exceeds remaining budget; truncating path=file:///private/tmp/ai-workflow-skill-discovery-20260928-candidate/AGENTS.md remaining_bytes=32768
+2026-09-28T16:42:42.250552Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.260141Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.264990Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.269954Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.275439Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.280904Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.286187Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.290618Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.295208Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.299362Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.304858Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.309972Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.314819Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:42.319945Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back
+2026-09-28T16:42:50.530502Z  WARN codex_core_plugins::manager: failed to refresh cached remote plugin catalog error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/list?scope=GLOBAL&limit=200&pageToken=eyJzY29wZSI6IkdMT0JBTCIsIndvcmtzcGFjZV9pZCI6bnVsbCwiY3JlYXRvcl9hY2NvdW50X3VzZXJfaWQiOm51bGwsImNvbGxlY3Rpb24iOm51bGwsImluY2x1ZGVfcmVzdHJpY3RlZF9wbHVnaW5zIjp0cnVlLCJpbmNsdWRlX3VubGlzdGVkX2dsb2JhbF9wbHVnaW5zIjp0cnVlLCJlbGlnaWJsZV9wbGFuX3R5cGUiOiJwcm9saXRlIiwiZW5mb3JjZV9wbGFuX2VsaWdpYmlsaXR5IjpmYWxzZSwicmFua19ieV9wb3B1bGFyaXR5Ijp0cnVlLCJjb250aW51YXRpb24iOnsiZGVwbG95bWVudF90eXBlIjoicHJpbWFyeSIsInF1ZXJ5X2lkIjoicnM0OjNjMDQ0NjRjLTA4MzMtNGQxNS05OGJkLWJiNzgzZWM5ZGY0ZTpyTWNxd2JTOjA6bGVhZi04MDgwMjU3MC0zMTFhLTQxYWUtODJmNC1jNDk5MTFjYzIwMTAiLCJjdXJzb3IiOiJaSDY5ZFhDNGdMdnZlSExwaEpVSzZmamkyTkdqUE5TMEdzVkNwSlZaZ192VU5lRUZjWjVjZGpTNENKZ3BSWlpnN1V3dmpobW5BNlc2TkU0VjlCVTJJRXIxUlJiVC1IUU1jdkhXb01SNUs3N1ZCcHpOeUtoMWh3NXZOS1FIa1BmWjRsMWk1cWJQd0x4d2k4SnJnQ2FnS3FkWUVmYWlwM3RiTW5iMzAwNHp1ZzU1UmstV2ExMGZpZ19jakhYZVFZdDZ2YzQ0UEE1alExVT0ifX0 failed with status 500 Internal Server Error: {"detail":{"retryable":true,"message":"Internal server error"}} scope=Global

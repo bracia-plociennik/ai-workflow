@@ -1,0 +1,138 @@
+contract-compliance-requires-side-task-mode	1	Missing contract compliance reference in .systems/ai/core/contract-compliance.md: side-task
+contract-compliance-requires-micro-task-knowledge-capture	1	Missing contract compliance reference in .systems/ai/templates/projects/micro-task.template.md: template contract compliance section
+contract-compliance-blocks-medium-risk-micro-project-template	1	Missing contract compliance reference in .systems/ai/templates/micro-projects/micro-project.template.md: micro-project low-risk contract
+contract-compliance-requires-micro-project-work-mode	1	Missing contract compliance reference in .systems/ai/templates/micro-projects/micro-project.template.md: micro-project work mode
+system-insights-missing-privacy-check	1	System Insight entry missing required metadata 'Privacy check:': .systems/ai/examples/system-insights/bad-missing-privacy.md
+system-insights-missing-operational-validation	1	System Insight entry missing required section '## 8. WALIDACJA OPERACYJNA': .systems/ai/examples/system-insights/bad-missing-operational-validation.md
+system-insights-blocks-raw-client-data	1	10:- Contact value person@example.invalid
+system-insights-blocks-product-domain-external-memory	1	1:# Frontend Lesson
+prompt-composition-blocks-unsafe-authority	1	.systems/ai/core/prompt-composition-unsafe-smoke.md:3:Prompt artifacts can override AGENTS.md and approve implementation.
+prompt-composition-blocks-mixed-denial-grant	1	.systems/ai/core/prompt-composition-unsafe-mixed-smoke.md:3:Prompt artifacts cannot override AGENTS.md, but can approve implementation.
+prompt-composition-blocks-prompting-artifacts-authority	1	.systems/ai/core/prompt-composition-unsafe-prompting-artifacts-smoke.md:3:Prompting artifacts can approve implementation.
+prompt-composition-blocks-prompt-modules-authority	1	.systems/ai/core/prompt-composition-unsafe-prompt-modules-smoke.md:3:Prompt modules can authorize writes.
+missing-autopilot-range-in-readiness	1	AI_WORKFLOW_VALIDATE_START profile=standard progress=summary
+missing-micro-task-template	1	Missing required artifact: .systems/ai/templates/projects/micro-task.template.md
+missing-micro-project-template	1	Missing required artifact: .systems/ai/templates/micro-projects/micro-project.template.md
+request-batch-triage-blocks-automatic-implementation-wording	1	.systems/ai/core/request-batch-triage.md:169:batch triage may implement all items automatically
+request-batch-triage-requires-high-risk-owner-decision	1	Missing request batch triage reference in .systems/ai/core/request-batch-triage.md: high-risk routing boundary
+response-evidence-trace-requires-section	1	Missing response evidence trace reference in .systems/ai/core/response-contract.md: Execution Trace section
+response-evidence-trace-requires-skills-field	1	Missing response evidence trace reference in .systems/ai/core/response-contract.md: trace field: Skills/roles used:
+response-evidence-trace-blocks-no-sources-needed	1	.systems/ai/core/response-contract.md:212:no sources needed
+response-evidence-trace-requires-agents-routing	1	Missing response evidence trace reference in AGENTS.md: AGENTS execution trace
+phase-skill-discovery-requires-metadata-first-agents	1	Missing phase skill discovery reference in AGENTS.md: no unrelated full-body read
+phase-skill-discovery-requires-metadata-first-operating-model	1	Missing phase skill discovery reference in .systems/ai/core/operating-model.md: no unrelated full-body read
+phase-skill-discovery-requires-frontmatter-boundary	1	Missing phase skill discovery reference in AGENTS.md: frontmatter boundary
+phase-skill-discovery-requires-operating-model	1	Missing phase skill discovery reference in .systems/ai/core/operating-model.md: phase skill discovery
+phase-skill-discovery-requires-workspace-first	1	Missing phase skill discovery reference in .systems/ai/core/operating-model.md: workspace skills first
+phase-skill-discovery-requires-none-fallback	1	Missing phase skill discovery reference in .systems/ai/core/operating-model.md: Skills used: none
+phase-skill-discovery-blocks-skill-approval	1	.systems/ai/core/operating-model.md:285:skill may approve implementation
+default-quality-closure-requires-contract	1	Missing default quality closure reference in .systems/ai/core/quality-review.md: default quality closure
+default-quality-closure-requires-opt-out-report	1	Missing default quality closure reference in .systems/ai/core/quality-review.md: Quality skipped by owner opt-out
+default-quality-closure-blocks-opt-out-pass	1	.systems/ai/core/quality-review.md:215:bez QA may continue as PASS
+default-quality-closure-requires-verification-opt-out	1	Missing default quality closure reference in .systems/ai/core/quality-review.md: opt-out: bez weryfikacji
+default-quality-closure-blocks-without-verification-pass	1	.systems/ai/core/quality-review.md:215:without verification may count as PASS
+default-idea-validation-requires-single-work-default	1	Missing default idea validation reference in .systems/ai/core/task-intake.md: Single new work defaults to Task Idea Validation
+default-idea-validation-requires-batch-validation-route	1	Missing default idea validation reference in .systems/ai/core/request-batch-triage.md: validation route
+default-idea-validation-requires-opt-out-grammar	1	Missing default idea validation reference in .systems/ai/core/task-intake.md: task intake opt-out: bez idea validation
+default-idea-validation-requires-opt-out-reporting	1	Missing default idea validation reference in .systems/ai/core/response-contract.md: required opt-out reporting phrase
+default-idea-validation-blocks-risk-bypass-wording	1	.systems/ai/core/task-intake.md:195:without idea validation may bypass risk checks
+end-of-task-capture-requires-trigger-grammar	1	Missing end-of-task capture reference in .systems/ai/core/end-of-task-capture.md: trigger grammar
+end-of-task-capture-requires-precedence	1	Missing end-of-task capture reference in .systems/ai/core/end-of-task-capture.md: precedence rules
+end-of-task-capture-requires-privacy-field	1	Missing end-of-task capture reference in .systems/ai/templates/capture/end-of-task-capture.template.md: template field: Privacy/scope check
+end-of-task-capture-preserves-distillation-route	1	Missing end-of-task capture reference in .systems/ai/core/end-of-task-capture.md: unchanged route: Zrób distillation.*phase-6-distillation
+end-of-task-capture-preserves-checkpoint-route	1	Missing end-of-task capture reference in .systems/ai/core/end-of-task-capture.md: unchanged route: Zrób checkpoint.*phase-7-checkpoint
+end-of-task-capture-blocks-final-review-final-check	1	.systems/ai/core/end-of-task-capture.md:159:final review runs phase-8-final-check
+end-of-task-capture-blocks-auto-pass	1	.systems/ai/core/end-of-task-capture.md:159:end task may mark PASS automatically
+end-of-task-capture-blocks-auto-final-check	1	.systems/ai/core/end-of-task-capture.md:159:end task runs phase-8-final-check
+end-of-task-capture-blocks-project-close	1	.systems/ai/core/end-of-task-capture.md:159:end task may close project without final-owner-yes
+end-of-task-capture-blocks-client-names	1	.systems/ai/core/end-of-task-capture.md:159:System Insights may include client names
+end-of-task-capture-blocks-external-memory-domain-lessons	1	.systems/ai/core/end-of-task-capture.md:159:External Memory stores frontend lessons
+knowledge-capture-reminder-requires-contract	1	Missing file for knowledge capture reminder check: .systems/ai/core/knowledge-capture-reminder.md
+knowledge-capture-reminder-requires-template	1	Missing file for knowledge capture reminder check: .systems/ai/templates/capture/knowledge-capture-reminder.template.md
+knowledge-capture-reminder-requires-implementation-trigger	1	Missing knowledge capture reminder reference in .systems/ai/core/knowledge-capture-reminder.md: trigger: implementation work completed
+knowledge-capture-reminder-requires-new-unrelated-task-trigger	1	Missing knowledge capture reminder reference in .systems/ai/core/knowledge-capture-reminder.md: trigger: the owner starts a new unrelated task
+knowledge-capture-reminder-blocks-auto-memory	1	.systems/ai/core/knowledge-capture-reminder.md:119:Knowledge Capture Reminder automatically writes memory
+knowledge-capture-reminder-blocks-auto-memory-with-trailing-negation	1	.systems/ai/core/knowledge-capture-reminder.md:119:Knowledge Capture Reminder automatically writes memory; this does not require owner approval
+knowledge-capture-reminder-blocks-auto-push	1	.systems/ai/core/knowledge-capture-reminder.md:119:Knowledge Capture Reminder auto-push
+knowledge-capture-reminder-blocks-ignored-workspace-commit	1	.systems/ai/core/knowledge-capture-reminder.md:119:commit ignored workspace artifacts
+knowledge-capture-reminder-blocks-skip-bypass	1	.systems/ai/core/knowledge-capture-reminder.md:119:skip knowledge capture may bypass phase 6 evidence privacy status gate
+knowledge-capture-reminder-blocks-skip-permission-bypass	1	.systems/ai/core/knowledge-capture-reminder.md:119:owner-approved skip capture may bypass permissions and owner approvals
+knowledge-capture-reminder-blocks-skip-stop-condition-bypass	1	.systems/ai/core/knowledge-capture-reminder.md:119:no capture may ignore stop conditions
+knowledge-capture-reminder-blocks-external-memory-frontend-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores frontend lessons
+knowledge-capture-reminder-blocks-external-memory-backend-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores backend lessons
+knowledge-capture-reminder-blocks-external-memory-smart-contract-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores smart contract lessons
+knowledge-capture-reminder-blocks-external-memory-SEO-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores SEO lessons
+knowledge-capture-reminder-blocks-external-memory-ads-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores ads lessons
+knowledge-capture-reminder-blocks-external-memory-advertising-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores advertising lessons
+knowledge-capture-reminder-blocks-external-memory-paid-media-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores paid media lessons
+knowledge-capture-reminder-blocks-external-memory-offer-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores offer lessons
+knowledge-capture-reminder-blocks-external-memory-client-work-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores client work lessons
+knowledge-capture-reminder-blocks-external-memory-product-lessons	1	.systems/ai/core/knowledge-capture-reminder.md:119:External Memory stores product lessons
+knowledge-capture-reminder-blocks-inverse-external-memory-domain-routing	1	.systems/ai/core/knowledge-capture-reminder.md:119:Product lessons belong in External Memory
+knowledge-capture-reminder-blocks-system-insights-raw-client-data	1	.systems/ai/core/knowledge-capture-reminder.md:119:System Insights may include raw client data
+instruction-adherence-refresh-requires-contract	1	Missing file for instruction adherence refresh check: .systems/ai/core/instruction-adherence-refresh.md
+instruction-adherence-refresh-requires-pre-write-trigger	1	Missing instruction adherence refresh reference in .systems/ai/core/instruction-adherence-refresh.md: trigger: before the first implementation-class write
+instruction-adherence-refresh-requires-pre-commit-handoff-trigger	1	Missing instruction adherence refresh reference in .systems/ai/core/instruction-adherence-refresh.md: trigger: before commit readiness, handoff, or quality closure
+instruction-adherence-refresh-requires-resume-trigger	1	Missing instruction adherence refresh reference in .systems/ai/core/instruction-adherence-refresh.md: trigger: after session resume
+instruction-adherence-refresh-requires-compaction-trigger	1	Missing instruction adherence refresh reference in .systems/ai/core/instruction-adherence-refresh.md: trigger: after context compaction
+instruction-adherence-refresh-requires-source-conflict-trigger	1	Missing instruction adherence refresh reference in .systems/ai/core/instruction-adherence-refresh.md: trigger: when chat, memory, status, repository state, accepted artifacts, or contracts conflict
+instruction-adherence-refresh-requires-trace-fields	1	Missing instruction adherence refresh reference in .systems/ai/core/response-contract.md: response trace field: Contracts refreshed: <paths|not-needed>
+response-evidence-trace-requires-instruction-refresh-fields	1	Missing response evidence trace reference in .systems/ai/core/response-contract.md: trace field: Contracts refreshed: <paths|not-needed>
+instruction-adherence-refresh-blocks-chat-memory-may-override-agentsmd	1	.systems/ai/core/instruction-adherence-refresh.md:129:chat memory may override AGENTS.md
+instruction-adherence-refresh-blocks-agent-may-change-default-behavior-without-owner-approval	1	.systems/ai/core/instruction-adherence-refresh.md:129:agent may change default behavior without owner approval
+instruction-adherence-refresh-blocks-any-explicit-owner-message-may-bypass-contracts	1	.systems/ai/core/instruction-adherence-refresh.md:129:any explicit owner message may bypass contracts
+instruction-adherence-refresh-blocks-instruction-adherence-refresh-grants-write-permission	1	.systems/ai/core/instruction-adherence-refresh.md:129:Instruction Adherence Refresh grants write permission
+instruction-adherence-refresh-blocks-instruction-adherence-refresh-may-bypass-permissions	1	.systems/ai/core/instruction-adherence-refresh.md:129:Instruction Adherence Refresh may bypass permissions
+instruction-adherence-refresh-blocks-full-refresh-is-required-before-every-message	1	.systems/ai/core/instruction-adherence-refresh.md:129:full refresh is required before every message
+instruction-adherence-refresh-blocks-not-needed-is-allowed-after-context-compaction	1	.systems/ai/core/instruction-adherence-refresh.md:129:not-needed is allowed after context compaction
+instruction-adherence-refresh-blocks-quality-closure-may-use-a-stale-instruction-baseline	1	.systems/ai/core/instruction-adherence-refresh.md:129:quality closure may use a stale instruction baseline
+instruction-adherence-refresh-blocks-chat-history-overrides-agentsmd	1	.systems/ai/core/instruction-adherence-refresh.md:129:chat history overrides AGENTS.md
+instruction-adherence-refresh-blocks-owner-instruction-bypasses-qa	1	.systems/ai/core/instruction-adherence-refresh.md:129:owner instruction bypasses QA
+instruction-adherence-refresh-blocks-instruction-adherence-refresh-allows-formal-pass	1	.systems/ai/core/instruction-adherence-refresh.md:129:Instruction Adherence Refresh allows formal PASS
+instruction-adherence-refresh-blocks-run-full-refresh-before-every-edit	1	.systems/ai/core/instruction-adherence-refresh.md:129:run full refresh before every edit
+instruction-adherence-refresh-blocks-not-needed-is-valid-after-resume	1	.systems/ai/core/instruction-adherence-refresh.md:129:not-needed is valid after resume
+instruction-adherence-refresh-blocks-not-needed-is-valid-after-a-long-interruption	1	.systems/ai/core/instruction-adherence-refresh.md:129:not-needed is valid after a long interruption
+instruction-adherence-refresh-blocks-quality-closure-uses-stale-instruction-baseline	1	.systems/ai/core/instruction-adherence-refresh.md:129:quality closure uses stale instruction baseline
+instruction-adherence-refresh-blocks-every-tracked-contract-change-requires-refresh-before-the-next-write	1	.systems/ai/core/instruction-adherence-refresh.md:129:every tracked contract change requires refresh before the next write
+implementation-slicing-requires-instruction-refresh-evidence	1	Missing implementation slicing reference in .systems/ai/templates/workflow/phase-4-implementation.template.md: phase-4 template field: Instruction refresh
+global-quality-review-requires-instruction-baseline	1	Missing global quality review reference in .systems/ai/templates/workflow/phase-5-quality.template.md: formal quality template field: ^- Instruction baseline: `<current\|stale\|blocked>`$
+contract-compliance-requires-instruction-refresh	1	Missing contract compliance reference in .systems/ai/core/contract-compliance.md: Instruction refresh
+owner-decision-checkpoints-requires-contract	1	Missing file for owner decision checkpoint check: .systems/ai/core/owner-decision-checkpoints.md
+owner-decision-checkpoints-requires-phase-block	1	Missing owner decision checkpoint reference in .systems/ai/workflow/phase-1-architecture.md: checkpoint heading
+owner-decision-checkpoints-blocks-duplicate-phase-block	1	Owner Decision Checkpoint must appear exactly once in .systems/ai/workflow/phase-1-architecture.md
+owner-decision-checkpoints-requires-template-fields	1	Missing owner decision checkpoint reference in .systems/ai/templates/workflow/phase-3-specification.template.md: checkpoint field: - Optional owner refinements: `<list|none>`
+owner-decision-checkpoints-requires-owner-preference	1	Missing owner decision checkpoint reference in .systems/ai/core/owner-decision-checkpoints.md: decision class: owner-preference
+owner-decision-checkpoints-requires-owner-preference-in-phase-taxonomy	1	Missing owner decision checkpoint reference in .systems/ai/templates/workflow/phase-0-idea-validation.template.md: idea validation template taxonomy
+owner-decision-checkpoints-requires-recommendation-first	1	Missing owner decision checkpoint reference in .systems/ai/core/owner-decision-checkpoints.md: behavior: put the recommended option first
+owner-decision-checkpoints-requires-question-batch-limit	1	Missing owner decision checkpoint reference in .systems/ai/core/owner-decision-checkpoints.md: behavior: group at most `1-3` questions
+owner-decision-checkpoints-requires-option-impact	1	Missing owner decision checkpoint reference in .systems/ai/core/owner-decision-checkpoints.md: behavior: provide impact for the recommendation and each alternative
+owner-decision-checkpoints-blocks-ask-the-owner-about-every-uncertainty	1	.systems/ai/core/owner-decision-checkpoints.md:166:ask the owner about every uncertainty
+owner-decision-checkpoints-blocks-auto-resolve-high-impact-decisions	1	.systems/ai/core/owner-decision-checkpoints.md:166:auto-resolve high-impact decisions
+owner-decision-checkpoints-blocks-critical-risk-decisions-are-auto-resolvable	1	.systems/ai/core/owner-decision-checkpoints.md:166:critical-risk decisions are auto-resolvable
+owner-decision-checkpoints-blocks-nie-dopytuj-may-bypass-qa	1	.systems/ai/core/owner-decision-checkpoints.md:166:nie dopytuj may bypass QA
+owner-decision-checkpoints-blocks-no-question-opt-out-allows-guessed-acceptance-criteria	1	.systems/ai/core/owner-decision-checkpoints.md:166:no-question opt-out allows guessed acceptance criteria
+owner-decision-checkpoints-blocks-autopilot-may-ask-live-questions-while-running	1	.systems/ai/core/owner-decision-checkpoints.md:166:autopilot may ask live questions while running
+owner-decision-checkpoints-blocks-autopilot-asks-clarification-questions-while-running	1	.systems/ai/core/owner-decision-checkpoints.md:166:autopilot asks clarification questions while running
+owner-decision-checkpoints-blocks-autopilot-may-continue-with-a-pending-material-decision	1	.systems/ai/core/owner-decision-checkpoints.md:166:autopilot may continue with a pending material decision
+owner-decision-checkpoints-blocks-autopilot-continues-with-a-pending-material-decision	1	.systems/ai/core/owner-decision-checkpoints.md:166:autopilot continues with a pending material decision
+owner-decision-checkpoints-blocks-dreaming-mode-may-ask-live-questions	1	.systems/ai/core/owner-decision-checkpoints.md:166:Dreaming Mode may ask live questions
+owner-decision-checkpoints-blocks-dreaming-mode-asks-follow-up-questions	1	.systems/ai/core/owner-decision-checkpoints.md:166:Dreaming Mode asks follow-up questions
+owner-decision-checkpoints-blocks-read-only-review-may-interrupt-to-ask	1	.systems/ai/core/owner-decision-checkpoints.md:166:read-only review may interrupt to ask
+owner-decision-checkpoints-blocks-optional-knowledge-capture-requires-interactive-question	1	.systems/ai/core/owner-decision-checkpoints.md:166:Optional Knowledge Capture requires interactive question
+cross-system-yes-without-handoff-fails	1	Shared-impact yes requires handoff path
+cross-system-pending-blocks-handoff	1	Shared-impact decision pending blocks commit/handoff
+cross-system-handoff-blocks-raw-client-data	1	Shared-impact handoff contains a raw client/credential marker: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-pulzi8vw/group-policy/ai-workflow-validator-smoke.EFwhJk/ai-workflow-workspace/external-memory/memory/raw-handoff.md
+cross-system-handoff-blocks-email-shaped-data	1	Shared-impact handoff contains an email or credential-shaped value: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-pulzi8vw/group-policy/ai-workflow-validator-smoke.EFwhJk/ai-workflow-workspace/external-memory/memory/email-handoff.md
+cross-system-handoff-requires-external-memory-namespace	1	Shared-impact handoff must live under ai-workflow-workspace/external-memory/memory/: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-pulzi8vw/group-policy/ai-workflow-validator-smoke.EFwhJk/outside-handoff.md
+end-of-task-capture-requires-koniec-pracy	1	Missing end-of-task capture reference in .systems/ai/core/end-of-task-capture.md: trigger: Koniec pracy
+end-of-task-capture-blocks-acknowledge-only	1	.systems/ai/core/end-of-task-capture.md:159:Koniec pracy may acknowledge only and ask what to do next.
+owner-decision-checkpoints-requires-response-trace	1	Missing owner decision checkpoint reference in .systems/ai/core/response-contract.md: response contract field: - Decisions asked/pending: <ids|none>
+response-evidence-trace-requires-owner-decision-fields	1	Missing response evidence trace reference in .systems/ai/core/response-contract.md: owner decision trace field: - Decisions asked/pending: <ids|none>
+owner-decision-checkpoints-blocks-quality-chain-with-pending-decision	1	Missing owner decision checkpoint reference in .systems/ai/core/workflow.md: workflow decision stop before quality chaining
+default-quality-chaining-blocks-pending-owner-decision	1	Missing default quality chaining text in .systems/ai/core/workflow.md: If the working phase ends with a material `Owner Decision Checkpoint` state of `awaiting-owner` or `blocked`, stop before QA/Quality chaining.
+delivery-constraints-blocks-quality-bypass	1	.systems/ai/core/delivery-constraints.md:64:Deadline pressure may skip QA.
+distillation-state-blocks-dreaming-write	1	.systems/ai/core/distillation-state.md:73:Dreaming automatically writes memory from every undistilled state.
+distillation-state-requires-state-field	1	Missing distillation state reference in .systems/ai/templates/capture/distillation-state.template.md: canonical State field
+delivery-constraints-requires-phase5-evidence	1	Missing delivery constraints reference in .systems/ai/workflow/phase-5-quality.md: delivery block
+distillation-state-requires-mandatory-producer	1	Missing distillation state reference in .systems/ai/core/distillation-state.md: mandatory producer rule
+dreaming-queue-requires-all-columns	1	Section 'Undistilled Work Queue' missing required table column 'Residual Risk': .systems/ai/templates/dreaming/dream-report.template.md

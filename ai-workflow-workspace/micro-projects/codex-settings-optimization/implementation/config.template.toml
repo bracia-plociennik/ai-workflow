@@ -1,0 +1,78 @@
+# Clean Balanced Safety config template for AI Workflow.
+#
+# Status: candidate artifact only; do not apply blindly.
+# Scope: from-scratch profile baseline, not a snapshot of the owner's current
+# ~/.codex/config.toml.
+#
+# Before applying:
+# - back up the real ~/.codex/config.toml;
+# - compare this file with the real config;
+# - preserve unrelated local settings intentionally;
+# - apply UI-only settings from balanced-safety-checklist.md separately.
+
+personality = "pragmatic"
+
+# Main model baseline for demanding AI Workflow work.
+# Use a separate profile or one-off override for xhigh/deep-review tasks.
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+
+# Balanced safety: local writes inside the workspace are allowed; network and
+# out-of-sandbox effects still require explicit approval.
+approval_policy = "on-request"
+approvals_reviewer = "auto_review"
+sandbox_mode = "workspace-write"
+
+# Prefer cached search by default. Use live search only for an explicitly
+# approved current-information task.
+web_search = "cached"
+
+[features]
+# Owner decision: no Codex Memories trial yet.
+memories = false
+
+# Keep browser developer mode conservative by default.
+browser_use_full_cdp_access = false
+
+# Preserve JS REPL disabled unless a task explicitly needs it.
+js_repl = false
+
+# Do not set hooks = false here. This profile adds no hooks, but it does not
+# globally block all user/project/plugin hook sources. Verify active hooks with
+# the app or `/hooks` during rollout.
+#
+# Do not set computer_use = false here. Chrome control should remain available
+# while broad Any App control is disabled in the UI.
+
+[sandbox_workspace_write]
+network_access = false
+writable_roots = []
+
+[mcp_servers.openaiDeveloperDocs]
+enabled = true
+url = "https://developers.openai.com/mcp"
+
+[mcp_servers.figma]
+# Enable only for Figma tasks.
+enabled = false
+url = "http://127.0.0.1:3845/mcp"
+
+[mcp_servers.node_repl]
+# Enable only when Browser/Chrome/app automation needs this local MCP flow.
+# If enabling fails, compare against the legacy snapshot or real current config
+# for Codex-app-specific environment variables.
+enabled = false
+command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+args = []
+startup_timeout_sec = 120
+
+[desktop]
+followUpQueueMode = "steer"
+reviewDelivery = "inline"
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+
+# Context-window usage, Any App control, Chrome website approvals, Memories,
+# Chronicle, local environments, Git UI, and worktree cleanup include app/UI
+# settings that must be applied through the checklist, not assumed from this
+# config file alone.

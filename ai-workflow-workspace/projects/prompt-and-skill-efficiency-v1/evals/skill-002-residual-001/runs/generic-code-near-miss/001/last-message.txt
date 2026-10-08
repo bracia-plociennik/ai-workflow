@@ -1,0 +1,24 @@
+## Finding
+
+- **P1 — Non-integer averages are truncated.** [skill_creator_status.py:7](/private/tmp/ai-workflow-skill-002-residual-001-safe/src/skill_creator_status.py:7) uses `//`, so `report_status([1, 2])` returns `"1"` instead of the required `"1.5"`. The empty-list branch at line 5 returns `"empty"` as required.
+
+**Intent compliance:** partial. A read-only execution confirmed both outputs. No files were changed, and this advisory review makes no formal PASS claim.
+
+## Execution Trace
+
+- **Sources used:** [AGENTS.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/AGENTS.md), the target file, and the fixture’s review, QA, risk, permissions, response, and instruction-refresh contracts.
+- **Evidence reviewed:** source lines 4–7; `python3 -B` returned `'1'` for `[1, 2]` and `'empty'` for `[]`.
+- **Workflow procedures used:** read-only global quality review. **Skills/roles used:** none; `skill_creator` was treated as a product symbol.
+- **Commands/checks:** file inspection and the read-only Python check. Git status was unavailable because the fixture has no Git repository; no product tests or accepted plan/spec were found. Review completeness is limited to the opened source and stated acceptance criteria.
+- **Limits/residual uncertainty:** no broader regression evidence. **Instruction refresh:** performed-targeted for this review against the opened fixture contracts and source; no instruction conflict found.
+- **Owner decision interaction:** none needed. **Model recommendation:** GPT-5.6 Luna High for a bounded review; current model unknown; non-blocking.
+
+## Co dalej?
+
+**Rekomendacja:** Authorize a scoped fix and verification of decimal averages.  
+**Wpływ:** Corrects the demonstrated output error.  
+**Napisz:** `Fix report_status so [1, 2] returns "1.5" and [] returns "empty"; verify both cases.`
+
+**Alternatywa:** Request a broader read-only review of averaging edge cases.  
+**Wpływ:** Clarifies expected formatting before implementation.  
+**Napisz:** `Review report_status edge cases read-only, including negative values and formatting.`

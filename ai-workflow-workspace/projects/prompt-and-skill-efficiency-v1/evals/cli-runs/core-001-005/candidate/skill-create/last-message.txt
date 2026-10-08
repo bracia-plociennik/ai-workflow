@@ -1,0 +1,73 @@
+## Task Idea Validation
+
+- **Co zostaje:** A reusable AI Workflow skill for reviewing the safety of local CLI commands, with trigger and non-trigger cases.
+- **Co jest słabe / do poprawy lub usunięcia:** “Safe” needs a defined outcome. The skill should identify effects, uncertainty, and applicable gates; it must not grant permission to run a command.
+- **Czego brakuje:** No information blocks this read-only design. A future build would need a separately authorized write scope.
+- **Blokery / decyzje:** No owner decision needed for this plan.
+- **Rekomendowany routing:** Read-only system-skill design in this isolated checkout. The named project directory is fixture data; repository status records no active formal project phase.
+
+## Proposed skill: `local-cli-command-safety`
+
+**Target for a future authorized build:** `.systems/ai/skills/local-cli-command-safety/`. Put the canonical procedure in `SKILL.md` and a short human summary in `README.md`. Add a reference file only if the command-effect checklist makes `SKILL.md` unwieldy. No script is needed for the initial version.
+
+**Candidate trigger description:** “Review a proposed local CLI or shell command before execution for filesystem changes, destructive effects, network access, credential exposure, indirect script behavior, and required AI Workflow permissions. Use for command safety review and safer local alternatives; do not use to authorize or execute commands.”
+
+| Should trigger | Should not trigger |
+| --- | --- |
+| “Is `git reset --hard` safe here?” | “Run `git reset --hard`.” Execution needs its own authorization and gates. |
+| “Review this `find … -delete` command before I run it.” | “Explain how `find` syntax works.” A general tutorial has no proposed action to review. |
+| “Can I safely run `npm test` in this checkout?” | “Review this application code for security flaws.” That is code or security review. |
+| “Check whether this `curl … \| sh` command has external effects.” | “Approve this production deployment.” That requires the production risk route. |
+| “Compare these two local cleanup commands for risk.” | “Create a skill for command safety.” That invokes `skill-creator`, as this planning task does. |
+
+**Review procedure to specify in `SKILL.md`:**
+
+1. Record the exact command, working directory, shell, relevant environment, and intended outcome. Treat missing context as unknown.
+2. Inspect the whole command, including substitutions, pipes, redirects, globbing, `sudo`, aliases, and invoked scripts or package tasks. Do not execute the proposed command to find out what it does.
+3. Identify possible writes, deletion, network calls, credential access, external effects, and effects outside the checkout. Classify risk under the existing AI Workflow risk model.
+4. Report a verdict of **locally reviewable**, **conditional on missing facts**, or **blocked by an existing gate**. State the evidence and uncertainty. Offer a narrower inspection command when one is genuinely safe.
+5. Preserve the authority boundary: the skill cannot override `AGENTS.md`, permissions, phase gates, approvals, or the rule against destructive and external actions.
+
+**Evaluation plan:** Manually test positive triggers and near-miss non-triggers, then compare skill-assisted answers with a baseline. Include straightforward inspection (`rg --files`), indirect execution (`npm test`, `make clean`), destructive commands, `curl … | sh`, redirects, and an opaque `python -c` command. Check that answers inspect indirect effects, avoid false assurance, never execute the candidate command, and distinguish review from approval. Keep any future eval output in the authorized project workspace, outside the skill directory.
+
+## Plan Quality Contract
+
+- **Plan classification:** read-only; **implementation writes planned:** no.
+- **DoD source:** Your request and the repository’s `skill-creator` contract.
+- **Testable DoD:** The proposal names the skill, target, authority boundary, review steps, trigger and non-trigger cases, and a local evaluation route.
+- **Artifact QA route / trigger:** `not-applicable` — this is a chat-only design with no artifact write.
+- **Implementation Quality Closure route:** `not-applicable` — no implementation is authorized or performed.
+- **Required verification:** Manual comparison with the skill, risk, and permission contracts; no executable checks required for an unchanged checkout.
+- **Quality-ready criteria:** Clear routing and testable cases without implying execution permission.
+- **Owner opt-out:** none. **Blocking decision:** none for planning.
+- **Next route:** Read-only tabletop review of the proposed cases. A later build requires its own authorized scope and gates.
+
+## Execution Trace
+
+- **Sources used:** [AGENTS.md](/private/tmp/pse-cli-candidate-skill-create-3x3r2s19/checkout/AGENTS.md), skill-creator, task-intake, plan-quality, risk, permissions, command, response, and repository-mode contracts; synthetic repo status and intake.
+- **Evidence reviewed:** Checkout path, clean `git status`, fixture file listing, and synthetic status recording no active formal project.
+- **Workflow procedures used:** Task Idea Validation; read-only Plan Quality Contract.
+- **Skills/roles used:** AI Workflow `skill-creator`; no matching workspace skill found.
+- **Commands/checks run:** Read-only file listings and contract reads; `git status --short` showed no changes. Validators and evals were not run because no files were changed.
+- **Skipped/unreadable sources:** Unrelated fixture cases were not read; no source was unreadable.
+- **Limits/residual uncertainty:** The design has not been tested against command-review outputs. No skill artifact was created.
+- **Instruction refresh:** Status: performed-targeted; trigger: initial planning baseline; contracts refreshed: AGENTS, routing, risk, permissions, skill-creator, plan and response contracts; reviewed baseline: checkout and synthetic status; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions asked/pending: none; auto-resolved decisions: system-skill target for a reusable AI Workflow skill.
+- **Model recommendation:** GPT-5.6 Sol High; reason: adversarial command and policy-boundary cases; criticality: safety-sensitive design; current model known: yes; blocking: no.
+- **Contract compliance:** Read-only planning, no writes; knowledge capture: not-required because the proposal is contained in this response.
+
+## Co dalej?
+
+**Rekomendacja:** Tabletop-review the proposed trigger cases and verdict format, read-only.  
+**Wpływ:** Exposes ambiguous routing before any skill files are created.  
+**Napisz:**
+```text
+Review the local CLI command safety skill plan against the proposed trigger and non-trigger cases. Read-only; do not write files or execute candidate commands.
+```
+
+**Alternatywa:** Keep this as the design proposal and stop here.  
+**Wpływ:** Preserves the current plan without spending time on evaluation yet.  
+**Napisz:**
+```text
+Keep the local CLI command safety skill plan as-is. No further action.
+```

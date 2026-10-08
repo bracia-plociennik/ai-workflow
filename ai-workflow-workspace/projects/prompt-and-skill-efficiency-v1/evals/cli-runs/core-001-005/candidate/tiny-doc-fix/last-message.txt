@@ -1,0 +1,30 @@
+Corrected `synthethic` to `synthetic` in the [fixture README](/private/tmp/pse-cli-candidate-tiny-doc-fix-pv7lbucd/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/tiny-doc-fix/README.md). An exact-content check confirmed the README is otherwise unchanged. No behavior or policy changed.
+
+### Execution Trace
+
+- **Sources used:** Owner request, fixture README, `AGENTS.md`, repo intake and relevant workflow contracts.
+- **Evidence reviewed:** Original and corrected README content; git status. Advisory review found no blockers.
+- **Workflow procedures used:** Task intake, one-slice implementation, advisory quality review, contract compliance. Work mode compliance: pass; knowledge capture: not required for a typo.
+- **Skills/roles used:** None.
+- **Commands/checks run:** Exact-content assertion succeeded; `git diff --check` succeeded. The fixture is git-ignored, so the content assertion verified the edit.
+- **Skipped/unreadable sources:** None. Behavior tests were unnecessary for a spelling-only edit.
+- **Limits/residual uncertainty:** None for the requested file change.
+- **Instruction refresh:** Performed-targeted before the write and quality closure; reviewed the owner scope, contracts, repo status, and file baseline; no conflict found.
+- **Owner decision interaction:** None needed; the deadline and timebox opt-out was applied.
+- **Model recommendation:** GPT-5.6 Luna High for this bounded, low-risk task; advisory only.
+
+### Co dalej?
+
+**Rekomendacja:** Accept the corrected fixture.  
+Wpływ: Closes the requested one-word fix.  
+Napisz:
+```text
+Accept the corrected fixture.
+```
+
+**Alternatywa:** Request a read-only review of the fixture.  
+Wpływ: Provides another inspection without changing files.  
+Napisz:
+```text
+Review the tiny-doc-fix fixture read-only.
+```

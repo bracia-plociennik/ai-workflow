@@ -1,0 +1,35 @@
+validation-timing-rejects-existing-output	2	Validation timing error: [Errno 17] File exists: '/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-rppxpuw_/group-core/ai-workflow-validator-smoke.ExW0Ml/AGENTS.md'
+validation-timing-rejects-escaping-output	2	Validation timing error: timing output must be under ignored workspace or tmp
+validation-timing-rejects-tmpdir-override	2	Validation timing error: timing output must be under ignored workspace or tmp
+validation-timing-rejects-symlink	2	Validation timing error: timing output must not be a symlink
+validation-timing-rejects-tracked-temporary-output	2	Validation timing error: timing output is tracked by git
+validation-timing-rejects-unignored-temporary-repo-output	2	Validation timing error: timing output must be under ignored workspace or tmp
+validation-timing-rejects-foreign-tracked-output	2	Validation timing error: timing output is tracked by git
+validation-timing-rejects-foreign-deleted-tracked-output	2	Validation timing error: timing output is tracked by git
+validation-timing-rejects-foreign-unignored-output	2	Validation timing error: timing output must be under ignored workspace or tmp
+validation-comparison-rejects-incomplete	2	Validation comparison error: incomplete or failed run cannot be a baseline
+validation-comparison-rejects-source-mismatch	2	Validation comparison error: source does not match the timed run identity
+validation-comparison-rejects-duplicate-record	2	Validation comparison error: duplicate timing identity
+validation-comparison-rejects-missing-smoke-check	2	Validation comparison error: smoke wall has no top-level smoke check
+validation-comparison-rejects-nonfinite-duration	2	Validation comparison error: invalid timing duration
+validation-comparison-rejects-separate-output	2	Validation comparison error: timing file and manifest must share a directory
+validation-comparison-rejects-oversized-smoke-wall	2	Validation comparison error: smoke wall exceeds its top-level check
+validation-comparison-rejects-private-fingerprint	2	Validation comparison error: timing metadata contains an unsafe field
+smoke-helper-rejects-unexpected-timeout	124	AI_WORKFLOW_TIMEOUT command=python3 timeout_seconds=1.0
+smoke-helper-rejects-missing-source	1	Traceback (most recent call last):
+smoke-helper-rejects-wrong-error-code	2	wrong rejection
+smoke-helper-rejects-wrong-diagnostic	1	unrelated error
+validate-workflow-emits-failure-marker	7	AI_WORKFLOW_VALIDATE_START profile=scoped progress=quiet
+timeout-wrapper-returns-124	124	AI_WORKFLOW_TIMEOUT command=python3 timeout_seconds=1.0
+timeout-wrapper-kills-process-group	124	AI_WORKFLOW_TIMEOUT command=python3 timeout_seconds=1.0
+update-validation-failure	7	AI_WORKFLOW_WORKSPACE_HOME: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-rppxpuw_/group-core/ai-workflow-validator-smoke.ExW0Ml/update-lifecycle-fixture/target/ai-workflow-workspace
+update-validation-timeout	124	AI_WORKFLOW_WORKSPACE_HOME: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-rppxpuw_/group-core/ai-workflow-validator-smoke.ExW0Ml/update-lifecycle-fixture/target/ai-workflow-workspace
+update-ahead-stops	1	AI_WORKFLOW_WORKSPACE_HOME: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-rppxpuw_/group-core/ai-workflow-validator-smoke.ExW0Ml/update-lifecycle-fixture/target/ai-workflow-workspace
+update-diverged-stops	1	AI_WORKFLOW_WORKSPACE_HOME: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-rppxpuw_/group-core/ai-workflow-validator-smoke.ExW0Ml/update-lifecycle-fixture/target/ai-workflow-workspace
+validation-observability-preserves-pass-integrity	1	Validation observability weakens coverage or PASS integrity
+smoke-partition-rejects-missing-id	1	Smoke manifest error: test ownership
+smoke-partition-rejects-duplicate-id	1	Smoke manifest error: reference ID inventory
+smoke-partition-rejects-missing-region	1	Smoke manifest error: raw region inventory
+smoke-partition-rejects-missing-audit	1	Smoke manifest error: outside assertion semantic audit
+smoke-partition-rejects-missing-nested-audit	1	Smoke manifest error: nested Python assertion inventory
+smoke-partition-rejects-removed-post-call-assertion	1	Smoke manifest error: changed frozen region: region-0701-1210

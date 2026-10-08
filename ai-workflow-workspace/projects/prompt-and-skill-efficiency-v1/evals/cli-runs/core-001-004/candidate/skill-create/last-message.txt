@@ -1,0 +1,68 @@
+## Read-only skill plan
+
+**Proposed skill:** `local-cli-command-safety` under `.systems/ai/skills/`. Its job is to review a *specific local CLI command* before it is suggested or run. It would identify the working directory, argument and shell expansion, files or services affected, reversibility, and a safer verification step. It would report uncertainty and route approvals through existing AI Workflow contracts; the skill itself would grant no permission.
+
+**Trigger cases**
+
+- “Is `git clean -fd` safe in this checkout?”
+- “Review this migration command before I run it.”
+- “Check whether this shell pipeline can delete files or contact an external service.”
+- An agent is about to suggest or execute a local command whose effects are unclear.
+
+**Non-trigger cases**
+
+- General coding, planning, documentation, or skill review with no concrete CLI command.
+- Reviewing application security code without a command to assess.
+- Granting approval to run a command, or replacing the repository’s risk and permissions rules.
+- Commands against production or external systems: escalate through the governing contracts rather than treating the skill review as authorization.
+
+**Proposed artifacts:** a compact `SKILL.md` with the trigger description and review procedure, a short `README.md`, and a small set of local positive and negative trigger examples. Add references or scripts only if repeated evaluation shows they are needed. The nearby [synthetic skill source](/private/tmp/pse-cli-candidate-skill-create-it_s4o6a/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/skill-review-near-miss/skill-source.md) illustrates the main failure to avoid: its “all tasks” description is too broad.
+
+### Task intake
+
+- **Co zostaje:** A reusable, narrowly scoped CLI review skill is useful.
+- **Co jest słabe / do poprawy lub usunięcia:** A broad “use for all tasks” trigger would cause unrelated activation.
+- **Czego brakuje:** Implementation authorization and a writable environment; neither is needed for this plan.
+- **Blokery / decyzje:** None for read-only planning. Before any later write, resolve the target, risk, write gate, and validation route against current repository state.
+- **Rekomendowany routing:** Read-only plan now; separately route any later system-skill creation as workflow maintenance.
+
+### Plan Quality Contract
+
+- **Plan classification:** read-only; implementation writes planned: **no**.
+- **DoD source:** Your request and the repository’s skill-creator contract.
+- **Testable DoD:** The plan names the skill’s purpose, boundary, target artifacts, and concrete trigger and non-trigger cases.
+- **Artifact QA route / trigger:** `not-applicable`—this is a chat-only plan with no phase artifact.
+- **Implementation Quality Closure route:** `not-applicable`—no skill is being implemented.
+- **Required verification:** Manual check that each example falls on the intended side of the trigger boundary; confirm the worktree remains unchanged.
+- **Quality-ready criteria:** The plan is reviewable without implying command approval or implementation readiness.
+- **Owner opt-out:** none. **Blocking decision:** none for this plan.
+- **Next route:** If creation is requested later, establish a write-capable scope and the required skill intake, review, and validation gates.
+
+## Execution Trace
+
+- **Sources used:** `AGENTS.md`; relevant core task-intake, plan-quality, risk, permissions, response, and refresh contracts; `.systems/ai/skills/skill-creator/SKILL.md`; fixture and repo intake/status.
+- **Evidence reviewed:** HEAD `7a904f7`; clean worktree; fixture present. No project status or accepted spec exists in the named fixture path.
+- **Workflow procedures used:** task-intake, read-only plan-quality, contract-compliance.
+- **Skills/roles used:** AI Workflow `skill-creator`; no subagents.
+- **Commands/checks run:** Read-only file inspection and `git status`; no tests or validation scripts, since no files changed.
+- **Skipped/unreadable sources:** None; project status and spec are absent.
+- **Limits/residual uncertainty:** The future skill has not been created or evaluated. **Work mode compliance:** read-only planning; **knowledge capture:** not-required, because no durable change or new operational evidence was produced.
+- **Instruction refresh:** Status: performed-targeted; trigger: initial scope review; contracts refreshed: `AGENTS.md` and the relevant contracts above; reviewed baseline: HEAD, clean worktree, repo status/intake, fixture; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions asked/pending: none; auto-resolved decision: proposed system-skill path.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High; reason: command safety needs careful boundary review; criticality: advisory security-related planning; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Review this trigger boundary before requesting creation.  
+Wpływ: The later skill can be evaluated against a clear, narrow purpose.  
+Napisz:
+```text
+Use this plan to create the local-cli-command-safety skill in a write-enabled isolated checkout, following the repository gates.
+```
+
+**Alternatywa:** Expand only the read-only trigger examples first.  
+Wpływ: This tests the boundary further without creating files.  
+Napisz:
+```text
+Add more positive and negative trigger cases to the read-only CLI command safety skill plan.
+```

@@ -1,0 +1,38 @@
+## Findings
+
+- **P0 — Refund reentrancy can drain other depositors’ funds.** [`refund()` sends Ether before clearing the caller’s balance](/private/tmp/pse-cli-baseline-blockchain-review-h22e2n3g/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:20). A depositor contract can call `refund()` again from its receive function while its balance is still recorded. For example, with a 1 ETH attacker deposit and 2 ETH from others, three bounded refund calls can pay the attacker 3 ETH and leave the other 2 ETH liability unpaid. Clear the balance before the external call; a failed send will revert that change.
+
+- **P1 — Anyone can open refunds.** [`openRefunds()` has no authorization check](/private/tmp/pse-cli-baseline-blockchain-review-h22e2n3g/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:14). Any address can trigger the refund state. The authorized role and intended timing need an escrow specification before a fix is implemented.
+
+The normal refund path clears a balance after payment, and a failed payment reverts. The accounting failure occurs when the recipient reenters before that clearing step. Deposits also remain possible after refunds open; whether that is allowed is unspecified.
+
+**Review scope:** Read-only advisory review of the fixture at `7a904f7`. No files changed, tests run, deployment, or provider contact. No accepted escrow spec or runnable contract tests were present, so this is a static finding, not a formal QA result.
+
+### Execution Trace
+
+- **Sources used:** Owner request; fixture; `AGENTS.md`; repository quality, risk, permissions, refresh, and response contracts; blockchain skill and its EVM, value-flow, and testing references.
+- **Evidence reviewed:** Numbered Solidity snippet, synthetic repo status/intake, clean `git status`, HEAD `7a904f7`. Manual traces covered ordinary refund, bounded reentrancy, and failed payment.
+- **Workflow procedures used:** Read-only global quality review and adaptive value-flow review. Intent/plan/spec compliance: **unknown** because no escrow spec is supplied. Review completeness: adversarial path completed; baseline current; automated evidence supporting-only and absent; formal gate ineligible.
+- **Skills/roles used:** `.systems/ai/skills/blockchain-skill/SKILL.md`; smart-contract security and accounting review.
+- **Commands/checks run:** Local file inspection, `git status --short`, `git rev-parse`, and numbered source review. Tests and workflow validators were not run: this is a standalone fixture review with no implementation change.
+- **Skipped/unreadable sources:** Accepted escrow specification and executable test suite were unavailable. No external sources or systems accessed.
+- **Limits/residual uncertainty:** The intended refund authority and deposit behavior after opening are undecided. Work mode: read-only advisory review; knowledge capture: not required for this synthetic fixture.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: `AGENTS.md`, operating model, quality review, full QA verification, risk, permissions, and response contract; reviewed baseline: HEAD `7a904f7`, clean worktree, fixture and synthetic repo status; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed for this review; decisions asked/pending: none; auto-resolved decisions: none.
+- **Model recommendation:** GPT-5.6 Sol High; reason: adversarial smart-contract security review; criticality: high; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define the authorized refund opener and request a local fix plan with a reentrancy regression test.  
+Wpływ: Makes the security fix testable before any implementation approval.  
+Napisz:
+```text
+Prepare a read-only fix plan for this escrow fixture. Specify who may open refunds and include a reentrancy regression test.
+```
+
+**Alternatywa:** Request a broader read-only escrow invariant review.  
+Wpływ: Clarifies state and accounting requirements before choosing a fix.  
+Napisz:
+```text
+Review this escrow fixture read-only for all refund-state and balance invariants.
+```

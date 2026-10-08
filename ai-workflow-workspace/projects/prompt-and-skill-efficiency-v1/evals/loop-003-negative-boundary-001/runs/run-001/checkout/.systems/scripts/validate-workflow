@@ -1,0 +1,692 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+profile="standard"
+project=""
+checks=""
+explain=0
+timing_output=""
+progress="summary"
+timeout_seconds="1200"
+
+validation_started=0
+completion_emitted=0
+current_stage="startup"
+current_check="none"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  .systems/scripts/validate-workflow [--profile full|standard|scoped|fast] [--project slug] [--checks check-a,check-b] [--timing-output path] [--progress quiet|summary|verbose] [--timeout-seconds seconds] [--explain]
+
+Profiles:
+  standard  Core validator/structure checks without embedded smoke tests. Default daily validator.
+  full      Complete validation, including check-validator-smoke-tests. Explicit heavy validator.
+  scoped    Fast base checks plus explicit --checks validators. Iteration only.
+  fast      Cheap sanity checks. Iteration only.
+EOF
+}
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --profile)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --profile"
+        exit 1
+      fi
+      profile="$2"
+      shift 2
+      ;;
+    --project)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --project"
+        exit 1
+      fi
+      project="$2"
+      shift 2
+      ;;
+    --checks)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --checks"
+        exit 1
+      fi
+      checks="$2"
+      shift 2
+      ;;
+    --explain)
+      explain=1
+      shift
+      ;;
+    --timing-output)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --timing-output"
+        exit 1
+      fi
+      timing_output="$2"
+      shift 2
+      ;;
+    --progress)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --progress"
+        exit 1
+      fi
+      progress="$2"
+      shift 2
+      ;;
+    --timeout-seconds)
+      if [[ "$#" -lt 2 ]]; then
+        echo "Missing value for --timeout-seconds"
+        exit 1
+      fi
+      timeout_seconds="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown validate-workflow argument: $1"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -n "$project" && ! "$project" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+  echo "Unsafe project slug: $project"
+  exit 1
+fi
+
+case "$profile" in
+  full|standard|scoped|fast)
+    ;;
+  *)
+    echo "Unknown validation profile: $profile"
+    exit 1
+    ;;
+esac
+
+case "$progress" in
+  quiet|summary|verbose)
+    ;;
+  *)
+    echo "Unknown progress mode: $progress"
+    exit 1
+    ;;
+esac
+
+if ! [[ "$timeout_seconds" =~ ^[0-9]+([.][0-9]+)?$ ]] || [[ "$timeout_seconds" == "0" || "$timeout_seconds" == "0.0" ]]; then
+  echo "--timeout-seconds must be greater than zero"
+  exit 1
+fi
+
+if [[ -n "$checks" && "$profile" != "scoped" ]]; then
+  echo "--checks is valid only with --profile scoped"
+  exit 1
+fi
+
+if [[ "$profile" == "scoped" && -z "$checks" ]]; then
+  echo "--profile scoped requires --checks <check-a,check-b>"
+  exit 1
+fi
+
+if ! command -v rg >/dev/null 2>&1; then
+  echo "Missing required command: rg"
+  exit 1
+fi
+
+validation_started=1
+printf 'AI_WORKFLOW_VALIDATE_START profile=%s progress=%s\n' "$profile" "$progress"
+
+finish_validation() {
+  local status="$?"
+  local result="fail"
+  if [[ "$status" -eq 0 ]]; then
+    result="pass"
+  elif [[ "$status" -eq 124 ]]; then
+    result="timeout"
+  elif [[ "$status" -eq 130 || "$status" -eq 143 ]]; then
+    result="interrupted"
+  fi
+  if [[ "$validation_started" -eq 1 && "$completion_emitted" -eq 0 ]]; then
+    completion_emitted=1
+    printf 'AI_WORKFLOW_VALIDATE_COMPLETE profile=%s result=%s exit_code=%s duration_seconds=%s stage=%s check=%s\n' \
+      "$profile" "$result" "$status" "$((SECONDS - validation_started_at))" "$current_stage" "$current_check"
+  fi
+}
+
+validation_started_at=$SECONDS
+trap finish_validation EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+record_timing() {
+  local check_name="$1"
+  local duration="$2"
+  local result="$3"
+  [[ -n "$timing_output" ]] || return 0
+  mkdir -p "$(dirname "$timing_output")"
+  if [[ ! -f "$timing_output" ]]; then
+    printf 'command/check_id\tgroup\tduration_seconds\tresult\tprofile\n' > "$timing_output"
+  fi
+  local group="validator"
+  [[ "$check_name" == "check-validator-smoke-tests" ]] && group="smoke"
+  printf '%s\t%s\t%s\t%s\t%s\n' "$check_name" "$group" "$duration" "$result" "$profile" >> "$timing_output"
+}
+
+run_cmd() {
+  local started=$SECONDS
+  local status
+  current_stage="validator"
+  current_check="$*"
+  if [[ "$progress" != "quiet" ]]; then
+    printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=started\n' "$current_stage" "$current_check"
+  fi
+  if [[ "$explain" == "1" ]]; then
+    printf '+ %s\n' "$*"
+  fi
+  set +e
+  if [[ "$1" == ".systems/scripts/check-validator-smoke-tests" && -n "$timing_output" ]]; then
+    AI_WORKFLOW_TIMING_OUTPUT="$timing_output" .systems/scripts/run-with-timeout --timeout-seconds "$timeout_seconds" "$@" --progress "$progress"
+  elif [[ "$1" == ".systems/scripts/check-validator-smoke-tests" ]]; then
+    .systems/scripts/run-with-timeout --timeout-seconds "$timeout_seconds" "$@" --progress "$progress"
+  else
+    .systems/scripts/run-with-timeout --timeout-seconds "$timeout_seconds" "$@"
+  fi
+  status=$?
+  set -e
+  record_timing "$(basename "$1")" "$((SECONDS - started))" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)"
+  if [[ "$progress" != "quiet" ]]; then
+    printf 'AI_WORKFLOW_VALIDATE_PROGRESS stage=%s check=%s status=%s duration_seconds=%s\n' \
+      "$current_stage" "$current_check" "$([[ "$status" -eq 0 ]] && echo pass || echo fail)" "$((SECONDS - started))"
+  fi
+  return "$status"
+}
+
+explain_profile() {
+  if [[ "$explain" != "1" ]]; then
+    return 0
+  fi
+
+  if [[ -n "$project" ]]; then
+    echo "Runtime project scope: $project (product checks remain global)"
+  fi
+
+  case "$profile" in
+    full)
+      echo "Validation profile: full"
+      if [[ "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" == "1" ]]; then
+        echo "Smoke tests: skipped by AI_WORKFLOW_SKIP_SMOKE_TESTS=1"
+        echo "Final validation evidence: no, unless owner explicitly accepts residual risk"
+      else
+        echo "Smoke tests: run"
+        echo "Final validation evidence: yes"
+      fi
+      ;;
+    standard)
+      echo "Validation profile: standard"
+      echo "Smoke tests: skipped"
+      echo "Final validation evidence: yes for ordinary work; no when a full-required gate applies"
+      ;;
+    scoped)
+      echo "Validation profile: scoped"
+      echo "Scoped checks: $checks"
+      echo "Smoke tests: skipped"
+      echo "Final validation evidence: no, unless owner explicitly accepts narrow validation with residual risk"
+      ;;
+    fast)
+      echo "Validation profile: fast"
+      echo "Smoke tests: skipped"
+      echo "Final validation evidence: no, iteration only"
+      ;;
+  esac
+}
+
+run_runtime_check() {
+  local check_path="$1"
+  if [[ -n "$project" ]]; then
+    run_cmd "$check_path" --project "$project"
+  else
+    run_cmd "$check_path"
+  fi
+}
+
+run_fast_checks() {
+  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    run_cmd git diff --check
+  elif [[ "$explain" == "1" ]]; then
+    echo "+ git diff --check (skipped: not a git repository)"
+  fi
+  run_cmd .systems/scripts/check-required-artifacts
+  run_cmd .systems/scripts/check-branch-policy
+  run_runtime_check .systems/scripts/check-naming
+  run_runtime_check .systems/scripts/check-status-consistency
+  run_runtime_check .systems/scripts/check-qa-evidence
+  run_cmd .systems/scripts/check-full-qa-verification
+  run_cmd .systems/scripts/check-contract-compliance
+}
+
+run_named_check() {
+  local check_name="$1"
+  local check_path
+
+  if [[ ! "$check_name" =~ ^check-[a-z0-9-]+$ ]]; then
+    echo "Invalid scoped check name: $check_name"
+    exit 1
+  fi
+
+  check_path=".systems/scripts/$check_name"
+  if [[ ! -f "$check_path" ]]; then
+    echo "Unknown scoped check: $check_name"
+    exit 1
+  fi
+
+  case "$check_name" in
+    check-naming|check-status-consistency|check-qa-evidence) run_runtime_check "$check_path" ;;
+    *) run_cmd "$check_path" ;;
+  esac
+}
+
+run_core_validators() {
+  run_cmd .systems/scripts/check-required-artifacts
+  run_cmd .systems/scripts/check-prompt-composition
+  run_cmd .systems/scripts/check-branch-policy
+  run_runtime_check .systems/scripts/check-naming
+  run_runtime_check .systems/scripts/check-status-consistency
+  run_runtime_check .systems/scripts/check-qa-evidence
+  run_cmd .systems/scripts/check-full-qa-verification
+  run_cmd .systems/scripts/check-system-insights
+  run_cmd .systems/scripts/check-system-skills
+  run_cmd .systems/scripts/check-contract-compliance
+  run_cmd .systems/scripts/check-knowledge-capture-gate
+  run_cmd .systems/scripts/check-default-quality-phase-chaining
+  run_cmd .systems/scripts/check-dreaming-mode
+  run_cmd .systems/scripts/check-global-quality-review-stance
+  run_cmd .systems/scripts/check-review-completeness-gate
+  run_cmd .systems/scripts/check-intent-plan-spec-compliance-review
+  run_cmd .systems/scripts/check-implementation-slicing
+  run_cmd .systems/scripts/check-plan-quality-contract
+  run_cmd .systems/scripts/check-validation-profiles
+  run_cmd .systems/scripts/check-knowledge-capture-reminder
+  run_cmd .systems/scripts/check-instruction-adherence-refresh
+  run_cmd .systems/scripts/check-owner-decision-checkpoints
+  run_cmd .systems/scripts/check-request-batch-triage
+  run_cmd .systems/scripts/check-response-evidence-trace
+  run_cmd .systems/scripts/check-phase-skill-discovery
+  run_cmd .systems/scripts/check-default-quality-closure
+  run_cmd .systems/scripts/check-default-idea-validation-opt-out
+  run_cmd .systems/scripts/check-end-of-task-capture
+  run_cmd .systems/scripts/check-cross-system-upgrade-handoff
+  run_cmd .systems/scripts/check-worktree-bootstrap
+  run_cmd .systems/scripts/check-validation-routing
+  run_cmd .systems/scripts/check-model-selection-guidance
+  run_cmd .systems/scripts/check-delivery-constraints
+  run_cmd .systems/scripts/check-distillation-state
+  run_cmd .systems/scripts/check-workspace-freshness
+  run_cmd .systems/scripts/check-contract-topology
+  run_cmd .systems/scripts/check-validation-observability
+  run_cmd .systems/scripts/check-validation-completion
+  run_cmd .systems/scripts/check-skill-evaluation-contract
+}
+
+explain_profile
+
+if [[ "$profile" == "fast" ]]; then
+  current_stage="fast-profile"
+  run_fast_checks
+  exit 0
+fi
+
+if [[ "$profile" == "scoped" ]]; then
+  current_stage="scoped-profile"
+  run_fast_checks
+  IFS=',' read -r -a selected_checks <<< "$checks"
+  for check_name in "${selected_checks[@]}"; do
+    check_name="${check_name//[[:space:]]/}"
+    if [[ -z "$check_name" ]]; then
+      echo "Empty scoped check name in --checks"
+      exit 1
+    fi
+    run_named_check "$check_name"
+  done
+  exit 0
+fi
+
+run_core_validators
+
+fail=0
+current_stage="structural-checks"
+phases=(
+  phase-0-init.md
+  phase-0-repo-intake.md
+  phase-0-project-workspace.md
+  phase-0-idea-validation.md
+  phase-1-architecture.md
+  phase-1-architecture-qa.md
+  phase-1-architecture-fix-loop.md
+  phase-2-project-plan.md
+  phase-2-plan-qa.md
+  phase-2-plan-fix-loop.md
+  phase-2-task-packaging.md
+  phase-2-packaging-qa.md
+  phase-2-package-fix-loop.md
+  phase-3-specification.md
+  phase-3-spec-qa.md
+  phase-3-spec-fix-loop.md
+  phase-4-implementation.md
+  phase-5-quality.md
+  phase-5-fix-loop.md
+  phase-6-distillation.md
+  phase-7-checkpoint.md
+  phase-8-final-check.md
+)
+
+requiredHeadings=(
+  "## Gate Conditions"
+  "### Input required"
+  "### Output required"
+  "### Pass criteria"
+  "### Fail criteria"
+  "### Who can approve"
+  "### Evidence required"
+  "### Next allowed phases"
+  "### Stop conditions"
+  "### Writes allowed"
+)
+
+while IFS= read -r -d '' phaseFile; do
+  for heading in "${requiredHeadings[@]}"; do
+    if ! rg -q "^${heading}$" "$phaseFile"; then
+      echo "Missing gate heading '$heading' in ${phaseFile#./}"
+      fail=1
+    fi
+  done
+
+  if rg -q 'Active request matches this phase|Phase-specific inputs listed below|The phase artifact named by|Follow `.systems/ai/core/workflow.md`|Product-code writes are allowed only in implementation or fix-loop phases that explicitly permit them' "$phaseFile"; then
+    echo "Generic gate placeholder remains in ${phaseFile#./}"
+    fail=1
+  fi
+done < <(find .systems/ai/workflow -maxdepth 1 -type f -name 'phase-*.md' -print0)
+
+phaseCount="$(find .systems/ai/workflow -maxdepth 1 -type f -name 'phase-*.md' | wc -l | tr -d ' ')"
+if [[ "$phaseCount" != "${#phases[@]}" ]]; then
+  echo "Unexpected workflow phase file count: $phaseCount, expected ${#phases[@]}"
+  fail=1
+fi
+
+for phase in "${phases[@]}"; do
+  if ! rg -q "$phase" .systems/ai/core/workflow.md; then
+    echo "Phase missing from router: $phase"
+    fail=1
+  fi
+
+  template=".systems/ai/templates/workflow/${phase%.md}.template.md"
+  if [[ ! -f "$template" ]]; then
+    echo "Phase template missing for $phase: $template"
+    fail=1
+  fi
+done
+
+for required_init_ref in AGENTS.md README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/core/workflow.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md; do
+  if ! rg -q 'phase-0-init|phase 0 init' "$required_init_ref"; then
+    echo "Missing phase-0-init reference in $required_init_ref"
+    fail=1
+  fi
+done
+
+for required_init_text in 'legacy-index.md' 'blocked-owner-merge' 'ready-for-repo-intake' 'context/data only' 'phase-0-repo-intake'; do
+  if ! rg -q "$required_init_text" .systems/ai/workflow/phase-0-init.md .systems/ai/templates/workflow/phase-0-init.template.md .systems/scripts/init-workspace .systems/ai/core/installation.md .systems/ai/core/command-routing.md; then
+    echo "Missing phase-0-init bootstrap text: $required_init_text"
+    fail=1
+  fi
+done
+
+root_agents_template=".systems/ai/templates/root-agents.template.md"
+for required_root_ref in 'ai-workflow/AGENTS.md' 'AI_WORKFLOW_HOME' 'AI_WORKFLOW_WORKSPACE_HOME' 'TARGET_REPO_ROOT' 'cd ai-workflow'; do
+  if ! rg -q "$required_root_ref" "$root_agents_template"; then
+    echo "Root AGENTS template missing required nested-clone ref: $required_root_ref"
+    fail=1
+  fi
+done
+
+workspace_phase=".systems/ai/workflow/phase-0-project-workspace.md"
+workspace_template=".systems/ai/templates/workflow/phase-0-project-workspace.template.md"
+for required_workspace_ref in 'tasks/' 'micro-tasks.md' 'micro-tasks/' 'change-requests.md' 'change-requests/' 'reviews/' 'autopilot/README.md' 'autopilot/runs/'; do
+  if ! rg -q "$required_workspace_ref" "$workspace_phase"; then
+    echo "Project workspace phase missing required workspace ref: $required_workspace_ref"
+    fail=1
+  fi
+
+  if ! rg -q "$required_workspace_ref" "$workspace_template"; then
+    echo "Project workspace template missing required workspace ref: $required_workspace_ref"
+    fail=1
+  fi
+done
+
+for required_change_ref in '.systems/ai/core/change-requests.md' 'change request' 'final-owner-yes'; do
+  if ! rg -q "$required_change_ref" .systems/ai/workflow/phase-8-final-check.md; then
+    echo "Final check missing change request ref: $required_change_ref"
+    fail=1
+  fi
+
+  if ! rg -q "$required_change_ref" .systems/ai/core/command-routing.md; then
+    echo "Command routing missing change request ref: $required_change_ref"
+    fail=1
+  fi
+done
+
+response_contract=".systems/ai/core/response-contract.md"
+for required_response_contract_text in 'Co dalej?' 'Rekomendacja:' 'Alternatywa:' 'Napisz:' 'Recommendation Sources' 'Alternative Selection'; do
+  if ! rg -q "$required_response_contract_text" "$response_contract"; then
+    echo "Response contract missing required text: $required_response_contract_text"
+    fail=1
+  fi
+done
+
+for required_response_contract_ref in AGENTS.md .systems/ai/core/operating-model.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md; do
+  if ! rg -q '.systems/ai/core/response-contract.md' "$required_response_contract_ref"; then
+    echo "Missing response contract reference in $required_response_contract_ref"
+    fail=1
+  fi
+done
+
+for required_task_intake_ref in AGENTS.md .systems/ai/core/command-routing.md .systems/ai/core/operating-model.md .systems/ai/core/response-contract.md .systems/ai/core/workflow.md; do
+  if ! rg -q '.systems/ai/core/task-intake.md' "$required_task_intake_ref"; then
+    echo "Missing task intake reference in $required_task_intake_ref"
+    fail=1
+  fi
+done
+
+for required_task_intake_text in 'Co zostaje' 'Co jest słabe / do poprawy lub usunięcia' 'Czego brakuje' 'Blokery / decyzje' 'Rekomendowany routing'; do
+  if ! rg -q "$required_task_intake_text" .systems/ai/core/task-intake.md .systems/ai/core/command-routing.md .systems/ai/core/response-contract.md; then
+    echo "Missing task intake validation text: $required_task_intake_text"
+    fail=1
+  fi
+done
+
+parallel_policy=".systems/ai/core/parallel-work-policy.md"
+if [[ ! -f "$parallel_policy" ]]; then
+  echo "Missing parallel work policy: $parallel_policy"
+  fail=1
+fi
+
+for required_parallel_ref in AGENTS.md HUMANS.md .systems/ai/core/operating-model.md .systems/ai/core/workflow.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md; do
+  if ! rg -q 'parallel-work-policy.md' "$required_parallel_ref"; then
+    echo "Missing parallel work policy reference in $required_parallel_ref"
+    fail=1
+  fi
+done
+
+for required_parallel_text in 'status-only' 'write set' 'repo focus snapshot' 'Project status' 'memory router'; do
+  if ! rg -qi "$required_parallel_text" "$parallel_policy"; then
+    echo "Parallel work policy missing required text: $required_parallel_text"
+    fail=1
+  fi
+done
+
+for required_autopilot_readiness_ref in .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/templates/autopilot/run-readme.template.md .systems/ai/templates/autopilot/state.template.md; do
+  if ! rg -q 'readiness.md|readiness-result|readiness audit' "$required_autopilot_readiness_ref"; then
+    echo "Missing autopilot readiness reference in $required_autopilot_readiness_ref"
+    fail=1
+  fi
+done
+
+for required_autopilot_readiness_text in 'readiness-result: ready' 'blocked' 'awaiting-owner' 'owner-decisions' 'external-effects'; do
+  if ! rg -q "$required_autopilot_readiness_text" .systems/ai/core/autopilot.md .systems/ai/templates/autopilot/readiness.template.md; then
+    echo "Missing autopilot readiness text: $required_autopilot_readiness_text"
+    fail=1
+  fi
+done
+
+for required_autopilot_range_ref in .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/core/guide.md .systems/ai/templates/autopilot/readiness.template.md .systems/ai/templates/autopilot/state.template.md .systems/ai/templates/autopilot/run-readme.template.md; do
+  if ! rg -q 'planning-range' "$required_autopilot_range_ref"; then
+    echo "Missing planning-range reference in $required_autopilot_range_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'implementation-range' "$required_autopilot_range_ref"; then
+    echo "Missing implementation-range reference in $required_autopilot_range_ref"
+    fail=1
+  fi
+done
+
+for required_autopilot_owner_only_text in 'owner-triggered only' 'must not automatically run `phase-8-final-check`' 'stop before phase 8'; do
+  if ! rg -q "$required_autopilot_owner_only_text" .systems/ai/core/autopilot.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/templates/autopilot/readiness.template.md; then
+    echo "Missing owner-only final check text: $required_autopilot_owner_only_text"
+    fail=1
+  fi
+done
+
+for required_ownership_ref in AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/operating-model.md; do
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/skills/' "$required_ownership_ref"; then
+    echo "Missing workspace skills reference in $required_ownership_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/external-memory/' "$required_ownership_ref"; then
+    echo "Missing workspace external memory reference in $required_ownership_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME/system-insights/' "$required_ownership_ref"; then
+    echo "Missing workspace system insights reference in $required_ownership_ref"
+    fail=1
+  fi
+done
+
+for required_skill_contract_ref in AGENTS.md .systems/ai/core/operating-model.md .systems/ai/skills/README.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'SKILL\.md' "$required_skill_contract_ref"; then
+    echo "Missing system skill SKILL.md contract reference in $required_skill_contract_ref"
+    fail=1
+  fi
+done
+
+for required_skill_context_ref in AGENTS.md .systems/ai/core/operating-model.md .systems/ai/core/command-routing.md .systems/ai/skills/README.md .systems/ai/skills/skill-creator/SKILL.md .systems/ai/templates/workspace/skills/README.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'skill-intake-plan\.md' "$required_skill_context_ref"; then
+    echo "Missing skill context intake reference in $required_skill_context_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'context/' "$required_skill_context_ref"; then
+    echo "Missing skill context source reference in $required_skill_context_ref"
+    fail=1
+  fi
+done
+
+for required_skill_validator_ref in .systems/scripts/check-required-artifacts .systems/scripts/check-validator-smoke-tests .systems/ai/core/commands.md; do
+  if ! rg -q 'check-system-skills' "$required_skill_validator_ref"; then
+    echo "Missing check-system-skills validator chain reference in $required_skill_validator_ref"
+    fail=1
+  fi
+done
+
+for required_system_insights_ref in AGENTS.md HUMANS.md README.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md .systems/ai/core/guide.md .systems/ai/core/memory.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'System Insights|system-insights' "$required_system_insights_ref"; then
+    echo "Missing System Insights reference in $required_system_insights_ref"
+    fail=1
+  fi
+done
+
+for required_contract_ref in AGENTS.md HUMANS.md README.md .systems/ai/core/operating-model.md .systems/ai/core/definition-of-done.md .systems/ai/core/commands.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'contract-compliance|Contract Compliance|contract compliance' "$required_contract_ref"; then
+    echo "Missing contract compliance reference in $required_contract_ref"
+    fail=1
+  fi
+
+  if ! rg -q 'Knowledge capture|knowledge capture' "$required_contract_ref"; then
+    echo "Missing knowledge capture reference in $required_contract_ref"
+    fail=1
+  fi
+done
+
+for required_update_workspace_ref in README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/command-routing.md; do
+  if ! rg -q 'update-workspace' "$required_update_workspace_ref"; then
+    echo "Missing update-workspace reference in $required_update_workspace_ref"
+    fail=1
+  fi
+done
+
+if ! rg -q 'Do not edit `.systems/\*\*`' AGENTS.md; then
+  echo "AGENTS.md missing target-repo .systems read-only rule"
+  fail=1
+fi
+
+if ! rg -q 'must not modify it|does not touch `AI_WORKFLOW_WORKSPACE_HOME/\*\*`|does not edit workspace legacy files' .systems/ai/core/update-from-upstream.md; then
+  echo "Update policy missing external workspace no-touch rule"
+  fail=1
+fi
+
+for required_public_model_ref in README.md HUMANS.md AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/core/repo-intake.md; do
+  if ! rg -q 'AI_WORKFLOW_WORKSPACE_HOME|ai-workflow-workspace' "$required_public_model_ref"; then
+    echo "Missing AI_WORKFLOW_WORKSPACE_HOME reference in $required_public_model_ref"
+    fail=1
+  fi
+done
+
+for required_repository_mode_ref in README.md HUMANS.md AGENTS.md .systems/ai/core/installation.md .systems/ai/core/update-from-upstream.md .systems/ai/core/guide.md .systems/ai/core/command-routing.md .systems/ai/core/workflow.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'repository-modes.md|official repo mode|target repo mode|AI_WORKFLOW_MODE' "$required_repository_mode_ref"; then
+    echo "Missing repository mode reference in $required_repository_mode_ref"
+    fail=1
+  fi
+done
+
+for required_repository_mode_text in 'Official Repo Mode' 'Target Repo Mode' 'AI_WORKFLOW_MODE=auto|official|target' 'There is no inner `ai-workflow/` directory' 'resolve-workflow-env'; do
+  if ! rg -q "$required_repository_mode_text" .systems/ai/core/repository-modes.md; then
+    echo "Repository modes doc missing required text: $required_repository_mode_text"
+    fail=1
+  fi
+done
+
+for required_resolver_ref in .systems/scripts/check-naming .systems/scripts/check-status-consistency .systems/scripts/check-qa-evidence .systems/scripts/check-full-qa-verification; do
+  if ! rg -q 'resolve-workflow-env' "$required_resolver_ref"; then
+    echo "Validator missing workflow env resolver: $required_resolver_ref"
+    fail=1
+  fi
+done
+
+for required_install_ref in README.md HUMANS.md .systems/ai/core/installation.md .systems/ai/templates/root-agents.template.md; do
+  if ! rg -q '.git/info/exclude' "$required_install_ref"; then
+    echo "Missing local-only .git/info/exclude install rule in $required_install_ref"
+    fail=1
+  fi
+done
+
+if rg -q 'printf "\\n# Local AI Workflow nested clone\\n/ai-workflow/\\n" >> \.gitignore' README.md HUMANS.md .systems/ai/core/installation.md; then
+  echo "Old committed .gitignore install flow remains"
+  fail=1
+fi
+
+for required_branch_policy_ref in README.md .systems/ai/core/installation.md .systems/ai/core/version.md .systems/ai/core/changelog.md; do
+  if ! rg -q 'check-branch-policy|AI_WORKFLOW_BRANCH_POLICY|ai-workflow-workspace' "$required_branch_policy_ref"; then
+    echo "Missing branch policy reference in $required_branch_policy_ref"
+    fail=1
+  fi
+done
+
+if [[ "$profile" == "full" && "${AI_WORKFLOW_SKIP_SMOKE_TESTS:-0}" != "1" ]]; then
+  current_stage="smoke-suite"
+  run_cmd .systems/scripts/check-validator-smoke-tests
+fi
+
+exit "$fail"

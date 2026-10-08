@@ -1,0 +1,24 @@
+# Current LV004 Implementation Readiness
+
+- Result: accepted execution complete; formal quality and Phase 6 complete, local source commit ready after capture checks
+- Baseline: clean 03fb788
+- Source mode: official upstream
+- Branch: codex/ai-workflow-lean-validation-v1
+- Authority: LV-DEC-008; high-risk scoped execution, quality, capture and local commits
+- Dependencies: LV001-LV003 current quality and accepted checkpoint, fresh full verification
+- Current spec: specs/phase-3-lv-test-004-smoke-partition-specification.md
+- Current Spec QA: quality/recovery-phase-3-lv-test-004-smoke-partition-spec-qa.md, lv004-spec-current-source-2026-09-30; initial pre-write assessment preserved as historical
+- Slice plan: implementation/phase-4-lv-test-004-smoke-partition-implementation.md
+- Capture state: capture-state/lv-test-004-smoke-partition.md, completed
+- Exact source ceiling: thirteen enumerated spec files; no writes to outside consumers
+- Source write conflicts: none observed
+- Delivery constraints: no deadline/timebox, LV-DEC-001
+- Shared impact: yes; update one existing conceptual handoff only after actual acceptance
+- Current source: thirteen approved paths promoted only after preserved-reference equivalence, ownership, protected mutation and lifecycle evidence; latest digest in implementation/lv004-current-source-audit.json
+- Historical prototype: disposable reference-copy; failed boundary, cleanup and consumer attempts remain evidence, not current verdicts
+- Verified: all 674 reference cases, 20 supplemental cases, 21 whole regions, field-level ownership, 552 matching negative diagnostics, reverse standalone groups, two protected mutations, pure imports and twelve final dispatcher fault probes
+- Current full evidence: source-only first full failed because the public live index omitted check-system-skills; preserved as failure. The repaired source full passed in 765 seconds; actual-runtime full passed in 612 seconds with 694 cases and one completion marker.
+- Quality and capture: genuine current LV001/LV002/LV003 regression and LV004 Spec QA complete; current Phase 5 lv004-quality-2026-09-30 PASS; Phase 6 and one privacy-safe handoff updated.
+- Verification remaining: targeted capture/status consistency and exact staged thirteen-path scope before local commit; Linux CI remains unrun.
+- Promotion rule: no proof means retain source monolith, record inconclusive outcome and require scope disposition before later dependency completion
+- No push, empty ignored-artifact commit or final-owner-yes

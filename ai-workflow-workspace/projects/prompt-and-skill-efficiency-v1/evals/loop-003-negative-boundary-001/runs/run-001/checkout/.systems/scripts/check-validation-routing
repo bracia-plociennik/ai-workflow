@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for validation routing check: $file"
+    fail=1
+  elif ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing validation routing requirement in $file: $label"
+    fail=1
+  fi
+}
+
+contract=".systems/ai/core/validation-routing.md"
+require_ref "$contract" '^# validation-routing\.md$' "core contract"
+require_ref "$contract" 'owner intent, DoD, accepted plan/spec, and scope' "semantic first"
+require_ref "$contract" 'findings-first code, diff, or artifact review' "findings first"
+require_ref "$contract" 'target-product tests, builds, and manual checks' "product checks"
+require_ref "$contract" 'applicable `.systems/scripts/\*\*` checks as supporting evidence' "supporting scripts"
+require_ref "$contract" 'Green scripts do not equal `PASS`' "PASS boundary"
+require_ref "$contract" 'no broad AI Workflow validation' "implementation boundary"
+require_ref "$contract" 'Phase 7 checkpoint' "checkpoint full route"
+require_ref "$contract" 'Phase 6 distillation' "distillation targeted route"
+
+templates=(
+  .systems/ai/templates/workflow/phase-1-architecture-qa.template.md
+  .systems/ai/templates/workflow/phase-2-plan-qa.template.md
+  .systems/ai/templates/workflow/phase-2-packaging-qa.template.md
+  .systems/ai/templates/workflow/phase-3-spec-qa.template.md
+  .systems/ai/templates/workflow/phase-5-quality.template.md
+  .systems/ai/templates/reviews/review.template.md
+  .systems/ai/templates/micro-projects/micro-project.template.md
+  .systems/ai/templates/projects/micro-task.template.md
+)
+
+for file in "${templates[@]}"; do
+  for field in \
+    'Semantic QA result' \
+    'Findings/blockers' \
+    'Product checks' \
+    'Workflow script applicability' \
+    'Targeted workflow commands' \
+    'Script evidence role.*supporting-only' \
+    'Final verdict'
+  do
+    require_ref "$file" "$field" "field: $field"
+  done
+done
+
+require_ref ".systems/ai/workflow/phase-4-implementation.md" 'does not run broad AI Workflow validation' "phase 4 boundary"
+require_ref ".systems/ai/templates/workflow/phase-4-implementation.template.md" 'Broad AI Workflow validation during implementation: `not-applicable`' "phase 4 template boundary"
+require_ref ".systems/ai/core/validation-profiles.md" 'not a default product-implementation QA command' "profile separation"
+require_ref "AGENTS.md" 'validation-routing\.md' "AGENTS integration"
+require_ref "HUMANS.md" 'Semantic QA Przed Skryptami' "HUMANS integration"
+require_ref "README.md" 'validation-routing\.md' "README integration"
+require_ref ".systems/ai/core/commands.md" 'check-validation-routing' "commands integration"
+require_ref ".systems/scripts/validate-workflow" 'check-validation-routing' "workflow validation"
+require_ref ".systems/scripts/check-required-artifacts" 'check-validation-routing' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'validation-routing-blocks-green-scripts-pass' "smoke integration"
+
+unsafe_patterns=(
+  'green (workflow )?scripts?[^.\n]{0,80}\b(equal|means?|produce|justify|guarantee)\b[^.\n]{0,50}\bPASS\b'
+  '(ordinary|routine) product implementation[^.\n]{0,120}\b(run|requires?|must run)\b[^.\n]{0,80}\b(validate-workflow|broad AI Workflow validation)\b'
+  'workflow scripts?[^.\n]{0,120}\b(replace|substitute for|come before)\b[^.\n]{0,80}\b(semantic|product|code|diff|DoD)\b'
+)
+
+for pattern in "${unsafe_patterns[@]}"; do
+  policy_reject_unsafe_pattern "$pattern" "Unsafe validation routing wording found: $pattern" \
+    AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+done
+
+exit "$fail"

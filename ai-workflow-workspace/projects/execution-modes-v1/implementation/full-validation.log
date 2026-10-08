@@ -1,0 +1,68 @@
+AI_WORKFLOW_VALIDATE_START profile=full progress=summary
+{"environment": "c7bb36069a75f37343dc32b094fbf846a67fd7f4f1150e9fbe014bc24759d87f", "root": "a84f29738bd8874273dc6a2875d88102573aff154150fdf7d7e1d0cd0f44e9f9", "state": "ready"}
+Runtime project scope: execution-modes-v1 (product checks remain global)
+Validation profile: full
+Smoke tests: run
+Final validation evidence: yes
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-efficiency status=started
++ .systems/scripts/check-execution-efficiency
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-efficiency status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=started
++ .systems/scripts/check-required-artifacts
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=started
++ .systems/scripts/check-prompt-composition
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=started
++ .systems/scripts/check-branch-policy
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming --project execution-modes-v1 status=started
++ .systems/scripts/check-naming --project execution-modes-v1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming --project execution-modes-v1 status=pass duration_seconds=3
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency --project execution-modes-v1 status=started
++ .systems/scripts/check-status-consistency --project execution-modes-v1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency --project execution-modes-v1 status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence --project execution-modes-v1 status=started
++ .systems/scripts/check-qa-evidence --project execution-modes-v1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence --project execution-modes-v1 status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-full-qa-verification status=started
++ .systems/scripts/check-full-qa-verification
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-full-qa-verification status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-insights status=started
++ .systems/scripts/check-system-insights
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-insights status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-skills status=started
++ .systems/scripts/check-system-skills
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-skills status=pass duration_seconds=3
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-compliance status=started
++ .systems/scripts/check-contract-compliance
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-compliance status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-gate status=started
++ .systems/scripts/check-knowledge-capture-gate
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-gate status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-phase-chaining status=started
++ .systems/scripts/check-default-quality-phase-chaining
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-phase-chaining status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-dreaming-mode status=started
++ .systems/scripts/check-dreaming-mode
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-dreaming-mode status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-global-quality-review-stance status=started
++ .systems/scripts/check-global-quality-review-stance
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-global-quality-review-stance status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-review-completeness-gate status=started
++ .systems/scripts/check-review-completeness-gate
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-review-completeness-gate status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-intent-plan-spec-compliance-review status=started
++ .systems/scripts/check-intent-plan-spec-compliance-review
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-intent-plan-spec-compliance-review status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-implementation-slicing status=started
++ .systems/scripts/check-implementation-slicing
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-implementation-slicing status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-plan-quality-contract status=started
++ .systems/scripts/check-plan-quality-contract
+.systems/ai/core/execution-modes.md:37:The optional `execution-readiness.template.json` projection is inspected by `check-execution-modes --state <file>`. It contains declared unit prerequisites, work kind, decisions, approved actions, baseline and exclusive resources. The pure inspector computes readiness, transitive blocking and completion. Planning units allow only artifact-write, formal-quality and local-commit actions; read-only units reject write actions. Unknown action names are rejected. High-impact agent choices require scoped approval references for all affected units. It performs no writes, launches or approval verification. A declared reference or true flag is not proof: the coordinator must verify real sources, gates, repository baseline and resource isolation before execution. An unknown or malformed projection is rejected.
+.systems/ai/core/autopilot.md:167:- Verify recorded human approval for high-risk work; a concrete accepted plan may already cover its named local implementation and formal Quality. Critical-risk and newly uncovered effects retain required human approval.
+.systems/ai/core/parallel-task-orchestration.md:3:Execution modes under execution-modes.md are inherited by workers from one coordinator. A queued decision blocks affected units, dependents and shared reservations; verified independent units may continue. Local plan approval may already cover named high-risk Quality; check the actual source at the gate without repeating approval requests.
+Unsafe Plan Quality Contract wording found
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-plan-quality-contract status=fail duration_seconds=0
+AI_WORKFLOW_VALIDATE_COMPLETE profile=full result=fail exit_code=1 duration_seconds=16 stage=validator check=.systems/scripts/check-plan-quality-contract

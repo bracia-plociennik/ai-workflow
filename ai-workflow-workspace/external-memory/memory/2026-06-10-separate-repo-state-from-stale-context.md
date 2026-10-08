@@ -1,0 +1,24 @@
+# 2026-06-10 - Separate Repo State From Stale Context
+
+- Date: `2026-06-10`
+- Title: `Separate repo state from stale context`
+- Type: `recommendation`
+- Scope: `workflow`
+- Status: `proposed`
+- Source: `generalized from an owner-approved cleanup where stale context conflicted with current repository state`
+- Recommendation: Before acting on attachments, memory, runtime notes, or prior chat context, verify the current repository state and use that state as factual truth. Keep tracked cleanup separate from ignored/local runtime cleanup, and only promote evidence-backed lessons into memory.
+- Why it matters: Stale context can preserve obsolete branch models, paths, task state, or workspace assumptions. Repository-first verification prevents false PASS, accidental commits of local runtime, and memory entries that encode outdated facts.
+- What worked well: The cleanup stayed safe by checking branch state, tracked files, ignored workspace behavior, validator policy, and final Git status before committing only the tracked CI change.
+- What failed or was weak: Old supporting context still described obsolete branch/workspace assumptions after the repository had already moved on. Without a repository-first check, those notes could have driven the wrong implementation path.
+- Suggested workflow improvement: For cleanup, recovery, resume, and memory-writing tasks, require a short pre-write evidence pass that distinguishes current tracked repository state from ignored workspace state and stale context.
+- Suggested skills improvement: Add or reinforce a reusable skill/checklist for repository-state reconciliation before editing memory, status, CI, branch policy, or workspace routing.
+- Applies to:
+  - `AGENTS.md`
+  - `.systems/ai/core/workflow.md`
+  - `.systems/ai/core/guide.md`
+  - `.systems/ai/workflow/phase-7-checkpoint.md`
+  - `.systems/ai/templates/`
+  - `.systems/ai/skills/`
+- Promotion path: Promote into the relevant workflow, guide, checkpoint, template, or skill contract only after owner/workflow maintainer acceptance.
+- Privacy check: `confirmed no repo-specific facts, project-specific facts, secrets, client data, or proprietary product details`
+- Notes: This entry is advisory. It does not override active workflow rules until promoted into a contract file.

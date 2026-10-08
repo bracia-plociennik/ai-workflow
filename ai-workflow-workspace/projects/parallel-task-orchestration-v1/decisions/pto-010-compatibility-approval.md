@@ -1,0 +1,12 @@
+# PTO-010 Compatibility Approval
+- Decision ID: PTO-D10
+- Date: 2026-10-04
+- Owner source: "Zatwierdzam PTO-010 jako compatibility adapter bez native dispatch. Implementuj."
+- Follow-up owner source: "Dojdz do phase 8 calosci."
+- Approved scope: exact PTO-010 spec write set, artifact QA/readiness, slices, integrated review, applicable high-risk Phase5, Phase6/7 and owner-triggered technical Phase8 of all included tasks.
+- Native boundary: no native dispatch, backend executor, counterpart source writes or installed interoperability claim.
+- High-risk gate permission: execution through technical Phase8 conditional on actual evidence; no PASS inferred from approval.
+- History: preserve earlier QA and append substantive regression reviews; previous Phase8 does not accept010.
+- Cross-system impact: yes, coordinated project; privacy-safe handoff after actual Quality.
+- Delivery: inherited no deadline/timebox.
+- Git: existing no-commit remains; no commit/push/update/PR/final-owner-yes.

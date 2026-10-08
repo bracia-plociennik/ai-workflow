@@ -1,0 +1,69 @@
+## Task Idea Validation
+
+- **Co zostaje:** A responsive account settings screen with loading, validation, and recovery states is a clear, bounded design target.
+- **Co jest słabe / do poprawy lub usunięcia:** The fixture has no React app, design system, or API contract to anchor component choices.
+- **Czego brakuje:** The final field list, save endpoint behavior, and existing UI conventions are needed before implementation.
+- **Blokery / decyzje:** None for this read-only plan. Those missing inputs block an implementation-ready specification.
+- **Rekomendowany routing:** Use this as a synthetic screen plan; resolve the missing inputs before any implementation route.
+
+## Screen plan
+
+Use a centered content area with a page heading, short description, and sections separated by dividers. The provisional fields are **display name** (editable, required, 1–80 characters after trimming), **email** (read-only), and **notification preference** (toggle). Keep password, email-change, and other security flows outside this screen until their contracts are defined.
+
+At narrow widths, stack labels, fields, messages, and actions in one column. At wider widths, allow labels and controls to align in two columns while keeping the form easy to scan. The save button must remain visible in normal document flow, with a comfortable touch target and no horizontal scrolling at 320 px.
+
+| State | Expected behavior |
+| --- | --- |
+| Loading | Show a labeled loading region and stable placeholders; disable editing until values arrive. |
+| Load failure | Show an error summary and **Retry**. Retry reloads the values. |
+| Ready | Show current values; keep **Save** disabled until a value changes. |
+| Invalid | Validate on blur and submit. Show field-specific text, connect it to the input, and move focus to the first invalid field after submit. Preserve all entries. |
+| Saving | Disable duplicate submits and show progress without implying success. |
+| Saved | Show a concise success status and clear the dirty state. |
+| Save failure or offline | Preserve edits, explain what happened, and offer **Retry save**. Never silently discard entries. |
+| Changed on server | If the eventual API reports a conflict, keep local edits and offer a way to reload server values before retrying. |
+
+**Proposed verification:** Test the state transitions with a mocked data source; check display-name boundaries and duplicate submission; inspect at 320, 375, 768, and 1280 px; and manually check keyboard focus, error announcements, and retry behavior. These are future acceptance checks, not checks run in this read-only task.
+
+## Plan Quality Contract
+
+- **Plan classification:** read-only; implementation writes planned: **no**.
+- **DoD source:** The user request and the provisional synthetic field scope above.
+- **Testable DoD:** A later implementation shows all listed states, preserves edits after validation or save failure, prevents duplicate saves, and meets the responsive and accessibility checks above.
+- **Artifact QA route / trigger:** `not-applicable` — this response creates no artifact or formal phase result.
+- **Implementation Quality Closure route:** `not-applicable` — no implementation is authorized here.
+- **Required verification:** `not-applicable` now; proposed implementation checks are listed above.
+- **Quality-ready criteria:** The plan names fields, state transitions, recovery actions, responsive behavior, and observable acceptance checks.
+- **Owner opt-out:** none.
+- **Not-applicable reason:** This is a response-only plan in a synthetic fixture with no product writes.
+- **Blocking decision:** none for planning; field and API contracts remain unresolved for implementation.
+- **Next route:** Resolve those contracts and the target React project before drafting an implementation-ready specification. **Residual risk:** The proposed layout and field rules cannot be checked against an actual app yet.
+
+## Execution Trace
+
+- **Sources used:** User prompt; [AGENTS.md](/private/tmp/pse-cli-candidate-frontend-ui-ip1vbwnl/checkout/AGENTS.md); AI Workflow core contracts for task intake, plan quality, risk, permissions, response, and decisions; [frontend skill](/private/tmp/pse-cli-candidate-frontend-ui-ip1vbwnl/checkout/.systems/ai/skills/frontend-skill/SKILL.md); repo status and intake.
+- **Evidence reviewed:** HEAD `7a904f7`; clean worktree; fixture directory listing; no React app or accepted screen artifacts found. Repo status records no formal active project or phase.
+- **Workflow procedures used:** Task Idea Validation, read-only Plan Quality Contract, skill discovery. Work mode complies with the no-write request; knowledge capture: **not-required**, since no durable state changed.
+- **Skills/roles used:** Repository frontend skill.
+- **Commands/checks run:** `git status`, `git rev-parse`, `rg`, `find`, and read-only document inspection. No product tests or visual checks ran.
+- **Skipped/unreadable sources:** None required for this scope; app, API, and design-system sources are absent.
+- **Limits/residual uncertainty:** Field choices and service responses are provisional. No implementation or formal QA result is claimed.
+- **Instruction refresh:** Status: performed-targeted; trigger: read-only plan and handoff; contracts refreshed: AGENTS.md, relevant core contracts, frontend skill; reviewed baseline: HEAD, worktree, repo status/intake, fixture listing; drift/conflict: none for this synthetic scope.
+- **Owner decision interaction:** Mode: none-needed for this plan; decisions asked/pending: none for the current step; auto-resolved decisions: provisional field scope.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded, reversible planning work; criticality: low for this read-only response; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Provide the target React project and field/API contract for an implementation-ready specification.  
+Wpływ: This makes component choices and verification executable.  
+Napisz:
+```text
+Use this screen plan to draft an implementation-ready specification for [React project path]. The settings fields are [fields], and the save API behaves as follows: [contract]. Do not implement yet.
+```
+
+**Alternatywa:** Refine the screen scope while staying read-only.  
+Wpływ: This settles the user experience before technical integration is specified.  
+Napisz:
+```text
+Revise the read-only account settings plan for these fields and preferences: [details]. Do not change files.
+```

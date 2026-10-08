@@ -1,0 +1,13 @@
+{
+  "case": "skill-review-direct",
+  "repeat": "001",
+  "fixture": "/private/tmp/ai-workflow-skill-002-residual-001-candidate",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "sandbox": "read-only",
+  "prompt_sha256": "3fce20471b6203badddc0c4367cb16e8a60cdc5e0499aeb3203f30608543fd5c",
+  "agents_sha256": "eab833e37b454578891d7e36cc8f9a4fedf52ed1251dcd73b887f19e8e8330e2",
+  "skill_sha256": "df6c69760abff4e936b4682485fada7a5d2cd0abd0f40cb1b44a46561e7232f6",
+  "exit_code": 0,
+  "duration_seconds": 114.83
+}

@@ -1,0 +1,31 @@
+## Findings
+
+**Architecture QA assessment: FAIL.** The proposal does not meet the accepted [owner intent and DoD](/private/tmp/pse-cli-baseline-formal-phase-qa-7udm2bws/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:3).
+
+- **Critical — ownership is unenforced.** The download endpoint checks authentication only. The architecture does not prevent an authenticated user from viewing another user’s document.
+- **Critical — failed uploads may leave visible records.** Metadata is written before bytes are uploaded, but the proposal defines no transaction, cleanup, or visibility rule when either write fails.
+- **Blocking DoD gaps.** Storage boundaries and testable acceptance criteria are absent. The proposal also lacks the explicit risks and unknowns needed for the [architecture gate](/private/tmp/pse-cli-baseline-formal-phase-qa-7udm2bws/checkout/.systems/ai/workflow/phase-1-architecture-qa.md:159).
+
+A second pass over cross-user downloads and partial upload failures reaches the same result. **The proposal cannot proceed to project planning under the architecture QA contract.** This is a read-only fixture assessment; no formal QA artifact or status was written.
+
+Model recommendation: GPT-5.6 Sol High for the security-sensitive architecture review. Blocking: no.
+
+## Execution Trace
+
+Sources: fixture owner intent, DoD, and proposal; architecture QA, plan quality, and full QA contracts. Baseline: `7a904f7`, clean worktree. Instruction refresh: performed-targeted for this read-only review; drift/conflict: none. Skills used: none matched. Checks: manual intent/DoD comparison and failure-path review; scripts and product tests were not applicable to this text-only fixture. Formal architecture artifact and project status are absent, so no formal phase result was recorded. Work mode: read-only advisory review; knowledge capture: not-required because no durable project state changed.
+
+## Co dalej?
+
+Rekomendacja:
+Revise the synthetic architecture proposal, then repeat architecture QA. Wpływ: resolves the blockers before planning.
+Napisz:
+```text
+Revise the formal-phase-qa fixture architecture to meet its owner intent and DoD, then review it again.
+```
+
+Alternatywa:
+Request a read-only acceptance checklist. Wpływ: gives the author precise criteria without changing the fixture.
+Napisz:
+```text
+Create a read-only architecture acceptance checklist for the formal-phase-qa fixture.
+```

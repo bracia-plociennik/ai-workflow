@@ -1,0 +1,36 @@
+## Findings
+
+1. **P0 — Refunds can drain other depositors’ funds.** [`refund()` sends Ether before clearing the caller’s balance](</private/tmp/pse-cli-candidate-blockchain-review-qu0yumgi/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:16>). A depositor contract can reenter `refund()` and receive the same recorded amount twice. For example, with 1 ETH deposited by the attacker and 1 ETH by another user, one reentry pays the attacker 2 ETH while the other user’s 1 ETH balance remains recorded but unfunded. Clear the balance before the external call and test the no-double-refund accounting invariant.
+
+2. **P1 — Anyone can open refunds.** [`openRefunds()` has no authorization check](</private/tmp/pse-cli-candidate-blockchain-review-qu0yumgi/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:14>). Any address can change the escrow’s global refund state. If that transition is intended to be controlled, define its authorized role and enforce it on-chain.
+
+**Review scope:** The findings follow from a manual trace of the fixture. No test harness, deployment, or provider call was used. The intended refund authority is unspecified, so the authorization finding depends on that product decision. This is an advisory review, not a formal QA result.
+
+## Execution Trace
+
+- **Sources used:** Fixture, repository `AGENTS.md`, review and risk contracts, blockchain skill and value-flow guidance.
+- **Evidence reviewed:** Fixture lines 9–22; manual trace of unauthorized state change and one nested refund; checkout at `7a904f7`.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; findings-first review and adversarial refund trace. No formal phase applies.
+- **Skills/roles used:** `.systems/ai/skills/blockchain-skill/SKILL.md`; Solidity security and accounting review.
+- **Commands/checks run:** `nl -ba` on the fixture and `git status --short`. No Solidity tests or workflow validators ran: this is a standalone read-only fixture with no test harness or workflow changes.
+- **Skipped/unreadable sources:** No accepted escrow specification or test evidence was present. Authorization intent remains uncertain.
+- **Limits/residual uncertainty:** Reentrancy is established by the code path; no executable proof was run. The pre-existing `AGENTS.md` worktree modification was untouched.
+- **Instruction refresh:** Status: performed-targeted. Trigger: review closure. Contracts refreshed: repository guidance, review, risk, permissions, and response contracts. Reviewed baseline: `7a904f7` plus current worktree and fixture. Drift/conflict: none affecting this review.
+- **Owner decision interaction:** Mode: none-needed for this review. Decisions asked/pending: none. Auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High. Reason: security and adversarial review. Criticality: high. Current model known: yes. Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define who may open refunds, then request a read-only remediation plan covering both findings.  
+Wpływ: Makes the authorization rule and accounting invariant testable before any code change.  
+Napisz:
+```text
+For this isolated fixture, define the intended refund authority and prepare a read-only remediation and test plan for both findings.
+```
+
+**Alternatywa:** Request a local proof-of-concept test plan for the reentrant payout only.  
+Wpływ: Narrows verification to the fund-drain path while leaving the authority decision open.  
+Napisz:
+```text
+Prepare a read-only local test plan demonstrating the escrow fixture's reentrant double refund; do not deploy or contact a provider.
+```

@@ -1,0 +1,61 @@
+## Task Idea Validation
+
+- **Co zostaje:** A read-only wallet dashboard using a backend balance read model. The stated scope excludes contract changes, backend changes, and transactions.
+- **Co jest słabe / do poprawy lub usunięcia:** “On-chain balance” could imply a live chain read. The UI should identify the backend snapshot and its freshness.
+- **Czego brakuje:** The supported chain, wallet identity rule, existing read-model response, and freshness policy are unspecified.
+- **Blokery / decyzje:** These details do not block a synthetic proposal; they block an implementation-ready specification.
+- **Rekomendowany routing:** Read-only planning in this fixture. The [repo status](/private/tmp/pse-cli-baseline-mixed-web3-ui-_d95skkx/checkout/ai-workflow-workspace/repo/core/status.md) records no formal active project or phase.
+
+## Synthetic dashboard plan
+
+1. **Data boundary:** The UI consumes an *existing* backend balance read model. It makes no direct chain-provider calls and has no signing, approval, transfer, or transaction controls.
+2. **Balance view:** Show wallet address, chain, asset, balance, and the block or timestamp represented by the snapshot. Preserve integer base units until display formatting; apply the asset’s verified decimals and label rounding clearly. Omit fiat values unless an existing, attributable price source is part of the accepted data contract.
+3. **Trust cues:** Label values as a backend projection of on-chain state. Show when data is stale, still indexing, or unavailable; never label a cached balance “live.”
+4. **State coverage:** Design loading, zero balance, populated, partial data, stale, wrong network, access denied, and service failure states. Provide a read-only retry where the existing API supports it.
+5. **Later verification:** Against an agreed mock response, check large balances and decimal precision, chain and asset identity, stale data, error recovery, mobile layout, keyboard use, and screen-reader labels. These checks are planned, not run.
+
+**Risk:** The bounded UI concept is medium risk. A new provider integration, authentication change, or security claim would require separate risk review and approval.
+
+## Plan Quality Contract
+
+- **Classification:** Read-only; no implementation writes planned.
+- **DoD source:** The current synthetic request.
+- **Testable DoD:** The proposal defines the data boundary, visible states, provenance, scope exclusions, and later verification without requiring a contract, backend, or transaction change.
+- **Artifact QA route / trigger:** `not-applicable` — no formal phase artifact is being written.
+- **Implementation Quality Closure route:** `not-applicable` — no implementation is authorized or performed.
+- **Required verification:** Read-only scope and contract review now; the UI checks above if implementation is separately authorized.
+- **Quality-ready criteria:** Existing read-model schema, chain scope, wallet identity rule, and freshness meaning are confirmed before an implementation specification.
+- **Owner opt-out:** None.
+- **Not-applicable reason:** This response is a conceptual plan in a read-only synthetic checkout.
+- **Blocking decision / next route:** Confirm those data-contract facts before dependent specification or implementation.
+
+**Contract compliance:** Read-only scope observed; no formal `PASS` or implementation readiness claimed. Knowledge capture: **not required** because no project state or reusable operational fact changed.
+
+## Execution Trace
+
+- **Sources used:** User request; [AGENTS.md](/private/tmp/pse-cli-baseline-mixed-web3-ui-_d95skkx/checkout/AGENTS.md); workflow planning, risk, permission, and response contracts; frontend and blockchain skills; synthetic repo status and intake.
+- **Evidence reviewed:** Fixture file list and clean `git status`; no product dashboard, API contract, or formal project artifacts were present.
+- **Workflow procedures used:** Task intake, skill discovery, plan quality contract, risk review.
+- **Skills/roles used:** Frontend skill for dashboard states and accessibility; blockchain skill for the on-chain/off-chain authority boundary. Laravel skill was inspected but does not apply without Laravel work.
+- **Commands/checks run:** Local file inspection and `git status`; no tests run because no files changed.
+- **Skipped/unreadable sources:** No external APIs accessed; no existing product read-model schema was available in the fixture.
+- **Limits/residual uncertainty:** Chain, endpoint shape, identity rule, and freshness threshold remain unknown.
+- **Instruction refresh:** Status: performed-full; trigger: initial checkout and formal-status check; contracts refreshed: AGENTS.md and relevant core contracts; reviewed baseline: clean worktree, repo status, intake, fixture; drift/conflict: warning—the user designates a fixture for this task while formal status lists no active project.
+- **Owner decision interaction:** Mode: queued; decisions pending: data contract and chain scope before any dependent implementation; auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High; reason: Web3 data provenance and integration ambiguity; criticality: medium for the bounded UI plan; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define the synthetic read-model response and supported chain, then refine this into a read-only UI specification.  
+Wpływ: Makes balance formatting, freshness, and failure states testable.  
+Napisz:
+```text
+Refine the synthetic wallet dashboard plan using this read-model schema and chain scope: [paste schema and chain]. Keep it read-only.
+```
+
+**Alternatywa:** Review the proposed data fields and states without choosing a schema yet.  
+Wpływ: Exposes missing decisions while keeping the work conceptual.  
+Napisz:
+```text
+Review the synthetic wallet dashboard plan for missing data fields, misleading balance claims, and UI states. Do not implement anything.
+```

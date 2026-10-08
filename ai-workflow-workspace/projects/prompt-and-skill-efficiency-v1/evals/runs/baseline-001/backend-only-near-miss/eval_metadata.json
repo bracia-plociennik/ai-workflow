@@ -1,0 +1,30 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Selects backend-laravel-skill",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Does not activate frontend-skill solely because an API has users",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Reviews repository conventions and failure behavior",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "backend-only-near-miss",
+  "eval_name": "backend-only-near-miss",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Requires frontend visual QA for this backend-only change"
+  ],
+  "prompt": "Review a synthetic Laravel FormRequest and service method for validation and error handling. There is no user-facing interface change."
+}

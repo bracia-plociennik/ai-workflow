@@ -1,0 +1,26 @@
+# 2026-06-23 - Intent Compliance Quality Checks
+
+- Date: `2026-06-23`
+- Topic: `Intent compliance quality checks`
+- Type: `repo-fact`
+- Status: `active`
+- Scope: `repo-wide`
+- Source: `owner-approved capture`
+- Evidence:
+  - `git log -1 --oneline` -> `4e86fb0 feat: add intent compliance quality checks`
+  - `git status --short --branch` -> `## main...origin/main`
+  - validation evidence from task QA:
+    - `git diff --check`: `PASS`
+    - `.systems/scripts/check-intent-plan-spec-compliance-review`: `PASS`
+    - `.systems/scripts/check-validator-smoke-tests`: `PASS`
+    - `.systems/scripts/validate-workflow`: `PASS`
+    - `.systems/scripts/check-branch-policy`: `PASS`
+    - `git ls-files ai-workflow-workspace`: `empty`
+- Summary: `main includes the intent/plan/spec compliance review contract. Global quality review and formal phase-5-quality now require explicit comparison against owner instruction, accepted plan, accepted spec, scope, and acceptance criteria.`
+- Applies to:
+  - `global quality review`
+  - `phase-5-quality`
+  - `quality artifact template`
+  - `workflow validators`
+- Rule: `When reviewing or running quality, check whether the work solved the requested problem and stayed within accepted scope, not only whether technical checks passed.`
+- Review trigger: `Revisit when changing quality-review, phase-5-quality, response contract, or QA validator semantics.`

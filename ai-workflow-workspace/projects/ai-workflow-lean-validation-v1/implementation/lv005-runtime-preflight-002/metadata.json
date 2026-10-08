@@ -1,0 +1,48 @@
+{
+  "kind": "infrastructure-only",
+  "model": "gpt-6-sol",
+  "settings": {
+    "model_reasoning_effort": "high",
+    "approval_policy": "never",
+    "default_permissions": "lv005-fixture",
+    "web_search": "disabled",
+    "permissions.lv005-fixture.filesystem": {
+      ":minimal": "read",
+      ":workspace_roots": {
+        ".": "write"
+      }
+    },
+    "permissions.lv005-fixture.network.enabled": false,
+    "project_doc_max_bytes": 0,
+    "features.code_mode_host": true,
+    "memories.generate_memories": false,
+    "memories.use_memories": false,
+    "features.skip_host_skill_discovery": true,
+    "features.apps": false,
+    "features.plugins": false,
+    "features.hooks": false,
+    "features.memories": false,
+    "features.multi_agent": false,
+    "features.multi_agent_v2": false,
+    "features.browser_use": false,
+    "features.browser_use_external": false,
+    "features.computer_use": false,
+    "features.view_image": false,
+    "features.image_generation": false,
+    "features.skill_search": false,
+    "features.skill_mcp_dependency_install": false,
+    "features.workspace_dependencies": false,
+    "features.shell_snapshot": false,
+    "features.tool_suggest": false
+  },
+  "exit_code": 0,
+  "duration_seconds": 30.63,
+  "prompt_sha256": "52b55c482ae1667d64f13885ae2066eed2e72509fb90fea124ef31dda4bdcffd",
+  "fixture_files": {
+    "visible.txt": "5b0c5d47b17644f3637f52056c6acb28ba55b346a44ae60715054b5e4544c36d",
+    "result.txt": "5b0c5d47b17644f3637f52056c6acb28ba55b346a44ae60715054b5e4544c36d"
+  },
+  "expected_result_written": true,
+  "grade": "not-applicable; requires manual context/tool and canary denial review",
+  "limits": "One synthetic capability probe; not paired behavior, promotion, source QA or service reliability evidence."
+}

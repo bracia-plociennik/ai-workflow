@@ -1,0 +1,8 @@
+interface:
+  display_name: "Backend Laravel Skill"
+  short_description: "Laravel and Backpack backend guardrails"
+  default_prompt: "Use $backend-laravel-skill to implement a Laravel backend change with FormRequests, services, DTOs, migrations, tests, and repo safety gates."
+
+policy:
+  allow_implicit_invocation: true
+

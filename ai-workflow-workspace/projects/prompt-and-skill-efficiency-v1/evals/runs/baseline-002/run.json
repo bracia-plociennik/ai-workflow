@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    "baseline"
+  ],
+  "created_at": "2026-09-24T16:37:04.140305+00:00",
+  "eval_count": 10,
+  "mode": "approved-subagent",
+  "skill_name": "ai-workflow-prompt-and-skill-routing",
+  "source_plan": "ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/evals.json",
+  "target_path": "AGENTS.md and active .systems/ai/skills"
+}

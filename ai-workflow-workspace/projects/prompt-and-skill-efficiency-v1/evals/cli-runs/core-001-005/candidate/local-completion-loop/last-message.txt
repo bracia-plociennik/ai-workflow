@@ -1,0 +1,34 @@
+Implemented `clamp` in [math_utils.py](/private/tmp/pse-cli-candidate-local-completion-loop-7gbri22_/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/local-completion-loop/math_utils.py:1). The local `test_math_utils.py` run passed **3/3 tests**. Boundary checks also passed; an incomparable input raised `TypeError`. No test failure required a fix or rerun.
+
+**Advisory findings-first review:** No blockers or findings. The change matches the requested scope and the three tested cases. Behavior for reversed bounds was not specified or tested. This is an advisory result, not a formal workflow `PASS`.
+
+Task intake: `Co zostaje` — the existing test cases; `Co jest słabe / do poprawy lub usunięcia` — the unimplemented function; `Czego brakuje` — a specification for reversed bounds; `Blokery / decyzje` — none for the requested scope; `Rekomendowany routing` — low-risk side task. Contract compliance: side-task mode aligned; knowledge capture not required because the response contains the evidence and no reusable workflow decision changed.
+
+### Execution Trace
+
+- Sources used: owner request, root `AGENTS.md`, synthetic repo status/intake, applicable workflow contracts, and the two fixture files.
+- Evidence reviewed: final file contents, test output, fixture file listing, and checkout status. Review completeness: contracts and risk aligned; edge and failure paths inspected; closure current; no post-fix review needed.
+- Workflow procedures used: task intake, compact one-slice implementation plan, advisory quality review, contract compliance.
+- Skills/roles used: none; findings-first review lens.
+- Commands/checks run: `python3 -B test_math_utils.py` — 3 passed; manual boundary and incompatible-input checks — passed; `git diff --check` — clean.
+- Skipped/unreadable sources: none. The workspace is git-ignored, so `git diff --check` does not inspect the edited file.
+- Limits/residual uncertainty: reversed-bound behavior remains unspecified. Deadline/timebox: owner opt-out for this synthetic scope; no quality checks were waived.
+- Instruction refresh: performed-targeted; trigger: first write and quality closure; contracts refreshed: `AGENTS.md`, implementation, risk, permissions, DoD, and quality contracts; reviewed baseline: checkout status, fixture files, and repo intake; drift/conflict: none.
+- Owner decision interaction: mode: none-needed; decisions asked/pending: none; auto-resolved decisions: use the existing numeric test contract.
+- Model recommendation: GPT-5.6 Luna High; reason: bounded local change; criticality: low; current model known: no; blocking: no.
+
+### Co dalej?
+
+Rekomendacja: Accept and close this synthetic side task.  
+Wpływ: Records the tested result as complete for the requested scope.  
+Napisz:
+```text
+Accept this synthetic fixture change and close the side task.
+```
+
+Alternatywa: Request a separate read-only review of reversed-bound behavior.  
+Wpływ: Clarifies an unspecified edge case without changing this result.  
+Napisz:
+```text
+Review reversed-bound behavior in this isolated fixture without editing files.
+```

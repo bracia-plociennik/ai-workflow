@@ -1,0 +1,36 @@
+## Finding
+
+**P1 — `average([1, 2])` violates the supplied contract.** [src/report.py:7](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/src/report.py:7) uses integer division, so the function returns `'1'` instead of `'1.5'`. A read-only execution confirmed the mismatch. `average([])` returns `'empty'` as required.
+
+**Skill selected: none.** The only active AI Workflow skill found was `skill-creator`. I opened its `name` and `description` frontmatter; it concerns skill artifacts, so I did not open its full instructions for this product-code review.
+
+This is an advisory finding, not a formal QA result. No files were changed. The two supplied examples were checked; broader behavior and regression coverage remain unreviewed.
+
+## Execution Trace
+
+- **Sources used:** Opened the fixture’s `AGENTS.md`, `src/report.py`, applicable AI Workflow review and response contracts, and only the `skill-creator/SKILL.md` frontmatter. The skill match decision is an inference from that description and the requested scope.
+- **Evidence reviewed:** The source line above and a `python3 -B` check: `[1, 2] → '1'`; `[] → 'empty'`.
+- **Workflow procedures used:** Phase Skill Discovery and read-only `global-quality-review-stance`. No formal phase or quality artifact.
+- **Skills/roles used:** Skills used: none; product-code review lens.
+- **Commands/checks run:** Fixture-only file discovery and reads; the two-case Python check. Git status could not run because the fixture is not a Git repository.
+- **Skipped/unreadable sources:** No workspace skills, test suite, project status, or accepted plan/spec was found in the fixture. The full non-matching skill body was intentionally unopened.
+- **Limits/residual uncertainty:** Review is limited to the supplied contract and fixture. No writes or formal `PASS` claim; knowledge capture is not required for this read-only finding.
+- **Instruction refresh:** Status: performed-targeted; trigger: review start; contracts refreshed: fixture `AGENTS.md` and applicable review, permissions, risk, and response contracts; reviewed baseline: opened fixture files; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions pending: none; auto-resolved: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded review; criticality: low; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Authorize a scoped fix for `average` and verification of both examples.  
+Wpływ: The implementation can satisfy the stated contract.  
+Napisz:
+```text
+Fix src/report.py so average([1, 2]) == '1.5' and average([]) == 'empty', then verify both cases.
+```
+
+**Alternatywa:** Extend the read-only review to other inputs first.  
+Wpływ: Clarifies expected behavior before an implementation change.  
+Napisz:
+```text
+Review src/report.py read-only for additional average edge cases and propose expected outputs.
+```

@@ -1,0 +1,13 @@
+{
+  "case": "catalog-only",
+  "repeat": "102",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "sandbox": "read-only",
+  "prompt_sha256": "3367702ab0884526b61aba55170cf07523f5ddb88d3c3bdfe7834ce63eabe574",
+  "fixture_before": "7d2be10da6c4000e23e49aa0653548bc53c61402ce66771acdf5340f86cd9781",
+  "fixture_after": "7d2be10da6c4000e23e49aa0653548bc53c61402ce66771acdf5340f86cd9781",
+  "fixture_unchanged": true,
+  "exit_code": 0,
+  "duration_seconds": 61.23
+}

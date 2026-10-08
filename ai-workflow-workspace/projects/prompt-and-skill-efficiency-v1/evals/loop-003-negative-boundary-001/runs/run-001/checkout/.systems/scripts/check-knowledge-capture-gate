@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v rg >/dev/null 2>&1; then
+  echo "Missing required command: rg"
+  exit 1
+fi
+
+fail=0
+
+required_fields=(
+  "- Capture recommended:"
+  "- Target:"
+  "- Reason:"
+  "- Owner decision required:"
+  "- Owner decision:"
+  "- Privacy/scope check:"
+  "- Suggested entry title:"
+  "- Suggested entry summary:"
+)
+
+phase_files=()
+while IFS= read -r -d '' path; do
+  phase_files+=("$path")
+done < <(find .systems/ai/workflow -maxdepth 1 -type f -name 'phase-*.md' -print0 | sort -z)
+
+template_files=()
+while IFS= read -r -d '' path; do
+  template_files+=("$path")
+done < <(find .systems/ai/templates/workflow -maxdepth 1 -type f -name 'phase-*.template.md' -print0 | sort -z)
+
+check_capture_block() {
+  local file="$1"
+
+  if ! rg -q '^## Optional Knowledge Capture$' "$file"; then
+    echo "Missing Optional Knowledge Capture block in ${file#./}"
+    fail=1
+    return
+  fi
+
+  for field in "${required_fields[@]}"; do
+    if ! grep -Fq -- "$field" "$file"; then
+      echo "Missing Optional Knowledge Capture field '$field' in ${file#./}"
+      fail=1
+    fi
+  done
+}
+
+for file in "${phase_files[@]}"; do
+  check_capture_block "$file"
+done
+
+for file in "${template_files[@]}"; do
+  check_capture_block "$file"
+done
+
+if [[ "${#phase_files[@]}" == "0" ]]; then
+  echo "No workflow phase files found"
+  fail=1
+fi
+
+if [[ "${#template_files[@]}" == "0" ]]; then
+  echo "No workflow phase templates found"
+  fail=1
+fi
+
+target_policy=".systems/ai/core/memory.md"
+for target in project-memory repo-memory external-memory system-insights decision-artifact status none; do
+  if ! rg -q "\`${target}\`" "$target_policy" .systems/ai/core/workflow.md .systems/ai/core/command-routing.md; then
+    echo "Optional Knowledge Capture target missing from policy docs: $target"
+    fail=1
+  fi
+done
+
+for required_ref in \
+  AGENTS.md \
+  README.md \
+  HUMANS.md \
+  .systems/ai/core/memory.md \
+  .systems/ai/core/workflow.md \
+  .systems/ai/core/contract-compliance.md \
+  .systems/ai/core/command-routing.md \
+  .systems/ai/core/system-insights.md \
+  .systems/ai/core/definition-of-done.md \
+  .systems/ai/core/version.md \
+  .systems/ai/core/changelog.md \
+  .systems/ai/core/commands.md; do
+  if ! rg -q 'Optional Knowledge Capture|optional knowledge capture' "$required_ref"; then
+    echo "Missing Optional Knowledge Capture reference in $required_ref"
+    fail=1
+  fi
+done
+
+if ! rg -q 'defer-to-distillation' .systems/ai/core/memory.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md; then
+  echo "Missing defer-to-distillation routing"
+  fail=1
+fi
+
+if ! rg -q 'defer-to-checkpoint' .systems/ai/core/memory.md .systems/ai/core/workflow.md .systems/ai/core/command-routing.md; then
+  echo "Missing defer-to-checkpoint routing"
+  fail=1
+fi
+
+if ! rg -q 'System Insight Candidate' .systems/ai/workflow/phase-6-distillation.md .systems/ai/templates/workflow/phase-6-distillation.template.md; then
+  echo "Phase 6 no longer preserves System Insight Candidate routing"
+  fail=1
+fi
+
+if ! rg -q 'System Insight Entries|Memory Updates' .systems/ai/workflow/phase-7-checkpoint.md .systems/ai/templates/workflow/phase-7-checkpoint.template.md; then
+  echo "Phase 7 no longer preserves checkpoint memory synchronization"
+  fail=1
+fi
+
+hard_gate_scope=(
+  AGENTS.md
+  README.md
+  HUMANS.md
+  .systems/ai/core
+  .systems/ai/workflow
+  .systems/ai/templates/workflow
+)
+
+if rg -ni 'must write memory after every phase|must capture memory after every phase|capture is required before next phase|capture required before next phase|memory is required before next phase|memory required before next phase|blocks? next phase when not captured|do not continue without memory capture' "${hard_gate_scope[@]}"; then
+  echo "Optional Knowledge Capture hard-gate wording found"
+  fail=1
+fi
+
+exit "$fail"

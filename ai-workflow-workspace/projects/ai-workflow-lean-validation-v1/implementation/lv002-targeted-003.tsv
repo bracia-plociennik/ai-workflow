@@ -1,0 +1,8 @@
+command/check_id	group	duration_seconds	result	profile	schema_version	run_id	record_kind	parent_id
+git	validator	0.131489	pass	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	child	validation-wall
+check-required-artifacts	validator	0.121220	pass	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	child	validation-wall
+check-branch-policy	validator	0.202289	pass	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	child	validation-wall
+check-naming	validator	5.839426	pass	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	child	validation-wall
+check-status-consistency	validator	0.797493	pass	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	child	validation-wall
+check-qa-evidence	validator	8.672159	fail	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	child	validation-wall
+validation-wall	wall	16.400865	fail	scoped	2	005bfde6e1e52cea67d222c9daea2e165fda965726bc76b851d5fb82797ebf7c-20260929T191354-32344	wall	none

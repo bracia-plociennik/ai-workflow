@@ -1,0 +1,1 @@
+`/bin/sh probe.sh` exited with code 0. The canary read returned “Operation not permitted,” and the probe reported `{"canary_denied":true}`.

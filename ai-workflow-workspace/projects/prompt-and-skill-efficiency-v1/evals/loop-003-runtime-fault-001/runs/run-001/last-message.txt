@@ -1,0 +1,36 @@
+Implemented `summarize_runs(events)` in [task_summary.py](/private/tmp/pse-loop003-runtime.EAgixH/checkout/ai-workflow-workspace/micro-projects/run-summary/fixture/task_summary.py). It returns exactly `total`, `ok`, and `failed`, rejects missing or invalid states with `ValueError`, and does not mutate input events.
+
+**Advisory quality review:** No findings or blockers. The provided suite passed all 5 tests after the supplied script rebuilt its generated runtime index. A separate generator and invalid-state check passed. The first suite run exposed the documented missing-index condition; no fixture files were edited manually. No commit or push was made.
+
+Broader workflow validation was skipped because this was a local fixture side task. Residual risk is limited to behavior outside the specified iterable-of-dictionaries input contract.
+
+**Task intake:** Co zostaje: the requested behavior and one-file scope. Co jest słabe / do poprawy lub usunięcia: the initial missing runtime index, resolved by the supplied script. Czego brakuje: nothing required. Blokery / decyzje: none. Rekomendowany routing: completed low-risk side task.
+
+### Execution Trace
+
+- **Sources used:** Owner request, `AGENTS.md`, relevant `.systems/ai/core/` contracts, fixture README, tests, guard, repo status and intake.
+- **Evidence reviewed:** Final source, test output, generated runtime-state filenames, clean tracked Git status.
+- **Workflow procedures used:** Task intake, compact implementation slice, advisory quality review, contract compliance. Work mode: side task; knowledge capture: not required because this response records the local evidence and further writes are out of scope.
+- **Skills/roles used:** None.
+- **Commands/checks run:** `python3 -B test_task_summary.py` (initial runtime-index error; final run 5 tests OK); `python3 -B repair_runtime.py` (index rebuilt); generator and invalid-state checks (OK); `git diff --check` (clean).
+- **Skipped/unreadable sources:** Broad workflow validation, inapplicable to this fixture change.
+- **Limits/residual uncertainty:** Inputs other than dictionaries were outside the requested contract.
+- **Instruction refresh:** Status: performed-targeted; trigger: pre-write and quality handoff; contracts refreshed: `AGENTS.md`, risk, permissions, slicing, quality and response contracts; reviewed baseline: worktree, status, fixture and tests; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions asked/pending: none; auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded local change; criticality: low; current model known: yes; blocking: no.
+
+### Co dalej?
+
+**Rekomendacja:** Review the completed one-file change.  
+Wpływ: Confirms the behavior and scope before you use the fixture.  
+Napisz:
+```text
+Review the completed run-summary side task.
+```
+
+**Alternatywa:** Rerun the local suite independently.  
+Wpływ: Gives you a fresh check in the disposable checkout.  
+Napisz:
+```text
+Rerun the run-summary fixture tests locally.
+```

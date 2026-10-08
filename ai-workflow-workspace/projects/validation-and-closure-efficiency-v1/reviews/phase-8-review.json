@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "kind": "final-check",
+  "task": null,
+  "run_id": "eff-all-final-check-2026-10-02",
+  "verdict": "PASS",
+  "date": "2026-10-02",
+  "inputs": [
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/changelog.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/commands.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/contract-compliance.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/implementation-slicing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/instruction-adherence-refresh.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/operating-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/quality-review.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/risk-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/validation-observability.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/validation-profiles.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/validation-routing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/workflow.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/reviews/review.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/workflow/phase-5-quality.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/workflow/phase-7-checkpoint.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/workflow/phase-8-final-check.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-6-distillation.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-7-checkpoint.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-8-final-check.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-qa-evidence"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-required-artifacts"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-review-completeness-gate"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-validator-smoke-tests"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/qa-evidence.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-checks.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-scope.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/core.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/manifest.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/validate-workflow"
+    },
+    {
+      "root": "workflow-source",
+      "path": "AGENTS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "HUMANS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/capabilities/execution-efficiency-v1.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/execution-efficiency.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/efficiency/bounded-defect.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/efficiency/check-plan.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/efficiency/process-timing.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-execution-efficiency"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/execution-efficiency.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/quality-record.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/prepare-quality-record"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/tests/execution-efficiency.py"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "context.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "architecture/phase-1-architecture.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "planning/phase-2-project-plan.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/eff-dec-001-owner-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "change-requests.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality/phase-5-eff-all-quality.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/phase-4-eff-all-implementation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "distillations/phase-6-eff-all-distillation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "checkpoints/phase-7-checkpoint-2026-10-02-eff-all.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "memory.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "memory/2026-10-02-execution-efficiency.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "capture-state/eff-all.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/current-diff-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/final-source-validation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/full-source-receipt.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/full-validation-evidence.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/baseline.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/candidate-final.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/integration-result.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-001-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-001.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-002-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-002.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-003-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-003.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-004-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-004.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-005-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-005.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-006-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-006.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-eff-007-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks/eff-007.md"
+    }
+  ],
+  "sections": {
+    "QA Verification Scope": "Technical final review of EFF-001 through EFF-007 only. Compare current source, owner scope, accepted architecture/plan/specs, all task cards, formal quality, distillation, checkpoint, memory and capture state. No final-owner-yes, publication, counterpart handoff or AI System modification.",
+    "Completion Review": "| Area | Result | Evidence |\n| --- | --- | --- |\n| EFF-001 whole-process timing | PASS | monotonic observed union, estimate/unknown separation; tests and three equivalent samples per scenario |\n| EFF-002 applicability/source vs runtime | PASS | authenticated current full source gate; fresh owned consumers after Phase 5/6/7 |\n| EFF-003 source-bound reuse | PASS | HMAC, fixed allowlist, complete successful inventory, source/tools/environment/inputs; stale/tamper/failure/CI negatives |\n| EFF-004 historical QA | PASS | explicit owner-bound immutable registry; direct current gate rejects registered history |\n| EFF-005 quality producer | PASS | six supplied-review kinds roundtrip; same consumer before no-clobber publication; separate approval provenance |\n| EFF-006 bounded defect | PASS | eligibility retains risk, formal gates, testable DoD and consumer/regression evidence; prohibited impact rejected |\n| EFF-007 refresh/preflight | PASS | scope/approval/authority/live HEAD comparison, selective current stage reads, early output/tool/key checks |\n| accepted artifact alignment | PASS | architecture, plan, seven specs and nine QA inputs remain immutable; live task index has seven done tasks |\n| quality and capture consistency | PASS | quality/phase-5-eff-all-quality.md, distillations/phase-6-eff-all-distillation.md, checkpoint and completed capture-state/eff-all.md |\n| privacy and publication boundaries | PASS | no client data, management checkout changes, handoff, commit, push or global config changes |\n| owner final approval | awaiting | explicitly excluded by decisions/eff-dec-001-owner-scope.md |",
+    "Intent / Plan / Spec Compliance": "- Compliance status: aligned\n- Owner instruction reviewed: yes\n- Accepted plan reviewed: yes\n- Accepted spec reviewed: yes\n- Acceptance criteria reviewed: yes\n- Scope creep: no\n- Wrong problem solved: no\n- Underbuild: no\n- Overbuild: no\n- Evidence: seven Phase 5 DoD rows plus current source, task/capture routers and checkpoint comparison. Synthetic no-improvement is disclosed rather than presented as measured acceleration.",
+    "Findings": "- Blockers: none\n- Unresolved findings: none\n- Known bug in approved scope: none identified after current-diff and failure-path review\n- Resolved findings: alias handling, Bash empty-array orchestration, history registry inventory, structured approval identity, live HEAD refresh, isolated fixture placement, timeout exit preservation, output preflight, CI ambient isolation and FIFO key rejection are covered by current regression evidence.",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: a758bb45e4e7e639d0b65e0189d776ea5176d50d plus all 42 changed/new source paths; source fingerprint d72fc8e331d5c6038705f1413de69322c5a600acd8255ec5865ba094375bdab6; current project artifacts through Phase 7\n- Closure freshness: current\n- Post-fix full re-review: completed\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete\n- Instruction refresh: performed-full\n- Instruction baseline: current\n- Cross-contract consistency: aligned\n- Risk/work mode compatibility: aligned\n- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: yes\n- Negative-space / adversarial review: completed\n- Automated evidence role: supporting-only\n- Producers/consumers reviewed: full source receipt and artifact closure; registered checks; QA producer/consumer/status; history registry/current gate; owner decision/final approval; timing/refresh and bounded eligibility\n- Evidence: reviews/current-diff-review.md; reviews/final-source-validation.md; current phase5/6/7 records, real public CLI integration and 29 behavioral cases\n- Skipped/unreadable areas: model/production latency not measured; no AI System/client analysis",
+    "Adaptive Data / Integration Verification Matrix": "- Applicability: required\n| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States / Rows | Failure Behavior | Test / Check | Manual Trace |\n| --- | --- | --- | --- | --- | --- | --- |\n| successful authenticated check receipt | complete inventory and unchanged bindings | allowed unchanged checks reused, runtime fresh | tamper, partial, failure, CI reuse | reject or execute fresh as contracted | behavioral tests and integration-result.json | actual fresh/reuse/tamper CLI flow reviewed |\n| full-source record and later runtime edits | unchanged source/tools/environment, fresh owned runtime inventory | complete source-backed artifact closure | stale source/env or unknown wider scope | controlled rejection | source verification and Phase 5/6/7 closures | full receipt to final runtime consumers traced |\n| supplied formal reviewer sections | complete current assessment with hashed inputs | consumer-valid canonical artifact | fabricated approval, missing evidence, overwrite | reject before publication | six-kind roundtrips and real project producer | Phase 5 evidence to current final-check/awaiting state traced |\n| immutable admitted history | original bytes and explicit decision checksums | integrity-only history | history as current PASS | current consumer rejects | historical/current combined-flag tests | registry/report/decision/current gate chain reviewed |",
+    "Evidence": "- Semantic findings-first full-current-diff review precedes final scripts: reviews/current-diff-review.md.\n- Fresh final full run: exit 0, exactly one completion marker, 702 seconds; all 42 registered validators; 703 smoke IDs across five groups, 665 seconds; 29 behavioral tests.\n- Receipt: reviews/full-source-receipt.json, run 03f21d30205442d5b9086bc866afd403; independently verified in the same resolved Bash/CI context.\n- Fresh Phase 5/6/7 runtime naming, QA, status and capture checks completed with exit 0. Earlier failed/interrupted source runs remain non-final.\n- Producer output is validated by the same qa-evidence consumer before atomic publication. After publication run source-backed fresh owned checks again.\n- Nine accepted planning QA records and current implementation QA inputs reviewed without rewriting history.\n- Source unchanged since the final full gate; runtime-only final-check writes do not assert a new fresh full execution.\n- Signed receipt contents are sanitized bindings, never the private local key.",
+    "Owner Approval": "- Technical final check result: PASS\n- Owner approval required: yes\n- Owner decision: awaiting\n- Approval source: decisions/eff-dec-001-owner-scope.md authorizes technical Phase 8 and explicitly excludes final-owner-yes. No owner approval artifact is created.",
+    "Final Gate": "- Can close active plan: awaiting-owner\n- Required next phase: owner-final-approval\n- Technical result: PASS\n- Commit/push allowed: no\n- Counterpart handoff: not-required, owner decision no",
+    "Change Requests Review": "- Open change requests: none\n- Hidden or deferred in-scope work: none\n- Stage snapshot differences: original accepted planning state columns remain historical input; live execution task/status/capture routers govern. They do not assert an unfinished implementation.",
+    "Owner Decision Checkpoint": "- Interaction mode: none\n- Decision state: awaiting-owner\n- Material decisions: future final-owner-yes only, excluded from this run\n- Questions asked: none\n- Auto-resolved reversible decisions: none at final check\n- Optional owner refinements: workload-level benchmark and receipt-context ergonomics\n- Decision artifacts: decisions/eff-dec-001-owner-scope.md\n- Next route: owner-final-approval",
+    "Optional Knowledge Capture": "- Capture recommended: no\n- Target: none\n- Reason: project distillation and memory synchronized at Phase 7; no additional capture requested\n- Owner decision required: no\n- Owner decision: not-requested\n- Privacy/scope check: pass\n- Suggested entry title: none\n- Suggested entry summary: none",
+    "Residual Risk": "Local key integrity and identical execution environment are required for source-bound reuse. Cheap synthetic checks showed no wall-time improvement; one real fresh/reuse sample is not a whole-agent benchmark. Checks prove bounded tested paths, not absence of every future bug. Existing freshness/current HEAD gates remain authoritative after a future source change or commit. CI/updater/release still execute a fresh full gate. Publication and final owner acceptance remain unperformed."
+  }
+}

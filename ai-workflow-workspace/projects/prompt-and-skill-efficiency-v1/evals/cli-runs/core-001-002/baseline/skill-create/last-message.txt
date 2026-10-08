@@ -1,0 +1,91 @@
+## Task Idea Validation
+
+- **Co zostaje:** A reusable skill focused on reviewing *proposed local CLI commands* before they run. The requested deliverable is a plan only.
+- **Co jest słabe / do poprawy lub usunięcia:** “Command safety” could attract routine shell use. The trigger must require an explicit safety review, not merely the presence of a CLI command.
+- **Czego brakuje:** No information blocks this read-only design. The system-skill location is a proposal for a later implementation decision.
+- **Blokery / decyzje:** None for this plan. Any later write needs its own permitted route and approval.
+- **Rekomendowany routing:** Read-only workflow-maintenance planning, using the AI Workflow `skill-creator` contract.
+
+## Proposed skill
+
+**Name:** `local-cli-safety-review`  
+**Future target:** `.systems/ai/skills/local-cli-safety-review/`
+
+The skill would statically review a command or short command sequence in its stated working directory. It would identify likely file changes and external effects, explain uncertainty from variables, globbing, pipes, redirection, command substitution, and invoked scripts, then give an advisory risk assessment and a safer local alternative where useful. It would **not execute the candidate command or grant approval**.
+
+**Proposed trigger description:** “Review the safety and likely effects of proposed local shell or CLI commands before execution, including destructive flags, filesystem scope, indirect scripts, and external effects. Use for explicit command-safety checks; do not activate for routine command execution or general code review.”
+
+| Should trigger | Should not trigger |
+| --- | --- |
+| “Is `rm -rf ./build` safe to run from this directory?” | “Run the configured unit tests.” |
+| “Review this cleanup script before I execute it locally.” | “Fix this Python function.” |
+| “What could this `git clean` command delete?” | “Explain what a shell pipe does.” |
+| “Check this command for hidden writes or network calls.” | “Review my application code for security issues.” |
+| “Suggest a safer form of this proposed migration command.” | “Deploy this service.” Deployment follows its own risk and approval route. |
+
+**Planned artifacts:** a `skill-intake-plan.md` recording scope and trigger cases, a compact canonical `SKILL.md`, and a short `README.md`. Add no scripts or references unless later testing shows a repeated need. The skill must defer to `AGENTS.md`, core risk and permission rules, and phase gates.
+
+**Future evaluation:** Use static local examples covering a safe read, destructive path expansion, shell substitution, an indirect script, and a near-miss routine test request. Check both useful risk explanations and correct non-trigger behavior. Any eventual skill change would need the applicable skill validator and workflow quality review.
+
+## Plan Quality Contract
+
+- **Plan classification:** read-only; implementation writes planned now: **none**.
+- **DoD source:** This request and the repository skill-creator contract.
+- **Testable DoD:** The plan names the skill’s purpose, target, authority boundary, artifacts, evaluation approach, and realistic trigger and non-trigger cases.
+- **Artifact QA route / trigger:** `not-applicable` to this response-only plan; review would apply to a later written artifact.
+- **Implementation Quality Closure route:** `not-applicable`; no implementation occurred.
+- **Required verification:** Manual comparison with repository contracts and fixture scope. Automated checks are not applicable without changed files.
+- **Quality-ready criteria:** The plan meets the DoD above; this does not establish implementation readiness or formal `PASS`.
+- **Owner opt-out:** none.
+- **Not-applicable reason:** Plan-only request in a read-only checkout.
+- **Blocking decision:** none for planning; future write location and authorization must be resolved before implementation.
+- **Next route:** Review or refine the plan. Residual risk: trigger behavior remains untested until a skill exists.
+
+**Work mode compliance:** read-only workflow-maintenance planning; no files changed. **Knowledge capture:** not required because this response is the plan and produced no durable implementation evidence.
+
+## Execution Trace
+
+Sources used:
+- Current user request; `AGENTS.md`; `.systems/ai/core/{task-intake,plan-quality-contract,permissions,risk-model,response-contract,commands,prompt-injection}.md`; `.systems/ai/skills/skill-creator/SKILL.md`; fixture repo status and intake.
+
+Evidence reviewed:
+- Isolated checkout path, synthetic fixture status, skill layout and routing contracts, and clean `git status --short` output.
+
+Workflow procedures used:
+- Task Idea Validation, Phase Skill Discovery, Plan Quality Contract, owner decision discovery.
+
+Skills/roles used:
+- AI Workflow `skill-creator` for skill design; no other matching workspace skill was present.
+
+Commands/checks run:
+- Read-only `rg`, `cat`, `find`, `wc`, and `git status --short`. No validators or evals run because no artifact was written; no formal `PASS` claimed.
+
+Skipped/unreadable sources:
+- No project plan or status artifact exists in the named fixture. Unrelated eval cases were not loaded.
+
+Limits/residual uncertainty:
+- Proposed trigger wording and behavior need validation after implementation. No external API, client, production system, or live upstream checkout was accessed.
+
+Instruction refresh:
+- Status: performed-full
+- Trigger: new isolated checkout and source baseline
+- Contracts refreshed: `AGENTS.md`, relevant core contracts, skill-creator contract, repo status and intake
+- Reviewed baseline: current worktree and fixture artifacts
+- Drift/conflict: none; the named fixture supplies task context while runtime status records no active formal phase
+
+Owner decision interaction:
+- Mode: none-needed
+- Decisions asked/pending: none
+- Auto-resolved decisions: proposed name and read-only planning route
+
+Model recommendation:
+- Recommended: GPT-5.6 Sol High
+- Reason: safety-focused skill design needs careful trigger boundaries
+- Criticality: advisory planning; any later security-impacting write requires separate routing
+- Current model known: yes
+- Blocking: no
+
+## Co dalej?
+
+- **Recommendation:** Review this plan’s scope and trigger boundary before any skill files are created. Impact: catches misrouting early. **Napisz:** “Review the local-cli-safety-review plan and refine its trigger and non-trigger cases, plan only.”
+- **Safe alternative:** Keep the design as-is and request a read-only evaluation matrix. Impact: provides more concrete cases before implementation. **Napisz:** “Create a read-only evaluation matrix for the proposed local-cli-safety-review skill.”

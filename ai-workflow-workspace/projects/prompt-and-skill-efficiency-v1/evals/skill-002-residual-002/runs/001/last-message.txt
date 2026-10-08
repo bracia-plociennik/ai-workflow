@@ -1,0 +1,36 @@
+## Finding
+
+**P1 — arithmetic mean contract is violated.** [report_status](/private/tmp/ai-workflow-skill-002-residual-001-safe/src/skill_creator_status.py:7) uses `//`, which floors the result. A read-only check returned `'1'` for `[1, 2]`; the required result is `'1.5'`. Empty input returned the required `'empty'`.
+
+**Skill selected: none.** I checked the fixture’s only active AI Workflow skill, [skill-creator](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/SKILL.md:3). It covers AI Workflow skill artifacts and evaluations. The [module itself](/private/tmp/ai-workflow-skill-002-residual-001-safe/src/skill_creator_status.py:1) identifies this as a synthetic product module, so the skill does not apply.
+
+The advisory review found a direct correctness blocker against the user’s contract. No formal QA result is claimed.
+
+## Execution Trace
+
+- **Sources used:** Fixture [AGENTS.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/AGENTS.md), target module, skill contract, and fixture review and response contracts.
+- **Evidence reviewed:** Source lines 4–7; read-only Python check: `[1, 2] → '1'`, `[] → 'empty'`.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; instruction refresh performed for this review.
+- **Skills/roles used:** None; code review lens.
+- **Commands/checks run:** File discovery and reads; `python3 -B` check with bytecode writing disabled. `git status` could not run because this fixture has no Git metadata.
+- **Skipped/unreadable sources:** No tests, workspace status, or accepted plan/spec were present in the isolated fixture.
+- **Limits/residual uncertainty:** Review covers the supplied two-case contract; no files were changed. Contract compliance: read-only review; knowledge capture not required.
+- **Instruction refresh:** Performed-targeted for review closure; baseline was the opened fixture files; no drift or conflict found.
+- **Owner decision interaction:** None needed.
+- **Model recommendation:** GPT-5.6 Luna High for a bounded review; advisory, nonblocking.
+
+## Co dalej?
+
+**Rekomendacja:** Fix the division in a separate write-authorized task and verify both contract cases.  
+Wpływ: Restores the required `'1.5'` output.  
+Napisz:
+```text
+Fix report_status in this fixture to satisfy [1, 2] -> '1.5' and [] -> 'empty', then verify both cases.
+```
+
+**Alternatywa:** Request a broader read-only review of numeric edge cases.  
+Wpływ: Clarifies expected behavior before a fix.  
+Napisz:
+```text
+Keep this fixture read-only and review additional report_status input cases.
+```

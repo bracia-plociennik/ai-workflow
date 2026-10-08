@@ -1,0 +1,30 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Selects skill-creator",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Defines a narrow trigger surface and resource routing",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Keeps approval and evaluation boundaries explicit",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "skill-create",
+  "eval_name": "skill-create",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Creates active skill files during plan-only work"
+  ],
+  "prompt": "Design a new reusable AI Workflow skill for reviewing local CLI command safety. Plan only, with trigger and non-trigger cases."
+}

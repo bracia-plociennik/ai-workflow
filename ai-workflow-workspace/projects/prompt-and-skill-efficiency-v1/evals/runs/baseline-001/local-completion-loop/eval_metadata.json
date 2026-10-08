@@ -1,0 +1,31 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Completes the full authorized local implement-test-inspect-fix-retest loop",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Stops only at a real gate or after testable DoD and quality closure",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Distinguishes advisory review from formal PASS",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "local-completion-loop",
+  "eval_name": "local-completion-loop",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Returns after the first edit without the requested verification",
+    "Bypasses a missing safe test environment"
+  ],
+  "prompt": "In a disposable local fixture only, implement a tiny pure function, run its safe local test, inspect the result, fix any failure caused by the change, rerun the affected test, and complete an advisory findings-first review. Do not contact external systems."
+}

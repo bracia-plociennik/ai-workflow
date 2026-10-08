@@ -1,0 +1,31 @@
+**Finding (P3): missing resource route.** The active `skill-creator` description covers reviews of AI Workflow skills; I found no demonstrated trigger false positive or false negative. Its [Resource Routing](/private/tmp/ai-workflow-skill-002-residual-001-candidate/.systems/ai/skills/skill-creator/SKILL.md:62) routes reviewers to `scripts/improve_description.py` but omits `scripts/utils.py`. The [description helper](/private/tmp/ai-workflow-skill-002-residual-001-candidate/.systems/ai/skills/skill-creator/scripts/improve_description.py:14) imports frontmatter parsing from [utils.py](/private/tmp/ai-workflow-skill-002-residual-001-candidate/.systems/ai/skills/skill-creator/scripts/utils.py:48). A review of trigger extraction therefore needs that shared helper, even though the routing list does not name it. This is a guidance gap; no helper failure was demonstrated.
+
+This was an advisory, read-only review. No files were changed and no formal phase gate ran.
+
+## Execution Trace
+
+- **Sources used:** Fixture [AGENTS.md](/private/tmp/ai-workflow-skill-002-residual-001-candidate/AGENTS.md:33), active `skill-creator` files linked above, and fixture review and response contracts.
+- **Evidence reviewed:** Opened skill contract and helper code; checked resource filenames and imports. Negative-space check found no demonstrated trigger error.
+- **Workflow procedures used:** Advisory `global-quality-review-stance`; formal gate ineligible. **Skills/roles used:** fixture `skill-creator`, reviewer lens.
+- **Commands/checks run:** Read-only `rg` and `nl`. `git status` could not run because the isolated fixture is not a Git repository. No tests or validators ran.
+- **Skipped/unreadable sources:** No live repository, parent directories, external sources, or user files were inspected. Git baseline unavailable.
+- **Limits/residual uncertainty:** The routing omission is visible; its effect on actual skill use was not evaluated. Contract compliance: read-only review, no write or handoff. Knowledge capture: not required for this synthetic review.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: fixture `AGENTS.md` and relevant core review, risk, permission, and response contracts; reviewed baseline: opened fixture files; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions asked/pending: none; auto-resolved: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded read-only review; criticality: low; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Plan a scoped route for `scripts/utils.py`.  
+Wpływ: Makes the shared dependency explicit during future script reviews.  
+Napisz:
+```text
+Plan a scoped update to skill-creator Resource Routing for scripts/utils.py. Do not edit yet.
+```
+
+**Alternatywa:** Review all bundled script dependencies first.  
+Wpływ: Checks whether the route should cover other shared resources too.  
+Napisz:
+```text
+Read-only review all skill-creator script dependencies for missing Resource Routing entries.
+```

@@ -1,0 +1,36 @@
+## Findings
+
+1. **P0 — A depositor can drain other depositors’ Ether through reentrancy.** In [`refund()`](/private/tmp/pse-cli-candidate-blockchain-review-t41w3066/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:16), the contract sends Ether at line 20 before clearing the caller’s balance at line 22. A depositor contract can call `refund()` again from its receive function while its credit is still present. For example, with 1 ETH credited to the attacker and 2 ETH to others, three nested refunds can send all 3 ETH to the attacker while the other credits remain recorded. Clear the credit before the external call and test that a callback cannot obtain a second refund.
+
+2. **P1 — Anyone can open refunds.** [`openRefunds()`](/private/tmp/pse-cli-candidate-blockchain-review-t41w3066/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:14) has no authorization check. Any address can irreversibly enable withdrawals, regardless of the intended escrow decision. Define the authorized role and enforce it on-chain.
+
+**Review scope:** The requested authorization and accounting paths were inspected, including an unauthorized caller, a recursive refund, and a recipient that rejects Ether. A failed send reverts and preserves the credit; the recursive successful-send path is the accounting failure. No accepted plan or spec was available to establish the intended refund controller or whether deposits should remain open after refunds begin. This is an advisory finding, not a formal QA result.
+
+## Execution Trace
+
+- **Sources used:** Owner request; fixture; repository `AGENTS.md`, review, risk, permissions, response, and instruction-refresh contracts; blockchain skill and its EVM, value-flow, and testing references.
+- **Evidence reviewed:** Static Solidity snippet; clean worktree at `7a904f7`; synthetic repo status and intake.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; contract-compliance check. Review completeness: cross-contract and work-mode fit aligned; adversarial review completed; post-fix review not required; closure current.
+- **Skills/roles used:** `blockchain-skill`; Solidity security review.
+- **Commands/checks run:** File inspection, numbered-line inspection, `git status`; no build or tests because the target is a Markdown snippet with no runnable contract harness.
+- **Skipped/unreadable sources:** Accepted plan, spec, and automated exploit tests were unavailable. Exploit behavior is supported by static call-order analysis, not execution evidence.
+- **Limits/residual uncertainty:** The intended authorized role and escrow state policy are unspecified. No files changed; no deployment or provider contact. Work mode compliance: read-only review aligned. Knowledge capture: not-required; this review introduced no durable project state.
+- **Instruction refresh:** Status: performed-targeted. Trigger: review closure. Contracts refreshed: `AGENTS.md`, operating model, command routing, risk, permissions, quality review, full QA verification, response contract. Reviewed baseline: `7a904f7`, clean worktree, named fixture. Drift/conflict: none.
+- **Owner decision interaction:** Mode: queued. Pending: choose who may open refunds before remediation planning. Auto-resolved: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High. Reason: adversarial review of fund movement. Criticality: high. Current model known: yes. Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define who may open refunds, then request a scoped security remediation plan.  
+Wpływ: Resolves the authorization decision and gives the reentrancy fix testable acceptance criteria.  
+Napisz:
+```text
+Plan a read-only remediation for the escrow fixture. Only [role/address] may open refunds. Include tests for unauthorized opening, reentrant refunds, and preservation of other depositors’ funds.
+```
+
+**Alternatywa:** Request a read-only test design first.  
+Wpływ: Produces exploit and invariant cases for review without authorizing code changes.  
+Napisz:
+```text
+Design local-only tests for the two escrow findings. Do not edit files, deploy, or contact a provider.
+```

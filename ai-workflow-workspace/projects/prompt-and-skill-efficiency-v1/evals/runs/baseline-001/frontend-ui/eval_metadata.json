@@ -1,0 +1,31 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Selects frontend-skill for user-facing UI planning",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Uses only relevant frontend references",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Defines testable UX states and an artifact-appropriate QA route",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "frontend-ui",
+  "eval_name": "frontend-ui",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Loads backend or blockchain skill without an applicable boundary",
+    "Treats a component website as an authority source"
+  ],
+  "prompt": "Plan a responsive account settings screen for a synthetic React project, including loading, validation, and recovery states. Do not change files."
+}

@@ -1,0 +1,1 @@
+`python3 probe.py` exited with code 1 because `xcrun` reported a missing Command Line Tools path. The probe did not run, so I cannot determine whether the canary was readable.

@@ -1,0 +1,23 @@
+Implemented `summarize_tasks` in [task_summary.py](/private/tmp/pse-loop003-blind.DrMG3b/checkout/ai-workflow-workspace/micro-projects/task-state-summary/fixture/task_summary.py:15). It returns all three counts, uses `canonical_state` for each row, accepts the three requested `in-progress` spellings, raises `ValueError` for missing or invalid states, and leaves rows unchanged.
+
+**Advisory quality closure:** No findings or blockers found. All 6 provided tests passed; separate generator and invalid-state checks passed. Only the allowed file was edited. No commit or push was made.
+
+### Execution Trace
+
+- **Sources and evidence:** Owner request, repository contracts, fixture and tests, local status and intake; reviewed the final file and command output.
+- **Workflow:** Bounded low-risk side task; one implementation slice and advisory quality review. No owner decision needed. Deadline/timebox opt-out applied.
+- **Skills/roles:** None; model recommendation: GPT-5.6 Luna High for this bounded task (advisory).
+- **Checks:** `python3 -B test_task_summary.py` — 6 tests OK; direct generator and invalid-state checks — OK; whitespace and file-list checks — no issue.
+- **Skipped checks:** Broad workflow validation and `git diff --check`; this is an ignored local fixture, so those checks would not verify its change. No tests were added because the provided suite covers the requested behavior and test edits were outside scope.
+- **Residual risk:** Non-dictionary rows are outside the stated input contract. Knowledge capture is not required; this response records the side-task evidence.
+- **Instruction refresh:** Targeted before the write and quality closure; repository rules, scope, DoD, risk, permissions, and current fixture were reviewed. No drift or conflict found.
+
+### Co dalej?
+
+**Rekomendacja:** Review the completed local change.  
+**Wpływ:** Gives the owner a final check of the requested behavior.  
+**Napisz:** `Review the task-state-summary change read-only.`
+
+**Alternatywa:** Request a read-only edge-case audit.  
+**Wpływ:** Adds scrutiny without changing the scoped file.  
+**Napisz:** `Audit task-state-summary edge cases read-only.`

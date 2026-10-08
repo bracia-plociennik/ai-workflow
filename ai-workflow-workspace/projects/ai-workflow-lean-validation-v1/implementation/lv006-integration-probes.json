@@ -1,0 +1,79 @@
+{
+  "source_head": "a7d66c7fdeccc96e9ffaa1103b65de506c6bc6ea",
+  "source_diff": [
+    ".systems/ai/core/changelog.md"
+  ],
+  "checks": [
+    {
+      "id": "current-qa-inputs",
+      "exit": 0,
+      "expected": 0,
+      "diagnostic": "successful supporting check"
+    },
+    {
+      "id": "manifest-structural-only",
+      "exit": 0,
+      "expected": 0,
+      "diagnostic": "successful supporting check"
+    },
+    {
+      "id": "immutable-baseline-valid",
+      "exit": 0,
+      "expected": 0,
+      "diagnostic": "successful supporting check"
+    },
+    {
+      "id": "bad-profile",
+      "exit": 1,
+      "expected": 1,
+      "diagnostic": "Unknown validation profile"
+    },
+    {
+      "id": "bad-group",
+      "exit": 2,
+      "expected": 2,
+      "diagnostic": "invalid choice"
+    },
+    {
+      "id": "unequal-coverage-rejected",
+      "exit": 2,
+      "expected": 2,
+      "diagnostic": "inputs or coverage differ"
+    },
+    {
+      "id": "safe-prohibition",
+      "exit": 0,
+      "expected": 0,
+      "diagnostic": "successful supporting check"
+    },
+    {
+      "id": "direct-unsafe",
+      "exit": 1,
+      "expected": 1,
+      "diagnostic": "successful supporting check"
+    },
+    {
+      "id": "compound-unsafe",
+      "exit": 1,
+      "expected": 1,
+      "diagnostic": "successful supporting check"
+    },
+    {
+      "id": "missing-policy-source",
+      "exit": 1,
+      "expected": 1,
+      "diagnostic": "scan failed"
+    }
+  ],
+  "baseline_tests": 660,
+  "current_tests": 694,
+  "full_speed_claim": "ineligible",
+  "groups": {
+    "core": 70,
+    "workspace": 95,
+    "policy": 157,
+    "skills": 29,
+    "quality": 343
+  },
+  "limits": "Synthetic reader/policy checks and structural audit; new full execution remains separate."
+}

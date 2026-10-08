@@ -1,0 +1,6 @@
+failure: exit 7, one completion marker, timing wall fail
+timeout: exit 124, one completion marker, timing wall timeout
+source-drift: exit 1, one completion marker, timing wall fail
+interrupt: exit 143, one completion marker, timing wall interrupted
+success: exit 0, one completion marker, timing wall pass
+LV002 lifecycle probes: 5 pass

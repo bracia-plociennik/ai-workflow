@@ -1,0 +1,23 @@
+# Publication Evidence
+
+- Date: 2026-10-01
+- Owner authority: decisions/final-owner-approval.md, D6.
+- Final-owner-yes: recorded; active plan completed with Phase 8 PASS.
+- Commit: f73891b925425e5a7b89daaec707a9fca554e824
+- Subject: feat: strengthen runtime integrity and streamline small tasks
+- Source changes: 51 approved files, 1075 insertions and 52 deletions.
+- Source parity: committed files byte-identical to the full-validated source manifest.
+- Push: completed successfully, current branch to origin; no force push.
+- Remote: https://github.com/bracia-plociennik/ai-workflow.git
+- Remote ref: refs/heads/codex/workflow-parity-and-runtime-integrity-v1
+- Independent remote HEAD: f73891b925425e5a7b89daaec707a9fca554e824, confirmed by git ls-remote.
+- Git status: clean; local branch tracks origin with no ahead/behind count.
+- Workspace tracked files: none.
+- Post-commit regression tests: 46/46 passed.
+- QA freshness: current committed-HEAD regression assessments; old runs retained as history.
+- Full evidence: prior 651/699-second full runs, 695 unique smoke IDs, identical source bytes; not a new post-commit full run.
+- Handoff: none, D5 and D6.
+- PR: not created.
+- Main/merge/deployment: not performed.
+- Remote CI: not checked; push success is not CI success.
+- Network note: initial sandbox remote-read probe could not resolve GitHub; approved read-only retry succeeded.

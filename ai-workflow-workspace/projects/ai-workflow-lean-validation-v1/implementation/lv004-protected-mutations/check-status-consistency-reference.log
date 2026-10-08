@@ -1,0 +1,51 @@
+AI_WORKFLOW_SMOKE_START group=all progress=summary
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-existing-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-escaping-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-tmpdir-override status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-symlink status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-tracked-temporary-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-unignored-temporary-repo-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-foreign-tracked-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-foreign-deleted-tracked-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-foreign-unignored-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-1 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-2 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-3 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-4 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-5 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-6 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-summarizes-complete status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-preserves-inconclusive status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-incomplete status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-incomplete status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-source-mismatch status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-duplicate-record status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-missing-smoke-check status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-nonfinite-duration status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-separate-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-oversized-smoke-wall status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-private-fingerprint status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-dedup status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-projects status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-graph status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-git status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-freshness status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-ownership status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-paths status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-checkpoint status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-source status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-finish status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-consumers status=started
+Validator smoke test unexpectedly failed: validation-scope-consumers
+Traceback (most recent call last):
+  File "/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T//ai-workflow-validator-smoke.8w4xG9/lv003-scope-probes.py", line 257, in <module>
+    check("check-status-consistency", False, "missing status key: next-phase")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T//ai-workflow-validator-smoke.8w4xG9/lv003-scope-probes.py", line 245, in check
+    result = invoke([str(source / ".systems/scripts" / name), "--runtime-only", "--scope-root", "projects/a"],
+                    source, ok=ok, env=env)
+  File "/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T//ai-workflow-validator-smoke.8w4xG9/lv003-scope-probes.py", line 32, in invoke
+    assert (run.returncode == 0) == ok, (run.returncode, run.stdout, run.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (0, '', '')
+AI_WORKFLOW_SMOKE_COMPLETE group=all result=fail exit_code=1 duration_seconds=27

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+fail=0
+for file in .systems/ai/core/contract-topology.md .systems/scripts/report-contract-topology; do
+  [[ -f "$file" ]] || { echo "Missing contract topology artifact: $file"; fail=1; }
+done
+for text in 'linked' 'partial' 'orphaned' 'unknown' 'producers' 'consumers' 'advisory'; do
+  rg -qi "$text" .systems/ai/core/contract-topology.md .systems/scripts/report-contract-topology || { echo "Topology contract missing: $text"; fail=1; }
+done
+if rg -qi 'topology.*blocks|must be linked before.*phase|orphaned.*hard gate' .systems/ai/core/contract-topology.md; then
+  echo "Contract topology incorrectly acts as a hard gate"
+  fail=1
+fi
+exit "$fail"

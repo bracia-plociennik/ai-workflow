@@ -1,0 +1,56 @@
+# 5.5 Fix Loop
+
+## Metadata
+
+- Project: `<project>`
+- Task/package ID:
+- Date: `<YYYY-MM-DD>`
+- Failed quality artifact: `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/quality/phase-5-<task-id>-quality.md`
+- Workflow phase: `5.5. FIX LOOP`
+- Result: `<completed|blocked>`
+
+## Quality Findings Addressed
+
+| Finding | Fix Applied | Evidence | Status |
+| --- | --- | --- | --- |
+| | | | `<fixed|blocked|deferred>` |
+
+## Scope Control
+
+- Fixes made:
+- Out-of-scope avoided:
+- New risks introduced:
+
+## Verification After Fix
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| | `<PASS|FAIL|not-run>` | |
+
+## Return To Quality Gate
+
+- All fix-loop changes complete: `<yes|no>`
+- Ready to rerun Quality: `<yes|no>`
+- Blocking reason: `<none|reason>`
+
+## Owner Decision Checkpoint
+
+- Interaction mode: `<interactive|queued|suppressed-owner-opt-out|none>`
+- Decision state: `<clear|awaiting-owner|blocked|queued>`
+- Material decisions: `<decision IDs|none>`
+- Questions asked: `<decision IDs|none>`
+- Auto-resolved reversible decisions: `<decision IDs|none>`
+- Optional owner refinements: `<list|none>`
+- Decision artifacts: `<paths|none>`
+- Next route:
+
+## Optional Knowledge Capture
+
+- Capture recommended: `<yes|no>`
+- Target: `<project-memory|repo-memory|external-memory|system-insights|decision-artifact|status|none>`
+- Reason:
+- Owner decision required: `<yes|no>`
+- Owner decision: `<capture-now|defer-to-distillation|defer-to-checkpoint|reject|not-requested>`
+- Privacy/scope check: `<pass|fail|n/a>`
+- Suggested entry title:
+- Suggested entry summary:

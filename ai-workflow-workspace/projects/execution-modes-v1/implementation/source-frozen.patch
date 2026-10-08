@@ -1,0 +1,1737 @@
+diff --git a/.systems/ai/core/autopilot.md b/.systems/ai/core/autopilot.md
+index 702c934..9553864 100644
+--- a/.systems/ai/core/autopilot.md
++++ b/.systems/ai/core/autopilot.md
+@@ -85,7 +85,7 @@ Only the owner can start `phase-8-final-check` with an explicit request. Technic
+ 
+ Autopilot may start only when:
+ 
+-- the user explicitly requests autonomous execution or project status says autopilot is active;
++- the user explicitly requests autonomous execution, or an approved multi-phase scope is resolved to Auto under execution-modes.md, or project status says autopilot is active;
+ - run-scoped readiness audit exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md`;
+ - readiness audit has `readiness-result: ready`;
+ - readiness audit declares `requested-range` as `planning-range` or `implementation-range`;
+@@ -99,7 +99,7 @@ Additional `planning-range` start conditions:
+ - accepted project context exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`;
+ - project/context repo intake is complete enough to identify safe commands, restricted zones, and external-effect policy;
+ - missing architecture, plan, optional owner-requested packaging, and specs are expected outputs of the range and must be listed as planned writes, not blockers;
+-- owner decisions needed before architecture or planning are resolved or listed as `awaiting-owner`.
++- owner decisions needed by each runnable unit are resolved; pending decisions exclude their affected units and dependents under execution-modes.md.
+ 
+ Additional `implementation-range` start conditions:
+ 
+@@ -145,12 +145,12 @@ Readiness status values are:
+ - `draft`: audit is being prepared;
+ - `blocked`: workflow gates, status, artifacts, commands, safe env, or evidence requirements are missing;
+ - `awaiting-owner`: owner decisions or approvals are required;
+-- `ready`: all blocking items are resolved, approved, or not applicable;
++- `ready`: all blocking items for the explicitly selected runnable subset are resolved, approved, or not applicable; excluded units remain blocked;
+ - `superseded`: scope, mode, task set, or run changed and a newer readiness artifact replaces this one.
+ 
+ Autopilot cannot enter `running` until readiness is `ready`. If readiness is `blocked` or `awaiting-owner`, run state must remain `stopped` or `awaiting-owner`, and the owner-facing prompt must list every required decision.
+ 
+-Use `.systems/ai/core/owner-decision-checkpoints.md` during readiness. Readiness may ask one grouped batch of 1-3 material questions before the run starts. It cannot be `ready` while `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decisions required by the requested range remain pending.
++Use `.systems/ai/core/owner-decision-checkpoints.md` and execution-modes.md during readiness. Human Coop may ask one grouped batch of 1-3 material questions before the run starts; Auto queues uncovered decisions. Readiness cannot be ready for units affected by pending decisions. Explicitly exclude those units and dependents before selecting a proven independent subset; global source, permissions or resource conflicts remain run blockers.
+ 
+ If no run exists, create the next `autopilot-XXX` directory and fill `readiness.md` before `state.md` can move to `running`. If an existing run is `awaiting-owner`, update the same `readiness.md` after owner answers unless scope, mode, or task set changed. If scope changes, supersede the old readiness artifact and create a new one for the new run or scope.
+ 
+@@ -162,18 +162,18 @@ Use the range state machines above. Do not run `phase-8-final-check` from autopi
+ 
+ - Execute sequentially unless one execution owner verifies delegated units under `.systems/ai/core/parallel-task-orchestration.md`. Optional packaging is not required for delegation.
+ - Continue only after evidence-backed `PASS`.
+-- STOP on critical risk, retry limit, blocking drift, or missing required evidence.
++- STOP affected units on critical risk, retry limit, blocking drift, or missing required evidence. Stop the run when the conflict is global or no proven independent unit remains; critical-risk actions still require their human-led route.
+ - Record auto-resolvable decisions before continuing.
+-- Stop for human approval on high-risk and critical-risk decisions.
++- Verify recorded human approval for high-risk work. Check whether the existing owner approval covers the named local implementation and formal Quality assessment. Critical-risk and newly uncovered effects retain required human approval.
+ - Do not ask live questions while the run state is `running`.
+-- If a new material decision appears, stop as `awaiting-owner`, record the decision and escalation evidence, and return one queued owner decision batch after stopping.
+-- Never continue `running` with a pending material decision.
++- If a new material decision appears, record full decision evidence, block affected units and dependents, and continue only verified independent units under execution-modes.md. Stop as `awaiting-owner` when no safe unit remains.
++- Never execute a unit blocked by a pending material decision.
+ - Use fake/log/test adapters by default for external effects.
+ - Do not send real emails, alerts, tickets, invoices, payments, production cron, or external API writes without explicit owner approval.
+ 
+ ## Delivery Constraint Readiness
+ 
+-Before `running`, implementation-range readiness must record a resolved delivery constraint or explicit bounded owner opt-out from `.systems/ai/core/delivery-constraints.md`. A new material delivery decision stops the run as `awaiting-owner`.
++Before `running`, implementation-range readiness records explicit constraints, owner opt-out or `auto-unbounded` for new Auto work under delivery-constraints.md. A new delivery blocker excludes affected units. Preserve existing limits on legacy runs; new Auto state has no implicit 300-minute timebox.
+ 
+ ## Retry Limits
+ 
+@@ -193,11 +193,11 @@ Before `running`, implementation-range readiness must record a resolved delivery
+ 
+ ## Stop Conditions
+ 
+-Autopilot must stop and write an escalation artifact when:
++Autopilot must stop affected units and write an escalation artifact for the conditions below. A run-wide baseline, permission, safety or budget conflict stops the entire run. A strictly unit-local blocker allows only proven independent units to continue under execution-modes.md; unresolved dependency/isolation is not independence:
+ 
+ - required gates are unsatisfied;
+ - repo, status, plan, spec, ledger, or runtime state conflicts;
+-- risk class requires human approval;
++- a unit lacks required human approval and no verified independent unit remains;
+ - retry or budget limit is reached;
+ - a required command is missing or unsafe;
+ - evidence cannot support `PASS`;
+diff --git a/.systems/ai/core/changelog.md b/.systems/ai/core/changelog.md
+index 39712d4..14d3a07 100644
+--- a/.systems/ai/core/changelog.md
++++ b/.systems/ai/core/changelog.md
+@@ -1,5 +1,14 @@
+ # changelog.md
+ 
++## 2026-10-08 - Execution Modes V1
++
++- Default new work to Auto; explicit Human Coop is task-local unless scoped wider.
++- Preserve mode on resume, scope-bound plan approvals and legacy non-retroactivity.
++- Block pending-decision units and dependents; permit only verified independent continuation.
++- Remove implicit new-run timebox, retain retry/no-progress limits and actual QA.
++- Add an inspection-only readiness projection, offline boundary regressions and supporting policy validator.
++- Preserve explicit final-check route, separate final-owner-yes and phase commit/push boundaries.
++
+ ## 2026-10-04 - Read-only parallel compatibility adaptation
+ - Add a closed contract-1 inspector for source/identity, global worker/reviewer
+   budget, state receipt and fail-closed transport/recovery differences.
+diff --git a/.systems/ai/core/command-routing.md b/.systems/ai/core/command-routing.md
+index ce00879..1b69ac2 100644
+--- a/.systems/ai/core/command-routing.md
++++ b/.systems/ai/core/command-routing.md
+@@ -1,4 +1,6 @@
+ # command-routing.md
++
++Resolve execution-modes.md for all new work and resume. Auto is default; Human Coop / pracujmy wspólnie / konsultuj decyzje select human-coop. Explicit Auto Mode selects auto. Planning-only stays planning. Pending owner choices exclude affected units and dependents; continue only proven independent ready work. An explicitly requested final check is a separate owner-authorized route after implementation-range, never inferred from Auto.
+ For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+ 
+ 
+@@ -57,8 +59,8 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
+ - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
+ - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
+ - If a command is clear but gates are not satisfied, route to the required predecessor phase or stop with the blocking gate.
+-- If a command is ambiguous, inspect repo artifacts first. Ask only when the missing information cannot be discovered safely.
+-- After intake or batch triage, use Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md`. Ask at most 1-3 material questions with recommendation and impacts; disclose safe reversible choices instead of asking about every implementation detail.
++- If a command is ambiguous, inspect repo artifacts first. Human Coop asks for missing material information; Auto queues it and blocks dependent work.
++- After intake or batch triage, use Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md`. In Human Coop ask at most 1-3 material questions with recommendation and impacts; Auto chooses covered reversible options and queues owner-only decisions.
+ - If a command conflicts with workflow safety, stop. Do not reinterpret it as approval to bypass safeguards.
+ 
+ ## Clarification Format
+diff --git a/.systems/ai/core/commands.md b/.systems/ai/core/commands.md
+index ed48151..fb4faff 100644
+--- a/.systems/ai/core/commands.md
++++ b/.systems/ai/core/commands.md
+@@ -1,4 +1,6 @@
+ # commands.md
++
++Execution Modes: use check-execution-modes for contract validation and check-execution-modes --state <execution-readiness.json> for pure declared readiness inspection. See execution-modes.md; the inspector neither dispatches workers nor verifies actual approval/resource evidence.
+ Read-only cross-system inspection: `.systems/scripts/inspect-parallel-compatibility
+ --workflow PATH --repo PATH --run FILE --mapping FILE`. See
+ `parallel-compatibility.md` and `compatibility.template.json`. Exit0 means static
+diff --git a/.systems/ai/core/contract-compliance.md b/.systems/ai/core/contract-compliance.md
+index 71f802a..3c627c1 100644
+--- a/.systems/ai/core/contract-compliance.md
++++ b/.systems/ai/core/contract-compliance.md
+@@ -1,4 +1,6 @@
+ # contract-compliance.md
++
++Use execution-modes.md at closure: report resolved mode, completed/blocked units, assumptions/override impact and full pending owner decision queue. Approval references must cover the actual actions. Auto never infers push or final-owner-yes; shared impact pending still blocks commit/handoff.
+ For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+ 
+ 
+diff --git a/.systems/ai/core/delivery-constraints.md b/.systems/ai/core/delivery-constraints.md
+index 0a5f74a..407660e 100644
+--- a/.systems/ai/core/delivery-constraints.md
++++ b/.systems/ai/core/delivery-constraints.md
+@@ -8,9 +8,9 @@ This is a planning contract. It does not grant write permission and does not rep
+ 
+ ## Default Rule
+ 
+-Before new implementation work, ask for the material delivery constraint when it is not already present in the accepted owner request or artifacts. Group missing questions with Owner Decision Discovery, at most `1-3` questions. Do not ask redundant versions of deadline, time budget, and duration.
++Before new implementation work, resolve execution-modes.md and existing constraints. In Human Coop, ask for the material delivery constraint when it is not already present in the accepted owner request or artifacts. Group missing questions with Owner Decision Discovery, at most `1-3` questions. Do not ask redundant versions of deadline, time budget, and duration.
+ 
+-If the owner gives no deadline or timebox, do not invent one. Record `Mode: not-set` and ask the nearest material question before dependent planning or implementation. An explicit owner opt-out is allowed only for the current scope unless it explicitly says otherwise.
++If the owner gives no deadline or timebox, do not invent one. New Auto work records `Mode: auto-unbounded`, Deadline and Time budget `none`, and continues without a deadline question. Human Coop records `Mode: not-set` and asks the nearest material question before dependent planning or implementation. An explicit owner opt-out is allowed only for the current scope unless it explicitly says otherwise. Resume preserves already-recorded limits.
+ 
+ ## Delivery Constraints Block
+ 
+@@ -18,7 +18,7 @@ Implementation-capable plans and work artifacts should include:
+ 
+ ```text
+ Delivery Constraints
+-- Mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|micro-exempt|not-set>
++- Mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|auto-unbounded|micro-exempt|not-set>
+ - Deadline: <timestamp|none>
+ - Timezone: <IANA timezone|none>
+ - Time budget: <duration|none>
+@@ -52,7 +52,7 @@ When the deadline or timebox is at risk, stop at the overrun checkpoint and repo
+ 
+ Supported opt-out wording includes `bez deadlinu`, `bez planowania z deadlinem`, `no deadline`, `without deadline`, `bez timeboxu`, and `no timebox`. The opt-out must be reported in the Execution Trace with residual risk. It does not bypass risk, permissions, DoD, QA, evidence, approvals, or stop conditions.
+ 
+-Autopilot readiness must contain a resolved delivery constraint or an explicit owner opt-out before `running`. Active autopilot remains non-interactive; a new material delivery decision stops the run as `awaiting-owner`.
++Autopilot readiness must contain a resolved delivery constraint, explicit owner opt-out or new Auto `auto-unbounded` before `running`. Active autopilot remains non-interactive; a material delivery decision blocks affected units and dependents, stopping as `awaiting-owner` when no safe independent work remains. Retry/no-progress and platform/resource limits remain required with no deadline.
+ 
+ ## Routing And Ownership
+ 
+diff --git a/.systems/ai/core/execution-modes.md b/.systems/ai/core/execution-modes.md
+new file mode 100644
+index 0000000..ac89b1d
+--- /dev/null
++++ b/.systems/ai/core/execution-modes.md
+@@ -0,0 +1,60 @@
++# Execution Modes
++
++## Mode Selection
++
++New work defaults to `auto`. `Human Coop`, `pracujmy wspólnie` and `konsultuj decyzje` select `human-coop`. Explicit `Auto Mode` selects `auto`. This interaction mode is independent of the work mode, formal phase, autopilot range and technical `autopilot.mode`.
++
++Resolve the most specific explicit choice: task, then declared session override, then project, then default. Record the mode, scope, source and scope ID before dependent work. A task choice expires with that task. A session choice requires explicit session-wide wording and does not leak into a new session. Resume preserves the recorded choice; it does not reset Human Coop to Auto.
++
++Legacy artifacts without an execution field remain historical under their original approvals. At readiness for future work, explicitly resolve and record the new mode and permission baseline. Do not rewrite old artifacts or grant retrospective autonomy.
++
++## Autonomous Choices
++
++Auto discovers facts first and takes the recommended safe, reversible choice inside the accepted goal, constraints and permissions. This includes local implementation strategy, testing, reversible owner preferences and local architecture choices. Record significant assumptions, why the choice serves DoD and the impact of a later override. A material choice can remain classified `high-impact`; record disposition `agent-choice` only if its local effects are already covered by the accepted scope and approvals. Classification is not downgraded to obtain permission.
++
++When owner intent is clear, derive and record a testable DoD before implementation. Fundamental ambiguity about the goal, protected data, required permission or acceptance criteria blocks dependent writes. Do not lower accepted DoD or hide a stub as completed work.
++
++Human Coop discovers facts and asks at most 1-3 material questions with recommendation, alternatives and impacts. Safe trivial choices and previously answered questions do not need repetition. Auto queues owner-only decisions without live questions; read-only review, Dreaming and active autopilot remain non-interactive even when Human Coop is selected.
++
++## Approval Scope
++
++An owner's acceptance of a concrete plan can cover its explicitly described local high-risk implementation and formal Phase 5 assessment. Record the actual approval reference, task scope, actions and risk; verify them at each gate without asking again. Plan acceptance does not predetermine QA PASS. Unknown or new risk, expanded scope and uncovered effects require their own approval.
++
++Execution mode must not grant permissions, approve critical-risk actions, production, billing, destructive operations or real external effects. Platform approvals still apply. Critical-risk remains human-led unless explicitly delegated with existing controls. A Git revert cannot undo external effects, disclosure or lost data.
++
++## Independent Continuation
++
++Pending decisions block their affected units and transitive dependents, not automatically every unit in the run. Readiness selects an explicit runnable subset with current gates, approval coverage, DoD, known dependencies and verified write/resource independence. Unknown dependency or isolation evidence blocks the unit. Shared uncertainty blocks every affected unit; a global permission/baseline conflict blocks the run.
++
++One coordinator owns shared status, decisions, integration, QA and commits. Subagents inherit the resolved mode and exact approved subset; they cannot spawn approvals or treat submission as acceptance. Continue independent units serially unless the installed parallel policy independently permits dispatch.
++
++An active run may remain running with a queued decision for an excluded unit only while a proven independent runnable unit exists. It must not execute a unit blocked by a pending material decision. If no safe unit remains, stop as `awaiting-owner` for owner decisions or `blocked` for other failures, and present one queue.
++
++## Runtime Evidence
++
++Use existing project status, task decisions and run readiness/state. Templates persist `execution` separately from technical `autopilot.mode`: mode, scope, scope-id, source, approval-reference, completed-units, blocked-units and pending-decisions. Task decision records add disposition, affected-units, blocking reason, assumption and override impact; full queued records retain the existing Decision Request Contract.
++
++Projection decision IDs and reasons are summaries, not replacements for the full queued decision records, alternatives/impacts or durable decision-artifact references required by owner-decision-checkpoints.md.
++Implementation projections must declare at least one write action and exclusive resource claims; no-op/read-only work must use the matching work kind rather than empty write metadata. Claims still require real coordinator verification.
++
++The optional `execution-readiness.template.json` projection is inspected by `check-execution-modes --state <file>`. It contains declared unit prerequisites, work kind, decisions, approved actions, baseline and exclusive resources. The pure inspector computes readiness, transitive blocking and completion. Planning unit action set: artifact-write, formal-quality and local-commit only. Read-only units reject write actions. Unknown action names are rejected. High-impact agent choices require scoped approval references for all affected units. It performs no writes, launches or approval verification. A declared reference or true flag is not proof: the coordinator must verify real sources, gates, repository baseline and resource isolation before execution. An unknown or malformed projection is rejected.
++
++On resume, inspect actual repo/worker state and verify the saved baseline, approval scope, mode and dependencies. Accepted output is not repeated. Baseline drift requires refreshed readiness and affected QA; a worker message is not completion evidence.
++
++## Delivery And Completion
++
++For new Auto work, absent deadline/timebox is `auto-unbounded`, with no interactive deadline question and no invented time budget. Preserve explicit limits and existing platform/resource budgets. Retry limits and no-progress stops remain required; no deadline does not authorize infinite repetition. Human Coop retains delivery discovery. A recorded legacy deadline is not silently removed.
++
++Planning-only requests end with the reviewed plan. Implementation requests execute the authorized scope, QA/fix loops and required capture/checkpoint. If the owner-approved scope includes final check, perform Phase 8 as a separate authorized route after implementation-range; an Auto label alone is not a final-check trigger. Final-owner-yes must not be inferred.
++
++Report `completed` only when all requested units satisfy DoD, actual QA and required capture. Report `partial / awaiting-owner` when owner decisions prevent full delivery; report `blocked` when no useful safe work remains for other reasons. Review completed work and disclose unverified/deferred areas. Distinguish technical completion from final owner acceptance.
++
++Scoped local commits follow phase-commit-policy.md on the owned branch after applicable QA. Ignored-only/no-op creates no commit. Auto must not authorize push, merge, branch deletion or changes to another writer's index. Phase 8 closure commit requires actual final-owner-yes.
++
++## Owner Report
++
++Full Execution Trace records mode, scope/source, significant choices and pending/blocked units. At closure give result versus DoD, evidence, AI choices with override impact, owner decision queue and remaining scope. Do not manufacture questions when the queue is empty.
++
++## Verification
++
++Use check-execution-modes, synthetic readiness tests, producer-consumer audit and adversarial policy review. Green scripts remain supporting evidence; mode metadata never proves model behavior or interoperability with AI System.
+diff --git a/.systems/ai/core/implementation-slicing.md b/.systems/ai/core/implementation-slicing.md
+index d42217e..d773525 100644
+--- a/.systems/ai/core/implementation-slicing.md
++++ b/.systems/ai/core/implementation-slicing.md
+@@ -1,5 +1,7 @@
+ # implementation-slicing.md
+ 
++Resolve execution-modes.md before writes. Record testable DoD from clear accepted intent; if ambiguous, block dependent writes. Record the runnable subset and pending/blocked units. Auto completes applicable QA/fix loops; slices never weaken permissions or acceptance criteria.
++
+ For eligible reversible bounded defects, `.systems/ai/core/execution-efficiency.md` permits one compact work record in existing project/workflow-maintenance mode. Slice scope, DoD, known consumers, regression evidence, approvals and semantic QA still apply; this does not bypass an active formal phase path or create a medium-risk micro-work exemption.
+ 
+ ## Purpose
+diff --git a/.systems/ai/core/operating-model.md b/.systems/ai/core/operating-model.md
+index bbb4b89..ab450b8 100644
+--- a/.systems/ai/core/operating-model.md
++++ b/.systems/ai/core/operating-model.md
+@@ -61,7 +61,7 @@ If task intake reveals high or critical risk, unknown safe environment, missing
+ 
+ ## Owner Decision Discovery
+ 
+-After task intake or batch triage, use `.systems/ai/core/owner-decision-checkpoints.md` before dependent planning, specification, implementation, or owner-sensitive writes. Inspect current sources first, ask at most 1-3 material questions, and report reversible auto-resolved decisions. Active autopilot, Dreaming/automations, and read-only review use queued decisions without mid-run interruption.
++After task intake or batch triage, resolve execution-modes.md and use owner-decision-checkpoints.md before dependent work. New work defaults to Auto; Human Coop asks at most 1-3 material questions. Auto selects covered reversible choices and queues uncovered owner decisions, blocking affected units while continuing proven independent work. Active autopilot, Dreaming/automations, and read-only review use queued decisions without mid-run interruption.
+ 
+ An explicit no-question opt-out suppresses interactive questions only for its declared work scope. It does not convert unresolved high-impact, critical-risk, missing-fact, risk, permission, DoD, QA, approval, or stop-condition decisions into safe defaults.
+ 
+diff --git a/.systems/ai/core/owner-decision-checkpoints.md b/.systems/ai/core/owner-decision-checkpoints.md
+index ba28195..1ce75cc 100644
+--- a/.systems/ai/core/owner-decision-checkpoints.md
++++ b/.systems/ai/core/owner-decision-checkpoints.md
+@@ -2,15 +2,15 @@
+ 
+ ## Purpose
+ 
+-`Owner Decision Discovery` makes meaningful owner choices visible before dependent work begins. It asks about material decisions and owner preferences by default, while keeping repo-discoverable facts and small reversible implementation details out of the owner's way.
++`Owner Decision Discovery` makes meaningful owner choices visible before dependent work begins. Resolve `auto` or `human-coop` under execution-modes.md first. Auto selects covered safe reversible choices and queues owner-only decisions; Human Coop asks about material decisions and owner preferences.
+ 
+ This is a decision and interaction contract, not a new workflow phase. It does not grant write permission, change risk, replace evidence, approve a phase, or satisfy Definition of Done.
+ 
+ ## Decision Classes
+ 
+ - `auto-resolvable`: low-impact, safe, reversible, inside accepted scope, and unlikely to change owner-visible outcomes; the agent may choose and must report it.
+-- `owner-preference`: a meaningful choice about outcome, UX, presentation, tradeoff, client collaboration, or another owner preference; ask by default before dependent work.
+-- `high-impact`: affects scope, architecture, data, integrations, cost, substantial rework, or long-lived behavior; owner decision is required.
++- `owner-preference`: a meaningful choice about outcome, UX, presentation, tradeoff, client collaboration, or another owner preference; Human Coop asks before dependent work; Auto may choose a safe reversible option inside accepted constraints.
++- `high-impact`: affects scope, architecture, data, integrations, cost, substantial rework, or long-lived behavior; required owner approval must cover the effects. Auto may choose already-covered local options as `agent-choice` under execution-modes.md without downgrading classification.
+ - `critical-risk`: uses the existing human-led approval and risk route; the agent must not resolve it.
+ - `blocked-by-missing-facts`: required facts cannot be discovered from current sources and safe work cannot continue without them.
+ 
+@@ -25,7 +25,7 @@ Before asking the owner:
+ 1. inspect current repository state, status, accepted artifacts, owner instructions, and available context;
+ 2. resolve discoverable facts from those sources;
+ 3. classify remaining choices;
+-4. ask only when a real `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decision remains.
++4. in Human Coop ask only when a real `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decision remains; in Auto queue decisions outside covered reversible choices.
+ 
+ Do not ask the owner to locate a file, choose an existing convention, repeat a recorded decision, or provide a fact that can be discovered safely. Do not invent a question when no owner decision exists. Report `No owner decision needed` instead.
+ 
+@@ -33,7 +33,7 @@ Do not ask the owner to locate a file, choose an existing convention, repeat a r
+ 
+ Run Owner Decision Discovery after idea validation or batch triage and before dependent planning, specification, implementation, or another owner-sensitive write.
+ 
+-For an interactive checkpoint:
++For a Human Coop interactive checkpoint (Auto records a queue instead):
+ 
+ - group at most `1-3` questions that block the nearest safe next step;
+ - put the recommended option first;
+@@ -45,7 +45,7 @@ For an interactive checkpoint:
+ 
+ Do not ask generic permission such as `Should I continue?` when the owner already requested execution and no material decision remains.
+ 
+-If more than three material decisions exist, ask the first `1-3` by dependency order and queue the rest. Do not hide or auto-resolve the remaining material decisions.
++In Human Coop, if more than three material decisions exist, ask the first `1-3` by dependency order and queue the rest. In Auto, take only covered reversible choices under execution-modes.md and queue all owner-only decisions. Do not hide unresolved material decisions.
+ 
+ ## Decision Request Contract
+ 
+@@ -98,15 +98,15 @@ When the owner changes an auto-resolved decision, report the override impact. If
+ 
+ ### Autopilot
+ 
+-Autopilot readiness may ask a grouped decision batch before the run enters `running`. Readiness cannot be `ready` while a material decision is pending.
++Human Coop autopilot readiness may ask a grouped decision batch before the run enters `running`; Auto readiness queues owner-only decisions. Readiness cannot be `ready` for a unit blocked by a pending material decision. A verified independent subset may be ready under execution-modes.md.
+ 
+ An active autopilot run must not ask live, follow-up, clarification, or other interactive questions while `running`:
+ 
+ - record `auto-resolvable` decisions in the existing task decision artifact;
+-- when a material decision appears, stop the run as `awaiting-owner`;
++- when a material decision appears, exclude affected units and transitive dependents; continue only a verified independent runnable subset;
+ - create or update the existing readiness, decision, and escalation evidence;
+-- return one queued owner decision batch after the run stops;
+-- never continue `running` with a pending material decision.
++- return one queued owner decision batch after the run stops or the independent subset completes;
++- never execute a unit blocked by a pending material decision; with no runnable independent work stop as `awaiting-owner`.
+ 
+ ### Dreaming And Automations
+ 
+@@ -144,11 +144,11 @@ Opt-out must not guess or bypass scope, risk, permissions, security, billing, mi
+ 
+ ## Knowledge Capture Boundary
+ 
+-Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves. Ask only when an existing checkpoint, distillation, status/evidence, commit-readiness, privacy, or owner-approved capture gate requires a material decision.
++Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves. Human Coop asks only when an existing checkpoint, distillation, status/evidence, commit-readiness, privacy, or owner-approved capture gate requires a material decision; Auto queues that decision and blocks its dependent action.
+ 
+ ## Delivery Constraint Questions
+ 
+-When `.systems/ai/core/delivery-constraints.md` applies, treat deadline, timezone, time budget, must-have outcome, cutline, and overrun handling as one grouped material decision. Ask at most `1-3` questions, do not ask redundant synonyms, and do not invent a deadline. A deadline is a planning constraint only and cannot weaken DoD, QA, evidence, risk, permissions, approvals, or stop conditions.
++When `.systems/ai/core/delivery-constraints.md` applies, Auto records absent deadline/timebox as `auto-unbounded` without a question. Human Coop treats missing deadline, timezone, time budget, must-have outcome, cutline, and overrun handling as one grouped material decision. Ask at most `1-3` questions, do not ask redundant synonyms, and do not invent a deadline. A deadline is a planning constraint only and cannot weaken DoD, QA, evidence, risk, permissions, approvals, or stop conditions.
+ 
+ ## Response Trace
+ 
+diff --git a/.systems/ai/core/parallel-task-orchestration.md b/.systems/ai/core/parallel-task-orchestration.md
+index 8a65034..929f5b6 100644
+--- a/.systems/ai/core/parallel-task-orchestration.md
++++ b/.systems/ai/core/parallel-task-orchestration.md
+@@ -1,4 +1,6 @@
+ # Parallel Task Orchestration V1
++
++Execution modes under execution-modes.md are inherited by workers from one coordinator. A queued decision blocks affected units, dependents and shared reservations; verified independent units may continue. Check whether existing owner approval covers named high-risk Quality assessment; verify its actual scope at the gate without repeating approval requests.
+ For AI System contract-1 adaptation, use `parallel-compatibility.md` and the
+ read-only `inspect-parallel-compatibility` interface. Inspection never establishes
+ native support, dispatch readiness, local acceptance or a second resource pool.
+diff --git a/.systems/ai/core/permissions.md b/.systems/ai/core/permissions.md
+index f1e8df8..dc6bfd1 100644
+--- a/.systems/ai/core/permissions.md
++++ b/.systems/ai/core/permissions.md
+@@ -1,4 +1,6 @@
+ # permissions.md
++
++Use execution-modes.md to verify existing scope-bound approval at each gate. An accepted concrete plan can cover its named local high-risk implementation and Phase 5 assessment. Mode metadata creates no permission; new effects/risks and critical-risk actions keep required approvals.
+ For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+ 
+ 
+diff --git a/.systems/ai/core/plan-quality-contract.md b/.systems/ai/core/plan-quality-contract.md
+index 39c621d..3510bbb 100644
+--- a/.systems/ai/core/plan-quality-contract.md
++++ b/.systems/ai/core/plan-quality-contract.md
+@@ -33,7 +33,7 @@ Every applicable plan contains this block before implementation readiness is dec
+ 
+ ## Delivery Constraint Integration
+ 
+-Implementation-capable plans must use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or a bounded owner opt-out. The plan must identify must-have outcome, cutline, deferred scope, quality floor, and overrun route. A read-only plan may mark delivery constraints `not-applicable` only with a reason. Delivery pressure never satisfies the DoD or bypasses QA, risk, permissions, approvals, or evidence.
++Implementation-capable plans must use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox, bounded owner opt-out or `auto-unbounded` for new Auto work with no supplied limit. The plan must identify must-have outcome, cutline, deferred scope, quality floor, and overrun route. A read-only plan may mark delivery constraints `not-applicable` only with a reason. Delivery pressure never satisfies the DoD or bypasses QA, risk, permissions, approvals, or evidence.
+ 
+ ## Route Selection
+ 
+diff --git a/.systems/ai/core/prompt-composition.md b/.systems/ai/core/prompt-composition.md
+index 39abfb7..eddf886 100644
+--- a/.systems/ai/core/prompt-composition.md
++++ b/.systems/ai/core/prompt-composition.md
+@@ -124,7 +124,7 @@ Suggest-only means the agent may name the proposed role, variable, or prompt mod
+ 
+ Durable project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/**` may be created only after explicit owner approval or inside an accepted task/phase whose write allowance includes those artifacts.
+ 
+-Low-risk inferred variables may be proposed and, when the active route already permits assumption recording, recorded as assumptions. The agent must ask the owner before using or recording a value that affects scope, risk, architecture, acceptance criteria, permissions, external effects, data handling, security, billing, migrations, production behavior, final acceptance, or any high-risk or critical-risk decision.
++Low-risk inferred variables may be proposed and, when the active route already permits assumption recording, recorded as assumptions. Use execution-modes.md for covered reversible local architecture choices and mode-aware decision reporting. A value changing accepted scope, risk, acceptance criteria, permissions, external effects, data handling, security, billing, migrations, production behavior, final acceptance, or uncovered high-risk/critical-risk effects requires the existing owner decision: Human Coop asks, Auto queues it and blocks dependent work. Prompt variables never supply approval.
+ 
+ ## Lifecycle
+ 
+diff --git a/.systems/ai/core/quality-review.md b/.systems/ai/core/quality-review.md
+index 826cc91..ec27e82 100644
+--- a/.systems/ai/core/quality-review.md
++++ b/.systems/ai/core/quality-review.md
+@@ -1,5 +1,7 @@
+ # quality-review.md
+ 
++Under execution-modes.md, review the approved scope, actual runnable subset, queued decisions and deferred/unverified work. Incomplete DoD cannot yield completed or a task-wide PASS. Do not infer approval from a mode or inspector result. Human Coop and Auto keep the same findings-first depth.
++
+ Efficiency evidence follows `.systems/ai/core/execution-efficiency.md`. Reused script results are not fresh semantic review. Audit authenticated bindings, applicable consumers, failure paths, immutable historical records and technical-versus-owner closure before a clean verdict.
+ 
+ ## Purpose
+diff --git a/.systems/ai/core/response-contract.md b/.systems/ai/core/response-contract.md
+index 830865f..3f0c431 100644
+--- a/.systems/ai/core/response-contract.md
++++ b/.systems/ai/core/response-contract.md
+@@ -1,5 +1,7 @@
+ # response-contract.md
+ 
++Execution mode (full Execution Trace): Mode: auto|human-coop; Scope/source: task|project|session and reference; AI choices/override impact: list|none; Blocked units/pending decisions: IDs|none. Use execution-modes.md. End status is completed only with full DoD, actual QA and capture; otherwise partial / awaiting-owner or blocked. Queue owner-only decisions at closure.
++
+ ## Purpose
+ 
+ This file defines the required user-facing response shape for Codex when working inside a repository governed by AI Workflow.
+diff --git a/.systems/ai/core/risk-model.md b/.systems/ai/core/risk-model.md
+index 21998af..c20355a 100644
+--- a/.systems/ai/core/risk-model.md
++++ b/.systems/ai/core/risk-model.md
+@@ -34,6 +34,7 @@ High:
+ 
+ - decision artifact;
+ - human approval before implementation;
++- an accepted concrete plan may cover its named local implementation and formal Phase 5 assessment under execution-modes.md; retain the approval reference and recheck actual coverage instead of repeating permission requests;
+ - rollback or safety notes when applicable.
+ 
+ Critical:
+diff --git a/.systems/ai/core/task-intake.md b/.systems/ai/core/task-intake.md
+index d90903a..30017bc 100644
+--- a/.systems/ai/core/task-intake.md
++++ b/.systems/ai/core/task-intake.md
+@@ -1,5 +1,7 @@
+ # task-intake.md
+ 
++Resolve execution-modes.md before decision discovery: new work defaults to Auto, explicit Human Coop is task-local unless wider. Derive testable DoD from clear intent; fundamental ambiguity blocks dependent writes. Auto records absent deadline/timebox as auto-unbounded without questioning.
++
+ ## Purpose
+ 
+ For a candidate tiny implementation, check narrow micro-exempt criteria in delivery-constraints.md before separate delivery questions or capture state. Reclassify growth; retain compact DoD, slice plan, permission, focused QA and disclosed evidence.
+@@ -90,7 +92,7 @@ After validation and before presenting a dependent plan or starting execution, u
+ 
+ - Inspect repository and accepted artifacts before asking.
+ - Classify remaining choices as `auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`.
+-- Ask at most 1-3 material questions that block the nearest safe next step.
++- Human Coop asks at most 1-3 material questions that block the nearest safe next step; Auto queues uncovered owner decisions.
+ - Put the recommendation first and state impact for every option.
+ - Report safe reversible decisions that were auto-resolved.
+ - If no material decision exists, continue and report `No owner decision needed`.
+diff --git a/.systems/ai/core/workflow.md b/.systems/ai/core/workflow.md
+index 1d947d4..e74b369 100644
+--- a/.systems/ai/core/workflow.md
++++ b/.systems/ai/core/workflow.md
+@@ -1,4 +1,6 @@
+ # workflow.md
++
++Apply execution-modes.md independently of phase/range: Auto resolves covered reversible choices; Human Coop asks about material choices. Required QA and phase gates apply per unit. A blocked working unit cannot enter its paired QA; independent ready units may continue. Run Phase 8 only as a separately owner-requested route after implementation-range; final-owner-yes remains separate.
+ For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+ 
+ 
+diff --git a/.systems/ai/templates/autopilot/README.md b/.systems/ai/templates/autopilot/README.md
+index 2cef88e..8c85103 100644
+--- a/.systems/ai/templates/autopilot/README.md
++++ b/.systems/ai/templates/autopilot/README.md
+@@ -1,5 +1,7 @@
+ # Autopilot Templates
+ 
++Interaction modes are resolved under execution-modes.md for approved ranges. execution-readiness.template.json is an optional inspection projection for check-execution-modes --state; metadata is not verified authority. Run state persists execution independently of autopilot.mode.
++
+ Templates for project-local autopilot run artifacts and gate artifacts.
+ 
+ Suggested destinations:
+diff --git a/.systems/ai/templates/autopilot/execution-readiness.template.json b/.systems/ai/templates/autopilot/execution-readiness.template.json
+new file mode 100644
+index 0000000..6b7c4d9
+--- /dev/null
++++ b/.systems/ai/templates/autopilot/execution-readiness.template.json
+@@ -0,0 +1,42 @@
++{
++  "schema": 1,
++  "execution": {
++    "mode": "auto",
++    "scope": "task",
++    "scope_id": "example-task",
++    "source": "new-work-default",
++    "approval_reference": "decisions/owner-scope.md"
++  },
++  "baseline": {
++    "assessed": "verified-baseline",
++    "current": "verified-baseline"
++  },
++  "units": [
++    {
++      "id": "UNIT-001",
++      "work_kind": "implementation",
++      "dependencies": [],
++      "dependencies_known": true,
++      "isolation_verified": true,
++      "resources": [
++        "files/example"
++      ],
++      "gates_ready": true,
++      "dod_testable": true,
++      "risk": "low",
++      "required_actions": ["local-write"],
++      "approved_actions": ["local-write"],
++      "approval_reference": "decisions/owner-scope.md",
++      "status": "pending",
++      "quality_current": false,
++      "capture_complete": false
++    }
++  ],
++  "decisions": [],
++  "requested_status": "inspect",
++  "final_check": {
++    "requested": false,
++    "approval_reference": null,
++    "owner_yes": false
++  }
++}
+diff --git a/.systems/ai/templates/autopilot/readiness.template.md b/.systems/ai/templates/autopilot/readiness.template.md
+index c0de146..fbca844 100644
+--- a/.systems/ai/templates/autopilot/readiness.template.md
++++ b/.systems/ai/templates/autopilot/readiness.template.md
+@@ -35,6 +35,19 @@ readiness:
+   readiness-result: draft # draft | blocked | awaiting-owner | ready | superseded
+   superseded-by: null
+ 
++execution:
++  mode: auto # auto | human-coop
++  scope: task # task | project | session
++  scope-id: <owner-approved-scope-id>
++  source: <explicit-choice-or-new-work-default>
++  approval-reference: <actual-owner-scope-reference>
++  readiness-projection: <optional-execution-readiness-json-path-or-none>
++  completed-units: []
++  blocked-units: []
++  pending-decisions: []
++  runnable-subset: []
++  independence-evidence: <current-dependency-write-resource-and-gate-evidence>
++
+ scanned-sources:
+   repo:
+     - AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md
+@@ -102,7 +115,7 @@ range-readiness:
+     stop-before-phase-8: <confirmed|blocked|not-applicable>
+ 
+ delivery-constraints:
+-  mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>
++  mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|auto-unbounded|not-set>
+   deadline: <timestamp|none>
+   timezone: <IANA timezone|none>
+   time-budget: <duration|none>
+@@ -129,6 +142,10 @@ owner-decisions:
+     classification: <owner-preference|high-impact|critical-risk|blocked-by-missing-facts>
+     decision: <decision-needed>
+     why-needed-now: <reason>
++    disposition: <pending|agent-choice|owner-approved>
++    affected-units: []
++    assumption: <safe-assumption-or-none>
++    override-impact: <impact-of-later-change>
+     options:
+       - option: <recommended-option>
+         impact: <impact>
+@@ -171,10 +188,10 @@ Record execution owner, backend/capacity evidence, DAG, write/resource reservati
+ integration owner and remaining checkpoint task slots. Unverified capability means
+ serial fallback, not readiness for isolated writes.
+ 
+-`ready` is allowed only when every blocking item is `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied.
++`ready` is allowed only for an explicit runnable subset whose blocking items are `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied. Under execution-modes.md, excluded units and their dependents remain blocked and cannot be dispatched.
+ 
+ For `planning-range`, missing architecture, plan, optional owner-requested packaging, and specs are not blockers when they are explicit outputs of the run. Product-code writes are always forbidden.
+ 
+ For `implementation-range`, missing Architecture QA PASS, Plan QA PASS, packaging decision or solo-by-default/not-requested packaging decision, first Spec QA PASS, safe implementation write scope, or checkpoint policy is blocking.
+ 
+-Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`. Readiness cannot be `ready` while a material owner decision is pending.
++Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`. Readiness cannot be `ready` for a unit blocked by a pending material decision. A separately requested final check uses its owner-authorized route after the range.
+diff --git a/.systems/ai/templates/autopilot/state.template.md b/.systems/ai/templates/autopilot/state.template.md
+index 57f86dc..9bf5174 100644
+--- a/.systems/ai/templates/autopilot/state.template.md
++++ b/.systems/ai/templates/autopilot/state.template.md
+@@ -47,13 +47,24 @@ current:
+   last-stable-pass: null
+   next-transition: null
+ 
++execution:
++  mode: auto # auto | human-coop; independent of autopilot.mode
++  scope: task # task | project | session
++  scope-id: <owner-approved-scope-id>
++  source: <explicit-choice-or-new-work-default>
++  approval-reference: <actual-owner-scope-reference>
++  readiness-projection: <optional-execution-readiness-json-path-or-none>
++  completed-units: []
++  blocked-units: []
++  pending-decisions: []
++
+ retry-counts:
+   spec-qa-for-current-task: 0
+   quality-for-current-task: 0
+   total-for-run: 0
+ 
+ budget:
+-  max-runtime-minutes: 300
++  max-runtime-minutes: null # no implicit timebox; preserve explicit/legacy limits on resume
+   max-spec-retries-per-task: 2
+   max-quality-retries-per-task: 2
+   max-total-retries: 32
+diff --git a/.systems/ai/templates/autopilot/task-decisions.template.md b/.systems/ai/templates/autopilot/task-decisions.template.md
+index 174631e..53fa1ca 100644
+--- a/.systems/ai/templates/autopilot/task-decisions.template.md
++++ b/.systems/ai/templates/autopilot/task-decisions.template.md
+@@ -11,6 +11,12 @@ Every decision made during spec, implementation, QA, fix loop, distillation, che
+   phase: null
+   classification: auto-resolvable # auto-resolvable | owner-preference | high-impact | critical-risk | blocked-by-missing-facts
+   status: chosen # chosen | awaiting-owner | superseded
++  disposition: agent-choice # pending | agent-choice | owner-approved
++  execution-mode: <auto|human-coop>
++  affected-units: []
++  blocking-reason: null
++  approval-reference: null
++  assumption: null
+   chosen: recommendation # recommendation | alternative | none
+   recommendation: null
+   recommendation-impact: null
+diff --git a/.systems/ai/templates/projects/plans.template.md b/.systems/ai/templates/projects/plans.template.md
+index edcb49d..3622b57 100644
+--- a/.systems/ai/templates/projects/plans.template.md
++++ b/.systems/ai/templates/projects/plans.template.md
+@@ -14,7 +14,7 @@ It is not a loose planning notes file. Operational project plans belong in `plan
+ 
+ ## Delivery Constraints
+ 
+-Implementation-capable plans use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or bounded owner opt-out, must-have outcome, cutline, deferred scope, quality floor, and overrun route.
++Implementation-capable plans use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox, bounded owner opt-out or new Auto auto-unbounded, must-have outcome, cutline, deferred scope, quality floor, and overrun route.
+ 
+ ## Rules
+ 
+diff --git a/.systems/ai/templates/projects/status.template.md b/.systems/ai/templates/projects/status.template.md
+index bfaed93..7675582 100644
+--- a/.systems/ai/templates/projects/status.template.md
++++ b/.systems/ai/templates/projects/status.template.md
+@@ -17,3 +17,11 @@
+ | `autopilot-mode` | `<none|supervised|semi-autonomous|autonomous-execution>` |
+ | `autopilot-state` | `<not-running|running|stopped|awaiting-owner|completed>` |
+ | `autopilot-run` | `<none|autopilot-001|autopilot-002|...>` |
++| `execution-mode` | `<auto|human-coop>` |
++| `execution-mode-scope` | `<task|project|session>` |
++| `execution-mode-source` | `<explicit-choice|new-work-default|inherited>` |
++| `execution-mode-scope-id` | `<scope-id>` |
++
++Use execution-modes.md for selection and resume. Missing fields in historical
++status do not retroactively grant new autonomy. Record session identity and
++decision references in the active run/task artifact when applicable.
+diff --git a/.systems/ai/workflow/phase-5-quality.md b/.systems/ai/workflow/phase-5-quality.md
+index 1a2883c..59c76c6 100644
+--- a/.systems/ai/workflow/phase-5-quality.md
++++ b/.systems/ai/workflow/phase-5-quality.md
+@@ -37,6 +37,7 @@
+ 
+ - Codex may mark low-risk and medium-risk gates as `PASS` when evidence is complete and policy gates are satisfied.
+ - The human owner must approve high-risk, critical-risk, and final closure gates as defined in `.systems/ai/core/risk-model.md`.
++- For high-risk local work, verify an existing explicit plan approval that covers this formal assessment under execution-modes.md. Do not request it again; actual evidence still determines PASS/FAIL. Critical-risk and final owner acceptance keep their separate gates.
+ 
+ ### Evidence required
+ 
+diff --git a/.systems/scripts/check-execution-modes b/.systems/scripts/check-execution-modes
+new file mode 100755
+index 0000000..4cf02bd
+--- /dev/null
++++ b/.systems/scripts/check-execution-modes
+@@ -0,0 +1,69 @@
++#!/usr/bin/env bash
++set -euo pipefail
++root="$(cd "$(dirname "$0")/../.." && pwd -P)"
++if [[ "${1:-}" == --state ]]; then
++  [[ "$#" == 2 ]] || { echo "Usage: check-execution-modes [--state file.json]" >&2; exit 2; }
++  exec python3 "$root/.systems/scripts/lib/execution-modes.py" --state "$2"
++fi
++[[ "$#" == 0 ]] || { echo "Unknown execution modes argument" >&2; exit 2; }
++cd "$root"
++source .systems/scripts/lib/policy-boundaries.sh
++fail=0
++require_literal() {
++  if [[ ! -f "$1" ]] || ! rg -qF -- "$2" "$1"; then
++    echo "Execution modes contract missing: $1: $2"
++    fail=1
++  fi
++}
++contract=.systems/ai/core/execution-modes.md
++for field in '## Mode Selection' '## Autonomous Choices' '## Approval Scope' \
++  '## Independent Continuation' '## Runtime Evidence' '## Delivery And Completion' \
++  'New work defaults to `auto`' 'Resume preserves the recorded choice' \
++  'Human Coop' 'agent-choice' 'auto-unbounded' 'no-progress' \
++  'Legacy artifacts' 'Final-owner-yes must not be inferred' \
++  'submission' 'Git revert' 'partial / awaiting-owner'; do
++  require_literal "$contract" "$field"
++done
++for file in AGENTS.md HUMANS.md README.md \
++  .systems/ai/core/{operating-model,task-intake,command-routing,workflow,autopilot,owner-decision-checkpoints,delivery-constraints,permissions,risk-model,implementation-slicing,quality-review,contract-compliance,response-contract,commands}.md; do
++  require_literal "$file" 'execution-modes.md'
++done
++for template in .systems/ai/templates/autopilot/{readiness,state}.template.md; do
++  execution_block="$(awk '/^execution:$/ { active=1; next } active && /^[^ ]/ { exit } active { print }' "$template")"
++  for field in 'execution:' 'mode: auto' 'scope:' 'scope-id:' 'source:' \
++    'approval-reference:' 'completed-units:' 'blocked-units:' 'pending-decisions:'; do
++    require_literal "$template" "$field"
++    if [[ "$field" != execution: ]] && ! printf '%s\n' "$execution_block" | rg -qF -- "$field"; then
++      echo "Execution modes producer field missing: $template: $field"
++      fail=1
++    fi
++  done
++done
++require_literal .systems/ai/templates/autopilot/state.template.md 'max-runtime-minutes: null'
++require_literal .systems/ai/templates/autopilot/readiness.template.md 'runnable-subset:'
++require_literal .systems/ai/templates/autopilot/readiness.template.md 'independence-evidence:'
++for field in 'disposition:' 'affected-units:' 'override-impact:'; do
++  require_literal .systems/ai/templates/autopilot/task-decisions.template.md "$field"
++  require_literal .systems/ai/templates/autopilot/readiness.template.md "$field"
++done
++require_literal .systems/ai/templates/projects/status.template.md 'execution-mode'
++require_literal .systems/ai/core/response-contract.md 'Blocked units/pending decisions'
++require_literal .systems/scripts/validate-workflow 'check-execution-modes'
++require_literal .systems/scripts/check-required-artifacts 'check-execution-modes'
++require_literal .systems/scripts/check-validator-smoke-tests '"execution-modes"'
++require_literal .systems/scripts/check-review-completeness-gate 'check-execution-modes'
++require_literal .systems/scripts/lib/validation-checks.json '"check-execution-modes"'
++for file in .systems/scripts/lib/execution-modes.py .systems/scripts/tests/execution-modes.py \
++  .systems/ai/templates/autopilot/execution-readiness.template.json; do
++  [[ -f "$file" && ! -L "$file" ]] || { echo "Execution modes artifact missing: $file"; fail=1; }
++done
++python3 .systems/scripts/lib/execution-modes.py --state .systems/ai/templates/autopilot/execution-readiness.template.json || fail=1
++policy_reject_unsafe_pattern \
++  '(auto mode|execution mode|Auto)[^.\n]{0,60}\b(may|can|allows?|grants?|authorizes?)\b[^.\n]{0,70}\b(bypass|skip|grant|authorize|infer)\b[^.\n]{0,60}\b(approval|permission|QA|DoD|push|production|final-owner-yes)\b' \
++  'Unsafe execution mode authority wording' \
++  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/templates
++policy_reject_unsafe_pattern \
++  '(auto mode|Auto)[^.\n]{0,60}\b(may|can|should)\b[^.\n]{0,50}\b(mark|declare|report)\b[^.\n]{0,40}\b(completed|PASS)\b[^.\n]{0,40}\b(incomplete|unresolved|missing)\b' \
++  'Unsafe execution mode completion wording' \
++  "$contract" .systems/ai/core/autopilot.md .systems/ai/core/response-contract.md
++exit "$fail"
+diff --git a/.systems/scripts/check-owner-decision-checkpoints b/.systems/scripts/check-owner-decision-checkpoints
+index e8f157a..0bc7edc 100755
+--- a/.systems/scripts/check-owner-decision-checkpoints
++++ b/.systems/scripts/check-owner-decision-checkpoints
+@@ -71,7 +71,7 @@ for behavior in \
+   'No owner decision needed' \
+   'Do not ask generic permission' \
+   'Optional refinements and disclosed auto-resolved decisions do not block the next phase' \
+-  'never continue `running` with a pending material decision' \
++  'never execute a unit blocked by a pending material decision' \
+   'must not ask live, follow-up, clarification, or other interactive questions' \
+   'must not interrupt mid-review' \
+   'Questions skipped by owner opt-out'
+@@ -148,7 +148,8 @@ require_literal ".systems/ai/templates/autopilot/task-decisions.template.md" 'au
+ require_literal ".systems/ai/workflow/phase-0-idea-validation.md" '`auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`' "idea validation decision taxonomy"
+ require_literal ".systems/ai/templates/workflow/phase-0-idea-validation.template.md" '<auto-resolvable|owner-preference|high-impact|critical-risk|blocked-by-missing-facts>' "idea validation template taxonomy"
+ require_literal ".systems/ai/workflow/phase-0-repo-intake.md" '`auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, `blocked-by-missing-facts`' "repo intake decision taxonomy"
+-require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'Readiness cannot be `ready` while a material owner decision is pending.' "autopilot readiness pending-decision gate"
++require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'Readiness cannot be `ready` for a unit blocked by a pending material decision.' "autopilot readiness pending-decision gate"
++require_literal "$contract" 'execution-modes.md' "mode-aware decision eligibility"
+ require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'max-batch-size: 3' "autopilot readiness batch limit"
+ require_literal ".systems/ai/templates/dreaming/dream-report.template.md" 'Live questions asked: `none`' "Dreaming non-interactive queue"
+ require_literal "$contract" '## Decision Record Producers' "decision record producer contract"
+@@ -201,7 +202,8 @@ unsafe_patterns=(
+   '(high-impact|critical-risk|blocked-by-missing-facts)[^.\n]{0,60}(is|are|may be|can be)[^.\n]{0,30}auto-resolv'
+   '(no-question opt-out|nie dopytuj|no clarifying questions)[^.\n]{0,80}(may|can|allows?|bypasses?|guesses?|permits?|authorizes?)[^.\n]{0,60}(scope|acceptance criteria|risk|permissions|security|billing|migrations|production|external effects|DoD|evidence|QA|Quality|approvals|stop conditions)'
+   'autopilot[^.\n]{0,80}(asks?|may ask|can ask)[^.\n]{0,40}(live|follow-up|clarification|interactive)? ?questions[^.\n]{0,40}running'
+-  'autopilot[^.\n]{0,80}((may|can|should|will) continue|continues)[^.\n]{0,50}pending material decision'
++  'autopilot[^.\n]{0,80}((may|can|should|will) continue|continues) (running )?(with|despite|regardless of|while)( a)? pending material decision'
++  '(autopilot|Auto)[^.\n]{0,60}(may|can|should|will)[^.\n]{0,30}(execute|dispatch)[^.\n]{0,40}(blocked unit|unit blocked by a pending)'
+   'Dreaming Mode[^.\n]{0,60}(asks?|may ask|can ask)[^.\n]{0,40}(live|follow-up|clarification|interactive)? ?questions'
+   'read-only review[^.\n]{0,60}(interrupts?|may interrupt|can interrupt)[^.\n]{0,30}(to ask|with questions)'
+   'Optional Knowledge Capture[^.\n]{0,60}(triggers?|requires?)[^.\n]{0,30}(interactive question|live question)'
+diff --git a/.systems/scripts/check-required-artifacts b/.systems/scripts/check-required-artifacts
+index 48416e7..26ab913 100755
+--- a/.systems/scripts/check-required-artifacts
++++ b/.systems/scripts/check-required-artifacts
+@@ -2,6 +2,11 @@
+ set -euo pipefail
+ 
+ required=(
++  ".systems/ai/core/execution-modes.md"
++  ".systems/scripts/check-execution-modes"
++  ".systems/scripts/lib/execution-modes.py"
++  ".systems/scripts/tests/execution-modes.py"
++  ".systems/ai/templates/autopilot/execution-readiness.template.json"
+   ".systems/ai/core/parallel-compatibility.md"
+   ".systems/ai/templates/orchestration/compatibility.template.json"
+   ".systems/scripts/lib/parallel-compatibility.py"
+diff --git a/.systems/scripts/check-review-completeness-gate b/.systems/scripts/check-review-completeness-gate
+index 108c141..d67741e 100755
+--- a/.systems/scripts/check-review-completeness-gate
++++ b/.systems/scripts/check-review-completeness-gate
+@@ -57,6 +57,7 @@ policy_validators=(
+   .systems/scripts/check-end-of-task-capture
+   .systems/scripts/check-default-idea-validation-opt-out
+   .systems/scripts/check-owner-decision-checkpoints
++  .systems/scripts/check-execution-modes
+   .systems/scripts/check-full-qa-verification
+   .systems/scripts/check-cross-system-upgrade-handoff
+   .systems/scripts/check-worktree-bootstrap
+diff --git a/.systems/scripts/check-validator-smoke-tests b/.systems/scripts/check-validator-smoke-tests
+index 89cefa2..9750886 100755
+--- a/.systems/scripts/check-validator-smoke-tests
++++ b/.systems/scripts/check-validator-smoke-tests
+@@ -24,6 +24,7 @@ class SmokeInterrupted(Exception):
+ # Executable compatibility index: each route binds a live ID and command.
+ # It is validated below; an unconnected descriptive comment is not coverage.
+ COVERAGE_INDEX = {
++    "execution-modes": ("execution-modes-valid", "check-execution-modes"),
+     "execution-efficiency": ("execution-efficiency-behavioral", "execution-efficiency.py"),
+     "contract-compliance": ("contract-compliance-requires-side-task-mode", "check-contract-compliance"),
+     "cross-system-upgrade-handoff": ("cross-system-upgrade-handoff-valid", "check-cross-system-upgrade-handoff"),
+diff --git a/.systems/scripts/lib/execution-modes.py b/.systems/scripts/lib/execution-modes.py
+new file mode 100644
+index 0000000..d4317c8
+--- /dev/null
++++ b/.systems/scripts/lib/execution-modes.py
+@@ -0,0 +1,223 @@
++#!/usr/bin/env python3
++"""Pure readiness projection. Declarations are not verified approvals or isolation."""
++import argparse
++import json
++from pathlib import Path
++import re
++import sys
++
++
++class InvalidState(ValueError):
++    pass
++
++
++def require(condition, message):
++    if not condition:
++        raise InvalidState(message)
++
++
++def keys(value, expected, label):
++    require(isinstance(value, dict) and set(value) == set(expected), label + ": fields")
++
++
++def text(value, label):
++    require(isinstance(value, str) and bool(value.strip()), label + ": nonempty text")
++
++
++def flag(value, label):
++    require(type(value) is bool, label + ": boolean")
++
++
++def identifiers(value, label):
++    require(isinstance(value, list) and all(isinstance(x, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]*", x) for x in value), label + ": identifiers")
++    require(len(set(value)) == len(value), label + ": duplicates")
++
++
++def resolve_mode(task=None, session=None, project=None, resumed=None):
++    # A new explicit choice is passed by the coordinator; otherwise resume wins.
++    for value in (task, session, project, resumed):
++        require(value is None or isinstance(value, str) and value in {"auto", "human-coop"}, "unknown execution mode")
++    choice = task or resumed or session or project or "auto"
++    require(choice in {"auto", "human-coop"}, "unknown execution mode")
++    return choice
++
++
++def overlap(left, right):
++    a, b = left.casefold().rstrip("/"), right.casefold().rstrip("/")
++    return a == b or a.startswith(b + "/") or b.startswith(a + "/")
++
++
++def assess(record):
++    keys(record, ("schema", "execution", "baseline", "units", "decisions", "requested_status", "final_check"), "projection")
++    require(type(record["schema"]) is int and record["schema"] == 1, "unsupported projection schema")
++    execution = record["execution"]
++    keys(execution, ("mode", "scope", "scope_id", "source", "approval_reference"), "execution")
++    require(isinstance(execution["mode"], str) and execution["mode"] in {"auto", "human-coop"}, "unknown execution mode")
++    require(execution["scope"] in {"task", "project", "session"}, "execution scope")
++    for key in ("scope_id", "source"):
++        text(execution[key], key)
++    require(execution["approval_reference"] is None or isinstance(execution["approval_reference"], str) and bool(execution["approval_reference"].strip()), "approval reference")
++    baseline = record["baseline"]
++    keys(baseline, ("assessed", "current"), "baseline")
++    for key in baseline:
++        text(baseline[key], "baseline")
++    require(isinstance(record["units"], list) and bool(record["units"]), "empty units")
++    units = {}
++    blocked = {}
++    completed = []
++    for unit in record["units"]:
++        keys(unit, ("id", "work_kind", "dependencies", "dependencies_known", "isolation_verified", "resources",
++                    "gates_ready", "dod_testable", "risk", "required_actions", "approved_actions",
++                    "approval_reference", "status", "quality_current", "capture_complete"), "unit")
++        identifiers([unit["id"]], "unit id")
++        require(unit["work_kind"] in {"planning", "implementation", "read-only"}, "unknown work kind")
++        require(unit["id"] not in units, "duplicate unit id")
++        identifiers(unit["dependencies"], "dependencies")
++        for field in ("dependencies_known", "isolation_verified", "gates_ready", "dod_testable", "quality_current", "capture_complete"):
++            flag(unit[field], field)
++        require(unit["risk"] in {"low", "medium", "high", "critical"}, "unknown risk")
++        require(unit["status"] in {"pending", "completed"}, "unknown unit status")
++        for field in ("required_actions", "approved_actions"):
++            identifiers(unit[field], field)
++            require(set(unit[field]).issubset({"artifact-write", "local-write", "product-write", "formal-quality", "local-commit", "production-deploy", "external-write", "billing", "destructive", "migration", "security-change"}), "unknown action")
++        require(unit["work_kind"] != "planning" or set(unit["required_actions"]).issubset({"artifact-write", "formal-quality", "local-commit"}), "planning request cannot implement")
++        require(unit["work_kind"] != "implementation" or bool(set(unit["required_actions"]) & {"artifact-write", "local-write", "product-write", "production-deploy", "external-write", "billing", "destructive", "migration", "security-change"}), "implementation unit lacks declared write action")
++        require(unit["work_kind"] != "read-only" or not unit["required_actions"], "read-only unit cannot request writes")
++        require(isinstance(unit["resources"], list), "resource list")
++        require(not unit["required_actions"] or bool(unit["resources"]), "action unit lacks resource claims")
++        for resource in unit["resources"]:
++            text(resource, "resource")
++            require(not any(x in resource for x in ("..", "\\", "\n", "\r")) and not resource.startswith("/") and all(x not in {"", "."} for x in resource.rstrip("/").split("/")), "unsafe resource identity")
++        require(len(set(unit["resources"])) == len(unit["resources"]), "duplicate resource")
++        require(unit["approval_reference"] is None or isinstance(unit["approval_reference"], str) and bool(unit["approval_reference"].strip()), "unit approval reference")
++        units[unit["id"]] = unit
++
++    visited, active = set(), set()
++    def visit(identifier):
++        require(identifier not in active, "dependency cycle")
++        if identifier in visited:
++            return
++        active.add(identifier)
++        for dependency in units[identifier]["dependencies"]:
++            require(dependency in units, "unknown dependency id")
++            visit(dependency)
++        active.remove(identifier)
++        visited.add(identifier)
++    for identifier in units:
++        visit(identifier)
++
++    for unit in units.values():
++        if unit["status"] == "completed":
++            require(all(units[x]["status"] == "completed" for x in unit["dependencies"]), "completed unit has unfinished dependency")
++
++    for identifier, unit in units.items():
++        reasons = []
++        if baseline["assessed"] != baseline["current"]:
++            reasons.append("baseline-drift")
++        for field in ("dependencies_known", "isolation_verified", "gates_ready", "dod_testable"):
++            if not unit[field]:
++                reasons.append(field)
++        if not set(unit["required_actions"]).issubset(unit["approved_actions"]):
++            reasons.append("unapproved-action")
++        if unit["risk"] in {"high", "critical"} or unit["required_actions"]:
++            if not unit["approval_reference"] or not execution["approval_reference"]:
++                reasons.append("missing-approval-reference")
++        if unit["risk"] == "critical":
++            reasons.append("human-led-critical-route")
++        if unit["status"] == "completed":
++            require(not reasons and unit["quality_current"] and unit["capture_complete"], "completed unit lacks DoD/gates/current QA/capture")
++            completed.append(identifier)
++        if reasons:
++            blocked[identifier] = reasons
++
++    require(isinstance(record["decisions"], list), "decisions list")
++    seen, queue = set(), []
++    for decision in record["decisions"]:
++        keys(decision, ("id", "classification", "disposition", "affected_units", "reversible", "within_scope", "permission_covered", "reason", "override_impact"), "decision")
++        identifiers([decision["id"]], "decision id")
++        require(decision["id"] not in seen, "duplicate decision id")
++        seen.add(decision["id"])
++        require(decision["classification"] in {"auto-resolvable", "owner-preference", "high-impact", "critical-risk", "blocked-by-missing-facts"}, "decision classification")
++        require(decision["disposition"] in {"pending", "agent-choice", "owner-approved"}, "decision disposition")
++        identifiers(decision["affected_units"], "affected units")
++        require(bool(decision["affected_units"]) and set(decision["affected_units"]).issubset(units), "unknown/empty affected units")
++        for field in ("reversible", "within_scope", "permission_covered"):
++            flag(decision[field], field)
++        for field in ("reason", "override_impact"):
++            text(decision[field], field)
++        if decision["disposition"] == "agent-choice":
++            require(decision["classification"] not in {"critical-risk", "blocked-by-missing-facts"} and all(decision[x] for x in ("reversible", "within_scope", "permission_covered")), "unsafe agent choice")
++            require(execution["mode"] == "auto" or decision["classification"] == "auto-resolvable", "Human Coop material preference requires owner")
++            if decision["classification"] == "high-impact":
++                require(bool(execution["approval_reference"]) and all(units[x]["approval_reference"] for x in decision["affected_units"]), "high-impact choice lacks scoped approval references")
++        if decision["disposition"] == "owner-approved":
++            require(execution["approval_reference"] is not None and decision["permission_covered"] and decision["within_scope"], "uncovered owner decision")
++        if decision["disposition"] == "pending":
++            queue.append(decision["id"])
++            for identifier in decision["affected_units"]:
++                require(identifier not in completed, "pending decision affects claimed completion")
++                blocked.setdefault(identifier, []).append("decision:" + decision["id"])
++
++    # Simultaneous candidate reservations must be disjoint, even before dispatch.
++    candidates = [x for x in units if x not in completed and x not in blocked]
++    for index, left in enumerate(candidates):
++        for right in candidates[index + 1:]:
++            if any(overlap(a, b) for a in units[left]["resources"] for b in units[right]["resources"]):
++                blocked.setdefault(left, []).append("shared-resource:" + right)
++                blocked.setdefault(right, []).append("shared-resource:" + left)
++
++    # Shared reservations and dependency uncertainty prevent a claim of independence.
++    changed = True
++    while changed:
++        changed = False
++        for identifier, unit in units.items():
++            if identifier in blocked or identifier in completed:
++                continue
++            dependencies = [x for x in unit["dependencies"] if x not in completed]
++            shared = [other for other in blocked if any(overlap(a, b) for a in unit["resources"] for b in units[other]["resources"])]
++            if dependencies or shared:
++                blocked[identifier] = ["dependency:" + x for x in dependencies] + ["shared-resource:" + x for x in shared]
++                changed = True
++    ready = [x for x in units if x not in blocked and x not in completed]
++    requested = record["requested_status"]
++    require(requested in {"inspect", "running", "completed"}, "requested status")
++    require(requested != "running" or bool(ready), "running without independent ready unit")
++    require(requested != "completed" or len(completed) == len(units) and not queue, "incomplete DoD cannot be completed")
++    final = record["final_check"]
++    keys(final, ("requested", "approval_reference", "owner_yes"), "final check")
++    flag(final["requested"], "final requested")
++    flag(final["owner_yes"], "final owner yes")
++    require(final["approval_reference"] is None or isinstance(final["approval_reference"], str) and bool(final["approval_reference"].strip()), "final approval reference")
++    require(not final["requested"] or final["approval_reference"] is not None, "final check lacks explicit request reference")
++    require(not final["owner_yes"], "projection cannot attest final-owner-yes")
++    result = "completed" if len(completed) == len(units) else "running" if ready else "awaiting-owner" if queue else "blocked"
++    return {"mode": execution["mode"], "ready_units": ready, "blocked_units": blocked,
++            "completed_units": completed, "pending_decisions": queue, "result": result,
++            "authority": "inspection-only"}
++
++
++def unique_keys(pairs):
++    output = {}
++    for key, value in pairs:
++        require(key not in output, "duplicate JSON key")
++        output[key] = value
++    return output
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--state", type=Path, required=True)
++    args = parser.parse_args()
++    try:
++        aliases = {Path("/tmp"): Path("/private/tmp"), Path("/var"): Path("/private/var")}
++        require(not any(path.is_symlink() and aliases.get(path) != path.resolve() for path in (args.state, *args.state.parents)), "symlink projection")
++        data = json.loads(args.state.read_text(), object_pairs_hook=unique_keys)
++        print(json.dumps(assess(data), sort_keys=True))
++        return 0
++    except (InvalidState, OSError, ValueError, TypeError, KeyError, RecursionError) as error:
++        print("Execution modes error: " + str(error), file=sys.stderr)
++        return 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/.systems/scripts/lib/validation-checks.json b/.systems/scripts/lib/validation-checks.json
+index d9abe63..7bd7c8c 100644
+--- a/.systems/scripts/lib/validation-checks.json
++++ b/.systems/scripts/lib/validation-checks.json
+@@ -1,6 +1,10 @@
+ {
+   "schema_version": 1,
+   "checks": {
++    "check-execution-modes": {
++      "dependencies": [],
++      "scope": "framework"
++    },
+     "check-phase-commit-policy": {
+       "dependencies": [],
+       "scope": "framework"
+diff --git a/.systems/scripts/smoke/core.sh b/.systems/scripts/smoke/core.sh
+index c56d406..33b63f0 100644
+--- a/.systems/scripts/smoke/core.sh
++++ b/.systems/scripts/smoke/core.sh
+@@ -947,5 +947,45 @@ mv "$tmp/phase-commit.orig" "$tmp/.systems/ai/core/phase-commit-policy.md"
+ 
+ run_must_pass "parallel-cross-system-offline-regressions" python3 .systems/scripts/tests/parallel-compatibility.py
+ 
++run_must_pass "execution-modes-valid" bash .systems/scripts/check-execution-modes
++run_must_pass "execution-modes-behavioral" python3 .systems/scripts/tests/execution-modes.py
++cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/owner-mode.orig"
++printf '\nautopilot may continue only verified independent units while a pending material decision blocks excluded units and dependents.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
++run_must_pass "execution-modes-qualified-independent-policy" bash .systems/scripts/check-owner-decision-checkpoints
++printf '\nAuto may dispatch a unit blocked by a pending material decision.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
++run_must_fail "execution-modes-blocked-unit-policy" --expect-literal 'Unsafe owner decision checkpoint wording' bash .systems/scripts/check-owner-decision-checkpoints
++mv "$tmp/owner-mode.orig" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
++cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
++printf '\nAuto must not bypass QA.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
++run_must_pass "execution-modes-safe-prohibition" bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
++for em_join in direct but however period colon semicolon unless yet; do
++  case "$em_join" in
++    direct) em_prefix='' ;;
++    but) em_prefix='Auto must not bypass QA, but ' ;;
++    however) em_prefix='Auto must not bypass QA, however ' ;;
++    period) em_prefix='Auto must not bypass QA. ' ;;
++    colon) em_prefix='Auto must not bypass QA: ' ;;
++    semicolon) em_prefix='Auto must not bypass QA; ' ;;
++    unless) em_prefix='Auto must not bypass QA unless ' ;;
++    yet) em_prefix='Auto must not bypass QA, yet ' ;;
++  esac
++  cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
++  printf '\n%sAuto may bypass QA.\n' "$em_prefix" >> "$tmp/.systems/ai/core/execution-modes.md"
++  run_must_fail "execution-modes-boundary-$em_join" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes
++  mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
++done
++cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
++printf '\nAuto may mark completed with incomplete DoD.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
++run_must_fail "execution-modes-false-completion" --expect-literal 'Unsafe execution mode completion wording' bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
++mv "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
++run_must_fail "execution-modes-missing-contract" --expect-literal 'Execution modes contract missing' bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
++cp "$tmp/.systems/ai/templates/autopilot/state.template.md" "$tmp/execution-state.orig"
++perl -0pi -e 's/  approval-reference: <actual-owner-scope-reference>\n//' "$tmp/.systems/ai/templates/autopilot/state.template.md"
++run_must_fail "execution-modes-missing-producer-field" --expect-literal 'Execution modes producer field missing' bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-state.orig" "$tmp/.systems/ai/templates/autopilot/state.template.md"
++
+ echo "Owned smoke group passed."
+ smoke_suite_completed=1
+diff --git a/.systems/scripts/smoke/manifest.json b/.systems/scripts/smoke/manifest.json
+index 0e807c1..3b8131f 100644
+--- a/.systems/scripts/smoke/manifest.json
++++ b/.systems/scripts/smoke/manifest.json
+@@ -770,7 +770,23 @@
+     "phase-commit-policy-boundary-yet",
+     "phase-commit-policy-missing-source",
+     "parallel-cross-system-offline-regressions",
+-    "validation-scope-dependencies"
++    "validation-scope-dependencies",
++    "execution-modes-valid",
++    "execution-modes-behavioral",
++    "execution-modes-safe-prohibition",
++    "execution-modes-false-completion",
++    "execution-modes-missing-contract",
++    "execution-modes-missing-producer-field",
++    "execution-modes-boundary-direct",
++    "execution-modes-boundary-but",
++    "execution-modes-boundary-however",
++    "execution-modes-boundary-period",
++    "execution-modes-boundary-colon",
++    "execution-modes-boundary-semicolon",
++    "execution-modes-boundary-unless",
++    "execution-modes-boundary-yet",
++    "execution-modes-qualified-independent-policy",
++    "execution-modes-blocked-unit-policy"
+   ],
+   "external_assertion_audit": [
+     {
+@@ -3104,7 +3120,23 @@
+     "phase-commit-policy-boundary-yet": "core",
+     "phase-commit-policy-missing-source": "core",
+     "parallel-cross-system-offline-regressions": "core",
+-    "validation-scope-dependencies": "core"
++    "validation-scope-dependencies": "core",
++    "execution-modes-valid": "core",
++    "execution-modes-behavioral": "core",
++    "execution-modes-safe-prohibition": "core",
++    "execution-modes-false-completion": "core",
++    "execution-modes-missing-contract": "core",
++    "execution-modes-missing-producer-field": "core",
++    "execution-modes-boundary-direct": "core",
++    "execution-modes-boundary-but": "core",
++    "execution-modes-boundary-however": "core",
++    "execution-modes-boundary-period": "core",
++    "execution-modes-boundary-colon": "core",
++    "execution-modes-boundary-semicolon": "core",
++    "execution-modes-boundary-unless": "core",
++    "execution-modes-boundary-yet": "core",
++    "execution-modes-qualified-independent-policy": "core",
++    "execution-modes-blocked-unit-policy": "core"
+   },
+   "tests": [
+     {
+@@ -11455,6 +11487,182 @@
+       "cleanup_id": "owned-temporary-directory-cleanup",
+       "mutation_id": "peer-envelope-boundary-cases",
+       "expected_outcome": "offline positive and adversarial cases; no dispatch or writes"
++    },
++    {
++      "id": "execution-modes-valid",
++      "group": "core",
++      "helper": "run_must_pass",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_pass \"execution-modes-valid\" bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-valid",
++      "expected_outcome": "success"
++    },
++    {
++      "id": "execution-modes-behavioral",
++      "group": "core",
++      "helper": "run_must_pass",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_pass \"execution-modes-behavioral\" python3 .systems/scripts/tests/execution-modes.py",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-behavioral",
++      "expected_outcome": "success"
++    },
++    {
++      "id": "execution-modes-safe-prohibition",
++      "group": "core",
++      "helper": "run_must_pass",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_pass \"execution-modes-safe-prohibition\" bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-safe-prohibition",
++      "expected_outcome": "success"
++    },
++    {
++      "id": "execution-modes-false-completion",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-false-completion\" --expect-literal 'Unsafe execution mode completion wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-false-completion",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-missing-contract",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-missing-contract\" --expect-literal 'Execution modes contract missing' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-missing-contract",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-missing-producer-field",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-missing-producer-field\" --expect-literal 'Execution modes producer field missing' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-missing-producer-field",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-direct",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-direct",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-but",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-but",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-however",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-however",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-period",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-period",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-colon",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-colon",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-semicolon",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-semicolon",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-unless",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-unless",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-boundary-yet",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-boundary-yet",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-qualified-independent-policy",
++      "group": "core",
++      "helper": "run_must_pass",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_pass \"execution-modes-qualified-independent-policy\" bash .systems/scripts/check-owner-decision-checkpoints",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-qualified-independent-policy",
++      "expected_outcome": "success"
++    },
++    {
++      "id": "execution-modes-blocked-unit-policy",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-blocked-unit-policy\" --expect-literal 'Unsafe owner decision checkpoint wording' bash .systems/scripts/check-owner-decision-checkpoints",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-blocked-unit-policy",
++      "expected_outcome": "reject intended boundary with diagnostic"
+     }
+   ],
+   "files_sha256": {
+@@ -11463,6 +11671,6 @@
+     "workspace.sh": "1c36c1035dfaba35a3722536cea159ec6a39dc7c8e8e346da37a3e02a4091c4c",
+     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
+     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
+-    "core.sh": "2fa1ac0c1d34a9622b865e4b3881b2b895ac8020fec905374bb19dcb4189894a"
++    "core.sh": "3c95e3dd60ad4d396ab3dfbbb15b517370d00f7104eb39905431d58ef719102a"
+   }
+ }
+diff --git a/.systems/scripts/tests/execution-modes.py b/.systems/scripts/tests/execution-modes.py
+new file mode 100644
+index 0000000..fb8c6d9
+--- /dev/null
++++ b/.systems/scripts/tests/execution-modes.py
+@@ -0,0 +1,268 @@
++#!/usr/bin/env python3
++"""Offline regressions for mode selection and conservative readiness."""
++import copy
++import importlib.util
++import json
++from pathlib import Path
++import subprocess
++import tempfile
++import unittest
++
++ROOT = Path(__file__).resolve().parents[3]
++spec = importlib.util.spec_from_file_location("execution_modes", ROOT / ".systems/scripts/lib/execution-modes.py")
++em = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(em)
++
++
++class ExecutionModes(unittest.TestCase):
++    def setUp(self):
++        self.record = json.loads((ROOT / ".systems/ai/templates/autopilot/execution-readiness.template.json").read_text())
++
++    def add_unit(self, name="UNIT-002", dependencies=None, resources=None):
++        unit = copy.deepcopy(self.record["units"][0])
++        unit.update(id=name, dependencies=dependencies or [], resources=resources or ["files/" + name])
++        self.record["units"].append(unit)
++        return unit
++
++    def decision(self, disposition="pending", classification="owner-preference"):
++        decision = dict(id="D-001", classification=classification, disposition=disposition,
++                        affected_units=["UNIT-001"], reversible=True, within_scope=True,
++                        permission_covered=True, reason="accepted UX goal", override_impact="local rework and re-QA")
++        self.record["decisions"].append(decision)
++        return decision
++
++    def test_selection_and_resume(self):
++        self.assertEqual(em.resolve_mode(), "auto")
++        self.assertEqual(em.resolve_mode(project="human-coop"), "human-coop")
++        self.assertEqual(em.resolve_mode(task="auto", project="human-coop"), "auto")
++        self.assertEqual(em.resolve_mode(session="human-coop", project="auto"), "human-coop")
++        self.assertEqual(em.resolve_mode(resumed="human-coop"), "human-coop")
++        self.assertEqual(em.resolve_mode(), "auto")  # next task has no expired override
++        for invalid in ("", "unknown", [], False):
++            with self.subTest(invalid=invalid), self.assertRaisesRegex(em.InvalidState, "unknown execution mode"):
++                em.resolve_mode(task=invalid)
++
++    def test_projection_requires_explicit_mode(self):
++        for invalid in (None, "", "unknown", [], False):
++            with self.subTest(invalid=invalid), self.assertRaisesRegex(em.InvalidState, "unknown execution mode"):
++                self.record["execution"]["mode"] = invalid
++                em.assess(self.record)
++
++    def test_auto_reversible_preference(self):
++        self.decision("agent-choice")
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++
++    def test_human_preference_not_agent_chosen(self):
++        self.record["execution"]["mode"] = "human-coop"
++        self.decision("agent-choice")
++        with self.assertRaisesRegex(em.InvalidState, "Human Coop"):
++            em.assess(self.record)
++
++    def test_human_trivial_choice(self):
++        self.record["execution"]["mode"] = "human-coop"
++        self.decision("agent-choice", "auto-resolvable")
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++
++    def test_high_impact_choice_keeps_classification(self):
++        self.decision("agent-choice", "high-impact")
++        self.record["units"][0]["approval_reference"] = "owner-approved-local-options"
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++        self.record["units"][0]["approval_reference"] = None
++        with self.assertRaisesRegex(em.InvalidState, "scoped approval"):
++            em.assess(self.record)
++
++    def test_no_unsafe_choice(self):
++        for field in ("reversible", "within_scope", "permission_covered"):
++            with self.subTest(field=field):
++                self.record["decisions"] = []
++                self.decision("agent-choice")[field] = False
++                with self.assertRaisesRegex(em.InvalidState, "unsafe agent choice"):
++                    em.assess(self.record)
++        for category in ("critical-risk", "blocked-by-missing-facts"):
++            self.record["decisions"] = []
++            self.decision("agent-choice", category)
++            with self.assertRaises(em.InvalidState):
++                em.assess(self.record)
++
++    def test_independent_subset_and_transitive_dependents(self):
++        self.decision()
++        self.add_unit()
++        self.add_unit("UNIT-003", ["UNIT-001"])
++        self.add_unit("UNIT-004", ["UNIT-003"])
++        self.record["requested_status"] = "running"
++        result = em.assess(self.record)
++        self.assertEqual(result["ready_units"], ["UNIT-002"])
++        self.assertEqual(set(result["blocked_units"]), {"UNIT-001", "UNIT-003", "UNIT-004"})
++
++    def test_owner_wait_when_no_independent_work(self):
++        self.decision()
++        self.assertEqual(em.assess(self.record)["result"], "awaiting-owner")
++        self.record["requested_status"] = "running"
++        with self.assertRaisesRegex(em.InvalidState, "running without"):
++            em.assess(self.record)
++
++    def test_shared_blocked_resource(self):
++        self.decision()
++        self.add_unit(resources=["files/example/child"])
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++
++    def test_case_alias_resource_overlap(self):
++        self.add_unit(resources=["FILES/EXAMPLE"])
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++
++    def test_unknown_dependencies_or_isolation(self):
++        for field in ("dependencies_known", "isolation_verified", "gates_ready", "dod_testable"):
++            with self.subTest(field=field):
++                unit = self.record["units"][0]
++                unit[field] = False
++                self.assertEqual(em.assess(self.record)["ready_units"], [])
++                unit[field] = True
++
++    def test_duplicate_unknown_cycle(self):
++        self.add_unit()
++        self.record["units"][1]["id"] = "UNIT-001"
++        with self.assertRaisesRegex(em.InvalidState, "duplicate"):
++            em.assess(self.record)
++        self.record["units"][1]["id"] = "UNIT-002"
++        self.record["units"][0]["dependencies"] = ["MISSING"]
++        with self.assertRaisesRegex(em.InvalidState, "unknown dependency"):
++            em.assess(self.record)
++        self.record["units"][0]["dependencies"] = ["UNIT-002"]
++        self.record["units"][1]["dependencies"] = ["UNIT-001"]
++        with self.assertRaisesRegex(em.InvalidState, "cycle"):
++            em.assess(self.record)
++
++    def test_scoped_high_risk_approval(self):
++        unit = self.record["units"][0]
++        unit.update(risk="high", required_actions=["local-write", "formal-quality"],
++                    approved_actions=["local-write", "formal-quality"], approval_reference="decisions/owner-scope.md")
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++        unit["required_actions"].append("production-deploy")
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++        unit["required_actions"].pop()
++        unit["approval_reference"] = None
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++
++    def test_critical_is_human_led(self):
++        self.record["units"][0].update(risk="critical", approval_reference="owner-ref")
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++
++    def test_baseline_drift(self):
++        self.record["baseline"]["current"] = "new-head"
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++
++    def test_no_false_completion_or_stale_quality(self):
++        self.record["requested_status"] = "completed"
++        with self.assertRaisesRegex(em.InvalidState, "incomplete DoD"):
++            em.assess(self.record)
++        unit = self.record["units"][0]
++        unit.update(status="completed", quality_current=True, capture_complete=True)
++        self.assertEqual(em.assess(self.record)["result"], "completed")
++        for field in ("quality_current", "capture_complete"):
++            unit[field] = False
++            with self.assertRaisesRegex(em.InvalidState, "completed unit lacks"):
++                em.assess(self.record)
++            unit[field] = True
++        self.decision()
++        with self.assertRaisesRegex(em.InvalidState, "pending decision"):
++            em.assess(self.record)
++
++    def test_dependency_requires_accepted_quality(self):
++        self.add_unit(dependencies=["UNIT-001"])
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++        self.record["units"][0].update(status="completed", quality_current=True, capture_complete=True)
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-002"])
++
++    def test_completed_dependency_cannot_be_unfinished(self):
++        unit = self.add_unit(dependencies=["UNIT-001"])
++        unit.update(status="completed", quality_current=True, capture_complete=True)
++        with self.assertRaisesRegex(em.InvalidState, "unfinished dependency"):
++            em.assess(self.record)
++
++    def test_final_check_needs_explicit_scope(self):
++        self.record["final_check"]["requested"] = True
++        with self.assertRaisesRegex(em.InvalidState, "explicit request"):
++            em.assess(self.record)
++        self.record["final_check"]["approval_reference"] = "owner-plan-final-check"
++        self.assertEqual(em.assess(self.record)["result"], "running")
++        self.record["final_check"]["owner_yes"] = True
++        with self.assertRaisesRegex(em.InvalidState, "final-owner-yes"):
++            em.assess(self.record)
++
++    def test_legacy_missing_field_has_no_new_authority(self):
++        del self.record["execution"]
++        with self.assertRaisesRegex(em.InvalidState, "fields"):
++            em.assess(self.record)
++
++    def test_plan_only_and_read_only_write_boundary(self):
++        unit = self.record["units"][0]
++        unit.update(work_kind="planning", required_actions=["product-write"], approved_actions=["product-write"])
++        with self.assertRaisesRegex(em.InvalidState, "planning request"):
++            em.assess(self.record)
++        unit.update(required_actions=["local-write"], approved_actions=["local-write"])
++        with self.assertRaisesRegex(em.InvalidState, "planning request"):
++            em.assess(self.record)
++        unit.update(required_actions=["artifact-write"], approved_actions=["artifact-write"], approval_reference="owner-plan")
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++        unit["work_kind"] = "read-only"
++        with self.assertRaisesRegex(em.InvalidState, "read-only"):
++            em.assess(self.record)
++
++    def test_malformed_flags_and_resources(self):
++        self.record["units"][0]["gates_ready"] = "yes"
++        with self.assertRaisesRegex(em.InvalidState, "boolean"):
++            em.assess(self.record)
++        self.record["units"][0]["gates_ready"] = True
++        for resource in ("../secret", "files/./secret", "/absolute", "files//secret"):
++            self.record["units"][0]["resources"] = [resource]
++            with self.assertRaisesRegex(em.InvalidState, "unsafe resource"):
++                em.assess(self.record)
++
++    def test_cli_duplicate_json_and_inspection(self):
++        with tempfile.TemporaryDirectory() as temporary:
++            path = Path(temporary) / "state.json"
++            path.write_text(json.dumps(self.record))
++            cli = ROOT / ".systems/scripts/lib/execution-modes.py"
++            result = subprocess.run(["python3", str(cli), "--state", str(path)], capture_output=True, text=True)
++            self.assertEqual(result.returncode, 0, result.stderr)
++            self.assertEqual(json.loads(result.stdout)["authority"], "inspection-only")
++            path.write_text('{"schema": 1, "schema": 1}')
++            result = subprocess.run(["python3", str(cli), "--state", str(path)], capture_output=True, text=True)
++            self.assertNotEqual(result.returncode, 0)
++            self.assertIn("duplicate JSON key", result.stderr)
++
++    def test_unknown_action_rejected(self):
++        self.record["units"][0].update(required_actions=["invented-write"], approved_actions=["invented-write"])
++        with self.assertRaisesRegex(em.InvalidState, "unknown action"):
++            em.assess(self.record)
++
++    def test_missing_write_and_resource_declarations_rejected(self):
++        unit = self.record["units"][0]
++        unit["required_actions"] = []
++        with self.assertRaisesRegex(em.InvalidState, "lacks declared write action"):
++            em.assess(self.record)
++        unit["required_actions"] = ["local-write"]
++        unit["resources"] = []
++        with self.assertRaisesRegex(em.InvalidState, "lacks resource claims"):
++            em.assess(self.record)
++
++    def test_owner_approval_outside_scope_rejected(self):
++        self.decision("owner-approved")["within_scope"] = False
++        with self.assertRaisesRegex(em.InvalidState, "uncovered owner decision"):
++            em.assess(self.record)
++
++    def test_cli_rejects_symlink_without_writes(self):
++        with tempfile.TemporaryDirectory() as temporary:
++            path = Path(temporary) / "state.json"
++            original = json.dumps(self.record)
++            path.write_text(original)
++            link = Path(temporary) / "linked.json"
++            link.symlink_to(path)
++            result = subprocess.run(["python3", str(ROOT / ".systems/scripts/lib/execution-modes.py"), "--state", str(link)], capture_output=True, text=True)
++            self.assertNotEqual(result.returncode, 0)
++            self.assertIn("symlink projection", result.stderr)
++            self.assertEqual(path.read_text(), original)
++
++
++if __name__ == "__main__":
++    unittest.main(verbosity=2)
+diff --git a/.systems/scripts/validate-workflow b/.systems/scripts/validate-workflow
+index 552c508..923af94 100755
+--- a/.systems/scripts/validate-workflow
++++ b/.systems/scripts/validate-workflow
+@@ -412,6 +412,7 @@ run_core_validators() {
+   run_cmd .systems/scripts/check-knowledge-capture-reminder
+   run_cmd .systems/scripts/check-instruction-adherence-refresh
+   run_cmd .systems/scripts/check-owner-decision-checkpoints
++  run_cmd .systems/scripts/check-execution-modes
+   run_cmd .systems/scripts/check-request-batch-triage
+   run_cmd .systems/scripts/check-response-evidence-trace
+   run_cmd .systems/scripts/check-phase-skill-discovery
+diff --git a/AGENTS.md b/AGENTS.md
+index 52b441c..e5af63d 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -61,7 +61,7 @@ Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow comm
+ 
+ If the owner provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, route through `.systems/ai/core/request-batch-triage.md` before ordinary task intake, planning, specification, implementation, task creation, change request creation, or autopilot. Batch triage groups, splits, classifies risk, and recommends routes only. It does not grant write permission and does not automatically create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests.
+ 
+-Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation/batch and before dependent planning, specification, implementation or owner-sensitive writes. Discover repo facts first; ask at most 1-3 material owner-preference questions with recommendations and impacts, auto-resolving only safe reversible details and reporting them. Autopilot, Dreaming and read-only review queue material decisions instead of interrupting. A read-only review with no material choice reports none without pre-loading the decision procedure. No-question opt-out cannot bypass hard gates.
++Use `.systems/ai/core/execution-modes.md` for new work: Auto is default, Human Coop is explicit and task-local unless scoped wider. Resolve and persist the mode before dependent work; resume preserves it. Auto chooses covered reversible implementation, preference and local architecture options, records assumptions/override impact, and queues owner-only decisions. Human Coop asks at most 1-3 material questions. Use owner-decision-checkpoints.md for full decision records. Block affected units and dependents; continue only verified independent work. Mode never grants approvals or weakens DoD/QA. Autopilot, Dreaming and read-only review remain non-interactive. No-question opt-out cannot bypass hard gates.
+ 
+ Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
+ 
+@@ -120,7 +120,7 @@ Every workflow phase artifact should include `Optional Knowledge Capture`: a sof
+ 
+ Every workflow phase artifact must also include `Owner Decision Checkpoint`. Optional refinements and reported reversible decisions do not block progression. A material `awaiting-owner` or `blocked` decision prevents dependent phase progression and default QA/Quality chaining.
+ 
+-If a blocking detail is missing, ask before continuing. The clarification must include:
++If a blocking detail is missing, use execution-modes.md: Auto queues the decision and blocks affected work; Human Coop asks before dependent work. The decision report or clarification must include:
+ 
+ - recommended interpretation and its impact;
+ - alternative interpretation and its impact;
+@@ -177,7 +177,7 @@ Prompt composition artifacts follow the same supporting-guidance boundary. Read
+ 
+ ## Stop Conditions
+ 
+-Stop before continuing when:
++Stop affected work before continuing when the conditions below apply. Under execution-modes.md, a unit-local blocker does not stop proven independent units; shared/global safety, baseline, permissions or unknown dependencies block every affected unit. This never waives a unit's own gate:
+ 
+ - a required gate is unsatisfied;
+ - acceptance criteria, task scope, or Definition of Done is missing;
+@@ -197,7 +197,7 @@ Do not mark `PASS` without evidence.
+ Write operations are allowed only when:
+ 
+ - the task has an accepted plan or explicit execution instruction;
+-- decisions are resolved or classified as auto-resolvable;
++- decisions needed by the active unit are resolved, auto-resolvable or covered reversible agent-choice under execution-modes.md; excluded units and dependents remain blocked;
+ - the active phase allows writes;
+ - the implementation gate is satisfied;
+ - the user approved implementation or active autopilot state allows it.
+@@ -346,7 +346,7 @@ fresh runtime-only checkpoint with all required consumers and semantic/privacy
+ evidence may qualify under `validation-profiles.md`; shared source, CI and updater
+ remain full-required. Manifest evidence never grants writes or PASS.
+ 
+-For new implementation work, apply `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or bounded owner opt-out before dependent writes. Deadline pressure cannot bypass DoD, QA, risk, permissions, evidence, or approvals.
++For new implementation work, apply `.systems/ai/core/delivery-constraints.md` and record explicit constraints, bounded owner opt-out or `auto-unbounded` for new Auto work with no supplied deadline/timebox. Deadline pressure cannot bypass DoD, QA, risk, permissions, evidence, or approvals.
+ 
+ For knowledge capture, apply `.systems/ai/core/distillation-state.md`. `is_distilled` is derived from `State: completed` and never grants write authority. Dreaming only reports the `Undistilled Work Queue` and remains advisory-only.
+ 
+diff --git a/HUMANS.md b/HUMANS.md
+index 722f558..2c9b460 100644
+--- a/HUMANS.md
++++ b/HUMANS.md
+@@ -1,4 +1,8 @@
+ # HUMANS.md
++
++## Execution Modes
++
++Domyślnie Auto wykonuje zatwierdzony zakres i QA, wybiera bezpieczne odwracalne rozwiązania oraz przedstawia decyzje i ich wpływ na końcu. Napisz Human Coop, pracujmy wspólnie lub konsultuj decyzje, aby konsultować materialne wybory w bieżącym zadaniu. Szerszy tryb wymaga jawnego projektu/sesji; resume zachowuje wybór. Pending decision blokuje zależną pracę, a pozostała może być kontynuowana po sprawdzeniu niezależności. Auto nie daje zgody na produkcję, koszty, push ani final-owner-yes. Użyj check-execution-modes jako supporting check; szczegóły w execution-modes.md.
+ For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
+ 
+ 
+@@ -158,17 +162,17 @@ Uruchom phase-5-quality dla <task-id>. Zapisz quality artifact, evidence i jedno
+ 
+ ## Delivery Constraints
+ 
+-Before new implementation work, Codex should ask for a material deadline, time budget, must-have outcome, and safe cutline when they are not already known. It should group questions, adapt optional scope, and stop for an overrun decision. A deadline never authorizes skipping QA, DoD, risk review, permissions, evidence, or approvals. Use `bez deadlinu` or `no deadline` only when you intentionally want the bounded opt-out reported with residual risk.
++Nowa praca domyślnie używa Auto: brak podanego deadline'u/timeboxu zapisuje jako auto-unbounded bez pytania. Human Coop pyta o materialne brakujące ograniczenia. Jawne ograniczenia i istniejące limity wznowionego runu pozostają wiążące. Deadline nie omija DoD, QA, risk, permissions, evidence ani approvals.
+ 
+ ## Distillation State
+ 
+ Each meaningful work item may have a scoped `Distillation State`. `completed` means an accepted phase-6 distillation exists; other states remain visible to reminders and Dreaming. Dreaming reports an advisory `Undistilled Work Queue` and does not write memory, distillation, insights, status, commits, or pushes.
+ 
+-AI Workflow domyślnie wykrywa materialne decyzje i znaczące preferencje ownera przed planowaniem, specyfikacją albo implementacją. Najpierw sprawdza repo i zaakceptowane artefakty, a potem grupuje maksymalnie 1-3 pytania z rekomendowaną opcją i wpływem. Nie powinien pytać o fakty możliwe do znalezienia ani o każdy drobny detal techniczny.
++AI Workflow wykrywa materialne decyzje przed zależną pracą. Auto sam wybiera odwracalne rozwiązania w zatwierdzonym zakresie i zbiera owner-only decisions. Human Coop grupuje maksymalnie 1-3 pytania z rekomendacją i wpływem. Żaden tryb nie pyta o fakty dostępne w repo ani każdy drobny detal.
+ 
+ Na końcu każdej fazy `Owner Decision Checkpoint` pokazuje otwarte decyzje, opcjonalne refinements oraz bezpieczne i odwracalne decyzje podjęte automatycznie. Zmiana takiej decyzji przez ownera może wymagać właściwego fix loop i re-QA.
+ 
+-Aktywny autopilot, Dreaming/automations i read-only review nie są przerywane pytaniami. Zbierają owner decision queue i pokazują ją po zatrzymaniu albo zakończeniu analizy. Autopilot readiness może zapytać przed wejściem w `running`.
++Aktywny autopilot, Dreaming/automations i read-only review nie są przerywane pytaniami. Zbierają owner decision queue i pokazują ją po zatrzymaniu albo zakończeniu analizy. Readiness w Human Coop może zapytać przed wejściem w running; Auto blokuje zależne jednostki i kontynuuje tylko sprawdzone niezależne.
+ 
+ Możesz użyć `nie dopytuj`, `bez pytań`, `nie zadawaj pytań pomocniczych`, `do not ask follow-up questions`, `no clarifying questions` albo `use reasonable defaults`. Opt-out dotyczy bieżącego scope, chyba że jawnie rozszerzysz go do końca taska, chatu albo sesji. Nie pozwala on zgadywać ani omijać hard gates.
+ 
+diff --git a/README.md b/README.md
+index 0a0b5cd..6157b2c 100644
+--- a/README.md
++++ b/README.md
+@@ -206,7 +206,7 @@ Global quality review uses `.systems/ai/core/quality-review.md` and `.systems/ai
+ 
+ Instruction Adherence Refresh uses `.systems/ai/core/instruction-adherence-refresh.md` to re-anchor long-running sessions on current contracts and repository state. Targeted refresh runs at pre-write, pre-commit/handoff/quality, and material scope/instruction-change boundaries; full refresh runs after resume, context compaction, working-directory change, long interruption, or source conflict. Every substantive Execution Trace reports refresh status and baseline, while normal continuation without a new trigger may report `not-needed`.
+ 
+-Owner Decision Discovery uses `.systems/ai/core/owner-decision-checkpoints.md` to ask 1-3 material questions by default before dependent work, disclose safe reversible decisions, and add a phase-end checkpoint to every workflow phase. Active autopilot, Dreaming/automations, and read-only review queue decisions without mid-run interruption. Explicit no-question opt-out cannot bypass hard gates.
++Execution Modes uses `.systems/ai/core/execution-modes.md`: new work defaults to Auto, choosing covered reversible options and queuing owner-only decisions. Explicit Human Coop asks 1-3 material questions through owner-decision-checkpoints.md. Block only affected units and dependents; independent continuation requires current gates and verified resource/write independence. Both modes retain semantic QA, approvals and phase-end evidence. Validator: check-execution-modes; optional inspection: check-execution-modes --state <execution-readiness.json>.
+ 
+ Implementation slicing uses `.systems/ai/core/implementation-slicing.md` for implementation-class writes. Formal phase-4, fix loops, side tasks, project-local micro-tasks, repo-level micro-projects, and workflow-maintenance writes start with an Implementation Slice Plan, include a DoD source, and record Slice Execution Evidence. Slicing does not grant write permission, expand scope, or bypass QA.
+ 

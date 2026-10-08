@@ -1,0 +1,350 @@
+#!/usr/bin/env bash
+set -euo pipefail
+exec python3 - "$@" <<'SMOKE_DISPATCH'
+"""Dispatch owned smoke groups with one public lifecycle and timing wall."""
+import argparse
+import collections
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+import time
+
+GROUPS = ("core", "policy", "quality", "skills", "workspace")
+
+class SmokeInterrupted(Exception):
+    """Do not use InterruptedError: subprocess.wait retries that exception."""
+# Executable compatibility index: each route binds a live ID and command.
+# It is validated below; an unconnected descriptive comment is not coverage.
+COVERAGE_INDEX = {
+    "contract-compliance": ("contract-compliance-requires-side-task-mode", "check-contract-compliance"),
+    "cross-system-upgrade-handoff": ("cross-system-upgrade-handoff-valid", "check-cross-system-upgrade-handoff"),
+    "default-idea-validation-opt-out": ("default-idea-validation-opt-out-valid", "check-default-idea-validation-opt-out"),
+    "default-quality-closure": ("default-quality-closure-valid", "check-default-quality-closure"),
+    "end-of-task-capture": ("end-of-task-capture-valid", "check-end-of-task-capture"),
+    "full-qa-verification": ("full-qa-verification-valid", "check-full-qa-verification"),
+    "global-quality-review": ("global-quality-review-valid", "check-global-quality-review-stance"),
+    "implementation-slicing": ("implementation-slicing-valid", "check-implementation-slicing"),
+    "instruction-adherence-refresh": ("instruction-adherence-refresh-valid", "check-instruction-adherence-refresh"),
+    "intent-plan-spec-compliance": ("intent-plan-spec-compliance-valid", "check-intent-plan-spec-compliance-review"),
+    "knowledge-capture-reminder": ("knowledge-capture-reminder-valid", "check-knowledge-capture-reminder"),
+    "model-selection-blocks-qa-bypass": ("model-selection-blocks-qa-bypass", "check-model-selection-guidance"),
+    "owner-decision-checkpoints": ("owner-decision-checkpoints-valid", "check-owner-decision-checkpoints"),
+    "phase-skill-discovery": ("phase-skill-discovery-valid", "check-phase-skill-discovery"),
+    "plan-quality-contract": ("plan-quality-contract-valid", "check-plan-quality-contract"),
+    "request-batch-triage": ("request-batch-triage-valid", "check-request-batch-triage"),
+    "response-evidence-trace": ("response-evidence-trace-valid", "check-response-evidence-trace"),
+    "review-completeness-gate": ("review-completeness-gate-valid", "check-review-completeness-gate"),
+    "validation-profiles": ("validation-profiles-valid", "check-validation-profiles"),
+    "validation-routing-blocks-green-scripts-pass": ("validation-routing-blocks-green-scripts-pass", "check-validation-routing"),
+    "worktree-bootstrap-local-bare-remote": ("worktree-bootstrap-local-bare-remote", "bootstrap-target-worktree"),
+    "worktree-bootstrap-linked-worktree": ("worktree-bootstrap-linked-worktree", "bootstrap-target-worktree"),
+}
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def reject(message):
+    raise ValueError("Smoke manifest error: " + message)
+
+def load_manifest(root):
+    folder = root / ".systems/scripts/smoke"
+    if folder.is_symlink() or not folder.resolve().is_relative_to(root):
+        reject("escaping/symlink smoke directory")
+    path = folder / "manifest.json"
+    if path.is_symlink():
+        reject("symlink manifest")
+    def unique_keys(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                reject("duplicate JSON key: " + key)
+            result[key] = value
+        return result
+    data = json.loads(path.read_text(), object_pairs_hook=unique_keys)
+    if data.get("schema") != 2 or data.get("groups") != list(GROUPS):
+        reject("schema/groups")
+    ids = data.get("reference_test_ids", [])
+    if (not isinstance(ids, list) or len(ids) != 674 or len(set(ids)) != len(ids)
+            or any(not isinstance(x, str) or not re.fullmatch(r"[A-Za-z0-9-]+", x) for x in ids)):
+        reject("reference ID inventory")
+    if digest(("\n".join(ids) + "\n").encode()) != data.get("reference_ids_sha256"):
+        reject("reference ID digest")
+    supplemental = data.get("supplemental_test_ids", [])
+    if (not isinstance(supplemental, list) or len(set(supplemental)) != len(supplemental)
+            or set(supplemental) & set(ids)
+            or any(not isinstance(x, str) or not re.fullmatch(r"[a-z0-9-]+", x) for x in supplemental)):
+        reject("supplemental ID inventory")
+    ownership = data.get("test_groups")
+    if not isinstance(ownership, dict) or set(ownership) != set(ids + supplemental) or set(ownership.values()) != set(GROUPS):
+        reject("test ownership")
+    required_files = {"common.sh", *(g + ".sh" for g in GROUPS)}
+    if set(data.get("files_sha256", {})) != required_files:
+        reject("file inventory")
+    bodies = {}
+    for name in sorted(required_files):
+        source = folder / name
+        if source.is_symlink() or not source.is_file():
+            reject("missing/symlink group source: " + name)
+        raw = source.read_bytes()
+        if digest(raw) != data["files_sha256"][name]:
+            reject("source digest: " + name)
+        bodies[name] = raw.decode()
+    regions = data.get("regions", [])
+    owned_assertions = []
+    seen_regions = set()
+    region_sources = {}
+    for region in regions:
+        identifier = region["id"]
+        group = region["group"]
+        if identifier in seen_regions or group not in GROUPS:
+            reject("duplicate/unknown region")
+        seen_regions.add(identifier)
+        start = "# BEGIN FROZEN " + identifier + "\n"
+        end = "# END FROZEN " + identifier + "\n"
+        body = bodies[group + ".sh"]
+        if body.count(start) != 1 or body.count(end) != 1:
+            reject("missing/duplicate raw region: " + identifier)
+        chunk = body.split(start, 1)[1].split(end, 1)[0]
+        if digest(chunk.encode()) != region["source_sha256"]:
+            reject("changed frozen region: " + identifier)
+        span = region.get("reference_lines")
+        if (not isinstance(span, list) or len(span) != 2
+                or any(type(n) is not int for n in span) or span[0] < 1 or span[1] < span[0]
+                or identifier != f"region-{span[0]:04d}-{span[1]:04d}"
+                or len(chunk.splitlines()) != span[1] - span[0] + 1):
+            reject("region line mapping: " + identifier)
+        region_sources[identifier] = (region, chunk)
+        owned_assertions.extend(region["assertion_ids"])
+        for field in ("setup_id", "cleanup_id", "mutation_id", "expected_outcome"):
+            if not isinstance(region.get(field), str) or not region[field].strip():
+                reject("region contract: " + field)
+    actual_regions = []
+    for group in GROUPS:
+        actual_regions.extend(re.findall(r"^# BEGIN FROZEN (region-[0-9]+-[0-9]+)$", bodies[group + ".sh"], re.M))
+    if len(actual_regions) != len(seen_regions) or set(actual_regions) != seen_regions:
+        reject("raw region inventory")
+    if len(owned_assertions) != 110 or len(set(owned_assertions)) != 110:
+        reject("outside assertion ownership")
+    if set(owned_assertions) != set(data.get("external_assertion_ids", [])):
+        reject("outside assertion inventory")
+    audit = data.get("external_assertion_audit", [])
+    if len(audit) != 110 or {row["id"] for row in audit} != set(owned_assertions):
+        reject("outside assertion semantic audit")
+    for row in audit:
+        if row.get("classification") not in ("assertion", "failure-branch", "failure-fixture") or not row.get("rationale"):
+            reject("outside assertion classification")
+        owners = [pair for pair in region_sources.values() if row["id"] in pair[0]["assertion_ids"]]
+        if len(owners) != 1:
+            reject("outside assertion line mapping")
+        region, chunk = owners[0]
+        number = row.get("source_line")
+        if (type(number) is not int or not region["reference_lines"][0] <= number <= region["reference_lines"][1]
+                or row["id"] != f"mono-line-{number:04d}"
+                or digest(chunk.splitlines()[number-region["reference_lines"][0]].encode()) != row.get("sha256")):
+            reject("outside assertion line mapping")
+    nested = data.get("nested_python_assertions", [])
+    if len(nested) != 34 or len({row["id"] for row in nested}) != 34:
+        reject("nested Python assertion inventory")
+    for row in nested:
+        if row.get("region_id") not in seen_regions or not row.get("rationale"):
+            reject("nested Python assertion ownership")
+        region, chunk = region_sources[row["region_id"]]
+        number = row.get("source_line")
+        if (row.get("group") != region["group"] or type(number) is not int
+                or not region["reference_lines"][0] <= number <= region["reference_lines"][1]
+                or row["id"] != f"mono-python-line-{number:04d}"
+                or digest(chunk.splitlines()[number-region["reference_lines"][0]].encode()) != row.get("sha256")):
+            reject("nested Python assertion line mapping")
+    tests = data.get("tests", [])
+    if len(tests) != len(ownership) or {test["id"] for test in tests} != set(ownership):
+        reject("test contract inventory")
+    for test in tests:
+        group = ownership[test["id"]]
+        if test.get("group") != group or test.get("helper") not in ("run_must_pass", "run_must_fail"):
+            reject("test outcome contract: " + test["id"])
+        if test.get("region_id") not in seen_regions and test.get("region_id") != "supplemental-core":
+            reject("test region contract: " + test["id"])
+        for field in ("command_contract", "setup_id", "cleanup_id", "mutation_id", "expected_outcome"):
+            if not isinstance(test.get(field), str) or not test[field].strip():
+                reject("test required field: " + field)
+        if test["region_id"] in region_sources:
+            region, chunk = region_sources[test["region_id"]]
+            if region["group"] != group or test["command_contract"] not in chunk:
+                reject("test region source call: " + test["id"])
+        if test["command_contract"] not in bodies[group + ".sh"]:
+            reject("test source call: " + test["id"])
+    contracts = {test["id"]: test for test in tests}
+    for label, (identifier, command) in COVERAGE_INDEX.items():
+        if identifier not in ownership:
+            reject("coverage index ID: " + label)
+        body = bodies[ownership[identifier] + ".sh"]
+        if command not in body or command not in contracts[identifier]["command_contract"]:
+            reject("coverage index command: " + label)
+    return data
+
+def descendants(pid):
+    # ps is available on supported macOS/Linux hosts. No repository data is read.
+    rows = subprocess.check_output(["ps", "-axo", "pid=,ppid=,lstart="], text=True)
+    parents = {int(a): (int(b), stamp.strip()) for a, b, stamp in (line.split(None, 2) for line in rows.splitlines())}
+    owned = {pid}
+    while True:
+        added = {child for child, (parent, _) in parents.items() if parent in owned} - owned
+        if not added:
+            return {child: parents[child][1] for child in owned if child in parents}
+        owned.update(added)
+
+def stop_child(child, owned):
+    def still_owned(pid):
+        try:
+            row = subprocess.check_output(["ps", "-p", str(pid), "-o", "lstart=,stat="], text=True).split()
+            return (tuple(row[:5]) == tuple(owned[pid].split())
+                    and len(row) == 6 and not row[5].startswith("Z"))
+        except subprocess.CalledProcessError:
+            return False
+    for pid in sorted(set(owned) - {child.pid}, reverse=True):
+        try:
+            if still_owned(pid):
+                os.kill(pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+    if child.poll() is None and child.pid in owned and still_owned(child.pid):
+        try:
+            os.killpg(child.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+    try:
+        child.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        pass
+    # A leader can exit before an uncooperative descendant. Do not equate
+    # leader completion with tree completion (nested timeouts own sessions).
+    for pid in owned:
+        try:
+            if still_owned(pid):
+                os.kill(pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    child.wait()
+
+def main():
+    parser = argparse.ArgumentParser(prog="check-validator-smoke-tests")
+    parser.add_argument("--group", choices=("all", *GROUPS), default="all")
+    parser.add_argument("--progress", choices=("quiet", "summary", "verbose"), default="summary")
+    parser.add_argument("--test-timeout-seconds", default="180")
+    parser.add_argument("--verify-manifest", action="store_true")
+    args = parser.parse_args()
+    if (not re.fullmatch(r"[0-9]+([.][0-9]+)?", args.test_timeout_seconds)
+            or not math.isfinite(float(args.test_timeout_seconds)) or float(args.test_timeout_seconds) <= 0):
+        parser.error("--test-timeout-seconds must be finite and greater than zero")
+    root = Path.cwd().resolve()
+    if args.verify_manifest:
+        try:
+            load_manifest(root)
+        except (ValueError, KeyError, TypeError, OSError) as error:
+            print(error, file=sys.stderr)
+            return 1
+        print("Smoke manifest and live coverage index verified.")
+        return 0
+    started = time.monotonic()
+    wall_start = None
+    status = 1
+    child = None
+    owned_tree = {}
+    temporary = None
+    timing = os.environ.get("AI_WORKFLOW_TIMING_OUTPUT", "")
+    helper = root / ".systems/scripts/lib/validation-timing.py"
+    run_id = os.environ.get("AI_WORKFLOW_TIMING_RUN_ID", f"smoke-{time.time_ns()}-{os.getpid()}")
+    def interrupted(signum, frame):
+        raise SmokeInterrupted(signum)
+    signal.signal(signal.SIGINT, interrupted)
+    signal.signal(signal.SIGTERM, interrupted)
+    print(f"AI_WORKFLOW_SMOKE_START group={args.group} progress={args.progress}", flush=True)
+    try:
+        data = load_manifest(root)
+        # Fail before creating children if the host cannot support owned-tree
+        # cleanup. A missing capability must not first be discovered on timeout.
+        descendants(os.getpid())
+        if timing:
+            if not Path(timing).exists():
+                subprocess.run(["python3", str(helper), "init", timing], check=True)
+            wall_start = subprocess.check_output(["python3", str(helper), "now"], text=True).strip()
+        temporary = Path(tempfile.mkdtemp(prefix="ai-workflow-smoke-dispatch-"))
+        selected = GROUPS if args.group == "all" else (args.group,)
+        for group in selected:
+            # Legacy artifact readers match directory components. Keep private
+            # fixture parents distinct from canonical namespaces such as quality/.
+            group_tmp = temporary / ("group-" + group)
+            group_tmp.mkdir()
+            ledger = temporary / (group + ".tsv")
+            ledger.touch()
+            env = os.environ.copy()
+            env.update(TMPDIR=str(group_tmp), AI_WORKFLOW_SMOKE_CHILD="1",
+                       AI_WORKFLOW_SMOKE_OWNED_GROUP=group, AI_WORKFLOW_SMOKE_LEDGER=str(ledger),
+                       AI_WORKFLOW_SMOKE_TIMING_PROFILE="smoke-" + args.group,
+                       AI_WORKFLOW_TIMING_RUN_ID=run_id)
+            child = subprocess.Popen(["bash", str(root / f".systems/scripts/smoke/{group}.sh"),
+                                      "--progress", args.progress, "--test-timeout-seconds", str(args.test_timeout_seconds)],
+                                     env=env, start_new_session=True)
+            owned_tree = {}
+            # Keep identity-bound descendants while their leader is alive;
+            # after leader exit, detached descendants may be reparented.
+            while True:
+                for pid, stamp in descendants(child.pid).items():
+                    owned_tree.setdefault(pid, stamp)
+                try:
+                    code = child.wait(timeout=0.5)
+                    break
+                except subprocess.TimeoutExpired:
+                    continue
+            stop_child(child, owned_tree)
+            child = None
+            if code:
+                status = code if code > 0 else 128 - code
+                break
+            actual = [line.split("\t") for line in ledger.read_text().splitlines()]
+            expected = {identifier for identifier, owner in data["test_groups"].items() if owner == group}
+            if (len(actual) != len(expected) or {row[0] for row in actual} != expected
+                    or any(len(row) != 2 or row[1] != group for row in actual)):
+                reject("executed ID/group coverage: " + group)
+        else:
+            status = 0
+    except SmokeInterrupted as error:
+        status = 128 + int(error.args[0])
+    except (ValueError, KeyError, TypeError, OSError, subprocess.SubprocessError) as error:
+        print(error, file=sys.stderr)
+        status = 1
+    finally:
+        # Ignore subsequent signals only while terminating the owned tree/fixture.
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        try:
+            if child is not None:
+                if child.poll() is None:
+                    for pid, stamp in descendants(child.pid).items():
+                        owned_tree.setdefault(pid, stamp)
+                stop_child(child, owned_tree)
+            if temporary is not None:
+                shutil.rmtree(temporary)
+        except (OSError, subprocess.SubprocessError) as error:
+            print("Smoke cleanup failed: " + str(error), file=sys.stderr)
+            status = 1
+        result = "pass" if status == 0 else "timeout" if status == 124 else "interrupted" if status in (130, 143) else "fail"
+        if timing and wall_start:
+            try:
+                subprocess.run(["python3", str(helper), "record", timing, run_id, "smoke-suite-wall", "smoke",
+                                result, "smoke-" + args.group, "wall", "validation-wall", wall_start], check=True)
+            except (OSError, subprocess.SubprocessError):
+                status, result = 1, "fail"
+        print(f"AI_WORKFLOW_SMOKE_COMPLETE group={args.group} result={result} exit_code={status} duration_seconds={int(time.monotonic()-started)}", flush=True)
+    return status
+
+raise SystemExit(main())
+SMOKE_DISPATCH

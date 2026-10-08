@@ -1,0 +1,70 @@
+## Task Idea Validation
+
+- **Co zostaje:** A responsive account settings screen with loading, validation, and recovery states is a clear, bounded planning request.
+- **Co jest słabe / do poprawy lub usunięcia:** “Account settings” does not identify which fields are editable. This plan assumes profile and notification preferences; it leaves password, authentication, and permission changes outside the screen.
+- **Czego brakuje:** The synthetic fixture has no React app, design system, API contract, or accepted task spec. Field names and validation limits below are proposed defaults.
+- **Blokery / decyzje:** None for this read-only plan. The editable fields, server validation rules, and save API need confirmation before implementation.
+- **Rekomendowany routing:** Read-only screen plan. The fixture’s [repo status](/private/tmp/pse-cli-baseline-frontend-ui-7ujb5aw1/checkout/ai-workflow-workspace/repo/core/status.md) records no active product phase.
+
+## Screen plan
+
+**Scope and layout.** Show a page title, section navigation, Profile, and Notifications. Profile contains an editable display name and time zone, plus a read-only email address. Notifications contains preference switches. On wide screens, place section navigation beside a single form column with a restrained maximum width. Below roughly 768 px, stack navigation above the form and make fields and actions full width. Check the layout at 320 px, with no horizontal overflow or controls hidden behind a save bar.
+
+**Save behavior.** Load settings with a revision identifier. Keep edits local until the user selects **Save changes**; enable that action only when values have changed and passed client validation. During save, show progress and prevent duplicate submissions. On success, update the saved baseline and announce confirmation. If the user leaves with unsaved changes, use the app’s established confirmation pattern.
+
+| State | Screen behavior and recovery |
+| --- | --- |
+| Initial loading | Show a stable form skeleton and a labelled loading status; avoid flashing empty fields. |
+| Load failure | Replace the form with an error summary and **Try again**. |
+| Validation error | Check display name on blur and submit; propose required, 2–80 characters. Put specific errors beside fields, summarize them on submit, and focus the summary. Apply server field errors too. |
+| Saving | Keep entered values visible; show progress on the save action. |
+| Save failure or offline | Preserve edits, explain that nothing was saved, and offer **Retry** when connectivity returns. |
+| Revision conflict | Explain that settings changed elsewhere. Offer **Review latest settings** and require an intentional new save after review; do not silently overwrite either version. |
+| Success | Show a brief status message and clear the dirty state. |
+
+Use labelled native controls, visible keyboard focus, an announced status region for load/save results, and errors linked to their fields. A reduced-motion setting should remove nonessential transitions.
+
+## Plan Quality Contract
+
+- **Plan classification:** Read-only; no implementation writes.
+- **DoD source:** The user’s request and this proposed screen scope.
+- **Testable DoD:** The plan specifies desktop and mobile layout, loading, client and server validation, save success, failure, offline and conflict recovery, and keyboard and screen-reader behavior.
+- **Artifact QA route / trigger:** `not-applicable` for this response; no formal project task or artifact exists in the fixture.
+- **Implementation Quality Closure route:** `not-applicable` for this read-only scope. A later formal implementation would need its own applicable quality route.
+- **Required verification:** Review this plan against the requested states and viewport constraints. App tests and visual checks are `not-applicable` because no app was changed.
+- **Quality-ready criteria:** Every listed state has a visible outcome and a usable next action; no editable value is silently lost.
+- **Owner opt-out:** None.
+- **Not-applicable reason:** The requested deliverable is a response-only plan with no file writes.
+- **Blocking decision:** None for planning; field scope and API rules remain open for implementation.
+- **Next route:** Confirm scope and establish the synthetic React task/spec before implementation.
+
+**No files were changed.** Work mode compliance: read-only planning within the synthetic checkout. Knowledge capture: **not-required**; no durable project outcome was produced.
+
+## Execution Trace
+
+- **Sources used:** [AGENTS.md](/private/tmp/pse-cli-baseline-frontend-ui-7ujb5aw1/checkout/AGENTS.md), repo status and intake, relevant AI Workflow planning policies, and the [frontend skill](/private/tmp/pse-cli-baseline-frontend-ui-7ujb5aw1/checkout/.systems/ai/skills/frontend-skill/SKILL.md).
+- **Evidence reviewed:** Fixture directory listing, repo status and intake, clean `git status`, and HEAD `7a904f7`.
+- **Workflow procedures used:** Task Idea Validation, Owner Decision Discovery, Plan Quality Contract, and read-only risk routing.
+- **Skills/roles used:** `frontend-skill` for responsive layout, accessibility, and state coverage.
+- **Commands/checks run:** Read-only file inspection and `git status --short`; no tests or build ran because there is no implementation.
+- **Skipped/unreadable sources:** No React app, design system, project status, or accepted spec is present in this fixture.
+- **Limits/residual uncertainty:** Fields, validation limits, and API behavior are assumptions pending an implementation spec.
+- **Instruction refresh:** Status: performed-targeted; trigger: new planning scope; contracts refreshed: AGENTS, operating model, task intake, plan quality, risk, permissions, response contract, frontend skill; reviewed baseline: HEAD, clean worktree, repo status/intake; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed for this read-only plan; decisions asked/pending: none for planning; auto-resolved decisions: proposed profile and notification scope.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded, reversible UI planning; criticality: medium if implemented; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Confirm the editable fields and save API, then turn this into a synthetic React task specification.  
+Wpływ: Makes validation and recovery behavior testable before any code is written.  
+Napisz:
+```text
+Specify this synthetic account settings screen. Editable fields are [fields]; the save API returns [response and error shapes]. Do not implement yet.
+```
+
+**Alternatywa:** Review only the proposed screen scope and states.  
+Wpływ: Resolves product choices before defining an API or implementation task.  
+Napisz:
+```text
+Review the proposed account settings scope and state matrix read-only; identify missing or unnecessary states.
+```

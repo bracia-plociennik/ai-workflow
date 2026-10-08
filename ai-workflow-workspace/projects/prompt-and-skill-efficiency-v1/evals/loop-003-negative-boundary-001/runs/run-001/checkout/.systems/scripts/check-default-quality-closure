@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1"
+  local pattern="$2"
+  local label="$3"
+
+  if [[ ! -f "$file" ]]; then
+    echo "Missing file for default quality closure check: $file"
+    fail=1
+    return 0
+  fi
+
+  if ! rg -q "$pattern" "$file"; then
+    echo "Missing default quality closure reference in $file: $label"
+    fail=1
+  fi
+}
+
+for file in \
+  ".systems/ai/core/quality-review.md" \
+  ".systems/ai/core/command-routing.md" \
+  ".systems/ai/core/contract-compliance.md"
+do
+  require_ref "$file" 'Default Quality Closure' "default quality closure"
+done
+
+for term in \
+  'Every substantive work item should end with a clear quality/review closure' \
+  'formal QA/Quality' \
+  'global-quality-review-stance' \
+  'PASS Integrity Gate' \
+  'findings-first review' \
+  'DoD fit' \
+  'intent/plan/spec/prompt compliance' \
+  'changed files review' \
+  'No blockers found' \
+  'No findings found' \
+  'Ready for owner review' \
+  'side tasks' \
+  'micro-tasks' \
+  'micro-projects' \
+  'advisory work' \
+  'Quality skipped by owner opt-out' \
+  'residual risk' \
+  'does not satisfy a required QA/Quality gate'
+do
+  require_ref ".systems/ai/core/quality-review.md" "$term" "$term"
+done
+
+for opt_out in \
+  'bez QA' \
+  'bez review' \
+  'bez quality' \
+  'bez weryfikacji' \
+  'bez sprawdzania' \
+  'without QA' \
+  'without review' \
+  'without verification' \
+  'no verification' \
+  'fast path no review'
+do
+  require_ref ".systems/ai/core/quality-review.md" "$opt_out" "opt-out: $opt_out"
+  require_ref ".systems/ai/core/command-routing.md" "$opt_out" "routing opt-out: $opt_out"
+done
+
+require_ref ".systems/ai/core/contract-compliance.md" 'Quality closure: formal\|advisory\|skipped-owner-opt-out\|not-applicable' "contract compliance field"
+require_ref ".systems/ai/core/contract-compliance.md" 'without verification' "contract compliance verification opt-out"
+require_ref ".systems/ai/core/contract-compliance.md" 'No blockers found' "contract compliance advisory wording"
+require_ref "HUMANS.md" 'Quality skipped by owner opt-out' "human guidance"
+require_ref "HUMANS.md" 'bez weryfikacji' "human verification opt-out"
+require_ref "README.md" 'check-default-quality-closure' "README validator list"
+require_ref ".systems/ai/core/commands.md" 'check-default-quality-closure' "commands validator list"
+require_ref ".systems/scripts/validate-workflow" 'check-default-quality-closure' "validate-workflow chain"
+require_ref ".systems/scripts/check-required-artifacts" 'check-default-quality-closure' "required artifacts"
+require_ref ".systems/scripts/check-validator-smoke-tests" 'default-quality-closure' "smoke coverage"
+
+policy_reject_unsafe_pattern \
+  '(bez QA|without QA|bez review|without review|bez weryfikacji|bez sprawdzania|without verification|no verification|fast path no review)[^.\n]{0,120}\b(may|can|allows?|continues?|continue|mark|marks?|count)\b[^.\n]{0,120}\b(PASS|QA PASS|continue as PASS)\b' \
+  "Unsafe default quality closure opt-out wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+
+policy_reject_unsafe_pattern \
+  '(advisory review|global-quality-review-stance|micro-task|side-task|micro-project|workflow-maintenance)[^.\n]{0,140}\b(may|can|creates?|produce|produces?|mark|marks?)\b[^.\n]{0,140}\bformal PASS\b' \
+  "Unsafe advisory quality closure PASS wording found" \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+
+exit "$fail"

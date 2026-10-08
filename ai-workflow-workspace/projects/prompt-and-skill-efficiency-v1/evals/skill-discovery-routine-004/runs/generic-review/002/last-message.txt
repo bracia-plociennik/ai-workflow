@@ -1,0 +1,33 @@
+## Finding
+
+**P1 — `average([1, 2])` violates the contract.** [src/report.py:7](/private/tmp/ai-workflow-skill-discovery-20260928/src/report.py:7) uses integer division (`//`). A read-only execution returned `'1'`; the required result is `'1.5'`. The empty-input path returned `'empty'` as required. Intent and acceptance-criteria fit is therefore **partial**. No files were edited, and this advisory review makes no formal `PASS` or `FAIL` declaration.
+
+**Skill selected: none.** The only active AI Workflow skill found was `skill-creator`. I opened its `SKILL.md` and confirmed it covers skill work, not product-code review.
+
+## Execution Trace
+
+- **Sources used — opened:** fixture `AGENTS.md`, `src/report.py`, `.systems/ai/skills/skill-creator/SKILL.md`, and relevant `.systems/ai/core/` review, QA, risk, permissions, response, and instruction-refresh contracts. **Inferred from discovery only:** no applicable product-review skill exists; `src/skill_creator_status.py` was listed but not opened.
+- **Evidence reviewed:** numbered source lines and read-only execution of both specified inputs. The workspace skill directory was absent; `git status` reported that the fixture is not a Git repository.
+- **Workflow procedures used:** Phase Skill Discovery and advisory `global-quality-review-stance`. **Skills/roles used:** none; product-code reviewer.
+- **Commands/checks run:** skill and file discovery; source reads; `python3 -B` contract checks (`'1'`, `'empty'`). No test suite or workflow validator was run; neither was needed to establish this finding.
+- **Skipped/unreadable sources:** no project status or Git baseline was available in the fixture. Review scope was the two supplied cases, so other inputs remain unassessed.
+- **Limits/residual uncertainty:** the behavior and intended formatting for other nonempty inputs were not specified.
+- **Instruction refresh:** Status: performed-targeted; Trigger: advisory review closure; Contracts refreshed: fixture `AGENTS.md` and relevant core contracts; Reviewed baseline: fixture files and owner-supplied contract, with no Git `HEAD`; Drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; Decisions asked/pending: none; Auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; Reason: bounded, read-only code review; Criticality: low; Current model known: yes; Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Fix the division and verify both specified results.  
+Wpływ: This resolves the observed contract failure.  
+Napisz:
+```text
+Fix src/report.py so average([1, 2]) == '1.5' and average([]) == 'empty', then verify both cases.
+```
+
+**Alternatywa:** Request a read-only review of expected formatting for additional inputs before changing code.  
+Wpływ: This clarifies the broader output contract first.  
+Napisz:
+```text
+Review the expected string format of average for other inputs in this fixture; do not edit files.
+```

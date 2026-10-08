@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "head": "8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1",
+  "files": [
+    {
+      "path": ".systems/ai/core/autopilot.md",
+      "sha256": "2e631489900fa917e9941168ba4422c2a158dab1101263cb573b53b4f1277f08"
+    },
+    {
+      "path": ".systems/ai/core/command-routing.md",
+      "sha256": "b9b8d92f7d950f8e963e41743be9d635168e1d489125fec5f92dd1995be58bf1"
+    },
+    {
+      "path": ".systems/ai/core/implementation-slicing.md",
+      "sha256": "0c007bdc3d31f68856333f06a30bcec9c6fade8fe49bb21a3529f80f91b1e176"
+    },
+    {
+      "path": ".systems/ai/core/operating-model.md",
+      "sha256": "7290fc46a296fbf2db752bc82ae2b7e06891a243b87894139e9084ad7044123c"
+    },
+    {
+      "path": ".systems/ai/core/parallel-task-orchestration.md",
+      "sha256": "85579d5f5a958676e4830520a699e5c47487ff0c267564c57591d0b542380530"
+    },
+    {
+      "path": ".systems/ai/core/parallel-work-policy.md",
+      "sha256": "39fec928d0c33fc900bd7fcbe68ba4deacfb47cb70a882bc3a23963ae16e52ba"
+    },
+    {
+      "path": ".systems/ai/core/workflow.md",
+      "sha256": "c5264cec5ec9511da60fe3e8d232bf35a0582a0676d236424b33de340dbfc5ab"
+    },
+    {
+      "path": ".systems/ai/templates/autopilot/readiness.template.md",
+      "sha256": "25d5fa29d7dbad6a686f32e031316bfddfb7ac8db14a4911e34c441bdbe34afc"
+    },
+    {
+      "path": ".systems/ai/templates/autopilot/state.template.md",
+      "sha256": "4c4c1001c0df26d173b7a757dea858b0ac2d6ce82f0de62225d80abf8f4923b9"
+    },
+    {
+      "path": ".systems/ai/templates/orchestration/run.template.json",
+      "sha256": "5107bac364cb27c975ac05ffd85629ee9cfb56bce63aceb847401a79c71a21db"
+    },
+    {
+      "path": ".systems/ai/templates/orchestration/unit.template.json",
+      "sha256": "11200b0f6124c13a8532bb4e0c9ce149335edbedb5268a219afe84f5091b5b22"
+    },
+    {
+      "path": ".systems/ai/workflow/phase-2-project-plan.md",
+      "sha256": "1956df3acd854ac1156bdec63d8c0703aaed7a91882b34267bad16fc7f6a8096"
+    },
+    {
+      "path": ".systems/scripts/check-parallel-task-orchestration",
+      "sha256": "8127b4fbe4273adcb80f667a74dfb0ee5b8d7bb8312383bd75cee747bce6a463"
+    },
+    {
+      "path": ".systems/scripts/check-required-artifacts",
+      "sha256": "0ff01b299dfda7d0b841b683d4d0334232a315a44ba20c77159f2bbfde71e7b0"
+    },
+    {
+      "path": ".systems/scripts/check-review-completeness-gate",
+      "sha256": "4da4ef7a4dec10a6ab1195fe142c4055111964818535e80d5aad008ec0fa3d45"
+    },
+    {
+      "path": ".systems/scripts/check-validator-smoke-tests",
+      "sha256": "ae93c2d87028bd0e28f26cd8fdfb327ac3e2a10e3fc03d9ed7b643525d2ef929"
+    },
+    {
+      "path": ".systems/scripts/lib/parallel-orchestration-tests.py",
+      "sha256": "629c81846b42b47599722dfcd09b40d6a8dca8b29405054fc752c9830c6c2053"
+    },
+    {
+      "path": ".systems/scripts/lib/parallel-orchestration.py",
+      "sha256": "c5c1e4134d0d5dae65e61b298dc33db0b4041df36900ef4c0f520893ff479308"
+    },
+    {
+      "path": ".systems/scripts/lib/validation-checks.json",
+      "sha256": "10330494fda4be9c16165b19aa0bf997cccdedd2f74f84f29d4a2314bd74da07"
+    },
+    {
+      "path": ".systems/scripts/plan-parallel-work",
+      "sha256": "55a0b476fef10e7c6b7d0b97a73a8938ecd9897289037ae8dfbfca61f43ad5e1"
+    },
+    {
+      "path": ".systems/scripts/smoke/core.sh",
+      "sha256": "8a5f52c421158f1e5c85963b5597e13e0065c572a5b58372767d9f1ea260675b"
+    },
+    {
+      "path": ".systems/scripts/smoke/manifest.json",
+      "sha256": "2ffe5d7e4a9e692dc854ebf01d66e01f29ddef19e3ef7fc02d1a2dc04d1c36ac"
+    },
+    {
+      "path": ".systems/scripts/validate-workflow",
+      "sha256": "0e8fc06a89090490799689539149c4994618085b443a6cc04addc9f07aa73335"
+    },
+    {
+      "path": ".systems/ai/templates/orchestration/result.template.json",
+      "sha256": "85f5d6ea5e5a9aa585372e4cbcc914abdea542111f764ffa83f14017f9d4d91b"
+    },
+    {
+      "path": ".systems/ai/templates/orchestration/worker-prompt.template.md",
+      "sha256": "ccf8dbc7bdd3a0c7bc548daba1b5faac9745d63e50a3aefcfda0382bd3ad44fd"
+    }
+  ]
+}

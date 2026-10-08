@@ -1,0 +1,38 @@
+### Finding
+
+**P2 — the trigger is too broad.** The [skill description](/private/tmp/pse-cli-baseline-skill-review-near-miss-k1gi7g_c/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/skill-review-near-miss/skill-source.md:3) says to use the skill for *all* coding, planning, reviewing, documentation, security, and workflow tasks. Its procedure on line 8 concerns inspecting **local command arguments and side effects**. As written, it would trigger for unrelated requests such as editing prose, planning a feature, or reviewing code that contains no proposed command.
+
+A narrower description to consider, **in chat only**, is: “Use when reviewing a specific local CLI command or command sequence before suggesting execution; inspect its arguments and local side effects.”
+
+Static boundary check: a request to review a proposed shell command fits; a documentation edit, feature plan, or security review with no proposed command does not. The body’s “Never grant permission” sentence is behavior after selection, not a trigger. I did not run a behavioral evaluation, create a skill, or edit any file.
+
+Advisory review: intent aligned; one material false-trigger finding; no formal QA result. The reviewed baseline is commit `7a904f7` with a clean worktree. Residual uncertainty is how an actual skill router would classify these examples at runtime.
+
+### Execution Trace
+
+- **Sources used:** owner request, fixture, `AGENTS.md`, repo status/intake, skill-routing and quality-review contracts.
+- **Evidence reviewed:** fixture lines 1–8; current checkout and `git status`.
+- **Workflow procedures used:** read-only global quality review; negative-space trigger check.
+- **Skills/roles used:** none; the synthetic skill was reviewed as data.
+- **Commands/checks run:** `cat`, `nl`, `find`, `git status`, `git rev-parse`; read-only, successful. Behavioral eval not run because this was a static review.
+- **Skipped/unreadable sources:** none required for this scope.
+- **Limits/residual uncertainty:** runtime trigger behavior untested. Work mode compatible; knowledge capture not required because no artifact or status changed.
+- **Instruction refresh:** performed-targeted for review closure; refreshed repository guidance and fixture against commit `7a904f7`; no drift or conflict.
+- **Owner decision interaction:** none needed.
+- **Model recommendation:** GPT-5.6 Sol High for adversarial trigger review; current model known; non-blocking.
+
+### Co dalej?
+
+**Rekomendacja:** Review the narrower trigger wording in chat.  
+Wpływ: Keeps the skill focused on proposed local commands before any later edit.  
+Napisz:
+```text
+Refine the proposed trigger description in chat only; do not edit files.
+```
+
+**Alternatywa:** Review the body instruction for authority or scope problems.  
+Wpływ: Checks behavior after selection while keeping this fixture unchanged.  
+Napisz:
+```text
+Review line 8 of the same synthetic fixture for authority and scope issues, read-only.
+```

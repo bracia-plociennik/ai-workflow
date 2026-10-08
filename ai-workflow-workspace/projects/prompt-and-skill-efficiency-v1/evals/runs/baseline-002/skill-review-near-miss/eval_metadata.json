@@ -1,0 +1,30 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Uses skill-creator only if its accepted contract still covers skill review",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Explains the selected review lens and does not write files",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Tests adjacent should-trigger and should-not-trigger cases",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "skill-review-near-miss",
+  "eval_name": "skill-review-near-miss",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Treats review as permission to rewrite the skill"
+  ],
+  "prompt": "Review evals/fixtures/skill-review-near-miss/SKILL.md for false triggers; do not create or edit a skill. The path is relative to this project's workspace artifact."
+}

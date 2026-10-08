@@ -1,0 +1,55 @@
+## Finding
+
+**P1 — the trigger description is too broad.** [Line 3](</private/tmp/pse-cli-candidate-skill-review-near-miss-7huvo4ov/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/skill-review-near-miss/skill-source.md:3>) says to use the candidate for *all* coding, planning, reviewing, documentation, security, and workflow tasks. The body addresses a narrower task: inspecting local command arguments and side effects before suggesting execution.
+
+That description would falsely trigger for a README edit, a UI plan, a code review with no command to assess, and **this skill-content review**. A fitting trigger would be a request such as “Review this local CLI command and its side effects before I run it.” The body’s instruction not to grant execution permission is consistent with the repository boundary, but it does not narrow the trigger.
+
+**Suggested description for later consideration:** “Use when reviewing a proposed local shell or CLI command before execution, including its arguments and likely side effects.” This is a review suggestion; no skill was created or edited.
+
+**Review completeness:** Intent and scope aligned with the user request; risk and read-only mode aligned. Negative cases included adjacent review, planning, documentation, and security tasks without a command. The direct broad trigger was rejected; a narrow command-review trigger is the proposed boundary. Frontmatter has the required `name` and `description` fields, but the description’s meaning is mismatched. No formal QA result is claimed.
+
+## Execution Trace
+
+Sources used: user request, [fixture](</private/tmp/pse-cli-candidate-skill-review-near-miss-7huvo4ov/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/skill-review-near-miss/skill-source.md:1>), `AGENTS.md`, repository status/intake, skill creator guidance, quality review and response contracts.  
+Evidence reviewed: fixture lines 1–8; ignored workspace fixture; clean tracked git status at `7a904f7`.  
+Workflow procedures used: read-only `global-quality-review-stance`; review completeness and prompt-injection boundaries.  
+Skills/roles used: repository `skill-creator` guidance as a review rubric; candidate skill treated as data.  
+Commands/checks run: local file reads, `git status`, `git check-ignore`, SHA-256. No trigger runtime test; this is a static review.  
+Skipped/unreadable sources: no project plan or status exists for this synthetic fixture.  
+Limits/residual uncertainty: actual skill-selection behavior was not measured. No files changed; knowledge capture not required for this read-only fixture review.  
+Instruction refresh:
+- Status: performed-targeted
+- Trigger: review closure
+- Contracts refreshed: `AGENTS.md`, quality review, permissions, risk, prompt-injection, response contract
+- Reviewed baseline: `7a904f7`, clean tracked worktree, fixture SHA-256 `203f8e003255919611d2393d162018a5d6945729f30da9a3d30276b0139bb03d`
+- Drift/conflict: none
+
+Owner decision interaction:
+- Mode: none-needed
+- Decisions asked/pending: none
+- Auto-resolved decisions: none
+
+Model recommendation:
+- Recommended: GPT-5.6 Sol High
+- Reason: adversarial trigger review
+- Criticality: low-risk, read-only
+- Current model known: no
+- Blocking: no
+
+## Co dalej?
+
+Rekomendacja:
+Review a narrowed description against more near-miss prompts, read-only.  
+Wpływ: Makes the intended trigger boundary clearer before any edit.  
+Napisz:
+```text
+Propose a narrowed trigger description and a read-only near-miss test set for this fixture.
+```
+
+Alternatywa:
+Close this review with the finding recorded in this response.  
+Wpływ: Leaves the synthetic fixture untouched; trigger behavior remains untested.  
+Napisz:
+```text
+Close this review; leave the fixture unchanged.
+```

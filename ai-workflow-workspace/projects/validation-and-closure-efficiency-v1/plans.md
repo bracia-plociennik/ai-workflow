@@ -1,0 +1,5 @@
+# Plans
+
+Accepted plan: planning/phase-2-project-plan.md. Seven included tasks EFF-001 through EFF-007. No deferred scope. Final acceptance is explicit in decisions/eff-dec-002-final-owner-yes.md, not inferred from implementation completion.
+
+Execution completion: all seven tasks are done and covered by quality/phase-5-eff-all-quality.md. Consolidated distillation and checkpoint completed. The accepted plan/spec files are immutable planning baselines, including their original planned-state columns; current execution is tasks.md and status.md. Technical Phase 8 completed with PASS in quality/phase-8-final-check.md. The separate quality/phase-8-final-owner-approval.md records explicit final-owner-yes; the active plan is closed. Original technical QA and scope decisions remain byte-preserved. Source commit 8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1 is now on local main and origin/main after owner-approved fast-forward publication. The fully integrated project branch was deleted locally and remotely. No PR or handoff.

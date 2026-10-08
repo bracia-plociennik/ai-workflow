@@ -1,0 +1,36 @@
+## Findings
+
+**P1 — `average([1, 2])` violates the contract.** [src/report.py](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/src/report.py:7) uses floor division, so `3 // 2` becomes `1` and the function returns `'1'`, rather than `'1.5'`. A read-only execution confirmed this. The empty-input path returns the required `'empty'`.
+
+**Skill selected: none.** I opened only the frontmatter of the fixture’s active `skill-creator` skill. Its description covers skill artifacts, not product-code review. The fixture has no workspace skills directory. I did not open the skill body.
+
+This is an advisory review, with no formal `PASS` or `FAIL`. The supplied contract and source show a correctness mismatch. No accepted plan, spec, runtime status, or Git baseline was available in the fixture.
+
+## Execution Trace
+
+- **Sources used:** Actual opens: fixture `AGENTS.md`, relevant `.systems/ai/core/` review and response contracts, `skill-creator/SKILL.md` frontmatter, and `src/report.py`. The expected results came from the user’s contract.
+- **Evidence reviewed:** `python3 -B` returned `'1'` for `[1, 2]` and `'empty'` for `[]`. The floor-division explanation is an inference from the opened code, confirmed by that execution.
+- **Workflow procedures used:** Skill discovery and read-only global quality review. Review completeness: acceptance mismatch identified; fractional and empty-input paths checked; no fix or post-fix review occurred.
+- **Skills/roles used:** Skills used: none; product-code review lens.
+- **Commands/checks run:** Fixture file listing, frontmatter read, source read, Git status attempt, and read-only Python execution. Git status reported that the fixture is not a Git repository.
+- **Skipped/unreadable sources:** No runtime status, accepted plan/spec, or Git metadata exists in the isolated fixture. No external sources were inspected.
+- **Limits/residual uncertainty:** Review covers the two supplied contract cases; no broader behavior contract was supplied. No files were written. Knowledge capture: not-required for this read-only finding.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: fixture `AGENTS.md` and applicable core review, risk, permissions, and response contracts; reviewed baseline: fixture files and supplied contract; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions asked/pending: none; auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded product-code review; criticality: low; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Route a fix for the division behavior through the applicable write and quality gates.  
+Wpływ: The function can then satisfy the fractional-average contract.  
+Napisz:
+```text
+Fix average([1, 2]) to return '1.5' in this fixture, following its AI Workflow write and quality gates.
+```
+
+**Alternatywa:** Continue read-only review with additional numeric cases.  
+Wpływ: This can clarify expected behavior before a fix is authorized.  
+Napisz:
+```text
+Keep this fixture read-only and review average() against additional numeric edge cases.
+```

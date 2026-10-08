@@ -1,0 +1,27 @@
+AI_WORKFLOW_VALIDATE_START profile=full progress=summary
+Runtime project scope: ai-workflow-lean-validation-v1 (product checks remain global)
+Validation profile: full
+Smoke tests: run
+Final validation evidence: yes
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=started
++ .systems/scripts/check-required-artifacts
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=started
++ .systems/scripts/check-prompt-composition
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=started
++ .systems/scripts/check-branch-policy
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming --project ai-workflow-lean-validation-v1 status=started
++ .systems/scripts/check-naming --project ai-workflow-lean-validation-v1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming --project ai-workflow-lean-validation-v1 status=pass duration_seconds=4
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency --project ai-workflow-lean-validation-v1 status=started
++ .systems/scripts/check-status-consistency --project ai-workflow-lean-validation-v1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency --project ai-workflow-lean-validation-v1 status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence --project ai-workflow-lean-validation-v1 status=started
++ .systems/scripts/check-qa-evidence --project ai-workflow-lean-validation-v1
+Invalid PASS evidence in /Users/jakubplociennik/ai-system/onlinen-workspace/projects/ai-workflow/ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/quality/recovery-phase-3-lv-val-003-scoped-selection-spec-qa.md: Invalid current QA assessment: stale or mismatched input SHA-256: workflow-source:AGENTS.md
+Invalid PASS evidence in /Users/jakubplociennik/ai-system/onlinen-workspace/projects/ai-workflow/ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/quality/phase-5-lv-core-001-verdict-integrity-quality.md: Invalid current QA assessment: stale or mismatched input SHA-256: workflow-source:.systems/scripts/check-validator-smoke-tests
+Invalid PASS evidence in /Users/jakubplociennik/ai-system/onlinen-workspace/projects/ai-workflow/ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/quality/phase-5-lv-obs-002-baseline-quality.md: Invalid current QA assessment: stale or mismatched input SHA-256: workflow-source:.systems/ai/core/commands.md
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence --project ai-workflow-lean-validation-v1 status=fail duration_seconds=2
+AI_WORKFLOW_VALIDATE_COMPLETE profile=full result=fail exit_code=1 duration_seconds=6 stage=validator check=.systems/scripts/check-qa-evidence --project ai-workflow-lean-validation-v1

@@ -1,0 +1,40 @@
+## Findings
+
+1. **P1 — Account authorization is missing.** [TransferRequest](/private/tmp/pse-cli-baseline-backend-only-near-miss-4oj3xsy4/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:8) checks only that a user is signed in. The service then loads any supplied account ID without checking the actor’s authority over it ([line 23](/private/tmp/pse-cli-baseline-backend-only-near-miss-4oj3xsy4/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:23)). A signed-in caller could debit another account if this service is invoked with that ID. Enforce account authorization in the service; the request may reject it earlier too.
+
+2. **P1 — A positive amount can still overdraw the account.** The `min:1` rule validates input shape, but the service subtracts without checking available balance ([line 24](/private/tmp/pse-cli-baseline-backend-only-near-miss-4oj3xsy4/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:24)). Reject insufficient funds with a defined backend/domain error.
+
+3. **P1 — The debit and transfer record can diverge.** The account is saved before `Transfer::create()` ([lines 25–30](/private/tmp/pse-cli-baseline-backend-only-near-miss-4oj3xsy4/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:25)); an insert failure can leave a debit without a record. Concurrent requests can also read the same balance. Use a database transaction with an account lock or equivalent atomic balance condition, and handle failed writes.
+
+**Static failure traces:** another user’s `account_id` reaches the debit; balance 50 with amount 60 becomes −10; a transfer insert error occurs after the debit. The required state in each case is, respectively, no unauthorized mutation, no overdraft, and no partial transfer. No automated checks or runnable Laravel application were supplied.
+
+This is an advisory, read-only review of a synthetic fixture. The requested scope is aligned; implementation compliance against a plan or spec is unknown because none was supplied. No user-facing interface change is implicated. Review completeness: contract and risk routing aligned, negative cases examined, baseline current; formal quality gate ineligible. Work mode compliance: read-only advisory review. Knowledge capture: **not required**, as no durable project state changed.
+
+## Execution Trace
+
+- **Sources used:** fixture, repository `AGENTS.md`, repo status/intake, quality review contracts, Laravel backend skill and reference.
+- **Evidence reviewed:** fixture lines 6–31; clean worktree at `7a904f7`.
+- **Workflow procedures used:** global-quality-review-stance and contract-compliance.
+- **Skills/roles used:** `backend-laravel-skill`; backend code review.
+- **Commands/checks run:** file inspection, line-numbered read, `git status --porcelain` (clean). Tests not run: the fixture contains no runnable application or tests.
+- **Skipped/unreadable sources:** controller, models, schema, exception handler, accepted plan/spec, and tests are absent. Their behavior remains unknown.
+- **Limits/residual uncertainty:** actual account ownership rules, balance representation, and error response contract are unspecified. Automated evidence is supporting-only; no post-fix review was needed.
+- **Instruction refresh:** Status: performed-targeted; Trigger: review closure; Contracts refreshed: `AGENTS.md`, operating model, quality review, full QA, risk, permissions; Reviewed baseline: `7a904f7`, clean worktree, fixture and repo status; Drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; Decisions asked/pending: none; Auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High; Reason: authorization and financial-state review; Criticality: high for any implementation; Current model known: no; Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Draft a read-only remediation plan covering authorization, balance errors, atomic writes, and focused tests.  
+Wpływ: Makes a later fix reviewable before any high-risk implementation.  
+Napisz:
+```text
+Draft a read-only remediation plan and test cases for the synthetic transfer fixture. Do not edit files.
+```
+
+**Alternatywa:** Request a narrower read-only review of backend error behavior.  
+Wpływ: Clarifies exception paths first, while leaving the broader fix plan for later.  
+Napisz:
+```text
+Review only the missing-account, insufficient-funds, unauthorized-account, and write-failure error paths in the synthetic transfer fixture. Do not edit files.
+```

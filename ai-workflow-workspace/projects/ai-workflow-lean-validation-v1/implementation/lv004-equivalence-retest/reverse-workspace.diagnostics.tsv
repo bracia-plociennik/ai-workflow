@@ -1,0 +1,72 @@
+branch-policy-public-blocks-dev-workspace	1	Branch policy violation: ai-workflow-workspace/ is tracked.
+branch-policy-public-blocks-legacy-workspace	1	Branch policy violation: legacy workspace files are tracked under workspace/.
+branch-policy-compat-dev-blocks-legacy-workspace	1	Branch policy violation: legacy workspace files are tracked under workspace/.
+branch-policy-compat-dev-blocks-local-workspace	1	Branch policy violation: ai-workflow-workspace/ is tracked.
+missing-autopilot-readme-template	1	Missing required artifact: .systems/ai/templates/autopilot/autopilot-readme.template.md
+missing-phase-0-init-template	1	Missing workflow template: .systems/ai/templates/workflow/phase-0-init.template.md
+missing-autopilot-readiness-template	1	Missing required artifact: .systems/ai/templates/autopilot/readiness.template.md
+missing-prompt-composition-contract	1	Missing required artifact: .systems/ai/core/prompt-composition.md
+missing-project-prompting-router-template	1	Missing required artifact: .systems/ai/templates/prompting/project-prompting-readme.template.md
+missing-system-insights-contract	1	Missing required artifact: .systems/ai/core/system-insights.md
+missing-contract-compliance-contract	1	Missing required artifact: .systems/ai/core/contract-compliance.md
+missing-skill-intake-plan-template	1	Missing required artifact: .systems/ai/templates/workspace/skills/skill-intake-plan.template.md
+missing-knowledge-capture-gate-validator	1	Missing required artifact: .systems/scripts/check-knowledge-capture-gate
+missing-dreaming-mode-contract	1	Missing required artifact: .systems/ai/core/dreaming-mode.md
+missing-dream-report-template	1	Missing required artifact: .systems/ai/templates/dreaming/dream-report.template.md
+missing-dreaming-mode-validator	1	Missing required artifact: .systems/scripts/check-dreaming-mode
+missing-quality-review-contract	1	Missing required artifact: .systems/ai/core/quality-review.md
+missing-global-quality-review-validator	1	Missing required artifact: .systems/scripts/check-global-quality-review-stance
+missing-request-batch-triage-contract	1	Missing required artifact: .systems/ai/core/request-batch-triage.md
+missing-request-batch-triage-validator	1	Missing required artifact: .systems/scripts/check-request-batch-triage
+missing-response-evidence-trace-validator	1	Missing required artifact: .systems/scripts/check-response-evidence-trace
+missing-phase-skill-discovery-validator	1	Missing required artifact: .systems/scripts/check-phase-skill-discovery
+missing-default-quality-closure-validator	1	Missing required artifact: .systems/scripts/check-default-quality-closure
+missing-default-idea-validation-opt-out-validator	1	Missing required artifact: .systems/scripts/check-default-idea-validation-opt-out
+missing-end-of-task-capture-contract	1	Missing required artifact: .systems/ai/core/end-of-task-capture.md
+missing-end-of-task-capture-template	1	Missing required artifact: .systems/ai/templates/capture/end-of-task-capture.template.md
+missing-end-of-task-capture-validator	1	Missing required artifact: .systems/scripts/check-end-of-task-capture
+missing-update-workspace-script	1	Missing required artifact: .systems/scripts/update-workspace
+post-plan-empty-tasks	1	.systems/ai/examples/projects/EXAMPLE/tasks.md has no concrete task rows
+later-phase-empty-tasks	1	.systems/ai/examples/projects/EXAMPLE/tasks.md has no concrete task rows
+bad-naming	1	Invalid Markdown filename (filesystem): .systems/ai/workflow/Phase_8_BAD.md
+naming-requires-frozen-eval-marker	1	Invalid Markdown filename (workspace-filesystem): /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/ai-workflow-workspace/projects/EXAMPLE/evals/frozen-run/fixture/STATE.md
+naming-rejects-bad-canonical-eval-artifact	1	Invalid Markdown filename (workspace-filesystem): /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/ai-workflow-workspace/projects/EXAMPLE/evals/frozen-run/Result_BAD.md
+naming-rejects-bad-unrelated-workspace-artifact	1	Invalid Markdown filename (workspace-filesystem): /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/ai-workflow-workspace/projects/EXAMPLE/Other_BAD.md
+missing-canonical-project-context	1	.systems/ai/examples/projects/EXAMPLE is in or past project/context intake but missing canonical context: .systems/ai/examples/projects/EXAMPLE/context.md
+missing-gate-heading	1	AI_WORKFLOW_VALIDATE_START profile=standard progress=summary
+knowledge-capture-requires-phase-block	1	Missing Optional Knowledge Capture block in .systems/ai/workflow/phase-0-idea-validation.md
+knowledge-capture-requires-template-field	1	Missing Optional Knowledge Capture field '- Owner decision required:' in .systems/ai/templates/workflow/phase-0-idea-validation.template.md
+knowledge-capture-blocks-hard-gate-wording	1	.systems/ai/core/memory.md:91:Agents must write memory after every phase.
+default-quality-chain-requires-architecture-mapping	1	Missing default quality chaining text in .systems/ai/core/command-routing.md: `phase-1-architecture` -> `phase-1-architecture-qa`
+default-quality-chain-requires-bez-qa-opt-out	1	Missing default quality chaining text: bez QA
+default-quality-chain-blocks-unsafe-opt-out-wording	1	Unsafe opt-out wording suggests progression without required QA
+default-quality-chain-blocks-default-task-packaging	1	Plan QA still routes unconditionally to task packaging
+default-quality-chain-requires-owner-only-packaging	1	Missing default quality chaining text in .systems/ai/workflow/phase-2-task-packaging.md: optional owner-requested
+default-quality-chain-blocks-phase-8-auto-chain	1	Unsafe wording suggests phase 8 can be started by default quality chaining
+dreaming-mode-requires-full-repo-variant	1	Dreaming Mode policy missing required boundary text: full-repo
+dreaming-mode-requires-dream-variant-template-field	1	Dream report template missing required field or section: Dream variant: `<workflow-artifacts-only\|full-repo>`
+dreaming-mode-requires-risk-privacy-template-field	1	Section 'Workflow Artifact Findings' missing required table column 'Risk/privacy note': .systems/ai/templates/dreaming/dream-report.template.md
+dreaming-mode-requires-risk-privacy-per-candidate-section	1	Section 'Workflow Artifact Findings' missing required table column 'Risk/privacy note': .systems/ai/templates/dreaming/dream-report.template.md
+dreaming-mode-requires-prompt-injection-boundary	1	Dreaming Mode policy missing required boundary text: prompt-injection.md
+dreaming-mode-requires-full-repo-exclusions	1	Dreaming Mode policy missing required boundary text: \.git/
+dreaming-mode-blocks-automatic-writes-wording	1	.systems/ai/core/dreaming-mode.md:136:Dreaming Mode writes System Insights automatically.
+dreaming-mode-requires-report-privacy-check	1	Dream Report missing required section or field 'Raw client data copied:': /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/ai-workflow-workspace/dreams/runs/2026-06-19-valid-workflow/dream-report.md
+dreaming-mode-blocks-raw-client-data	1	95:client name: Private Client
+dreaming-mode-blocks-full-repo-not-applicable-report	1	Full-repo Dream Report cannot mark repo/code review findings not-applicable: /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/ai-workflow-workspace/dreams/runs/2026-06-19-valid-full-repo/dream-report.md
+dreaming-v2-blocks-placeholder	1	22:| `.systems/ai/core/dreaming-mode.md` | `v2-workflow` | `new` | <finding> | `review` | protects evidence | `none` | `none` | `safe` | `review` |
+dreaming-v2-blocks-duplicate-id	1	Dream Report v2 contains duplicate recommendation IDs: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/v2-dream-workspace/dreams/runs/v2-valid/dream-report.md
+dreaming-v2-blocks-repeated-without-evidence	1	Repeated Dream recommendation lacks previous evidence: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/v2-dream-workspace/dreams/runs/v2-valid/dream-report.md
+dreaming-v2-requires-complete-privacy-scope	1	Dream Report v2 missing required field 'Production identifiers copied: `no`': /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/v2-dream-workspace/dreams/runs/v2-valid/dream-report.md
+worktree-bootstrap-requires-approval	1	Worktree bootstrap STOP: platform network/write approval was not recorded
+worktree-bootstrap-requires-strong-marker	1	Worktree bootstrap STOP: missing strong AI Workflow installation marker
+worktree-bootstrap-rejects-symlink-marker	1	Worktree bootstrap STOP: accepted marker cannot be a symlink
+worktree-bootstrap-stops-agents-collision	1	Worktree bootstrap STOP: root AGENTS.md already exists and requires owner-approved merge
+worktree-bootstrap-stops-wrong-origin	1	Worktree bootstrap STOP: existing clone has wrong origin: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/.bootstrap-v1-smoke/wrong.git
+worktree-bootstrap-stops-dirty-clone	1	Worktree bootstrap STOP: existing clone is dirty
+worktree-bootstrap-stops-self-clone	1	Worktree bootstrap STOP: official AI Workflow repository must not clone itself
+update-blocks-dirty-template	1	AI_WORKFLOW_WORKSPACE_HOME: /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/.update-smoke/target/ai-workflow-workspace (not found)
+update-blocks-dirty-example-micro-project	1	AI_WORKFLOW_WORKSPACE_HOME: /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/.update-smoke/target/ai-workflow-workspace (not found)
+update-blocks-legacy-nested-workspace	1	STOP: legacy workspace found inside AI_WORKFLOW_HOME: /private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/.update-smoke/target/ai-workflow/workspace
+workspace-freshness-remains-advisory	1	Workspace freshness incorrectly acts as a hard gate
+contract-topology-remains-advisory	1	Contract topology incorrectly acts as a hard gate
+update-ff-only-failure-leaves-external-workspace	1	AI_WORKFLOW_WORKSPACE_HOME: /var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/ai-workflow-smoke-dispatch-xwod18_3/group-workspace/ai-workflow-validator-smoke.g3EzwE/.update-smoke/target/ai-workflow-workspace

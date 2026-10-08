@@ -1,0 +1,32 @@
+**Skills used: none.** The fixture’s only active AI Workflow skill is [skill-creator](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/.systems/ai/skills/skill-creator/SKILL.md). Its frontmatter covers creating and reviewing *skill artifacts*; a future review of [src/report.py](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/src/report.py) is a product-code review based on the request. The normal AI Workflow review procedure would apply, but it is not a skill.
+
+**Actual opens versus inference:** I opened the fixture’s [AGENTS.md](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/AGENTS.md), relevant core contracts, and the `skill-creator` frontmatter. A directory listing confirmed that `src/report.py` exists. I did **not** open or review its contents, so its review needs remain unknown.
+
+### Execution Trace
+
+- **Sources used:** Fixture `AGENTS.md`, core routing and response contracts, `skill-creator/SKILL.md` frontmatter.
+- **Evidence reviewed:** Fixture file and directory listings; workspace skill directory absent; Git metadata unavailable in the fixture.
+- **Workflow procedures used:** Phase Skill Discovery.
+- **Skills/roles used:** None; `skill-creator` was considered and did not match.
+- **Commands/checks run:** Read-only listings and source reads. No tests or code review.
+- **Skipped/unreadable sources:** `src/report.py` contents intentionally unopened; some combined core output was truncated.
+- **Limits/residual uncertainty:** Selection is based on the requested review type and available skill metadata, not the code’s contents.
+- **Instruction refresh:** Status: performed-targeted; Trigger: initial fixture discovery; Contracts refreshed: `AGENTS.md` and relevant core contracts; Reviewed baseline: fixture listing and available runtime paths; Drift/conflict: none found.
+- **Owner decision interaction:** Mode: none-needed; Decisions asked/pending: none; Auto-resolved decisions: none.
+- **Model recommendation:** Recommended: not-applicable; Reason: no review was performed; Criticality: not-applicable; Current model known: not-applicable; Blocking: not-applicable.
+
+### Co dalej?
+
+**Rekomendacja:** Request the code review when ready.  
+Wpływ: The review can then use the normal procedure and inspect the file.  
+Napisz:
+```text
+Review src/report.py in this isolated fixture.
+```
+
+**Alternatywa:** Recheck skill availability if the fixture changes.  
+Wpływ: A newly added workspace skill could change the selection.  
+Napisz:
+```text
+Recheck which AI Workflow skill applies to reviewing src/report.py.
+```

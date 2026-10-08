@@ -1,0 +1,14 @@
+{
+  "scope": "synthetic-detectors-and-wrapper-only",
+  "model_calls": 0,
+  "CLI_called": false,
+  "tests_run": 14,
+  "failures": 0,
+  "errors": 0,
+  "successful": true,
+  "duration_seconds": 1.319,
+  "harness_sha256": "c66ae4125fa7208e946fd5dd1026b5a32995b82cc85797edbe279f6be8adcbf3",
+  "tests_sha256": "ce9c5b27fa4a972ccb68c3bdeb097310468a101908b343ab761e83894ad3d78b",
+  "runtime_isolation_proven": false,
+  "behavioral_eval_ready": false
+}

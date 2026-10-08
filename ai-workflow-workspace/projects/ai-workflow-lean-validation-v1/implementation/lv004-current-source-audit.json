@@ -1,0 +1,39 @@
+{
+  "source_head": "03fb78819a0d0f8e413e05e2f7d13573f63c85d8",
+  "paths_sha256": {
+    ".systems/ai/core/commands.md": "0f5419df7215119197e3251648863e693cf94224657a6830d3bf57ee4f2a3e26",
+    ".systems/ai/core/validation-observability.md": "42ab0c5c3df49f65f1736ecc93e69d89a2037fc12f3b4ed192474db3a8dfbf26",
+    ".systems/scripts/check-validation-completion": "ea357f5fb71f3c0522554c135cfcebfb0064d76e32fb762ea4e583b592b6a3ba",
+    ".systems/scripts/check-validation-observability": "6309030c4497d3b3d59794053e1bf4770ab0623f98b48402b26474846bf6b17f",
+    ".systems/scripts/check-validator-smoke-tests": "a2c50575a3dba189d3ad3aef5976da7db67eea468c8540be39b095457dbe465d",
+    ".systems/scripts/smoke/common.sh": "3caa22344730df6b565b687eb0d68e2964ed0d143ee69c27c218508e03aa1db9",
+    ".systems/scripts/smoke/core.sh": "fbb76e3894444f91a527ce41628ea984c0ec7d8ff811a3587077f8e11bd2ba2d",
+    ".systems/scripts/smoke/manifest.json": "64dc59a39ab2862643010c22e898cfcd16601674fb85909e70589656535696d4",
+    ".systems/scripts/smoke/policy.sh": "9260731823487ef869be343da6ef8f3754d7b56dcc39c5edb44be17df85331b5",
+    ".systems/scripts/smoke/quality.sh": "e45a8254d9739094962dde329847ddfe117672f9b4f126254f623d848c396de6",
+    ".systems/scripts/smoke/skills.sh": "99c5db23482ea390c991973d4f6a11155a4f88365d50f65df661ad6e99b6a30b",
+    ".systems/scripts/smoke/workspace.sh": "7e9a435dcbaae8f5e5357ad50e68236e2c1eaa040134017d4b7d2f0ef6e07d68",
+    "README.md": "3a97a1633219a72c0b414b50fe8bc810bc049b99a69f8a71a0b8b2bacf6ffccf"
+  },
+  "source_digest": "a70de995e0acc04c539624fbd979c9b8e3eea1677a64786379d41bde6a6b9cf5",
+  "approved_paths": 13,
+  "reference_ids": 674,
+  "supplemental_ids": 20,
+  "ownership": {
+    "core": 70,
+    "workspace": 95,
+    "policy": 157,
+    "skills": 29,
+    "quality": 343
+  },
+  "outside_point_classification": {
+    "assertion": 95,
+    "failure-branch": 14,
+    "failure-fixture": 1
+  },
+  "nested_python_assertions": 34,
+  "frozen_regions": 21,
+  "pure_import": "verified",
+  "ci_updater_and_full_runner": "unchanged",
+  "limits": "Structural supporting evidence; behavior, current source review and formal quality are separate."
+}

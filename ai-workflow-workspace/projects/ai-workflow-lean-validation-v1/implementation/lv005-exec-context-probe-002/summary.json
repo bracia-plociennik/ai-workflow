@@ -1,0 +1,113 @@
+{
+  "model_called": false,
+  "endpoint": "loopback only; no authentication",
+  "expected_cli_failure": "intentional HTTP 400",
+  "cli_exit_code": 1,
+  "requests": [
+    {
+      "model": "gpt-6-sol",
+      "reasoning": {
+        "effort": "high",
+        "context": "all_turns"
+      },
+      "input_items": 7,
+      "role_inventory": [
+        "developer",
+        "developer",
+        "developer",
+        "developer",
+        "developer",
+        "user",
+        "user"
+      ],
+      "input_text_kinds": [
+        "base-or-user-text",
+        "<skills_instructions>",
+        "<permissions instructions>",
+        "<collaboration_mode>",
+        "<multi_agent_role>",
+        "<multi_agent_mode>",
+        "AGENTS instructions",
+        "<environment_context>",
+        "base-or-user-text"
+      ],
+      "host_skill_catalog_present": true,
+      "skill_catalog_count": 4,
+      "only_known_public_builtin_names": false,
+      "global_agents_instruction_count": 1,
+      "global_agents_instruction_sha256": [
+        "809b97b8ccd047f656b6dd59e2827e874af20cedcd230c4ce045c6ccfd5a43e3"
+      ],
+      "disallowed_markers_present": [],
+      "context_sha256": "ad9c92a1a667148ea321d8278996cf78f9479aad7902ffafca68efd4ee39ef1b",
+      "context_bytes": 27342,
+      "authorization_header_present": false,
+      "tool_inventory": []
+    }
+  ],
+  "settings": {
+    "model_reasoning_effort": "high",
+    "approval_policy": "never",
+    "default_permissions": "lv005-fixture",
+    "web_search": "disabled",
+    "permissions.lv005-fixture.filesystem": {
+      ":minimal": "read",
+      ":workspace_roots": {
+        ".": "write"
+      }
+    },
+    "permissions.lv005-fixture.network.enabled": false,
+    "project_doc_max_bytes": 0,
+    "features.code_mode_host": true,
+    "memories.generate_memories": false,
+    "memories.use_memories": false,
+    "features.skip_host_skill_discovery": true,
+    "model_provider": "lv005-local-sink",
+    "model_providers.lv005-local-sink.name": "Local context sink; no model",
+    "model_providers.lv005-local-sink.base_url": "http://127.0.0.1:61905/v1",
+    "model_providers.lv005-local-sink.requires_openai_auth": false,
+    "model_providers.lv005-local-sink.wire_api": "responses",
+    "model_providers.lv005-local-sink.supports_websockets": false,
+    "model_providers.lv005-local-sink.request_max_retries": 0,
+    "model_providers.lv005-local-sink.stream_max_retries": 0,
+    "features.apps": false,
+    "features.plugins": false,
+    "features.hooks": false,
+    "features.memories": false,
+    "features.multi_agent": false,
+    "features.multi_agent_v2": false,
+    "features.browser_use": false,
+    "features.browser_use_external": false,
+    "features.computer_use": false,
+    "features.view_image": false,
+    "features.image_generation": false,
+    "features.skill_search": false,
+    "features.skill_mcp_dependency_install": false,
+    "features.workspace_dependencies": false,
+    "features.shell_snapshot": false,
+    "features.tool_suggest": false,
+    "skills.config": [
+      {
+        "path": "/Users/jakubplociennik/.codex/skills/.system/imagegen/SKILL.md",
+        "enabled": false
+      },
+      {
+        "path": "/Users/jakubplociennik/.codex/skills/.system/openai-docs/SKILL.md",
+        "enabled": false
+      },
+      {
+        "path": "/Users/jakubplociennik/.codex/skills/.system/plugin-creator/SKILL.md",
+        "enabled": false
+      },
+      {
+        "path": "/Users/jakubplociennik/.codex/skills/.system/skill-creator/SKILL.md",
+        "enabled": false
+      },
+      {
+        "path": "/Users/jakubplociennik/.codex/skills/.system/skill-installer/SKILL.md",
+        "enabled": false
+      }
+    ]
+  },
+  "limits": "Custom provider may differ from authenticated provider in system/tool packaging; this does not prove hosted-model context equality."
+}

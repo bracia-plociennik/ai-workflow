@@ -1,0 +1,25 @@
+# 2026-06-11 - Prompt Composition Release 0.8.8
+
+- Date: `2026-06-11`
+- Topic: `prompt composition release 0.8.8`
+- Type: `repo-fact`
+- Status: `active`
+- Scope: `repo-wide`
+- Source: `final phase-7-checkpoint`
+- Evidence:
+  - `AI_WORKFLOW_WORKSPACE_HOME/projects/upgrade-with-master-prompt/checkpoints/phase-7-checkpoint-2026-06-11-final.md`
+  - commit `825bcfc` `docs: add prompt composition contract`
+  - commit `28a8ccd` `docs: add prompt composition templates`
+  - commit `accfb06` `docs: route prompt composition guidance`
+  - commit `31e2ae7` `docs: define project prompting lifecycle`
+  - commit `852037f` `test: add prompt composition validation`
+  - commit `0330dbd` `docs: add prompt composition examples`
+- Summary: `AI Workflow 0.8.8 adds prompt composition as advisory guidance with role profiles, variable packs, project-local lifecycle, validators, human guidance, and examples.`
+- Applies to:
+  - `.systems/ai/core/prompt-composition.md`
+  - `.systems/ai/templates/prompting/`
+  - `.systems/ai/examples/prompting/`
+  - `.systems/scripts/check-prompt-composition`
+  - `HUMANS.md`
+- Rule: `Prompt composition artifacts remain advisory. They cannot override source-of-truth order, phase gates, risk, permissions, evidence, stop conditions, or owner approvals.`
+- Review trigger: `Revisit when adding prompt composition templates, examples, validators, or changing source-of-truth order.`

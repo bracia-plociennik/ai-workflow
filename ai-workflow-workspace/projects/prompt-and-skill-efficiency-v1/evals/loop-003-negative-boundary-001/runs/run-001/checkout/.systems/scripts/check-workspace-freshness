@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+fail=0
+for file in .systems/ai/core/workspace-freshness.md .systems/scripts/report-workspace-freshness; do
+  [[ -f "$file" ]] || { echo "Missing workspace freshness artifact: $file"; fail=1; }
+done
+for text in 'advisory' 'observed-at' 'repository path' 'branch' 'HEAD' 'worktree' 'dirty' 'stale' 'unknown'; do
+  rg -qi "$text" .systems/ai/core/workspace-freshness.md .systems/scripts/report-workspace-freshness || { echo "Workspace freshness contract missing: $text"; fail=1; }
+done
+if rg -qi 'freshness.*hard gate|stale.*blocks workflow|must pass before' .systems/ai/core/workspace-freshness.md; then
+  echo "Workspace freshness incorrectly acts as a hard gate"
+  fail=1
+fi
+exit "$fail"

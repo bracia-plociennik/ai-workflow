@@ -1,0 +1,61 @@
+## Task Idea Validation
+
+- **Co zostaje:** A read-only wallet dashboard that displays balances supplied by a backend read model. The stated boundary excludes contract changes, backend code, and transactions.
+- **Co jest słabe / do poprawy lub usunięcia:** “On-chain balance” needs a visible chain and freshness reference so a projected backend value is not presented as a live contract read.
+- **Czego brakuje:** An actual UI application and an agreed read-model schema. The named project directory contains evaluation fixtures, not a product implementation or accepted project plan.
+- **Blokery / decyzje:** None for this read-only plan. Those missing inputs block implementation. A future UI change would be **medium risk**; changing authentication or adding an external integration would require separate risk review.
+- **Rekomendowany routing:** Keep this as a synthetic planning-only output. Resolve the product target and read-model contract before any implementation route.
+
+## Synthetic dashboard plan
+
+1. **Define the display contract.** For each balance, require wallet address, chain ID, asset identifier and symbol, atomic balance, decimals, and the block number and indexing time behind the value. Define how the read model marks unavailable or incomplete data.
+2. **Design a compact balance view.** Show the wallet and chain, then each asset’s formatted balance and data freshness. Keep amounts from different assets separate. Show a portfolio value only if an approved valuation source and timestamp are later supplied.
+3. **Map the states.** Cover loading, no assets, loaded, stale, partial, unavailable, offline, and retry. Label projected data clearly; never imply a pending refresh has confirmed a new balance. Include narrow-screen, keyboard, and screen-reader behavior in the later UI specification.
+4. **Verify against local synthetic data.** Future UI tests should cover large integer amounts, differing decimals, zero balances, mismatched chain or address, stale blocks, partial responses, and failed retries. Use local mocked responses only.
+
+**Acceptance conditions for a future implementation:** Every displayed amount maps to the correct wallet, chain, and asset; formatting preserves atomic-value precision; freshness and failures are visible; the UI has no signing, sending, approval, or transaction controls; and no contract or backend code changes are included.
+
+### Plan Quality Contract
+
+- **Plan classification:** read-only; no implementation writes planned.
+- **DoD source:** the user’s stated scope and the acceptance conditions above.
+- **Testable DoD / acceptance conditions:** the display, state, precision, provenance, and exclusion checks above.
+- **Artifact QA route / trigger:** not-applicable; this response creates no formal project artifact.
+- **Implementation Quality Closure route:** not-applicable; no implementation occurs.
+- **Required verification:** not-applicable now; the local mock and UI checks above apply if implementation is later authorized.
+- **Quality-ready criteria:** a future implementation needs an agreed schema, product target, applicable QA route, and evidence for the acceptance conditions.
+- **Owner opt-out:** none.
+- **Not-applicable reason:** planning-only response with no writes.
+- **Blocking decision:** none for planning; product target and read-model schema remain prerequisites for implementation.
+- **Next route:** resolve those prerequisites, then prepare a scoped implementation specification.
+
+**Contract compliance:** Read-only planning scope respected. Knowledge capture: **not-required**; no repository state or reusable project decision changed.
+
+## Execution Trace
+
+- **Sources used:** User prompt; [AGENTS.md](/private/tmp/pse-cli-candidate-mixed-web3-ui-1fqopsd2/checkout/AGENTS.md); relevant `.systems/ai/core/` contracts; frontend and blockchain skills; fixture and repo runtime context.
+- **Evidence reviewed:** HEAD `7a904f7`, clean git status, repo status showing no active formal project, and the named fixture directory.
+- **Workflow procedures used:** task intake, plan quality contract, risk routing, owner decision discovery.
+- **Skills/roles used:** frontend-skill and blockchain-skill for UI states and read-model provenance.
+- **Commands/checks run:** read-only file inspection; `git status --porcelain=v1` clean; `git diff --check` clean.
+- **Skipped/unreadable sources:** No product app, accepted project artifacts, or read-model schema exist here; no UI tests or external checks were run.
+- **Limits/residual uncertainty:** The fixture does not establish a usable product API or UI stack. This plan does not authorize implementation.
+- **Instruction refresh:** Status: performed-full; trigger: reconcile the selected fixture with repo status; contracts refreshed: AGENTS.md, operating model, routing, risk, permissions, workflow, response, plan, and relevant skills; reviewed baseline: HEAD, worktree, status, intake, and fixture; drift/conflict: none—the prompt selects a fixture while runtime status has no active formal project.
+- **Owner decision interaction:** Mode: none-needed for planning; decisions asked/pending: none; auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High; reason: balance provenance and read-model boundaries need careful specification; criticality: medium for a future UI change; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Provide the target UI application and proposed backend read-model response for a scoped specification.  
+**Wpływ:** This makes the data mapping and verification criteria concrete before implementation.  
+**Napisz:**
+```text
+Use this target UI path and read-model response to specify the synthetic wallet dashboard. Keep it read-only and make no code changes: <path and response>.
+```
+
+**Alternatywa:** Review the proposed display contract using synthetic sample responses only.  
+**Wpływ:** This can settle balance fields and failure states while the product target remains unknown.  
+**Napisz:**
+```text
+Review the wallet dashboard display contract with local synthetic sample responses only; make no code changes.
+```

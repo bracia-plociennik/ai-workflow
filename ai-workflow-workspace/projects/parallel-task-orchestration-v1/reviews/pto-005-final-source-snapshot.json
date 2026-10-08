@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "scope": "PTO-QA-005-integration-acceptance",
+  "baseline_head": "8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1",
+  "source_fingerprints": {
+    "helper": "b406516efa9d162455f8f9b6ed2dc7921c5ab39b3db4f5f94312d566d4ba70bc",
+    "contract": "35fdf294437cf80d671d13ff47767fb01cc5bdb01d489945d567e9c4da2d8ece",
+    "quality": "814971d0617f6d6d97d352d62fa01ea443a51542aff48a4c899ce05a78e77014",
+    "fullqa": "7ecdb8e2affc94f14460717ad28635dd02cf43be9445a55a2991589752ae5002",
+    "phase5": "57a7e87eaf808615192826f57029489110dc1fbbc9df315016cbdce561912113",
+    "template": "b29cc2eb032e679b47069688397bbb6169ddf28ac356ea077e74583bef6287cb",
+    "smoke": "2cefde781c69c64b464896f3bb03215bccb2934552c3ae383d246eef61473f24",
+    "tests": "0e33131f870618d98b5973afb64772dbe4fed913f391863a739b557996843bb4",
+    "manifest": "029ebb686ab41b1edc6e6ac65f706b9daec7b80cf87ec0dbc9c1609358c0b798"
+  },
+  "review": "reviews/pto-005-quality-review.md",
+  "full_source_receipt": "/tmp/pto-005-full-source-003.json",
+  "full_exit_code": 0,
+  "full_duration_seconds": 703,
+  "smoke_groups": 5,
+  "smoke_ids": 744,
+  "native_support": "unverified",
+  "execution_authorized": false
+}

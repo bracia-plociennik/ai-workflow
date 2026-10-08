@@ -1,0 +1,33 @@
+Corrected `synthethic` to `synthetic` in the [fixture README](/private/tmp/pse-cli-candidate-tiny-doc-fix-ycdo0hgf/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/tiny-doc-fix/README.md). The sentence is otherwise unchanged.
+
+The requested scope was clear; no correction beyond the spelling was needed, no information was missing, and no owner decision blocked the low-risk side-task route. An exact-content check succeeded. Advisory review found no blockers or behavior change.
+
+### Execution Trace
+
+- Sources used: owner request, fixture README, repository guidance, synthetic repo status and intake.
+- Evidence reviewed: README before and after the edit; exact-content assertion; `git status --short`; `git diff --check`.
+- Workflow procedures used: task intake, implementation slice, advisory quality review, contract compliance.
+- Skills/roles used: none.
+- Commands/checks run: exact-content assertion succeeded; `git diff --check` and tracked-file status were clean.
+- Skipped/unreadable sources: none. The workspace is Git-ignored, so the Git checks do not cover this README; the direct content check does.
+- Limits/residual uncertainty: none for the spelling fix. No tests were needed for this documentation-only change.
+- Instruction refresh: performed-targeted before the edit and review; baseline was the isolated checkout, its synthetic status, and the named fixture; no drift found.
+- Owner decision interaction: none needed.
+- Model recommendation: GPT-5.6 Luna High for this bounded, reversible task; advisory only.
+- Contract compliance: low-risk side task; knowledge capture not required because the typo fix creates no reusable operational knowledge.
+
+### Co dalej?
+
+**Rekomendacja:** Accept the correction and close this synthetic task.  
+Wpływ: The requested fixture edit is complete.  
+Napisz:
+```text
+Accept the README typo fix and end this synthetic task.
+```
+
+**Alternatywa:** Request a read-only review of the fixture.  
+Wpływ: Adds an independent check without changing files.  
+Napisz:
+```text
+Review the tiny-doc-fix README correction without editing files.
+```

@@ -1,0 +1,65 @@
+## Authorization blocker
+
+**P1 — the proposed diff removes the document ownership check.** In [case.md](/private/tmp/pse-cli-candidate-security-readonly-4p4f49mn/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/security-readonly/case.md:7), `download()` would return the stored document without checking whether `$actor` owns it. If a caller can pass another user’s `Document`, that user could download its contents instead of receiving `403`. The change should be blocked pending an authorization review. A real application may have another guard, but this fixture provides no evidence of one.
+
+This is a **high-risk permissions change** under the repository risk model; implementation would require human approval. The checkout contains only a synthetic snippet, so exploitability and any upstream policy cannot be verified. No files were changed, no application tests were run, and this advisory review does not issue a formal `PASS` or `FAIL`.
+
+## Execution Trace
+
+Sources used:
+- Owner request; fixture; `AGENTS.md`; risk, permissions, quality review, full QA, response and instruction-refresh contracts; backend Laravel skill.
+
+Evidence reviewed:
+- Fixture lines 3–9; repo intake and status; clean worktree at `7a904f7`.
+
+Workflow procedures used:
+- Read-only `global-quality-review-stance`; targeted instruction refresh. Review completeness: finding recorded, risk and work mode aligned, adversarial case considered, baseline current; accepted app plan/spec and caller authorization are unavailable.
+
+Skills/roles used:
+- Backend Laravel skill; security review lens.
+
+Commands/checks run:
+- Read-only file inspection and `git status`; no application tests because no application is present.
+
+Skipped/unreadable sources:
+- Application routes, policies, tests, and accepted plan/spec: absent from the fixture.
+
+Limits/residual uncertainty:
+- Whether another layer authorizes the download is unknown. Contract compliance: read-only scope respected. Knowledge capture: not-required; no durable work was authorized.
+
+Instruction refresh:
+- Status: performed-targeted
+- Trigger: review closure
+- Contracts refreshed: `AGENTS.md`, operating model, risk, permissions, quality and response contracts
+- Reviewed baseline: `7a904f7`, clean worktree, named fixture
+- Drift/conflict: none
+
+Owner decision interaction:
+- Mode: none-needed
+- Decisions asked/pending: none
+- Auto-resolved decisions: none
+
+Model recommendation:
+- Recommended: GPT-5.6 Sol High
+- Reason: security and authorization review
+- Criticality: high
+- Current model known: no
+- Blocking: no
+
+## Co dalej?
+
+Rekomendacja:
+Treat this synthetic diff as an authorization blocker in the review decision.
+Wpływ: Prevents the proposed removal from being accepted without evidence of equivalent access control.
+Napisz:
+```text
+Record the read-only review decision for this synthetic fixture; do not repair or deploy.
+```
+
+Alternatywa:
+Provide isolated route and policy evidence for a further read-only review.
+Wpływ: Clarifies whether another authorization check covers this download path.
+Napisz:
+```text
+Review the supplied isolated route, policy, and test evidence for this download path read-only; do not repair or deploy.
+```

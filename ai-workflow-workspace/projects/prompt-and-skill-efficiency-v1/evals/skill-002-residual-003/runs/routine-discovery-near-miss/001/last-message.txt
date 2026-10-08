@@ -1,0 +1,35 @@
+### Finding
+
+**P1 — The arithmetic-mean case fails.** [Line 7](/private/tmp/ai-workflow-skill-002-residual-001-candidate/src/skill_creator_status.py:7) uses floor division (`//`). A read-only Python check returned `[1, 2] -> '1'`, where the contract requires `'1.5'`. The empty-input branch returned `'empty'` as required. Replacing `//` with `/` would address the demonstrated mismatch; no file was changed.
+
+**Skill selected: none.** The fixture’s only active AI Workflow skill, [skill-creator](/private/tmp/ai-workflow-skill-002-residual-001-candidate/.systems/ai/skills/skill-creator/SKILL.md), covers work on AI Workflow skills. The [module](/private/tmp/ai-workflow-skill-002-residual-001-candidate/src/skill_creator_status.py:1) identifies itself as product code.
+
+### Execution Trace
+
+- **Sources used:** Fixture `AGENTS.md`, applicable `.systems/ai/core/` review contracts, the skill contract, and the target module.
+- **Evidence reviewed:** Source lines 4–7 and read-only Python output for both requested inputs. The fixture search found no test file or runtime workspace.
+- **Workflow procedures used:** Advisory, findings-first code review; no formal quality verdict.
+- **Skills/roles used:** None; code-review lens.
+- **Commands/checks run:** Fixture-local file search and reads; `python3 -B` returned `'1'` and `'empty'`. No writes.
+- **Skipped/unreadable sources:** Git state is unavailable because the fixture is not a Git repository. No source outside the fixture was inspected.
+- **Limits/residual uncertainty:** Review is limited to the stated contract and isolated fixture.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: fixture `AGENTS.md` and applicable review contracts; reviewed baseline: fixture files; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions pending: none.
+- **Model recommendation:** GPT-5.6 Luna High; bounded review; low criticality; current model known: yes; blocking: no.
+- **Contract compliance:** Read-only advisory work complied with the requested scope. Knowledge capture: not-required; no durable state changed.
+
+### Co dalej?
+
+**Rekomendacja:** Authorize a scoped fix and verification of both inputs.  
+Wpływ: Resolves the demonstrated contract failure.  
+Napisz:
+```text
+Fix report_status in the isolated fixture and verify [1, 2] and [].
+```
+
+**Alternatywa:** Request a broader read-only edge-case review.  
+Wpływ: Clarifies formatting expectations before any edit.  
+Napisz:
+```text
+Review report_status edge cases in the isolated fixture without editing files.
+```

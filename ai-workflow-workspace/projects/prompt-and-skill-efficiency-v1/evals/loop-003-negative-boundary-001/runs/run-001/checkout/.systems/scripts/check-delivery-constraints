@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "$0")/lib/policy-boundaries.sh"
+
+fail=0
+
+require_ref() {
+  local file="$1" pattern="$2" label="$3"
+  if [[ ! -f "$file" ]]; then
+    echo "Missing delivery constraints file: $file"
+    fail=1
+    return
+  fi
+  if ! rg -qi -- "$pattern" "$file"; then
+    echo "Missing delivery constraints reference in $file: $label"
+    fail=1
+  fi
+}
+
+contract=.systems/ai/core/delivery-constraints.md
+template=.systems/ai/templates/delivery/delivery-constraints.template.md
+
+require_ref "$contract" '^# delivery-constraints\.md$' 'core contract'
+for section in '## Default Rule' '## Delivery Constraints Block' '## Scope And Quality Boundaries' '## Overrun And Opt-Out' '## Routing And Ownership' '## Evidence'; do
+  require_ref "$contract" "^${section}$" "$section"
+done
+for field in 'Mode:' 'Deadline:' 'Timezone:' 'Time budget:' 'Must-have outcome:' 'Should-have scope:' 'Stretch scope:' 'Explicitly deferred scope:' 'Quality floor:' 'Cutline rule:' 'Overrun checkpoint:' 'Owner override:'; do
+  require_ref "$contract" "$field" "contract field $field"
+  require_ref "$template" "$field" "template field $field"
+done
+for phrase in 'at most `1-3` questions' 'Do not invent one' 'deadline pressure never authorizes skipping QA' 'awaiting-owner' 'bez deadlinu' 'no deadline' 'bez timeboxu' 'no timebox'; do
+  require_ref "$contract" "$phrase" "boundary $phrase"
+done
+for integration in \
+  'AGENTS.md:delivery-constraints.md' \
+  'HUMANS.md:Delivery Constraints' \
+  'README.md:delivery-constraints.md' \
+  '.systems/ai/core/task-intake.md:delivery-constraints.md' \
+  '.systems/ai/core/owner-decision-checkpoints.md:delivery constraint' \
+  '.systems/ai/core/plan-quality-contract.md:delivery constraint' \
+  '.systems/ai/core/implementation-slicing.md:delivery constraint' \
+  '.systems/ai/core/command-routing.md:deadline' \
+  '.systems/ai/core/autopilot.md:delivery constraint' \
+  '.systems/ai/core/commands.md:check-delivery-constraints' \
+  '.systems/scripts/validate-workflow:check-delivery-constraints' \
+  '.systems/scripts/check-required-artifacts:delivery-constraints.md'; do
+  file="${integration%%:*}"; pattern="${integration#*:}"
+  require_ref "$file" "$pattern" "integration $pattern"
+done
+
+for file in \
+  .systems/ai/workflow/phase-1-architecture.md \
+  .systems/ai/workflow/phase-2-project-plan.md \
+  .systems/ai/workflow/phase-3-specification.md \
+  .systems/ai/workflow/phase-1-architecture-qa.md \
+  .systems/ai/workflow/phase-2-plan-qa.md \
+  .systems/ai/workflow/phase-3-spec-qa.md \
+  .systems/ai/workflow/phase-4-implementation.md \
+  .systems/ai/workflow/phase-5-quality.md \
+  .systems/ai/templates/workflow/phase-1-architecture.template.md \
+  .systems/ai/templates/workflow/phase-2-project-plan.template.md \
+  .systems/ai/templates/workflow/phase-3-specification.template.md \
+  .systems/ai/templates/workflow/phase-1-architecture-qa.template.md \
+  .systems/ai/templates/workflow/phase-2-plan-qa.template.md \
+  .systems/ai/templates/workflow/phase-3-spec-qa.template.md \
+  .systems/ai/templates/workflow/phase-4-implementation.template.md \
+  .systems/ai/templates/workflow/phase-5-quality.template.md \
+  .systems/ai/templates/projects/task-card.template.md \
+  .systems/ai/templates/projects/micro-task.template.md \
+  .systems/ai/templates/micro-projects/micro-project.template.md; do
+  require_ref "$file" 'Delivery Constraints|delivery-constraints\.md' 'delivery block'
+done
+
+for file in .systems/ai/workflow/phase-5-quality.md .systems/ai/templates/workflow/phase-5-quality.template.md; do
+  for field in 'Delivery Constraints QA' 'Deadline/timebox status:' 'Delivered scope:' 'Deferred scope:' 'Quality floor preserved:' 'Overrun decision:'; do
+    require_ref "$file" "$field" "phase-5 quality field $field"
+  done
+done
+
+policy_reject_unsafe_pattern \
+  'deadline[^.\n]{0,100}(may|can|should|will|must|allows?|permits?)[^.\n]{0,80}(skip|bypass|omit|ignore)[^.\n]{0,80}(QA|DoD|permission|approval|evidence|security|risk)' \
+  'Unsafe deadline wording found' \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/templates
+
+exit "$fail"

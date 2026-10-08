@@ -1,0 +1,26 @@
+# 2026-05-19 - Memory Router And Directory Model
+
+- Date: 2026-05-19
+- Topic: Memory router and directory model
+- Type: template-change
+- Status: active
+- Scope: ai-workflow-template
+- Source: owner decision to align internal and repo memory with the external-memory directory model.
+- Evidence:
+  - `.systems/ai/core/memory.md`
+  - `.systems/ai/memory/README.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/README.md`
+- Summary: Template, repo, project, and external memory keep stable `.md` router entrypoints, while detailed memory entries are stored as dated files in sibling directories.
+- Applies to:
+  - `.systems/ai/core/memory.md`
+  - `.systems/ai/memory/`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/core/memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/repo/memory/`
+  - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/memory/`
+  - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/external-memory.md`
+  - `AI_WORKFLOW_WORKSPACE_HOME/external-memory/memory/`
+  - memory templates
+- Rule: Do not store long memory bodies in `memory.md` router files. Add a dated detailed entry and route to it from the index.
+- Review trigger: update if router validation is automated or if memory entry schemas change.

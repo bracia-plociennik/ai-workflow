@@ -1,0 +1,212 @@
+{
+  "schema": 1,
+  "kind": "implementation-quality",
+  "task": "EM-CORE-001-execution-modes",
+  "run_id": "em-recovery-quality-20261008",
+  "verdict": "PASS",
+  "date": "2026-10-08",
+  "inputs": [
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/autopilot.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/changelog.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/command-routing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/commands.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/contract-compliance.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/delivery-constraints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/execution-modes.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/implementation-slicing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/operating-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/owner-decision-checkpoints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/parallel-task-orchestration.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/permissions.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/plan-quality-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/prompt-composition.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/quality-review.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/response-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/risk-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/task-intake.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/workflow.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/execution-readiness.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/readiness.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/state.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/task-decisions.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/plans.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/status.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-5-quality.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-execution-modes"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-owner-decision-checkpoints"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-required-artifacts"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-review-completeness-gate"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-validator-smoke-tests"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-checks.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/core.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/manifest.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/tests/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/validate-workflow"
+    },
+    {
+      "root": "workflow-source",
+      "path": "AGENTS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "HUMANS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "README.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-em-core-001-execution-modes-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/2026-10-08-owner-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/phase-4-em-core-001-execution-modes-implementation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/integrated-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/source-frozen.patch"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/full-validation-final-source.log"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/postcommit-implementation-review.md"
+    }
+  ],
+  "sections": {
+    "Evidence": "- Evidence: reviews/integrated-review.md; implementation/full-validation-final-source.log; 28 offline tests and 16 supplemental smoke IDs; every changed source path is fingerprinted below.\n- Skipped checks: model/provider/native dispatch evals and counterpart rollout are outside the approved synthetic-only scope.\n- Residual risk: declarations do not establish actual approvals, native isolation or model adherence.\n- Fresh review: reviews/postcommit-implementation-review.md; 28 offline tests re-run at committed HEAD. Current-HEAD full validation follows before checkpoint/final closure.",
+    "Findings": "- Blockers: none\n- Unresolved findings: none\n- Findings corrected: plan-only action boundary, missing scoped high-impact references, invalid mode fallthrough, unit-local stop/write and question clauses, projection/full-queue distinction, capture-state producer evidence.\n- Additional correction: implementation units require a declared write action and nonempty resource claims; no-op/read-only work cannot claim implementation readiness with empty metadata.\n- Final parser correction: a non-string persisted mode rejects rather than silently taking the optional resolver default; five malformed state mode cases re-tested.",
+    "Gate Decision": "- Result: PASS\n- Next route: phase-6-distillation",
+    "Definition Of Done Validation": "| DoD Item | Result | Evidence |\n| --- | --- | --- |\n| Auto default and Human Coop opt-in | PASS | mode contract, routing, resolver/decision tests |\n| Proven independent continuation with conservative dependency/resource blocking | PASS | graph, cycle, reservation and unknown-gate tests |\n| Mode scope/source persisted separately from autopilot.mode; resume and legacy protected | PASS | templates, producer audit and resolver tests |\n| No implicit new Auto timebox; retry bounds remain | PASS | state unbounded budget, delivery and autopilot contract |\n| Same QA/approval/DoD depth and explicit Phase8/owner acceptance | PASS | quality/phase contracts, approval/completion/final-check adversarial tests |\n| Canonical supporting validator and preserved smoke coverage | PASS | required/registry/gate integration and verified manifest |\n| Plan-only/read-only and source safety boundaries | PASS | action, unknown mode, symlink and duplicate JSON cases |",
+    "Intent / Plan / Spec Compliance": "- Result: PASS\n- Owner instruction reviewed: yes\n- Accepted plan reviewed: yes\n- Accepted spec reviewed: yes\n- Scope/out-of-scope reviewed: yes\n- Acceptance criteria reviewed: yes\n- Compliance status: aligned\n- Wrong problem solved: no\n- Owner instruction mismatch: no\n- Accepted plan mismatch: no\n- Accepted spec mismatch: no\n- Acceptance criteria gap: no\n- Scope creep: no\n- Underbuild: no\n- Overbuild: no\n- Evidence: accepted five-slice plan/spec, D1-D8 scope decision and integrated current-diff review; no external implementation or unauthorized Git publication.",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: d3536e5c907842e34fe323be367c100ed24b32ea and complete owned committed diff\n- Closure freshness: current\n- Post-fix full re-review: completed\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete\n- Cross-contract consistency: aligned\n- Risk/work mode compatibility: aligned\n- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: yes\n- Negative-space / adversarial review: completed\n- Automated evidence role: supporting-only\n- Instruction refresh: performed-full\n- Instruction baseline: current\n- Producers/consumers reviewed: router/intake/decisions/delivery/approval, project/readiness/state/decision templates, pure inspector, quality/commit consumers, registry and smoke source population\n- Evidence: reviews/integrated-review.md; sixteen supplemental smoke IDs preserve the original suite.",
+    "Adaptive Data / Integration Verification Matrix": "- Applicability: required\n| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States/Rows | Failure Behavior | Test/Check | Manual Trace |\n| --- | --- | --- | --- | --- | --- | --- |\n| Pending D1 affects U1, U3 depends on U1, U2 disjoint | U1/U3 blocked | U2 ready | blocked dispatch | exclude transitively | graph/resource tests | D1 -> U1 -> U3; shared claims block neighbors |\n| Approved local high-risk scope | refs remain scope-bound | local task ready | newly added production action | block uncovered effects | scoped approval and high-impact tests | required action must be in approved set and actual source verified |\n| Empty/unknown mode or duplicate JSON field | invalid input | no readiness claim | silent fallback or overwrite | reject before result | mode and CLI tests | explicit empty choice cannot select Auto |\n| Plan/read-only write request | invalid | no product writes | local/product write in plan | reject | planning/action tests | planning actions limited to artifact/quality/local commit |\n| Claimed completed with stale quality or capture missing | invalid completion | honest blocked/awaiting state | completed/PASS without DoD | reject | completion tests | each unit's own QA/capture remains mandatory |",
+    "Quality Gate": "- Intent / Plan / Spec Compliance PASS: yes\n- Review Completeness Gate PASS: yes\n- Cross-contract consistency aligned: yes\n- Risk/work mode compatibility aligned: yes\n- Negative-space / adversarial review complete or not applicable: yes\n- Automated evidence treated as supporting-only: yes\n- Post-fix full re-review complete or not required: yes\n- Instruction baseline current: yes\n- Closure freshness current: yes\n- Policy-boundary adversarial matrix complete or not applicable: yes\n- Producer-consumer field audit complete or not applicable: yes\n- Required-field mapping complete or not applicable: yes\n- 100% DoD satisfied: yes\n- No known bug in scope: yes\n- No regression in changed/direct paths: yes\n- Edge cases covered or explicitly rejected: yes\n- Explicit evidence attached: yes\n- Quality result: PASS\n- Required next phase: phase-6-distillation"
+  }
+}

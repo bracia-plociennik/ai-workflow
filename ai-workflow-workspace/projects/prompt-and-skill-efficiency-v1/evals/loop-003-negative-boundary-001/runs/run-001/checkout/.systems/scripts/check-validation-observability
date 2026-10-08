@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+fail=0
+for file in .systems/ai/core/validation-observability.md .systems/scripts/validate-workflow .systems/scripts/check-validator-smoke-tests; do
+  [[ -f "$file" ]] || { echo "Missing validation observability artifact: $file"; fail=1; }
+done
+for text in '--timing-output' 'median' 'three' 'group' 'all' 'equivalence' 'supporting evidence'; do
+  rg -qi -- "$text" .systems/ai/core/validation-observability.md .systems/scripts/validate-workflow .systems/scripts/check-validator-smoke-tests || { echo "Validation observability missing: $text"; fail=1; }
+done
+if rg -qi 'green.*scripts.*PASS|skip.*coverage|group.*replace.*all' .systems/ai/core/validation-observability.md; then
+  echo "Validation observability weakens coverage or PASS integrity"
+  fail=1
+fi
+exit "$fail"

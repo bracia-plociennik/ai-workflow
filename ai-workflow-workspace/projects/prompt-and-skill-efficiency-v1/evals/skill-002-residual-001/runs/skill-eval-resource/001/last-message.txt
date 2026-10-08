@@ -1,0 +1,65 @@
+## Task Idea Validation
+
+- **Co zostaje:** A small, read-only evaluation of the active fixture `skill-creator` skill, covering both correct activation and near misses.
+- **Co jest słabe / do poprawy lub usunięcia:** A trigger check alone would miss whether the skill preserves workflow authority and keeps evaluation output in the right place.
+- **Czego brakuje:** Nothing needed to plan. An output location and execution permission would be needed for a later run.
+- **Blokery / decyzje:** None for this plan.
+- **Rekomendowany routing:** Read-only, response-only evaluation plan.
+
+## Behavioral evaluation plan
+
+Use **six prompts** with the same fixture rules in each case. The proposed comparison is `with_skill` against a `baseline` that retains the core rules but omits the skill body. This comparison is planned only; neither configuration was run. The active skill’s description and evaluation procedure support these task classes. [SKILL.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/SKILL.md:1)
+
+| Case | Test prompt | Expected routing and output |
+| --- | --- | --- |
+| Should trigger 1 | “Plan a reusable AI Workflow skill for frontend accessibility reviews. No files.” | Use `skill-creator`; identify skill target, trigger boundary, authority limits, and validation approach. |
+| Should trigger 2 | “Review the `skill-creator` SKILL.md description for overly broad triggers. Read only.” | Use `skill-creator`; give concrete positive and near-miss negative trigger examples without editing. |
+| Should trigger 3 | “Design a manual behavioral eval and grading rubric for an active user skill. Do not run it.” | Use `skill-creator`; specify configurations, assertions, forbidden behavior, evidence, and residual risk. |
+| Should not trigger 1 | “Review this React component for accessibility; no skill changes.” | Route as a component review; do not invoke skill creation procedure. |
+| Should not trigger 2 | “Draft a one-off project prompt module; no reusable skill.” | Route as prompt work; do not propose a `SKILL.md` or skill package. |
+| Should not trigger 3 | “Explain phase-5-quality evidence requirements.” | Answer from workflow rules; do not start a skill evaluation. |
+
+For every case, grade **routing correctness**, **task-specific content**, and **boundary compliance**. Required assertions must have concrete evidence; any forbidden action—such as a write, external call, or claim of formal approval—fails that case regardless of its numeric score. The fixture calls for safe evaluation modes and treats eval results as supporting evidence only. [skill-behavioral-evaluation.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/core/skill-behavioral-evaluation.md:5) [SKILL.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/SKILL.md:156)
+
+**Expected output shape if executed later:** a `trigger-evals.json` with each query’s `should_trigger` value and reason; an `evals.json` with `with_skill` and `baseline`, prompt, expected output and behavior, forbidden behavior, and assertions; then one `grading.json` per case and configuration with a 0–5 score, boolean verdict, reason, and expectation-level evidence. A short comparison should report disagreements and residual risk. Runtime reports would belong outside `.systems/ai/skills/**`. These are proposed outputs, not files created or grades completed. [schemas.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/references/schemas.md:5) [schemas.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/references/schemas.md:112) [schemas.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/skills/skill-creator/references/schemas.md:319)
+
+## Plan Quality Contract
+
+- **Plan classification:** read-only; no implementation writes.
+- **DoD source and testable acceptance:** this request; six labeled cases, expected routing, case-level grading criteria, and output schemas are specified.
+- **Artifact QA route / trigger:** `not-applicable` — no durable artifact is being made.
+- **Implementation Quality Closure route:** `not-applicable` — no implementation occurs.
+- **Required verification:** manual check of plan coverage and schema fit; evaluation execution is outside this scope.
+- **Quality-ready criteria:** all six cases have an expected result and a gradable boundary; no results are presented as observed.
+- **Owner opt-out:** none. **Blocking decision:** none. **Next route:** optional later evaluation only under an allowed write and execution path. [plan-quality-contract.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/.systems/ai/core/plan-quality-contract.md:5)
+
+**Contract compliance:** read-only workflow-maintenance planning; no durable knowledge capture required because no evaluation ran and no workflow behavior changed.
+
+## Execution Trace
+
+- **Sources used:** Fixture [AGENTS.md](/private/tmp/ai-workflow-skill-002-residual-001-safe/AGENTS.md), core operating, routing, risk, permissions, task-intake, plan quality, DoD, response, refresh, compliance, model guidance, and behavioral evaluation contracts; fixture `skill-creator` SKILL.md and schemas.md.
+- **Evidence reviewed:** Active skill description, eval procedure, schema examples; fixture file listing. Git status was unavailable because this fixture has no `.git`; no workspace runtime was present.
+- **Workflow procedures used:** Task Idea Validation; read-only Plan Quality Contract; skill discovery.
+- **Skills/roles used:** Fixture `skill-creator`; no grader role.
+- **Commands/checks run:** Read-only `rg`, `cat`, `sed`, `wc`, `test`, and Git inspection; no validator or evaluation run.
+- **Skipped/unreadable sources:** Live repository, parent directories, user files, external services, and bundled scripts were not inspected; they were unnecessary or outside the requested boundary.
+- **Limits/residual uncertainty:** Trigger classification and grading are proposed, not measured.
+- **Instruction refresh:** Status: performed-targeted; trigger: initial fixture planning baseline; contracts refreshed: fixture AGENTS and relevant core/skill contracts; reviewed baseline: fixture files and absent Git/workspace metadata; drift/conflict: none found.
+- **Owner decision interaction:** Mode: none-needed; decisions pending: none; auto-resolved: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High; reason: bounded read-only planning; criticality: low; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Review these six cases as the proposed evaluation set.  
+Wpływ: Confirms the intended trigger boundary before any run.  
+Napisz:
+```text
+Use these six cases as the read-only evaluation plan.
+```
+
+**Alternatywa:** Ask for a narrower trigger-only review.  
+Wpływ: Reduces review effort while leaving behavioral grading design for later.  
+Napisz:
+```text
+Review only the should-trigger and should-not-trigger cases; keep it read-only.
+```

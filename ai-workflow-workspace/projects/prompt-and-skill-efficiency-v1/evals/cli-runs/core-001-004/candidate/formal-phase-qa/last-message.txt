@@ -1,0 +1,38 @@
+## Findings
+
+**Read-only assessment: the proposal would fail the architecture gate.** This is not a formal phase result: the fixture supplies a proposal and owner intent, but the project has no architecture artifact or active phase status.
+
+- **P1 — Document access is not restricted to the owner.** The download endpoint checks authentication only. An authenticated user could request another user’s document unless ownership is checked for each document. This contradicts the [owner intent](/private/tmp/pse-cli-candidate-formal-phase-qa-js8tgnic/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:3).
+- **P1 — Failed uploads may leave visible records.** Metadata is written before object storage, while failure handling only returns HTTP 500. No rollback, cleanup, or visibility rule ensures the failed upload stays invisible. [Proposal](/private/tmp/pse-cli-candidate-formal-phase-qa-js8tgnic/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:7).
+- **P2 — Storage and verification are underspecified.** The proposal does not define the private storage boundary, upload authentication, or testable acceptance criteria required by the [fixture DoD](/private/tmp/pse-cli-candidate-formal-phase-qa-js8tgnic/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:5). A second failure-path pass also leaves the metadata-write/object-upload partial failure unresolved.
+
+These are blocking architecture decisions under the [architecture QA contract](/private/tmp/pse-cli-candidate-formal-phase-qa-js8tgnic/checkout/.systems/ai/workflow/phase-1-architecture-qa.md:228). **Planning should not proceed on this proposal.** A formal QA verdict would additionally require the specified architecture artifact and phase evidence, which this synthetic checkout does not contain.
+
+## Execution Trace
+
+Sources used: fixture case; `AGENTS.md`; architecture and architecture QA phase contracts; QA, DoD, risk, permissions, and response contracts; synthetic repo intake and status.  
+Evidence reviewed: `HEAD` `7a904f7`, clean worktree, fixture lines 3–7, and phase gate requirements.  
+Workflow procedures used: read-only `global-quality-review-stance`, artifact QA comparison, second failure-path review.  
+Skills/roles used: none; architecture and security review lens.  
+Commands/checks run: local file inspection and `git status`; no scripts or product tests apply to this proposal-only review.  
+Skipped/unreadable sources: formal architecture artifact and project phase status are absent.  
+Limits/residual uncertainty: storage exposure and intended failure recovery cannot be inferred; no formal `PASS` or `FAIL` recorded. Review completeness: cross-contract mismatch identified; risk/work mode aligned for read-only review; adversarial review completed; automated evidence supporting-only; post-fix review not required; closure current.  
+Instruction refresh: Status: performed-targeted; Trigger: review closure; Contracts refreshed: `AGENTS.md`, architecture QA, quality, risk, permissions, DoD; Reviewed baseline: `HEAD` `7a904f7` and fixture; Drift/conflict: none.  
+Owner decision interaction: Mode: none-needed for this review; Decisions asked/pending: none for review; Auto-resolved decisions: none.  
+Model recommendation: Recommended: GPT-5.6 Sol High; Reason: security-sensitive architecture and adversarial QA; Criticality: high; Current model known: no; Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Revise the synthetic architecture proposal to specify ownership enforcement, private storage, failed-upload cleanup, and testable criteria, then review it again.  
+Wpływ: Resolves the identified planning blockers.  
+Napisz:
+```text
+Revise the synthetic architecture proposal in the isolated fixture, then run a read-only architecture QA review.
+```
+
+**Alternatywa:** Run a narrower read-only audit of upload and download failure paths.  
+Wpływ: Clarifies the required decisions without changing the fixture.  
+Napisz:
+```text
+Audit the synthetic uploader's authorization and failure paths read-only; list the decisions needed before planning.
+```

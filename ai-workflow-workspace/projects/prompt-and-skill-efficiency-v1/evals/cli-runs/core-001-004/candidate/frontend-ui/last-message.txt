@@ -1,0 +1,102 @@
+## Task Idea Validation
+
+- **Co zostaje:** A responsive account settings screen with loading, validation, and recovery states is a clear planning target.
+- **Co jest słabe / do poprawy lub usunięcia:** The fixture has no React application or API contract, so component and integration choices cannot be tied to existing code.
+- **Czego brakuje:** The eventual app’s design system, field rules, save API, and account permissions.
+- **Blokery / decyzje:** None for this read-only plan. Those missing facts block implementation readiness.
+- **Rekomendowany routing:** Keep this as a synthetic, read-only frontend plan.
+
+## Screen plan
+
+**Scope:** Let a signed-in user view their login email, edit their display name and preferences, and save. Treat login email as read-only. Credential and email changes require a separate security scope.
+
+**Layout:** Use a page heading and one clearly grouped form. At wide widths, keep the form at a comfortable reading width with a persistent, visible save area. At narrow widths, stack fields and make the save button full width. Long email addresses, error text, and increased text size must wrap without horizontal scrolling.
+
+| State | Screen behavior |
+| --- | --- |
+| Initial load | Show labeled skeleton areas; keep editing and save unavailable. |
+| Load failure | Explain that settings could not load and offer **Retry**. |
+| Ready | Show current values and a disabled save button until something changes. |
+| Invalid | Show errors beside fields, link them to inputs, and move focus to the first error on submit. Use server-provided rules as the final authority. |
+| Saving | Keep entered values visible, prevent duplicate submits, and announce progress. |
+| Saved | Show success only after the save is confirmed; update the displayed baseline. |
+| Save failure or offline | Preserve the draft, explain the failure, and offer **Try again**. |
+| Stale data or conflict | Preserve the draft, explain that settings changed elsewhere, and offer a reload path with an explicit warning before discarding edits. |
+| Permission loss | Stop editing and explain why saving is unavailable. |
+
+Use native labeled controls, visible focus, keyboard-operable recovery actions, and text announcements for errors and success. Do not rely on color alone.
+
+## Plan Quality Contract
+
+- **Plan classification:** read-only; no implementation writes planned.
+- **DoD source:** user request, repository Definition of Done, and frontend skill.
+- **Testable DoD:** the plan specifies mobile and desktop layout, every state above, validation and retry behavior, accessibility behavior, and the boundaries left for the real app to define.
+- **Artifact QA route:** not-applicable; this is a response-only plan with no durable artifact.
+- **Artifact QA trigger:** not-applicable.
+- **Implementation Quality Closure route:** not-applicable; no implementation is authorized or performed.
+- **Required verification:** manually check state coverage and confirm the checkout remains unchanged. Future implementation would need viewport, keyboard, validation, and simulated failure checks.
+- **Quality-ready criteria:** complete plan coverage for this read-only request; implementation readiness requires the real app and API contract.
+- **Owner opt-out:** none.
+- **Not-applicable reason:** no files or product code are being changed.
+- **Blocking decision:** none for planning; field rules and API behavior remain unresolved for implementation.
+- **Next route:** use this plan as a review baseline, then resolve the real app’s contracts before implementation.
+
+**Risk:** The proposed profile and preferences UI is a medium-risk feature when implemented. Credential or login-email changes would need separate risk review.
+
+## Execution Trace
+
+Sources used:
+- [AGENTS.md](/private/tmp/pse-cli-candidate-frontend-ui-y8_d13eg/checkout/AGENTS.md), workflow planning and response contracts, repository status/intake, and the [frontend skill](/private/tmp/pse-cli-candidate-frontend-ui-y8_d13eg/checkout/.systems/ai/skills/frontend-skill/SKILL.md).
+
+Evidence reviewed:
+- Clean `git status`; synthetic repository status; named fixture directory; no React app files found.
+
+Workflow procedures used:
+- Task Idea Validation, Plan Quality Contract, owner decision discovery, advisory contract compliance.
+
+Skills/roles used:
+- Frontend skill for journey states, recovery, responsive behavior, and accessibility.
+
+Commands/checks run:
+- Read-only file inspection and `git status`; no tests or build run because there is no application and no files changed.
+
+Skipped/unreadable sources:
+- React source, design system, and API contract are absent from this fixture.
+
+Limits/residual uncertainty:
+- Field limits, persistence semantics, and visual conventions need a real application contract. Work mode compliance: read-only scope met. Knowledge capture: not-required; no durable facts changed.
+
+Instruction refresh:
+- Status: performed-targeted
+- Trigger: new planning scope
+- Contracts refreshed: repository guidance, task intake, plan quality, permissions, risk, response, and frontend skill
+- Reviewed baseline: clean checkout and synthetic workspace status
+- Drift/conflict: none
+
+Owner decision interaction:
+- Mode: none-needed
+- Decisions asked/pending: none
+- Auto-resolved decisions: profile and preferences scope for this synthetic plan
+
+Model recommendation:
+- Recommended: GPT-5.6 Luna High
+- Reason: bounded read-only frontend planning
+- Criticality: low for this plan
+- Current model known: yes
+- Blocking: no
+
+## Co dalej?
+
+**Rekomendacja:** Use the plan as the synthetic review baseline.  
+Wpływ: It preserves the requested no-write scope.  
+Napisz:
+```text
+Review this account settings plan for missing user states; keep it read-only.
+```
+
+**Alternatywa:** Provide a real React app and its settings API contract for an implementation plan.  
+Wpływ: Component choices, validation rules, and verification can then be made concrete.  
+Napisz:
+```text
+Plan implementation of this account settings screen in the attached React project using its existing design system and API contract; do not change files.
+```

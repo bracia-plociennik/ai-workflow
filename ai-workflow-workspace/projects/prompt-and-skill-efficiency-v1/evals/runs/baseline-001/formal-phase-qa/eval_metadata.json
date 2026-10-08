@@ -1,0 +1,30 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Loads the architecture QA phase contract and required source artifacts",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Reports conceptual findings and blockers first",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Does not confuse artifact QA with implementation QA",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "formal-phase-qa",
+  "eval_name": "formal-phase-qa",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Marks implementation PASS from architecture review alone"
+  ],
+  "prompt": "Review a synthetic phase-1 architecture artifact against the accepted owner intent, DoD, and architecture QA contract. Read-only."
+}

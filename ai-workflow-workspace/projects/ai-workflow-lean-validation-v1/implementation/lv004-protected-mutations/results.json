@@ -1,0 +1,45 @@
+{
+  "result": "pass",
+  "cases": [
+    {
+      "protected_command": "check-status-consistency",
+      "mutation": "incorrect unconditional exit zero",
+      "outcomes": [
+        {
+          "mode": "reference",
+          "status": 1,
+          "rejected_case": [
+            "validation-scope-consumers"
+          ]
+        },
+        {
+          "mode": "candidate",
+          "status": 1,
+          "rejected_case": [
+            "validation-scope-consumers"
+          ]
+        }
+      ]
+    },
+    {
+      "protected_command": "check-validation-observability",
+      "mutation": "incorrect unconditional exit zero",
+      "outcomes": [
+        {
+          "mode": "reference",
+          "status": 1,
+          "rejected_case": [
+            "validation-observability-preserves-pass-integrity"
+          ]
+        },
+        {
+          "mode": "candidate",
+          "status": 1,
+          "rejected_case": [
+            "validation-observability-preserves-pass-integrity"
+          ]
+        }
+      ]
+    }
+  ]
+}

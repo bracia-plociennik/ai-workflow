@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"01a0f31f-a115-7711-ad4b-582224a60709"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/jakubplociennik/.codex/config.toml."}}
+{"type":"turn.started"}
+{"type":"error","message":"{\"error\":{\"message\":\"local context sink; intentional rejection\",\"type\":\"invalid_request_error\"}}"}
+{"type":"turn.failed","error":{"message":"{\"error\":{\"message\":\"local context sink; intentional rejection\",\"type\":\"invalid_request_error\"}}"}}

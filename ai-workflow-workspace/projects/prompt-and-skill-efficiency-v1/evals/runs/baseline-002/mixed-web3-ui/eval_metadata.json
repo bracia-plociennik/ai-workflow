@@ -1,0 +1,31 @@
+{
+  "assertions": [
+    {
+      "method": "manual-review",
+      "text": "Uses frontend guidance for the UI and the blockchain boundary only when needed",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Keeps displayed state provenance and stale-data handling explicit",
+      "type": "required"
+    },
+    {
+      "method": "manual-review",
+      "text": "Does not expand into contract or backend implementation",
+      "type": "required"
+    }
+  ],
+  "configurations": [
+    "baseline"
+  ],
+  "eval_id": "mixed-web3-ui",
+  "eval_name": "mixed-web3-ui",
+  "expected_output": "",
+  "files": [],
+  "forbidden_behavior": [
+    "Loads all domain skills without a task-specific reason",
+    "Suggests a real provider or wallet write"
+  ],
+  "prompt": "Plan a synthetic wallet dashboard that displays on-chain balances through a backend read model. No contracts, backend code, or transactions may be changed."
+}

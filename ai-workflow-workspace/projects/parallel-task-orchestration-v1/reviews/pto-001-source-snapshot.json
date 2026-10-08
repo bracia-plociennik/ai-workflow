@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "head": "8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1",
+  "task": "PTO-CORE-001-contract-routing",
+  "files": [
+    {
+      "path": ".systems/ai/core/autopilot.md",
+      "sha256": "2e631489900fa917e9941168ba4422c2a158dab1101263cb573b53b4f1277f08"
+    },
+    {
+      "path": ".systems/ai/core/command-routing.md",
+      "sha256": "b9b8d92f7d950f8e963e41743be9d635168e1d489125fec5f92dd1995be58bf1"
+    },
+    {
+      "path": ".systems/ai/core/implementation-slicing.md",
+      "sha256": "0c007bdc3d31f68856333f06a30bcec9c6fade8fe49bb21a3529f80f91b1e176"
+    },
+    {
+      "path": ".systems/ai/core/operating-model.md",
+      "sha256": "7290fc46a296fbf2db752bc82ae2b7e06891a243b87894139e9084ad7044123c"
+    },
+    {
+      "path": ".systems/ai/core/parallel-task-orchestration.md",
+      "sha256": "7c378ba71c1de2b9c08dbab1b8e873818e4d1c1e0f4d946326b7a286ceb07bb2"
+    },
+    {
+      "path": ".systems/ai/core/parallel-work-policy.md",
+      "sha256": "39fec928d0c33fc900bd7fcbe68ba4deacfb47cb70a882bc3a23963ae16e52ba"
+    },
+    {
+      "path": ".systems/ai/core/workflow.md",
+      "sha256": "c5264cec5ec9511da60fe3e8d232bf35a0582a0676d236424b33de340dbfc5ab"
+    },
+    {
+      "path": ".systems/ai/templates/autopilot/readiness.template.md",
+      "sha256": "25d5fa29d7dbad6a686f32e031316bfddfb7ac8db14a4911e34c441bdbe34afc"
+    },
+    {
+      "path": ".systems/ai/templates/autopilot/state.template.md",
+      "sha256": "4c4c1001c0df26d173b7a757dea858b0ac2d6ce82f0de62225d80abf8f4923b9"
+    },
+    {
+      "path": ".systems/ai/workflow/phase-2-project-plan.md",
+      "sha256": "1956df3acd854ac1156bdec63d8c0703aaed7a91882b34267bad16fc7f6a8096"
+    },
+    {
+      "path": ".systems/scripts/check-parallel-task-orchestration",
+      "sha256": "8127b4fbe4273adcb80f667a74dfb0ee5b8d7bb8312383bd75cee747bce6a463"
+    },
+    {
+      "path": ".systems/scripts/check-required-artifacts",
+      "sha256": "0ff01b299dfda7d0b841b683d4d0334232a315a44ba20c77159f2bbfde71e7b0"
+    },
+    {
+      "path": ".systems/scripts/check-review-completeness-gate",
+      "sha256": "4da4ef7a4dec10a6ab1195fe142c4055111964818535e80d5aad008ec0fa3d45"
+    },
+    {
+      "path": ".systems/scripts/check-validator-smoke-tests",
+      "sha256": "7a1d97b4810dae4e79298446fb6cf6839f37e3780aac9ba0f782cdf3a10a9761"
+    },
+    {
+      "path": ".systems/scripts/lib/validation-checks.json",
+      "sha256": "10330494fda4be9c16165b19aa0bf997cccdedd2f74f84f29d4a2314bd74da07"
+    },
+    {
+      "path": ".systems/scripts/smoke/core.sh",
+      "sha256": "da7e35290db5936fbd33f14d352071780389a5a57059eed4fa7111973436584a"
+    },
+    {
+      "path": ".systems/scripts/smoke/manifest.json",
+      "sha256": "c4975bbd1eec722eba7f3062a6a7ed4de643d11ca597414bbe91809ee8a41d16"
+    },
+    {
+      "path": ".systems/scripts/validate-workflow",
+      "sha256": "0e8fc06a89090490799689539149c4994618085b443a6cc04addc9f07aa73335"
+    }
+  ]
+}

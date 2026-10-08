@@ -1,0 +1,167 @@
+# spec-qa
+## Metadata
+- QA verification contract: `full-qa-verification-v2`
+- Result: PASS
+
+## Current QA Run
+- Run ID: phase-3-par-core-004-spec-qa-initial-commit-regression
+- Artifact kind: spec-qa
+- Project/task identity: workflow-parity-and-runtime-integrity-v1:PAR-CORE-004
+- Assessed source HEAD: f73891b925425e5a7b89daaec707a9fca554e824
+- Assessed worktree digest: c1089bb6caaae1517d3b4ff9bb770d7f7221bb09379cb1e1f41b445c213115ff
+- Input artifacts: see table
+- Verdict: PASS
+- Gate Decision: PASS
+
+### Input Artifacts
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | decisions/owner-decisions.md | 8bc20decf295d6a59e74424672feecfb33af951e9640eccfaa69a20245e1890e |
+| owning-project-evidence | planning/phase-2-project-plan.md | 9e93b6084e14ba0c5c3e87abba8909b2368f297c33a5deddefd82a830a3a9b62 |
+| owning-project-evidence | specs/phase-3-par-core-004-specification.md | a79938a7422b72db26c851758e68fea4c71fac38d45b3dc21a3aa17929697d61 |
+
+### QA Verification Scope
+Review accepted D1-D5, producer/consumer boundaries, complete seven-task scope, testability and failure behavior. Architecture quality does not prove implementation quality.
+
+### Artifact QA Completeness Gate
+- Owner intent and governing sources reviewed: accepted owner plan and D1-D5.
+- DoD / phase acceptance criteria reviewed: yes
+- Scope and out-of-scope consistency: aligned
+- Artifact / relevant diff review: completed
+- Findings-first review: completed
+- Failure / rework / dependency scenarios: completed
+- Repository and source compatibility: aligned
+- Post-fix full artifact re-review: not-required
+- Evidence reviewed: current scripts, schemas, accepted seven scopes and tables.
+- Skipped or unreadable sources: none within required planning scope.
+- Residual risk: runtime proof still requires implementation fixtures and final current-diff review.
+- Closure freshness: current
+
+### Review Completeness Gate
+- Status: complete
+- Reviewed baseline: committed HEAD f73891b925425e5a7b89daaec707a9fca554e824; exact source parity with the full-validated 51-file manifest; current input SHA-256 table.
+- Closure freshness: current
+- Post-fix full re-review: not-required
+- Policy-boundary adversarial matrix: completed
+- Producer-consumer field audit: completed
+- Required-field mapping: complete
+
+### Findings
+- Blockers: none
+- Unresolved findings: none
+
+### Evidence
+- Post-commit regression assessment: source publication only; all 51 committed source blobs equal the full-validated manifest, clean source worktree, D1-D5 and accepted spec/DoD unchanged. D6 grants closure/publication only. Producer-consumer, failure-path and adversarial findings remain resolved; the 46 deterministic regressions were rerun successfully after commit.
+- Full supporting runs remain the original completed 651/699-second runs on identical source contents; this is not a claim of a new full run or model/remote evaluation.
+- Avoided widening old scoped manifest inputs; added separate canonical inventory.
+- Kept aggregate shell trace uncertainty explicit instead of inferring reads from command text.
+- Fixture design copies current tracked source, not ignored private runtime or stale HEAD blobs.
+- No model eval, foreign writes, handoff or final-owner-yes authorized by the plan.
+
+### Gate Decision
+- Result: PASS
+- Required next phase: phase-4-implementation
+
+## Delivery Constraints
+- Mode: owner-opt-out
+- Deadline: none
+- Time budget: none
+- Owner override: D4, no deadline or timebox.
+- Must-have outcome: all seven accepted differences with no quality-floor weakening.
+- Quality floor: testable DoD, semantic review, targeted regression and fresh full validation.
+- Cutline rule: stop for a new material decision; never remove coverage to finish.
+- Overrun checkpoint: not-applicable, owner opted out.
+
+## Plan Quality Contract
+- DoD source: accepted D1-D5 and this plan.
+- Testable done conditions: seven routes covered by positive and negative fixtures; old smoke coverage unchanged; no foreign writes; phase 8 awaits owner.
+- Plan classification: implementation-capable
+- Artifact QA route: architecture-qa, plan-qa and spec-qa.
+- Implementation QA route: phase-5-quality
+- Required verification: current-diff review, producer-consumer audit, negative/failure-path tests, existing smoke suite, explicit full.
+- Quality-ready criteria: no unresolved blockers/material findings; current input hashes and complete evidence.
+- Opt-out/not-applicable reason: none for quality.
+- Blocking decision: none; D1-D5 resolved.
+- Next route: implementation slices after Spec QA.
+
+## Owner Decision Checkpoint
+- Interaction mode: none
+- Decision state: clear
+- Material decisions: D1-D5
+- Questions asked: none; already answered.
+- Auto-resolved reversible decisions: separate branch and task IDs.
+- Optional owner refinements: none
+- Decision artifacts: decisions/owner-decisions.md
+- Next route: approved phases through 8; no final-owner-yes.
+
+## Optional Knowledge Capture
+- Capture recommended: yes
+- Target: project-memory
+- Reason: record integration boundaries and conservative evidence lessons.
+- Owner decision required: no
+- Owner decision: defer-to-distillation
+- Privacy/scope check: pass
+- Suggested entry title: Runtime integrity and selective overhead
+- Suggested entry summary: Preserve quality while reducing accidental context and script cost.
+
+
+
+## Historical Runs
+
+Pre-commit assessment, retained unchanged:
+- Run ID: phase-3-par-core-004-spec-qa-initial
+- Artifact kind: spec-qa
+- Project/task identity: workflow-parity-and-runtime-integrity-v1:PAR-CORE-004
+- Assessed source HEAD: 0c767da0385723560d1b0d4794a9091316c23140
+- Assessed worktree digest: c1089bb6caaae1517d3b4ff9bb770d7f7221bb09379cb1e1f41b445c213115ff
+- Input artifacts: see table
+- Verdict: PASS
+- Gate Decision: PASS
+
+### Input Artifacts
+| Root kind | Relative path | SHA-256 |
+| --- | --- | --- |
+| owning-project-evidence | decisions/owner-decisions.md | 8bc20decf295d6a59e74424672feecfb33af951e9640eccfaa69a20245e1890e |
+| owning-project-evidence | planning/phase-2-project-plan.md | 9e93b6084e14ba0c5c3e87abba8909b2368f297c33a5deddefd82a830a3a9b62 |
+| owning-project-evidence | specs/phase-3-par-core-004-specification.md | a79938a7422b72db26c851758e68fea4c71fac38d45b3dc21a3aa17929697d61 |
+
+### QA Verification Scope
+Review accepted D1-D5, producer/consumer boundaries, complete seven-task scope, testability and failure behavior. Architecture quality does not prove implementation quality.
+
+### Artifact QA Completeness Gate
+- Owner intent and governing sources reviewed: accepted owner plan and D1-D5.
+- DoD / phase acceptance criteria reviewed: yes
+- Scope and out-of-scope consistency: aligned
+- Artifact / relevant diff review: completed
+- Findings-first review: completed
+- Failure / rework / dependency scenarios: completed
+- Repository and source compatibility: aligned
+- Post-fix full artifact re-review: not-required
+- Evidence reviewed: current scripts, schemas, accepted seven scopes and tables.
+- Skipped or unreadable sources: none within required planning scope.
+- Residual risk: runtime proof still requires implementation fixtures and final current-diff review.
+- Closure freshness: current
+
+### Review Completeness Gate
+- Status: complete
+- Reviewed baseline: 0c767da0385723560d1b0d4794a9091316c23140; planning inputs in the table.
+- Closure freshness: current
+- Post-fix full re-review: not-required
+- Policy-boundary adversarial matrix: completed
+- Producer-consumer field audit: completed
+- Required-field mapping: complete
+
+### Findings
+- Blockers: none
+- Unresolved findings: none
+
+### Evidence
+- Avoided widening old scoped manifest inputs; added separate canonical inventory.
+- Kept aggregate shell trace uncertainty explicit instead of inferring reads from command text.
+- Fixture design copies current tracked source, not ignored private runtime or stale HEAD blobs.
+- No model eval, foreign writes, handoff or final-owner-yes authorized by the plan.
+
+### Gate Decision
+- Result: PASS
+- Required next phase: phase-4-implementation
+

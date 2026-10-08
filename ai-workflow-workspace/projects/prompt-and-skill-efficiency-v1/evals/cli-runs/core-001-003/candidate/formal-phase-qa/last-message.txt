@@ -1,0 +1,38 @@
+## Architecture QA review
+
+**Candidate verdict: FAIL.** The proposal does not meet the owner intent or DoD in [case.md](/private/tmp/pse-cli-candidate-formal-phase-qa-armtsbix/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/formal-phase-qa/case.md:3).
+
+- **Critical — ownership:** The download endpoint checks authentication, but never checks whether the requested document belongs to the caller. An authenticated user could therefore request another user’s document. The proposal also leaves access to metadata and stored bytes undefined.
+- **Critical — failed uploads:** Metadata is written before storage completes. Returning HTTP 500 does not remove a record or partial object, so a failed upload could leave a visible record.
+- **Missing DoD evidence:** Storage access boundaries and testable acceptance criteria are absent. These unresolved decisions would affect the project plan.
+
+A second failure-path review reaches the same result: a partial object upload, database failure, or direct storage access has no defined ownership or cleanup behavior. **Do not proceed to project planning on this candidate.** The [architecture QA contract](/private/tmp/pse-cli-candidate-formal-phase-qa-armtsbix/checkout/.systems/ai/workflow/phase-1-architecture-qa.md) routes a failed architecture to its fix loop.
+
+This is an **advisory assessment of a synthetic fixture**, not a recorded formal phase result. The required canonical architecture artifact and project status are absent; no QA artifact or status was written.
+
+## Execution Trace
+
+- **Sources used:** `AGENTS.md`; fixture; architecture QA, DoD, risk, permissions, quality, validation, and response contracts; synthetic repo status and intake.
+- **Evidence reviewed:** Fixture lines 3–7, project directory, `git status` (pre-existing `AGENTS.md` modification). No product implementation exists to test.
+- **Workflow procedures used:** Read-only architecture QA lens and findings-first advisory review. Skills/roles used: none matching this fixture.
+- **Commands/checks run:** Local file inspection and `git status`; no product tests or workflow scripts were applicable. Automated evidence role: supporting-only.
+- **Skipped/unreadable sources:** Canonical project architecture and status artifacts are absent. Residual uncertainty: the fixture cannot establish a formal phase state.
+- **Instruction refresh:** Performed-full for this isolated checkout; refreshed repository instructions, phase and review contracts, status, and fixture. Reviewed baseline: current worktree. Drift/conflict: none affecting the review.
+- **Owner decision interaction:** None needed for this read-only verdict. Knowledge capture: not-required; no durable state changed.
+- **Model recommendation:** GPT-5.6 Sol High; security-sensitive architecture review. Criticality: high. Current model known: yes. Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Revise the architecture candidate to define ownership enforcement, storage boundaries, failure cleanup, and testable criteria, then request another read-only review.  
+Wpływ: Resolves the blockers before planning.  
+Napisz:
+```text
+Review this revised synthetic architecture candidate against the same owner intent and DoD, read-only: [paste candidate]
+```
+
+**Alternatywa:** Provide the canonical architecture and project status for a formal gate review.  
+Wpływ: Allows the phase prerequisites and evidence to be checked.  
+Napisz:
+```text
+Review the canonical architecture artifact and project status for formal phase-1 architecture QA, read-only.
+```

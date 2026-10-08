@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "kind": "owner-approval",
+  "approval_reference": "decisions/eff-dec-002-final-owner-yes.md",
+  "final_check": "quality/phase-8-final-check.md"
+}

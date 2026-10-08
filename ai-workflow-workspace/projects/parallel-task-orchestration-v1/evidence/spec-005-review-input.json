@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "kind": "spec-qa",
+  "task": "PTO-QA-005-integration-acceptance",
+  "run_id": "pto-spec-qa-005-revision-003",
+  "verdict": "PASS",
+  "date": "2026-10-03",
+  "inputs": [
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-pto-qa-005-integration-acceptance-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "planning/phase-2-project-plan.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality/phase-2-plan-qa.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "architecture/phase-1-architecture.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "context.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/owner-decisions.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/specifications-review.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-3-spec-qa.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/plan-quality-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/autopilot.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/full-qa-verification.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-scope.py"
+    }
+  ],
+  "sections": {
+    "Findings": "- Blockers: none\n- Unresolved findings: none\n- Residual risk: native backend isolation and performance remain unverified until implementation tests.",
+    "Evidence": "Task PTO-QA-005-integration-acceptance: reviewed complete specification, 5 AC, explicit files, 3 grouped regression scenarios, slice plan, data/failure trace and formal future gates. Evidence: reviews/specifications-review.md. Semantic review only; no implementation or native test claimed. Fresh complete re-review after correcting task-index future Phase 5 links; prior run remains historical and cannot authorize this baseline. Final consumer audit binds owned runtime inventory requirement for orchestration; complete current plan/spec re-review performed.",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: HEAD 8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1 and hashed specification/plan/architecture/decision/review inputs\n- Closure freshness: current\n- Post-fix full re-review: completed\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete",
+    "QA Verification Scope": "Specification of PTO-QA-005-integration-acceptance: testable readiness design, DoD/scope/dependencies, safety and planned verification. Does not authorize implementation or claim runtime correctness.",
+    "Artifact QA Completeness Gate": "- Owner intent and governing sources reviewed: context.md, decisions/owner-decisions.md, installed parallel/autopilot/risk/QA contracts\n- DoD / phase acceptance criteria reviewed: yes\n- Scope and out-of-scope consistency: aligned\n- Artifact / relevant diff review: completed\n- Findings-first review: completed\n- Failure / rework / dependency scenarios: completed\n- Repository and source compatibility: aligned\n- Post-fix full artifact re-review: completed\n- Evidence reviewed: reviews/specifications-review.md and current source contracts bound below\n- Skipped or unreadable sources: live native runtime tests intentionally deferred to implementation\n- Residual risk: actual runtime support and net speedup not established\n- Closure freshness: current",
+    "Checks": "| Check | Result | Evidence | Finding |\n| --- | --- | --- | --- |\n| Spec contract/DoD/quality routes | PASS | PTO-005 AC, Plan Quality Contract and slices | none |\n| Intent/plan/architecture consistency | PASS | mapped task scope and decisions | none |\n| Dependencies/readiness | PASS | predecessor and owner gates explicit, no hidden readiness | none |\n| Negative-space and consumer review | PASS | specifications-review.md task row and traces | none |\n| Post-fix whole artifact review | PASS | checkpoint reservation, lifecycle and test entrypoint refinements | resolved |",
+    "Gate Decision": "- Spec QA result: PASS\n- Required next phase: phase-4-implementation",
+    "Execution Authority": "Artifact-only PASS. No high-risk implementation approval or ready implementation-range is supplied. Future start must verify owner approval, dependencies, isolation and current instructions/spec inputs."
+  }
+}

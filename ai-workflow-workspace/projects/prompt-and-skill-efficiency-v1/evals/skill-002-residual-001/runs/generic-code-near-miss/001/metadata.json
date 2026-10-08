@@ -1,0 +1,13 @@
+{
+  "case": "generic-code-near-miss",
+  "repeat": "001",
+  "fixture": "/private/tmp/ai-workflow-skill-002-residual-001-safe",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "sandbox": "read-only",
+  "prompt_sha256": "19b0b7fef94b945a162dd7d6086af27b9b6d1741538f5c133c61ecdfcb1fca3c",
+  "agents_sha256": "eab833e37b454578891d7e36cc8f9a4fedf52ed1251dcd73b887f19e8e8330e2",
+  "skill_sha256": "645c67b7ae48994e1b337d6eec637e7510dd30b0d80d91f57288419ffa8284fd",
+  "exit_code": 0,
+  "duration_seconds": 75.43
+}

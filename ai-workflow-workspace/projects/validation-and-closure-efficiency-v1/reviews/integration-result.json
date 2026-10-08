@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "scope": "public iteration interface",
+  "results": [
+    {
+      "stage": "fresh",
+      "duration_seconds": 0.5491512499866076,
+      "execution": "executed",
+      "completion_markers": 1
+    },
+    {
+      "stage": "reused",
+      "duration_seconds": 0.46894950000569224,
+      "execution": "reused",
+      "completion_markers": 1
+    }
+  ],
+  "tampered_receipt_rejected": true,
+  "semantic_quality_replaced": false
+}

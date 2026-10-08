@@ -1,0 +1,33 @@
+## Finding
+
+**P1 — `report_status` truncates fractional averages.** [Line 7](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/src/skill_creator_status.py:7) uses `//`, so `report_status([1, 2])` returns `'1'` instead of the required `'1.5'`. A read-only Python check confirmed this. The empty-input branch returns `'empty'` as required. Other inputs with fractional averages have the same risk.
+
+**Skill selected: none.** The fixture has no workspace skills. Its only active system skill, `skill-creator`, describes AI Workflow skill artifacts; this is a product-code review. I opened only its frontmatter, not its body.
+
+This is an advisory review, with no edits and no formal QA result. The owner-provided contract is the acceptance criterion; no plan, spec, status artifact, or Git baseline was available in the fixture.
+
+## Execution Trace
+
+- **Actual source opens:** fixture `AGENTS.md`, the relevant `.systems/ai/core/` review and response contracts, `skill-creator/SKILL.md` frontmatter, and `src/skill_creator_status.py`. I did not open `src/report.py`.
+- **Inference:** the skill does not match based on its opened description; the missing plan, spec, and status artifacts are based on fixture file discovery.
+- **Procedure and check:** read-only `global-quality-review-stance`; `python3 -B` returned `'1'` and `'empty'` for the two specified calls. Automated output supports the line-level finding. No writes or workflow validators.
+- **Review completeness:** acceptance mismatch identified; fractional-average edge case reviewed; no fix or post-fix review occurred. Reviewed baseline: the fixture files as opened; Git status was unavailable because the fixture is not a Git repository.
+- **Instruction refresh:** performed-targeted for this review; fixture `AGENTS.md` and relevant core contracts refreshed; no drift found. Owner decision interaction: none needed.
+- **Model recommendation:** GPT-5.6 Luna High for a bounded review; advisory, blocking: no.
+- **Contract compliance:** read-only advisory work; knowledge capture **not required** because no status or durable workflow knowledge changed. Residual uncertainty: behavior beyond the supplied contract was not assessed.
+
+## Co dalej?
+
+**Rekomendacja:** Authorize a scoped fix and verification of both contract cases.  
+Wpływ: Restores the required fractional result.  
+Napisz:
+```text
+Fix report_status to satisfy both stated cases, then verify them.
+```
+
+**Alternatywa:** Request a wider read-only check of numeric edge cases.  
+Wpływ: Clarifies the intended behavior before a code change.  
+Napisz:
+```text
+Review report_status read-only for other numeric edge cases; do not edit files.
+```

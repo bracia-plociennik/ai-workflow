@@ -1,0 +1,65 @@
+{
+  "exit_code": 0,
+  "model_called": false,
+  "source": "local CLI debug prompt-input with empty CODEX_HOME",
+  "settings": {
+    "model": "gpt-6-sol",
+    "model_reasoning_effort": "high",
+    "approval_policy": "never",
+    "default_permissions": "lv005-fixture",
+    "permissions.lv005-fixture.filesystem": {
+      ":minimal": "read",
+      ":workspace_roots": {
+        ".": "write"
+      }
+    },
+    "permissions.lv005-fixture.network.enabled": false,
+    "web_search": "disabled",
+    "project_doc_max_bytes": 0,
+    "features.code_mode_host": true,
+    "features.skip_host_skill_discovery": true,
+    "memories.generate_memories": false,
+    "memories.use_memories": false,
+    "features.apps": false,
+    "features.plugins": false,
+    "features.hooks": false,
+    "features.memories": false,
+    "features.multi_agent": false,
+    "features.multi_agent_v2": false,
+    "features.browser_use": false,
+    "features.browser_use_external": false,
+    "features.computer_use": false,
+    "features.view_image": false,
+    "features.image_generation": false,
+    "features.skill_search": false,
+    "features.skill_mcp_dependency_install": false,
+    "features.workspace_dependencies": false,
+    "features.shell_snapshot": false,
+    "features.tool_suggest": false,
+    "skills.config": [
+      {
+        "path": "/private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/lv005-context-preflight-1v8o1izg/empty-codex-home/skills/.system/imagegen",
+        "enabled": false
+      },
+      {
+        "path": "/private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/lv005-context-preflight-1v8o1izg/empty-codex-home/skills/.system/openai-docs",
+        "enabled": false
+      },
+      {
+        "path": "/private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/lv005-context-preflight-1v8o1izg/empty-codex-home/skills/.system/plugin-creator",
+        "enabled": false
+      },
+      {
+        "path": "/private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/lv005-context-preflight-1v8o1izg/empty-codex-home/skills/.system/skill-creator",
+        "enabled": false
+      },
+      {
+        "path": "/private/var/folders/z8/75mknv4133d06g5vwmqfl__m0000gn/T/lv005-context-preflight-1v8o1izg/empty-codex-home/skills/.system/skill-installer",
+        "enabled": false
+      }
+    ]
+  },
+  "bytes": 10197,
+  "sha256": "1be73ad949b5709bf22b3cb6c846566788f0ee9dfe85f14df83f3d8655cc540a",
+  "limits": "Local preview is separate from exec; verify exec warnings and actual tools independently."
+}

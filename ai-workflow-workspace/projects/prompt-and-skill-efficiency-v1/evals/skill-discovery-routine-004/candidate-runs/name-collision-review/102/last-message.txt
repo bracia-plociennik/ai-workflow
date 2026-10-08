@@ -1,0 +1,36 @@
+## Finding
+
+**P1 — `report_status` violates the nonempty-input contract.** [Line 7](/private/tmp/ai-workflow-skill-discovery-20260928-candidate/src/skill_creator_status.py:7) uses integer division. A read-only execution returned `'1'` for `[1, 2]`, where the contract requires `'1.5'`. The empty-input case returned `'empty'` as required.
+
+**Skill selected: none.** I opened only the frontmatter of the fixture’s `skill-creator` skill. Its description covers AI Workflow skill artifacts; this is a product-code review. I did not open the skill body. That selection is based on the frontmatter and the target file’s contents, not its filename alone.
+
+The review is advisory. No files were edited, and no formal QA result is claimed.
+
+## Execution Trace
+
+- **Sources used:** Actually opened the fixture’s `AGENTS.md`, relevant `.systems/ai/core/` review and routing contracts, the `skill-creator/SKILL.md` frontmatter, and `src/skill_creator_status.py` (plus `src/report.py`). Inferred skill non-applicability from the frontmatter and product-code scope.
+- **Evidence reviewed:** `python3 -B` returned `[1, 2]: '1'` and `[]: 'empty'`. File listing showed no workspace skill or status artifact.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; contract comparison and failure-path check.
+- **Skills/roles used:** Skills used: none; product-code reviewer.
+- **Commands/checks run:** File listing, source reads, frontmatter-only read, and the two runtime calls. `git status` failed because the fixture is not a Git repository.
+- **Skipped/unreadable sources:** No Git baseline or fixture status artifacts were available; the nonmatching skill body was intentionally unopened.
+- **Limits/residual uncertainty:** Review covers the two specified calls; no broader behavior contract was supplied. Knowledge capture: not required for this read-only finding.
+- **Instruction refresh:** Status: performed-targeted. Trigger: review closure. Contracts refreshed: fixture `AGENTS.md` and relevant core review contracts. Reviewed baseline: fixture files, without Git metadata. Drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed. Decisions asked/pending: none. Auto-resolved decisions: none.
+- **Model recommendation:** Recommended: GPT-5.6 Luna High. Reason: bounded product-code review. Criticality: low. Current model known: no. Blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Fix the division and verify both contract cases.  
+Wpływ: Resolves the observed correctness defect.  
+Napisz:
+```text
+Fix report_status in src/skill_creator_status.py so the two specified contract cases pass, then verify them.
+```
+
+**Alternatywa:** Extend the read-only review to more inputs.  
+Wpływ: Clarifies expected formatting and edge cases before a change.  
+Napisz:
+```text
+Keep this read-only. Review report_status for additional edge cases and propose a complete output contract.
+```

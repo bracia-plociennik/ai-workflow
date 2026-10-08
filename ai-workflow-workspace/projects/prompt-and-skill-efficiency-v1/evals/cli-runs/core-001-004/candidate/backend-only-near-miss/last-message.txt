@@ -1,0 +1,44 @@
+## Findings
+
+1. **P1 — Account ownership is not checked.** [TransferRequest](/private/tmp/pse-cli-candidate-backend-only-near-miss-koy6irw5/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:8) permits any signed-in user, and the service loads any `account_id`. A caller could debit another user’s account unless an unseen caller enforces ownership. The service should enforce that boundary too.
+
+2. **P1 — A failed transfer-record insert can leave a debit behind.** [TransferService](/private/tmp/pse-cli-candidate-backend-only-near-miss-koy6irw5/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:23) saves the reduced balance before `Transfer::create()`, with no transaction. If creation fails, the balance and ledger disagree.
+
+3. **P1 — Concurrent requests can record two transfers but apply one debit.** The service reads, subtracts, and saves without a lock or equivalent atomic operation. Two requests can read the same starting balance and overwrite each other’s updates.
+
+4. **P2 — Insufficient funds have no defined failure path.** The FormRequest correctly requires a positive integer amount, but the service can make the balance negative. Whether overdrafts are allowed is unspecified; if they are forbidden, this needs a business-rule check and a defined error. An unknown `account_id` currently reaches `findOrFail`; whether that should remain a 404 depends on the existing contract.
+
+**Review scope:** The requested backend review is complete. No interface change was assessed. The fixture contains no runnable Laravel application, accepted transfer specification, or tests, so these are code-path findings rather than observed runtime failures. No files changed and no formal QA result was issued.
+
+**Data/error trace:** Valid positive input → account lookup → balance save → transfer insert. The forbidden states to check are an unauthorized debit, a negative balance when overdrafts are disallowed, and a debit without its transfer record. The fixture provides no automated check for these paths.
+
+**Review Completeness Gate:** Cross-contract and read-only work-mode fit: aligned; adversarial failure paths: reviewed; automated evidence: supporting only, unavailable; post-fix review: not required; baseline: clean worktree at `7a904f7`; instruction baseline and closure: current. Formal gate eligibility: no.
+
+## Execution Trace
+
+- **Sources used:** Owner request, fixture, root `AGENTS.md`, repo status/intake, review and safety contracts, Laravel backend skill and reference.
+- **Evidence reviewed:** Numbered fixture source, `git status`, `git diff`, and repository file search.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; findings-first and failure-path review. Work-mode compliance: advisory review; knowledge capture: not required because nothing changed.
+- **Skills/roles used:** `.systems/ai/skills/backend-laravel-skill/SKILL.md`; Laravel backend review.
+- **Commands/checks run:** Read-only file inspection and git checks; worktree clean. Product tests and workflow scripts not run: this is a Markdown-only synthetic fixture with no runnable app or workflow change.
+- **Skipped/unreadable sources:** Transfer specification, caller, models, database constraints, and tests are absent from the fixture.
+- **Limits/residual uncertainty:** Ownership enforced by an unseen caller, overdraft policy, and expected error statuses cannot be determined.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: root `AGENTS.md`, review, risk, permissions, and response contracts; reviewed baseline: `7a904f7` and fixture; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed for read-only review; decisions asked/pending: none; auto-resolved: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High; reason: authorization and balance-integrity review; criticality: high-risk domain, synthetic read-only scope; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define the account-ownership, overdraft, and error rules in a read-only remediation plan.  
+Wpływ: Makes the fixes and their tests precise before any high-risk implementation.  
+Napisz:
+```text
+Create a read-only remediation plan for this transfer fixture, including ownership, overdraft, concurrency, atomicity, and error handling.
+```
+
+**Alternatywa:** Map focused failure-path tests for the fixture.  
+Wpływ: Gives a verification checklist while leaving business-rule decisions open.  
+Napisz:
+```text
+Create a read-only failure-path test matrix for this transfer fixture.
+```

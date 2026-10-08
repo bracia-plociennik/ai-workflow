@@ -1,0 +1,1 @@
+The shell tool returned `code-mode host is disabled` on both attempts. I couldn’t read `visible.txt` or create `result.txt`.

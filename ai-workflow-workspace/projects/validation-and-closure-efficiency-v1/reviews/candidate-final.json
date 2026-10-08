@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "variant": "candidate",
+  "scope": "synthetic-script-orchestration-only",
+  "samples": [
+    {
+      "scenario": "bounded-defect",
+      "sample": 1,
+      "duration_ns": 110156042,
+      "executed": 1,
+      "reused": 1,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": false
+    },
+    {
+      "scenario": "bounded-defect",
+      "sample": 2,
+      "duration_ns": 109663917,
+      "executed": 1,
+      "reused": 1,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": false
+    },
+    {
+      "scenario": "bounded-defect",
+      "sample": 3,
+      "duration_ns": 111890083,
+      "executed": 1,
+      "reused": 1,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": false
+    },
+    {
+      "scenario": "runtime-only-closure",
+      "sample": 1,
+      "duration_ns": 118388458,
+      "executed": 1,
+      "reused": 1,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": false
+    },
+    {
+      "scenario": "runtime-only-closure",
+      "sample": 2,
+      "duration_ns": 113290708,
+      "executed": 1,
+      "reused": 1,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": false
+    },
+    {
+      "scenario": "runtime-only-closure",
+      "sample": 3,
+      "duration_ns": 107546416,
+      "executed": 1,
+      "reused": 1,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": false
+    },
+    {
+      "scenario": "shared-contract-change",
+      "sample": 1,
+      "duration_ns": 155856042,
+      "executed": 2,
+      "reused": 0,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": true
+    },
+    {
+      "scenario": "shared-contract-change",
+      "sample": 2,
+      "duration_ns": 152785000,
+      "executed": 2,
+      "reused": 0,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": true
+    },
+    {
+      "scenario": "shared-contract-change",
+      "sample": 3,
+      "duration_ns": 152737042,
+      "executed": 2,
+      "reused": 0,
+      "coverage": [
+        "intent",
+        "consumer",
+        "failure",
+        "regression"
+      ],
+      "source_change": true
+    }
+  ],
+  "limitations": "No model, semantic-review or real project wall-time speedup is measured."
+}

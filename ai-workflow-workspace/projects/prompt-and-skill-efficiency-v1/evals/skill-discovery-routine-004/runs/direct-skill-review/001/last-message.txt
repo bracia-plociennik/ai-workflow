@@ -1,0 +1,36 @@
+## Findings
+
+**Selected skill:** the fixture’s active AI Workflow [skill-creator](/private/tmp/ai-workflow-skill-discovery-20260928/.systems/ai/skills/skill-creator/SKILL.md:1). Its trigger covers this review of an AI Workflow skill. The similarly named product module in `src/` is outside that trigger.
+
+- **P2 — Eval route can reuse stale grades.** The [resource route](/private/tmp/ai-workflow-skill-discovery-20260928/.systems/ai/skills/skill-creator/SKILL.md:82) says `run_loop.py` executes the eval loop. The [script](/private/tmp/ai-workflow-skill-discovery-20260928/.systems/ai/skills/skill-creator/scripts/run_loop.py:27) validates and scaffolds a run, then aggregates any `grading.json` already in the run directory. It does not execute or regrade the evaluations. When a run directory is reused with a changed plan, old grades can therefore appear in a new report. Make the route describe scaffolding and reporting accurately, and require a freshness check before aggregation.
+- **P3 — Context review route is too narrow.** [Resource Routing](/private/tmp/ai-workflow-skill-discovery-20260928/.systems/ai/skills/skill-creator/SKILL.md:66) permits opening `context/` only during creation or update, while the next line routes reviewers to the intake plan for a context-driven build. A reviewer may need the raw source to verify that plan. Explicitly allow targeted, read-only inspection of `context/` during review, while retaining its untrusted-data status.
+
+These are source-based findings; the stale-grade outcome is an inference from the opened code, not an observed run. No files were changed or scripts executed.
+
+## Execution Trace
+
+- **Sources actually opened:** fixture `AGENTS.md`; relevant `.systems/ai/core/` contracts; `skill-creator/SKILL.md`, `README.md`, `references/schemas.md`, and the relevant script source; both `src/` modules.
+- **Evidence reviewed:** fixture file listing and static code paths. The fixture has no `.git` entry or runtime status artifacts.
+- **Workflow procedures used:** read-only global quality review and skill discovery. **Skills/roles used:** fixture AI Workflow `skill-creator`; advisory reviewer.
+- **Commands/checks run:** `rg`, `cat`, `sed`, `nl`, and read-only path checks. Validation and eval scripts were not run because they can write output.
+- **Skipped/unreadable sources:** other bundled resources were existence-checked, not opened in detail; no eval run artifacts were present.
+- **Limits/residual uncertainty:** the stale-grade scenario was not reproduced. Advisory findings only; no formal quality result.
+- **Instruction refresh:** performed-targeted for this review against the fixture instructions, review contracts, and current files; no conflict found.
+- **Owner decision interaction:** none needed. **Model recommendation:** GPT-5.6 Sol High for a workflow-contract review; advisory, nonblocking.
+- **Contract compliance:** read-only scope respected. Knowledge capture: not-required; the findings are recorded here.
+
+## Co dalej?
+
+**Rekomendacja:** Review a proposed correction to the two resource routes.  
+**Wpływ:** Makes eval evidence and context-driven reviews easier to interpret safely.  
+**Napisz:**
+```text
+Prepare a read-only proposed patch for the two skill-creator findings.
+```
+
+**Alternatywa:** Run a separate read-only trigger-case review.  
+**Wpływ:** Tests the trigger boundary before changing its wording.  
+**Napisz:**
+```text
+Review positive and near-miss negative trigger cases for the fixture's skill-creator description; do not edit files.
+```

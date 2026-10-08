@@ -1,0 +1,38 @@
+## Findings
+
+1. **P1 — Refunds can pay the same balance more than once.** In [case.md](/private/tmp/pse-cli-candidate-blockchain-review-w70l8wz_/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:20), `refund()` sends ETH before clearing `balances[msg.sender]`. A contract recipient can call `refund()` again from its fallback while its recorded balance is unchanged. For example, with 1 ETH credited to the attacker and 2 ETH credited to another depositor, two refund calls can pay the attacker 2 ETH and leave only 1 ETH backing the other depositor’s 2 ETH claim. Clear the balance before the external call; a failed send will revert that state change.
+
+2. **P1 — Anyone can open refunds.** [openRefunds()](/private/tmp/pse-cli-candidate-blockchain-review-w70l8wz_/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/blockchain-review/case.md:14) has no authorization check. Any address can enable withdrawals, regardless of the intended escrow decision. The authorized caller and conditions for opening refunds need an explicit policy enforced by the contract.
+
+**Review limits:** This was a static, read-only review of the fixture. There is no accepted escrow specification or test harness here, so the intended refund trigger is unknown. I ran no Solidity tests, deployment, or provider calls. If a recipient rejects the ETH transfer, `require(ok)` reverts the refund and leaves its balance recorded; that failure path does not address the reentrant path.
+
+**Review completeness:** Adversarial paths checked: unauthorized opening, repeated refund during a callback, empty balance, closed refunds, and failed transfer. The two findings block a quality-ready verdict. This advisory review does not issue formal `PASS` or `FAIL`.
+
+## Execution Trace
+
+Sources used: user request; `AGENTS.md`; AI Workflow review, risk, permissions, response, and instruction-refresh contracts; blockchain skill and its EVM/value-flow/testing references; the escrow fixture.  
+Evidence reviewed: fixture lines 8–24; synthetic repo status and intake; clean git worktree at `7a904f7`.  
+Workflow procedures used: read-only `global-quality-review-stance`; contract compliance. Knowledge capture: **not-required**—no files or durable project state changed.  
+Skills/roles used: `.systems/ai/skills/blockchain-skill/SKILL.md`, security and value-flow review.  
+Commands/checks run: local file inspection and `git status`; no automated Solidity checks because the target is a Markdown code fixture without a test harness. Workflow scripts are not applicable; automated evidence would be supporting-only.  
+Skipped/unreadable sources: accepted escrow spec and product tests were absent.  
+Limits/residual uncertainty: authorized opener and refund-opening conditions remain unspecified; no runtime exploit test was performed.  
+Instruction refresh: **performed-targeted** for quality closure; refreshed repository instructions, review/risk/permissions contracts, status, and fixture against HEAD/worktree. Drift/conflict: none affecting this read-only review.  
+Owner decision interaction: **queued** for remediation—choose who may open refunds and under what conditions; no decision was needed to complete the review.  
+Model recommendation: **GPT-5.6 Sol High** for security remediation review; current model known: yes; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define the refund-opening authority and request a separately approved fix for both findings.  
+Wpływ: Makes the authorization rule testable and addresses the path that can deplete other depositors’ funds.  
+Napisz:
+```text
+The authorized refund opener is [role/address], and refunds may open when [condition]. Prepare a scoped fix and tests for both escrow findings; do not deploy.
+```
+
+**Alternatywa:** Request a read-only local test plan first.  
+Wpływ: Gives reviewers concrete normal, unauthorized, and reentrant cases before any code change.  
+Napisz:
+```text
+Prepare a read-only local test plan for the escrow authorization and refund accounting findings. Do not edit files, deploy, or contact a provider.
+```

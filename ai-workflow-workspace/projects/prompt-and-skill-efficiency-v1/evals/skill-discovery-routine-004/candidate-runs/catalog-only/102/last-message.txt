@@ -1,0 +1,29 @@
+**Selected skill: none.** The fixture exposes one active AI Workflow skill, `skill-creator`. Its frontmatter covers creating and reviewing *skill artifacts*, so it does not match the requested future review of `src/report.py`. This selection is based on the requested task and the skill description; I did not open `src/report.py` or assess its contents.
+
+### Execution Trace
+
+- **Sources opened:** Fixture `AGENTS.md`, relevant `.systems/ai/core/` contracts, and the `skill-creator/SKILL.md` frontmatter only.
+- **Evidence reviewed:** A fixture-only file listing found one active `SKILL.md`; the workspace skill directory is absent. The file listing found `src/report.py`, but its contents were not opened.
+- **Workflow procedures used:** Skill discovery only. **Skills/roles used:** none.
+- **Commands/checks run:** Read-only file listing, frontmatter extraction, and contract reads. No writes or code review.
+- **Skipped/unreadable sources:** `src/report.py` was deliberately unopened. The fixture has no `.git` directory.
+- **Limits/residual uncertainty:** A future review could reveal context that changes skill relevance.
+- **Instruction refresh:** Status: performed-targeted; trigger: this fixture evaluation; contracts refreshed: fixture `AGENTS.md` and relevant core contracts; reviewed baseline: fixture listing and skill frontmatter; drift/conflict: none.
+- **Owner decision interaction:** Mode: none-needed; decisions: none.
+- **Model recommendation:** Not applicable to skill selection.
+
+### Co dalej?
+
+**Rekomendacja:** Request the read-only code review when ready.  
+Wpływ: The review can use the file’s actual contents and applicable workflow contracts.  
+Napisz:
+```text
+Review src/report.py read-only using the isolated fixture.
+```
+
+**Alternatywa:** Recheck skill availability if the fixture changes first.  
+Wpływ: Captures any newly available skill before the review.  
+Napisz:
+```text
+Recheck the isolated fixture for skills relevant to reviewing src/report.py; do not review the code.
+```

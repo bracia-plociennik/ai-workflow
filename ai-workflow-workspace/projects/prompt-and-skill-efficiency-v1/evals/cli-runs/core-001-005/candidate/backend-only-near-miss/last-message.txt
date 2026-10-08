@@ -1,0 +1,42 @@
+## Review findings
+
+The [synthetic Laravel fixture](/private/tmp/pse-cli-candidate-backend-only-near-miss-psm2hbk_/checkout/ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/fixtures/backend-only-near-miss/case.md:5) has three material backend risks:
+
+- **P1 — Account authorization:** `authorize()` checks only that a user is signed in. The service then loads any supplied `account_id` and debits it without checking whether the actor may transfer from that account (lines 8, 23–25). Enforce the account policy at the point of use, with no write on denial.
+- **P1 — Balance validation and concurrency:** A positive integer amount can exceed the available balance. Concurrent requests can also read the same balance and both proceed (lines 14, 23–25). Check available funds under a transaction with a row lock or an equivalent atomic conditional update.
+- **P1 — Partial transfer:** The balance is saved before `Transfer::create()` (lines 25–26). If record creation fails, the debit remains. Both writes need one database transaction.
+
+**P2 — Error handling:** The fixture defines no insufficient-funds failure, and `findOrFail()` alone does not establish how missing and inaccessible accounts should be handled consistently. Define domain errors and map them to the existing backend response contract without changing the user-facing interface.
+
+The critical cases to verify are an inaccessible account, insufficient funds, concurrent transfers against one balance, and transfer-record failure after a debit. No application, schema, or tests are present in this fixture, so these are code-review findings, not runtime results. Whether overdrafts or retries are permitted, and the existing error response contract, remain unknown.
+
+Review completeness: intent and read-only scope aligned; risk and work mode aligned; adversarial cases reviewed; automated evidence absent; post-fix review not required; reviewed baseline `7a904f7` with a clean worktree. Formal QA status is not applicable.
+
+## Execution Trace
+
+- **Sources used:** User request, `AGENTS.md`, AI Workflow review and safety contracts, Laravel backend skill and reference, fixture `case.md`, synthetic repo status and intake.
+- **Evidence reviewed:** Fixture lines 5–33; Git HEAD `7a904f7`; clean `git status`.
+- **Workflow procedures used:** Read-only `global-quality-review-stance`; contract compliance. Knowledge capture: **not-required**, because this review changed no artifact or status.
+- **Skills/roles used:** `backend-laravel-skill`, backend code-review lens.
+- **Commands/checks run:** Local file reads, line-number inspection, `git status`. Tests not run: the fixture contains no executable Laravel application.
+- **Skipped/unreadable sources:** Models, schema, routes, response contract, and tests are absent.
+- **Limits/residual uncertainty:** Account policy, overdraft rule, retry behavior, and error mapping need product context before a fix can be specified.
+- **Instruction refresh:** Status: performed-targeted; trigger: review closure; contracts refreshed: `AGENTS.md`, quality, risk, permissions, response, and Laravel skill contracts; reviewed baseline: `7a904f7` and fixture; drift/conflict: none.
+- **Owner decision interaction:** Mode: queued; decisions pending: account policy, overdraft rule, and error contract; auto-resolved: none.
+- **Model recommendation:** Recommended: GPT-5.6 Sol High; reason: authorization and balance correctness require adversarial review; criticality: high if implemented; current model known: no; blocking: no.
+
+## Co dalej?
+
+**Rekomendacja:** Define the account, overdraft, and error rules before routing a backend fix.  
+Wpływ: Makes the authorization and failure behavior testable without guessing product policy.  
+Napisz:
+```text
+Define the account authorization, overdraft, and error response rules for this synthetic transfer fixture, then prepare a backend fix plan.
+```
+
+**Alternatywa:** Request a narrower read-only test-case review of the fixture.  
+Wpływ: Produces concrete regression scenarios while leaving product decisions open.  
+Napisz:
+```text
+List read-only Laravel test cases for the transfer fixture's authorization, balance, concurrency, and rollback paths.
+```
