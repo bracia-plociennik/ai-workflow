@@ -947,5 +947,45 @@ mv "$tmp/phase-commit.orig" "$tmp/.systems/ai/core/phase-commit-policy.md"
 
 run_must_pass "parallel-cross-system-offline-regressions" python3 .systems/scripts/tests/parallel-compatibility.py
 
+run_must_pass "execution-modes-valid" bash .systems/scripts/check-execution-modes
+run_must_pass "execution-modes-behavioral" python3 .systems/scripts/tests/execution-modes.py
+cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/owner-mode.orig"
+printf '\nautopilot may continue only verified independent units while a pending material decision blocks excluded units and dependents.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_pass "execution-modes-qualified-independent-policy" bash .systems/scripts/check-owner-decision-checkpoints
+printf '\nAuto may dispatch a unit blocked by a pending material decision.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+run_must_fail "execution-modes-blocked-unit-policy" --expect-literal 'Unsafe owner decision checkpoint wording' bash .systems/scripts/check-owner-decision-checkpoints
+mv "$tmp/owner-mode.orig" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
+printf '\nAuto must not bypass QA.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
+run_must_pass "execution-modes-safe-prohibition" bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
+for em_join in direct but however period colon semicolon unless yet; do
+  case "$em_join" in
+    direct) em_prefix='' ;;
+    but) em_prefix='Auto must not bypass QA, but ' ;;
+    however) em_prefix='Auto must not bypass QA, however ' ;;
+    period) em_prefix='Auto must not bypass QA. ' ;;
+    colon) em_prefix='Auto must not bypass QA: ' ;;
+    semicolon) em_prefix='Auto must not bypass QA; ' ;;
+    unless) em_prefix='Auto must not bypass QA unless ' ;;
+    yet) em_prefix='Auto must not bypass QA, yet ' ;;
+  esac
+  cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
+  printf '\n%sAuto may bypass QA.\n' "$em_prefix" >> "$tmp/.systems/ai/core/execution-modes.md"
+  run_must_fail "execution-modes-boundary-$em_join" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes
+  mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
+done
+cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
+printf '\nAuto may mark completed with incomplete DoD.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
+run_must_fail "execution-modes-false-completion" --expect-literal 'Unsafe execution mode completion wording' bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
+mv "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
+run_must_fail "execution-modes-missing-contract" --expect-literal 'Execution modes contract missing' bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
+cp "$tmp/.systems/ai/templates/autopilot/state.template.md" "$tmp/execution-state.orig"
+perl -0pi -e 's/  approval-reference: <actual-owner-scope-reference>\n//' "$tmp/.systems/ai/templates/autopilot/state.template.md"
+run_must_fail "execution-modes-missing-producer-field" --expect-literal 'Execution modes producer field missing' bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-state.orig" "$tmp/.systems/ai/templates/autopilot/state.template.md"
+
 echo "Owned smoke group passed."
 smoke_suite_completed=1

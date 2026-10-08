@@ -1,5 +1,14 @@
 # changelog.md
 
+## 2026-10-08 - Execution Modes V1
+
+- Default new work to Auto; explicit Human Coop is task-local unless scoped wider.
+- Preserve mode on resume, scope-bound plan approvals and legacy non-retroactivity.
+- Block pending-decision units and dependents; permit only verified independent continuation.
+- Remove implicit new-run timebox, retain retry/no-progress limits and actual QA.
+- Add an inspection-only readiness projection, offline boundary regressions and supporting policy validator.
+- Preserve explicit final-check route, separate final-owner-yes and phase commit/push boundaries.
+
 ## 2026-10-04 - Read-only parallel compatibility adaptation
 - Add a closed contract-1 inspector for source/identity, global worker/reviewer
   budget, state receipt and fail-closed transport/recovery differences.

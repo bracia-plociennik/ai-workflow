@@ -57,6 +57,7 @@ policy_validators=(
   .systems/scripts/check-end-of-task-capture
   .systems/scripts/check-default-idea-validation-opt-out
   .systems/scripts/check-owner-decision-checkpoints
+  .systems/scripts/check-execution-modes
   .systems/scripts/check-full-qa-verification
   .systems/scripts/check-cross-system-upgrade-handoff
   .systems/scripts/check-worktree-bootstrap

@@ -1,5 +1,7 @@
 # response-contract.md
 
+Execution mode (full Execution Trace): Mode: auto|human-coop; Scope/source: task|project|session and reference; AI choices/override impact: list|none; Blocked units/pending decisions: IDs|none. Use execution-modes.md. End status is completed only with full DoD, actual QA and capture; otherwise partial / awaiting-owner or blocked. Queue owner-only decisions at closure.
+
 ## Purpose
 
 This file defines the required user-facing response shape for Codex when working inside a repository governed by AI Workflow.

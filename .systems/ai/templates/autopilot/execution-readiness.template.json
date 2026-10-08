@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "execution": {
+    "mode": "auto",
+    "scope": "task",
+    "scope_id": "example-task",
+    "source": "new-work-default",
+    "approval_reference": "decisions/owner-scope.md"
+  },
+  "baseline": {
+    "assessed": "verified-baseline",
+    "current": "verified-baseline"
+  },
+  "units": [
+    {
+      "id": "UNIT-001",
+      "work_kind": "implementation",
+      "dependencies": [],
+      "dependencies_known": true,
+      "isolation_verified": true,
+      "resources": [
+        "files/example"
+      ],
+      "gates_ready": true,
+      "dod_testable": true,
+      "risk": "low",
+      "required_actions": ["local-write"],
+      "approved_actions": ["local-write"],
+      "approval_reference": "decisions/owner-scope.md",
+      "status": "pending",
+      "quality_current": false,
+      "capture_complete": false
+    }
+  ],
+  "decisions": [],
+  "requested_status": "inspect",
+  "final_check": {
+    "requested": false,
+    "approval_reference": null,
+    "owner_yes": false
+  }
+}

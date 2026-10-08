@@ -1,4 +1,6 @@
 # commands.md
+
+Execution Modes: use check-execution-modes for contract validation and check-execution-modes --state <execution-readiness.json> for pure declared readiness inspection. See execution-modes.md; the inspector neither dispatches workers nor verifies actual approval/resource evidence.
 Read-only cross-system inspection: `.systems/scripts/inspect-parallel-compatibility
 --workflow PATH --repo PATH --run FILE --mapping FILE`. See
 `parallel-compatibility.md` and `compatibility.template.json`. Exit0 means static
