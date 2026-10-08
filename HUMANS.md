@@ -1,4 +1,6 @@
 # HUMANS.md
+
+Official `dev` may publish an audited workspace snapshot; `main` remains code-only. Review privacy and refresh `repo/publication-review.json` before committing changed workspace files, then run `check-workspace-publication`. Move product commits to main selectively, excluding the snapshot and dev-only ignore change. Published historical QA is not current QA PASS; see repository-modes.md.
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 
 

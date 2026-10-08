@@ -14,6 +14,8 @@ When this repository is cloned into a target repository as `ai-workflow/`, the t
 
 ## Path Resolution
 
+In official repo mode, only `dev` may track a privacy-reviewed workspace snapshot under `repository-modes.md`. `main`, other branches and nested installations remain protected. Run `check-workspace-publication` before publishing snapshot changes; published history is supporting context, never current QA PASS or target runtime.
+
 AI Workflow has two repository modes. In upstream, `AI_WORKFLOW_HOME` is this root; in targets it is the nested `ai-workflow/`. Read `.systems/ai/core/repository-modes.md` if placement is ambiguous.
 
 When AI Workflow is used as a nested clone:

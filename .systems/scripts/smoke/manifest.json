@@ -770,7 +770,8 @@
     "phase-commit-policy-boundary-yet",
     "phase-commit-policy-missing-source",
     "parallel-cross-system-offline-regressions",
-    "validation-scope-dependencies"
+    "validation-scope-dependencies",
+    "branch-policy-dev-publication-regressions"
   ],
   "external_assertion_audit": [
     {
@@ -3104,7 +3105,8 @@
     "phase-commit-policy-boundary-yet": "core",
     "phase-commit-policy-missing-source": "core",
     "parallel-cross-system-offline-regressions": "core",
-    "validation-scope-dependencies": "core"
+    "validation-scope-dependencies": "core",
+    "branch-policy-dev-publication-regressions": "workspace"
   },
   "tests": [
     {
@@ -11455,12 +11457,23 @@
       "cleanup_id": "owned-temporary-directory-cleanup",
       "mutation_id": "peer-envelope-boundary-cases",
       "expected_outcome": "offline positive and adversarial cases; no dispatch or writes"
+    },
+    {
+      "id": "branch-policy-dev-publication-regressions",
+      "group": "workspace",
+      "region_id": "supplemental-core",
+      "helper": "run_must_pass",
+      "command_contract": "run_must_pass \"branch-policy-dev-publication-regressions\" python3 .systems/scripts/tests/branch-policy.py",
+      "setup_id": "synthetic-temp-git-repositories",
+      "cleanup_id": "owned-temporary-directory-cleanup",
+      "mutation_id": "branch-ci-index-privacy-boundaries",
+      "expected_outcome": "real Git branch, detached CI and publication boundary regressions"
     }
   ],
   "files_sha256": {
     "common.sh": "d27babc3927de3538a42ccbd7dbc98251092e388fddf2745e0962f124453d688",
     "quality.sh": "df3e514dd8945369367a4a2d024f2ec121ac9f416db8a8f1e1f411c3e1fc08da",
-    "workspace.sh": "1c36c1035dfaba35a3722536cea159ec6a39dc7c8e8e346da37a3e02a4091c4c",
+    "workspace.sh": "0b2281cd5f5526e77a7e7cc927aa5fcb38fba774e96695ae09b92cf4885bae55",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
     "core.sh": "2fa1ac0c1d34a9622b865e4b3881b2b895ac8020fec905374bb19dcb4189894a"

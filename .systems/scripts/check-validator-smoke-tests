@@ -24,6 +24,7 @@ class SmokeInterrupted(Exception):
 # Executable compatibility index: each route binds a live ID and command.
 # It is validated below; an unconnected descriptive comment is not coverage.
 COVERAGE_INDEX = {
+    "dev-workspace-publication": ("branch-policy-dev-publication-regressions", "branch-policy.py"),
     "execution-efficiency": ("execution-efficiency-behavioral", "execution-efficiency.py"),
     "contract-compliance": ("contract-compliance-requires-side-task-mode", "check-contract-compliance"),
     "cross-system-upgrade-handoff": ("cross-system-upgrade-handoff-valid", "check-cross-system-upgrade-handoff"),

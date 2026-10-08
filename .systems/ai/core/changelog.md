@@ -1,5 +1,11 @@
 # changelog.md
 
+## 2026-10-08 - Reviewed Workspace On Official Dev
+
+- Permit audited workspace snapshots only on official dev, with staged-blob hashes and branch/installation/PR guards.
+- Keep main code-only and its workspace ignore rule; publish runtime and dev-only ignore changes separately.
+- Run full source CI on main/dev with an empty validation workspace; verify publication integrity separately without converting historical evidence into current QA PASS.
+
 ## 2026-10-04 - Read-only parallel compatibility adaptation
 - Add a closed contract-1 inspector for source/identity, global worker/reviewer
   budget, state receipt and fail-closed transport/recovery differences.

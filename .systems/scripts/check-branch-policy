@@ -11,40 +11,55 @@ fi
 
 policy="${AI_WORKFLOW_BRANCH_POLICY:-auto}"
 
-resolve_auto_policy() {
-  local branch=""
-
-  if [[ -n "${GITHUB_BASE_REF:-}" ]]; then
-    branch="$GITHUB_BASE_REF"
-  elif [[ -n "${GITHUB_REF_NAME:-}" ]]; then
-    branch="$GITHUB_REF_NAME"
-  else
-    branch="$(git branch --show-current 2>/dev/null || true)"
-  fi
-
-  case "$branch" in
-    main|"")
-      printf 'public\n'
-      ;;
-    *)
-      printf 'public\n'
-      ;;
-  esac
-}
-
 case "$policy" in
-  auto)
-    policy="$(resolve_auto_policy)"
-    ;;
-  public|dev)
+  auto|public|dev)
     ;;
   *)
     echo "Invalid AI_WORKFLOW_BRANCH_POLICY: $policy"
     echo "Allowed values: auto, public, dev"
-    echo "Note: dev is a compatibility alias and does not allow tracked runtime workspace files."
+    echo "dev never overrides the actual branch or installation boundary."
     exit 1
     ;;
 esac
+
+branch="$(git branch --show-current 2>/dev/null || true)"
+parent="$(cd "$repo_root/.." && pwd -P)"
+parent_git="$(git -C "$parent" rev-parse --show-toplevel 2>/dev/null || true)"
+nested=0
+if [[ "$parent_git" == "$parent" ]]; then
+  nested=1
+fi
+
+# Local Git identity takes precedence. Only verified detached Actions context
+# can identify a development merge tree; a PR destination may narrow permission.
+if [[ -z "$branch" && "${GITHUB_ACTIONS:-}" == true &&
+      "${GITHUB_REPOSITORY:-}" == bracia-plociennik/ai-workflow &&
+      "${GITHUB_SHA:-}" == "$(git rev-parse HEAD)" ]]; then
+  case "${GITHUB_EVENT_NAME:-}" in
+    push)
+      [[ "${GITHUB_REF:-}" != refs/heads/dev || "${GITHUB_REF_NAME:-}" != dev ]] || branch=dev
+      ;;
+    pull_request)
+      if [[ "${GITHUB_BASE_REF:-}" == dev && "${GITHUB_REF:-}" =~ ^refs/pull/[0-9]+/merge$ ]]; then
+        branch=dev
+      fi
+      ;;
+  esac
+fi
+
+allow_workspace=0
+origin="$(git remote get-url origin 2>/dev/null || true)"
+canonical_origin=0
+case "$origin" in
+  https://github.com/bracia-plociennik/ai-workflow.git|https://github.com/bracia-plociennik/ai-workflow|git@github.com:bracia-plociennik/ai-workflow.git)
+    canonical_origin=1 ;;
+esac
+if [[ "$policy" != public && "$branch" == dev && "$nested" == 0 &&
+      "$canonical_origin" == 1 &&
+      "${AI_WORKFLOW_MODE:-auto}" != target &&
+      ( -z "${GITHUB_BASE_REF:-}" || "${GITHUB_BASE_REF:-}" == dev ) ]]; then
+  allow_workspace=1
+fi
 
 tracked_legacy="$(git ls-files -- workspace || true)"
 tracked_local_workspace="$(git ls-files -- ai-workflow-workspace || true)"
@@ -57,11 +72,17 @@ if [[ -n "$tracked_legacy" ]]; then
   fail=1
 fi
 
-if [[ -n "$tracked_local_workspace" ]]; then
+if [[ -n "$tracked_local_workspace" && "$allow_workspace" == 0 ]]; then
   echo "Branch policy violation: ai-workflow-workspace/ is tracked."
-  echo "ai-workflow-workspace/ must remain local-only and ignored in this repository."
+  echo "Tracked workspace is allowed only on official dev, never on main, other branches, or nested installations."
   printf '%s\n' "$tracked_local_workspace" | sed 's/^/ - /'
   fail=1
+fi
+
+if [[ -n "$tracked_local_workspace" && "$allow_workspace" == 1 ]]; then
+  if ! "$script_dir/check-workspace-publication"; then
+    fail=1
+  fi
 fi
 
 exit "$fail"

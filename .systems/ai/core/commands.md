@@ -1,4 +1,6 @@
 # commands.md
+
+Official dev workspace publication: run `.systems/scripts/check-workspace-publication` against the staged index, or add `--ref HEAD` for the committed snapshot. `check-branch-policy` permits only actual official dev or verified detached CI targeting dev; main/other branches and nested installations remain forbidden. CI full source verification uses a separate empty `AI_WORKFLOW_WORKSPACE_HOME`; it does not attest current runtime QA. Use `/tmp` for validation output.
 Read-only cross-system inspection: `.systems/scripts/inspect-parallel-compatibility
 --workflow PATH --repo PATH --run FILE --mapping FILE`. See
 `parallel-compatibility.md` and `compatibility.template.json`. Exit0 means static

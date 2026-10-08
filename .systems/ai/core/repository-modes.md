@@ -14,8 +14,9 @@ Use `official-repo` mode when working inside the upstream `ai-workflow` reposito
 - `TARGET_REPO_ROOT` is the repository root.
 - `.systems/`, `.github/`, `AGENTS.md`, `HUMANS.md`, and `README.md` live directly in the repository root.
 - There is no inner `ai-workflow/` directory. This is expected and valid.
-- No active runtime workspace may be tracked inside the official `ai-workflow` repository on any branch.
-- A local `AI_WORKFLOW_HOME/ai-workflow-workspace/` may exist for private development, but it must remain ignored and untracked.
+- Only the official `dev` branch may track a privacy-reviewed `ai-workflow-workspace/` snapshot. `main`, other branches, unknown branch identity and nested installations must not track this directory.
+- On `main` and other branches a local workspace remains ignored. On official `dev`, remove only its root ignore rule, retain generated/sensitive-file exclusions, and run `check-workspace-publication` before publishing changed blobs.
+- Published runtime is supporting data, not installed target state or current QA PASS. Historical reports retain their original content and baseline; privacy-sensitive files remain local.
 
 Default official workspace:
 
@@ -49,7 +50,7 @@ Use `.systems/scripts/resolve-workflow-env` for shell scripts that need path res
 - In `official` mode, default workspace is inside `AI_WORKFLOW_HOME`.
 - In `target` mode, default workspace is beside `AI_WORKFLOW_HOME`.
 - Validators must not require a workspace to exist in the official repository.
-- If an ignored local official workspace exists, validators may read it when a check needs runtime context, but branch policy still blocks tracking it.
+- Validators may read the selected local workspace when runtime checks are requested. Source CI uses a separate empty validation workspace and checks publication integrity separately; it does not certify the snapshot's current project QA.
 
 The resolver exports:
 
@@ -65,7 +66,9 @@ AI_WORKFLOW_WORKSPACE_HOME
 `.systems/scripts/check-branch-policy` enforces runtime tracking rules:
 
 - all modes block legacy `workspace/**`;
-- all modes block `ai-workflow-workspace/**` inside the official repository;
+- only official `dev` with a current publication review may track `ai-workflow-workspace/**`; all other branches and nested installations block it;
 - target repositories may commit their sibling `ai-workflow-workspace/**` in the parent application repository, not inside the nested `ai-workflow/` clone.
 
 The absence of an inner `ai-workflow/` directory in the upstream repository is not a branch policy violation.
+
+Local Git branch identity and the canonical `origin` URL govern the exception. Verified detached GitHub Actions push/PR context may identify `dev`; a PR targeting `main` remains forbidden. `AI_WORKFLOW_BRANCH_POLICY=dev` cannot override branch or installation identity, while `public` always forbids tracked runtime. Move product changes from `dev` to `main` by selecting product commits; never merge the workspace snapshot or its dev-only ignore configuration into `main`.

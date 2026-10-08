@@ -1130,5 +1130,7 @@ rm -rf "$update_fixture"
 # END FROZEN region-4879-4893
 
 
+run_must_pass "branch-policy-dev-publication-regressions" python3 .systems/scripts/tests/branch-policy.py
+
 echo "Owned smoke group passed."
 smoke_suite_completed=1

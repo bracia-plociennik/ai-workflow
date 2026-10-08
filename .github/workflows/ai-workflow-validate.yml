@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   validate:
@@ -26,19 +27,38 @@ jobs:
       - name: Check branch policy
         run: .systems/scripts/check-branch-policy
 
+      - name: Check published workspace snapshot
+        run: .systems/scripts/check-workspace-publication --ref HEAD
+
+      - name: Prepare source-only validation checkout
+        shell: bash
+        run: |
+          source_checkout="$(mktemp -d "$RUNNER_TEMP/ai-workflow-source-validation.XXXXXX")"
+          git archive HEAD .systems .github AGENTS.md HUMANS.md README.md .gitignore | tar -xf - -C "$source_checkout"
+          git -C "$source_checkout" init -q --initial-branch=main
+          git -C "$source_checkout" add .
+          git -C "$source_checkout" -c user.name='Source Validation' -c user.email='source-validation@example.invalid' commit -qm 'Source validation fixture'
+          printf 'AI_WORKFLOW_SOURCE_CHECKOUT=%s\n' "$source_checkout" >> "$GITHUB_ENV"
+
       - name: Validate workflow template
-        run: .systems/scripts/validate-workflow --profile full
+        shell: bash
+        run: |
+          cd "$AI_WORKFLOW_SOURCE_CHECKOUT"
+          AI_WORKFLOW_WORKSPACE_HOME="$AI_WORKFLOW_SOURCE_CHECKOUT/ai-workflow-workspace" .systems/scripts/validate-workflow --profile full
 
       - name: Check strict naming
-        run: .systems/scripts/check-naming
+        shell: bash
+        run: |
+          cd "$AI_WORKFLOW_SOURCE_CHECKOUT"
+          AI_WORKFLOW_WORKSPACE_HOME="$AI_WORKFLOW_SOURCE_CHECKOUT/ai-workflow-workspace" .systems/scripts/check-naming
 
-      - name: Check diff whitespace
+      - name: Check product diff whitespace
         shell: bash
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            git diff --check "origin/${{ github.base_ref }}...HEAD"
+            git diff --check "origin/${{ github.base_ref }}...HEAD" -- .systems .github AGENTS.md HUMANS.md README.md .gitignore
           elif git rev-parse HEAD^ >/dev/null 2>&1; then
-            git diff --check HEAD^..HEAD
+            git diff --check HEAD^..HEAD -- .systems .github AGENTS.md HUMANS.md README.md .gitignore
           else
-            git diff --check
+            git diff --check -- .systems .github AGENTS.md HUMANS.md README.md .gitignore
           fi

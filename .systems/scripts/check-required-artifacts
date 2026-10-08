@@ -2,6 +2,9 @@
 set -euo pipefail
 
 required=(
+  ".systems/scripts/check-workspace-publication"
+  ".systems/scripts/lib/workspace-publication.py"
+  ".systems/scripts/tests/branch-policy.py"
   ".systems/ai/core/parallel-compatibility.md"
   ".systems/ai/templates/orchestration/compatibility.template.json"
   ".systems/scripts/lib/parallel-compatibility.py"
