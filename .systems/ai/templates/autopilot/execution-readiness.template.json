@@ -1,5 +1,12 @@
 {
-  "schema": 1,
+  "schema": 2,
+  "recovery": {
+    "attempts": [],
+    "retry_counts": {
+      "units": {"UNIT-001": {"spec": 0, "quality": 0}},
+      "total": 0
+    }
+  },
   "execution": {
     "mode": "auto",
     "scope": "task",

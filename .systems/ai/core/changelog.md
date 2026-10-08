@@ -1,5 +1,12 @@
 # changelog.md
 
+## 2026-10-08 - Execution Modes Compatibility
+
+- Add source-bound contract 1 capability metadata with closed source/mapping coverage.
+- Add schema 2 per-unit stable-cause recovery, unique attempts and persisted stricter retry budgets.
+- Preserve legacy schema 1 inspection without new recovery attestation.
+- Verify candidate protocols against a frozen actual AI System adapter in an isolated synthetic installation; no rollout or native behavior claim.
+
 ## 2026-10-08 - Execution Modes V1
 
 - Default new work to Auto; explicit Human Coop is task-local unless scoped wider.

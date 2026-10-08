@@ -489,6 +489,22 @@ run_must_fail() {
 
   should_run_smoke_test "$name" || return 0
 
+  local capability_backup=""
+  if [[ "$name" == "missing-autopilot-range-in-readiness" ]]; then
+    # Pin only this deliberate fixture mutation; integrity tests never use this hook.
+    capability_backup="$tmp/execution-capability-range.orig"
+    cp "$tmp/.systems/ai/capabilities/execution-modes-v1.json" "$capability_backup"
+    python3 - "$tmp" <<'PY'
+import hashlib, json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+path = root / ".systems/ai/capabilities/execution-modes-v1.json"
+record = json.loads(path.read_text())
+name = ".systems/ai/templates/autopilot/readiness.template.md"
+record["sources"][name] = hashlib.sha256((root / name).read_bytes()).hexdigest()
+path.write_text(json.dumps(record, indent=2) + "\n")
+PY
+  fi
+
   if [[ "$progress" != "quiet" ]]; then
     printf 'AI_WORKFLOW_SMOKE_PROGRESS test=%s status=started\n' "$name"
   fi
@@ -497,6 +513,9 @@ run_must_fail() {
   (cd "$tmp" && "$timeout_runner" --timeout-seconds "$test_timeout_seconds" "$@") >"$output" 2>&1
   status=$?
   set -e
+  if [[ -n "$capability_backup" ]]; then
+    mv "$capability_backup" "$tmp/.systems/ai/capabilities/execution-modes-v1.json"
+  fi
   if [[ -n "${AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT:-}" ]]; then
     mkdir -p "$(dirname "$AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT")"
     printf '%s\t%s\t%s\n' "$name" "$status" "$(sed -n '/[^[:space:]]/{p;q;}' "$output")" >> "$AI_WORKFLOW_SMOKE_DIAGNOSTICS_OUTPUT"

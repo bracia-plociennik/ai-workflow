@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Pure readiness projection. Declarations are not verified approvals or isolation."""
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -47,9 +48,107 @@ def overlap(left, right):
     return a == b or a.startswith(b + "/") or b.startswith(a + "/")
 
 
+CAPABILITY_SOURCES = {".systems/ai/core/" + name + ".md" for name in (
+    "execution-modes", "autopilot", "owner-decision-checkpoints", "delivery-constraints",
+    "permissions", "risk-model", "phase-commit-policy", "quality-review")}
+CAPABILITY_SOURCES.update({".systems/scripts/check-execution-modes",
+    ".systems/scripts/lib/execution-modes.py"})
+CAPABILITY_SOURCES.update({".systems/ai/templates/autopilot/" + name for name in (
+    "execution-readiness.template.json", "readiness.template.md",
+    "state.template.md", "task-decisions.template.md")})
+CAPABILITY_BEHAVIORS = {"scoped-approval", "dependency-local-blocking", "auto-unconstrained",
+                       "three-stalled-attempts", "technical-phase-8", "human-material-questions"}
+
+
+def unlinked(path, label):
+    aliases = {Path("/tmp"): Path("/private/tmp"), Path("/var"): Path("/private/var")}
+    require(not any(p.is_symlink() and aliases.get(p) != p.resolve()
+                    for p in (path, *path.parents)), "symlink " + label)
+
+
+def capability(root):
+    unlinked(root, "capability root")
+    root = root.resolve(strict=True)
+    path = root / ".systems/ai/capabilities/execution-modes-v1.json"
+    unlinked(path, "capability")
+    record = json.loads(path.read_text(), object_pairs_hook=unique_keys)
+    keys(record, ("contract", "capability", "behaviors", "mode_mapping", "sources"), "capability")
+    require(type(record["contract"]) is int and record["contract"] == 1, "unsupported capability contract")
+    require(record["capability"] == "execution-modes-v1", "unknown capability")
+    require(record["mode_mapping"] == {"auto": "auto", "human": "human-coop"}, "capability mode mapping")
+    identifiers(record["behaviors"], "capability behaviors")
+    require(set(record["behaviors"]) == CAPABILITY_BEHAVIORS, "capability behaviors incomplete/unknown")
+    keys(record["sources"], CAPABILITY_SOURCES, "capability sources")
+    for name, digest in record["sources"].items():
+        require(isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest), "capability hash")
+        source = root / name
+        unlinked(source, "capability source")
+        require(source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() == digest,
+                "capability source mismatch: " + name)
+    return {"status": "source-bound", "authority": "support-metadata-only",
+            "mode_mapping": record["mode_mapping"]}
+
+
+def recovery(record, units):
+    if record["schema"] == 1:
+        return {}, "legacy-unverified"
+    data = record["recovery"]
+    keys(data, ("attempts", "retry_counts"), "recovery")
+    keys(data["retry_counts"], ("units", "total"), "retry counts")
+    counts = data["retry_counts"]
+    require(type(counts["total"]) is int and counts["total"] >= 0, "total retries")
+    require(isinstance(counts["units"], dict) and set(counts["units"]).issubset(units), "retry unit identity")
+    for identifier, value in counts["units"].items():
+        keys(value, ("spec", "quality"), "unit retries")
+        require(all(type(n) is int and n >= 0 for n in value.values()), "unit retry count")
+    require(counts["total"] >= sum(sum(v.values()) for v in counts["units"].values()), "inconsistent retry total")
+    require(isinstance(data["attempts"], list), "recovery attempts")
+    require(counts["total"] >= len(data["attempts"]), "attempt history exceeds retry total")
+    attempts, stalled, evidence = set(), {}, {}
+    for attempt in data["attempts"]:
+        keys(attempt, ("attempt_id", "unit_id", "cause_id", "progress_evidence"), "recovery attempt")
+        for field in ("attempt_id", "unit_id", "cause_id"):
+            identifiers([attempt[field]], "attempt " + field)
+        require(attempt["attempt_id"] not in attempts, "duplicate recovery attempt")
+        attempts.add(attempt["attempt_id"])
+        require(attempt["unit_id"] in units and attempt["unit_id"] in counts["units"], "unknown recovery unit/budget")
+        fingerprint = attempt["progress_evidence"]
+        require(fingerprint is None or isinstance(fingerprint, str) and re.fullmatch(r"[0-9a-f]{64}", fingerprint), "progress fingerprint")
+        pair = (attempt["unit_id"], attempt["cause_id"])
+        # Declared evidence is deduplicated across causes within a unit.
+        seen = evidence.setdefault(attempt["unit_id"], set())
+        if fingerprint is not None and fingerprint not in seen:
+            seen.add(fingerprint)
+            stalled[pair] = 0
+        else:
+            stalled[pair] = stalled.get(pair, 0) + 1
+    blocked = {}
+    for (identifier, cause), count in stalled.items():
+        if count >= 3:
+            blocked.setdefault(identifier, []).append("stalled-cause:" + cause)
+    for identifier, value in counts["units"].items():
+        for field in ("spec", "quality"):
+            if value[field] >= 2:
+                blocked.setdefault(identifier, []).append("retry-limit:" + field)
+    if counts["total"] >= 32:
+        for identifier, unit in units.items():
+            if unit["status"] != "completed":
+                blocked.setdefault(identifier, []).append("retry-limit:total")
+    # Budget exhaustion stops retries, not a result already accepted after its last allowed fix.
+    for identifier in list(blocked):
+        if units[identifier]["status"] == "completed":
+            require(counts["total"] <= 32 and all(n <= 2 for n in counts["units"].get(identifier, {}).values()),
+                    "completed unit exceeds retry budgets")
+            require(not any(x.startswith("stalled-cause:") for x in blocked[identifier]),
+                    "completed unit has stalled recovery")
+            del blocked[identifier]
+    return blocked, "declared-schema-2"
+
+
 def assess(record):
-    keys(record, ("schema", "execution", "baseline", "units", "decisions", "requested_status", "final_check"), "projection")
-    require(type(record["schema"]) is int and record["schema"] == 1, "unsupported projection schema")
+    require(isinstance(record, dict) and type(record.get("schema")) is int and record["schema"] in {1, 2}, "unsupported projection schema")
+    fields = ("schema", "execution", "baseline", "units", "decisions", "requested_status", "final_check")
+    keys(record, fields + (("recovery",) if record["schema"] == 2 else ()), "projection")
     execution = record["execution"]
     keys(execution, ("mode", "scope", "scope_id", "source", "approval_reference"), "execution")
     require(isinstance(execution["mode"], str) and execution["mode"] in {"auto", "human-coop"}, "unknown execution mode")
@@ -106,12 +205,14 @@ def assess(record):
     for identifier in units:
         visit(identifier)
 
+    blocked, recovery_status = recovery(record, units)
+
     for unit in units.values():
         if unit["status"] == "completed":
             require(all(units[x]["status"] == "completed" for x in unit["dependencies"]), "completed unit has unfinished dependency")
 
     for identifier, unit in units.items():
-        reasons = []
+        reasons = blocked.get(identifier, []).copy()
         if baseline["assessed"] != baseline["current"]:
             reasons.append("baseline-drift")
         for field in ("dependencies_known", "isolation_verified", "gates_ready", "dod_testable"):
@@ -125,6 +226,9 @@ def assess(record):
         if unit["risk"] == "critical":
             reasons.append("human-led-critical-route")
         if unit["status"] == "completed":
+            if record["schema"] == 2:
+                require(record["recovery"]["retry_counts"]["total"] <= 32,
+                        "completed unit exceeds retry budgets")
             require(not reasons and unit["quality_current"] and unit["capture_complete"], "completed unit lacks DoD/gates/current QA/capture")
             completed.append(identifier)
         if reasons:
@@ -193,6 +297,7 @@ def assess(record):
     result = "completed" if len(completed) == len(units) else "running" if ready else "awaiting-owner" if queue else "blocked"
     return {"mode": execution["mode"], "ready_units": ready, "blocked_units": blocked,
             "completed_units": completed, "pending_decisions": queue, "result": result,
+            "recovery_status": recovery_status,
             "authority": "inspection-only"}
 
 
@@ -206,13 +311,18 @@ def unique_keys(pairs):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--state", type=Path, required=True)
+    choice = parser.add_mutually_exclusive_group(required=True)
+    choice.add_argument("--state", type=Path)
+    choice.add_argument("--capability-root", type=Path)
     args = parser.parse_args()
     try:
-        aliases = {Path("/tmp"): Path("/private/tmp"), Path("/var"): Path("/private/var")}
-        require(not any(path.is_symlink() and aliases.get(path) != path.resolve() for path in (args.state, *args.state.parents)), "symlink projection")
-        data = json.loads(args.state.read_text(), object_pairs_hook=unique_keys)
-        print(json.dumps(assess(data), sort_keys=True))
+        if args.capability_root is not None:
+            output = capability(args.capability_root)
+        else:
+            unlinked(args.state, "projection")
+            data = json.loads(args.state.read_text(), object_pairs_hook=unique_keys)
+            output = assess(data)
+        print(json.dumps(output, sort_keys=True))
         return 0
     except (InvalidState, OSError, ValueError, TypeError, KeyError, RecursionError) as error:
         print("Execution modes error: " + str(error), file=sys.stderr)

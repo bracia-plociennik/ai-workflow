@@ -55,6 +55,20 @@ Scoped local commits follow phase-commit-policy.md on the owned branch after app
 
 Full Execution Trace records mode, scope/source, significant choices and pending/blocked units. At closure give result versus DoD, evidence, AI choices with override impact, owner decision queue and remaining scope. Do not manufacture questions when the queue is empty.
 
+## Source-bound Capability
+
+The portable support record is `.systems/ai/capabilities/execution-modes-v1.json`, contract 1. Exact mode_mapping is auto -> auto and human -> human-coop; auto-unconstrained maps conceptually to auto-unbounded. Required behaviors: scoped-approval, dependency-local-blocking, auto-unconstrained, three-stalled-attempts, technical-phase-8 and human-material-questions.
+Sources pin all approval, recovery, readiness and quality producer/consumer files listed by the pure inspector. Missing, unknown, linked, incomplete or stale metadata cannot establish support. Capability metadata never grants approval, proves native/model behavior or replaces a counterpart's own reviewed installed-source profile.
+
+## Bounded Recovery
+
+New readiness uses projection schema 2. Persist chronological attempts with unique attempt_id, unit_id, stable cause_id and optional progress_evidence SHA-256. The coordinator verifies meaningful progress and stable cause identity against real evidence; hashes and labels alone are declarations. Do not relabel a cause to reset its history. Preserve history across resume.
+After three consecutive unproductive attempts for one unit and stable cause, exclude that unit, its dependents and shared reservations. A new, independently verified fingerprint resets only that cause's stalled count; repeated fingerprints and claimed progress do not. Different units/causes are counted separately; a stalled cause remains blocking until verified new progress addresses that cause.
+Persist retry_counts per unit (spec, quality) and total for the run. Existing limits remain 2 Spec fix loops, 2 Quality fix loops and 32 total retries. An exhausted limit blocks further retries; progress never resets these budgets. The first reached limit wins. A budget override requires its existing explicit project decision, not an execution-mode field.
+Schema 1 inspection remains readable and reports recovery_status legacy-unverified; it cannot attest the new guard. Fresh schema 2 readiness and reconstructed verified history/budgets are required for future execution relying on bounded recovery.
+
+The chronological list is the authoritative declared attempt order. Unit IDs and cause IDs are stable across resume; the coordinator must not delete/reorder history or rename units/causes to evade limits. A newly introduced unit without any attempts may omit its zero-valued budget entry; any unit with attempt history requires explicit counters. Projection counters are declarations; aggregate the parent task/package's existing Spec/Quality budgets across its delegated units and verify them in real run state before execution. Splitting a task never grants another retry budget. Completion after the last allowed successful fix remains valid; execution beyond an exhausted budget does not.
+
 ## Verification
 
 Use check-execution-modes, synthetic readiness tests, producer-consumer audit and adversarial policy review. Green scripts remain supporting evidence; mode metadata never proves model behavior or interoperability with AI System.

@@ -58,6 +58,13 @@ for file in .systems/scripts/lib/execution-modes.py .systems/scripts/tests/execu
   [[ -f "$file" && ! -L "$file" ]] || { echo "Execution modes artifact missing: $file"; fail=1; }
 done
 python3 .systems/scripts/lib/execution-modes.py --state .systems/ai/templates/autopilot/execution-readiness.template.json || fail=1
+python3 .systems/scripts/lib/execution-modes.py --capability-root "$root" || fail=1
+for field in '## Source-bound Capability' '## Bounded Recovery' 'three consecutive unproductive attempts' 'legacy-unverified' 'progress never resets'; do
+  require_literal "$contract" "$field"
+done
+require_literal .systems/ai/templates/autopilot/state.template.md 'projection-schema: 2'
+require_literal .systems/ai/templates/autopilot/state.template.md 'attempts: []'
+require_literal .systems/ai/templates/autopilot/readiness.template.md 'recovery-budget-evidence:'
 policy_reject_unsafe_pattern \
   '(auto mode|execution mode|Auto)[^.\n]{0,60}\b(may|can|allows?|grants?|authorizes?)\b[^.\n]{0,70}\b(bypass|skip|grant|authorize|infer)\b[^.\n]{0,60}\b(approval|permission|QA|DoD|push|production|final-owner-yes)\b' \
   'Unsafe execution mode authority wording' \

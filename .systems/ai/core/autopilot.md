@@ -177,6 +177,8 @@ Before `running`, implementation-range readiness records explicit constraints, o
 
 ## Retry Limits
 
+Execution-modes projection schema 2 adds the per-unit stable-cause three-stalled-attempts guard and persisted retry counts. The stricter existing Spec/Quality/run budgets below take precedence; meaningful progress does not reset them. Restore history and verify progress sources before resume. Block affected units and continue only verified independent work.
+
 - Max 2 Spec QA fix loops per task/package.
 - Max 2 Quality fix loops per task/package.
 - Max 32 total retries per 16-task autopilot run unless a project decision overrides it.

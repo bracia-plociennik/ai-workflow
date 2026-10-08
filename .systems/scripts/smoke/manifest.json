@@ -786,7 +786,9 @@
     "execution-modes-boundary-unless",
     "execution-modes-boundary-yet",
     "execution-modes-qualified-independent-policy",
-    "execution-modes-blocked-unit-policy"
+    "execution-modes-blocked-unit-policy",
+    "execution-modes-missing-capability",
+    "execution-modes-stale-capability"
   ],
   "external_assertion_audit": [
     {
@@ -3136,7 +3138,9 @@
     "execution-modes-boundary-unless": "core",
     "execution-modes-boundary-yet": "core",
     "execution-modes-qualified-independent-policy": "core",
-    "execution-modes-blocked-unit-policy": "core"
+    "execution-modes-blocked-unit-policy": "core",
+    "execution-modes-missing-capability": "core",
+    "execution-modes-stale-capability": "core"
   },
   "tests": [
     {
@@ -11663,14 +11667,36 @@
       "cleanup_id": "restore-execution-mode-source",
       "mutation_id": "execution-modes-blocked-unit-policy",
       "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-missing-capability",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-missing-capability\" --expect-literal 'Execution modes error:' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-missing-capability",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-stale-capability",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-stale-capability\" --expect-literal 'capability source mismatch' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-stale-capability",
+      "expected_outcome": "reject intended boundary with diagnostic"
     }
   ],
   "files_sha256": {
-    "common.sh": "d27babc3927de3538a42ccbd7dbc98251092e388fddf2745e0962f124453d688",
+    "common.sh": "7fb7a207b5c9b7ca2508a2883c1e19a7e947edd918f4787754292d3b27772ea5",
     "quality.sh": "df3e514dd8945369367a4a2d024f2ec121ac9f416db8a8f1e1f411c3e1fc08da",
     "workspace.sh": "1c36c1035dfaba35a3722536cea159ec6a39dc7c8e8e346da37a3e02a4091c4c",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
-    "core.sh": "3c95e3dd60ad4d396ab3dfbbb15b517370d00f7104eb39905431d58ef719102a"
+    "core.sh": "a619316c5631f55666dd5ea8a368e7a11c0633e64405b0347b2b3a182221632a"
   }
 }

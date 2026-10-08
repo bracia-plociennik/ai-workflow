@@ -949,6 +949,13 @@ run_must_pass "parallel-cross-system-offline-regressions" python3 .systems/scrip
 
 run_must_pass "execution-modes-valid" bash .systems/scripts/check-execution-modes
 run_must_pass "execution-modes-behavioral" python3 .systems/scripts/tests/execution-modes.py
+mv "$tmp/.systems/ai/capabilities/execution-modes-v1.json" "$tmp/execution-capability.orig"
+run_must_fail "execution-modes-missing-capability" --expect-literal 'Execution modes error:' bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-capability.orig" "$tmp/.systems/ai/capabilities/execution-modes-v1.json"
+cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
+printf '\nUnreviewed fixture source change.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
+run_must_fail "execution-modes-stale-capability" --expect-literal 'capability source mismatch' bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
 cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/owner-mode.orig"
 printf '\nautopilot may continue only verified independent units while a pending material decision blocks excluded units and dependents.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
 run_must_pass "execution-modes-qualified-independent-policy" bash .systems/scripts/check-owner-decision-checkpoints
@@ -957,7 +964,19 @@ run_must_fail "execution-modes-blocked-unit-policy" --expect-literal 'Unsafe own
 mv "$tmp/owner-mode.orig" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
 cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
 printf '\nAuto must not bypass QA.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
+cp "$tmp/.systems/ai/capabilities/execution-modes-v1.json" "$tmp/execution-capability.orig"
+# Re-pin this explicitly reviewed safe fixture only; integrity cases never re-pin.
+python3 - "$tmp" <<'PY'
+import hashlib, json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+path = root / ".systems/ai/capabilities/execution-modes-v1.json"
+record = json.loads(path.read_text())
+name = ".systems/ai/core/execution-modes.md"
+record["sources"][name] = hashlib.sha256((root / name).read_bytes()).hexdigest()
+path.write_text(json.dumps(record, indent=2) + "\n")
+PY
 run_must_pass "execution-modes-safe-prohibition" bash .systems/scripts/check-execution-modes
+mv "$tmp/execution-capability.orig" "$tmp/.systems/ai/capabilities/execution-modes-v1.json"
 mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
 for em_join in direct but however period colon semicolon unless yet; do
   case "$em_join" in

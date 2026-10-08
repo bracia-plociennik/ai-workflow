@@ -47,6 +47,9 @@ execution:
   pending-decisions: []
   runnable-subset: []
   independence-evidence: <current-dependency-write-resource-and-gate-evidence>
+  recovery-schema: 2
+  recovery-history: <persisted-unique-attempt-unit-stable-cause-progress-evidence>
+  recovery-budget-evidence: <current-spec-quality-total-counts>
 
 scanned-sources:
   repo:

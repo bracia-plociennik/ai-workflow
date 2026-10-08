@@ -83,6 +83,10 @@ progress:
 blockers: []
 
 recovery:
+  projection-schema: 2
+  attempts: [] # attempt_id, unit_id, stable cause_id, progress_evidence SHA-256 or null
+  stalled-units: [] # excludes dependents/shared reservations; meaningful progress must be verified
+  history-source: <current-persisted-attempts-and-retry-counts>
   last-recovery-check-at: null
   last-recovery-result: null
 ```

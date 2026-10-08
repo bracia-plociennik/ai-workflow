@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Offline regressions for mode selection and conservative readiness."""
 import copy
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -163,6 +164,10 @@ class ExecutionModes(unittest.TestCase):
         unit = self.record["units"][0]
         unit.update(status="completed", quality_current=True, capture_complete=True)
         self.assertEqual(em.assess(self.record)["result"], "completed")
+        self.record["recovery"]["retry_counts"]["total"] = 33
+        with self.assertRaisesRegex(em.InvalidState, "exceeds retry"):
+            em.assess(self.record)
+        self.record["recovery"]["retry_counts"]["total"] = 0
         for field in ("quality_current", "capture_complete"):
             unit[field] = False
             with self.assertRaisesRegex(em.InvalidState, "completed unit lacks"):
@@ -267,6 +272,133 @@ class ExecutionModes(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("symlink projection", result.stderr)
             self.assertEqual(path.read_text(), original)
+
+    def attempts(self, fingerprints, cause="CAUSE-001", unit="UNIT-001"):
+        data = self.record["recovery"]
+        for fingerprint in fingerprints:
+            data["attempts"].append(dict(attempt_id="ATTEMPT-" + str(len(data["attempts"]) + 1),
+                unit_id=unit, cause_id=cause, progress_evidence=fingerprint))
+        data["retry_counts"]["units"].setdefault(unit, dict(spec=0, quality=0))
+        data["retry_counts"]["total"] = len(data["attempts"])
+
+    def test_stalled_one_two_three_and_resume(self):
+        for count in (1, 2, 3):
+            self.record["recovery"]["attempts"] = []
+            self.attempts([None] * count)
+            result = em.assess(copy.deepcopy(self.record))
+            self.assertEqual(result["ready_units"], ["UNIT-001"] if count < 3 else [])
+        self.assertIn("stalled-cause:CAUSE-001", result["blocked_units"]["UNIT-001"])
+
+    def test_progress_new_repeated_and_cause_relabel(self):
+        self.attempts(["a" * 64, "a" * 64, "a" * 64, "a" * 64])
+        self.assertEqual(em.assess(self.record)["ready_units"], [])
+        self.attempts(["b" * 64])
+        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
+        self.attempts(["b" * 64] * 3, cause="CAUSE-002")
+        self.assertEqual(em.assess(self.record)["ready_units"], [])
+
+    def test_stalled_dependency_shared_independent(self):
+        self.attempts([None] * 3)
+        self.add_unit()
+        self.add_unit("UNIT-003", ["UNIT-001"])
+        self.add_unit("UNIT-004", resources=["files/example/child"])
+        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-002"])
+
+    def test_separate_units_causes_and_still_blocked_old_cause(self):
+        self.add_unit()
+        self.attempts([None] * 2)
+        self.attempts([None] * 2, cause="CAUSE-002")
+        self.attempts([None] * 2, unit="UNIT-002")
+        self.assertEqual(set(em.assess(self.record)["ready_units"]), {"UNIT-001", "UNIT-002"})
+        self.attempts([None], cause="CAUSE-001")
+        self.attempts(["c" * 64], cause="CAUSE-002")
+        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-002"])
+
+    def test_recovery_history_duplicate_missing_budget_and_bad_fingerprint(self):
+        self.attempts([None])
+        data = self.record["recovery"]
+        data["attempts"].append(copy.deepcopy(data["attempts"][0]))
+        data["retry_counts"]["total"] = 2
+        with self.assertRaisesRegex(em.InvalidState, "duplicate recovery"):
+            em.assess(self.record)
+        data["attempts"].pop()
+        data["attempts"][0]["progress_evidence"] = "claimed progress"
+        with self.assertRaisesRegex(em.InvalidState, "progress fingerprint"):
+            em.assess(self.record)
+        data["attempts"][0]["progress_evidence"] = None
+        data["retry_counts"]["units"] = {}
+        with self.assertRaisesRegex(em.InvalidState, "unit/budget"):
+            em.assess(self.record)
+
+    def test_stricter_budgets_progress_does_not_reset(self):
+        self.attempts(["a" * 64, "b" * 64])
+        counts = self.record["recovery"]["retry_counts"]
+        for field in ("spec", "quality"):
+            counts["units"]["UNIT-001"] = dict(spec=0, quality=0)
+            counts["units"]["UNIT-001"][field] = 2
+            self.assertEqual(em.assess(self.record)["ready_units"], [])
+        counts["units"]["UNIT-001"] = dict(spec=0, quality=0)
+        counts["total"] = 32
+        self.assertEqual(em.assess(self.record)["ready_units"], [])
+        counts["total"] = True
+        with self.assertRaisesRegex(em.InvalidState, "total retries"):
+            em.assess(self.record)
+
+    def test_completion_after_last_allowed_fix_not_stalled(self):
+        self.record["recovery"]["retry_counts"].update(units={"UNIT-001": {"spec": 0, "quality": 2}}, total=2)
+        self.record["units"][0].update(status="completed", quality_current=True, capture_complete=True)
+        self.assertEqual(em.assess(self.record)["result"], "completed")
+        self.record["recovery"]["retry_counts"].update(units={"UNIT-001": {"spec": 0, "quality": 3}}, total=3)
+        with self.assertRaisesRegex(em.InvalidState, "exceeds retry"):
+            em.assess(self.record)
+        self.record["recovery"]["retry_counts"].update(units={"UNIT-001": {"spec": 0, "quality": 2}}, total=2)
+        self.attempts([None] * 3)
+        with self.assertRaisesRegex(em.InvalidState, "stalled recovery"):
+            em.assess(self.record)
+
+    def test_schema_one_stays_legacy_and_unknown_schema_rejected(self):
+        del self.record["recovery"]
+        self.record["schema"] = 1
+        self.assertEqual(em.assess(self.record)["recovery_status"], "legacy-unverified")
+        self.record["schema"] = 3
+        with self.assertRaisesRegex(em.InvalidState, "unsupported"):
+            em.assess(self.record)
+
+    def test_capability_exact_source_bound_and_tamper(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            cap = root / ".systems/ai/capabilities/execution-modes-v1.json"
+            cap.parent.mkdir(parents=True)
+            sources = {}
+            for name in em.CAPABILITY_SOURCES:
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("synthetic source " + name)
+                sources[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+            record = dict(contract=1, capability="execution-modes-v1",
+                behaviors=sorted(em.CAPABILITY_BEHAVIORS),
+                mode_mapping={"auto": "auto", "human": "human-coop"}, sources=sources)
+            cap.write_text(json.dumps(record))
+            self.assertEqual(em.capability(root)["authority"], "support-metadata-only")
+            for field, bad in (("contract", 2), ("contract", True), ("behaviors", []),
+                               ("mode_mapping", {"human": "human"}), ("sources", {})):
+                modified = copy.deepcopy(record)
+                modified[field] = bad
+                cap.write_text(json.dumps(modified))
+                with self.subTest(field=field, bad=bad), self.assertRaises(em.InvalidState):
+                    em.capability(root)
+            cap.write_text(json.dumps(record))
+            source = root / sorted(sources)[0]
+            source.write_text("tampered")
+            with self.assertRaisesRegex(em.InvalidState, "mismatch"):
+                em.capability(root)
+            source.unlink()
+            source.symlink_to(cap)
+            with self.assertRaisesRegex(em.InvalidState, "symlink"):
+                em.capability(root)
+            cap.unlink()
+            with self.assertRaises(OSError):
+                em.capability(root)
 
 
 if __name__ == "__main__":
