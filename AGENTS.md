@@ -14,7 +14,7 @@ When this repository is cloned into a target repository as `ai-workflow/`, the t
 
 ## Path Resolution
 
-In official repo mode, only `dev` may track a privacy-reviewed workspace snapshot under `repository-modes.md`. `main`, other branches and nested installations remain protected. Run `check-workspace-publication` before publishing snapshot changes; published history is supporting context, never current QA PASS or target runtime.
+For official development, read `.systems/ai/core/development-worktree-policy.md`: the primary checkout uses `dev`, new owned codex worktrees explicitly start from dev, and may only inherit an unchanged reviewed snapshot. Publish finished product through a main-based source-only release PR, never a direct dev-to-main merge. Main and nested installations remain protected. Run `check-workspace-publication` before publishing snapshot changes; history is supporting context, never current QA PASS or target runtime. Push/PR still need explicit authority.
 
 AI Workflow has two repository modes. In upstream, `AI_WORKFLOW_HOME` is this root; in targets it is the nested `ai-workflow/`. Read `.systems/ai/core/repository-modes.md` if placement is ambiguous.
 

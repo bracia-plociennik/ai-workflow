@@ -104,7 +104,7 @@ AI Workflow uses two roots:
 - `TARGET_REPO_ROOT`: the parent application repository, for example a Laravel repo.
 - `AI_WORKFLOW_HOME`: the nested clone directory, normally `ai-workflow/`.
 - `AI_WORKFLOW_WORKSPACE_HOME`: the target-owned workspace, normally `ai-workflow-workspace/`.
-- In official repo mode, `AI_WORKFLOW_HOME` and `TARGET_REPO_ROOT` are this repository root. Local workspace is ignored on `main`; only official `dev` may publish a privacy-reviewed snapshot under `repository-modes.md`.
+- In official repo mode, `AI_WORKFLOW_HOME` and `TARGET_REPO_ROOT` are this repository root. Local workspace is ignored on `main`; only official `dev` may publish a privacy-reviewed snapshot. Linked development worktrees may inherit it unchanged under `development-worktree-policy.md`.
 
 Rules:
 
@@ -271,13 +271,13 @@ The included `EXAMPLE` workspaces are illustrative only. Do not treat them as ac
 
 - `main` is the public reusable template branch.
 - `dev` may track an audited `ai-workflow-workspace/**` snapshot with `repo/publication-review.json` binding every published blob by SHA-256. Historical artifacts remain supporting data, not current QA PASS.
-- `main`, other branches and nested installations must not track that workspace; legacy `workspace/**` is always forbidden. `main` keeps its workspace ignore rule; `dev` removes only that rule and retains generated/sensitive exclusions.
+- The primary development checkout uses `dev`. New owned `codex/<scope>` linked worktrees start explicitly from dev, not the tool default main. They may only inherit an unchanged reviewed dev workspace; main/release branches, unknown identities and nested installations remain protected. Legacy `workspace/**` is always forbidden.
 - Before staging a changed snapshot, review its privacy and update the publication inventory. `check-workspace-publication` validates staged bytes; `--ref HEAD` validates a committed snapshot. Hashes detect changes but do not replace a human/agent privacy review.
 - CI on main/dev runs full source validation with a separate empty workspace and reports snapshot integrity separately. Local runtime QA remains explicit and retains all freshness requirements. Timing/temporary evidence belongs in ignored storage or `/tmp`.
-- Promote product commits from `dev` to `main` individually. Never merge the snapshot or dev-only ignore change into main; its branch policy rejects those paths.
+- Feature PRs target dev. Promote completed product through a separate source-only release branch based on main and a PR to main. Select reviewed source-only commits or a reviewed product-only patch for mixed commits. Never merge dev history directly into main; removing workspace afterward does not remove its history. Preserve main's workspace ignore rule and review other ignore changes individually.
 - Target repositories should update nested clones from public `main`.
 - Target repositories should not commit `ai-workflow/` or root `AGENTS.md`; they should commit their sibling `ai-workflow-workspace/` when it contains useful repo/project runtime.
-- `.systems/scripts/check-branch-policy` enforces the dev-only reviewed-snapshot exception and always forbids legacy `workspace/**`.
+- `.systems/scripts/check-branch-policy` enforces reviewed dev snapshots and read-only inheritance using actual branch/worktree identity, ancestry and index comparison. See `.systems/ai/core/development-worktree-policy.md`; no automatic push, PR or merge authority is granted.
 
 ## Validation Before Reuse
 

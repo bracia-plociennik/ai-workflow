@@ -14,8 +14,8 @@ Use `official-repo` mode when working inside the upstream `ai-workflow` reposito
 - `TARGET_REPO_ROOT` is the repository root.
 - `.systems/`, `.github/`, `AGENTS.md`, `HUMANS.md`, and `README.md` live directly in the repository root.
 - There is no inner `ai-workflow/` directory. This is expected and valid.
-- Only the official `dev` branch may track a privacy-reviewed `ai-workflow-workspace/` snapshot. `main`, other branches, unknown branch identity and nested installations must not track this directory.
-- On `main` and other branches a local workspace remains ignored. On official `dev`, remove only its root ignore rule, retain generated/sensitive-file exclusions, and run `check-workspace-publication` before publishing changed blobs.
+- Only official `dev` may change and publish a privacy-reviewed `ai-workflow-workspace/` snapshot. An owned linked `codex/*` worktree may inherit an unchanged reviewed dev snapshot under `development-worktree-policy.md`; main, release branches, unknown identity and nested installations must not track this directory.
+- On `main` and source-only release branches a local workspace remains ignored. On official `dev` and its inherited worktrees, retain generated/sensitive-file exclusions and run `check-workspace-publication` before publication.
 - Published runtime is supporting data, not installed target state or current QA PASS. Historical reports retain their original content and baseline; privacy-sensitive files remain local.
 
 Default official workspace:
@@ -66,9 +66,9 @@ AI_WORKFLOW_WORKSPACE_HOME
 `.systems/scripts/check-branch-policy` enforces runtime tracking rules:
 
 - all modes block legacy `workspace/**`;
-- only official `dev` with a current publication review may track `ai-workflow-workspace/**`; all other branches and nested installations block it;
+- official `dev` with a current publication review may track `ai-workflow-workspace/**`; linked codex worktrees/verified PRs to dev may inherit it unchanged as defined in `development-worktree-policy.md`; main and nested installations block it;
 - target repositories may commit their sibling `ai-workflow-workspace/**` in the parent application repository, not inside the nested `ai-workflow/` clone.
 
 The absence of an inner `ai-workflow/` directory in the upstream repository is not a branch policy violation.
 
-Local Git branch identity and the canonical `origin` URL govern the exception. Verified detached GitHub Actions push/PR context may identify `dev`; a PR targeting `main` remains forbidden. `AI_WORKFLOW_BRANCH_POLICY=dev` cannot override branch or installation identity, while `public` always forbids tracked runtime. Move product changes from `dev` to `main` by selecting product commits; never merge the workspace snapshot or its dev-only ignore configuration into `main`.
+Local Git branch identity and the canonical `origin` URL govern the exception. Verified detached GitHub Actions push/PR context may identify `dev`; PR inheritance requires an unchanged two-parent merge baseline. A PR targeting `main` remains forbidden when runtime is tracked. `AI_WORKFLOW_BRANCH_POLICY=dev` cannot override branch or installation identity, while `public` always forbids tracked runtime. The primary development checkout and new implementation worktrees use explicit `dev`. Follow `development-worktree-policy.md` for main-based filtered publication; never merge dev runtime history or its dev-only ignore configuration into main.

@@ -298,5 +298,5 @@ Implementations that add prompt composition behavior should verify:
 - required files and references exist;
 - unsafe authority language is not introduced into system docs;
 - workflow validators pass;
-- `ai-workflow-workspace/**` follows repository-modes.md: a reviewed snapshot is allowed only on official `dev`, and remains untracked on main/other branches and in nested installations;
+- `ai-workflow-workspace/**` follows repository-modes.md and development-worktree-policy.md: only official dev changes a reviewed snapshot; linked development worktrees may inherit it unchanged. Main/release branches and nested installations remain protected;
 - generated project artifacts remain project-local.

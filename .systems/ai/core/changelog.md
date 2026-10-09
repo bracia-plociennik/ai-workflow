@@ -1,5 +1,11 @@
 # changelog.md
 
+## 2026-10-09 - Development Worktrees And Filtered Publication
+
+- Use dev explicitly for the primary development checkout and owned codex worktrees.
+- Permit only unchanged reviewed dev snapshot inheritance; reject changed worker/PR runtime, stale bases and false detached PR provenance.
+- Publish completed product through main-based source-only release PRs, not dev history merges; preserve main's ignore rule and explicit publication approvals.
+
 ## 2026-10-08 - Reviewed Workspace On Official Dev
 
 - Permit audited workspace snapshots only on official dev, with staged-blob hashes and branch/installation/PR guards.

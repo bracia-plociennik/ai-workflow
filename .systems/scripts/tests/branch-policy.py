@@ -103,7 +103,7 @@ class BranchPolicyTests(unittest.TestCase):
         for update in ({"GITHUB_SHA": "0" * 40}, {"GITHUB_REPOSITORY": "other/repo"},
                        {"GITHUB_REF": "refs/tags/dev"}, {"GITHUB_EVENT_NAME": "pull_request_target"}):
             self.check(False, **{**context, **update})
-        self.check(True, **{**context, "GITHUB_EVENT_NAME": "pull_request", "GITHUB_BASE_REF": "dev",
+        self.check(False, **{**context, "GITHUB_EVENT_NAME": "pull_request", "GITHUB_BASE_REF": "dev",
                             "GITHUB_REF": "refs/pull/12/merge", "GITHUB_REF_NAME": "12/merge"})
         self.check(False, **{**context, "GITHUB_EVENT_NAME": "pull_request", "GITHUB_BASE_REF": "main",
                              "GITHUB_REF": "refs/pull/12/merge"})
@@ -113,6 +113,112 @@ class BranchPolicyTests(unittest.TestCase):
         self.snapshot()
         self.check(False, GITHUB_BASE_REF="main", GITHUB_HEAD_REF="dev")
         self.check(False, AI_WORKFLOW_MODE="target")
+
+    def linked_worker(self):
+        self.dev()
+        self.snapshot()
+        self.git("commit", "-qm", "reviewed dev snapshot")
+        worker = Path(self.tmp.name) / "worker"
+        self.git("worktree", "add", "-qb", "codex/worker", str(worker), "dev")
+        return worker
+
+    def test_linked_dev_worker_inherits_only_unchanged_index(self):
+        worker = self.linked_worker()
+        self.check(True, repo=worker)
+        product = worker / ".systems/product.txt"
+        product.write_text("reviewed product\n")
+        self.git("add", ".systems/product.txt", repo=worker)
+        self.git("commit", "-qm", "product only", repo=worker)
+        self.check(True, repo=worker)
+        # Even a refreshed publication review cannot authorize worker runtime.
+        path = worker / "ai-workflow-workspace/repo/core/new.md"
+        path.write_text("new synthetic runtime\n")
+        review = worker / "ai-workflow-workspace/repo/publication-review.json"
+        inventory = json.loads(review.read_text())
+        inventory["files"][str(path.relative_to(worker))] = hashlib.sha256(path.read_bytes()).hexdigest()
+        review.write_text(json.dumps(inventory))
+        self.git("add", "ai-workflow-workspace", repo=worker)
+        self.check(False, repo=worker, diagnostic="inherited dev workspace must remain unchanged")
+
+    def test_linked_worker_cannot_remove_entire_snapshot(self):
+        worker = self.linked_worker()
+        self.git("rm", "-qrf", "ai-workflow-workspace", repo=worker)
+        self.check(False, repo=worker, diagnostic="inherited dev workspace must remain unchanged")
+
+    def test_reverted_workspace_commit_still_rejects_worker_and_pr(self):
+        worker = self.linked_worker()
+        runtime = worker / "ai-workflow-workspace/repo/core/example.md"
+        runtime.write_text("changed runtime\n")
+        self.git("add", "ai-workflow-workspace", repo=worker)
+        self.git("commit", "-qm", "runtime change", repo=worker)
+        self.git("revert", "--no-edit", "HEAD", repo=worker)
+        self.assertEqual(self.git("diff", "dev", "HEAD", "--", "ai-workflow-workspace", repo=worker), "")
+        self.check(False, repo=worker, diagnostic="including commit history")
+        self.git("merge", "--no-ff", "-qm", "synthetic PR", "codex/worker")
+        self.git("checkout", "-q", "--detach")
+        context = {**self.ci_env(), "GITHUB_EVENT_NAME": "pull_request",
+                   "GITHUB_BASE_REF": "dev", "GITHUB_REF": "refs/pull/12/merge"}
+        self.check(False, diagnostic="including commit history", **context)
+
+    def test_primary_codex_snapshot_is_not_linked_inheritance(self):
+        self.dev()
+        self.snapshot()
+        self.git("commit", "-qm", "snapshot")
+        self.git("switch", "-qc", "codex/primary")
+        self.check(False)
+
+    def test_linked_worker_guards_and_stale_dev(self):
+        worker = self.linked_worker()
+        self.check(False, repo=worker, AI_WORKFLOW_BRANCH_POLICY="public")
+        self.check(False, repo=worker, AI_WORKFLOW_MODE="target")
+        self.check(False, repo=worker, GITHUB_BASE_REF="main")
+        self.git("remote", "set-url", "origin", "https://github.com/other/repo.git")
+        self.check(False, repo=worker)
+        self.git("remote", "set-url", "origin", "https://github.com/bracia-plociennik/ai-workflow.git")
+        self.git("commit", "--allow-empty", "-qm", "advanced dev")
+        self.check(False, repo=worker)
+
+    def test_linked_non_dev_ancestor_rejects_copied_snapshot(self):
+        self.dev()
+        self.snapshot()
+        self.git("commit", "-qm", "snapshot")
+        worker = Path(self.tmp.name) / "worker"
+        self.git("worktree", "add", "-qb", "codex/worker", str(worker), "main")
+        self.snapshot(worker)
+        self.check(False, repo=worker)
+
+    def test_verified_pr_dev_requires_unchanged_first_parent_workspace(self):
+        worker = self.linked_worker()
+        product = worker / ".systems/product.txt"
+        product.write_text("product\n")
+        self.git("add", ".systems/product.txt", repo=worker)
+        self.git("commit", "-qm", "product", repo=worker)
+        self.git("merge", "--no-ff", "-qm", "synthetic PR", "codex/worker")
+        self.git("checkout", "-q", "--detach")
+        context = {**self.ci_env(), "GITHUB_EVENT_NAME": "pull_request",
+                   "GITHUB_BASE_REF": "dev", "GITHUB_REF": "refs/pull/12/merge"}
+        self.check(True, **context)
+        self.check(False, **{**context, "GITHUB_BASE_REF": "main"})
+        self.git("rm", "-qf", "ai-workflow-workspace/repo/core/example.md")
+        self.check(False, diagnostic="inherited dev workspace must remain unchanged", **context)
+        self.git("rm", "-qrf", "ai-workflow-workspace")
+        self.check(False, diagnostic="inherited dev workspace must remain unchanged", **context)
+
+    def test_filtered_publication_excludes_runtime_history(self):
+        worker = self.linked_worker()
+        source = worker / ".systems/product.txt"
+        source.write_text("completed product\n")
+        self.git("add", ".systems/product.txt", repo=worker)
+        self.git("commit", "-qm", "product", repo=worker)
+        product_commit = self.git("rev-parse", "HEAD", repo=worker)
+        dev_commit = self.git("rev-parse", "dev")
+        self.git("switch", "-qc", "codex/release", "main")
+        self.git("cherry-pick", product_commit)
+        self.assertEqual(self.git("ls-files", "ai-workflow-workspace"), "")
+        ancestry = subprocess.run(["git", "-C", str(self.repo), "merge-base", "--is-ancestor",
+                                   dev_commit, "HEAD"], env=ENV)
+        self.assertEqual(ancestry.returncode, 1)
+        self.check(True)
 
     def test_nested_dev_rejects_even_official_override(self):
         parent = Path(self.tmp.name) / "target"

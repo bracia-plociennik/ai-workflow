@@ -23,6 +23,8 @@ case "$policy" in
 esac
 
 branch="$(git branch --show-current 2>/dev/null || true)"
+inherit_base=""
+inherit_violation=0
 parent="$(cd "$repo_root/.." && pwd -P)"
 parent_git="$(git -C "$parent" rev-parse --show-toplevel 2>/dev/null || true)"
 nested=0
@@ -40,8 +42,10 @@ if [[ -z "$branch" && "${GITHUB_ACTIONS:-}" == true &&
       [[ "${GITHUB_REF:-}" != refs/heads/dev || "${GITHUB_REF_NAME:-}" != dev ]] || branch=dev
       ;;
     pull_request)
-      if [[ "${GITHUB_BASE_REF:-}" == dev && "${GITHUB_REF:-}" =~ ^refs/pull/[0-9]+/merge$ ]]; then
+      if [[ "${GITHUB_BASE_REF:-}" == dev && "${GITHUB_REF:-}" =~ ^refs/pull/[0-9]+/merge$ &&
+            "$(git rev-list --parents -n 1 HEAD | awk '{print NF}')" == 3 ]]; then
         branch=dev
+        inherit_base="$(git rev-parse HEAD^1)"
       fi
       ;;
   esac
@@ -61,9 +65,33 @@ if [[ "$policy" != public && "$branch" == dev && "$nested" == 0 &&
   allow_workspace=1
 fi
 
+# Linked development workers may inherit, never change, the reviewed dev index.
+if [[ "$policy" != public && "$branch" == codex/* && "$nested" == 0 &&
+      "$canonical_origin" == 1 && "${AI_WORKFLOW_MODE:-auto}" != target &&
+      ( -z "${GITHUB_BASE_REF:-}" || "${GITHUB_BASE_REF:-}" == dev ) ]]; then
+  git_dir="$(git rev-parse --absolute-git-dir)"
+  common_dir="$(cd "$(git rev-parse --git-common-dir)" && pwd -P)"
+  if [[ "$git_dir" != "$common_dir" ]] &&
+     git show-ref --verify --quiet refs/heads/dev &&
+     git merge-base --is-ancestor refs/heads/dev HEAD; then
+    inherit_base="$(git rev-parse refs/heads/dev)"
+    allow_workspace=1
+  fi
+fi
+
+if [[ -n "$inherit_base" ]]; then
+  changed_history="$(git rev-list --full-history "$inherit_base..HEAD" -- ai-workflow-workspace)"
+  if [[ -n "$changed_history" ]] ||
+     ! git diff --cached --quiet "$inherit_base" -- ai-workflow-workspace; then
+    echo "Branch policy violation: inherited dev workspace must remain unchanged, including commit history."
+    allow_workspace=0
+    inherit_violation=1
+  fi
+fi
+
 tracked_legacy="$(git ls-files -- workspace || true)"
 tracked_local_workspace="$(git ls-files -- ai-workflow-workspace || true)"
-fail=0
+fail="$inherit_violation"
 
 if [[ -n "$tracked_legacy" ]]; then
   echo "Branch policy violation: legacy workspace files are tracked under workspace/."
@@ -74,7 +102,8 @@ fi
 
 if [[ -n "$tracked_local_workspace" && "$allow_workspace" == 0 ]]; then
   echo "Branch policy violation: ai-workflow-workspace/ is tracked."
-  echo "Tracked workspace is allowed only on official dev, never on main, other branches, or nested installations."
+  echo "Tracked workspace requires official dev or unchanged reviewed dev inheritance in an owned linked codex worktree/verified PR to dev."
+  echo "Main, release branches, unknown identity and nested installations remain forbidden."
   printf '%s\n' "$tracked_local_workspace" | sed 's/^/ - /'
   fail=1
 fi
