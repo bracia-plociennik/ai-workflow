@@ -85,7 +85,7 @@ Only the owner can start `phase-8-final-check` with an explicit request. Technic
 
 Autopilot may start only when:
 
-- the user explicitly requests autonomous execution or project status says autopilot is active;
+- the user explicitly requests autonomous execution, or an approved multi-phase scope is resolved to Auto under execution-modes.md, or project status says autopilot is active;
 - run-scoped readiness audit exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/autopilot/runs/<run-id>/readiness.md`;
 - readiness audit has `readiness-result: ready`;
 - readiness audit declares `requested-range` as `planning-range` or `implementation-range`;
@@ -99,7 +99,7 @@ Additional `planning-range` start conditions:
 - accepted project context exists at `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md`;
 - project/context repo intake is complete enough to identify safe commands, restricted zones, and external-effect policy;
 - missing architecture, plan, optional owner-requested packaging, and specs are expected outputs of the range and must be listed as planned writes, not blockers;
-- owner decisions needed before architecture or planning are resolved or listed as `awaiting-owner`.
+- owner decisions needed by each runnable unit are resolved; pending decisions exclude their affected units and dependents under execution-modes.md.
 
 Additional `implementation-range` start conditions:
 
@@ -145,12 +145,12 @@ Readiness status values are:
 - `draft`: audit is being prepared;
 - `blocked`: workflow gates, status, artifacts, commands, safe env, or evidence requirements are missing;
 - `awaiting-owner`: owner decisions or approvals are required;
-- `ready`: all blocking items are resolved, approved, or not applicable;
+- `ready`: all blocking items for the explicitly selected runnable subset are resolved, approved, or not applicable; excluded units remain blocked;
 - `superseded`: scope, mode, task set, or run changed and a newer readiness artifact replaces this one.
 
 Autopilot cannot enter `running` until readiness is `ready`. If readiness is `blocked` or `awaiting-owner`, run state must remain `stopped` or `awaiting-owner`, and the owner-facing prompt must list every required decision.
 
-Use `.systems/ai/core/owner-decision-checkpoints.md` during readiness. Readiness may ask one grouped batch of 1-3 material questions before the run starts. It cannot be `ready` while `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decisions required by the requested range remain pending.
+Use `.systems/ai/core/owner-decision-checkpoints.md` and execution-modes.md during readiness. Human Coop may ask one grouped batch of 1-3 material questions before the run starts; Auto queues uncovered decisions. Readiness cannot be ready for units affected by pending decisions. Explicitly exclude those units and dependents before selecting a proven independent subset; global source, permissions or resource conflicts remain run blockers.
 
 If no run exists, create the next `autopilot-XXX` directory and fill `readiness.md` before `state.md` can move to `running`. If an existing run is `awaiting-owner`, update the same `readiness.md` after owner answers unless scope, mode, or task set changed. If scope changes, supersede the old readiness artifact and create a new one for the new run or scope.
 
@@ -162,20 +162,22 @@ Use the range state machines above. Do not run `phase-8-final-check` from autopi
 
 - Execute sequentially unless one execution owner verifies delegated units under `.systems/ai/core/parallel-task-orchestration.md`. Optional packaging is not required for delegation.
 - Continue only after evidence-backed `PASS`.
-- STOP on critical risk, retry limit, blocking drift, or missing required evidence.
+- STOP affected units on critical risk, retry limit, blocking drift, or missing required evidence. Stop the run when the conflict is global or no proven independent unit remains; critical-risk actions still require their human-led route.
 - Record auto-resolvable decisions before continuing.
-- Stop for human approval on high-risk and critical-risk decisions.
+- Verify recorded human approval for high-risk work. Check whether the existing owner approval covers the named local implementation and formal Quality assessment. Critical-risk and newly uncovered effects retain required human approval.
 - Do not ask live questions while the run state is `running`.
-- If a new material decision appears, stop as `awaiting-owner`, record the decision and escalation evidence, and return one queued owner decision batch after stopping.
-- Never continue `running` with a pending material decision.
+- If a new material decision appears, record full decision evidence, block affected units and dependents, and continue only verified independent units under execution-modes.md. Stop as `awaiting-owner` when no safe unit remains.
+- Never execute a unit blocked by a pending material decision.
 - Use fake/log/test adapters by default for external effects.
 - Do not send real emails, alerts, tickets, invoices, payments, production cron, or external API writes without explicit owner approval.
 
 ## Delivery Constraint Readiness
 
-Before `running`, implementation-range readiness must record a resolved delivery constraint or explicit bounded owner opt-out from `.systems/ai/core/delivery-constraints.md`. A new material delivery decision stops the run as `awaiting-owner`.
+Before `running`, implementation-range readiness records explicit constraints, owner opt-out or `auto-unbounded` for new Auto work under delivery-constraints.md. A new delivery blocker excludes affected units. Preserve existing limits on legacy runs; new Auto state has no implicit 300-minute timebox.
 
 ## Retry Limits
+
+Execution-modes projection schema 2 adds the per-unit stable-cause three-stalled-attempts guard and persisted retry counts. The stricter existing Spec/Quality/run budgets below take precedence; meaningful progress does not reset them. Restore history and verify progress sources before resume. Block affected units and continue only verified independent work.
 
 - Max 2 Spec QA fix loops per task/package.
 - Max 2 Quality fix loops per task/package.
@@ -193,11 +195,11 @@ Before `running`, implementation-range readiness must record a resolved delivery
 
 ## Stop Conditions
 
-Autopilot must stop and write an escalation artifact when:
+Autopilot must stop affected units and write an escalation artifact for the conditions below. A run-wide baseline, permission, safety or budget conflict stops the entire run. A strictly unit-local blocker allows only proven independent units to continue under execution-modes.md; unresolved dependency/isolation is not independence:
 
 - required gates are unsatisfied;
 - repo, status, plan, spec, ledger, or runtime state conflicts;
-- risk class requires human approval;
+- a unit lacks required human approval and no verified independent unit remains;
 - retry or budget limit is reached;
 - a required command is missing or unsafe;
 - evidence cannot support `PASS`;

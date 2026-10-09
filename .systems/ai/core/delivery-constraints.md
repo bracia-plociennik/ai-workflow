@@ -8,9 +8,9 @@ This is a planning contract. It does not grant write permission and does not rep
 
 ## Default Rule
 
-Before new implementation work, ask for the material delivery constraint when it is not already present in the accepted owner request or artifacts. Group missing questions with Owner Decision Discovery, at most `1-3` questions. Do not ask redundant versions of deadline, time budget, and duration.
+Before new implementation work, resolve execution-modes.md and existing constraints. In Human Coop, ask for the material delivery constraint when it is not already present in the accepted owner request or artifacts. Group missing questions with Owner Decision Discovery, at most `1-3` questions. Do not ask redundant versions of deadline, time budget, and duration.
 
-If the owner gives no deadline or timebox, do not invent one. Record `Mode: not-set` and ask the nearest material question before dependent planning or implementation. An explicit owner opt-out is allowed only for the current scope unless it explicitly says otherwise.
+If the owner gives no deadline or timebox, do not invent one. New Auto work records `Mode: auto-unbounded`, Deadline and Time budget `none`, and continues without a deadline question. Human Coop records `Mode: not-set` and asks the nearest material question before dependent planning or implementation. An explicit owner opt-out is allowed only for the current scope unless it explicitly says otherwise. Resume preserves already-recorded limits.
 
 ## Delivery Constraints Block
 
@@ -18,7 +18,7 @@ Implementation-capable plans and work artifacts should include:
 
 ```text
 Delivery Constraints
-- Mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|micro-exempt|not-set>
+- Mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|auto-unbounded|micro-exempt|not-set>
 - Deadline: <timestamp|none>
 - Timezone: <IANA timezone|none>
 - Time budget: <duration|none>
@@ -52,7 +52,7 @@ When the deadline or timebox is at risk, stop at the overrun checkpoint and repo
 
 Supported opt-out wording includes `bez deadlinu`, `bez planowania z deadlinem`, `no deadline`, `without deadline`, `bez timeboxu`, and `no timebox`. The opt-out must be reported in the Execution Trace with residual risk. It does not bypass risk, permissions, DoD, QA, evidence, approvals, or stop conditions.
 
-Autopilot readiness must contain a resolved delivery constraint or an explicit owner opt-out before `running`. Active autopilot remains non-interactive; a new material delivery decision stops the run as `awaiting-owner`.
+Autopilot readiness must contain a resolved delivery constraint, explicit owner opt-out or new Auto `auto-unbounded` before `running`. Active autopilot remains non-interactive; a material delivery decision blocks affected units and dependents, stopping as `awaiting-owner` when no safe independent work remains. Retry/no-progress and platform/resource limits remain required with no deadline.
 
 ## Routing And Ownership
 

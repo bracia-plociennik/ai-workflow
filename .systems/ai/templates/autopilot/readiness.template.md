@@ -35,6 +35,22 @@ readiness:
   readiness-result: draft # draft | blocked | awaiting-owner | ready | superseded
   superseded-by: null
 
+execution:
+  mode: auto # auto | human-coop
+  scope: task # task | project | session
+  scope-id: <owner-approved-scope-id>
+  source: <explicit-choice-or-new-work-default>
+  approval-reference: <actual-owner-scope-reference>
+  readiness-projection: <optional-execution-readiness-json-path-or-none>
+  completed-units: []
+  blocked-units: []
+  pending-decisions: []
+  runnable-subset: []
+  independence-evidence: <current-dependency-write-resource-and-gate-evidence>
+  recovery-schema: 2
+  recovery-history: <persisted-unique-attempt-unit-stable-cause-progress-evidence>
+  recovery-budget-evidence: <current-spec-quality-total-counts>
+
 scanned-sources:
   repo:
     - AI_WORKFLOW_WORKSPACE_HOME/repo/core/status.md
@@ -102,7 +118,7 @@ range-readiness:
     stop-before-phase-8: <confirmed|blocked|not-applicable>
 
 delivery-constraints:
-  mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|not-set>
+  mode: <deadline-and-timebox|deadline-only|timebox-only|owner-opt-out|auto-unbounded|not-set>
   deadline: <timestamp|none>
   timezone: <IANA timezone|none>
   time-budget: <duration|none>
@@ -129,6 +145,10 @@ owner-decisions:
     classification: <owner-preference|high-impact|critical-risk|blocked-by-missing-facts>
     decision: <decision-needed>
     why-needed-now: <reason>
+    disposition: <pending|agent-choice|owner-approved>
+    affected-units: []
+    assumption: <safe-assumption-or-none>
+    override-impact: <impact-of-later-change>
     options:
       - option: <recommended-option>
         impact: <impact>
@@ -171,10 +191,10 @@ Record execution owner, backend/capacity evidence, DAG, write/resource reservati
 integration owner and remaining checkpoint task slots. Unverified capability means
 serial fallback, not readiness for isolated writes.
 
-`ready` is allowed only when every blocking item is `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied.
+`ready` is allowed only for an explicit runnable subset whose blocking items are `resolved`, `approved`, or `not-applicable`, all high-risk approvals are recorded, no critical-risk task is routed to autopilot, command/safe-env/evidence gates are clear, and the selected range gates are satisfied. Under execution-modes.md, excluded units and their dependents remain blocked and cannot be dispatched.
 
 For `planning-range`, missing architecture, plan, optional owner-requested packaging, and specs are not blockers when they are explicit outputs of the run. Product-code writes are always forbidden.
 
 For `implementation-range`, missing Architecture QA PASS, Plan QA PASS, packaging decision or solo-by-default/not-requested packaging decision, first Spec QA PASS, safe implementation write scope, or checkpoint policy is blocking.
 
-Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`. Readiness cannot be `ready` while a material owner decision is pending.
+Autopilot must not run `phase-8-final-check`; owner-only final check must be confirmed before readiness can be `ready`. Readiness cannot be `ready` for a unit blocked by a pending material decision. A separately requested final check uses its owner-authorized route after the range.

@@ -2,15 +2,15 @@
 
 ## Purpose
 
-`Owner Decision Discovery` makes meaningful owner choices visible before dependent work begins. It asks about material decisions and owner preferences by default, while keeping repo-discoverable facts and small reversible implementation details out of the owner's way.
+`Owner Decision Discovery` makes meaningful owner choices visible before dependent work begins. Resolve `auto` or `human-coop` under execution-modes.md first. Auto selects covered safe reversible choices and queues owner-only decisions; Human Coop asks about material decisions and owner preferences.
 
 This is a decision and interaction contract, not a new workflow phase. It does not grant write permission, change risk, replace evidence, approve a phase, or satisfy Definition of Done.
 
 ## Decision Classes
 
 - `auto-resolvable`: low-impact, safe, reversible, inside accepted scope, and unlikely to change owner-visible outcomes; the agent may choose and must report it.
-- `owner-preference`: a meaningful choice about outcome, UX, presentation, tradeoff, client collaboration, or another owner preference; ask by default before dependent work.
-- `high-impact`: affects scope, architecture, data, integrations, cost, substantial rework, or long-lived behavior; owner decision is required.
+- `owner-preference`: a meaningful choice about outcome, UX, presentation, tradeoff, client collaboration, or another owner preference; Human Coop asks before dependent work; Auto may choose a safe reversible option inside accepted constraints.
+- `high-impact`: affects scope, architecture, data, integrations, cost, substantial rework, or long-lived behavior; required owner approval must cover the effects. Auto may choose already-covered local options as `agent-choice` under execution-modes.md without downgrading classification.
 - `critical-risk`: uses the existing human-led approval and risk route; the agent must not resolve it.
 - `blocked-by-missing-facts`: required facts cannot be discovered from current sources and safe work cannot continue without them.
 
@@ -25,7 +25,7 @@ Before asking the owner:
 1. inspect current repository state, status, accepted artifacts, owner instructions, and available context;
 2. resolve discoverable facts from those sources;
 3. classify remaining choices;
-4. ask only when a real `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decision remains.
+4. in Human Coop ask only when a real `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts` decision remains; in Auto queue decisions outside covered reversible choices.
 
 Do not ask the owner to locate a file, choose an existing convention, repeat a recorded decision, or provide a fact that can be discovered safely. Do not invent a question when no owner decision exists. Report `No owner decision needed` instead.
 
@@ -33,7 +33,7 @@ Do not ask the owner to locate a file, choose an existing convention, repeat a r
 
 Run Owner Decision Discovery after idea validation or batch triage and before dependent planning, specification, implementation, or another owner-sensitive write.
 
-For an interactive checkpoint:
+For a Human Coop interactive checkpoint (Auto records a queue instead):
 
 - group at most `1-3` questions that block the nearest safe next step;
 - put the recommended option first;
@@ -45,7 +45,7 @@ For an interactive checkpoint:
 
 Do not ask generic permission such as `Should I continue?` when the owner already requested execution and no material decision remains.
 
-If more than three material decisions exist, ask the first `1-3` by dependency order and queue the rest. Do not hide or auto-resolve the remaining material decisions.
+In Human Coop, if more than three material decisions exist, ask the first `1-3` by dependency order and queue the rest. In Auto, take only covered reversible choices under execution-modes.md and queue all owner-only decisions. Do not hide unresolved material decisions.
 
 ## Decision Request Contract
 
@@ -98,15 +98,15 @@ When the owner changes an auto-resolved decision, report the override impact. If
 
 ### Autopilot
 
-Autopilot readiness may ask a grouped decision batch before the run enters `running`. Readiness cannot be `ready` while a material decision is pending.
+Human Coop autopilot readiness may ask a grouped decision batch before the run enters `running`; Auto readiness queues owner-only decisions. Readiness cannot be `ready` for a unit blocked by a pending material decision. A verified independent subset may be ready under execution-modes.md.
 
 An active autopilot run must not ask live, follow-up, clarification, or other interactive questions while `running`:
 
 - record `auto-resolvable` decisions in the existing task decision artifact;
-- when a material decision appears, stop the run as `awaiting-owner`;
+- when a material decision appears, exclude affected units and transitive dependents; continue only a verified independent runnable subset;
 - create or update the existing readiness, decision, and escalation evidence;
-- return one queued owner decision batch after the run stops;
-- never continue `running` with a pending material decision.
+- return one queued owner decision batch after the run stops or the independent subset completes;
+- never execute a unit blocked by a pending material decision; with no runnable independent work stop as `awaiting-owner`.
 
 ### Dreaming And Automations
 
@@ -144,11 +144,11 @@ Opt-out must not guess or bypass scope, risk, permissions, security, billing, mi
 
 ## Knowledge Capture Boundary
 
-Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves. Ask only when an existing checkpoint, distillation, status/evidence, commit-readiness, privacy, or owner-approved capture gate requires a material decision.
+Soft `Optional Knowledge Capture` recommendations are listed in the phase-end recap and do not trigger an interactive question by themselves. Human Coop asks only when an existing checkpoint, distillation, status/evidence, commit-readiness, privacy, or owner-approved capture gate requires a material decision; Auto queues that decision and blocks its dependent action.
 
 ## Delivery Constraint Questions
 
-When `.systems/ai/core/delivery-constraints.md` applies, treat deadline, timezone, time budget, must-have outcome, cutline, and overrun handling as one grouped material decision. Ask at most `1-3` questions, do not ask redundant synonyms, and do not invent a deadline. A deadline is a planning constraint only and cannot weaken DoD, QA, evidence, risk, permissions, approvals, or stop conditions.
+When `.systems/ai/core/delivery-constraints.md` applies, Auto records absent deadline/timebox as `auto-unbounded` without a question. Human Coop treats missing deadline, timezone, time budget, must-have outcome, cutline, and overrun handling as one grouped material decision. Ask at most `1-3` questions, do not ask redundant synonyms, and do not invent a deadline. A deadline is a planning constraint only and cannot weaken DoD, QA, evidence, risk, permissions, approvals, or stop conditions.
 
 ## Response Trace
 

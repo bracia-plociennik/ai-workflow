@@ -1,6 +1,9 @@
 # HUMANS.md
 
 Official `dev` may publish an audited workspace snapshot; `main` remains code-only. Review privacy and refresh `repo/publication-review.json` before committing changed workspace files, then run `check-workspace-publication`. Move product commits to main selectively, excluding the snapshot and dev-only ignore change. Published historical QA is not current QA PASS; see repository-modes.md.
+## Execution Modes
+
+Domyślnie Auto wykonuje zatwierdzony zakres i QA, wybiera bezpieczne odwracalne rozwiązania oraz przedstawia decyzje i ich wpływ na końcu. Napisz Human Coop, pracujmy wspólnie lub konsultuj decyzje, aby konsultować materialne wybory w bieżącym zadaniu. Szerszy tryb wymaga jawnego projektu/sesji; resume zachowuje wybór. Pending decision blokuje zależną pracę, a pozostała może być kontynuowana po sprawdzeniu niezależności. Auto nie daje zgody na produkcję, koszty, push ani final-owner-yes. Użyj check-execution-modes jako supporting check; szczegóły w execution-modes.md.
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 
 
@@ -160,17 +163,17 @@ Uruchom phase-5-quality dla <task-id>. Zapisz quality artifact, evidence i jedno
 
 ## Delivery Constraints
 
-Before new implementation work, Codex should ask for a material deadline, time budget, must-have outcome, and safe cutline when they are not already known. It should group questions, adapt optional scope, and stop for an overrun decision. A deadline never authorizes skipping QA, DoD, risk review, permissions, evidence, or approvals. Use `bez deadlinu` or `no deadline` only when you intentionally want the bounded opt-out reported with residual risk.
+Nowa praca domyślnie używa Auto: brak podanego deadline'u/timeboxu zapisuje jako auto-unbounded bez pytania. Human Coop pyta o materialne brakujące ograniczenia. Jawne ograniczenia i istniejące limity wznowionego runu pozostają wiążące. Deadline nie omija DoD, QA, risk, permissions, evidence ani approvals.
 
 ## Distillation State
 
 Each meaningful work item may have a scoped `Distillation State`. `completed` means an accepted phase-6 distillation exists; other states remain visible to reminders and Dreaming. Dreaming reports an advisory `Undistilled Work Queue` and does not write memory, distillation, insights, status, commits, or pushes.
 
-AI Workflow domyślnie wykrywa materialne decyzje i znaczące preferencje ownera przed planowaniem, specyfikacją albo implementacją. Najpierw sprawdza repo i zaakceptowane artefakty, a potem grupuje maksymalnie 1-3 pytania z rekomendowaną opcją i wpływem. Nie powinien pytać o fakty możliwe do znalezienia ani o każdy drobny detal techniczny.
+AI Workflow wykrywa materialne decyzje przed zależną pracą. Auto sam wybiera odwracalne rozwiązania w zatwierdzonym zakresie i zbiera owner-only decisions. Human Coop grupuje maksymalnie 1-3 pytania z rekomendacją i wpływem. Żaden tryb nie pyta o fakty dostępne w repo ani każdy drobny detal.
 
 Na końcu każdej fazy `Owner Decision Checkpoint` pokazuje otwarte decyzje, opcjonalne refinements oraz bezpieczne i odwracalne decyzje podjęte automatycznie. Zmiana takiej decyzji przez ownera może wymagać właściwego fix loop i re-QA.
 
-Aktywny autopilot, Dreaming/automations i read-only review nie są przerywane pytaniami. Zbierają owner decision queue i pokazują ją po zatrzymaniu albo zakończeniu analizy. Autopilot readiness może zapytać przed wejściem w `running`.
+Aktywny autopilot, Dreaming/automations i read-only review nie są przerywane pytaniami. Zbierają owner decision queue i pokazują ją po zatrzymaniu albo zakończeniu analizy. Readiness w Human Coop może zapytać przed wejściem w running; Auto blokuje zależne jednostki i kontynuuje tylko sprawdzone niezależne.
 
 Możesz użyć `nie dopytuj`, `bez pytań`, `nie zadawaj pytań pomocniczych`, `do not ask follow-up questions`, `no clarifying questions` albo `use reasonable defaults`. Opt-out dotyczy bieżącego scope, chyba że jawnie rozszerzysz go do końca taska, chatu albo sesji. Nie pozwala on zgadywać ani omijać hard gates.
 

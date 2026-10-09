@@ -771,7 +771,25 @@
     "phase-commit-policy-missing-source",
     "parallel-cross-system-offline-regressions",
     "validation-scope-dependencies",
-    "branch-policy-dev-publication-regressions"
+    "branch-policy-dev-publication-regressions",
+    "execution-modes-valid",
+    "execution-modes-behavioral",
+    "execution-modes-safe-prohibition",
+    "execution-modes-false-completion",
+    "execution-modes-missing-contract",
+    "execution-modes-missing-producer-field",
+    "execution-modes-boundary-direct",
+    "execution-modes-boundary-but",
+    "execution-modes-boundary-however",
+    "execution-modes-boundary-period",
+    "execution-modes-boundary-colon",
+    "execution-modes-boundary-semicolon",
+    "execution-modes-boundary-unless",
+    "execution-modes-boundary-yet",
+    "execution-modes-qualified-independent-policy",
+    "execution-modes-blocked-unit-policy",
+    "execution-modes-missing-capability",
+    "execution-modes-stale-capability"
   ],
   "external_assertion_audit": [
     {
@@ -3106,7 +3124,25 @@
     "phase-commit-policy-missing-source": "core",
     "parallel-cross-system-offline-regressions": "core",
     "validation-scope-dependencies": "core",
-    "branch-policy-dev-publication-regressions": "workspace"
+    "branch-policy-dev-publication-regressions": "workspace",
+    "execution-modes-valid": "core",
+    "execution-modes-behavioral": "core",
+    "execution-modes-safe-prohibition": "core",
+    "execution-modes-false-completion": "core",
+    "execution-modes-missing-contract": "core",
+    "execution-modes-missing-producer-field": "core",
+    "execution-modes-boundary-direct": "core",
+    "execution-modes-boundary-but": "core",
+    "execution-modes-boundary-however": "core",
+    "execution-modes-boundary-period": "core",
+    "execution-modes-boundary-colon": "core",
+    "execution-modes-boundary-semicolon": "core",
+    "execution-modes-boundary-unless": "core",
+    "execution-modes-boundary-yet": "core",
+    "execution-modes-qualified-independent-policy": "core",
+    "execution-modes-blocked-unit-policy": "core",
+    "execution-modes-missing-capability": "core",
+    "execution-modes-stale-capability": "core"
   },
   "tests": [
     {
@@ -11468,14 +11504,212 @@
       "cleanup_id": "owned-temporary-directory-cleanup",
       "mutation_id": "branch-ci-index-privacy-boundaries",
       "expected_outcome": "real Git branch, detached CI and publication boundary regressions"
+    },
+    {
+      "id": "execution-modes-valid",
+      "group": "core",
+      "helper": "run_must_pass",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_pass \"execution-modes-valid\" bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-valid",
+      "expected_outcome": "success"
+    },
+    {
+      "id": "execution-modes-behavioral",
+      "group": "core",
+      "helper": "run_must_pass",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_pass \"execution-modes-behavioral\" python3 .systems/scripts/tests/execution-modes.py",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-behavioral",
+      "expected_outcome": "success"
+    },
+    {
+      "id": "execution-modes-safe-prohibition",
+      "group": "core",
+      "helper": "run_must_pass",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_pass \"execution-modes-safe-prohibition\" bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-safe-prohibition",
+      "expected_outcome": "success"
+    },
+    {
+      "id": "execution-modes-false-completion",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-false-completion\" --expect-literal 'Unsafe execution mode completion wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-false-completion",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-missing-contract",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-missing-contract\" --expect-literal 'Execution modes contract missing' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-missing-contract",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-missing-producer-field",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-missing-producer-field\" --expect-literal 'Execution modes producer field missing' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-missing-producer-field",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-direct",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-direct",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-but",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-but",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-however",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-however",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-period",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-period",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-colon",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-colon",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-semicolon",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-semicolon",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-unless",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-unless",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-boundary-yet",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-boundary-$em_join\" --expect-literal 'Unsafe execution mode authority wording' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-boundary-yet",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-qualified-independent-policy",
+      "group": "core",
+      "helper": "run_must_pass",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_pass \"execution-modes-qualified-independent-policy\" bash .systems/scripts/check-owner-decision-checkpoints",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-qualified-independent-policy",
+      "expected_outcome": "success"
+    },
+    {
+      "id": "execution-modes-blocked-unit-policy",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-blocked-unit-policy\" --expect-literal 'Unsafe owner decision checkpoint wording' bash .systems/scripts/check-owner-decision-checkpoints",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-blocked-unit-policy",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-missing-capability",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-missing-capability\" --expect-literal 'Execution modes error:' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-missing-capability",
+      "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "execution-modes-stale-capability",
+      "group": "core",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-core",
+      "command_contract": "run_must_fail \"execution-modes-stale-capability\" --expect-literal 'capability source mismatch' bash .systems/scripts/check-execution-modes",
+      "setup_id": "execution-mode-source-copy",
+      "cleanup_id": "restore-execution-mode-source",
+      "mutation_id": "execution-modes-stale-capability",
+      "expected_outcome": "reject intended boundary with diagnostic"
     }
   ],
   "files_sha256": {
-    "common.sh": "d27babc3927de3538a42ccbd7dbc98251092e388fddf2745e0962f124453d688",
+    "common.sh": "7fb7a207b5c9b7ca2508a2883c1e19a7e947edd918f4787754292d3b27772ea5",
     "quality.sh": "df3e514dd8945369367a4a2d024f2ec121ac9f416db8a8f1e1f411c3e1fc08da",
     "workspace.sh": "0b2281cd5f5526e77a7e7cc927aa5fcb38fba774e96695ae09b92cf4885bae55",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
-    "core.sh": "2fa1ac0c1d34a9622b865e4b3881b2b895ac8020fec905374bb19dcb4189894a"
+    "core.sh": "a619316c5631f55666dd5ea8a368e7a11c0633e64405b0347b2b3a182221632a"
   }
 }

@@ -63,7 +63,7 @@ Use `.systems/ai/core/command-routing.md` to interpret user-facing workflow comm
 
 If the owner provides a list, checklist, brain dump, mixed improvements, or `2+ owner items`, route through `.systems/ai/core/request-batch-triage.md` before ordinary task intake, planning, specification, implementation, task creation, change request creation, or autopilot. Batch triage groups, splits, classifies risk, and recommends routes only. It does not grant write permission and does not automatically create projects, tasks, micro-tasks, micro-projects, change requests, commits, or pull requests.
 
-Use `.systems/ai/core/owner-decision-checkpoints.md` after idea validation/batch and before dependent planning, specification, implementation or owner-sensitive writes. Discover repo facts first; ask at most 1-3 material owner-preference questions with recommendations and impacts, auto-resolving only safe reversible details and reporting them. Autopilot, Dreaming and read-only review queue material decisions instead of interrupting. A read-only review with no material choice reports none without pre-loading the decision procedure. No-question opt-out cannot bypass hard gates.
+Use `.systems/ai/core/execution-modes.md` for new work: Auto is default, Human Coop is explicit and task-local unless scoped wider. Resolve and persist the mode before dependent work; resume preserves it. Auto chooses covered reversible implementation, preference and local architecture options, records assumptions/override impact, and queues owner-only decisions. Human Coop asks at most 1-3 material questions. Use owner-decision-checkpoints.md for full decision records. Block affected units and dependents; continue only verified independent work. Mode never grants approvals or weakens DoD/QA. Autopilot, Dreaming and read-only review remain non-interactive. No-question opt-out cannot bypass hard gates.
 
 Before planning, specifying, implementing, starting autopilot, or accepting a side-task/micro-task/change request for any new task or approach request, apply `.systems/ai/core/task-intake.md`. The response or routed artifact must identify `Co zostaje`, `Co jest słabe / do poprawy lub usunięcia`, `Czego brakuje`, `Blokery / decyzje`, and `Rekomendowany routing`. This lens does not grant write permission. New project ideas still route to formal `phase-0-idea-validation`.
 
@@ -122,7 +122,7 @@ Every workflow phase artifact should include `Optional Knowledge Capture`: a sof
 
 Every workflow phase artifact must also include `Owner Decision Checkpoint`. Optional refinements and reported reversible decisions do not block progression. A material `awaiting-owner` or `blocked` decision prevents dependent phase progression and default QA/Quality chaining.
 
-If a blocking detail is missing, ask before continuing. The clarification must include:
+If a blocking detail is missing, use execution-modes.md: Auto queues the decision and blocks affected work; Human Coop asks before dependent work. The decision report or clarification must include:
 
 - recommended interpretation and its impact;
 - alternative interpretation and its impact;
@@ -179,7 +179,7 @@ Prompt composition artifacts follow the same supporting-guidance boundary. Read 
 
 ## Stop Conditions
 
-Stop before continuing when:
+Stop affected work before continuing when the conditions below apply. Under execution-modes.md, a unit-local blocker does not stop proven independent units; shared/global safety, baseline, permissions or unknown dependencies block every affected unit. This never waives a unit's own gate:
 
 - a required gate is unsatisfied;
 - acceptance criteria, task scope, or Definition of Done is missing;
@@ -199,7 +199,7 @@ Do not mark `PASS` without evidence.
 Write operations are allowed only when:
 
 - the task has an accepted plan or explicit execution instruction;
-- decisions are resolved or classified as auto-resolvable;
+- decisions needed by the active unit are resolved, auto-resolvable or covered reversible agent-choice under execution-modes.md; excluded units and dependents remain blocked;
 - the active phase allows writes;
 - the implementation gate is satisfied;
 - the user approved implementation or active autopilot state allows it.
@@ -348,7 +348,7 @@ fresh runtime-only checkpoint with all required consumers and semantic/privacy
 evidence may qualify under `validation-profiles.md`; shared source, CI and updater
 remain full-required. Manifest evidence never grants writes or PASS.
 
-For new implementation work, apply `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or bounded owner opt-out before dependent writes. Deadline pressure cannot bypass DoD, QA, risk, permissions, evidence, or approvals.
+For new implementation work, apply `.systems/ai/core/delivery-constraints.md` and record explicit constraints, bounded owner opt-out or `auto-unbounded` for new Auto work with no supplied deadline/timebox. Deadline pressure cannot bypass DoD, QA, risk, permissions, evidence, or approvals.
 
 For knowledge capture, apply `.systems/ai/core/distillation-state.md`. `is_distilled` is derived from `State: completed` and never grants write authority. Dreaming only reports the `Undistilled Work Queue` and remains advisory-only.
 

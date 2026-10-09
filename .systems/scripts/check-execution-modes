@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd "$(dirname "$0")/../.." && pwd -P)"
+if [[ "${1:-}" == --state ]]; then
+  [[ "$#" == 2 ]] || { echo "Usage: check-execution-modes [--state file.json]" >&2; exit 2; }
+  exec python3 "$root/.systems/scripts/lib/execution-modes.py" --state "$2"
+fi
+[[ "$#" == 0 ]] || { echo "Unknown execution modes argument" >&2; exit 2; }
+cd "$root"
+source .systems/scripts/lib/policy-boundaries.sh
+fail=0
+require_literal() {
+  if [[ ! -f "$1" ]] || ! rg -qF -- "$2" "$1"; then
+    echo "Execution modes contract missing: $1: $2"
+    fail=1
+  fi
+}
+contract=.systems/ai/core/execution-modes.md
+for field in '## Mode Selection' '## Autonomous Choices' '## Approval Scope' \
+  '## Independent Continuation' '## Runtime Evidence' '## Delivery And Completion' \
+  'New work defaults to `auto`' 'Resume preserves the recorded choice' \
+  'Human Coop' 'agent-choice' 'auto-unbounded' 'no-progress' \
+  'Legacy artifacts' 'Final-owner-yes must not be inferred' \
+  'submission' 'Git revert' 'partial / awaiting-owner'; do
+  require_literal "$contract" "$field"
+done
+for file in AGENTS.md HUMANS.md README.md \
+  .systems/ai/core/{operating-model,task-intake,command-routing,workflow,autopilot,owner-decision-checkpoints,delivery-constraints,permissions,risk-model,implementation-slicing,quality-review,contract-compliance,response-contract,commands}.md; do
+  require_literal "$file" 'execution-modes.md'
+done
+for template in .systems/ai/templates/autopilot/{readiness,state}.template.md; do
+  execution_block="$(awk '/^execution:$/ { active=1; next } active && /^[^ ]/ { exit } active { print }' "$template")"
+  for field in 'execution:' 'mode: auto' 'scope:' 'scope-id:' 'source:' \
+    'approval-reference:' 'completed-units:' 'blocked-units:' 'pending-decisions:'; do
+    require_literal "$template" "$field"
+    if [[ "$field" != execution: ]] && ! printf '%s\n' "$execution_block" | rg -qF -- "$field"; then
+      echo "Execution modes producer field missing: $template: $field"
+      fail=1
+    fi
+  done
+done
+require_literal .systems/ai/templates/autopilot/state.template.md 'max-runtime-minutes: null'
+require_literal .systems/ai/templates/autopilot/readiness.template.md 'runnable-subset:'
+require_literal .systems/ai/templates/autopilot/readiness.template.md 'independence-evidence:'
+for field in 'disposition:' 'affected-units:' 'override-impact:'; do
+  require_literal .systems/ai/templates/autopilot/task-decisions.template.md "$field"
+  require_literal .systems/ai/templates/autopilot/readiness.template.md "$field"
+done
+require_literal .systems/ai/templates/projects/status.template.md 'execution-mode'
+require_literal .systems/ai/core/response-contract.md 'Blocked units/pending decisions'
+require_literal .systems/scripts/validate-workflow 'check-execution-modes'
+require_literal .systems/scripts/check-required-artifacts 'check-execution-modes'
+require_literal .systems/scripts/check-validator-smoke-tests '"execution-modes"'
+require_literal .systems/scripts/check-review-completeness-gate 'check-execution-modes'
+require_literal .systems/scripts/lib/validation-checks.json '"check-execution-modes"'
+for file in .systems/scripts/lib/execution-modes.py .systems/scripts/tests/execution-modes.py \
+  .systems/ai/templates/autopilot/execution-readiness.template.json; do
+  [[ -f "$file" && ! -L "$file" ]] || { echo "Execution modes artifact missing: $file"; fail=1; }
+done
+python3 .systems/scripts/lib/execution-modes.py --state .systems/ai/templates/autopilot/execution-readiness.template.json || fail=1
+python3 .systems/scripts/lib/execution-modes.py --capability-root "$root" || fail=1
+for field in '## Source-bound Capability' '## Bounded Recovery' 'three consecutive unproductive attempts' 'legacy-unverified' 'progress never resets'; do
+  require_literal "$contract" "$field"
+done
+require_literal .systems/ai/templates/autopilot/state.template.md 'projection-schema: 2'
+require_literal .systems/ai/templates/autopilot/state.template.md 'attempts: []'
+require_literal .systems/ai/templates/autopilot/readiness.template.md 'recovery-budget-evidence:'
+policy_reject_unsafe_pattern \
+  '(auto mode|execution mode|Auto)[^.\n]{0,60}\b(may|can|allows?|grants?|authorizes?)\b[^.\n]{0,70}\b(bypass|skip|grant|authorize|infer)\b[^.\n]{0,60}\b(approval|permission|QA|DoD|push|production|final-owner-yes)\b' \
+  'Unsafe execution mode authority wording' \
+  AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/templates
+policy_reject_unsafe_pattern \
+  '(auto mode|Auto)[^.\n]{0,60}\b(may|can|should)\b[^.\n]{0,50}\b(mark|declare|report)\b[^.\n]{0,40}\b(completed|PASS)\b[^.\n]{0,40}\b(incomplete|unresolved|missing)\b' \
+  'Unsafe execution mode completion wording' \
+  "$contract" .systems/ai/core/autopilot.md .systems/ai/core/response-contract.md
+exit "$fail"
