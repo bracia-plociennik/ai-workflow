@@ -224,8 +224,8 @@ Detailed rules live in `.systems/ai/core/update-from-upstream.md`.
 ## Branch Policy
 
 - Public reusable template: `main`.
-- Legacy `workspace/**` remains forbidden. A privacy-reviewed `ai-workflow-workspace/**` snapshot is permitted only on official `dev` under repository-modes.md; main and nested installations remain code-only.
-- A local official workspace remains ignored outside `dev`. Published dev data must not be imported as a target's installed runtime or current QA evidence.
+- Legacy `workspace/**` remains forbidden. Only official dev changes a privacy-reviewed workspace snapshot; linked development worktrees may inherit it unchanged under development-worktree-policy.md. Main and nested installations remain code-only.
+- A local official workspace remains ignored on main/source-only release branches. Development worktrees preserve read-only inheritance and generated/sensitive exclusions. Published dev data must not be imported as a target's installed runtime or current QA evidence.
 - No branch may track the legacy nested runtime directory `workspace/**`.
 - `.systems/scripts/check-branch-policy` enforces this rule.
 - Target repositories update nested clones from public `main`.

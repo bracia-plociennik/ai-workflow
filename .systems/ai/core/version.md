@@ -18,7 +18,7 @@
 - `.systems/ai/core/repository-modes.md` defines official repo mode, target repo mode, and shared path resolution.
 - `.systems/` is the system-owned namespace inside `AI_WORKFLOW_HOME`.
 - `AI_WORKFLOW_WORKSPACE_HOME/` is the target-owned runtime/advisory namespace, normally `ai-workflow-workspace/` beside `AI_WORKFLOW_HOME`.
-- Legacy `workspace/**` is forbidden on every branch. Only official `dev` may track a privacy-reviewed `ai-workflow-workspace/**` snapshot; main, other branches and nested installations remain blocked.
+- Legacy `workspace/**` is forbidden on every branch. Only official dev changes a privacy-reviewed workspace snapshot; linked development worktrees may inherit it unchanged under development-worktree-policy.md. Main/release branches and nested installations remain blocked.
 - `.systems/scripts/check-branch-policy` enforces actual branch/installation identity and `check-workspace-publication` verifies reviewed staged blobs. Publication is supporting-only and never supplies current QA PASS.
 - `.systems/ai/` is system-owned policy and workflow source.
 - `.systems/ai/core/` stores canonical AI router and policy files.

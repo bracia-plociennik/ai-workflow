@@ -51,6 +51,7 @@ required=(
   ".systems/ai/core/operating-model.md"
   ".systems/ai/core/installation.md"
   ".systems/ai/core/repository-modes.md"
+  ".systems/ai/core/development-worktree-policy.md"
   ".systems/ai/core/update-from-upstream.md"
   ".systems/ai/core/workflow.md"
   ".systems/ai/core/autopilot.md"
