@@ -1,0 +1,14 @@
+# Distillation State
+- Capture schema: 2
+- Work ID: EM-CORE-001-execution-modes
+- Work mode: project
+- Project/repo scope: execution-modes-v1
+- Source artifact: implementation/phase-4-em-core-001-execution-modes-implementation.md
+- Quality artifact: quality/recovery-phase-5-em-core-001-execution-modes-quality.md
+- State: completed
+- Distillation artifact: distillations/phase-6-em-core-001-execution-modes-distillation.md
+- Last reminder: 2026-10-08
+- Owner disposition: capture-now
+- Privacy/scope check: pass
+- Residual risk: First-write capture record was missing and corrected before quality closure; no claim that this record existed before writes.
+- is_distilled derived value: true

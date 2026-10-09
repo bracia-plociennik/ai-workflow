@@ -1,0 +1,22 @@
+# Project Status
+| Field | Value |
+| --- | --- |
+| `workflow-requirement` | mandatory |
+| `workflow-scope` | plan-derived |
+| `project-workspace` | AI_WORKFLOW_WORKSPACE_HOME/projects/execution-modes-v1 |
+| `active-plan-status` | closed |
+| `current-task` | none |
+| `active-change-request` | none |
+| `current-phase` | owner-final-approval |
+| `phase-result` | completed |
+| `next-phase` | not-applicable |
+| `next-task` | n/a |
+| `blocking-reason` | none |
+| `updated-at` | 2026-10-09 |
+| `autopilot-mode` | none |
+| `autopilot-state` | not-running |
+| `autopilot-run` | none |
+| `execution-mode` | auto |
+| `execution-mode-scope` | project |
+| `execution-mode-source` | decisions/2026-10-08-owner-scope.md |
+| `execution-mode-scope-id` | execution-modes-v1 |

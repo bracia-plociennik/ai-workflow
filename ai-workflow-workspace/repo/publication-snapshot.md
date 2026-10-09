@@ -18,3 +18,19 @@
   privacy review and manifest update before staged-index publication validation.
 - Source CI is a separate full Workflow validation with an empty runtime.
 - This snapshot does not import approvals, status or client runtime into any target.
+
+## Supplemental Review: 2026-10-09
+
+- The owner explicitly approves public release of all eight restored files.
+- Four Execution Modes routers/evidence files were previously excluded because
+  they changed during the initial audit. Their current bytes were re-reviewed.
+- Four Parallel Task Orchestration artifacts contain an owner-approved technical
+  reference to TechGrow. No raw client runtime, credentials or private documents
+  are included in this supplement. Other initial exclusions remain in force.
+- The eight source files were copied unchanged from the local development runtime
+  at eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249. This does not merge its product code
+  or certify current runtime QA against the dev branch source.
+- Archive copies remain local. Historical QA, statuses and approvals stay
+  supporting data; this publication does not restamp their fingerprints.
+- The updated publication manifest binds the complete snapshot and separately
+  records this supplemental review without replacing the original source baseline.

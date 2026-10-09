@@ -1,17 +1,32 @@
 {
   "schema": 1,
   "privacy_review": "completed",
-  "reviewed_at": "2026-10-08",
+  "reviewed_at": "2026-10-09",
   "source_head": "d3536e5c907842e34fe323be367c100ed24b32ea",
   "quality_authority": "supporting-only",
   "excluded_by_reason": {
     "generated-or-git-metadata": 45,
     "non-synthetic-email": 4,
     "private-account-or-session-screenshot": 4,
-    "client-reference": 19,
-    "changed-during-audit": 5
+    "client-reference": 15,
+    "changed-during-audit": 1
+  },
+  "supplemental_review": {
+    "reviewed_at": "2026-10-09",
+    "source_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+    "owner_publication_approval": "explicit-all-eight-restored-files",
+    "quality_authority": "supporting-only",
+    "files": ["ai-workflow-workspace/projects/execution-modes-v1/capture-state/em-core-001-execution-modes.md","ai-workflow-workspace/projects/execution-modes-v1/quality-assessments.json","ai-workflow-workspace/projects/execution-modes-v1/status.md","ai-workflow-workspace/projects/execution-modes-v1/tasks.md","ai-workflow-workspace/projects/parallel-task-orchestration-v1/change-requests/2026-10-04-parallel-task-orchestration-v1-cr-001-capture-parity.md","ai-workflow-workspace/projects/parallel-task-orchestration-v1/history/2026-10-05-pre-dependency-scope/phase-5-pto-cap-008-capture-parity-quality.md","ai-workflow-workspace/projects/parallel-task-orchestration-v1/reviews/pre-final-planning-review.md","ai-workflow-workspace/projects/parallel-task-orchestration-v1/specs/phase-3-pto-cap-008-capture-parity-specification.md"]
   },
   "files": {
+    "ai-workflow-workspace/projects/execution-modes-v1/capture-state/em-core-001-execution-modes.md": "895733149cb90db87134a8a38de50e7931d13c915353facbc294ac79476c0c2e",
+    "ai-workflow-workspace/projects/execution-modes-v1/quality-assessments.json": "6867a95c05cfc4cc808c460c33cd19ac06a361ec90b2f4e326149c47cd4dc55f",
+    "ai-workflow-workspace/projects/execution-modes-v1/status.md": "dedb855a662021f0e947937639bec68adc90e417e24a7cb8135769fa9426e86f",
+    "ai-workflow-workspace/projects/execution-modes-v1/tasks.md": "2d3e9fa5b9251f17037748dc8af33a5c4883a313f3bbba71d5b4c680797ee163",
+    "ai-workflow-workspace/projects/parallel-task-orchestration-v1/change-requests/2026-10-04-parallel-task-orchestration-v1-cr-001-capture-parity.md": "8ed80fcc940b74f7e77d19b9e3d7f712b9fb126fde298e2045e05bdbd732f123",
+    "ai-workflow-workspace/projects/parallel-task-orchestration-v1/history/2026-10-05-pre-dependency-scope/phase-5-pto-cap-008-capture-parity-quality.md": "7d98cf52b9f75237e7565db0629104f9ec785d16ce7d07a0a8021406c39f6092",
+    "ai-workflow-workspace/projects/parallel-task-orchestration-v1/reviews/pre-final-planning-review.md": "d7e99978e9a558dd1236623af94e50b3184f41e2eddd56314f57cfeae0b76bfa",
+    "ai-workflow-workspace/projects/parallel-task-orchestration-v1/specs/phase-3-pto-cap-008-capture-parity-specification.md": "17b9a172aa9d2bef11e9547876bd830aea836c58bef6e8d700a5cb51d9333c7a",
     "ai-workflow-workspace/README.md": "3d6f7acec5d8481f8407a5e955b53dd536da0f5fac908f4a6bc42c5763501cfc",
     "ai-workflow-workspace/dreams/README.md": "9e797dd9c49feaff8b7db76a25326c77e262fbf347f2967fbd57f9686b6fd3e7",
     "ai-workflow-workspace/dreams/runs/2026-07-15-ai-workflow-system-validation/dream-report.md": "bee4938352b373fad1d67c42e925825b42de66ef08cd1ddee99615444c465a51",
@@ -1800,7 +1815,7 @@
     "ai-workflow-workspace/repo/memory/2026-10-04-parallel-compatibility-inspection.md": "6fbd2e53f7cde0a153845b248c1c1ce8bfbf3aadd8091db8548e94bf24222b56",
     "ai-workflow-workspace/repo/memory/2026-10-04-parallel-protocol-boundaries.md": "8d449fa57fbaa45778d4779ccaecdec647a2b7e6252ced4e72669fd36d43c83b",
     "ai-workflow-workspace/repo/memory/README.md": "fae80e06f3f1951993c2a76b1ac54d4705a77ad9d5f9ebb990e79384dcc670b6",
-    "ai-workflow-workspace/repo/publication-snapshot.md": "3ea245835e933af5c0131a0a2e8c0f7b798b70fc9ae3712e1541e8e9bf35472d",
+    "ai-workflow-workspace/repo/publication-snapshot.md": "b550851aff70a2391b7585636616fb296dad551cb5c70e6e97a795a99f1bc567",
     "ai-workflow-workspace/repo/quality/runtime-dependency-scope-source-review.md": "88df74bacbae730e9f8764a188b6a3ac24e18f98f1b113c357aa92851e47c607",
     "ai-workflow-workspace/skills/README.md": "388471052f5f1b00ea68000164895df87326290536d20011908d59f5e7b19fd1",
     "ai-workflow-workspace/system-insights/README.md": "b043f6cf88a65775f27b10e34aff3cd4cc2a4ac0c363a3d710fe82fd633422c7",

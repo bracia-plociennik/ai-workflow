@@ -26,11 +26,7 @@ ai-workflow-workspace/**/.git/
 /ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/implementation/lv004-equivalence-retest/reverse-skills.diagnostics.tsv
 /ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/implementation/lv004-reference/check-validator-smoke-tests.sh
 /ai-workflow-workspace/projects/ai-workflow-lean-validation-v1/implementation/lv005-exec-context-probe.py
-/ai-workflow-workspace/projects/parallel-task-orchestration-v1/change-requests/2026-10-04-parallel-task-orchestration-v1-cr-001-capture-parity.md
-/ai-workflow-workspace/projects/parallel-task-orchestration-v1/history/2026-10-05-pre-dependency-scope/phase-5-pto-cap-008-capture-parity-quality.md
-/ai-workflow-workspace/projects/parallel-task-orchestration-v1/reviews/pre-final-planning-review.md
 /ai-workflow-workspace/projects/parallel-task-orchestration-v1/reviews/pto-008-formal-quality-input.json
-/ai-workflow-workspace/projects/parallel-task-orchestration-v1/specs/phase-3-pto-cap-008-capture-parity-specification.md
 /ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/loop-003-negative-boundary-001/runs/run-001/checkout/.systems/ai/core/changelog.md
 /ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/loop-003-negative-boundary-001/runs/run-001/checkout/.systems/ai/core/guide.md
 /ai-workflow-workspace/projects/prompt-and-skill-efficiency-v1/evals/loop-003-negative-boundary-001/runs/run-001/checkout/.systems/ai/skills/legacy/backend-laravel-skill-source/context/backend-laravel-skill-source-practices.md

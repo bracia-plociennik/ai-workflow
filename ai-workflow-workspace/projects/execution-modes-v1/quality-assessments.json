@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "assessments": [
+    {
+      "path": "quality/phase-1-architecture-qa.md",
+      "sha256": "c344bb361522f0c7d149d43d2d26572e6d7cf5b745f0f9546e902104a4d38f28",
+      "state": "superseded",
+      "assessed_head": "a9a5c40430af3dec153df94f8b78a30f668bbde3",
+      "decision": "decisions/2026-10-08-qa-history-1.md",
+      "decision_sha256": "7c4d1e88a602bf353b3a31deabaa72d96a311dd0578e0e00fb30f6dc0bb2cd67"
+    },
+    {
+      "path": "quality/phase-2-plan-qa.md",
+      "sha256": "061b92f43b3400fc76d0694bf25f48915c9bb73dd73b49aa55a6edf91cd53e00",
+      "state": "superseded",
+      "assessed_head": "a9a5c40430af3dec153df94f8b78a30f668bbde3",
+      "decision": "decisions/2026-10-08-qa-history-2.md",
+      "decision_sha256": "9426aa08a240d88f1d112267779d25b88fab6b5f0320a6240e7e0a5923583356"
+    },
+    {
+      "path": "quality/phase-3-em-core-001-execution-modes-spec-qa.md",
+      "sha256": "35f632c7eeedbef53532fe49345be94d9883139c84a73fdc23ad1292c7b99b4d",
+      "state": "superseded",
+      "assessed_head": "a9a5c40430af3dec153df94f8b78a30f668bbde3",
+      "decision": "decisions/2026-10-08-qa-history-3.md",
+      "decision_sha256": "6d180bf802bf52db66d61bbde0029add4d3dba040b16a400381bac87cd74f0cf"
+    },
+    {
+      "path": "quality/phase-5-em-core-001-execution-modes-quality.md",
+      "sha256": "489edfd7a1bebed41c671ee4e2e72a796ea40937eb59bb22d52f4f04c440f916",
+      "state": "superseded",
+      "assessed_head": "a9a5c40430af3dec153df94f8b78a30f668bbde3",
+      "decision": "decisions/2026-10-08-qa-history-4.md",
+      "decision_sha256": "699984c0cad72478e89384fb793a3fcae6e99cce5bdba464d8096269483dca61"
+    }
+  ]
+}
