@@ -14,7 +14,7 @@ It is not a loose planning notes file. Operational project plans belong in `plan
 
 ## Delivery Constraints
 
-Implementation-capable plans use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or bounded owner opt-out, must-have outcome, cutline, deferred scope, quality floor, and overrun route.
+Implementation-capable plans use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox, bounded owner opt-out or new Auto auto-unbounded, must-have outcome, cutline, deferred scope, quality floor, and overrun route.
 
 ## Rules
 

@@ -124,7 +124,7 @@ Suggest-only means the agent may name the proposed role, variable, or prompt mod
 
 Durable project-local prompting artifacts under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/prompting/**` may be created only after explicit owner approval or inside an accepted task/phase whose write allowance includes those artifacts.
 
-Low-risk inferred variables may be proposed and, when the active route already permits assumption recording, recorded as assumptions. The agent must ask the owner before using or recording a value that affects scope, risk, architecture, acceptance criteria, permissions, external effects, data handling, security, billing, migrations, production behavior, final acceptance, or any high-risk or critical-risk decision.
+Low-risk inferred variables may be proposed and, when the active route already permits assumption recording, recorded as assumptions. Use execution-modes.md for covered reversible local architecture choices and mode-aware decision reporting. A value changing accepted scope, risk, acceptance criteria, permissions, external effects, data handling, security, billing, migrations, production behavior, final acceptance, or uncovered high-risk/critical-risk effects requires the existing owner decision: Human Coop asks, Auto queues it and blocks dependent work. Prompt variables never supply approval.
 
 ## Lifecycle
 

@@ -71,7 +71,7 @@ for behavior in \
   'No owner decision needed' \
   'Do not ask generic permission' \
   'Optional refinements and disclosed auto-resolved decisions do not block the next phase' \
-  'never continue `running` with a pending material decision' \
+  'never execute a unit blocked by a pending material decision' \
   'must not ask live, follow-up, clarification, or other interactive questions' \
   'must not interrupt mid-review' \
   'Questions skipped by owner opt-out'
@@ -148,7 +148,8 @@ require_literal ".systems/ai/templates/autopilot/task-decisions.template.md" 'au
 require_literal ".systems/ai/workflow/phase-0-idea-validation.md" '`auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`' "idea validation decision taxonomy"
 require_literal ".systems/ai/templates/workflow/phase-0-idea-validation.template.md" '<auto-resolvable|owner-preference|high-impact|critical-risk|blocked-by-missing-facts>' "idea validation template taxonomy"
 require_literal ".systems/ai/workflow/phase-0-repo-intake.md" '`auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, `blocked-by-missing-facts`' "repo intake decision taxonomy"
-require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'Readiness cannot be `ready` while a material owner decision is pending.' "autopilot readiness pending-decision gate"
+require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'Readiness cannot be `ready` for a unit blocked by a pending material decision.' "autopilot readiness pending-decision gate"
+require_literal "$contract" 'execution-modes.md' "mode-aware decision eligibility"
 require_literal ".systems/ai/templates/autopilot/readiness.template.md" 'max-batch-size: 3' "autopilot readiness batch limit"
 require_literal ".systems/ai/templates/dreaming/dream-report.template.md" 'Live questions asked: `none`' "Dreaming non-interactive queue"
 require_literal "$contract" '## Decision Record Producers' "decision record producer contract"
@@ -201,7 +202,8 @@ unsafe_patterns=(
   '(high-impact|critical-risk|blocked-by-missing-facts)[^.\n]{0,60}(is|are|may be|can be)[^.\n]{0,30}auto-resolv'
   '(no-question opt-out|nie dopytuj|no clarifying questions)[^.\n]{0,80}(may|can|allows?|bypasses?|guesses?|permits?|authorizes?)[^.\n]{0,60}(scope|acceptance criteria|risk|permissions|security|billing|migrations|production|external effects|DoD|evidence|QA|Quality|approvals|stop conditions)'
   'autopilot[^.\n]{0,80}(asks?|may ask|can ask)[^.\n]{0,40}(live|follow-up|clarification|interactive)? ?questions[^.\n]{0,40}running'
-  'autopilot[^.\n]{0,80}((may|can|should|will) continue|continues)[^.\n]{0,50}pending material decision'
+  'autopilot[^.\n]{0,80}((may|can|should|will) continue|continues) (running )?(with|despite|regardless of|while)( a)? pending material decision'
+  '(autopilot|Auto)[^.\n]{0,60}(may|can|should|will)[^.\n]{0,30}(execute|dispatch)[^.\n]{0,40}(blocked unit|unit blocked by a pending)'
   'Dreaming Mode[^.\n]{0,60}(asks?|may ask|can ask)[^.\n]{0,40}(live|follow-up|clarification|interactive)? ?questions'
   'read-only review[^.\n]{0,60}(interrupts?|may interrupt|can interrupt)[^.\n]{0,30}(to ask|with questions)'
   'Optional Knowledge Capture[^.\n]{0,60}(triggers?|requires?)[^.\n]{0,30}(interactive question|live question)'

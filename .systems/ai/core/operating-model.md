@@ -61,7 +61,7 @@ If task intake reveals high or critical risk, unknown safe environment, missing 
 
 ## Owner Decision Discovery
 
-After task intake or batch triage, use `.systems/ai/core/owner-decision-checkpoints.md` before dependent planning, specification, implementation, or owner-sensitive writes. Inspect current sources first, ask at most 1-3 material questions, and report reversible auto-resolved decisions. Active autopilot, Dreaming/automations, and read-only review use queued decisions without mid-run interruption.
+After task intake or batch triage, resolve execution-modes.md and use owner-decision-checkpoints.md before dependent work. New work defaults to Auto; Human Coop asks at most 1-3 material questions. Auto selects covered reversible choices and queues uncovered owner decisions, blocking affected units while continuing proven independent work. Active autopilot, Dreaming/automations, and read-only review use queued decisions without mid-run interruption.
 
 An explicit no-question opt-out suppresses interactive questions only for its declared work scope. It does not convert unresolved high-impact, critical-risk, missing-fact, risk, permission, DoD, QA, approval, or stop-condition decisions into safe defaults.
 

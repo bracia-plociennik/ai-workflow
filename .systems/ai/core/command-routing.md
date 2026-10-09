@@ -1,4 +1,6 @@
 # command-routing.md
+
+Resolve execution-modes.md for all new work and resume. Auto is default; Human Coop / pracujmy wspólnie / konsultuj decyzje select human-coop. Explicit Auto Mode selects auto. Planning-only stays planning. Pending owner choices exclude affected units and dependents; continue only proven independent ready work. An explicitly requested final check is a separate owner-authorized route after implementation-range, never inferred from Auto.
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 
 
@@ -57,8 +59,8 @@ Prompt composition artifacts, role profiles, variable packs, and phase-role fram
 - Medium commands with a clear phase or task must be resolved against status, task index, plan, specs, and repo intake before acting.
 - Short commands such as `Zaimplementuj taski 01-16` are allowed only when the active project and task range can be resolved unambiguously.
 - If a command is clear but gates are not satisfied, route to the required predecessor phase or stop with the blocking gate.
-- If a command is ambiguous, inspect repo artifacts first. Ask only when the missing information cannot be discovered safely.
-- After intake or batch triage, use Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md`. Ask at most 1-3 material questions with recommendation and impacts; disclose safe reversible choices instead of asking about every implementation detail.
+- If a command is ambiguous, inspect repo artifacts first. Human Coop asks for missing material information; Auto queues it and blocks dependent work.
+- After intake or batch triage, use Owner Decision Discovery from `.systems/ai/core/owner-decision-checkpoints.md`. In Human Coop ask at most 1-3 material questions with recommendation and impacts; Auto chooses covered reversible options and queues owner-only decisions.
 - If a command conflicts with workflow safety, stop. Do not reinterpret it as approval to bypass safeguards.
 
 ## Clarification Format

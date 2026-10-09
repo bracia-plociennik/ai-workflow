@@ -33,7 +33,7 @@ Every applicable plan contains this block before implementation readiness is dec
 
 ## Delivery Constraint Integration
 
-Implementation-capable plans must use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox or a bounded owner opt-out. The plan must identify must-have outcome, cutline, deferred scope, quality floor, and overrun route. A read-only plan may mark delivery constraints `not-applicable` only with a reason. Delivery pressure never satisfies the DoD or bypasses QA, risk, permissions, approvals, or evidence.
+Implementation-capable plans must use `.systems/ai/core/delivery-constraints.md` and record a deadline/timebox, bounded owner opt-out or `auto-unbounded` for new Auto work with no supplied limit. The plan must identify must-have outcome, cutline, deferred scope, quality floor, and overrun route. A read-only plan may mark delivery constraints `not-applicable` only with a reason. Delivery pressure never satisfies the DoD or bypasses QA, risk, permissions, approvals, or evidence.
 
 ## Route Selection
 

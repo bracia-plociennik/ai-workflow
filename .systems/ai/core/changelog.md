@@ -5,6 +5,21 @@
 - Permit audited workspace snapshots only on official dev, with staged-blob hashes and branch/installation/PR guards.
 - Keep main code-only and its workspace ignore rule; publish runtime and dev-only ignore changes separately.
 - Run full source CI on main/dev with an empty validation workspace; verify publication integrity separately without converting historical evidence into current QA PASS.
+## 2026-10-08 - Execution Modes Compatibility
+
+- Add source-bound contract 1 capability metadata with closed source/mapping coverage.
+- Add schema 2 per-unit stable-cause recovery, unique attempts and persisted stricter retry budgets.
+- Preserve legacy schema 1 inspection without new recovery attestation.
+- Verify candidate protocols against a frozen actual AI System adapter in an isolated synthetic installation; no rollout or native behavior claim.
+
+## 2026-10-08 - Execution Modes V1
+
+- Default new work to Auto; explicit Human Coop is task-local unless scoped wider.
+- Preserve mode on resume, scope-bound plan approvals and legacy non-retroactivity.
+- Block pending-decision units and dependents; permit only verified independent continuation.
+- Remove implicit new-run timebox, retain retry/no-progress limits and actual QA.
+- Add an inspection-only readiness projection, offline boundary regressions and supporting policy validator.
+- Preserve explicit final-check route, separate final-owner-yes and phase commit/push boundaries.
 
 ## 2026-10-04 - Read-only parallel compatibility adaptation
 - Add a closed contract-1 inspector for source/identity, global worker/reviewer

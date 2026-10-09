@@ -1,4 +1,6 @@
 # Parallel Task Orchestration V1
+
+Execution modes under execution-modes.md are inherited by workers from one coordinator. A queued decision blocks affected units, dependents and shared reservations; verified independent units may continue. Check whether existing owner approval covers named high-risk Quality assessment; verify its actual scope at the gate without repeating approval requests.
 For AI System contract-1 adaptation, use `parallel-compatibility.md` and the
 read-only `inspect-parallel-compatibility` interface. Inspection never establishes
 native support, dispatch readiness, local acceptance or a second resource pool.

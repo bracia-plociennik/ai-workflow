@@ -47,13 +47,24 @@ current:
   last-stable-pass: null
   next-transition: null
 
+execution:
+  mode: auto # auto | human-coop; independent of autopilot.mode
+  scope: task # task | project | session
+  scope-id: <owner-approved-scope-id>
+  source: <explicit-choice-or-new-work-default>
+  approval-reference: <actual-owner-scope-reference>
+  readiness-projection: <optional-execution-readiness-json-path-or-none>
+  completed-units: []
+  blocked-units: []
+  pending-decisions: []
+
 retry-counts:
   spec-qa-for-current-task: 0
   quality-for-current-task: 0
   total-for-run: 0
 
 budget:
-  max-runtime-minutes: 300
+  max-runtime-minutes: null # no implicit timebox; preserve explicit/legacy limits on resume
   max-spec-retries-per-task: 2
   max-quality-retries-per-task: 2
   max-total-retries: 32
@@ -72,6 +83,10 @@ progress:
 blockers: []
 
 recovery:
+  projection-schema: 2
+  attempts: [] # attempt_id, unit_id, stable cause_id, progress_evidence SHA-256 or null
+  stalled-units: [] # excludes dependents/shared reservations; meaningful progress must be verified
+  history-source: <current-persisted-attempts-and-retry-counts>
   last-recovery-check-at: null
   last-recovery-result: null
 ```

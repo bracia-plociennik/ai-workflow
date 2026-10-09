@@ -1,6 +1,10 @@
 {
   "schema_version": 1,
   "checks": {
+    "check-execution-modes": {
+      "dependencies": [],
+      "scope": "framework"
+    },
     "check-phase-commit-policy": {
       "dependencies": [],
       "scope": "framework"

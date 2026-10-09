@@ -11,6 +11,12 @@ Every decision made during spec, implementation, QA, fix loop, distillation, che
   phase: null
   classification: auto-resolvable # auto-resolvable | owner-preference | high-impact | critical-risk | blocked-by-missing-facts
   status: chosen # chosen | awaiting-owner | superseded
+  disposition: agent-choice # pending | agent-choice | owner-approved
+  execution-mode: <auto|human-coop>
+  affected-units: []
+  blocking-reason: null
+  approval-reference: null
+  assumption: null
   chosen: recommendation # recommendation | alternative | none
   recommendation: null
   recommendation-impact: null

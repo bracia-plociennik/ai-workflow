@@ -1,6 +1,7 @@
 # commands.md
 
 Official dev workspace publication: run `.systems/scripts/check-workspace-publication` against the staged index, or add `--ref HEAD` for the committed snapshot. `check-branch-policy` permits only actual official dev or verified detached CI targeting dev; main/other branches and nested installations remain forbidden. CI full source verification uses a separate empty `AI_WORKFLOW_WORKSPACE_HOME`; it does not attest current runtime QA. Use `/tmp` for validation output.
+Execution Modes: use check-execution-modes for contract/capability validation and check-execution-modes --state <execution-readiness.json> for pure declared readiness inspection. Schema 2 adds persisted stable-cause recovery and stricter retry budgets; schema 1 remains legacy-unverified. Source-bound capability is support metadata, not approval or installed counterpart compatibility. See execution-modes.md; the inspector neither dispatches workers nor verifies actual approval/resource evidence.
 Read-only cross-system inspection: `.systems/scripts/inspect-parallel-compatibility
 --workflow PATH --repo PATH --run FILE --mapping FILE`. See
 `parallel-compatibility.md` and `compatibility.template.json`. Exit0 means static

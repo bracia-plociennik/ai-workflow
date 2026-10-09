@@ -1,5 +1,7 @@
 # implementation-slicing.md
 
+Resolve execution-modes.md before writes. Record testable DoD from clear accepted intent; if ambiguous, block dependent writes. Record the runnable subset and pending/blocked units. Auto completes applicable QA/fix loops; slices never weaken permissions or acceptance criteria.
+
 For eligible reversible bounded defects, `.systems/ai/core/execution-efficiency.md` permits one compact work record in existing project/workflow-maintenance mode. Slice scope, DoD, known consumers, regression evidence, approvals and semantic QA still apply; this does not bypass an active formal phase path or create a medium-risk micro-work exemption.
 
 ## Purpose

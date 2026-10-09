@@ -1,5 +1,7 @@
 # task-intake.md
 
+Resolve execution-modes.md before decision discovery: new work defaults to Auto, explicit Human Coop is task-local unless wider. Derive testable DoD from clear intent; fundamental ambiguity blocks dependent writes. Auto records absent deadline/timebox as auto-unbounded without questioning.
+
 ## Purpose
 
 For a candidate tiny implementation, check narrow micro-exempt criteria in delivery-constraints.md before separate delivery questions or capture state. Reclassify growth; retain compact DoD, slice plan, permission, focused QA and disclosed evidence.
@@ -90,7 +92,7 @@ After validation and before presenting a dependent plan or starting execution, u
 
 - Inspect repository and accepted artifacts before asking.
 - Classify remaining choices as `auto-resolvable`, `owner-preference`, `high-impact`, `critical-risk`, or `blocked-by-missing-facts`.
-- Ask at most 1-3 material questions that block the nearest safe next step.
+- Human Coop asks at most 1-3 material questions that block the nearest safe next step; Auto queues uncovered owner decisions.
 - Put the recommendation first and state impact for every option.
 - Report safe reversible decisions that were auto-resolved.
 - If no material decision exists, continue and report `No owner decision needed`.

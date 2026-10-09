@@ -25,6 +25,7 @@ class SmokeInterrupted(Exception):
 # It is validated below; an unconnected descriptive comment is not coverage.
 COVERAGE_INDEX = {
     "dev-workspace-publication": ("branch-policy-dev-publication-regressions", "branch-policy.py"),
+    "execution-modes": ("execution-modes-valid", "check-execution-modes"),
     "execution-efficiency": ("execution-efficiency-behavioral", "execution-efficiency.py"),
     "contract-compliance": ("contract-compliance-requires-side-task-mode", "check-contract-compliance"),
     "cross-system-upgrade-handoff": ("cross-system-upgrade-handoff-valid", "check-cross-system-upgrade-handoff"),

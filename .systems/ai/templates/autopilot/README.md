@@ -1,5 +1,7 @@
 # Autopilot Templates
 
+Interaction modes are resolved under execution-modes.md for approved ranges. execution-readiness.template.json is an optional inspection projection for check-execution-modes --state; metadata is not verified authority. Run state persists execution independently of autopilot.mode.
+
 Templates for project-local autopilot run artifacts and gate artifacts.
 
 Suggested destinations:

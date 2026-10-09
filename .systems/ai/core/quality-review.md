@@ -1,5 +1,7 @@
 # quality-review.md
 
+Under execution-modes.md, review the approved scope, actual runnable subset, queued decisions and deferred/unverified work. Incomplete DoD cannot yield completed or a task-wide PASS. Do not infer approval from a mode or inspector result. Human Coop and Auto keep the same findings-first depth.
+
 Efficiency evidence follows `.systems/ai/core/execution-efficiency.md`. Reused script results are not fresh semantic review. Audit authenticated bindings, applicable consumers, failure paths, immutable historical records and technical-versus-owner closure before a clean verdict.
 
 ## Purpose

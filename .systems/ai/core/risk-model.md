@@ -34,6 +34,7 @@ High:
 
 - decision artifact;
 - human approval before implementation;
+- an accepted concrete plan may cover its named local implementation and formal Phase 5 assessment under execution-modes.md; retain the approval reference and recheck actual coverage instead of repeating permission requests;
 - rollback or safety notes when applicable.
 
 Critical:

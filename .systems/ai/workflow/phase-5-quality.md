@@ -37,6 +37,7 @@
 
 - Codex may mark low-risk and medium-risk gates as `PASS` when evidence is complete and policy gates are satisfied.
 - The human owner must approve high-risk, critical-risk, and final closure gates as defined in `.systems/ai/core/risk-model.md`.
+- For high-risk local work, verify an existing explicit plan approval that covers this formal assessment under execution-modes.md. Do not request it again; actual evidence still determines PASS/FAIL. Critical-risk and final owner acceptance keep their separate gates.
 
 ### Evidence required
 
