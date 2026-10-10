@@ -10,7 +10,11 @@ Use `check-distillation-state` for canonical repo/project inventory and contract
 
 Capture consumers share `lib/capture-record.py`: historical schema1 integrity
 does not require or supply current implementation QA; schema2 ready/completed
-retains strict current QA/identity/HEAD and explicit derived-state checks. Pending
+retains strict current QA/identity/HEAD and explicit derived-state checks. An
+explicitly registered immutable historical V2 assessment permits provenance-only
+inventory as verified-historical, with original bound source integrity and accepted
+distillation checks; it cannot satisfy any current parent or source acceptance gate.
+Unregistered stale QA and historical V3 remain invalid. Pending
 quality may omit a QA reference and ready may omit distillation. Completed needs
 an accepted owned distillation. Collection-wide duplicate/invalid-claim checks
 apply before parent completion or checkpoint eligibility.

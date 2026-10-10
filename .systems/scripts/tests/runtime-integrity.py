@@ -216,7 +216,7 @@ class RuntimeTests(unittest.TestCase):
         file = self.state('ready', '1')
         self.assertFalse(self.capture_parity()['invalid'])
 
-    def test_capture_schema2_real_current_qa_and_negative_parity(self):
+    def current_capture_fixture(self):
         self.capture_paths()
         file = self.state('ready', '2')
         (self.owner / 'quality').mkdir()
@@ -266,6 +266,59 @@ class RuntimeTests(unittest.TestCase):
         producer.publish(report, body)
         file.write_text(file.read_text().replace('quality.md', 'quality/' + report.name))
         valid = file.read_text()
+        return file, report, body, valid
+
+    def admit_capture_history(self, report):
+        metadata, _ = load('qa-evidence').read_current(report.read_text().splitlines())
+        relative = report.relative_to(self.owner).as_posix()
+        (self.owner / 'decisions').mkdir(exist_ok=True)
+        decision = self.owner / 'decisions/history.md'
+        decision.write_text('- History decision: approved\n- Approved report: ' + relative +
+                            '\n- Approved state: historical\n- Source: synthetic owner preservation')
+        registry = {'schema': 1, 'assessments': [{'path': relative,
+                    'sha256': hashlib.sha256(report.read_bytes()).hexdigest(), 'state': 'historical',
+                    'assessed_head': metadata['Assessed source HEAD'], 'decision': 'decisions/history.md',
+                    'decision_sha256': hashlib.sha256(decision.read_bytes()).hexdigest()}]}
+        (self.owner / 'quality-assessments.json').write_text(json.dumps(registry))
+
+    def test_capture_admitted_history_is_not_current_parent_acceptance(self):
+        file, report, body, valid = self.current_capture_fixture()
+        completed = valid.replace('State: ready', 'State: completed').replace(
+            'derived value: false', 'derived value: true').replace(
+            'Distillation artifact: none', 'Distillation artifact: distillations/work.md')
+        file.write_text(completed)
+        git(self.repo, 'commit', '--allow-empty', '-qm', 'changed source baseline')
+        self.assertTrue(self.capture_parity()['invalid'])
+        self.admit_capture_history(report)
+        result = self.capture_parity()
+        self.assertFalse(result['invalid'])
+        self.assertEqual(result['records'][0]['quality_verification'], 'verified-historical')
+        self.assertTrue(result['records'][0]['is_distilled'])
+        self.assertEqual(result['unresolved'], 0)
+        self.assertEqual(file.read_text(), completed)
+        self.assertEqual(report.read_text(), body)
+        with self.assertRaisesRegex(ValueError, 'historical assessment cannot supply current PASS'):
+            load('parallel-orchestration').check_parent_gate(
+                self.owner, {'repository_root': str(self.repo)}, 'WORK-001',
+                'quality/' + report.name, 'capture-state/work.md')
+
+    def test_capture_historical_original_source_qa_and_decision_integrity(self):
+        file, report, body, valid = self.current_capture_fixture()
+        self.admit_capture_history(report)
+        self.assertFalse(self.capture_parity()['invalid'])
+        source = self.owner / 'source.md'
+        source.write_text('changed historical source')
+        self.assertTrue(self.capture_parity()['invalid'])
+        source.write_text('accepted synthetic source')
+        report.write_text(body + '\nchanged')
+        self.assertTrue(self.capture_parity()['invalid'])
+        report.write_text(body)
+        decision = self.owner / 'decisions/history.md'
+        decision.write_text(decision.read_text() + '\nchanged')
+        self.assertTrue(self.capture_parity()['invalid'])
+
+    def test_capture_schema2_real_current_qa_and_negative_parity(self):
+        file, report, body, valid = self.current_capture_fixture()
         self.assertEqual(self.capture_parity()['records'][0]['quality_verification'], 'verified-current')
         for mutation in ('derived', 'identity', 'head', 'hash', 'gate', 'kind', 'unbound-source'):
             with self.subTest(mutation=mutation):
