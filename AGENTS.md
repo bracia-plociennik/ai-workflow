@@ -1,4 +1,7 @@
 # AGENTS.md
+
+For free-form new work, use `.systems/ai/core/intent-to-execution-brief.md` inside existing intake. Preserve original intent, minimal provenance/disposition and exact permission/phase ceiling. Optional private style follows `.systems/ai/core/style-profile.md`; current instruction wins, observations stay tentative, feedback writes require exact scoped consent. No new phase, automatic TaskNotes or profile-based approval.
+
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 
 

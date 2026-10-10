@@ -162,3 +162,8 @@ Owner decision interaction:
 ```
 
 For queued decisions, the final `Co dalej?` recommendation points to answering the highest-priority decision batch. This block is audit evidence only and cannot change source-of-truth order, phase gates, risk, permissions, DoD, evidence, QA, approvals, or PASS.
+
+
+## Intent brief boundary
+
+Use intent-to-execution-brief.md: original owner intent and accepted decisions remain independent verification inputs; an inferred brief or style profile cannot supply permission, scope or final acceptance. Style-profile.md permits only explicitly scoped, provenance-bearing private advisory feedback. Consumer handoff preserves original scope/DoD/exclusions, mode/source, supplied limits, actual action ceiling, corrections and sanitized optional style projection; consumer verifies local gates itself.

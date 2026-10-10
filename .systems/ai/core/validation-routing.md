@@ -60,3 +60,8 @@ Validation Execution Record
 ## Authority Boundary
 
 Validation routing does not weaken DoD, PASS Integrity, findings-first review, risk, permissions, owner approvals, phase gates, or required evidence. A skipped inapplicable workflow script is not a skipped product check.
+
+
+## Intent brief supporting checks
+
+check-intent-to-execution-brief runs in standard/full and declared scoped dependency closure. It validates candidate profile syntax/live bytes and synthetic state/source regression tests only; candidate-live-only has authority none and capability_verified false. Exact accepted installation support needs the separate pure verifier with externally verified --expected-head, committed tree/index/live comparison, valid execution-mode capability and actual native/semantic Quality. CI/scripts never launch model APIs or export private sources; real native B01–B25 tests are a separately approved isolated evidence route. No script PASS substitutes for source/model/owner proof.

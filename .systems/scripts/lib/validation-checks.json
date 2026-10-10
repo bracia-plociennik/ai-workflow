@@ -188,6 +188,12 @@
     "check-validator-smoke-tests": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-intent-to-execution-brief": {
+      "dependencies": [
+        "check-execution-modes"
+      ],
+      "scope": "framework"
     }
   },
   "runtime_required": [
