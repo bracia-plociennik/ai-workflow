@@ -86,6 +86,10 @@ old owner-approval provenance against its exact registered historical passing fi
 decision and hashes, and reports current_gate_eligible false. Direct current owner
 approval still requires a current passing final with approved target inputs.
 Historical approval integrity never grants renewed acceptance of changed sources.
+Capture inventory also distinguishes verified-historical provenance from
+verified-current quality. It preserves admitted original record bytes and
+checks the exact original bound source and accepted distillation; current
+parent acceptance continues to require verified-current.
 
 ## Schema-Driven Quality Producer
 
