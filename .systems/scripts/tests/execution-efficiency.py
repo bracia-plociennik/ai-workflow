@@ -427,6 +427,91 @@ class EvidenceTests(unittest.TestCase):
         producer.publish(target, document)
         self.assertEqual(qa.owner_approval(target, ROOT, self.workspace, "synthetic")["scope"], "synthetic")
 
+    def register_history(self, report):
+        relative = report.relative_to(self.project).as_posix()
+        decision = self.project / "decisions/history.md"
+        decision.write_text("- History decision: approved\n- Approved report: " + relative +
+                            "\n- Approved state: historical\n- Source: synthetic preservation")
+        metadata, _ = qa.read_current(report.read_text().splitlines())
+        registry = {"schema": 1, "assessments": [{"path": relative, "sha256": eff.file_hash(report),
+                    "state": "historical", "assessed_head": metadata["Assessed source HEAD"],
+                    "decision": "decisions/history.md", "decision_sha256": eff.file_hash(decision)}]}
+        (self.project / "quality-assessments.json").write_text(json.dumps(registry))
+
+    def approval_for(self, final):
+        decision = self.project / "decisions/owner.md"
+        decision.write_text("- Owner decision: final-owner-yes\n- Approved scope: synthetic\n- Source: synthetic test owner")
+        report = self.project / "quality/phase-8-final-owner-approval.md"
+        report.write_text("- Owner approval contract: owner-approval-v1\n- Scope: synthetic\n"
+                          "- Owner decision: final-owner-yes\n- Approval reference: decisions/owner.md\n"
+                          "- Approval SHA-256: " + eff.file_hash(decision) +
+                          "\n- Final check: " + final.relative_to(self.project).as_posix() +
+                          "\n- Final check SHA-256: " + eff.file_hash(final) + "\n")
+        return report
+
+    def test_nested_history_preserves_bytes_and_rejects_current_acceptance(self):
+        output, body = producer.render(supplied_review(), ROOT, self.workspace, "synthetic")
+        nested = output.parent / "cr-001" / output.name
+        nested.parent.mkdir()
+        nested.write_text(body)
+        self.register_history(nested)
+        (self.project / "context.md").unlink()
+        result = qa.assess(nested, ROOT, self.workspace, "synthetic", history_integrity=True)
+        self.assertEqual(result["lifecycle"], "historical")
+        self.assertFalse(result["current_gate_eligible"])
+        self.assertEqual(nested.read_text(), body)
+        with self.assertRaisesRegex(qa.InvalidAssessment, "cannot supply current PASS"):
+            qa.assess(nested, ROOT, self.workspace, "synthetic", require_pass=True)
+        registry_path = self.project / "quality-assessments.json"
+        registry = json.loads(registry_path.read_text())
+        foreign = self.project / "context-report.md"
+        foreign.write_text(body)
+        registry["assessments"][0]["path"] = "context-report.md"
+        registry_path.write_text(json.dumps(registry))
+        with self.assertRaisesRegex(qa.InvalidAssessment, "owning quality root"):
+            qa.history_entry(foreign, self.project)
+
+    def test_historical_owner_approval_is_provenance_only_and_tamper_checked(self):
+        output, body = producer.render(supplied_review("final-check"), ROOT, self.workspace, "synthetic")
+        nested = output.parent / "cr-001" / output.name
+        nested.parent.mkdir()
+        nested.write_text(body)
+        approval = self.approval_for(nested)
+        self.register_history(nested)
+        (self.project / "context.md").unlink()
+        result = qa.owner_approval(approval, ROOT, self.workspace, "synthetic", history_integrity=True)
+        self.assertEqual(result["lifecycle"], "historical")
+        self.assertFalse(result["current_gate_eligible"])
+        with self.assertRaisesRegex(qa.InvalidAssessment, "cannot supply current PASS"):
+            qa.owner_approval(approval, ROOT, self.workspace, "synthetic")
+        command = [sys.executable, str(ROOT / ".systems/scripts/lib/qa-evidence.py"), str(approval),
+                   "--workflow-root", str(ROOT), "--workspace-root", str(self.workspace),
+                   "--project", "synthetic", "--owner-approval", "--history-integrity", "--require-pass"]
+        result = subprocess.run(command, capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("cannot supply current PASS", result.stderr)
+        nested.write_text(body + "\nchanged")
+        with self.assertRaisesRegex(qa.InvalidAssessment, "final check integrity mismatch"):
+            qa.owner_approval(approval, ROOT, self.workspace, "synthetic", history_integrity=True)
+
+    def test_current_owner_approval_verifies_real_approved_target_inputs(self):
+        import re
+        output, body = producer.render(supplied_review("final-check"), ROOT, self.workspace, "synthetic")
+        target = self.root / "target"
+        target.mkdir()
+        source = target / "target.md"
+        source.write_bytes((self.project / "context.md").read_bytes())
+        body = body.replace("| owning-project-evidence | context.md |", "| approved-target-source | target.md |")
+        digest = hashlib.sha256(("approved-target-source:target.md=" + eff.file_hash(source) + "\n").encode()).hexdigest()
+        body = re.sub(r"(?m)^- Assessed worktree digest: .+$", "- Assessed worktree digest: " + digest, body)
+        producer.publish(output, body)
+        approval = self.approval_for(output)
+        result = qa.owner_approval(approval, ROOT, self.workspace, "synthetic", target_root=target)
+        self.assertTrue(result["current_gate_eligible"])
+        source.write_text("changed target")
+        with self.assertRaisesRegex(qa.InvalidAssessment, "stale or mismatched"):
+            qa.owner_approval(approval, ROOT, self.workspace, "synthetic", target_root=target)
+
     def test_source_receipt_requires_all_checks_and_same_environment(self):
         key = self.root / "key"
         key.write_bytes(self.key)

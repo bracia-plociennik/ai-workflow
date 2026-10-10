@@ -430,7 +430,7 @@ def report_kind_and_identity(report, project):
     raise InvalidAssessment("V2 report filename does not identify a formal QA phase")
 
 
-def owner_approval(report, workflow, workspace, project, document=None):
+def owner_approval(report, workflow, workspace, project, document=None, target_root=None, history_integrity=False):
     if report.is_symlink() or any(parent.is_symlink() for parent in report.parents if parent != Path("/")):
         raise InvalidAssessment("linked owner approval report")
     owner = workspace.resolve(strict=True) / "projects" / project
@@ -453,8 +453,13 @@ def owner_approval(report, workflow, workspace, project, document=None):
     decision = section_fields(approval.read_text().splitlines())
     require_values(decision, {"Owner decision": {"final-owner-yes"}, "Approved scope": {project},
                              "Source": None}, "Explicit owner decision")
-    assess(final, workflow, workspace, project, expected_kind="final-check", require_pass=True)
-    return {"owner_decision": "final-owner-yes", "scope": project, "reference": values["Approval reference"]}
+    assessment = assess(final, workflow, workspace, project, target_root,
+                        expected_kind="final-check", require_pass=not history_integrity,
+                        history_integrity=history_integrity)
+    if assessment["verdict"] != "PASS":
+        raise InvalidAssessment("owner approval requires a passing final check")
+    return {"owner_decision": "final-owner-yes", "scope": project, "reference": values["Approval reference"],
+            "lifecycle": assessment["lifecycle"], "current_gate_eligible": assessment["current_gate_eligible"]}
 
 
 def history_entry(report, owner_project_root):
@@ -482,7 +487,7 @@ def history_entry(report, owner_project_root):
             raise InvalidAssessment("invalid or duplicate historical assessment")
         seen.add(entry["path"])
         original = contained(owner_project_root, entry["path"])
-        if original.parent != owner_project_root / "quality":
+        if not original.is_relative_to((owner_project_root / "quality").resolve(strict=True)):
             raise InvalidAssessment("historical report must stay in owning quality root")
         decision = contained(owner_project_root, entry["decision"])
         if not entry["decision"].startswith("decisions/") or not decision.read_text().strip():
@@ -654,7 +659,11 @@ def main():
         parser.error("unsafe project slug")
     try:
         if args.owner_approval:
-            print(json.dumps(owner_approval(args.report, args.workflow_root, args.workspace_root, args.project), sort_keys=True))
+            if args.history_integrity and args.require_pass:
+                raise InvalidAssessment("historical owner approval cannot supply current PASS")
+            print(json.dumps(owner_approval(args.report, args.workflow_root, args.workspace_root, args.project,
+                                           target_root=args.approved_target_root,
+                                           history_integrity=args.history_integrity), sort_keys=True))
             return 0
         result = assess(
             args.report,

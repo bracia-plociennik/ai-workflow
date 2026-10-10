@@ -203,7 +203,7 @@ validate_evidence_file() {
     local owner_project
     owner_project="${file#"$workspace_home"/projects/}"
     owner_project="${owner_project%%/*}"
-    if ! python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$owner_project" --owner-approval; then
+    if ! python3 "$script_dir/lib/qa-evidence.py" "$file" --workflow-root "$repo_root" --workspace-root "$workspace_home" --project "$owner_project" --owner-approval --history-integrity "${qa_target_args[@]}"; then
       reject_pass_file "$file" 'invalid explicit owner approval provenance'
     fi
     return
