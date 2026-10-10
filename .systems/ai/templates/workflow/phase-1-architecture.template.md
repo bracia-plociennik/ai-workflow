@@ -149,3 +149,15 @@
 - Privacy/scope check: `<pass|fail|n/a>`
 - Suggested entry title:
 - Suggested entry summary:
+
+
+## Intent Brief (when material)
+
+- Original owner instruction / accepted decisions reference:
+- Outcome/output, target, must-have/exclusions, testable DoD:
+- Material field provenance + disposition + source:
+- Mode/source/scope, supplied limits, actual allowed actions/stop phase:
+- Assumptions, pending decisions/dependencies and correction impact:
+- Optional active style revision/source (advisory only; current instruction wins):
+
+Use existing inline/context/task evidence for a tiny clear request, not another mandatory file. No inferred approval/deadline or automatic feedback write.
