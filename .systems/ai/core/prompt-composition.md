@@ -1,5 +1,10 @@
 # prompt-composition.md
 
+## Intent brief and private style context
+
+Use intent-to-execution-brief.md during existing intake: minimal inline/embedded fields with provenance and disposition; preserve original request/accepted decisions as independent QA anchors. Batch triage and current action/phase ceilings remain first. This adds no phase or approval. Use style-profile.md for optional explicitly enabled local style; recording needs actual exact-target consent and minimal provenance/privacy, observations stay tentative and current instruction overrides profile. Invalid/disabled profile supplies no preferences. Auto chooses only covered reversible options and queues protected owner decisions; Human groups material questions, settled answers not repeated and noninteractive routes stay so.
+
+
 ## Purpose
 
 This file defines how AI Workflow may use prompt modules, role profiles, variable packs, and generated prompting artifacts.
@@ -196,7 +201,7 @@ Every variable pack must identify:
 
 The agent may infer a variable only when the source is approved or evidence-backed, the inference is low risk, and an incorrect value would not change scope, risk, acceptance criteria, user-facing commitments, external effects, or implementation permissions.
 
-The agent must ask the owner instead of inferring when:
+For choices outside covered reversible scope, Human Coop asks and Auto queues the exact owner decision instead of inferring when:
 
 - the value affects scope, architecture, accepted behavior, risk class, permissions, external effects, data handling, security, billing, migrations, production behavior, or final acceptance;
 - evidence is conflicting or low confidence;

@@ -1891,3 +1891,8 @@ Przed startem pracy:
 - Wiesz, co ma zatrzymać autopilota.
 
 Jeśli którykolwiek punkt jest niejasny, poproś Codexa o preflight/reconciliation zamiast startować implementację.
+
+
+## Intent brief and local style
+
+Free-form requests are interpreted inside existing intake, preserving goal, explicit exclusions and authorization. Auto resolves covered choices; Human asks grouped material questions. Optional local schema1 style profile learns only under scoped owner opt-in from explicit corrections and marked tentative observations, preserves revisions/provenance and supports correction/disable. Current instructions always win; no raw conversation ingestion or new permission. See `.systems/ai/core/intent-to-execution-brief.md` and `.systems/ai/core/style-profile.md`.

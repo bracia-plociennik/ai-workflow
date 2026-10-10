@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd "$(dirname "$0")/../.." && pwd -P)"
+if [[ "$#" != 0 ]]; then
+  exec python3 -B "$root/.systems/scripts/lib/intent-brief.py" "$@"
+fi
+cd "$root"
+python3 -B - <<'PY'
+import runpy
+from pathlib import Path
+module=runpy.run_path('.systems/scripts/lib/intent-brief.py')
+print(module['candidate'](Path.cwd(), Path('.systems/ai/capabilities/intent-to-execution-brief-v1.json')))
+PY
+python3 -B .systems/scripts/tests/style-profile.py
+python3 -B .systems/scripts/tests/intent-to-execution-brief.py
