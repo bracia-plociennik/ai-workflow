@@ -1,4 +1,5 @@
 """Shared capture semantics; callers select populations and provide trusted adapters."""
+import hashlib
 import re
 
 
@@ -86,17 +87,23 @@ def record(file, workspace, owner, workflow, repo, project, scope, qa):
             raise ValueError('mixed capture/QA wire versions')
         if project and ('full-qa-verification-v2' in quality_text or v3):
             try:
+                historical = version == '2' and qa.history_entry(sources['Quality artifact'], owner) is not None
                 assessed = qa.assess(sources['Quality artifact'], workflow, workspace, project, repo,
-                                     'implementation-quality', project + ':' + values['Work ID'], require_pass=True)
-                if not assessed.get('source_equivalence_verified') and assessed['assessed_source_head'] != scope.git(repo, 'rev-parse', 'HEAD').decode().strip():
+                                     'implementation-quality', project + ':' + values['Work ID'],
+                                     require_pass=not historical, history_integrity=historical)
+                if assessed['verdict'] != 'PASS':
+                    raise ValueError('capture requires passing QA')
+                if not historical and not assessed.get('source_equivalence_verified') and assessed['assessed_source_head'] != scope.git(repo, 'rev-parse', 'HEAD').decode().strip():
                     raise ValueError('capture QA HEAD is stale')
                 _, sections = qa.read_current(sources['Quality artifact'].read_text().splitlines())
-                bound_sources = {scope.contained(owner, relative) for kind, relative, checksum in
-                                 qa.input_rows(sections['Input Artifacts'])
-                                 if kind == 'owning-project-evidence'}
+                bound_sources = {scope.contained(owner, relative): checksum for kind, relative, checksum in
+                                 qa.input_rows(sections['Input Artifacts']) if kind == 'owning-project-evidence'
+                                 and relative == values['Source artifact']}
                 if sources['Source artifact'] not in bound_sources:
                     raise ValueError('capture source is not bound to current QA')
-                verification = 'verified-current'
+                if historical and hashlib.sha256(sources['Source artifact'].read_bytes()).hexdigest() != bound_sources[sources['Source artifact']]:
+                    raise ValueError('historical capture source integrity mismatch')
+                verification = 'verified-historical' if historical else 'verified-current'
             except (ValueError, OSError):
                 if version in {'2', '3'}:
                     raise ValueError('capture current QA invalid')

@@ -80,6 +80,17 @@ Historical integrity validation checks the original schema/input digest without
 requiring historical source hashes to match live files. Direct current/status
 PASS consumers reject registered history.
 
+Reports may remain in owning quality subdirectories, including historical change
+request scopes; admission never relocates them. Whole-history QA validation checks
+old owner-approval provenance against its exact registered historical passing final,
+decision and hashes, and reports current_gate_eligible false. Direct current owner
+approval still requires a current passing final with approved target inputs.
+Historical approval integrity never grants renewed acceptance of changed sources.
+Capture inventory also distinguishes verified-historical provenance from
+verified-current quality. It preserves admitted original record bytes and
+checks the exact original bound source and accepted distillation; current
+parent acceptance continues to require verified-current.
+
 ## Schema-Driven Quality Producer
 
 prepare-quality-record renders supplied reviewer sections and input references
