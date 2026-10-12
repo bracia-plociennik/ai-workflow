@@ -227,3 +227,8 @@ Formal `PASS` or `FAIL` is allowed only inside formal QA/Quality phases, includi
 ## Intent brief boundary
 
 Use intent-to-execution-brief.md: original owner intent and accepted decisions remain independent verification inputs; an inferred brief or style profile cannot supply permission, scope or final acceptance. Style-profile.md permits only explicitly scoped, provenance-bearing private advisory feedback. Consumer handoff preserves original scope/DoD/exclusions, mode/source, supplied limits, actual action ceiling, corrections and sanitized optional style projection; consumer verifies local gates itself.
+
+
+## Goal-Focused Maintenance Integration
+
+Activated goal-focused-maintenance.md separates incident notification from task verdict. Review actual current goal, dependency closure and evidence of independence; unknown impact cannot get a silent-safe label. Current correctness/verification defects are E04 and invalidate Quality as before. Independent historical debt may be recorded privately below thresholds, but never omit an in-scope finding or claim a skipped required check passed. Review raw errors truthfully in evidence without unsolicited owner debt narration.

@@ -50,3 +50,8 @@ Knowledge Capture Reminder from `.systems/ai/core/knowledge-capture-reminder.md`
 Mark `FAIL` when any required criterion is missing, unverified, contradicted by repository state, or blocked by an unresolved decision.
 
 Warnings do not override missing DoD, missing evidence, or failing checks.
+
+
+## Goal-Focused Maintenance Integration
+
+goal-focused-maintenance.md cannot defer a current DoD, required test, approval, Spec/Quality/Capture proof or full release/updater failure into PASS. Independently evidenced unrelated history may be kept outside current-goal selection without changing the full audit result. Required consumer/dependency closure is assessed live before selecting; unknown, duplicate, shared, foreign or alias claims stay blocking.

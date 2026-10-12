@@ -249,6 +249,87 @@ class PolicyTests(unittest.TestCase):
         q = self.observed(); q['issues'][0]['source_refs'] = [str(self.owner / 'missing')]
         self.assertRaises(m.Invalid, m.validate_queue, q, str(self.owner))
 
+class CanonicalGoalTests(unittest.TestCase):
+    def setUp(self):
+        import subprocess,hashlib
+        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name); self.repo = self.root / 'repo'; self.repo.mkdir()
+        subprocess.run(['git','init','-q',str(self.repo)],check=True)
+        for name in ('current.py', 'old.py'):
+            (self.repo/name).write_text('# synthetic product input\n')
+        subprocess.run(['git','-C',str(self.repo),'add','.'],check=True)
+        subprocess.run(['git','-C',str(self.repo),'-c','user.name=Synthetic','-c','user.email=fixture@example.invalid','commit','-qm','fixture'],check=True)
+        self.head = subprocess.check_output(['git','-C',str(self.repo),'rev-parse','HEAD'],text=True).strip()
+        self.workspace = self.root/'workspace';self.project='fixture';self.owner=self.workspace/'projects/fixture'
+        self.ns=self.owner/'capture-state';self.ns.mkdir(parents=True)
+        (self.owner/'quality').mkdir()
+        s=importlib.util.spec_from_file_location('canonical_capture', HERE/'capture-state.py')
+        self.c=importlib.util.module_from_spec(s);sys.modules[s.name]=self.c;s.loader.exec_module(self.c)
+        self.current = self.make('CUR-NOW-001-work','current.py')
+        self.old = self.make('HIS-OLD-001-work','old.py', stale=True)
+
+    def make(self, task, source, stale=False):
+        import hashlib,re
+        lower=task.lower();src=f'source-{lower}.md';(self.owner/src).write_text('synthetic implementation\n')
+        template=(HERE.parents[1]/'ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md').read_text()
+        rows=[('owning-project-evidence',src,hashlib.sha256((self.owner/src).read_bytes()).hexdigest()),
+              ('approved-target-source',source,hashlib.sha256((self.repo/source).read_bytes()).hexdigest())]
+        digest=hashlib.sha256(''.join(sorted(f'{k}:{p}={h}\n' for k,p,h in rows)).encode()).hexdigest()
+        text=template.replace('EXAMPLE:EX-01',self.project+':'+task).replace('Run ID: example-quality-001','Run ID: fixture-'+lower)
+        text=text.replace('Assessed source HEAD: '+'0'*40,'Assessed source HEAD: '+('0'*40 if stale else self.head))
+        text=text.replace('Assessed worktree digest: '+'0'*64,'Assessed worktree digest: '+digest)
+        table='### Input Artifacts\n\n| Root kind | Relative path | SHA-256 |\n| --- | --- | --- |\n'+''.join('| '+' | '.join(r)+' |\n' for r in rows)
+        text=re.sub(r'### Input Artifacts\n.*?(?=\n### Definition)',table,text,flags=re.S)
+        qref=f'quality/phase-5-{lower}-quality.md';(self.owner/qref).write_text(text)
+        fields={'Capture schema':'2','Work ID':task,'Work mode':'full-project','Project/repo scope':self.project,
+                'Source artifact':src,'Quality artifact':qref,'State':'ready','Distillation artifact':'none',
+                'Last reminder':'none','Owner disposition':'capture-now','Privacy/scope check':'pass','Residual risk':'none',
+                'is_distilled derived value':'false'}
+        path=self.ns/(lower+'.md');path.write_text('# Capture\n\n'+''.join('- '+k+': '+v+'\n' for k,v in fields.items()))
+        return path
+
+    def goal(self):
+        return self.c.goal_collection(sorted(self.ns.iterdir()),self.workspace,self.owner,HERE.parents[2],self.repo,self.project,['CUR-NOW-001-work'])
+
+    def test_s12_real_current_consumer_preserves_independent_history_and_full_failure(self):
+        before=self.old.read_bytes(); full=self.c.collection(sorted(self.ns.iterdir()),self.workspace,self.owner,HERE.parents[2],self.repo,self.project)
+        self.assertTrue(full['invalid'])
+        out=self.goal();self.assertEqual(out['gate_result'],'PASS',out);self.assertTrue(out['historical_invalid'])
+        self.assertEqual(self.old.read_bytes(),before);self.assertTrue(out['inventory']['invalid'])
+
+    def test_s13_duplicate_even_invalid_sibling_stays_blocking(self):
+        self.old.write_text(self.old.read_text().replace('Work ID: HIS-OLD-001-work','Work ID: CUR-NOW-001-work'))
+        self.assertEqual(self.goal()['gate_result'],'FAIL')
+
+    def test_unknown_identity_or_alias_stays_blocking(self):
+        self.old.write_text(self.old.read_text().replace('Work ID: HIS-OLD-001-work','Unknown ID: original'))
+        self.assertEqual(self.goal()['gate_result'],'FAIL')
+
+    def test_shared_live_product_dependency_cannot_be_excluded(self):
+        q=self.owner/'quality/phase-5-his-old-001-work-quality.md'
+        q.write_text(q.read_text().replace('approved-target-source | old.py','approved-target-source | current.py'))
+        self.assertEqual(self.goal()['gate_result'],'FAIL')
+
+    def test_s17_required_quality_failure_never_becomes_pass(self):
+        q=self.owner/'quality/phase-5-cur-now-001-work-quality.md'
+        q.write_text(q.read_text().replace('Verdict: PASS','Verdict: FAIL'))
+        self.assertEqual(self.goal()['gate_result'],'FAIL')
+
+    def test_s19_new_dependency_invalidates_old_independence(self):
+        self.assertEqual(self.goal()['gate_result'],'PASS')
+        self.current.write_text(self.current.read_text().replace('Source artifact: source-cur-now-001-work.md','Source artifact: source-his-old-001-work.md'))
+        self.assertEqual(self.goal()['gate_result'],'FAIL')
+
+    def test_unknown_required_work_and_foreign_qa_rejected(self):
+        self.assertRaises(ValueError,self.c.goal_collection,sorted(self.ns.iterdir()),self.workspace,self.owner,HERE.parents[2],self.repo,self.project,[])
+        self.old.write_text(self.old.read_text().replace('Quality artifact: quality/phase-5-his-old-001-work-quality.md','Quality artifact: quality/phase-5-cur-now-001-work-quality.md'))
+        self.assertEqual(self.goal()['gate_result'],'FAIL')
+
+    def test_readonly_goal_gate_keeps_every_input_byte(self):
+        before={str(p):p.read_bytes() for p in self.owner.rglob('*') if p.is_file()}
+        for _ in range(3):self.goal()
+        self.assertEqual(before,{str(p):p.read_bytes() for p in self.owner.rglob('*') if p.is_file()})
+
 
 if __name__ == '__main__':
     unittest.main()

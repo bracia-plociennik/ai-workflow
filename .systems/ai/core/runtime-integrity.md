@@ -58,3 +58,8 @@ Consumer versions that do not support schema 2 must request schema 1 or stop;
 never silently infer a backend from installed metadata. Native verification is
 deferred to a separate approved test with authentic isolation/capacity evidence.
 Serial fallback means ordinary serial work, never unverified native dispatch.
+
+
+## Goal-Focused Maintenance Integration
+
+Under goal-focused-maintenance.md, capture-state.py --project <slug> --goal-work-id <required-id> is an explicit optional current-goal consumer. It first inventories every physical sibling and resolves live QA dependency claims; only demonstrably disjoint historical failures are separated. Unknown/duplicate/shared/foreign claims and incomplete required current Capture remain FAIL. Default inventory remains exhaustive/nonzero on any invalid record. Stored queue flags cannot select proof or grant acceptance.

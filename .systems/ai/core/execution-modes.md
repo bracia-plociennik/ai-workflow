@@ -77,3 +77,8 @@ The chronological list is the authoritative declared attempt order. Unit IDs and
 ## Verification
 
 Use check-execution-modes, synthetic readiness tests, producer-consumer audit and adversarial policy review. Green scripts remain supporting evidence; mode metadata never proves model behavior or interoperability with AI System.
+
+
+## Goal-Focused Maintenance Integration
+
+Auto/Human selection never activates repair authority. Explicit goal-focused-maintenance.md activation binds parent identity, accepted scope/DoD/architecture, current proof and maintenance roots. Related/unrelated low-risk local reversible repairs must still fit actual target approval, known tests, collision checks and the shared 600-second incidental budget. Defer ineligible independent work silently below thresholds; material goal/risk and architecture drift are escalated. Resuming Auto never resets elapsed or occurrence history.

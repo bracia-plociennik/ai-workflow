@@ -87,3 +87,8 @@ Full QA Verification does not grant write permission, change risk, expand scope,
 ## Intent brief boundary
 
 Use intent-to-execution-brief.md: original owner intent and accepted decisions remain independent verification inputs; an inferred brief or style profile cannot supply permission, scope or final acceptance. Style-profile.md permits only explicitly scoped, provenance-bearing private advisory feedback. Consumer handoff preserves original scope/DoD/exclusions, mode/source, supplied limits, actual action ceiling, corrections and sanitized optional style projection; consumer verifies local gates itself.
+
+
+## Goal-Focused Maintenance Integration
+
+Optional goal-focused-maintenance.md current-goal selection is separate from history integrity and notification severity. Live consumers inspect every physical sibling claim before selection; duplicate/shared Work IDs, distillations, aliases, source dependencies, foreign owner and unknown claims remain blocking. Required current QA uses the existing fresh assessment with complete task coverage. selection never rewrites old QA or admits history as current PASS. Full-required release/updater checks still execute and keep their nonzero result.

@@ -430,6 +430,35 @@ def report_kind_and_identity(report, project):
     raise InvalidAssessment("V2 report filename does not identify a formal QA phase")
 
 
+def dependency_refs(report, workflow, workspace, project, target_root):
+    """Physical dependency claims for conservative goal selection, NOT QA PASS.
+
+    Reading historical claims never promotes them. Malformed/unknown claims must
+    stay blocking; callers still assess required current reports normally.
+    """
+    owner = workspace.resolve(strict=True) / 'projects' / project
+    path = contained(owner, str(report.relative_to(owner)))
+    text = path.read_text()
+    version = wire_version(text.splitlines())
+    if version not in {2, 3}:
+        raise InvalidAssessment('unsupported dependency claim wire')
+    meta, sections = read_current(text.splitlines())
+    if not re.fullmatch(re.escape(project) + r':[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)*', meta['Project/task identity']):
+        raise InvalidAssessment('foreign dependency claim identity')
+    roots = {'workflow-source': workflow, 'approved-target-source': target_root,
+             'owning-project-evidence': owner}
+    result = set()
+    seen = set()
+    for kind, relative, checksum in input_rows(sections['Input Artifacts']):
+        if kind not in roots or (kind, relative) in seen or not re.fullmatch(r'[0-9a-f]{64}', checksum):
+            raise InvalidAssessment('unknown/duplicate dependency claim')
+        seen.add((kind, relative))
+        result.add(str(contained(roots[kind].resolve(strict=True), relative)))
+    if not seen:
+        raise InvalidAssessment('missing dependency closure')
+    return sorted(result)
+
+
 def owner_approval(report, workflow, workspace, project, document=None, target_root=None, history_integrity=False):
     if report.is_symlink() or any(parent.is_symlink() for parent in report.parents if parent != Path("/")):
         raise InvalidAssessment("linked owner approval report")

@@ -593,3 +593,62 @@ def load_policy(owner, path):
         return validate_policy(decode(target.read_text()), owner), []
     except (Invalid, OSError, UnicodeError):
         return defaults(), ['invalid-policy: conservative defaults; revision repair required']
+
+
+def select_goal(inventory, claims, owner, required_work_ids):
+    """Conservative selection from live consumer-derived physical claims.
+
+    Full inventory errors remain in output. Required gates cannot call this with
+    an empty goal or a data-supplied exclusion list. This grants no QA authority.
+    """
+    strings(required_work_ids); need(required_work_ids, 'current goal needs required identities')
+    required = set(required_work_ids)
+    indexes = {'work_ids': {}, 'distillation_refs': {}, 'aliases': {}}
+    identities = {}
+    blocked_paths, reasons = set(), []
+    for claim in claims:
+        fields(claim, {'path', 'owner_ref', 'work_ids', 'source_refs', 'distillation_refs', 'aliases', 'complete'})
+        for key in ('work_ids', 'source_refs', 'distillation_refs', 'aliases'):
+            strings(claim[key])
+        need(type(claim['complete']) is bool, 'invalid completeness fact')
+        if claim['owner_ref'] != owner or not claim['complete']:
+            blocked_paths.add(claim['path']); reasons.append({'path': claim['path'], 'reason': 'unknown/foreign dependency claims'})
+        for key, index in indexes.items():
+            for ref in claim[key]:
+                index.setdefault(ref, set()).add(claim['path'])
+        for ref in claim['work_ids'] + claim['aliases']:
+            identities.setdefault(ref, set()).add(claim['path'])
+    for paths in identities.values():
+        if len(paths) > 1:
+            blocked_paths |= paths
+            reasons += [{'path': path, 'reason': 'shared work/alias identity'} for path in sorted(paths)]
+    for key, index in indexes.items():
+        for paths in index.values():
+            if len(paths) > 1:
+                blocked_paths |= paths
+                reasons += [{'path': path, 'reason': 'duplicate/shared ' + key + ' claim'} for path in sorted(paths)]
+    found = set().union(*(set(c['work_ids']) for c in claims)) if claims else set()
+    for missing in sorted(required - found):
+        reasons.append({'path': missing, 'reason': 'missing required work identity'})
+    live = [c for c in claims if required & set(c['work_ids'] + c['aliases'])]
+    refs = set().union(*(set(c['source_refs'] + c['distillation_refs'] + c['aliases']) for c in live)) if live else set()
+    selected = {c['path'] for c in live} | blocked_paths
+    # Transitive closure, not just the first directly required row.
+    while True:
+        previous = set(selected)
+        for claim in claims:
+            if set(claim['source_refs'] + claim['distillation_refs'] + claim['aliases']) & refs:
+                selected.add(claim['path'])
+            if claim['path'] in selected:
+                refs |= set(claim['source_refs'] + claim['distillation_refs'] + claim['aliases'])
+        if selected == previous:
+            break
+    known_paths = {c['path'] for c in claims}
+    for error in inventory['invalid']:
+        if error['path'] not in known_paths:
+            reasons.append({'path': error['path'], 'reason': 'unresolved inventory identity'})
+    invalid = reasons + [e for e in inventory['invalid'] if e['path'] in selected]
+    return {'schema_version': 1, 'scope': 'current-goal', 'required_work_ids': sorted(required),
+            'records': [r for r in inventory['records'] if r['path'] in selected], 'invalid': invalid,
+            'historical_invalid': [e for e in inventory['invalid'] if e['path'] not in selected and e['path'] in known_paths],
+            'inventory': deepcopy(inventory)}
