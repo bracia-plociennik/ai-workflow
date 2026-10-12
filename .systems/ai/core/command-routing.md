@@ -1,5 +1,10 @@
 # command-routing.md
 
+## Intent brief and private style context
+
+Use intent-to-execution-brief.md during existing intake: minimal inline/embedded fields with provenance and disposition; preserve original request/accepted decisions as independent QA anchors. Batch triage and current action/phase ceilings remain first. This adds no phase or approval. Use style-profile.md for optional explicitly enabled local style; recording needs actual exact-target consent and minimal provenance/privacy, observations stay tentative and current instruction overrides profile. Invalid/disabled profile supplies no preferences. Auto chooses only covered reversible options and queues protected owner decisions; Human groups material questions, settled answers not repeated and noninteractive routes stay so.
+
+
 Resolve execution-modes.md for all new work and resume. Auto is default; Human Coop / pracujmy wspólnie / konsultuj decyzje select human-coop. Explicit Auto Mode selects auto. Planning-only stays planning. Pending owner choices exclude affected units and dependents; continue only proven independent ready work. An explicitly requested final check is a separate owner-authorized route after implementation-range, never inferred from Auto.
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 

@@ -329,3 +329,8 @@ From the target repository root, product-specific validation commands are whatev
 ```text
 ai-workflow-workspace/repo/core/repo-intake.md
 ```
+
+
+## Intent brief and local style
+
+Free-form requests are interpreted inside existing intake, preserving goal, explicit exclusions and authorization. Auto resolves covered choices; Human asks grouped material questions. Optional local schema1 style profile learns only under scoped owner opt-in from explicit corrections and marked tentative observations, preserves revisions/provenance and supports correction/disable. Current instructions always win; no raw conversation ingestion or new permission. See `.systems/ai/core/intent-to-execution-brief.md` and `.systems/ai/core/style-profile.md`.
