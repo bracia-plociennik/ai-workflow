@@ -1,6 +1,12 @@
 # Repo Status
 
-### Current Focus: Historical Evidence Publication - 2026-10-12
+### Current Focus: Historical Capture Recovery - 2026-10-12
+
+- Owner-approved: recover exactly 30 QA reports and two historical approval bindings; preserve original bytes, results and final-owner-yes; required QA and scoped dev commit/push, no renewed Phase 8.
+- Owning review: repo/reviews/2026-10-12-historical-capture-recovery.md; supporting history only, never current product acceptance.
+- Earlier publication focus and project acceptance below are historical snapshots. No source, main or counterpart changes.
+
+### Historical Focus: Historical Evidence Publication - 2026-10-12
 
 - Owner-approved scope: synchronize source-only origin/main to dev, preserve local runtime and publication policy, register eight reports as history without rewriting their bytes, results or original final-owner-yes, and publish the reviewed dev snapshot after required QA.
 - Source synchronization commit: b48d873700fee94377af4ae1357f68f4544ffe07; source matches origin/main b5965affde1d670783f86f422f59143deba54e74. Runtime and .gitignore were unchanged by the source merge.

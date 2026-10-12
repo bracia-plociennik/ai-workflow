@@ -1,0 +1,13 @@
+# Distillation State
+- Capture schema: 1
+- Work ID: historical-capture-recovery
+- Work mode: workflow-maintenance
+- Project/repo scope: repo
+- Source artifact: reviews/2026-10-12-historical-capture-recovery.md
+- Quality artifact: reviews/2026-10-12-historical-capture-recovery.md
+- State: not-applicable
+- Distillation artifact: none
+- Last reminder: 2026-10-12
+- Owner disposition: not-requested
+- Privacy/scope check: pass
+- Residual risk: No new reusable product rule was produced; this recovery applies the existing historical lifecycle protocol. Transactional checks and publication evidence are captured in the owning review. No formal Phase 6 or fake completed distillation is claimed. Historical evidence does not establish current product quality; full publication QA remains required.

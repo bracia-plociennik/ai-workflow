@@ -1,5 +1,7 @@
 # Project Status
 
+Historical lifecycle recovery, 2026-10-12: the current router reflects completed owner approval, not a new Phase 8 PASS. Original QA verdicts and final-owner-yes remain unchanged. quality-assessments.json admits exactly the two stale reports as history; evidence/historical-owner-approval-binding.json verifies the archived original approval/final/decision correspondence. This is supporting provenance, never current source acceptance.
+
 | Field | Value |
 | --- | --- |
 | `workflow-requirement` | `optional` |
@@ -7,12 +9,12 @@
 | `active-plan-status` | `closed` |
 | `current-task` | `none` |
 | `active-change-request` | `none` |
-| `current-phase` | `phase-8-final-check` |
-| `phase-result` | `PASS` |
+| `current-phase` | `owner-final-approval` |
+| `phase-result` | `completed` |
 | `next-phase` | `not-applicable` |
 | `next-task` | `none` |
 | `blocking-reason` | `none` |
-| `updated-at` | `2026-10-02` |
+| `updated-at` | `2026-10-12` |
 | `autopilot-mode` | `manual` |
 | `autopilot-state` | `inactive` |
 

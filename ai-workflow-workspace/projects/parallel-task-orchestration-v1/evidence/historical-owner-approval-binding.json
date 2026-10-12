@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "scope": "parallel-task-orchestration-v1",
+  "lifecycle": "historical",
+  "current_gate_eligible": false,
+  "owner_decision": "final-owner-yes",
+  "admission_source": "direct owner-approved historical binding recovery, 2026-10-12; not a new final-owner-yes",
+  "original_approval": "history/2026-10-05-pre-dependency-scope/phase-8-final-owner-approval.md",
+  "original_approval_sha256": "14530d21aa86754cfaefc18138bf5c23ec31e2145ac66303fa79fa3985779e5a",
+  "original_final_check": "history/2026-10-05-pre-dependency-scope/phase-8-final-check.md",
+  "original_final_check_sha256": "63cd8b2afbff2671d9279e140ad7989619180758d6b4280f725763b9dac1cb29",
+  "original_decision": "decisions/pto-final-owner-yes.md",
+  "original_decision_sha256": "d908a8754618f808efb1078cdd9fc16ed4a8d6a87bf4978d304dd3ccf4644f41",
+  "unchanged_router": "quality/phase-8-final-owner-approval.md",
+  "unchanged_router_sha256": "1b22e6dee3561486d575877525182abcb7c465c585e6b971db3e4a43594e01b6",
+  "disposition": "Explicit archival provenance only. Original references resolved against the archived final check, not a later compatibility review. Not an input to current approval gates."
+}

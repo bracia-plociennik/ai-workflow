@@ -8,6 +8,166 @@
       "assessed_head": "8a0eeef5dcee4a4c9852cb495bdae6e92115a0e1",
       "decision": "decisions/phase-8-pre-cr-history-storage.md",
       "decision_sha256": "8ac89a550b71abe95129289fc2be45443eac1c322e4bbd0f03eb7d21fc879a91"
+    },
+    {
+      "path": "quality/phase-3-pto-alloc-002-adaptive-allocation-spec-qa.md",
+      "sha256": "be7c46c928f33ff169c5f4547ef3c69db983531e7bf787a0078b325a1ec7353f",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-alloc-002-adaptive-allocation-spec-qa.md",
+      "decision_sha256": "2aadb1b2d294c363afb22e438cb23138470946e011d37726447655b49efac69e"
+    },
+    {
+      "path": "quality/phase-3-pto-cap-008-capture-parity-spec-qa.md",
+      "sha256": "fbc7ef99b1910dee68c34eb96cfb2b9831d42c5e2a4b6aca14b3df6f9bb95df5",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-cap-008-capture-parity-spec-qa.md",
+      "decision_sha256": "0af5a6b5227e405e814d5726f3780a947862a4efb5abd2b58965c44c2c8878d1"
+    },
+    {
+      "path": "quality/phase-3-pto-compat-006-capability-evaluation-spec-qa.md",
+      "sha256": "eac675cb77edb6d3ea217969ac1897f1a110391bcb1d30316d2fb9548d7d5f38",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-compat-006-capability-evaluation-spec-qa.md",
+      "decision_sha256": "0f8d0328145dcf4558285a327688cf9f59ded52a405e5b11d5749795fb86fef8"
+    },
+    {
+      "path": "quality/phase-3-pto-core-001-contract-routing-spec-qa.md",
+      "sha256": "d1097503c9f228b5e0ad0c7741c24c3a4eabf8a6d3df7efebe277438e5cb99d1",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-core-001-contract-routing-spec-qa.md",
+      "decision_sha256": "4a1e5e003223849903eeeab7eb33a16cb6014c93dd5c3a1c76cc27c1ceaa4853"
+    },
+    {
+      "path": "quality/phase-3-pto-docs-007-handoff-guidance-spec-qa.md",
+      "sha256": "e030b7eec231258995fe4f56864a3c96ae631b1c707304f7db100a84bd686218",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-docs-007-handoff-guidance-spec-qa.md",
+      "decision_sha256": "d79a8a90604b1b990c119ad3b026d1c0ed081c51a5145101d808595190516fa4"
+    },
+    {
+      "path": "quality/phase-3-pto-git-009-phase-commits-spec-qa.md",
+      "sha256": "7990715eeecc0120cf3e07710760c96766efea8fe0d510c63c52195a282010a5",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-git-009-phase-commits-spec-qa.md",
+      "decision_sha256": "b503b30354d054e2e6c211b4a64ae9c5a68f5f2b8b5fd5b3206b58be45d360a4"
+    },
+    {
+      "path": "quality/phase-3-pto-iso-003-isolated-delegation-spec-qa.md",
+      "sha256": "64b39a7ab597545b4689bc344f9dc7663e01570ec765ef6f5a7377ba5f7787c7",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-iso-003-isolated-delegation-spec-qa.md",
+      "decision_sha256": "12a456a105df446e1755ffb3a72c519b2d1f1080046f6d27d60c9c8f5675e439"
+    },
+    {
+      "path": "quality/phase-3-pto-qa-005-integration-acceptance-spec-qa.md",
+      "sha256": "f56dfc90c1f06045d9774725d36596c0a5581e2ce49bafef2f37994282f36b5a",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-qa-005-integration-acceptance-spec-qa.md",
+      "decision_sha256": "5efc3f2baf2191c58b8ebd9d5e32c8f88b5a29c913f30e9ad95979b4729c3c5d"
+    },
+    {
+      "path": "quality/phase-3-pto-run-004-lifecycle-recovery-spec-qa.md",
+      "sha256": "f6e158ba6e62a99b24c9461e05f784a7d87edbe844c68dd658b16e9c44f0a390",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-3-pto-run-004-lifecycle-recovery-spec-qa.md",
+      "decision_sha256": "da84bb301473df9cf1121a754e95728935caa73e6568f68fb5a7ed56c953f10d"
+    },
+    {
+      "path": "quality/phase-5-pto-alloc-002-adaptive-allocation-quality.md",
+      "sha256": "28019fab9b93fa3f8c345896b058252257632fc5ed31381dc6a64dd1d0448542",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-alloc-002-adaptive-allocation-quality.md",
+      "decision_sha256": "206ec3f1606bd85cf4ca1a3de62f798fd81fb64befce0f4ab8a1e8f17b7b2bf8"
+    },
+    {
+      "path": "quality/phase-5-pto-bridge-010-compatibility-adaptation-quality.md",
+      "sha256": "fd8566e3d60333b03020f8f70cb797eb85ecede9a4b0fd4eee2b05299797e21d",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-bridge-010-compatibility-adaptation-quality.md",
+      "decision_sha256": "22b593dd6e27c6cf6829f9e6cc426c59fb6d124c3d4e87e9af9f66cbe4db3d4f"
+    },
+    {
+      "path": "quality/phase-5-pto-cap-008-capture-parity-quality.md",
+      "sha256": "adfa09e3dd5b203b68daa771226865d2b8d46b542e751c1e4c1f6e212f7a5dcf",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-cap-008-capture-parity-quality.md",
+      "decision_sha256": "ef3c108fb9349e393e60f39b7479c945e54ac7b08fe7ab9a3d7dfb9d98dcb2c7"
+    },
+    {
+      "path": "quality/phase-5-pto-compat-006-capability-evaluation-quality.md",
+      "sha256": "febb3a097dd80b73abe506b42b8a2bdd0a6144ef99fe19c84448f0facc791a7d",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-compat-006-capability-evaluation-quality.md",
+      "decision_sha256": "c95ddeafa057e02d4b753c18b424e403093f81527b12858f4315f14745f65057"
+    },
+    {
+      "path": "quality/phase-5-pto-core-001-contract-routing-quality.md",
+      "sha256": "d96f1e754e83bb7adb9875584325018dc6a5634f1cda68d37bee2dae4b928c8b",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-core-001-contract-routing-quality.md",
+      "decision_sha256": "73b5a3dcf6f8f1dae0bf5b8bc729f9eb99c9062f9cc566e7b4979994539cd75a"
+    },
+    {
+      "path": "quality/phase-5-pto-docs-007-handoff-guidance-quality.md",
+      "sha256": "5f22c03dd916bb8e6bf8fcb87addbfc47a1e466aee0900ba8efd591bebc59cba",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-docs-007-handoff-guidance-quality.md",
+      "decision_sha256": "8de33acf6775fb528f251b7a0f1212a84b70895fab6d6a2133b032789240c494"
+    },
+    {
+      "path": "quality/phase-5-pto-git-009-phase-commits-quality.md",
+      "sha256": "9767e4f3ff6abcb7953b16363bbd1020dd448dabb3b0b7dcc4d3eabc8f2555fb",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-git-009-phase-commits-quality.md",
+      "decision_sha256": "42ea776674fd994ffbfb83dc52623be84a0acc7d1d8e65aaf51603743a11ab5b"
+    },
+    {
+      "path": "quality/phase-5-pto-iso-003-isolated-delegation-quality.md",
+      "sha256": "0d4388f55a0fbf74f9cc54dd5a88fb1c8bb4667ade4bdfd6bd9bfb5640990b58",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-iso-003-isolated-delegation-quality.md",
+      "decision_sha256": "349a606a80c1b37baa8a4f4019ab651de130046d02a85c3cd3588e47762a9b88"
+    },
+    {
+      "path": "quality/phase-5-pto-qa-005-integration-acceptance-quality.md",
+      "sha256": "50ceaa7c4c8a10d42903651ca378d9eeb85e3a7ae12145e5c9d1f3ad9813ce29",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-qa-005-integration-acceptance-quality.md",
+      "decision_sha256": "2c0c9428123cdfeb82ae08301f79c06450d43389302dc46495dacd26f3148835"
+    },
+    {
+      "path": "quality/phase-5-pto-run-004-lifecycle-recovery-quality.md",
+      "sha256": "165449254d26d0bda248aed08d9cfe47cbc036ad8dc3ef2bf64c193469f4e3c8",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-pto-run-004-lifecycle-recovery-quality.md",
+      "decision_sha256": "b5fbf2095d76b46286c003726551913418c080b58ff873ef1aa072645f4ac10e"
+    },
+    {
+      "path": "quality/phase-8-final-check.md",
+      "sha256": "90a41c3d3e4077ad0e8ded07080ccadee1cc19e68be178f7e19c4f375c0342b6",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-8-final-check.md",
+      "decision_sha256": "a99cb5ea1dfae03403a787f15e9acf141e23020d2047890712781b7c0cb97c6e"
     }
   ]
 }

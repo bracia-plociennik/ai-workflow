@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "assessments": [
+    {
+      "path": "quality/phase-5-eff-all-quality.md",
+      "sha256": "dc112f1ea72706788733da73ffc3ec61cc4246e9da75b6212a01a4c1653a8c9f",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-eff-all-quality.md",
+      "decision_sha256": "b6ae5a483a13ad27e57e5566dc6c11c020995742ef6252d8c7b4e2d92b3cc9b5"
+    },
+    {
+      "path": "quality/phase-8-final-check.md",
+      "sha256": "9308ec32b08f33e4afac854406cf091c4b165db8f024acf29e58b0a6836a8985",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-8-final-check.md",
+      "decision_sha256": "a99cb5ea1dfae03403a787f15e9acf141e23020d2047890712781b7c0cb97c6e"
+    }
+  ]
+}

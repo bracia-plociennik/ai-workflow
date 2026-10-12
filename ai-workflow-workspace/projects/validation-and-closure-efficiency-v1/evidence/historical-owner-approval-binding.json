@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "scope": "validation-and-closure-efficiency-v1",
+  "lifecycle": "historical",
+  "current_gate_eligible": false,
+  "owner_decision": "final-owner-yes",
+  "admission_source": "direct owner-approved historical binding recovery, 2026-10-12; not a new final-owner-yes",
+  "original_approval": "history/2026-10-05-pre-dependency-scope/phase-8-final-owner-approval.md",
+  "original_approval_sha256": "3bad526cec090acf2e8e9fa5e7fc62b537bd2f5a3caa6b6baa7f12e41b32d016",
+  "original_final_check": "history/2026-10-05-pre-dependency-scope/phase-8-final-check.md",
+  "original_final_check_sha256": "961c0794a10da2183b487995b55b3ab2e21d902769a6d17c3e9c14ec22aab9d4",
+  "original_decision": "decisions/eff-dec-002-final-owner-yes.md",
+  "original_decision_sha256": "df942af28e28eaf5e174e88fda153f1ccd2e06199bae0a9bcfe5b4e23450b1b9",
+  "unchanged_router": "quality/phase-8-final-owner-approval.md",
+  "unchanged_router_sha256": "9059ba362917051f2e324be57f0cecf7b6031670ebbb9e15f0fedbee0d9f81fa",
+  "disposition": "Explicit archival provenance only. Original references resolved against the archived final check, not a later compatibility review. Not an input to current approval gates."
+}

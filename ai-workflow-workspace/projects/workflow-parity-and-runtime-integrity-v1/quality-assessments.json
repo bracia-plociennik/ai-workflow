@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "assessments": [
+    {
+      "path": "quality/phase-5-par-core-001-canonical-capture-state-quality.md",
+      "sha256": "d97fe547aadc553345a78b6cffeb1227aeaa72d59d0b728a77bd73daed41b8ae",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-001-canonical-capture-state-quality.md",
+      "decision_sha256": "9417aeefd04b59d0a89a05dfc22ddb060f406897fd701f3a332fa8e0a6890c3a"
+    },
+    {
+      "path": "quality/phase-5-par-core-002-smoke-fixture-isolation-quality.md",
+      "sha256": "1e8593d5e53bd046b5f60a9ad8f45dd48d392bb9e0207cdb71926c4943307386",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-002-smoke-fixture-isolation-quality.md",
+      "decision_sha256": "b33ed5d5aaa2364d71bc5b210a140524f07bbeca28724265db5c5ae228dcb7c8"
+    },
+    {
+      "path": "quality/phase-5-par-core-003-scorer-evidence-quality.md",
+      "sha256": "3e27d7e19222245a5cd4a7205441d451b9bee215ef2d8942c8e34a12594f4267",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-003-scorer-evidence-quality.md",
+      "decision_sha256": "6a77028d270033213cc2d81167f1a3f0244d718d2c37b558059402b203e99b81"
+    },
+    {
+      "path": "quality/phase-5-par-core-004-micro-exempt-quality.md",
+      "sha256": "d35d62cc64f160a3f261c876d3c2b4bf06bb5084ac3c19c7ceea72ab746a6d97",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-004-micro-exempt-quality.md",
+      "decision_sha256": "064c5356b6c24063ac94b77a9dc7279ff38a4501a202ffd371eb63e59737b4e6"
+    },
+    {
+      "path": "quality/phase-5-par-core-005-capability-model-guidance-quality.md",
+      "sha256": "f0db4e0e5d26c43cfa7dc24f4b8e5e1eaa9301332bf6d827bbbb235bdcef6ecf",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-005-capability-model-guidance-quality.md",
+      "decision_sha256": "3866265ecccf08a544c06d38125a046f94b3b90714aee4418328ca55e425bb3b"
+    },
+    {
+      "path": "quality/phase-5-par-core-006-compact-response-quality.md",
+      "sha256": "0649511bad7f4c9b6a13dd36731dd20c0afda56f59ff161f84bc42cfdb7f420c",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-006-compact-response-quality.md",
+      "decision_sha256": "e40d257099683da3ec7db85401239f7fbfe6493f0aa82a5e02947014a3ccec10"
+    },
+    {
+      "path": "quality/phase-5-par-core-007-coordinator-interface-quality.md",
+      "sha256": "4d78d862b1df81d0f99c952a387fc06fa4a2599374b6a64d806384b67af96ff4",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-5-par-core-007-coordinator-interface-quality.md",
+      "decision_sha256": "2fd1d7ef149e5a89c8a47ba93b10654762d20fe8d85c70f29f1ad2f4f21d6aad"
+    },
+    {
+      "path": "quality/phase-8-final-check.md",
+      "sha256": "0a542f52f0aa4303556a5bb38545c00c0549015e49235152827a425f781e1606",
+      "state": "historical",
+      "assessed_head": "b234eb6d8dd13cdab1f5be26fd6efa1b5834fc05",
+      "decision": "decisions/history-admission-phase-8-final-check.md",
+      "decision_sha256": "a99cb5ea1dfae03403a787f15e9acf141e23020d2047890712781b7c0cb97c6e"
+    }
+  ]
+}
