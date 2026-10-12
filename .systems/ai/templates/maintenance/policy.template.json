@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "policy_id": "goal-focused-maintenance-v1",
+  "revision": 0,
+  "parent_revision": null,
+  "changed_at": "2026-01-01T00:00:00Z",
+  "approval_ref": null,
+  "reason": "Portable defaults",
+  "rules": [
+    {
+      "id": "E01",
+      "title": "Data integrity and disclosure",
+      "enabled": true,
+      "trigger": "Data integrity and disclosure",
+      "examples": [],
+      "severity_floor": "immediate"
+    },
+    {
+      "id": "E02",
+      "title": "Security and access boundaries",
+      "enabled": true,
+      "trigger": "Security and access boundaries",
+      "examples": [],
+      "severity_floor": "immediate"
+    },
+    {
+      "id": "E03",
+      "title": "Unintended financial effects",
+      "enabled": true,
+      "trigger": "Unintended financial effects",
+      "examples": [],
+      "severity_floor": "immediate"
+    },
+    {
+      "id": "E04",
+      "title": "Current deliverable correctness",
+      "enabled": true,
+      "trigger": "Current deliverable correctness",
+      "examples": [],
+      "severity_floor": "immediate"
+    },
+    {
+      "id": "E05",
+      "title": "Unapproved goal or architecture drift",
+      "enabled": true,
+      "trigger": "Unapproved goal or architecture drift",
+      "examples": [],
+      "severity_floor": "immediate"
+    }
+  ],
+  "thresholds": {
+    "distinct_open_causes": 5,
+    "recurring_affected_tasks": 3
+  },
+  "incidental_budget_seconds": 600
+}
