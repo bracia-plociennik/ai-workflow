@@ -14,13 +14,13 @@
     "human": "human-coop"
   },
   "sources": {
-    ".systems/ai/core/autopilot.md": "1950e8d59c50d750ae9c067f0280b8d1ae00e8438a92470b85bbe23e93b693f0",
-    ".systems/ai/core/delivery-constraints.md": "e1be1e98058c84eabdd0a677e786ee95c1ede381e260572e4343984e2c146382",
-    ".systems/ai/core/execution-modes.md": "1085407af66d6766150e1f532173ace83196dfa70dc8b5e33ea1542c4e388d15",
+    ".systems/ai/core/autopilot.md": "fc419f79c5072d99765487981993b8f50e762793ffa17c63153589071753fcf3",
+    ".systems/ai/core/delivery-constraints.md": "67a277f43f9ecbee328580890ecbe390a0cfdd2d637af11dd54987541836bcba",
+    ".systems/ai/core/execution-modes.md": "63c9fbb55b19ba78f9ae4050300606ce66a7f2a16722634da9e8c0883e05fefe",
     ".systems/ai/core/owner-decision-checkpoints.md": "705b8c700fd2ff4ffc36906645ff412bdad9ad6f763c14c8a9bf169130933c76",
-    ".systems/ai/core/permissions.md": "3e676e7b54f96301f5fe5dc435fc81ea95756cb9aba3f797dc642699ce405a18",
+    ".systems/ai/core/permissions.md": "1c76b3bcbff6a377125cf0361a342c727d7dc7304650f59c28b2f6ae45b7920c",
     ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
-    ".systems/ai/core/quality-review.md": "0b16489ab1896edbdc1582ec72c85b2ba3710a1c1b62468b08bab95fc28f0cd8",
+    ".systems/ai/core/quality-review.md": "a0fa65a677e340341f95010982fa09717093e8d8ae3c29709fa2046d4163f6c5",
     ".systems/ai/core/risk-model.md": "24acc42aa62d71d52622343ddc89d6167e335d1cd8c651fe05e70fb85184a5d1",
     ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
     ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",

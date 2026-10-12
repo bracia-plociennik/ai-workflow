@@ -238,6 +238,20 @@ class PolicyTests(unittest.TestCase):
         q = self.start(); closed = deepcopy(q['budgets'][0]['intervals'][0]); closed.update(id='overlap', end=time_at(30)); q['budgets'][0]['intervals'][0]['end'] = time_at(20); q['budgets'][0]['intervals'].append(closed)
         self.assertRaises(m.Invalid, m.validate_queue, q, str(self.owner))
 
+    def test_actual_new_immediate_impact_rearms_but_scans_do_not(self):
+        from dataclasses import replace
+        q=self.observed(); q['issues'][0]['impact']='material';q['issues'][0]['immediate_rule_ids']=['E04']
+        facts=replace(self.facts,immediate_rules=('E04',))
+        projection=m.project(q,self.policy,'issue-1',facts)
+        q=m.notification(q,self.policy,'goal',[projection],'first-risk',time_at())
+        q=m.mark_presented(q,'first-risk',time_at(1),self.ev,lambda *_:True)
+        self.assertEqual(m.notification(q,self.policy,'goal',[projection],'scan',time_at(2)),q)
+        changed=self.issue(impact='material');changed['immediate_rule_ids']=['E04']
+        new=self.owner/'new-impact.md';new.write_text('actual new correctness impact');changed['source_refs']=[str(new)]
+        q=m.observe(q,changed,'parent',time_at(3))
+        q=m.notification(q,self.policy,'goal',[m.project(q,self.policy,'issue-1',facts)],'new-impact',time_at(3))
+        self.assertEqual(len(q['notification_episodes']),2)
+
     def test_cas_rejects_schema_valid_budget_history_reset(self):
         q = self.start(); q = m.end_interval(q, 'parent', 'interval', time_at(599), self.ev)
         path = str(self.owner / 'queue.json')
@@ -329,6 +343,43 @@ class CanonicalGoalTests(unittest.TestCase):
         before={str(p):p.read_bytes() for p in self.owner.rglob('*') if p.is_file()}
         for _ in range(3):self.goal()
         self.assertEqual(before,{str(p):p.read_bytes() for p in self.owner.rglob('*') if p.is_file()})
+
+class CapabilityTests(unittest.TestCase):
+    def setUp(self):
+        import subprocess,shutil
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
+        self.root=Path(self.tmp.name)/'source';self.root.mkdir()
+        original=HERE.parents[2]
+        for name in m.source_population(original):
+            p=self.root/name;p.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(original/name,p)
+        self.profile=m.support_profile(self.root)
+        (self.root/'.systems/ai/capabilities/goal-focused-maintenance-v1.json').write_text(json.dumps(self.profile,sort_keys=True,indent=2)+'\n')
+        subprocess.run(['git','init','-q',str(self.root)],check=True)
+        subprocess.run(['git','-C',str(self.root),'add','.'],check=True)
+        subprocess.run(['git','-C',str(self.root),'-c','user.name=Synthetic','-c','user.email=fixture@example.invalid','commit','-qm','synthetic complete product support'],check=True)
+        self.head=subprocess.check_output(['git','-C',str(self.root),'rev-parse','HEAD'],text=True).strip()
+
+    def test_s20_actual_committed_support_is_not_activation_or_authority(self):
+        result=m.verify_support(self.root,self.head,self.profile)
+        self.assertTrue(result['support_verified']);self.assertFalse(result['activated']);self.assertEqual(result['authority'],'none')
+        self.assertRaises(m.Invalid,m.verify_support,self.root,'0'*40,self.profile)
+        (self.root/'.systems/ai/capabilities/goal-focused-maintenance-v1.json').unlink()
+        self.assertRaises(m.Invalid,m.verify_support,self.root,self.head,self.profile)
+
+    def test_source_drift_mode_extra_or_partial_index_rejects(self):
+        import subprocess
+        p=self.root/'.systems/ai/core/goal-focused-maintenance.md';p.write_text(p.read_text()+'changed\n')
+        self.assertRaises(m.Invalid,m.verify_support,self.root,self.head,self.profile)
+        # A newly self-declared matching profile cannot override the reviewed one.
+        changed=m.support_profile(self.root)
+        (self.root/'.systems/ai/capabilities/goal-focused-maintenance-v1.json').write_text(json.dumps(changed))
+        self.assertRaises(m.Invalid,m.verify_support,self.root,self.head,changed)
+        subprocess.run(['git','-C',str(self.root),'add','.systems/ai/core/goal-focused-maintenance.md'],check=True)
+        self.assertRaises(m.Invalid,m.verify_support,self.root,self.head,self.profile)
+
+    def test_portable_policy_template_matches_accepted_defaults(self):
+        original=HERE.parents[2]
+        self.assertEqual(m.decode((original/'.systems/ai/templates/maintenance/policy.template.json').read_text()),m.defaults())
 
 
 if __name__ == '__main__':

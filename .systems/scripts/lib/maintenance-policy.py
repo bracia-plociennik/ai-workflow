@@ -11,6 +11,8 @@ from pathlib import Path
 import re
 import stat
 import tempfile
+import hashlib
+import subprocess
 
 WIRE = 'goal-focused-maintenance-v1'
 FLOORS = ('E01', 'E02', 'E03', 'E04', 'E05')
@@ -311,6 +313,10 @@ def threshold_reasons(queue, policy, goal):
 def project(queue, policy, issue_id, facts, now=None):
     validate_queue(queue, facts.owner_ref); validate_policy(policy, facts.owner_ref)
     token(facts.goal_ref); token(facts.parent_task_ref)
+    need(all(type(getattr(facts, key)) is bool for key in ('independence_verified', 'required_dependency',
+         'local_reversible_low_risk', 'target_covered', 'collision_free', 'known_test', 'request', 'compatible')),
+         'facts require actual verified booleans')
+    need(type(facts.immediate_rules) is tuple, 'live rules must be an immutable verified tuple')
     issue = next((i for i in queue['issues'] if i['id'] == issue_id), None)
     need(issue is not None, 'unknown issue')
     rules = {r['id'] for r in policy['rules'] if r['enabled']}
@@ -381,6 +387,10 @@ def observe(queue, observation, parent_task, now):
             changed = True; new_parent = True
         if not changed and not new_parent:
             return result
+        if changed and (observation['impact'] == 'material' or observation['immediate_rule_ids']):
+            # An actual changed impact/evidence event can rearm even the same
+            # rule. Mere scans never call observe() and cannot rearm a receipt.
+            old['notification_episode'] = None
         for key in ('safe_summary', 'source_refs', 'impact', 'independence_evidence', 'immediate_rule_ids'):
             old[key] = deepcopy(observation[key])
         old['affected_scope'] = sorted(set(old['affected_scope']) | set(observation['affected_scope']))
@@ -633,11 +643,16 @@ def select_goal(inventory, claims, owner, required_work_ids):
     live = [c for c in claims if required & set(c['work_ids'] + c['aliases'])]
     refs = set().union(*(set(c['source_refs'] + c['distillation_refs'] + c['aliases']) for c in live)) if live else set()
     selected = {c['path'] for c in live} | blocked_paths
+    def overlaps(left, right):
+        if left == right:
+            return True
+        a, b = Path(left), Path(right)
+        return a.is_absolute() and b.is_absolute() and (a.is_relative_to(b) or b.is_relative_to(a))
     # Transitive closure, not just the first directly required row.
     while True:
         previous = set(selected)
         for claim in claims:
-            if set(claim['source_refs'] + claim['distillation_refs'] + claim['aliases']) & refs:
+            if any(overlaps(a, b) for a in claim['source_refs'] + claim['distillation_refs'] + claim['aliases'] for b in refs):
                 selected.add(claim['path'])
             if claim['path'] in selected:
                 refs |= set(claim['source_refs'] + claim['distillation_refs'] + claim['aliases'])
@@ -652,3 +667,92 @@ def select_goal(inventory, claims, owner, required_work_ids):
             'records': [r for r in inventory['records'] if r['path'] in selected], 'invalid': invalid,
             'historical_invalid': [e for e in inventory['invalid'] if e['path'] not in selected and e['path'] in known_paths],
             'inventory': deepcopy(inventory)}
+
+
+def source_population(root):
+    """Independent complete product population; no submitted ignore list."""
+    root = Path(root)
+    need(root.is_absolute() and root.is_dir() and not root.is_symlink(), 'invalid source root')
+    safe_path(root, root)
+    result = {}
+    for top in ('.systems', '.github', 'AGENTS.md', 'HUMANS.md', 'README.md', '.gitignore'):
+        entry = root / top
+        need(not entry.is_symlink(), 'linked product namespace')
+        if not entry.exists():
+            continue
+        for path in sorted(entry.rglob('*')) if entry.is_dir() else [entry]:
+            need(not path.is_symlink(), 'linked product source')
+            if path.is_dir():
+                need(path.name != '.git', 'nested source repository'); continue
+            need(path.is_file(), 'unsupported product input')
+            name = path.relative_to(root).as_posix()
+            if '__pycache__' in path.parts or path.suffix in {'.pyc', '.pyo'}:
+                continue
+            if name == '.systems/ai/capabilities/goal-focused-maintenance-v1.json':
+                continue  # Sole typed self-descriptor exclusion; committed below.
+            mode = '100755' if path.stat().st_mode & 0o111 else '100644'
+            result[name] = {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'mode': mode}
+    return result
+
+
+def support_profile(root):
+    return {'schema_version': 1, 'capability': WIRE, 'wire_schema': 1,
+            'authority': 'none', 'source_population': source_population(root)}
+
+
+def verify_support(root, expected_head, expected_profile):
+    """Read-only exact reviewed/committed support, not install or activation.
+
+    The coordinator supplies externally reviewed HEAD/profile, never a queue
+    label or a value learned from the candidate itself. No network or Git writes.
+    """
+    root = Path(root); need(root.is_absolute(), 'absolute source root required')
+    need(type(expected_head) is str and re.fullmatch(r'[0-9a-f]{40}', expected_head), 'reviewed source identity required')
+    fields(expected_profile, {'schema_version', 'capability', 'wire_schema', 'authority', 'source_population'})
+    need(type(expected_profile['schema_version']) is int and expected_profile['schema_version'] == 1
+         and type(expected_profile['wire_schema']) is int and expected_profile['wire_schema'] == 1
+         and expected_profile['capability'] == WIRE and expected_profile['authority'] == 'none', 'unsupported source profile')
+    def git(*args):
+        try:
+            return subprocess.check_output(['git', '--no-replace-objects', '-C', str(root), *args], stderr=subprocess.PIPE)
+        except subprocess.CalledProcessError as error:
+            raise Invalid('source identity unavailable') from error
+    need(git('rev-parse','--show-toplevel').decode().strip() == str(root), 'not an explicit source repository')
+    need(git('rev-parse','HEAD').decode().strip() == expected_head, 'source HEAD differs from reviewed identity')
+    path = root / '.systems/ai/capabilities/goal-focused-maintenance-v1.json'
+    need(path.is_file() and not path.is_symlink(), 'installed capability absent')
+    descriptor = decode(path.read_text())
+    minimum = {'AGENTS.md', '.systems/ai/core/goal-focused-maintenance.md',
+               '.systems/ai/core/response-contract.md', '.systems/ai/core/permissions.md',
+               '.systems/scripts/lib/maintenance-policy.py', '.systems/scripts/lib/capture-record.py',
+               '.systems/scripts/lib/capture-state.py', '.systems/scripts/lib/qa-evidence.py',
+               '.systems/scripts/lib/maintenance-tests.py', '.systems/scripts/check-goal-focused-maintenance',
+               '.systems/ai/templates/maintenance/policy.template.json'}
+    need(minimum <= set(expected_profile['source_population']), 'incomplete behavioral consumer support')
+    need(descriptor == expected_profile and support_profile(root) == expected_profile, 'source population or descriptor drift')
+    names = set(expected_profile['source_population']) | {'.systems/ai/capabilities/goal-focused-maintenance-v1.json'}
+    # Compare complete committed/index populations, bytes and modes. Private
+    # workspace runtime is deliberately outside this independent product set.
+    trees = {}
+    for ref in ('HEAD',):
+        tree = {}
+        for row in git('ls-tree','-r','-z',ref).split(b'\0'):
+            if not row: continue
+            metadata, raw = row.split(b'\t',1); mode, kind, oid = metadata.decode().split(); name = raw.decode()
+            if any(name == top or name.startswith(top + '/') for top in ('.systems','.github','AGENTS.md','HUMANS.md','README.md','.gitignore')):
+                need(kind == 'blob' and mode in {'100644','100755'}, 'unsupported committed source type')
+                tree[name] = (mode, oid)
+        trees[ref] = tree
+    index = {}
+    for row in git('ls-files','--stage','-z').split(b'\0'):
+        if not row: continue
+        metadata, raw = row.split(b'\t',1); mode, oid, stage = metadata.decode().split(); name = raw.decode()
+        if name in trees['HEAD'] or any(name == top or name.startswith(top + '/') for top in ('.systems','.github','AGENTS.md','HUMANS.md','README.md','.gitignore')):
+            need(stage == '0', 'unmerged source index'); index[name] = (mode,oid)
+    need(set(trees['HEAD']) == names and index == trees['HEAD'], 'incomplete/changed committed source index')
+    for name,(mode,oid) in trees['HEAD'].items():
+        blob = git('cat-file','blob',oid)
+        need(blob == (root/name).read_bytes(), 'committed/live source mismatch')
+        need(mode == ('100755' if (root/name).stat().st_mode & 0o111 else '100644'), 'source mode mismatch')
+    return {'schema_version': 1, 'capability': WIRE, 'source_head': expected_head,
+            'support_verified': True, 'authority': 'none', 'activated': False}

@@ -2,6 +2,12 @@
 set -euo pipefail
 
 required=(
+  ".systems/ai/core/goal-focused-maintenance.md"
+  ".systems/ai/capabilities/goal-focused-maintenance-v1.json"
+  ".systems/scripts/check-goal-focused-maintenance"
+  ".systems/scripts/lib/maintenance-policy.py"
+  ".systems/scripts/lib/maintenance-tests.py"
+  ".systems/ai/templates/maintenance/policy.template.json"
   ".systems/scripts/check-workspace-publication"
   ".systems/scripts/lib/workspace-publication.py"
   ".systems/scripts/tests/branch-policy.py"
