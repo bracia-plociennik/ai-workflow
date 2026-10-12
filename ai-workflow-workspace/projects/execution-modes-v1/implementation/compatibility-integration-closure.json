@@ -1,0 +1,97 @@
+{
+  "result": "candidate-protocol-scenarios-completed",
+  "scenarios": [
+    "approved-auto",
+    "human-vocabulary",
+    "missing-action-approval",
+    "dependent-blocker-independent-continuation",
+    "transitive-blocker",
+    "unknown-dependency",
+    "resume-baseline-drift",
+    "phase8-needs-explicit-scope",
+    "metadata-cannot-grant-final-owner-yes",
+    "incomplete-dod-not-completed",
+    "project-scope-preserved",
+    "session-scope-preserved",
+    "unmapped-vocabulary-rejected",
+    "empty-write-resources-rejected",
+    "plan-only-rejects-product-write",
+    "explicit-local-high-risk-approval-preserved",
+    "product-write-does-not-cover-external-action",
+    "human-material-choice-retains-owner-gate",
+    "preflight-human-resume",
+    "preflight-explicit-mode-conflict",
+    "preflight-project-identity-conflict",
+    "preflight-no-safe-unit",
+    "preflight-independent-continuation"
+  ],
+  "source_manifest": {
+    ".systems/ai/core/autopilot.md": "1950e8d59c50d750ae9c067f0280b8d1ae00e8438a92470b85bbe23e93b693f0",
+    ".systems/ai/core/delivery-constraints.md": "441a283b0dddfdb8113c4fecb2145036e8e76036f396b5dd77406cb13b4b52f3",
+    ".systems/ai/core/execution-modes.md": "ff170bdd3f1ea5a6de791ba71c7eda244b4c0c11ab32a57a5d866e8f481b10be",
+    ".systems/ai/core/owner-decision-checkpoints.md": "5d21fcc056262f9837aa996f6f6643060b6cfb99b6f6f8b181eae269c9642bcb",
+    ".systems/ai/core/permissions.md": "3e676e7b54f96301f5fe5dc435fc81ea95756cb9aba3f797dc642699ce405a18",
+    ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
+    ".systems/ai/core/quality-review.md": "69f4536dbfb76fa35dd5b97894d9b3f1fd7e0b8e3077dc81ac0af7194f02e953",
+    ".systems/ai/core/risk-model.md": "24acc42aa62d71d52622343ddc89d6167e335d1cd8c651fe05e70fb85184a5d1",
+    ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
+    ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",
+    ".systems/ai/templates/autopilot/state.template.md": "3193a29339a5d1fa0a9f613e7f7b243a3f80223a19ae7415708f72409605340f",
+    ".systems/ai/templates/autopilot/task-decisions.template.md": "a92710c7f49d64e6b36e99617437a7b6b142ea9cb478902530ef45c6772475d7",
+    ".systems/scripts/check-execution-modes": "084ae1ee68359f189e4abe626a3139a1092bd183cc21e0ef5b8316be9af53990",
+    ".systems/scripts/lib/execution-modes.py": "fc6fc0162c9380e2d301b081decc1d553395b253c115342d4360dbd09f5cb73a"
+  },
+  "installed_support": {
+    "status": "source-bound",
+    "fallback": "none",
+    "reason": "reviewed actual Workflow sources match committed, index and live inputs",
+    "evidence_role": "source inspection; native behavior unverified",
+    "mode_mapping": {
+      "auto": "auto",
+      "human": "human-coop"
+    },
+    "delivery_mapping": {
+      "auto-unconstrained": "auto-unbounded"
+    },
+    "source_head": "9aad02eb5106b35949d5f077a9e21a0d058e4186",
+    "tested_commit": "9aad02eb5106b35949d5f077a9e21a0d058e4186",
+    "profile_sha256": "20b086bb8ee225947bcc6bb540895d9746e324e2682be8a970a1fba66769a519"
+  },
+  "limitations": [
+    "actual committed local counterpart; no rollout or owner acceptance",
+    "pure protocol tests; no native agent behavior proof",
+    "planning/external effects remain coordinator scope gates"
+  ],
+  "additional_scenarios": [
+    "three-stalled-blocked",
+    "independent-continuation",
+    "new-progress-reset",
+    "stricter-quality-budget",
+    "uncommitted-source-rejected"
+  ],
+  "frozen_counterpart_sources": {
+    ".systems/scripts/execution_efficiency.py": "cf377dc73a371418caa845de92f6822142b426f96ddd5137f6b9b46a47d10663",
+    ".systems/scripts/execution_modes.py": "67865e4a1d265392bb1062e3ba8d1f65cef4434e723c9616a69d88c73c37bf60",
+    ".systems/scripts/orchestration_compatibility.py": "64adc4912d1ae1873c869812b3e9289d7ca34ab9f046756d047255231820fbc4",
+    ".systems/scripts/validation_support.py": "834e37875531aa2ef028f39a98a8bb50b6d2c5b2b282f6485d96678395140127",
+    ".systems/scripts/project-orchestration-preflight": "6a3243f748d7df0223bb601b6179e80a240a399191ce2ec3ba5aab27fdf12f78",
+    ".systems/scripts/tests/verify_execution_modes_counterpart.py": "2972e4c43bcf5db72dc211fb4be57c2619f5346e8456df83ce3c26a2bc3c46f5"
+  },
+  "candidate_sources": {
+    ".systems/ai/core/autopilot.md": "1950e8d59c50d750ae9c067f0280b8d1ae00e8438a92470b85bbe23e93b693f0",
+    ".systems/ai/core/delivery-constraints.md": "441a283b0dddfdb8113c4fecb2145036e8e76036f396b5dd77406cb13b4b52f3",
+    ".systems/ai/core/execution-modes.md": "ff170bdd3f1ea5a6de791ba71c7eda244b4c0c11ab32a57a5d866e8f481b10be",
+    ".systems/ai/core/owner-decision-checkpoints.md": "5d21fcc056262f9837aa996f6f6643060b6cfb99b6f6f8b181eae269c9642bcb",
+    ".systems/ai/core/permissions.md": "3e676e7b54f96301f5fe5dc435fc81ea95756cb9aba3f797dc642699ce405a18",
+    ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
+    ".systems/ai/core/quality-review.md": "69f4536dbfb76fa35dd5b97894d9b3f1fd7e0b8e3077dc81ac0af7194f02e953",
+    ".systems/ai/core/risk-model.md": "24acc42aa62d71d52622343ddc89d6167e335d1cd8c651fe05e70fb85184a5d1",
+    ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
+    ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",
+    ".systems/ai/templates/autopilot/state.template.md": "3193a29339a5d1fa0a9f613e7f7b243a3f80223a19ae7415708f72409605340f",
+    ".systems/ai/templates/autopilot/task-decisions.template.md": "a92710c7f49d64e6b36e99617437a7b6b142ea9cb478902530ef45c6772475d7",
+    ".systems/scripts/check-execution-modes": "084ae1ee68359f189e4abe626a3139a1092bd183cc21e0ef5b8316be9af53990",
+    ".systems/scripts/lib/execution-modes.py": "fc6fc0162c9380e2d301b081decc1d553395b253c115342d4360dbd09f5cb73a"
+  },
+  "fixture_role": "isolated profile of synthetic committed candidate; not installed interoperability"
+}

@@ -2,6 +2,7 @@
 ## Goals
 Minimize owner interruptions while preserving approved scope, honest results and current evidence.
 ## Components And Responsibilities
+Pre-final CR EXECUTION-MODES-CR-001 adds a source-bound execution-modes capability and schema 2 bounded recovery inspection, with actual frozen counterpart adapter tests. See specs/phase-3-em-compat-002-compatibility-specification.md. Existing schema 1 is legacy inspection only; no new approval or dispatch authority.
 | Component | Responsibility |
 | --- | --- |
 | execution-modes.md | canonical mode, scope, decision eligibility and authority |
@@ -36,4 +37,3 @@ No scheduler, native worker calls, paid eval, target edits or external effects.
 - Deadline: none
 - Time budget: none
 - Quality floor: full DoD and findings-first review
-

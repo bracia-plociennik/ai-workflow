@@ -1,0 +1,434 @@
+AI_WORKFLOW_VALIDATE_START profile=full progress=summary
+{"environment": "1b71f27e4e336c5b7f0408f933af23e8b16aff169fbf2a0c319a59d65451eae4", "root": "6505a6316c226595be0f44a18a08e55279fc2bc4b4cdd165e8173a77883cc95f", "state": "ready"}
+Validation profile: full
+Smoke tests: run
+Final validation evidence: yes
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-efficiency status=started
++ .systems/scripts/check-execution-efficiency
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-efficiency status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=started
++ .systems/scripts/check-required-artifacts
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=started
++ .systems/scripts/check-prompt-composition
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=started
++ .systems/scripts/check-branch-policy
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming status=started
++ .systems/scripts/check-naming
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming status=pass duration_seconds=4
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency status=started
++ .systems/scripts/check-status-consistency
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence status=started
++ .systems/scripts/check-qa-evidence
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-full-qa-verification status=started
++ .systems/scripts/check-full-qa-verification
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-full-qa-verification status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-insights status=started
++ .systems/scripts/check-system-insights
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-insights status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-skills status=started
++ .systems/scripts/check-system-skills
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-skills status=pass duration_seconds=3
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-compliance status=started
++ .systems/scripts/check-contract-compliance
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-compliance status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-gate status=started
++ .systems/scripts/check-knowledge-capture-gate
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-gate status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-phase-chaining status=started
++ .systems/scripts/check-default-quality-phase-chaining
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-phase-chaining status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-dreaming-mode status=started
++ .systems/scripts/check-dreaming-mode
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-dreaming-mode status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-global-quality-review-stance status=started
++ .systems/scripts/check-global-quality-review-stance
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-global-quality-review-stance status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-review-completeness-gate status=started
++ .systems/scripts/check-review-completeness-gate
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-review-completeness-gate status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-intent-plan-spec-compliance-review status=started
++ .systems/scripts/check-intent-plan-spec-compliance-review
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-intent-plan-spec-compliance-review status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-implementation-slicing status=started
++ .systems/scripts/check-implementation-slicing
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-implementation-slicing status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-plan-quality-contract status=started
++ .systems/scripts/check-plan-quality-contract
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-plan-quality-contract status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-profiles status=started
++ .systems/scripts/check-validation-profiles
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-profiles status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-reminder status=started
++ .systems/scripts/check-knowledge-capture-reminder
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-reminder status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-instruction-adherence-refresh status=started
++ .systems/scripts/check-instruction-adherence-refresh
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-instruction-adherence-refresh status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-owner-decision-checkpoints status=started
++ .systems/scripts/check-owner-decision-checkpoints
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-owner-decision-checkpoints status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-modes status=started
++ .systems/scripts/check-execution-modes
+{"authority": "inspection-only", "blocked_units": {}, "completed_units": [], "mode": "auto", "pending_decisions": [], "ready_units": ["UNIT-001"], "recovery_status": "declared-schema-2", "result": "running"}
+{"authority": "support-metadata-only", "mode_mapping": {"auto": "auto", "human": "human-coop"}, "status": "source-bound"}
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-modes status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-request-batch-triage status=started
++ .systems/scripts/check-request-batch-triage
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-request-batch-triage status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-response-evidence-trace status=started
++ .systems/scripts/check-response-evidence-trace
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-response-evidence-trace status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-phase-skill-discovery status=started
++ .systems/scripts/check-phase-skill-discovery
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-phase-skill-discovery status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-closure status=started
++ .systems/scripts/check-default-quality-closure
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-closure status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-idea-validation-opt-out status=started
++ .systems/scripts/check-default-idea-validation-opt-out
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-idea-validation-opt-out status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-end-of-task-capture status=started
++ .systems/scripts/check-end-of-task-capture
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-end-of-task-capture status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-cross-system-upgrade-handoff status=started
++ .systems/scripts/check-cross-system-upgrade-handoff
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-cross-system-upgrade-handoff status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-worktree-bootstrap status=started
++ .systems/scripts/check-worktree-bootstrap
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-worktree-bootstrap status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-routing status=started
++ .systems/scripts/check-validation-routing
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-routing status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-model-selection-guidance status=started
++ .systems/scripts/check-model-selection-guidance
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-model-selection-guidance status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-delivery-constraints status=started
++ .systems/scripts/check-delivery-constraints
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-delivery-constraints status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-distillation-state status=started
++ .systems/scripts/check-distillation-state
+{"invalid": [], "records": [], "schema_version": 1, "skipped": ["workspace-absent"], "total": 0, "unresolved": 0}
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-distillation-state status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-workspace-freshness status=started
++ .systems/scripts/check-workspace-freshness
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-workspace-freshness status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-topology status=started
++ .systems/scripts/check-contract-topology
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-topology status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-observability status=started
++ .systems/scripts/check-validation-observability
+Smoke manifest and live coverage index verified.
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-observability status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-completion status=started
++ .systems/scripts/check-validation-completion
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-completion status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-skill-evaluation-contract status=started
++ .systems/scripts/check-skill-evaluation-contract
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-skill-evaluation-contract status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-runtime-integrity status=started
++ .systems/scripts/check-runtime-integrity
+test_absolute_literal_read_path_is_retained (__main__.RuntimeTests.test_absolute_literal_read_path_is_retained) ... ok
+test_capability_not_frozen_model (__main__.RuntimeTests.test_capability_not_frozen_model) ... ok
+test_capture_duplicate_invalid_claim_still_blocks_valid_sibling (__main__.RuntimeTests.test_capture_duplicate_invalid_claim_still_blocks_valid_sibling) ... ok
+test_capture_legacy_absent_derived_and_legacy_gate_parity (__main__.RuntimeTests.test_capture_legacy_absent_derived_and_legacy_gate_parity) ... ok
+test_capture_normalized_duplicate_claims_share_record_parser (__main__.RuntimeTests.test_capture_normalized_duplicate_claims_share_record_parser) ... ok
+test_capture_pending_quality_without_quality_and_ready_without_distillation (__main__.RuntimeTests.test_capture_pending_quality_without_quality_and_ready_without_distillation) ... ok
+test_capture_reused_distillation_invalid_identity_still_blocks (__main__.RuntimeTests.test_capture_reused_distillation_invalid_identity_still_blocks) ... ok
+test_capture_schema2_real_current_qa_and_negative_parity (__main__.RuntimeTests.test_capture_schema2_real_current_qa_and_negative_parity) ... ok
+test_comment_and_expression_are_not_file_reads (__main__.RuntimeTests.test_comment_and_expression_are_not_file_reads) ... ok
+test_compact_cannot_hide_material_boundary (__main__.RuntimeTests.test_compact_cannot_hide_material_boundary) ... ok
+test_completed_requires_owned_unique_distillation (__main__.RuntimeTests.test_completed_requires_owned_unique_distillation) ... ok
+test_completed_requires_source_artifact (__main__.RuntimeTests.test_completed_requires_source_artifact) ... ok
+test_compound_pipeline_branch_unknown (__main__.RuntimeTests.test_compound_pipeline_branch_unknown) ... ok
+test_contract_integration (__main__.RuntimeTests.test_contract_integration) ... ok
+test_coordinator_detects_baseline_change (__main__.RuntimeTests.test_coordinator_detects_baseline_change) ... ok
+test_coordinator_does_not_promote_declared_pass (__main__.RuntimeTests.test_coordinator_does_not_promote_declared_pass) ... ok
+test_coordinator_git_failure_is_controlled_json (__main__.RuntimeTests.test_coordinator_git_failure_is_controlled_json) ... ok
+test_coordinator_missing_evidence_unknown (__main__.RuntimeTests.test_coordinator_missing_evidence_unknown) ... ok
+test_coordinator_rejects_identity_mismatch (__main__.RuntimeTests.test_coordinator_rejects_identity_mismatch) ... ok
+test_coordinator_rejects_source_symlink (__main__.RuntimeTests.test_coordinator_rejects_source_symlink) ... ok
+test_coordinator_rejects_stale_hash_and_verdict_conflict (__main__.RuntimeTests.test_coordinator_rejects_stale_hash_and_verdict_conflict) ... ok
+test_coordinator_rejects_stale_head (__main__.RuntimeTests.test_coordinator_rejects_stale_head) ... ok
+test_coordinator_reuses_real_qa_reader (__main__.RuntimeTests.test_coordinator_reuses_real_qa_reader) ... ok
+test_coordinator_unsupported_version_and_json_failure (__main__.RuntimeTests.test_coordinator_unsupported_version_and_json_failure) ... ok
+test_duplicate_work_rejected (__main__.RuntimeTests.test_duplicate_work_rejected) ... ok
+test_false_and_cat_not_executed (__main__.RuntimeTests.test_false_and_cat_not_executed) ... ok
+test_fixture_current_worktree_not_head (__main__.RuntimeTests.test_fixture_current_worktree_not_head) ... ok
+test_fixture_excludes_ignored_and_unrelated (__main__.RuntimeTests.test_fixture_excludes_ignored_and_unrelated) ... ok
+test_fixture_explicit_new_product_only (__main__.RuntimeTests.test_fixture_explicit_new_product_only) ... ok
+test_fixture_preserves_deletion (__main__.RuntimeTests.test_fixture_preserves_deletion) ... ok
+test_fixture_rejects_extra_traversal (__main__.RuntimeTests.test_fixture_rejects_extra_traversal) ... ok
+test_fixture_rejects_ignored_extra (__main__.RuntimeTests.test_fixture_rejects_ignored_extra) ... ok
+test_fixture_rejects_nonempty_output (__main__.RuntimeTests.test_fixture_rejects_nonempty_output) ... ok
+test_fixture_rejects_symlink (__main__.RuntimeTests.test_fixture_rejects_symlink) ... ok
+test_fixture_retains_synthetic_context_but_not_raw_skill_context (__main__.RuntimeTests.test_fixture_retains_synthetic_context_but_not_raw_skill_context) ... ok
+test_foreign_project_excluded (__main__.RuntimeTests.test_foreign_project_excluded) ... ok
+test_foreign_workspace_root_rejected (__main__.RuntimeTests.test_foreign_workspace_root_rejected) ... ok
+test_help_and_started_events_not_confirmed (__main__.RuntimeTests.test_help_and_started_events_not_confirmed) ... ok
+test_incomplete_read_attempted (__main__.RuntimeTests.test_incomplete_read_attempted) ... ok
+test_micro_eligibility_and_growth (__main__.RuntimeTests.test_micro_eligibility_and_growth) ... ok
+test_missing_required_state_field_rejected (__main__.RuntimeTests.test_missing_required_state_field_rejected) ... ok
+test_public_fixture_preserves_git_selected_privacy_boundary (__main__.RuntimeTests.test_public_fixture_preserves_git_selected_privacy_boundary) ... ok
+test_public_fixture_rejects_unknown_gitless_source (__main__.RuntimeTests.test_public_fixture_rejects_unknown_gitless_source) ... ok
+test_repo_namespace_and_historical_not_pass (__main__.RuntimeTests.test_repo_namespace_and_historical_not_pass) ... ok
+test_rg_filename_listing_is_not_content_read (__main__.RuntimeTests.test_rg_filename_listing_is_not_content_read) ... ok
+test_runtime_policy_adversarial_matrix (__main__.RuntimeTests.test_runtime_policy_adversarial_matrix) ... ok
+test_schema2_cannot_promote_advisory_to_pass (__main__.RuntimeTests.test_schema2_cannot_promote_advisory_to_pass) ... ok
+test_scoped_v1_population_unchanged (__main__.RuntimeTests.test_scoped_v1_population_unchanged) ... ok
+test_sed_literal_filename_confirmed (__main__.RuntimeTests.test_sed_literal_filename_confirmed) ... ok
+test_success_survives_later_failure (__main__.RuntimeTests.test_success_survives_later_failure) ... ok
+test_symlink_evidence_rejected (__main__.RuntimeTests.test_symlink_evidence_rejected) ... ok
+test_traversal_evidence_rejected (__main__.RuntimeTests.test_traversal_evidence_rejected) ... ok
+test_unknown_schema_rejected (__main__.RuntimeTests.test_unknown_schema_rejected) ... ok
+test_unrelated_tracked_secret_not_inspected (__main__.RuntimeTests.test_unrelated_tracked_secret_not_inspected) ... ok
+
+----------------------------------------------------------------------
+Ran 54 tests in 9.474s
+
+OK
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-runtime-integrity status=pass duration_seconds=10
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-parallel-task-orchestration status=started
++ .systems/scripts/check-parallel-task-orchestration
+Parallel task orchestration contract passed.
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-parallel-task-orchestration status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-phase-commit-policy status=started
++ .systems/scripts/check-phase-commit-policy
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-phase-commit-policy status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validator-smoke-tests status=started
++ .systems/scripts/check-validator-smoke-tests
+AI_WORKFLOW_SMOKE_START group=all progress=summary
+AI_WORKFLOW_SMOKE_GROUP_START group=core progress=summary
+Smoke fixture: selected current-worktree files=481
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-existing-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-escaping-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-tmpdir-override status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-symlink status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-tracked-temporary-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-unignored-temporary-repo-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-foreign-tracked-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-foreign-deleted-tracked-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-timing-rejects-foreign-unignored-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-1 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-2 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-3 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-4 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-5 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-6 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-summarizes-complete status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-preserves-inconclusive status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-captures-incomplete status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-incomplete status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-source-mismatch status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-duplicate-record status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-missing-smoke-check status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-nonfinite-duration status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-separate-output status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-oversized-smoke-wall status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-comparison-rejects-private-fingerprint status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-dedup status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-projects status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-graph status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-git status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-freshness status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-ownership status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-paths status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-checkpoint status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-source status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-finish status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-consumers status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-completion-validator-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validate-workflow-emits-one-completion-marker status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validate-workflow-emits-failure-marker status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=timeout-wrapper-returns-124 status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=timeout-wrapper-kills-process-group status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=update-equal-canonical status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=update-validation-failure status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=update-validation-timeout status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=update-behind-canonical status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=update-ahead-stops status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=update-diverged-stops status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-observability-validator-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-observability-preserves-pass-integrity status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=validation-scope-dependencies status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-manifest-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-missing-id status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-duplicate-id status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-missing-region status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-missing-audit status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-missing-nested-audit status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-wrong-assertion-line status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-wrong-nested-owner status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-wrong-test-region status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-partition-rejects-removed-post-call-assertion status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-allows-safe-prohibition status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-direct status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-but status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-however status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-period status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-colon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-unless status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-yet status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-semicolon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-observability-rejects-missing-source status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=runtime-integrity-synthetic-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-diagnostic-contract-short status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-diagnostic-contract-long status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-diagnostic-contract-missing-marker status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-diagnostic-contract-wrong-status-zero status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=smoke-diagnostic-contract-wrong-status-two status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-efficiency-behavioral status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-efficiency-compound-boundary status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-efficiency-missing-contract status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-may-not-prohibition status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-phase-seven-bypass status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-dual-owners status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-consumer-parallel-work-policy status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-consumer-autopilot status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-consumer-implementation-slicing status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-consumer-command-routing status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-consumer-operating-model status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-consumer-workflow status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-artifact-project-plan status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-artifact-readiness status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-artifact-state status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-authority-recursive status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-authority-scope status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-authority-phase-eight status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-equivalent-auto-push status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-equivalent-completion-capacity status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-equivalent-unlimited-capacity status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-but status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-however status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-period status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-colon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-semicolon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-unless status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-reverse-yet status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-safe-prohibition status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-direct-boundary status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-separator-however status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-separator-period status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-separator-colon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-separator-semicolon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-separator-unless status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-separator-yet status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-compound-boundary status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-submitted-is-not-accepted status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-task-orchestration-missing-contract status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-planner-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-protocol-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-lifecycle-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-integration-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-compatibility-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-safe-prohibition status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-direct status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-but status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-however status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-period status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-colon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-semicolon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-unless status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-boundary-yet status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=phase-commit-policy-missing-source status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=parallel-cross-system-offline-regressions status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-valid status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-behavioral status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-missing-capability status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-stale-capability status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-qualified-independent-policy status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-blocked-unit-policy status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-safe-prohibition status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-direct status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-but status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-however status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-period status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-colon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-semicolon status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-unless status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-boundary-yet status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-false-completion status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-missing-contract status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=execution-modes-missing-producer-field status=started
+Owned smoke group passed.
+AI_WORKFLOW_SMOKE_GROUP_COMPLETE group=core result=pass exit_code=0 duration_seconds=140
+AI_WORKFLOW_SMOKE_GROUP_START group=policy progress=summary
+Smoke fixture: selected current-worktree files=481
+AI_WORKFLOW_SMOKE_PROGRESS test=contract-compliance-requires-side-task-mode status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=contract-compliance-requires-micro-task-knowledge-capture status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=contract-compliance-blocks-medium-risk-micro-project-template status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=contract-compliance-requires-micro-project-work-mode status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-insights-missing-privacy-check status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-insights-missing-operational-validation status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-insights-blocks-raw-client-data status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-insights-blocks-product-domain-external-memory status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-insights-allows-ad-hoc-external-memory-note status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=system-insights-valid-anonymized-insights status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=prompt-composition-blocks-unsafe-authority status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=prompt-composition-blocks-mixed-denial-grant status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=prompt-composition-blocks-prompting-artifacts-authority status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=prompt-composition-blocks-prompt-modules-authority status=started
+AI_WORKFLOW_SMOKE_PROGRESS test=missing-autopilot-range-in-readiness status=started
+Validator smoke test lacks expected diagnostic: missing-autopilot-range-in-readiness
+AI_WORKFLOW_VALIDATE_START profile=standard progress=summary
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-efficiency status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-efficiency status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-required-artifacts status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-prompt-composition status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-branch-policy status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-naming status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-status-consistency status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-qa-evidence status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-full-qa-verification status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-full-qa-verification status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-insights status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-insights status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-skills status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-system-skills status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-compliance status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-contract-compliance status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-gate status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-gate status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-phase-chaining status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-default-quality-phase-chaining status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-dreaming-mode status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-dreaming-mode status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-global-quality-review-stance status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-global-quality-review-stance status=pass duration_seconds=0
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-review-completeness-gate status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-review-completeness-gate status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-intent-plan-spec-compliance-review status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-intent-plan-spec-compliance-review status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-implementation-slicing status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-implementation-slicing status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-plan-quality-contract status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-plan-quality-contract status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-profiles status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-validation-profiles status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-reminder status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-knowledge-capture-reminder status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-instruction-adherence-refresh status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-instruction-adherence-refresh status=pass duration_seconds=1
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-owner-decision-checkpoints status=started
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-owner-decision-checkpoints status=pass duration_seconds=2
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-modes status=started
+{"authority": "inspection-only", "blocked_units": {}, "completed_units": [], "mode": "auto", "pending_decisions": [], "ready_units": ["UNIT-001"], "recovery_status": "declared-schema-2", "result": "running"}
+Execution modes error: capability source mismatch: .systems/ai/templates/autopilot/readiness.template.md
+AI_WORKFLOW_VALIDATE_PROGRESS stage=validator check=.systems/scripts/check-execution-modes status=fail duration_seconds=1
+AI_WORKFLOW_VALIDATE_COMPLETE profile=standard result=fail exit_code=1 duration_seconds=22 stage=validator check=.systems/scripts/check-execution-modes
+AI_WORKFLOW_SMOKE_GROUP_COMPLETE group=policy result=fail exit_code=1 duration_seconds=28
+AI_WORKFLOW_SMOKE_COMPLETE group=all result=fail exit_code=1 duration_seconds=173
+AI_WORKFLOW_VALIDATE_COMPLETE profile=full result=interrupted exit_code=143 duration_seconds=225 stage=validator check=.systems/scripts/check-validator-smoke-tests

@@ -1,0 +1,597 @@
+diff --git a/.systems/ai/capabilities/execution-modes-v1.json b/.systems/ai/capabilities/execution-modes-v1.json
+new file mode 100644
+index 0000000..742b390
+--- /dev/null
++++ b/.systems/ai/capabilities/execution-modes-v1.json
+@@ -0,0 +1,32 @@
++{
++  "contract": 1,
++  "capability": "execution-modes-v1",
++  "behaviors": [
++    "scoped-approval",
++    "dependency-local-blocking",
++    "auto-unconstrained",
++    "three-stalled-attempts",
++    "technical-phase-8",
++    "human-material-questions"
++  ],
++  "mode_mapping": {
++    "auto": "auto",
++    "human": "human-coop"
++  },
++  "sources": {
++    ".systems/ai/core/autopilot.md": "1950e8d59c50d750ae9c067f0280b8d1ae00e8438a92470b85bbe23e93b693f0",
++    ".systems/ai/core/delivery-constraints.md": "441a283b0dddfdb8113c4fecb2145036e8e76036f396b5dd77406cb13b4b52f3",
++    ".systems/ai/core/execution-modes.md": "36e2d0e1dc6b6635d4f205ccc5a5197ef17a6fb6f3dd2d7d6621b3944d6becd9",
++    ".systems/ai/core/owner-decision-checkpoints.md": "5d21fcc056262f9837aa996f6f6643060b6cfb99b6f6f8b181eae269c9642bcb",
++    ".systems/ai/core/permissions.md": "3e676e7b54f96301f5fe5dc435fc81ea95756cb9aba3f797dc642699ce405a18",
++    ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
++    ".systems/ai/core/quality-review.md": "69f4536dbfb76fa35dd5b97894d9b3f1fd7e0b8e3077dc81ac0af7194f02e953",
++    ".systems/ai/core/risk-model.md": "24acc42aa62d71d52622343ddc89d6167e335d1cd8c651fe05e70fb85184a5d1",
++    ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
++    ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",
++    ".systems/ai/templates/autopilot/state.template.md": "3193a29339a5d1fa0a9f613e7f7b243a3f80223a19ae7415708f72409605340f",
++    ".systems/ai/templates/autopilot/task-decisions.template.md": "a92710c7f49d64e6b36e99617437a7b6b142ea9cb478902530ef45c6772475d7",
++    ".systems/scripts/check-execution-modes": "084ae1ee68359f189e4abe626a3139a1092bd183cc21e0ef5b8316be9af53990",
++    ".systems/scripts/lib/execution-modes.py": "2066a67937adea4ff43effe870d79cc723ed5b42c76a03b83f41a03fdad7fe04"
++  }
++}
+diff --git a/.systems/ai/core/autopilot.md b/.systems/ai/core/autopilot.md
+index 9553864..16b4c89 100644
+--- a/.systems/ai/core/autopilot.md
++++ b/.systems/ai/core/autopilot.md
+@@ -177,6 +177,8 @@ Before `running`, implementation-range readiness records explicit constraints, o
+ 
+ ## Retry Limits
+ 
++Execution-modes projection schema 2 adds the per-unit stable-cause three-stalled-attempts guard and persisted retry counts. The stricter existing Spec/Quality/run budgets below take precedence; meaningful progress does not reset them. Restore history and verify progress sources before resume. Block affected units and continue only verified independent work.
++
+ - Max 2 Spec QA fix loops per task/package.
+ - Max 2 Quality fix loops per task/package.
+ - Max 32 total retries per 16-task autopilot run unless a project decision overrides it.
+diff --git a/.systems/ai/core/changelog.md b/.systems/ai/core/changelog.md
+index 14d3a07..aa91394 100644
+--- a/.systems/ai/core/changelog.md
++++ b/.systems/ai/core/changelog.md
+@@ -1,5 +1,12 @@
+ # changelog.md
+ 
++## 2026-10-08 - Execution Modes Compatibility
++
++- Add source-bound contract 1 capability metadata with closed source/mapping coverage.
++- Add schema 2 per-unit stable-cause recovery, unique attempts and persisted stricter retry budgets.
++- Preserve legacy schema 1 inspection without new recovery attestation.
++- Verify candidate protocols against a frozen actual AI System adapter in an isolated synthetic installation; no rollout or native behavior claim.
++
+ ## 2026-10-08 - Execution Modes V1
+ 
+ - Default new work to Auto; explicit Human Coop is task-local unless scoped wider.
+diff --git a/.systems/ai/core/commands.md b/.systems/ai/core/commands.md
+index fb4faff..9d60f5b 100644
+--- a/.systems/ai/core/commands.md
++++ b/.systems/ai/core/commands.md
+@@ -1,6 +1,6 @@
+ # commands.md
+ 
+-Execution Modes: use check-execution-modes for contract validation and check-execution-modes --state <execution-readiness.json> for pure declared readiness inspection. See execution-modes.md; the inspector neither dispatches workers nor verifies actual approval/resource evidence.
++Execution Modes: use check-execution-modes for contract/capability validation and check-execution-modes --state <execution-readiness.json> for pure declared readiness inspection. Schema 2 adds persisted stable-cause recovery and stricter retry budgets; schema 1 remains legacy-unverified. Source-bound capability is support metadata, not approval or installed counterpart compatibility. See execution-modes.md; the inspector neither dispatches workers nor verifies actual approval/resource evidence.
+ Read-only cross-system inspection: `.systems/scripts/inspect-parallel-compatibility
+ --workflow PATH --repo PATH --run FILE --mapping FILE`. See
+ `parallel-compatibility.md` and `compatibility.template.json`. Exit0 means static
+diff --git a/.systems/ai/core/execution-modes.md b/.systems/ai/core/execution-modes.md
+index ac89b1d..9acecc7 100644
+--- a/.systems/ai/core/execution-modes.md
++++ b/.systems/ai/core/execution-modes.md
+@@ -55,6 +55,18 @@ Scoped local commits follow phase-commit-policy.md on the owned branch after app
+ 
+ Full Execution Trace records mode, scope/source, significant choices and pending/blocked units. At closure give result versus DoD, evidence, AI choices with override impact, owner decision queue and remaining scope. Do not manufacture questions when the queue is empty.
+ 
++## Source-bound Capability
++
++The portable support record is `.systems/ai/capabilities/execution-modes-v1.json`, contract 1. Exact mode_mapping is auto -> auto and human -> human-coop; auto-unconstrained maps conceptually to auto-unbounded. Required behaviors: scoped-approval, dependency-local-blocking, auto-unconstrained, three-stalled-attempts, technical-phase-8 and human-material-questions.
++Sources pin all approval, recovery, readiness and quality producer/consumer files listed by the pure inspector. Missing, unknown, linked, incomplete or stale metadata cannot establish support. Capability metadata never grants approval, proves native/model behavior or replaces a counterpart's own reviewed installed-source profile.
++
++## Bounded Recovery
++
++New readiness uses projection schema 2. Persist chronological attempts with unique attempt_id, unit_id, stable cause_id and optional progress_evidence SHA-256. The coordinator verifies meaningful progress and stable cause identity against real evidence; hashes and labels alone are declarations. Do not relabel a cause to reset its history. Preserve history across resume.
++After three consecutive unproductive attempts for one unit and stable cause, exclude that unit, its dependents and shared reservations. A new, independently verified fingerprint resets only that cause's stalled count; repeated fingerprints and claimed progress do not. Different units/causes are counted separately; a stalled cause remains blocking until verified new progress addresses that cause.
++Persist retry_counts per unit (spec, quality) and total for the run. Existing limits remain 2 Spec fix loops, 2 Quality fix loops and 32 total retries. An exhausted limit blocks further retries; progress never resets these budgets. The first reached limit wins. A budget override requires its existing explicit project decision, not an execution-mode field.
++Schema 1 inspection remains readable and reports recovery_status legacy-unverified; it cannot attest the new guard. Fresh schema 2 readiness and reconstructed verified history/budgets are required for future execution relying on bounded recovery.
++
+ ## Verification
+ 
+ Use check-execution-modes, synthetic readiness tests, producer-consumer audit and adversarial policy review. Green scripts remain supporting evidence; mode metadata never proves model behavior or interoperability with AI System.
+diff --git a/.systems/ai/templates/autopilot/execution-readiness.template.json b/.systems/ai/templates/autopilot/execution-readiness.template.json
+index 6b7c4d9..55016f9 100644
+--- a/.systems/ai/templates/autopilot/execution-readiness.template.json
++++ b/.systems/ai/templates/autopilot/execution-readiness.template.json
+@@ -1,5 +1,12 @@
+ {
+-  "schema": 1,
++  "schema": 2,
++  "recovery": {
++    "attempts": [],
++    "retry_counts": {
++      "units": {"UNIT-001": {"spec": 0, "quality": 0}},
++      "total": 0
++    }
++  },
+   "execution": {
+     "mode": "auto",
+     "scope": "task",
+diff --git a/.systems/ai/templates/autopilot/readiness.template.md b/.systems/ai/templates/autopilot/readiness.template.md
+index fbca844..cf04a7a 100644
+--- a/.systems/ai/templates/autopilot/readiness.template.md
++++ b/.systems/ai/templates/autopilot/readiness.template.md
+@@ -47,6 +47,9 @@ execution:
+   pending-decisions: []
+   runnable-subset: []
+   independence-evidence: <current-dependency-write-resource-and-gate-evidence>
++  recovery-schema: 2
++  recovery-history: <persisted-unique-attempt-unit-stable-cause-progress-evidence>
++  recovery-budget-evidence: <current-spec-quality-total-counts>
+ 
+ scanned-sources:
+   repo:
+diff --git a/.systems/ai/templates/autopilot/state.template.md b/.systems/ai/templates/autopilot/state.template.md
+index 9bf5174..33422b8 100644
+--- a/.systems/ai/templates/autopilot/state.template.md
++++ b/.systems/ai/templates/autopilot/state.template.md
+@@ -83,6 +83,10 @@ progress:
+ blockers: []
+ 
+ recovery:
++  projection-schema: 2
++  attempts: [] # attempt_id, unit_id, stable cause_id, progress_evidence SHA-256 or null
++  stalled-units: [] # excludes dependents/shared reservations; meaningful progress must be verified
++  history-source: <current-persisted-attempts-and-retry-counts>
+   last-recovery-check-at: null
+   last-recovery-result: null
+ ```
+diff --git a/.systems/scripts/check-execution-modes b/.systems/scripts/check-execution-modes
+index 4cf02bd..5e50c33 100755
+--- a/.systems/scripts/check-execution-modes
++++ b/.systems/scripts/check-execution-modes
+@@ -58,6 +58,13 @@ for file in .systems/scripts/lib/execution-modes.py .systems/scripts/tests/execu
+   [[ -f "$file" && ! -L "$file" ]] || { echo "Execution modes artifact missing: $file"; fail=1; }
+ done
+ python3 .systems/scripts/lib/execution-modes.py --state .systems/ai/templates/autopilot/execution-readiness.template.json || fail=1
++python3 .systems/scripts/lib/execution-modes.py --capability-root "$root" || fail=1
++for field in '## Source-bound Capability' '## Bounded Recovery' 'three consecutive unproductive attempts' 'legacy-unverified' 'progress never resets'; do
++  require_literal "$contract" "$field"
++done
++require_literal .systems/ai/templates/autopilot/state.template.md 'projection-schema: 2'
++require_literal .systems/ai/templates/autopilot/state.template.md 'attempts: []'
++require_literal .systems/ai/templates/autopilot/readiness.template.md 'recovery-budget-evidence:'
+ policy_reject_unsafe_pattern \
+   '(auto mode|execution mode|Auto)[^.\n]{0,60}\b(may|can|allows?|grants?|authorizes?)\b[^.\n]{0,70}\b(bypass|skip|grant|authorize|infer)\b[^.\n]{0,60}\b(approval|permission|QA|DoD|push|production|final-owner-yes)\b' \
+   'Unsafe execution mode authority wording' \
+diff --git a/.systems/scripts/check-required-artifacts b/.systems/scripts/check-required-artifacts
+index 26ab913..88087f1 100755
+--- a/.systems/scripts/check-required-artifacts
++++ b/.systems/scripts/check-required-artifacts
+@@ -3,6 +3,7 @@ set -euo pipefail
+ 
+ required=(
+   ".systems/ai/core/execution-modes.md"
++  ".systems/ai/capabilities/execution-modes-v1.json"
+   ".systems/scripts/check-execution-modes"
+   ".systems/scripts/lib/execution-modes.py"
+   ".systems/scripts/tests/execution-modes.py"
+diff --git a/.systems/scripts/lib/execution-modes.py b/.systems/scripts/lib/execution-modes.py
+index d4317c8..50faaba 100644
+--- a/.systems/scripts/lib/execution-modes.py
++++ b/.systems/scripts/lib/execution-modes.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Pure readiness projection. Declarations are not verified approvals or isolation."""
+ import argparse
++import hashlib
+ import json
+ from pathlib import Path
+ import re
+@@ -47,9 +48,107 @@ def overlap(left, right):
+     return a == b or a.startswith(b + "/") or b.startswith(a + "/")
+ 
+ 
++CAPABILITY_SOURCES = {".systems/ai/core/" + name + ".md" for name in (
++    "execution-modes", "autopilot", "owner-decision-checkpoints", "delivery-constraints",
++    "permissions", "risk-model", "phase-commit-policy", "quality-review")}
++CAPABILITY_SOURCES.update({".systems/scripts/check-execution-modes",
++    ".systems/scripts/lib/execution-modes.py"})
++CAPABILITY_SOURCES.update({".systems/ai/templates/autopilot/" + name for name in (
++    "execution-readiness.template.json", "readiness.template.md",
++    "state.template.md", "task-decisions.template.md")})
++CAPABILITY_BEHAVIORS = {"scoped-approval", "dependency-local-blocking", "auto-unconstrained",
++                       "three-stalled-attempts", "technical-phase-8", "human-material-questions"}
++
++
++def unlinked(path, label):
++    aliases = {Path("/tmp"): Path("/private/tmp"), Path("/var"): Path("/private/var")}
++    require(not any(p.is_symlink() and aliases.get(p) != p.resolve()
++                    for p in (path, *path.parents)), "symlink " + label)
++
++
++def capability(root):
++    unlinked(root, "capability root")
++    root = root.resolve(strict=True)
++    path = root / ".systems/ai/capabilities/execution-modes-v1.json"
++    unlinked(path, "capability")
++    record = json.loads(path.read_text(), object_pairs_hook=unique_keys)
++    keys(record, ("contract", "capability", "behaviors", "mode_mapping", "sources"), "capability")
++    require(type(record["contract"]) is int and record["contract"] == 1, "unsupported capability contract")
++    require(record["capability"] == "execution-modes-v1", "unknown capability")
++    require(record["mode_mapping"] == {"auto": "auto", "human": "human-coop"}, "capability mode mapping")
++    identifiers(record["behaviors"], "capability behaviors")
++    require(set(record["behaviors"]) == CAPABILITY_BEHAVIORS, "capability behaviors incomplete/unknown")
++    keys(record["sources"], CAPABILITY_SOURCES, "capability sources")
++    for name, digest in record["sources"].items():
++        require(isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest), "capability hash")
++        source = root / name
++        unlinked(source, "capability source")
++        require(source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest() == digest,
++                "capability source mismatch: " + name)
++    return {"status": "source-bound", "authority": "support-metadata-only",
++            "mode_mapping": record["mode_mapping"]}
++
++
++def recovery(record, units):
++    if record["schema"] == 1:
++        return {}, "legacy-unverified"
++    data = record["recovery"]
++    keys(data, ("attempts", "retry_counts"), "recovery")
++    keys(data["retry_counts"], ("units", "total"), "retry counts")
++    counts = data["retry_counts"]
++    require(type(counts["total"]) is int and counts["total"] >= 0, "total retries")
++    require(isinstance(counts["units"], dict) and set(counts["units"]).issubset(units), "retry unit identity")
++    for identifier, value in counts["units"].items():
++        keys(value, ("spec", "quality"), "unit retries")
++        require(all(type(n) is int and n >= 0 for n in value.values()), "unit retry count")
++    require(counts["total"] >= sum(sum(v.values()) for v in counts["units"].values()), "inconsistent retry total")
++    require(isinstance(data["attempts"], list), "recovery attempts")
++    require(counts["total"] >= len(data["attempts"]), "attempt history exceeds retry total")
++    attempts, stalled, evidence = set(), {}, {}
++    for attempt in data["attempts"]:
++        keys(attempt, ("attempt_id", "unit_id", "cause_id", "progress_evidence"), "recovery attempt")
++        for field in ("attempt_id", "unit_id", "cause_id"):
++            identifiers([attempt[field]], "attempt " + field)
++        require(attempt["attempt_id"] not in attempts, "duplicate recovery attempt")
++        attempts.add(attempt["attempt_id"])
++        require(attempt["unit_id"] in units and attempt["unit_id"] in counts["units"], "unknown recovery unit/budget")
++        fingerprint = attempt["progress_evidence"]
++        require(fingerprint is None or isinstance(fingerprint, str) and re.fullmatch(r"[0-9a-f]{64}", fingerprint), "progress fingerprint")
++        pair = (attempt["unit_id"], attempt["cause_id"])
++        # Declared evidence is deduplicated across causes within a unit.
++        seen = evidence.setdefault(attempt["unit_id"], set())
++        if fingerprint is not None and fingerprint not in seen:
++            seen.add(fingerprint)
++            stalled[pair] = 0
++        else:
++            stalled[pair] = stalled.get(pair, 0) + 1
++    blocked = {}
++    for (identifier, cause), count in stalled.items():
++        if count >= 3:
++            blocked.setdefault(identifier, []).append("stalled-cause:" + cause)
++    for identifier, value in counts["units"].items():
++        for field in ("spec", "quality"):
++            if value[field] >= 2:
++                blocked.setdefault(identifier, []).append("retry-limit:" + field)
++    if counts["total"] >= 32:
++        for identifier, unit in units.items():
++            if unit["status"] != "completed":
++                blocked.setdefault(identifier, []).append("retry-limit:total")
++    # Budget exhaustion stops retries, not a result already accepted after its last allowed fix.
++    for identifier in list(blocked):
++        if units[identifier]["status"] == "completed":
++            require(counts["total"] <= 32 and all(n <= 2 for n in counts["units"].get(identifier, {}).values()),
++                    "completed unit exceeds retry budgets")
++            require(not any(x.startswith("stalled-cause:") for x in blocked[identifier]),
++                    "completed unit has stalled recovery")
++            del blocked[identifier]
++    return blocked, "declared-schema-2"
++
++
+ def assess(record):
+-    keys(record, ("schema", "execution", "baseline", "units", "decisions", "requested_status", "final_check"), "projection")
+-    require(type(record["schema"]) is int and record["schema"] == 1, "unsupported projection schema")
++    require(isinstance(record, dict) and type(record.get("schema")) is int and record["schema"] in {1, 2}, "unsupported projection schema")
++    fields = ("schema", "execution", "baseline", "units", "decisions", "requested_status", "final_check")
++    keys(record, fields + (("recovery",) if record["schema"] == 2 else ()), "projection")
+     execution = record["execution"]
+     keys(execution, ("mode", "scope", "scope_id", "source", "approval_reference"), "execution")
+     require(isinstance(execution["mode"], str) and execution["mode"] in {"auto", "human-coop"}, "unknown execution mode")
+@@ -106,12 +205,14 @@ def assess(record):
+     for identifier in units:
+         visit(identifier)
+ 
++    blocked, recovery_status = recovery(record, units)
++
+     for unit in units.values():
+         if unit["status"] == "completed":
+             require(all(units[x]["status"] == "completed" for x in unit["dependencies"]), "completed unit has unfinished dependency")
+ 
+     for identifier, unit in units.items():
+-        reasons = []
++        reasons = blocked.get(identifier, []).copy()
+         if baseline["assessed"] != baseline["current"]:
+             reasons.append("baseline-drift")
+         for field in ("dependencies_known", "isolation_verified", "gates_ready", "dod_testable"):
+@@ -193,6 +294,7 @@ def assess(record):
+     result = "completed" if len(completed) == len(units) else "running" if ready else "awaiting-owner" if queue else "blocked"
+     return {"mode": execution["mode"], "ready_units": ready, "blocked_units": blocked,
+             "completed_units": completed, "pending_decisions": queue, "result": result,
++            "recovery_status": recovery_status,
+             "authority": "inspection-only"}
+ 
+ 
+@@ -206,13 +308,18 @@ def unique_keys(pairs):
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument("--state", type=Path, required=True)
++    choice = parser.add_mutually_exclusive_group(required=True)
++    choice.add_argument("--state", type=Path)
++    choice.add_argument("--capability-root", type=Path)
+     args = parser.parse_args()
+     try:
+-        aliases = {Path("/tmp"): Path("/private/tmp"), Path("/var"): Path("/private/var")}
+-        require(not any(path.is_symlink() and aliases.get(path) != path.resolve() for path in (args.state, *args.state.parents)), "symlink projection")
+-        data = json.loads(args.state.read_text(), object_pairs_hook=unique_keys)
+-        print(json.dumps(assess(data), sort_keys=True))
++        if args.capability_root is not None:
++            output = capability(args.capability_root)
++        else:
++            unlinked(args.state, "projection")
++            data = json.loads(args.state.read_text(), object_pairs_hook=unique_keys)
++            output = assess(data)
++        print(json.dumps(output, sort_keys=True))
+         return 0
+     except (InvalidState, OSError, ValueError, TypeError, KeyError, RecursionError) as error:
+         print("Execution modes error: " + str(error), file=sys.stderr)
+diff --git a/.systems/scripts/smoke/core.sh b/.systems/scripts/smoke/core.sh
+index 33b63f0..73740a3 100644
+--- a/.systems/scripts/smoke/core.sh
++++ b/.systems/scripts/smoke/core.sh
+@@ -949,6 +949,13 @@ run_must_pass "parallel-cross-system-offline-regressions" python3 .systems/scrip
+ 
+ run_must_pass "execution-modes-valid" bash .systems/scripts/check-execution-modes
+ run_must_pass "execution-modes-behavioral" python3 .systems/scripts/tests/execution-modes.py
++mv "$tmp/.systems/ai/capabilities/execution-modes-v1.json" "$tmp/execution-capability.orig"
++run_must_fail "execution-modes-missing-capability" --expect-literal 'Execution modes error:' bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-capability.orig" "$tmp/.systems/ai/capabilities/execution-modes-v1.json"
++cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
++printf '\nUnreviewed fixture source change.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
++run_must_fail "execution-modes-stale-capability" --expect-literal 'capability source mismatch' bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
+ cp "$tmp/.systems/ai/core/owner-decision-checkpoints.md" "$tmp/owner-mode.orig"
+ printf '\nautopilot may continue only verified independent units while a pending material decision blocks excluded units and dependents.\n' >> "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+ run_must_pass "execution-modes-qualified-independent-policy" bash .systems/scripts/check-owner-decision-checkpoints
+@@ -957,7 +964,19 @@ run_must_fail "execution-modes-blocked-unit-policy" --expect-literal 'Unsafe own
+ mv "$tmp/owner-mode.orig" "$tmp/.systems/ai/core/owner-decision-checkpoints.md"
+ cp "$tmp/.systems/ai/core/execution-modes.md" "$tmp/execution-mode.orig"
+ printf '\nAuto must not bypass QA.\n' >> "$tmp/.systems/ai/core/execution-modes.md"
++cp "$tmp/.systems/ai/capabilities/execution-modes-v1.json" "$tmp/execution-capability.orig"
++# Re-pin this explicitly reviewed safe fixture only; integrity cases never re-pin.
++python3 - "$tmp" <<'PY'
++import hashlib, json, pathlib, sys
++root = pathlib.Path(sys.argv[1])
++path = root / ".systems/ai/capabilities/execution-modes-v1.json"
++record = json.loads(path.read_text())
++name = ".systems/ai/core/execution-modes.md"
++record["sources"][name] = hashlib.sha256((root / name).read_bytes()).hexdigest()
++path.write_text(json.dumps(record, indent=2) + "\n")
++PY
+ run_must_pass "execution-modes-safe-prohibition" bash .systems/scripts/check-execution-modes
++mv "$tmp/execution-capability.orig" "$tmp/.systems/ai/capabilities/execution-modes-v1.json"
+ mv "$tmp/execution-mode.orig" "$tmp/.systems/ai/core/execution-modes.md"
+ for em_join in direct but however period colon semicolon unless yet; do
+   case "$em_join" in
+diff --git a/.systems/scripts/smoke/manifest.json b/.systems/scripts/smoke/manifest.json
+index 3b8131f..5921d7e 100644
+--- a/.systems/scripts/smoke/manifest.json
++++ b/.systems/scripts/smoke/manifest.json
+@@ -786,7 +786,9 @@
+     "execution-modes-boundary-unless",
+     "execution-modes-boundary-yet",
+     "execution-modes-qualified-independent-policy",
+-    "execution-modes-blocked-unit-policy"
++    "execution-modes-blocked-unit-policy",
++    "execution-modes-missing-capability",
++    "execution-modes-stale-capability"
+   ],
+   "external_assertion_audit": [
+     {
+@@ -3136,7 +3138,9 @@
+     "execution-modes-boundary-unless": "core",
+     "execution-modes-boundary-yet": "core",
+     "execution-modes-qualified-independent-policy": "core",
+-    "execution-modes-blocked-unit-policy": "core"
++    "execution-modes-blocked-unit-policy": "core",
++    "execution-modes-missing-capability": "core",
++    "execution-modes-stale-capability": "core"
+   },
+   "tests": [
+     {
+@@ -11663,6 +11667,28 @@
+       "cleanup_id": "restore-execution-mode-source",
+       "mutation_id": "execution-modes-blocked-unit-policy",
+       "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-missing-capability",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-missing-capability\" --expect-literal 'Execution modes error:' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-missing-capability",
++      "expected_outcome": "reject intended boundary with diagnostic"
++    },
++    {
++      "id": "execution-modes-stale-capability",
++      "group": "core",
++      "helper": "run_must_fail",
++      "region_id": "supplemental-core",
++      "command_contract": "run_must_fail \"execution-modes-stale-capability\" --expect-literal 'capability source mismatch' bash .systems/scripts/check-execution-modes",
++      "setup_id": "execution-mode-source-copy",
++      "cleanup_id": "restore-execution-mode-source",
++      "mutation_id": "execution-modes-stale-capability",
++      "expected_outcome": "reject intended boundary with diagnostic"
+     }
+   ],
+   "files_sha256": {
+@@ -11671,6 +11697,6 @@
+     "workspace.sh": "1c36c1035dfaba35a3722536cea159ec6a39dc7c8e8e346da37a3e02a4091c4c",
+     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
+     "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
+-    "core.sh": "3c95e3dd60ad4d396ab3dfbbb15b517370d00f7104eb39905431d58ef719102a"
++    "core.sh": "a619316c5631f55666dd5ea8a368e7a11c0633e64405b0347b2b3a182221632a"
+   }
+ }
+diff --git a/.systems/scripts/tests/execution-modes.py b/.systems/scripts/tests/execution-modes.py
+index 4dd39bc..6205bce 100644
+--- a/.systems/scripts/tests/execution-modes.py
++++ b/.systems/scripts/tests/execution-modes.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Offline regressions for mode selection and conservative readiness."""
+ import copy
++import hashlib
+ import importlib.util
+ import json
+ from pathlib import Path
+@@ -268,6 +269,133 @@ class ExecutionModes(unittest.TestCase):
+             self.assertIn("symlink projection", result.stderr)
+             self.assertEqual(path.read_text(), original)
+ 
++    def attempts(self, fingerprints, cause="CAUSE-001", unit="UNIT-001"):
++        data = self.record["recovery"]
++        for fingerprint in fingerprints:
++            data["attempts"].append(dict(attempt_id="ATTEMPT-" + str(len(data["attempts"]) + 1),
++                unit_id=unit, cause_id=cause, progress_evidence=fingerprint))
++        data["retry_counts"]["units"].setdefault(unit, dict(spec=0, quality=0))
++        data["retry_counts"]["total"] = len(data["attempts"])
++
++    def test_stalled_one_two_three_and_resume(self):
++        for count in (1, 2, 3):
++            self.record["recovery"]["attempts"] = []
++            self.attempts([None] * count)
++            result = em.assess(copy.deepcopy(self.record))
++            self.assertEqual(result["ready_units"], ["UNIT-001"] if count < 3 else [])
++        self.assertIn("stalled-cause:CAUSE-001", result["blocked_units"]["UNIT-001"])
++
++    def test_progress_new_repeated_and_cause_relabel(self):
++        self.attempts(["a" * 64, "a" * 64, "a" * 64, "a" * 64])
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++        self.attempts(["b" * 64])
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-001"])
++        self.attempts(["b" * 64] * 3, cause="CAUSE-002")
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++
++    def test_stalled_dependency_shared_independent(self):
++        self.attempts([None] * 3)
++        self.add_unit()
++        self.add_unit("UNIT-003", ["UNIT-001"])
++        self.add_unit("UNIT-004", resources=["files/example/child"])
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-002"])
++
++    def test_separate_units_causes_and_still_blocked_old_cause(self):
++        self.add_unit()
++        self.attempts([None] * 2)
++        self.attempts([None] * 2, cause="CAUSE-002")
++        self.attempts([None] * 2, unit="UNIT-002")
++        self.assertEqual(set(em.assess(self.record)["ready_units"]), {"UNIT-001", "UNIT-002"})
++        self.attempts([None], cause="CAUSE-001")
++        self.attempts(["c" * 64], cause="CAUSE-002")
++        self.assertEqual(em.assess(self.record)["ready_units"], ["UNIT-002"])
++
++    def test_recovery_history_duplicate_missing_budget_and_bad_fingerprint(self):
++        self.attempts([None])
++        data = self.record["recovery"]
++        data["attempts"].append(copy.deepcopy(data["attempts"][0]))
++        data["retry_counts"]["total"] = 2
++        with self.assertRaisesRegex(em.InvalidState, "duplicate recovery"):
++            em.assess(self.record)
++        data["attempts"].pop()
++        data["attempts"][0]["progress_evidence"] = "claimed progress"
++        with self.assertRaisesRegex(em.InvalidState, "progress fingerprint"):
++            em.assess(self.record)
++        data["attempts"][0]["progress_evidence"] = None
++        data["retry_counts"]["units"] = {}
++        with self.assertRaisesRegex(em.InvalidState, "unit/budget"):
++            em.assess(self.record)
++
++    def test_stricter_budgets_progress_does_not_reset(self):
++        self.attempts(["a" * 64, "b" * 64])
++        counts = self.record["recovery"]["retry_counts"]
++        for field in ("spec", "quality"):
++            counts["units"]["UNIT-001"] = dict(spec=0, quality=0)
++            counts["units"]["UNIT-001"][field] = 2
++            self.assertEqual(em.assess(self.record)["ready_units"], [])
++        counts["units"]["UNIT-001"] = dict(spec=0, quality=0)
++        counts["total"] = 32
++        self.assertEqual(em.assess(self.record)["ready_units"], [])
++        counts["total"] = True
++        with self.assertRaisesRegex(em.InvalidState, "total retries"):
++            em.assess(self.record)
++
++    def test_completion_after_last_allowed_fix_not_stalled(self):
++        self.record["recovery"]["retry_counts"].update(units={"UNIT-001": {"spec": 0, "quality": 2}}, total=2)
++        self.record["units"][0].update(status="completed", quality_current=True, capture_complete=True)
++        self.assertEqual(em.assess(self.record)["result"], "completed")
++        self.record["recovery"]["retry_counts"].update(units={"UNIT-001": {"spec": 0, "quality": 3}}, total=3)
++        with self.assertRaisesRegex(em.InvalidState, "exceeds retry"):
++            em.assess(self.record)
++        self.record["recovery"]["retry_counts"].update(units={"UNIT-001": {"spec": 0, "quality": 2}}, total=2)
++        self.attempts([None] * 3)
++        with self.assertRaisesRegex(em.InvalidState, "stalled recovery"):
++            em.assess(self.record)
++
++    def test_schema_one_stays_legacy_and_unknown_schema_rejected(self):
++        del self.record["recovery"]
++        self.record["schema"] = 1
++        self.assertEqual(em.assess(self.record)["recovery_status"], "legacy-unverified")
++        self.record["schema"] = 3
++        with self.assertRaisesRegex(em.InvalidState, "unsupported"):
++            em.assess(self.record)
++
++    def test_capability_exact_source_bound_and_tamper(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            cap = root / ".systems/ai/capabilities/execution-modes-v1.json"
++            cap.parent.mkdir(parents=True)
++            sources = {}
++            for name in em.CAPABILITY_SOURCES:
++                path = root / name
++                path.parent.mkdir(parents=True, exist_ok=True)
++                path.write_text("synthetic source " + name)
++                sources[name] = hashlib.sha256(path.read_bytes()).hexdigest()
++            record = dict(contract=1, capability="execution-modes-v1",
++                behaviors=sorted(em.CAPABILITY_BEHAVIORS),
++                mode_mapping={"auto": "auto", "human": "human-coop"}, sources=sources)
++            cap.write_text(json.dumps(record))
++            self.assertEqual(em.capability(root)["authority"], "support-metadata-only")
++            for field, bad in (("contract", 2), ("contract", True), ("behaviors", []),
++                               ("mode_mapping", {"human": "human"}), ("sources", {})):
++                modified = copy.deepcopy(record)
++                modified[field] = bad
++                cap.write_text(json.dumps(modified))
++                with self.subTest(field=field, bad=bad), self.assertRaises(em.InvalidState):
++                    em.capability(root)
++            cap.write_text(json.dumps(record))
++            source = root / sorted(sources)[0]
++            source.write_text("tampered")
++            with self.assertRaisesRegex(em.InvalidState, "mismatch"):
++                em.capability(root)
++            source.unlink()
++            source.symlink_to(cap)
++            with self.assertRaisesRegex(em.InvalidState, "symlink"):
++                em.capability(root)
++            cap.unlink()
++            with self.assertRaises(OSError):
++                em.capability(root)
++
+ 
+ if __name__ == "__main__":
+     unittest.main(verbosity=2)

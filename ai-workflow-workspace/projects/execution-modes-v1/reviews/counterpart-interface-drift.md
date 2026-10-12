@@ -1,0 +1,4 @@
+# Counterpart Interface Refresh
+Observed current AI System execution_modes.py uses its own contract 1 workflow profile: exact fourteen sources with modes/hashes, tested_commit, mode_mapping and delivery_mapping. workflow_support verifies committed HEAD, index and live bytes. It does not consume the new Workflow capability file.
+Adaptation: keep source-bound Workflow capability for its own consumer and portable support metadata. Actual integration uses frozen counterpart adapter/preflight/harness with an explicitly constructed synthetic committed Workflow installation and isolated profile. No write to counterpart checkout or installed profile.
+The prior capability-to-workflow_support assumption is superseded by this verified source observation. Approval, native execution and real rollout remain unverified.

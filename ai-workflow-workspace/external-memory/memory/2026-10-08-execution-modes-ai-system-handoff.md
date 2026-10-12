@@ -46,8 +46,27 @@ Legacy missing execution metadata does not gain autonomy. Resume preserves recor
 check-execution-modes --state path.json is pure schema/readiness inspection, not dispatch or proof of authority. Schema1 records mode/scope/source/ref, unit actions and dependencies, resource claims and pending/agent-choice/owner-approved dispositions. It rejects malformed explicit modes, duplicate keys, linked input, cyclic/unknown dependencies, uncovered actions, empty implementation metadata and premature completion.
 Summary decision IDs do not replace full decision request/alternatives/impact/artifact fields. Verify actual sources before acting.
 
-## Actual Verification
-28 offline tests, 16 supplemental smoke cases and full source validation passed after semantic current-diff, adversarial and producer-consumer review. Source-frozen full result=pass, exit0, duration763 seconds. Scripts are supporting-only. Post-commit QA/Phase7/Phase8 confirmation will be recorded in the owning source project; technical closure does not confer owner acceptance.
+### Compatibility Adaptation: EM-COMPAT-002
+Portable capability: .systems/ai/capabilities/execution-modes-v1.json, contract 1; exact auto -> auto and human -> human-coop mapping, six closed behaviors and fourteen pinned relative sources. It is support metadata only.
+New projections use schema 2. Unique chronological attempt IDs, stable unit/cause IDs and optional progress fingerprints enforce three unsuccessful attempts, while the existing 2 Spec / 2 Quality / 32 total limits remain stricter independent budgets. Completed results after the last permitted successful fix remain valid; exhausted budgets prohibit more retries. Legacy schema 1 remains readable as legacy-unverified, not recovery proof.
+The current AI System adapter does not consume this portable capability directly. It uses its own reviewed contract 1 profile with fourteen source hashes/modes, tested_commit, mode_mapping, delivery_mapping and inspector path, plus committed HEAD/index/live equality. auto-unconstrained maps to auto-unbounded. Forward the original projection and mode/scope/source, not a reconstructed weakened state.
+Compatibility evidence uses a frozen actual adapter/preflight/harness and a separately generated profile in an isolated synthetic committed candidate. All 23 counterpart scenarios and five extra recovery/tamper scenarios pass; 38 Workflow deterministic tests pass. No counterpart source or installed profile was changed. Current source commit is eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249. Source-copy paths/bytes/modes are equal; fresh formal prerequisite QA and both implementation Qualities bind this HEAD. Phase6 capture and Phase7 synchronization are completed. Technical final acceptance remains awaiting-owner-final-yes; final evidence is owned by projects/execution-modes-v1/quality/phase-8-final-check.md, not this advisory handoff.
+
+### Adoption Boundary
+The AI System owner must separately approve its reviewed installed-source profile for the actual published Workflow version and validate that installation. This handoff and the synthetic profile do not authorize nested updates, native dispatch or real approval inference. Synthetic protocol compatibility is established; installed interoperability and model adherence remain unclaimed.
+
+## Historical CORE Verification
+29 offline tests and 16 supplemental smoke cases cover the implemented contract and inspector. Full validation at actual committed HEAD 9d00bba3a17a9208b42a59ea29b0796ae5f15a6e completed with result=pass, exit_code=0, duration_seconds=739; all smoke groups passed. Semantic current-diff, adversarial and producer-consumer reviews preceded scripts; scripts remain supporting-only.
+
+Local source commits: d3536e5 and 9d00bba on codex/execution-modes-v1; neither is pushed by this work. Fresh formal prerequisite QA and implementation Quality were assessed at that committed HEAD. Phase 6 capture and Phase 7 checkpoint are recorded in the owning project. The separately requested technical Phase 8 route follows that checkpoint and retains awaiting-owner-final-yes; no owner acceptance or counterpart rollout is claimed.
+
+## Current Compatibility Verification
+- Assessed source commit: eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249, local branch codex/execution-modes-v1, clean tracked worktree and empty index.
+- Fresh full profile on this committed source and owning execution-modes-v1 runtime: result=pass, exit_code=0, duration_seconds=698; all five smoke groups pass, smoke duration_seconds=664.
+- Fresh source tests: 38 deterministic regressions. Frozen actual counterpart integration: 23 scenarios plus five recovery/tamper extras, all pass; frozen source preservation verified.
+- Architecture/Plan/both Spec QA and both implementation Qualities are current at this HEAD. Earlier assessments are preserved as history, not restamped.
+- Phase6 and Phase7 are complete for both tasks. Technical final-check evidence remains distinct from final-owner-yes; neither this handoff nor installed capability metadata grants final acceptance.
+- Semantic/adversarial full-current-diff and producer-consumer review precede scripts; scripts remain supporting-only. No paid/model/native trials, installation, counterpart source writes, push or merge.
 
 ## Counterpart Adaptation Checklist
 - [ ] Compare installed contracts; do not import historical status/approvals.

@@ -1,0 +1,13 @@
+# Final Owner Acceptance And Publication
+- Date: 2026-10-09
+- Owner decision: final-owner-yes
+- Approved scope: execution-modes-v1
+- Source: direct owner message: owner-approved: zapisz moje final-owner-yes i wypchaj
+- Accepted work: EM-CORE-001-execution-modes and EM-COMPAT-002-compatibility, including the reviewed compatibility adaptation.
+- Assessed source commit: eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249
+- Publication target: origin/codex/execution-modes-v1
+- Closure writes: owning decision, current final-check/owner-approval evidence, project status and repo focus; preserve prior technical Phase8 bytes as history before fresh closure assessment.
+- Publication scope: existing reviewed source commits only; ignored workspace remains local.
+- Excluded: main merge, force push, branch deletion, counterpart source writes, nested updates, installation and native/model/provider calls.
+- Commit needed: no, source already committed and this closure is ignored-only.
+- Privacy/scope check: pass

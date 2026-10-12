@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "kind": "final-check",
+  "task": null,
+  "run_id": "em-final-check-20261008",
+  "verdict": "PASS",
+  "date": "2026-10-08",
+  "inputs": [
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/autopilot.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/changelog.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/command-routing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/commands.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/contract-compliance.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/delivery-constraints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/execution-modes.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/implementation-slicing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/operating-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/owner-decision-checkpoints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/parallel-task-orchestration.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/permissions.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/plan-quality-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/prompt-composition.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/quality-review.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/response-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/risk-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/task-intake.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/workflow.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/execution-readiness.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/readiness.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/state.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/task-decisions.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/plans.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/status.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-5-quality.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-execution-modes"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-owner-decision-checkpoints"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-required-artifacts"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-review-completeness-gate"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-validator-smoke-tests"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-checks.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/core.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/manifest.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/tests/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/validate-workflow"
+    },
+    {
+      "root": "workflow-source",
+      "path": "AGENTS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "HUMANS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "README.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "context.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "status.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "tasks.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "plans.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "change-requests.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "architecture/phase-1-architecture.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "planning/phase-2-project-plan.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-em-core-001-execution-modes-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/2026-10-08-owner-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality-assessments.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality/recovery-phase-1-architecture-qa.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality/recovery-phase-2-plan-qa.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality/recovery-phase-3-em-core-001-execution-modes-spec-qa.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "quality/recovery-phase-5-em-core-001-execution-modes-quality.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "capture-state/em-core-001-execution-modes.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "distillations/phase-6-em-core-001-execution-modes-distillation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "checkpoints/phase-7-checkpoint-2026-10-08-execution-modes.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "memory.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "memory/2026-10-08-execution-mode-boundaries.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/final-closure-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/full-validation-final-head.log"
+    }
+  ],
+  "sections": {
+    "Evidence": "- Evidence: reviews/final-closure-review.md; implementation/full-validation-final-head.log (pass, exit0, 739 seconds); 29 offline regressions and all smoke groups; actual current-HEAD formal QA, checkpoint and completed capture.\n- Scripts are supporting-only; semantic source/intent/DoD and failure-path reviews precede them.\n- Skipped checks: model/provider/native trials and counterpart rollout, outside approved scope.\n- Residual risk: contract and inspector behavior do not prove perfect model adherence or real-world isolation.",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: 9d00bba3a17a9208b42a59ea29b0796ae5f15a6e and current owned project artifacts\n- Closure freshness: current\n- Post-fix full re-review: completed\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete\n- Cross-contract consistency: aligned\n- Risk/work mode compatibility: aligned\n- Automated evidence role: supporting-only\n- Instruction refresh: performed-full\n- Instruction baseline: current\n- Evidence: reviews/final-closure-review.md and prior integrated/final committed reviews.",
+    "Scope Under Final Check": "- Plan artifact: planning/phase-2-project-plan.md\n- Completed task: EM-CORE-001-execution-modes, five approved slices and in-scope QA corrections\n- Deferred tasks: none\n- Out-of-scope: counterpart source/nested edits, model/provider/native trials, push/main merge/branch deletion and final-owner-yes\n- Architecture and accepted spec remain aligned with the committed source.",
+    "Completion Review": "| Area | Result | Evidence |\n| --- | --- | --- |\n| In-scope DoD and tasks complete | PASS | tasks.md, current implementation Quality, committed source review |\n| Architecture, plan and specification QA current | PASS | three current recovery assessments at actual HEAD |\n| Implementation Quality current | PASS | recovery-phase-5-em-core-001-execution-modes-quality.md |\n| Distillation accepted and processed | PASS | phase6 gate, processed flag true, schema2 completed capture |\n| Checkpoint complete | PASS | phase7 checkpoint, full source run and fresh owned checks |\n| Repo, status, project memory and handoff aligned | PASS | final closure review and source-backed memory |\n| Privacy and scope preserved | PASS | no raw client data, no counterpart writes or external dispatch |\n| Blocking decisions and change requests resolved | PASS | approved scope and change-requests.md with zero open requests |\n| Final owner acceptance | awaiting | explicitly excluded from current authorization |",
+    "Findings": "- Blockers: none\n- Unresolved findings: none\n- Critical errors: none\n- Warnings: none\n- Corrected findings: malformed persisted mode, plan-only write declarations, high-impact coverage, incomplete implementation resource claims and stale unconditional question shortcut.\n- Residual risks: synthetic-only verification cannot guarantee model judgment or installed counterpart interoperability.",
+    "Owner Approval": "- Technical final check result: PASS\n- Owner approval required: yes\n- Owner decision: awaiting\n- Owner comments captured as change request: not-applicable",
+    "Change Request Review": "| Change request | Timing | Status | Blocks final-owner-yes? | Route |\n| --- | --- | --- | --- | --- |\n| none | pre-final-approval | none open | no | owner-final-approval |",
+    "Final Gate": "- Can close active plan: awaiting-owner\n- Required next phase: owner-final-approval\n- Blocking reason: final-owner-yes not granted; technical scope complete",
+    "Gate Decision": "- Result: PASS\n- Next route: owner-final-approval",
+    "Owner Decision Checkpoint": "- Interaction mode: queued\n- Decision state: awaiting-owner\n- Material decisions: final-owner-yes only\n- Questions asked: none\n- Auto-resolved reversible decisions: approved technical implementation strategy, conservative readiness projection and history-preserving fresh assessments\n- Optional owner refinements: none\n- Decision artifacts: decisions/2026-10-08-owner-scope.md\n- Next route: owner-final-approval",
+    "Optional Knowledge Capture": "- Capture recommended: no additional capture\n- Target: none\n- Reason: Phase6 and Phase7, project memory and one handoff complete\n- Owner decision required: no additional capture decision\n- Owner decision: capture-now already fulfilled\n- Privacy/scope check: pass"
+  }
+}

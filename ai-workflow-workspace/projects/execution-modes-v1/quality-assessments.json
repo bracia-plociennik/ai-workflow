@@ -32,6 +32,70 @@
       "assessed_head": "a9a5c40430af3dec153df94f8b78a30f668bbde3",
       "decision": "decisions/2026-10-08-qa-history-4.md",
       "decision_sha256": "699984c0cad72478e89384fb793a3fcae6e99cce5bdba464d8096269483dca61"
+    },
+    {
+      "path": "quality/recovery-phase-1-architecture-qa.md",
+      "sha256": "ce466759d2da6e63718d574f6d78798cda3a06684a72dbb6c6bca55c0af55c32",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-1.md",
+      "decision_sha256": "4dc3d48f762e500c0619d58f7af386e309acfa1314223290beec2f10171313b2"
+    },
+    {
+      "path": "quality/recovery-phase-2-plan-qa.md",
+      "sha256": "94e0f839397d4bb19130ba35a9017404b7b7e1ff0af9c636aca1d83af2265277",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-2.md",
+      "decision_sha256": "97036fc536a95858894f5132ac7d2c972ab602907a5304f82c6844baf15e9a47"
+    },
+    {
+      "path": "quality/recovery-phase-3-em-core-001-execution-modes-spec-qa.md",
+      "sha256": "65e20c2a36a76eb4f1dcc52d3558289278cea8696cd3eac8f6d0a4fb68a6ef7c",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-3.md",
+      "decision_sha256": "7cbb44d3c294a3ac0774ff3a2998c464af2a9b74dca6624d321e4becb9d235a8"
+    },
+    {
+      "path": "quality/recovery-phase-5-em-core-001-execution-modes-quality.md",
+      "sha256": "b7ace6e5748c3a264533097bf01a2c3779f56ef456aada7058e479c4630b10e1",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-4.md",
+      "decision_sha256": "55aec3e7aa287a9f81ff3360ff05556191426ee56393cb4c6081a5b369f83216"
+    },
+    {
+      "path": "quality/phase-3-em-compat-002-compatibility-spec-qa.md",
+      "sha256": "39022359904cc5471c7ffa09a51c3e4e24177a9b032631253dbd4df5277353d4",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-5.md",
+      "decision_sha256": "f9322746bfc8269259522d7497ed7fe5a6c51ed3cde2188c2fb7c21903cb2d06"
+    },
+    {
+      "path": "quality/phase-5-em-compat-002-compatibility-quality.md",
+      "sha256": "fb63a4dfa580625820597fa40e362e2218c94dfa4cddbbc88125739a88808f78",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-6.md",
+      "decision_sha256": "5bad305a0b0e240be0812f18395bebb8e59bce32aea6aefb0293d2e488b322b6"
+    },
+    {
+      "path": "quality/phase-8-final-check.md",
+      "sha256": "7c85c2c7670a626a070139de28e94f65a4b0b51f04b59ef5bb471f8a5bc38a8f",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-7.md",
+      "decision_sha256": "5f4c185adf4353526f3de2c6da84fc3ccb1b1dedadb2b6e14985771d2bd08612"
+    },
+    {
+      "path": "quality/phase-8-final-owner-approval.md",
+      "sha256": "2604cddb507e1b246bd07f578dab4fa9fccb981846a45e959d8dd60a03f4f8c5",
+      "state": "historical",
+      "assessed_head": "eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249",
+      "decision": "decisions/2026-10-12-history-admission-8.md",
+      "decision_sha256": "01e169d3d93c03f4cd065270e7076083443532cbd846e441e351991a359a2155"
     }
   ]
 }

@@ -1,0 +1,11 @@
+# Compatibility Scope Approval
+- Source: current owner request PLEASE IMPLEMENT THIS PLAN accepting the immediately preceding compatibility adaptation plan.
+- Scope: EM-COMPAT-002-compatibility in official ai-workflow-dev, high-risk local implementation, formal Phase 5, phases 6/7, local scoped commits and repeated technical Phase 8.
+- Mode: auto, project execution-modes-v1.
+- Cross-system impact: yes, update existing single outgoing handoff.
+- Deadline/timebox: none.
+- Excluded: AI System source writes, native/provider calls, push, merge, branch deletion, installs and final-owner-yes.
+- History policy: preserve prior QA bytes; supersede current assessments through explicit recovery records, not restamping.
+- Technical choice: schema 2 preserves legacy schema 1 inspection without retrospective recovery verification; stricter existing limits take precedence.
+- Override impact: future schema or retry-policy change requires new spec, tests and QA.
+- Canonical task identity: EM-COMPAT-002-compatibility; EM-COMPAT-002 in the accepted plan was shorthand. Only the naming suffix is clarified; actions, scope and approval boundaries are unchanged.

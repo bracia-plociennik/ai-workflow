@@ -1,5 +1,15 @@
 # Execution Modes Project Plan
 ## Tasks
+### EM-COMPAT-002-compatibility
+- Goal: source-bound compatibility and bounded recovery.
+- Scope: capability, schema 2 inspector/templates, validator/regressions, frozen counterpart integration and current Quality/capture/final check.
+- Risk type: high
+- Dependencies: accepted compatibility architecture/plan/spec QA.
+- DoD: seven conditions in specs/phase-3-em-compat-002-compatibility-specification.md.
+- Start condition: current Spec QA and decisions/2026-10-08-compatibility-scope.md.
+- End condition: current Quality, Phase 6/7 and renewed technical Phase 8 awaiting owner.
+- Readiness status: ready
+- Requires user decision before implementation: no, accepted named scope.
 ### EM-CORE-001-execution-modes
 - Goal: integrate two interaction modes with dependency-aware safety.
 - Scope: five slices below, formal Quality, distillation/checkpoint and requested technical final check.
@@ -14,8 +24,10 @@
 - Requires user decision before implementation: no; accepted plan covers named local risk.
 ## Final Execution Order
 EM-CORE-001-execution-modes: contract; dependent readiness; templates/resume; quality/Git; validators/docs/handoff.
+EM-COMPAT-002-compatibility follows CORE: capability/recovery contract; inspector/templates; synthetic frozen adapter integration; fresh integrated Quality; Phase 6/7; renewed whole-project technical Phase 8 awaiting owner.
 ## Dependency Map
 All slices integrate into one source change; later slices depend on canonical contract. No separate task QA claims per slice.
+The compatibility CR is a separate reviewed source scope after CORE, not a parallel independent workflow. Its final regression QA covers both tasks; no task is omitted from delivery or final check.
 ## Plan Quality Contract
 - Plan classification: implementation-capable
 - DoD source: context.md and decisions/2026-10-08-owner-scope.md
@@ -35,4 +47,3 @@ All slices integrate into one source change; later slices depend on canonical co
 - Deadline: none
 - Time budget: none
 - Quality floor: full DoD and findings-first review
-

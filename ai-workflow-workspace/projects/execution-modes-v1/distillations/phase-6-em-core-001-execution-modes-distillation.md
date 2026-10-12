@@ -3,7 +3,7 @@
 - Quality: quality/recovery-phase-5-em-core-001-execution-modes-quality.md
 - Owner scope: decisions/2026-10-08-owner-scope.md
 - Privacy/scope check: pass
-- memory-in-repo-memory: false
+- memory-in-repo-memory: true
 
 ## What Was Done
 Auto is the default interaction mode for new approved work; Human Coop is explicit. Both retain the same local workflow, DoD, approval and quality requirements.
@@ -13,6 +13,7 @@ Auto is the default interaction mode for new approved work; Human Coop is explic
 - Block pending decisions by affected unit and transitive dependency; continue only verified independent units.
 - Projection declarations are inspection inputs, not proof of approval or native isolation.
 - Persisted mode rejects malformed values. Implementation claims require declared writes/resources.
+- Mode defaults must also qualify older workflow shortcut paragraphs; an unconditional interactive sentence was corrected and covered by the 29th regression test.
 - Existing high-risk permission is checked for actual coverage, never recreated from metadata.
 - Auto with no delivery constraint is unbounded; retry/no-progress and explicit/legacy resource limits still apply.
 
@@ -42,7 +43,7 @@ none; no separate promotion approved or needed.
 - Auto-resolved reversible decisions: preserve prior QA bytes and perform fresh post-commit assessments
 - Optional owner refinements: none
 - Decision artifacts: decisions/2026-10-08-owner-scope.md
-- Next route: local scoped source commit, fresh QA and phase-7-checkpoint
+- Next route: processed by checkpoints/phase-7-checkpoint-2026-10-08-execution-modes.md; requested technical phase-8-final-check
 
 ## Optional Knowledge Capture
 - Capture recommended: yes

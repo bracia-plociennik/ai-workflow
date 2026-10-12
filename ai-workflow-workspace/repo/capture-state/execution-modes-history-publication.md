@@ -1,0 +1,13 @@
+# Distillation State
+- Capture schema: 1
+- Work ID: execution-modes-history-publication
+- Work mode: workflow-maintenance
+- Project/repo scope: repo
+- Source artifact: reviews/2026-10-12-execution-modes-history-publication.md
+- Quality artifact: reviews/2026-10-12-execution-modes-history-publication.md
+- State: not-applicable
+- Distillation artifact: none
+- Last reminder: 2026-10-12
+- Owner disposition: not-requested
+- Privacy/scope check: pass
+- Residual risk: No new reusable product rule was produced: this maintenance applies the already published protocol. Transactional decisions and verification are retained in the owning review, so a separate Phase 6 distillation is not applicable and is_distilled remains false. Historical QA is not current acceptance. Original late capture creation is disclosed in the review; public publication remains persistent and detection cannot prove absence of every sensitive context.

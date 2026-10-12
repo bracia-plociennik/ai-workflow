@@ -1,6 +1,37 @@
 # Repo Status
 
-### Current Focus: PTO Final Owner Closure - 2026-10-04
+### Current Focus: Historical Evidence Publication - 2026-10-12
+
+- Owner-approved scope: synchronize source-only origin/main to dev, preserve local runtime and publication policy, register eight reports as history without rewriting their bytes, results or original final-owner-yes, and publish the reviewed dev snapshot after required QA.
+- Source synchronization commit: b48d873700fee94377af4ae1357f68f4544ffe07; source matches origin/main b5965affde1d670783f86f422f59143deba54e74. Runtime and .gitignore were unchanged by the source merge.
+- Historical records and frozen counterpart evidence are supporting-only, not current product acceptance. No renewed Phase 8, main write, counterpart update or installed/native behavior claim.
+- Source and staged runtime full validation completed, each with 46 checks and 778 smoke IDs; original report/acceptance hashes are unchanged. Historical formatting findings remain disclosed and preserved.
+- Actual committed-snapshot and remote publication results are returned separately in the chat after those operations; this router does not infer a push, new product acceptance or Phase 8.
+- Owning evidence: repo/reviews/2026-10-12-execution-modes-history-publication.md.
+
+### Historical Focus: Execution Modes Final Owner Closure - 2026-10-09
+
+- Owner final-owner-yes and current-branch push are explicit in projects/execution-modes-v1/decisions/2026-10-09-final-owner-yes.md.
+- Both accepted tasks have current implementation Quality, completed Phase6/7 and reviewed technical final check at source eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249. Source and index remain unchanged; no empty commit for ignored-only closure.
+- Final acceptance closes execution-modes-v1; fresh final-check/owner-approval evidence and owned artifact checks bind the closure state. Publication outcome is recorded separately in projects/execution-modes-v1/evidence/publication.md, not inferred from approval.
+- Publication target: origin/codex/execution-modes-v1 only. No main merge, counterpart/nested update, native/model trial or installed interoperability claim.
+- Project router: projects/execution-modes-v1/status.md; handoff: external-memory/memory/2026-10-08-execution-modes-ai-system-handoff.md.
+
+### Historical Focus: Execution Modes Compatibility Closure - 2026-10-08
+
+- Official source branch codex/execution-modes-v1 at eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249; clean tracked worktree and empty index. Source commit is local; no push or merge is authorized.
+- CORE and compatibility have fresh formal prerequisite QA and implementation Quality at actual HEAD. Phase6 capture and Phase7 synchronization are complete. Current committed-source/project full validation passed in 698 seconds with every check and all five smoke groups; scripts remain supporting-only.
+- Separately requested renewed technical Phase8 retains awaiting-owner-final-yes; current final evidence is projects/execution-modes-v1/quality/phase-8-final-check.md. This focus snapshot is not final owner approval. No counterpart/nested update, native/model trial or installed interoperability is claimed.
+- Project router: projects/execution-modes-v1/status.md; one handoff: external-memory/memory/2026-10-08-execution-modes-ai-system-handoff.md.
+
+### Historical Focus: Execution Modes Technical Closure - 2026-10-08
+
+- Official source branch codex/execution-modes-v1 at 9d00bba3a17a9208b42a59ea29b0796ae5f15a6e; clean tracked worktree and empty index. Local commits d3536e5 and 9d00bba are not pushed by this scope.
+- Accepted Auto/Human Coop scope has fresh formal artifact QA and implementation Quality, accepted Phase 6 and a synchronized Phase 7 checkpoint. Current HEAD full validation passed in 739 seconds with all smoke groups; scripts are supporting-only.
+- Separately requested technical Phase 8 retains awaiting-owner-final-yes. This focus snapshot is not final owner approval and does not close the active plan. No main merge, counterpart/nested update or model/native evaluation is claimed.
+- Project router: projects/execution-modes-v1/status.md; handoff: external-memory/memory/2026-10-08-execution-modes-ai-system-handoff.md.
+
+### Historical Focus: PTO Final Owner Closure - 2026-10-04
 
 - Explicit final-owner-yes and current-branch commit/push: projects/parallel-task-orchestration-v1/decisions/pto-final-owner-yes.md.
 - Approved ten-task protocol-only scope is closed. Source commit b234eb6 matches all70 reviewed staged bytes/modes; no extra path or hook mutation.

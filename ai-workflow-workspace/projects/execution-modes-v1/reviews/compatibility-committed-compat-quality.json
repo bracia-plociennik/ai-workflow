@@ -1,0 +1,248 @@
+{
+  "schema": 1,
+  "kind": "implementation-quality",
+  "task": "EM-COMPAT-002-compatibility",
+  "run_id": "em-compat-committed-compat-quality-20261008",
+  "verdict": "PASS",
+  "date": "2026-10-08",
+  "inputs": [
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/autopilot.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/changelog.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/command-routing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/commands.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/contract-compliance.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/delivery-constraints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/execution-modes.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/implementation-slicing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/operating-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/owner-decision-checkpoints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/parallel-task-orchestration.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/permissions.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/plan-quality-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/prompt-composition.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/quality-review.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/response-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/risk-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/task-intake.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/workflow.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/execution-readiness.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/readiness.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/state.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/task-decisions.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/plans.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/status.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-5-quality.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-execution-modes"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-owner-decision-checkpoints"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-required-artifacts"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-review-completeness-gate"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-validator-smoke-tests"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-checks.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/core.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/manifest.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/tests/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/validate-workflow"
+    },
+    {
+      "root": "workflow-source",
+      "path": "AGENTS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "HUMANS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/capabilities/execution-modes-v1.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/common.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/phase-commit-policy.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-em-compat-002-compatibility-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/phase-4-em-compat-002-compatibility-implementation.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/2026-10-08-compatibility-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/2026-10-08-owner-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/compatibility-final-semantic-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-unit-tests.log"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-integration-closure.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-full-stable-source.log"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-source-copy-equality.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/compatibility-postcommit-semantic-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-postcommit-source-equality.json"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-postcommit-unit-tests.log"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-postcommit-integration.json"
+    }
+  ],
+  "sections": {
+    "Evidence": "- Evidence: reviews/compatibility-final-semantic-review.md; implementation/compatibility-unit-tests.log (38 tests); implementation/compatibility-integration-closure.json (23 adapter scenarios plus five recovery/tamper cases); final-source full log and exact source-copy equality. Model/native/rollout checks are excluded by the accepted scope. Scripts remain supporting-only.\n- Fresh committed baseline: reviews/compatibility-postcommit-semantic-review.md, post-commit source equality, 38 current tests and repeated 23+5 adapter scenarios. Pre-commit full evidence remains labeled as such; fresh project/full follows before Phase7/8.",
+    "Findings": "- Blockers: none\n- Unresolved findings: none\n- Corrected: over-budget completion; isolated range-policy capability fixture; omitted compatibility final execution order; canonical task suffix and premature in-progress next phase.",
+    "Gate Decision": "- Result: PASS\n- Next route: phase-6-distillation",
+    "Definition Of Done Validation": "| DoD Item | Result | Evidence |\n| --- | --- | --- |\n| Exact source-bound capability metadata, fields and mode mapping | PASS | fourteen-source producer-consumer audit and negative tamper tests |\n| Stable-cause schema2 recovery with unique attempts and deduplicated progress | PASS | 38 deterministic tests and recovery integration scenarios |\n| Legacy schema1 does not attest new recovery or authority | PASS | legacy-unverified regression and contract |\n| Stalled/dependent/shared units blocked; independent approved unit ready | PASS | manual graph trace and actual frozen adapter |\n| Existing 2 Spec / 2 Quality / 32 run limits preserved | PASS | exhaustion and last-successful-fix regressions |\n| Full source QA and canonical plan/spec compliance | PASS | final-source full result, source equality, current artifact QA and semantic review |\n| Capture/handoff/final-check inputs and safe downstream sequencing ready | PASS | existing single handoff updated; required Phase6/7/8 remain separate delivery gates, not claimed by Phase5 |",
+    "Intent / Plan / Spec Compliance": "- Result: PASS\n- Owner instruction reviewed: yes\n- Accepted plan reviewed: yes\n- Accepted spec reviewed: yes\n- Scope/out-of-scope reviewed: yes\n- Acceptance criteria reviewed: yes\n- Compliance status: aligned\n- Wrong problem solved: no\n- Owner instruction mismatch: no\n- Accepted plan mismatch: no\n- Accepted spec mismatch: no\n- Acceptance criteria gap: no\n- Scope creep: no\n- Underbuild: no\n- Overbuild: no\n- Evidence: accepted compatibility CR/spec and scope decision, corrected complete execution order, actual frozen adapter protocol and final semantic review. Delivery capture/final check are mandatory subsequent routes.",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: eb5f4d6973d2e0d3fadc15c3b8d3412741ad3249 and entire committed fifteen-path change, live source, index and forty-four reviewed inputs\n- Closure freshness: current\n- Post-fix full re-review: completed\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete\n- Cross-contract consistency: aligned\n- Risk/work mode compatibility: aligned\n- Source-of-truth, permissions, phase gates, artifact state, and acceptance criteria reviewed: yes\n- Negative-space / adversarial review: completed\n- Automated evidence role: supporting-only\n- Instruction refresh: performed-full\n- Instruction baseline: current\n- Producers/consumers reviewed: router/intake/decisions/delivery/approval, project/readiness/state/decision templates, pure inspector, quality/commit consumers, registry and smoke source population\n- Evidence: reviews/compatibility-final-semantic-review.md; current forty-four-source inputs and complete fifteen-path source diff.",
+    "Adaptive Data / Integration Verification Matrix": "- Applicability: required\n| Source Shape | Expected Canonical State | Expected Derived Output | Forbidden States/Rows | Failure Behavior | Test/Check | Manual Trace |\n| --- | --- | --- | --- | --- | --- | --- |\n| Exact fourteen sources and closed capability fields | source-bound metadata | support-only map | stale/missing/linked metadata | reject | capability tamper suite | source digest compared before support |\n| U1/C1 three attempts, U2 disjoint | U1 blocked | U2 ready | affected dispatch | exclude dependents and shared claims | frozen recovery scenarios | attempts -> causes -> graph -> readiness |\n| Repeated hash or new C2 hash | no false reset of C1 | old cause remains blocked | hash/relabel budget reset | preserve cause history | progress/cause regressions | unit-wide dedup precedes cause counters |\n| Last successful permitted fix with current QA/capture | completed | accepted result | extra retry beyond budget | reject excess | completion and total-limit regressions | successful completion distinguished from retry |\n| Frozen adapter/profile plus committed candidate | source-bound synthetic support | original mode/scope/source forwarded | uncommitted source or expanded action | reject | 23 actual adapter cases | HEAD/index/live profile compared; original JSON inspected |\n| Legacy schema1 | legacy-unverified | no new recovery proof | inferred new authority | guard not attested | schema regression | explicit fresh schema2 needed for future guard |\n| No owner final acceptance or push permission | technical work only | awaiting owner at final check | auto final-owner-yes or rollout | reject or remain out of scope | original final-check/approval regressions | mode metadata never creates permission |",
+    "Quality Gate": "- Intent / Plan / Spec Compliance PASS: yes\n- Review Completeness Gate PASS: yes\n- Cross-contract consistency aligned: yes\n- Risk/work mode compatibility aligned: yes\n- Negative-space / adversarial review complete or not applicable: yes\n- Automated evidence treated as supporting-only: yes\n- Post-fix full re-review complete or not required: yes\n- Instruction baseline current: yes\n- Closure freshness current: yes\n- Policy-boundary adversarial matrix complete or not applicable: yes\n- Producer-consumer field audit complete or not applicable: yes\n- Required-field mapping complete or not applicable: yes\n- 100% DoD satisfied: yes\n- No known bug in scope: yes\n- No regression in changed/direct paths: yes\n- Edge cases covered or explicitly rejected: yes\n- Explicit evidence attached: yes\n- Quality result: PASS\n- Required next phase: phase-6-distillation"
+  }
+}

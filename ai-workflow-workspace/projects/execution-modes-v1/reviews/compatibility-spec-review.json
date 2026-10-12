@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "kind": "spec-qa",
+  "task": "EM-COMPAT-002",
+  "run_id": "em-compat-planning-spec-20261008",
+  "verdict": "PASS",
+  "date": "2026-10-08",
+  "inputs": [
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-em-compat-002-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/2026-10-08-compatibility-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/compatibility-planning-review.md"
+    }
+  ],
+  "sections": {
+    "Gate Decision": "- Result: PASS\n- Next route: next accepted planning or implementation stage",
+    "Evidence": "- Evidence: reviews/compatibility-planning-review.md; accepted compatibility scope and actual counterpart adapter reviewed.",
+    "Findings": "- Blockers: none\n- Unresolved findings: none",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: 9d00bba3a17a9208b42a59ea29b0796ae5f15a6e and accepted compatibility artifacts\n- Closure freshness: current\n- Post-fix full re-review: not-required\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete",
+    "QA Verification Scope": "- Owner intent, DoD, scope, legacy semantics, stricter budgets, capability source binding and no-dispatch boundary reviewed.",
+    "Artifact QA Completeness Gate": "- Owner intent and governing sources reviewed: compatibility approval and current contracts\n- DoD / phase acceptance criteria reviewed: yes\n- Scope and out-of-scope consistency: aligned\n- Artifact / relevant diff review: completed\n- Findings-first review: completed\n- Failure / rework / dependency scenarios: completed\n- Repository and source compatibility: aligned\n- Post-fix full artifact re-review: not-required\n- Evidence reviewed: reviews/compatibility-planning-review.md and accepted artifact\n- Skipped or unreadable sources: none\n- Residual risk: source-bound metadata is not execution authority or model proof\n- Closure freshness: current"
+  }
+}

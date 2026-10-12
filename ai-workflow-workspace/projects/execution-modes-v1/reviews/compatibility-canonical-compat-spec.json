@@ -1,0 +1,218 @@
+{
+  "schema": 1,
+  "kind": "spec-qa",
+  "task": "EM-COMPAT-002-compatibility",
+  "run_id": "em-compat-canonical-compat-spec-20261008",
+  "verdict": "PASS",
+  "date": "2026-10-08",
+  "inputs": [
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/autopilot.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/changelog.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/command-routing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/commands.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/contract-compliance.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/delivery-constraints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/execution-modes.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/implementation-slicing.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/operating-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/owner-decision-checkpoints.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/parallel-task-orchestration.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/permissions.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/plan-quality-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/prompt-composition.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/quality-review.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/response-contract.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/risk-model.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/task-intake.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/workflow.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/execution-readiness.template.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/readiness.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/state.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/autopilot/task-decisions.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/plans.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/templates/projects/status.template.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/workflow/phase-5-quality.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-execution-modes"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-owner-decision-checkpoints"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-required-artifacts"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-review-completeness-gate"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/check-validator-smoke-tests"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/lib/validation-checks.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/core.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/manifest.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/tests/execution-modes.py"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/validate-workflow"
+    },
+    {
+      "root": "workflow-source",
+      "path": "AGENTS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "HUMANS.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": "README.md"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/capabilities/execution-modes-v1.json"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/scripts/smoke/common.sh"
+    },
+    {
+      "root": "workflow-source",
+      "path": ".systems/ai/core/phase-commit-policy.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "specs/phase-3-em-compat-002-compatibility-specification.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "decisions/2026-10-08-compatibility-scope.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/compatibility-planning-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/counterpart-interface-drift.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "reviews/compatibility-integrated-review.md"
+    },
+    {
+      "root": "owning-project-evidence",
+      "path": "implementation/compatibility-integration-final.json"
+    }
+  ],
+  "sections": {
+    "Gate Decision": "- Result: PASS\n- Next route: next accepted planning or implementation stage",
+    "Evidence": "- Evidence: reviews/compatibility-planning-review.md; accepted compatibility scope and actual counterpart adapter reviewed.",
+    "Findings": "- Blockers: none\n- Unresolved findings: none",
+    "Review Completeness Gate": "- Status: complete\n- Reviewed baseline: 9d00bba3a17a9208b42a59ea29b0796ae5f15a6e and accepted compatibility artifacts\n- Closure freshness: current\n- Post-fix full re-review: not-required\n- Policy-boundary adversarial matrix: completed\n- Producer-consumer field audit: completed\n- Required-field mapping: complete",
+    "QA Verification Scope": "- Owner intent, DoD, scope, legacy semantics, stricter budgets, capability source binding and no-dispatch boundary reviewed.",
+    "Artifact QA Completeness Gate": "- Owner intent and governing sources reviewed: compatibility approval and current contracts\n- DoD / phase acceptance criteria reviewed: yes\n- Scope and out-of-scope consistency: aligned\n- Artifact / relevant diff review: completed\n- Findings-first review: completed\n- Failure / rework / dependency scenarios: completed\n- Repository and source compatibility: aligned\n- Post-fix full artifact re-review: not-required\n- Evidence reviewed: reviews/compatibility-planning-review.md and accepted artifact\n- Skipped or unreadable sources: none\n- Residual risk: source-bound metadata is not execution authority or model proof\n- Closure freshness: current"
+  }
+}
