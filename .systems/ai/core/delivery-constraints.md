@@ -71,3 +71,8 @@ Autopilot readiness must contain a resolved delivery constraint, explicit owner 
 ## Evidence
 
 Quality closure records the agreed deadline/timebox, delivered scope, deferred scope, deadline status, quality floor, skipped checks, overrun decisions, and residual risk.
+
+
+## Goal-Focused Maintenance Integration
+
+The goal-focused-maintenance.md 600-second limit applies to TOTAL incidental diagnosis/edit/review/test/record work per stable approved parent task, shared across adapters/resumes. It does not impose a timebox on intentional product development. Persist intervals, reserve verification/recovery, bound tool duration, start no new incidental action at exhaustion. Unknown recovered elapsed is ineligible until verified reconstruction. Unexpected safe own-change recovery overrun is recorded honestly, never hidden by resetting the budget.

@@ -221,3 +221,8 @@ The footer is invalid when:
 - either option would bypass gates, evidence, approval, risk policy, or final owner approval;
 - either `Napisz:` block is missing, vague, or not actionable;
 - impact is vague, for example `better workflow` without saying what becomes safer, clearer, faster, or unblocked.
+
+
+## Goal-Focused Maintenance Integration
+
+Activated goal-focused-maintenance.md governs incidental disclosure. Progress/final replies focus on the requested outcome and necessary decisions; below thresholds omit unsolicited historical debt/count/reminder commentary while retaining inspectable evidence. Immediately surface E01–E05 and current-goal blockers before affected unsafe work. Five distinct active causes or a third truly obstructed parent task yield one consolidated milestone summary with actual presentation receipt. On explicit request show the full scoped queue including uncertainty. Required current limits, failed gates and incomplete delivery remain truthful; no assertion of all-green from silence. Host UI tool logs remain outside this narration policy.

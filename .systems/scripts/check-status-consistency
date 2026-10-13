@@ -5,6 +5,7 @@ fail=0
 project=""
 runtime_only=0
 scope_root=""
+goal_work_ids=()
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --project)
@@ -13,6 +14,9 @@ while [[ "$#" -gt 0 ]]; do
       shift 2
       ;;
     --runtime-only) runtime_only=1; shift ;;
+    --goal-work-id)
+      [[ "$#" -ge 2 ]] || { echo "Missing required work identity" >&2; exit 2; }
+      goal_work_ids+=(--goal-work-id "$2"); shift 2 ;;
     --scope-root)
       [[ "$#" -ge 2 ]] || { echo "Missing value for --scope-root" >&2; exit 2; }
       scope_root="$2"; shift 2 ;;
@@ -589,4 +593,11 @@ for project_root in "${project_roots[@]}"; do
   done < <(find "$project_root" "${find_depth[@]}" -name 'tasks.md' -print0 2>/dev/null || true)
 done
 
+if [[ "${#goal_work_ids[@]}" -gt 0 ]]; then
+  [[ -n "$project" ]] || { echo "Current-goal gate requires --project" >&2; exit 2; }
+  if ! python3 "$script_dir/lib/capture-state.py" --workspace "$workspace_home" \
+    --workflow "$repo_root" --repo "$target_repo_root" --project "$project" "${goal_work_ids[@]}"; then
+    fail=1
+  fi
+fi
 exit "$fail"

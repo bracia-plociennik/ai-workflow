@@ -1,6 +1,9 @@
 """Shared capture semantics; callers select populations and provide trusted adapters."""
 import hashlib
 import re
+import importlib.util
+from pathlib import Path
+import sys
 
 
 STATES = {'pending-quality', 'ready', 'completed', 'deferred', 'owner-skipped', 'blocked', 'not-applicable'}
@@ -48,6 +51,70 @@ def accepted_distillation(text, legacy):
         return len(values) == 1 and re.fullmatch(r'`?yes`?(?:[;,][^\n]*)?', values[0].strip()) is not None
     values = re.findall(r'^- State after accepted distillation:\s*([^\n]+)$', text, re.M)
     return legacy and len(values) == 1 and values[0].strip('` ') == 'completed'
+
+
+def goal_claims(files, workspace, owner, workflow, repo, project, scope, qa):
+    """Inspect every physical sibling, including invalid ones, before selection."""
+    claims = []
+    for file in files:
+        if file.name in {'README.md', 'capture-state.md'}:
+            continue
+        claim = {'path': str(file.relative_to(workspace)), 'owner_ref': str(owner),
+                 'work_ids': [], 'source_refs': [], 'distillation_refs': [],
+                 'aliases': [], 'complete': False}
+        try:
+            scope.contained(owner, str(file.relative_to(owner)))
+            parsed = pairs(file.read_text())
+            values = dict(parsed)
+            if len(parsed) != len(values) or values.get('Capture schema', '1') not in {'1', '2', '3'}:
+                raise ValueError('unknown/duplicate claims')
+            identity = values['Work ID']
+            if not re.fullmatch(r'[A-Z][A-Z0-9]*(?:-[A-Za-z0-9]+)*', identity):
+                raise ValueError('unknown work identity')
+            claim['work_ids'] = [identity]
+            if any('alias' in k.lower() or 'claim' in k.lower() for k in values):
+                raise ValueError('unresolved alias claims')
+            legacy = values.get('Capture schema', '1') == '1'
+            for key in ('Source artifact', 'Quality artifact', 'Distillation artifact'):
+                path = references(workspace, owner, values[key], scope, legacy)
+                if path is not None:
+                    claim['source_refs'].append(str(path))
+                if key == 'Distillation artifact' and path is not None:
+                    claim['distillation_refs'].append(str(path))
+                if key == 'Quality artifact' and path is not None:
+                    meta, _ = qa.read_current(path.read_text().splitlines())
+                    if meta['Project/task identity'] != project + ':' + identity:
+                        raise ValueError('foreign QA task claim')
+                    claim['source_refs'] += qa.dependency_refs(path, workflow, workspace, project, repo)
+            if values['Quality artifact'] == 'none' and values.get('State') != 'not-applicable':
+                raise ValueError('cannot prove dependency closure without QA')
+            claim['source_refs'] = sorted(set(claim['source_refs']))
+            claim['complete'] = True
+        except (ValueError, KeyError, OSError, UnicodeError):
+            pass
+        claims.append(claim)
+    return claims
+
+
+def goal_collection(files, workspace, owner, workflow, repo, project, scope, qa, required_work_ids):
+    """Optional live current-goal consumer; full collection remains exhaustive.
+
+    No policy file, age, estimated cost or saved skip flag selects evidence.
+    Required identities originate in the accepted current task/DoD. Ambiguous
+    siblings retain a blocking result even when their own record fails parsing.
+    """
+    spec = importlib.util.spec_from_file_location('capture_maintenance', Path(__file__).with_name('maintenance-policy.py'))
+    maintenance = importlib.util.module_from_spec(spec); sys.modules[spec.name] = maintenance; spec.loader.exec_module(maintenance)
+    full = collection(files, workspace, owner, workflow, repo, project, scope, qa)
+    claims = goal_claims(files, workspace, owner, workflow, repo, project, scope, qa)
+    selected = maintenance.select_goal(full, claims, str(owner), required_work_ids)
+    current = {row['work_id']: row for row in selected['records']}
+    for ident in required_work_ids:
+        row = current.get(ident)
+        if row is None or row['quality_verification'] != 'verified-current' or row['state'] not in {'ready', 'completed'}:
+            selected['invalid'].append({'path': ident, 'reason': 'required current Capture proof incomplete'})
+    selected['gate_result'] = 'FAIL' if selected['invalid'] else 'PASS'
+    return selected
 
 
 def record(file, workspace, owner, workflow, repo, project, scope, qa):

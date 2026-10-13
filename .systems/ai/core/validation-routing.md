@@ -65,3 +65,8 @@ Validation routing does not weaken DoD, PASS Integrity, findings-first review, r
 ## Intent brief supporting checks
 
 check-intent-to-execution-brief runs in standard/full and declared scoped dependency closure. It validates candidate profile syntax/live bytes and synthetic state/source regression tests only; candidate-live-only has authority none and capability_verified false. Exact accepted installation support needs the separate pure verifier with externally verified --expected-head, committed tree/index/live comparison, valid execution-mode capability and actual native/semantic Quality. CI/scripts never launch model APIs or export private sources; real native B01–B25 tests are a separately approved isolated evidence route. No script PASS substitutes for source/model/owner proof.
+
+
+## Goal-Focused Maintenance Integration
+
+goal-focused-maintenance.md does not relax required full/source/release/updater validation. Optional current-goal collection is explicitly labeled and retains the exhaustive inventory plus historical_invalid; direct required proof is independently checked. Default validators remain unchanged; no age/quiet-policy/cost skip list can make a failing full audit pass. Semantic review precedes supporting scripts.
