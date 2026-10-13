@@ -1,5 +1,7 @@
 # HUMANS.md
 
+Przed wyborem katalogu użyj `.systems/ai/core/workspace-directory-layout.md`: właściwe repozytoria zostają w `projects/`, dodatkowe worktree’y trafiają do `.worktrees/<repository-id>/<work-id>/`, a pliki robocze do `.tmp/<work-id>/` pod wybranym rootem kolekcji. `AI_WORKFLOW_WORKSPACE_HOME/projects/` nadal przechowuje plany, taski i QA. Zapisz trwałe dowody poza `.tmp`; nie przenoś historii ani nie usuwaj danych automatycznie.
+
 Oficjalny checkout rozwojowy pracuje na `dev`. Nowe owned worktree `codex/<scope>` tworzysz jawnie od `dev`, nie domyślnego `main` narzędzia. Mogą dziedziczyć niezmieniony, sprawdzony snapshot workspace, ale nie aktualizują go. Feature PR kierujesz do dev; ukończony produkt publikujesz z osobnego source-only release brancha od main przez PR do main. Nie scalasz dev bezpośrednio do main, bo przeniosłoby to historię workspace. Reguły: `.systems/ai/core/development-worktree-policy.md`.
 
 Official `dev` may publish an audited workspace snapshot; `main` remains code-only. Review privacy and refresh `repo/publication-review.json` before committing changed workspace files, then run `check-workspace-publication`. Select only reviewed product commits or a product-only patch for mixed commits; preserve main's workspace ignore rule. Published historical QA is not current QA PASS. Local workspace differences are not automatically staged or published; push/PR still require authority.

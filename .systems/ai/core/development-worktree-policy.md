@@ -1,6 +1,12 @@
 # Development Worktree And Filtered Publication Policy
 
 ## Development Base
+
+Apply `workspace-directory-layout.md` before choosing a destination: canonical
+owner repos belong in the collection `projects/`; auxiliary implementation,
+review and release trees use `.worktrees/<repository-id>/<work-id>/`. Disposable
+task files use `.tmp/<work-id>/`. Workflow runtime `projects/` remains the logical
+artifact namespace, not a Git repository/worktree collection.
 The official AI Workflow development checkout uses `dev`. New substantive
 implementation work uses an owned `codex/<scope>` linked worktree created with
 an explicit `dev` ref. Do not accept a tool's default `main` starting ref.
