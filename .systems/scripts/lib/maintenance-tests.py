@@ -355,6 +355,9 @@ class CapabilityTests(unittest.TestCase):
         self.profile=m.support_profile(self.root)
         (self.root/'.systems/ai/capabilities/goal-focused-maintenance-v1.json').write_text(json.dumps(self.profile,sort_keys=True,indent=2)+'\n')
         subprocess.run(['git','init','-q',str(self.root)],check=True)
+        # Synthetic fixture teardown must not race detached Git maintenance.
+        subprocess.run(['git','-C',str(self.root),'config','gc.auto','0'],check=True)
+        subprocess.run(['git','-C',str(self.root),'config','maintenance.auto','false'],check=True)
         subprocess.run(['git','-C',str(self.root),'add','.'],check=True)
         subprocess.run(['git','-C',str(self.root),'-c','user.name=Synthetic','-c','user.email=fixture@example.invalid','commit','-qm','synthetic complete product support'],check=True)
         self.head=subprocess.check_output(['git','-C',str(self.root),'rev-parse','HEAD'],text=True).strip()
