@@ -34,3 +34,8 @@ An agent must not:
 - Use fake/log/test adapters for external effects.
 - Prefer read-only inspection before mutation.
 - Record skipped checks and approval gaps.
+
+
+## Goal-Focused Maintenance Integration
+
+Incidental repairs under activated goal-focused-maintenance.md require actual local target approval and coordinator permission/privacy checks; an evaluator projection or queue/policy text never grants them. Only local/reversible/low-risk known-cause/test collision-free changes within recorded approved roots qualify. Security/auth/billing/permissions/production/migrations/secrets/external effects/architecture changes/dependency installs/cross-owner writes are excluded from this allowance. Metadata bookkeeping within the current task approval creates no recursive permission request or Capture. No new Git/publication authority follows.

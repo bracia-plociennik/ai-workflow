@@ -200,3 +200,8 @@ Rekomendowany routing:
 ```
 
 Then provide the plan, clarification, or safe next step. Finish the whole response with the required `Co dalej?` footer from `.systems/ai/core/response-contract.md`.
+
+
+## Goal-Focused Maintenance Integration
+
+During scoped activation, record the stable parent outcome, accepted goal/DoD/architecture, nearest canonical owner, current required proof identities and concrete owner-approved maintenance target roots. Read existing queue rather than creating a second cause/task budget. Apply goal-focused-maintenance.md: separate actual goal/risk blockers from independently evidenced incidental debt. Preserve the intake lens internally; below thresholds do not recite unrelated debt to the owner. Unknown dependencies cannot be marked independent.

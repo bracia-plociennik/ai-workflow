@@ -194,6 +194,10 @@
         "check-execution-modes"
       ],
       "scope": "framework"
+    },
+    "check-goal-focused-maintenance": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

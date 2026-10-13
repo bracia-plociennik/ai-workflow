@@ -352,3 +352,8 @@ DoD:
 - brak ukrytych sprzeczności
 - decyzja o zamknięciu etapu
 ```
+
+
+## Goal-Focused Maintenance Integration
+
+goal-focused-maintenance.md is a disclosure/scoped history policy, not final-owner-yes. At an explicitly requested Phase8, review the private issue queue and current proof; proven independent historical debt does not by itself block the active goal, but unknown/shared/duplicate/foreign dependencies do. Current technical acceptance and actual owner final approval remain required. Store actual presented receipt only after a surfaced summary; no automatic Phase8 from the queue.

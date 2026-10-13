@@ -86,3 +86,8 @@ Dream Reports for this contract must state `Durable writes performed: no` and `S
 ## Privacy And Scope
 
 State records contain paths and workflow metadata only. Do not copy raw client data, secrets, API keys, credentials, private keys, production data, or project-specific domain content into cross-project insights or External Memory.
+
+
+## Goal-Focused Maintenance Integration
+
+Under activated goal-focused-maintenance.md, observation/dedup/disposition/timer/presentation bookkeeping is metadata of the existing approved task and does not recursively require another Capture record or formal task. Real substantive repairs retain compact DoD/diff/test/review/knowledge evidence and link once to the owning Capture when warranted. Original historical QA/Capture stays immutable and is not promoted to current approval. Required current proof remains binding; proven independent history may be selected only by the conservative live dependency consumer, with exhaustive inventory retained.

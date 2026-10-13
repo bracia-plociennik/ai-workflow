@@ -132,3 +132,8 @@ The classification is advisory only. Durable capture must use the existing memor
 V1 has no scheduler. It does not add automations, daemon processes, hooks, cron jobs, or background execution.
 
 Nightly or AFK execution can be planned later as a separate owner-approved micro-project after this advisory contract is stable.
+
+
+## Goal-Focused Maintenance Integration
+
+When scoped goal-focused-maintenance.md is active, read the nearest-owner maintenance/queue.json only for the authorized advisory report. Do not mutate queue/policy/budget/presentation flags/tasks/Capture/source/approvals/scheduler or execute repairs. A written Dream Report is not an owner delivery receipt. Use sanitized summaries/references, not raw private sources; live coordinator later verifies actual presentation if it occurs.

@@ -205,3 +205,8 @@ Autopilot must stop affected units and write an escalation artifact for the cond
 - evidence cannot support `PASS`;
 - prompt-injection defense is triggered;
 - a destructive or production-affecting action would be needed.
+
+
+## Goal-Focused Maintenance Integration
+
+An activated goal-focused-maintenance.md queue never adds automatic tasks or resets parent budgets. Incidental metadata does not add formal task/checkpoint slots; substantive repairs still have actual local eligibility and quality evidence. The active goal and current QA remain binding. E01–E05/goal blockers are immediate, accumulation summaries occur at the existing task/milestone boundary. No unattended background dispatcher or automatic Phase8 is introduced.

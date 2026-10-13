@@ -115,3 +115,8 @@ End-of-Task Capture is owner-triggered by completion/capture wording such as `to
 Knowledge Capture Reminder is proactive and can appear without owner capture wording after implementation, fixes, quality closure, handoff, commit readiness, or before unrelated new work. It remains proposal-oriented unless existing gates require capture.
 
 If the owner gives a direct End-of-Task Capture command, use `.systems/ai/core/end-of-task-capture.md` first and include Knowledge Capture Reminder only as supporting context when useful.
+
+
+## Goal-Focused Maintenance Integration
+
+For activated goal-focused-maintenance.md, retain the knowledge disposition in owning evidence and do not narrate unrelated historical queue counts or advisory reminders below escalation thresholds. This exception covers metadata bookkeeping only, not a substantive repair or a required task-quality/capture gate. On request, authorized Dreaming read or milestone review expose the requested queue accurately. No automatic TaskNotes or new recursive Capture.

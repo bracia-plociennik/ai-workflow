@@ -31,6 +31,11 @@ def record(file, workspace, owner, workflow, repo, project):
 
 def collection(files, workspace, owner, workflow, repo, project):
     return shared.collection(files, workspace, owner, workflow, repo, project, scope, qa)
+
+
+def goal_collection(files, workspace, owner, workflow, repo, project, required_work_ids):
+    return shared.goal_collection(files, workspace, owner, workflow, repo, project, scope, qa, required_work_ids)
+
 def inventory(workspace, workflow, repo, project=None):
     result = {'schema_version': 1, 'records': [], 'invalid': [], 'skipped': [], 'total': 0, 'unresolved': 0}
     if not workspace.exists():
@@ -78,9 +83,17 @@ def main():
     p.add_argument('--workflow', type=Path, required=True)
     p.add_argument('--repo', type=Path, required=True)
     p.add_argument('--project')
+    p.add_argument('--goal-work-id', action='append', default=[])
     a = p.parse_args()
     try:
-        out = inventory(a.workspace, a.workflow, a.repo, a.project)
+        if a.goal_work_id:
+            if not a.project or not scope.SLUG.fullmatch(a.project):
+                raise ValueError('goal selection needs an explicit owning project')
+            owner = scope.contained(a.workspace, 'projects/' + a.project)
+            namespace = scope.contained(owner, 'capture-state')
+            out = goal_collection(sorted(namespace.iterdir()), a.workspace, owner, a.workflow, a.repo, a.project, a.goal_work_id)
+        else:
+            out = inventory(a.workspace, a.workflow, a.repo, a.project)
         print(json.dumps(out, sort_keys=True))
         return bool(out['invalid'])
     except (ValueError, OSError, UnicodeError) as error:

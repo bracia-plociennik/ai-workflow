@@ -1896,3 +1896,8 @@ Jeśli którykolwiek punkt jest niejasny, poproś Codexa o preflight/reconciliat
 ## Intent brief and local style
 
 Free-form requests are interpreted inside existing intake, preserving goal, explicit exclusions and authorization. Auto resolves covered choices; Human asks grouped material questions. Optional local schema1 style profile learns only under scoped owner opt-in from explicit corrections and marked tentative observations, preserves revisions/provenance and supports correction/disable. Current instructions always win; no raw conversation ingestion or new permission. See `.systems/ai/core/intent-to-execution-brief.md` and `.systems/ai/core/style-profile.md`.
+
+
+## Goal-focused maintenance (scoped opt-in)
+
+See `.systems/ai/core/goal-focused-maintenance.md`. One private nearest-owner queue records independently evidenced incidental debt without unsolicited narration below five active causes or three actually affected parent tasks. E01–E05 and current-goal blockers are immediate; one stable parent shares 600 seconds incidental work across resumes/adapters. Local eligibility requires actual target approval and quality; there is no background executor. On request/milestone or authorized Dreaming review, inspect the same queue. Full/current QA and original history remain binding. Versioned committed source support must be verified before activation; no installation, migration, publication or owner-final approval follows from a capability label.
