@@ -17,6 +17,12 @@ A repository name, chat claim, empty directory, or guessed convention is not a s
 
 ## Preflight
 
+Apply `workspace-directory-layout.md` when choosing an auxiliary target-worktree
+location: use the approved collection `.worktrees/<repository-id>/<work-id>/`.
+Bootstrap installs inside that already selected target; it does not create a
+new canonical project or migrate existing roots. Disposable bootstrap/task
+output uses the approved `.tmp/<work-id>/`, with durable evidence stored separately.
+
 Before any clone:
 
 1. Resolve the target Git worktree with `git rev-parse`, including linked worktrees where `.git` is a file, and confirm it is not official AI Workflow repo mode.

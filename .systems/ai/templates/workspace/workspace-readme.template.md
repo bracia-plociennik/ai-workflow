@@ -26,6 +26,12 @@ The nested `ai-workflow/` clone is system-owned and should stay local to the tar
 
 ## Rules
 
+Apply `.systems/ai/core/workspace-directory-layout.md`: this runtime `projects/`
+stores logical project artifacts. Canonical repositories stay in the approved
+collection `projects/`, auxiliary Git worktrees in `.worktrees/`, and disposable
+task files in `.tmp/`. Keep durable evidence here under its owning namespace;
+the placement rule does not grant creation, relocation or cleanup authority.
+
 - Do not store system workflow docs here.
 - Do not edit `ai-workflow/.systems/**` from a target repository.
 - If the workflow itself needs an improvement, record it in `external-memory/`.
