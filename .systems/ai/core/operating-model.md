@@ -6,6 +6,15 @@ integration, common QA and capture remain owned by the orchestrator.
 
 Under `.systems/ai/core/execution-efficiency.md`, an eligible low/medium reversible bounded defect can use a compact work record in existing full-project or workflow-maintenance mode, only when not already bound to formal phases. It is not a medium-risk micro-task exemption. Accepted scope, DoD, consumers, regressions, semantic QA and capture remain required; excluded impacts reroute.
 
+## Repository And Scratch Placement
+
+Before choosing repository, auxiliary-worktree or disposable task paths, apply
+`workspace-directory-layout.md`. Canonical repository collection `projects/`
+contains owner repositories; auxiliary trees use `.worktrees/` and disposable
+files use `.tmp/` under the selected approved collection root. Preserve the
+separate `AI_WORKFLOW_WORKSPACE_HOME/projects/` logical artifact namespace.
+Existing permission, historical QA and cleanup boundaries remain unchanged.
+
 ## Primary Objective
 
 Make repository work safe, verifiable, and resumable without turning documentation into theatre. The workflow exists to block bad changes, force evidence, and keep status unambiguous.
