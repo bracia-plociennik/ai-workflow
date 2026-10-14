@@ -1482,6 +1482,7 @@ class IntegrationTests(unittest.TestCase):
         self.fail(request)
 
     def test_directory_delivery_requires_unchanged_outputs_and_deletion_tombstones(self):
+        (self.worker / "out").chmod(0o755)
         (self.worker / "out/unchanged.txt").write_text("unchanged owned output")
         (self.worker / "out/deleted.txt").write_text("deleted by producer")
         self.start()
@@ -1511,6 +1512,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_intended_target_directory_mode_and_unintended_mode(self):
         import shutil
+        (self.worker / "out").chmod(0o755)
         (self.root / "out").mkdir()
         (self.root / "out").chmod((self.worker / "out").stat().st_mode & 0o777)
         self.start()
