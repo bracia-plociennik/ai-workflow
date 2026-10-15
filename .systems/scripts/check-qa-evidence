@@ -504,15 +504,25 @@ if [[ -n "$workspace_home" && -d "$workspace_home/projects" ]]; then
   fi
 fi
 
+# Only a project's canonical quality tree contains active assessments. Nested
+# evidence snapshots may retain quality/ directories, but remain source data.
+# Keep all descendants of a canonical quality tree, including history, checked
+# identically in selected-project and exhaustive workspace modes.
+quality_roots=()
 for project_root in "${project_roots[@]}"; do
   if [[ -n "$project" && "$project_root" == "$workspace_home/projects/$project" ]]; then
-    find_depth=(-maxdepth 2)
+    quality_roots+=("$project_root/quality")
   else
-    find_depth=(-mindepth 1)
+    while IFS= read -r -d '' quality_root; do
+      quality_roots+=("$quality_root")
+    done < <(find "$project_root" -mindepth 2 -maxdepth 2 -type d -name quality -print0 2>/dev/null || true)
   fi
+done
+
+for quality_root in "${quality_roots[@]}"; do
   while IFS= read -r -d '' file; do
     validate_evidence_file "$file"
-  done < <(find "$project_root" "${find_depth[@]}" -path '*/quality/*' -type f -name '*.md' -print0 2>/dev/null || true)
+  done < <(find "$quality_root" -type f -name '*.md' -print0 2>/dev/null || true)
 done
 
 exit "$fail"
