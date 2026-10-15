@@ -1,5 +1,7 @@
 # Installation And Collision Policy
 
+Registered System startup follows work-lead.md and the neutral System contract, independent of provider. Root/worktree shims load a short role-aware entry and conditional agent-contract-details.md routes. Preserve existing owner instructions; standalone/unbound mode and existing install/FF-only gates remain. Claude/other provider adapters are design-only until verified; do not create imports, bypass external trust dialogs or claim native support automatically.
+
 This file is the canonical policy for installing AI Workflow into an existing repository.
 
 The default target-repository installation model is a nested clone plus a separate target-owned workspace. Keep the whole workflow system inside `ai-workflow/`, use a local-only root `AGENTS.md` shim, and commit runtime facts in `ai-workflow-workspace/`.

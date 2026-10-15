@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import datetime
 import os
 import re
 import stat
@@ -107,8 +108,105 @@ def baseline(repo):
     return {'head': head, 'worktree_sha256': hashlib.sha256(state + b'\0' + diff).hexdigest(), 'dirty': bool(state)}
 
 
-def status(workflow, workspace, repo, project, schema_version=1):
-    if type(schema_version) is not int or schema_version not in (1, 2):
+LEAD_ACTIONS = {'inspect', 'planning-artifacts', 'implementation', 'quality-assessment',
+                'local-commit', 'publish', 'install-activate', 'external-effect'}
+LEAD_FIELDS = {'schema_version', 'lead_id', 'lead_kind', 'owner_id', 'parent_work_id',
+               'mandate_ref', 'mandate_revision', 'allowed_actions', 'resource_roots',
+               'phase_ceiling', 'reserved_actions', 'escalation_target'}
+
+
+def lead_path(raw):
+    if not isinstance(raw, str) or not raw or any(ord(c) < 32 for c in raw):
+        raise ValueError('invalid lead resource')
+    path = Path(raw)
+    if (not path.is_absolute() or '..' in path.parts or any(c in raw for c in '*?[]')
+            or any(p.is_symlink() for p in (path, *path.parents))):
+        raise ValueError('lead resource must be concrete absolute and unlinked')
+    return path
+
+
+def lead_phase(value):
+    match = re.fullmatch(r'phase-([0-8])-[a-z]+(?:-[a-z]+)*', value or '')
+    if not match:
+        raise ValueError('unsupported lead phase')
+    return int(match.group(1))
+
+
+def inspect_work_lead(record, action='inspect', resource=None, phase='phase-0-repo-intake'):
+    """Compare declared scope, never authenticate original consent or execute work.
+
+    The executing agent independently checks the actual owner instruction and live
+    revocation disposition. A matching projection cannot supply that verification.
+    """
+    scope.fields(record, {'work_lead', 'mandate_state', 'valid_until', 'context_binding',
+                          'evidence_refs'}, 'work-lead projection')
+    lead = record['work_lead']
+    scope.fields(lead, LEAD_FIELDS, 'work_lead')
+    if type(lead['schema_version']) is not int or lead['schema_version'] != 1:
+        raise ValueError('unsupported work-lead version')
+    if lead['lead_kind'] not in {'human', 'ai-system'}:
+        raise ValueError('unsupported lead kind')
+    for name in ('lead_id', 'owner_id', 'parent_work_id', 'mandate_ref', 'escalation_target'):
+        if (not isinstance(lead[name], str) or not lead[name].strip()
+                or any(ord(c) < 32 for c in lead[name])):
+            raise ValueError('missing lead identity/evidence pointer')
+    if type(lead['mandate_revision']) is not int or lead['mandate_revision'] < 1:
+        raise ValueError('invalid mandate revision')
+    actions, roots, reserved = lead['allowed_actions'], lead['resource_roots'], lead['reserved_actions']
+    for values in (actions, roots, reserved, record['evidence_refs']):
+        if (not isinstance(values, list) or any(not isinstance(x, str) or not x for x in values)
+                or len(values) != len(set(values))):
+            raise ValueError('invalid or duplicate lead list')
+    if not actions or not roots or not set(actions) <= LEAD_ACTIONS:
+        raise ValueError('unknown/empty lead scope')
+    if any(any(ord(c) < 32 for c in x) or '*' in x for x in reserved):
+        raise ValueError('invalid reservations')
+    paths = [lead_path(x) for x in roots]
+    target = lead_path(resource) if resource is not None else None
+    ceiling, requested = lead_phase(lead['phase_ceiling']), lead_phase(phase)
+    state, binding = record['mandate_state'], record['context_binding']
+    if state not in {'issued', 'revoked', 'superseded', 'unknown'}:
+        raise ValueError('unknown mandate disposition')
+    if binding not in {'resolved', 'unbound', 'unavailable', 'conflict'}:
+        raise ValueError('unknown context binding')
+    expires = record['valid_until']
+    expired = False
+    if expires is not None:
+        if not isinstance(expires, str):
+            raise ValueError('invalid mandate expiry')
+        timestamp = datetime.datetime.fromisoformat(expires)
+        if timestamp.tzinfo is None:
+            raise ValueError('expiry must include timezone')
+        expired = timestamp <= datetime.datetime.now(datetime.timezone.utc)
+    out = dict(lead_contract_version=1, context_binding=binding, scope_check='matched',
+               authority_check='unknown', provenance_verified=False, execution_authorized=False,
+               evidence_refs=list(record['evidence_refs']), actionable_blockers=[],
+               next_allowed_action=action)
+    reason = None
+    if state != 'issued':
+        out['authority_check'] = 'revoked' if state in {'revoked', 'superseded'} else 'unknown'
+        reason = 'Mandate is not currently issued'
+    elif expired:
+        out['authority_check'] = 'expired'
+        reason = 'Mandate expired'
+    elif not record['evidence_refs']:
+        out['authority_check'] = 'missing'
+        reason = 'Original owner evidence references missing'
+    elif binding != 'resolved':
+        reason = 'Bound System context unavailable/conflicting; inspect only'
+    elif (action not in actions or action in reserved or requested > ceiling
+          or target is None or not any(target.is_relative_to(root) for root in paths)):
+        out['authority_check'] = 'out-of-scope'
+        reason = 'Requested action/resource/phase exceeds declared scope'
+    if reason:
+        out.update(scope_check='blocked', next_allowed_action='inspect', actionable_blockers=[reason])
+    else:
+        out['actionable_blockers'] = ['Executing agent must independently verify actual owner provenance/current disposition and phase gates']
+    return out
+
+
+def status(workflow, workspace, repo, project, schema_version=1, lead_record=None, requested_action="inspect", resource=None, requested_phase=None):
+    if type(schema_version) is not int or schema_version not in (1, 2, 3):
         raise ValueError('unsupported coordinator schema')
     if workflow.is_symlink() or repo.is_symlink():
         raise ValueError('symlink repository identity')
@@ -121,7 +219,7 @@ def status(workflow, workspace, repo, project, schema_version=1):
     owner = scope.owned_root(workspace, 'projects/' + project)
     before = baseline(repo)
     workflow_head = scope.git(workflow, 'rev-parse', 'HEAD').decode().strip()
-    capability = parallel_capability(workflow) if schema_version == 2 else None
+    capability = parallel_capability(workflow) if schema_version in (2, 3) else None
     source = scope.contained(owner, 'status.md')
     text = source.read_text()
     declared = {}
@@ -171,7 +269,7 @@ def status(workflow, workspace, repo, project, schema_version=1):
             raise ValueError('QA inputs changed during coordinator read')
     if capture.inventory(workspace, workflow, repo, project) != captures:
         raise ValueError('capture evidence changed during coordinator read')
-    if schema_version == 2 and parallel_capability(workflow) != capability:
+    if schema_version in (2, 3) and parallel_capability(workflow) != capability:
         raise ValueError('capability changed during coordinator read')
     out = {'schema_version': 1, 'repository': str(repo), 'project': project,
             'workflow_version': workflow_head,
@@ -179,8 +277,23 @@ def status(workflow, workspace, repo, project, schema_version=1):
             'gate': 'verified-' + verified['verdict'].lower() if verified and not blockers else 'unknown',
             'blockers': blockers, 'evidence_paths': evidence, 'capture_inventory': captures,
             'freshness': 'current' if verified and not blockers else 'unknown', 'execution_authorized': False}
-    if schema_version == 2:
-        out.update(schema_version=2, parallel_capability=capability)
+    if schema_version in (2, 3):
+        out.update(schema_version=schema_version, parallel_capability=capability)
+    if schema_version == 3:
+        if lead_record is None:
+            lead = {'lead_contract_version': 1, 'context_binding': 'unbound',
+                    'authority_check': 'missing', 'scope_check': 'unknown',
+                    'provenance_verified': False, 'execution_authorized': False,
+                    'actionable_blockers': ['No work-lead record selected; standalone owner instructions still govern'],
+                    'evidence_refs': [], 'next_allowed_action': 'inspect'}
+        else:
+            path = scope.contained(owner, str(lead_record))
+            raw = bounded_bytes(owner, str(path.relative_to(owner)), 65536)
+            lead = inspect_work_lead(scope.strict_json(raw.decode('utf-8')), requested_action,
+                                     resource or str(repo), requested_phase or phase)
+            if raw != bounded_bytes(owner, str(path.relative_to(owner)), 65536):
+                raise ValueError('lead record changed during inspection')
+        out.update(lead, actual_gate=out['gate'])
     return out
 
 
@@ -190,17 +303,23 @@ def main():
     p.add_argument('--workspace', type=Path, required=True)
     p.add_argument('--repo', type=Path, required=True)
     p.add_argument('--project', required=True)
-    p.add_argument('--schema-version', type=int, choices=[1, 2], default=1)
+    p.add_argument('--schema-version', type=int, choices=[1, 2, 3], default=1)
     p.add_argument('--format', choices=['json', 'human'], default='json')
+    p.add_argument('--lead-record', help='owning-project relative JSON projection, schema3 only; never authenticates consent')
+    p.add_argument('--requested-action', default='inspect')
+    p.add_argument('--resource', help='absolute concrete requested resource; schema3 only')
+    p.add_argument('--requested-phase', help='explicit requested phase, schema3 only')
     a = p.parse_args()
     try:
-        out = status(a.workflow, a.workspace, a.repo, a.project, a.schema_version)
+        if a.schema_version != 3 and (a.lead_record or a.resource or a.requested_phase or a.requested_action != 'inspect'):
+            raise ValueError('work-lead options require explicit schema3')
+        out = status(a.workflow, a.workspace, a.repo, a.project, a.schema_version, a.lead_record, a.requested_action, a.resource, a.requested_phase)
         if a.format == 'json':
             print(json.dumps(out, sort_keys=True))
         else:
             print('Project: ' + out['project'] + '\nGate: ' + out['gate'] + '\nFreshness: ' + out['freshness'])
             print('Execution authorized: no\nBlockers: ' + ('; '.join(out['blockers']) or 'none'))
-            if a.schema_version == 2:
+            if a.schema_version in (2, 3):
                 print('Parallel protocol: ' + out['parallel_capability']['state'] +
                       '\nNative backend: unverified; operational support: no; fallback: serial')
         return 0 if out['freshness'] == 'current' else 1

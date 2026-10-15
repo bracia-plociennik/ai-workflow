@@ -1,5 +1,7 @@
 # risk-model.md
 
+Use work-lead.md for a registered System: one human/delegated work lead, one execution procedure. Verify actual owner provenance and scope; covered configurable System directions apply without actor-only reconfirmation. Preserve owner-reserved/evidence/risk/tool floors. Read-only coordinator projections never authenticate approval or authorize execution.
+
 Bounded-defect handling under `.systems/ai/core/execution-efficiency.md` is a compact record within existing formal-project/workflow-maintenance modes, not risk reclassification. Medium risk still requires accepted plan and QA; high/critical or unknown impact excludes this route.
 
 ## Risk Classes

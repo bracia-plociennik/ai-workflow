@@ -1,5 +1,12 @@
 # changelog.md
 
+## 2026-10-15 - Scoped Work Lead And Startup Routing
+
+- Support one human or owner-delegated System work lead with equal scoped actions and current phase/quality gates.
+- Add explicit schema3 read-only lead projection without changing legacy readers or authenticating metadata as consent.
+- Compact automatic entry guidance while preserving the complete detailed execution contract and custom project instructions.
+- Add source-bound consumer conformance; native/provider acceptance remains installation-specific.
+
 ## 2026-10-09 - Development Worktrees And Filtered Publication
 
 - Use dev explicitly for the primary development checkout and owned codex worktrees.

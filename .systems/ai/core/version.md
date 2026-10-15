@@ -2,7 +2,7 @@
 
 | Field | Value |
 | --- | --- |
-| Workflow version | `0.8.24` |
+| Workflow version | `0.8.25` |
 | Compatible with | Codex CLI, Codex app, ChatGPT agent as optional reviewer |
 | Last process migration | `2026-07-24` |
 | Naming standard | lowercase kebab-case with canonical `SKILL.md` skill-contract exception |

@@ -86,11 +86,15 @@ is_frozen_eval_input_path() {
   local path="$1"
   local relative
   local eval_root
+  local context_workspace="$workspace_home"
 
-  [[ -n "$workspace_home" && "$path" == "$workspace_home"/projects/* ]] || return 1
-  relative="${path#"$workspace_home"/projects/}"
+  if [[ "$path" == "$repo_root"/ai-workflow-workspace/projects/* ]]; then
+    context_workspace="$repo_root/ai-workflow-workspace"
+  fi
+  [[ -n "$context_workspace" && "$path" == "$context_workspace"/projects/* ]] || return 1
+  relative="${path#"$context_workspace"/projects/}"
   if [[ "$relative" =~ ^([^/]+)/evals/([^/]+)/(fixture/|runs/[^/]+/checkout/) ]]; then
-    eval_root="$workspace_home/projects/${BASH_REMATCH[1]}/evals/${BASH_REMATCH[2]}"
+    eval_root="$context_workspace/projects/${BASH_REMATCH[1]}/evals/${BASH_REMATCH[2]}"
     [[ -s "$eval_root/freeze.md" ]] && return 0
   fi
 
@@ -101,6 +105,13 @@ is_exempt_supporting_path() {
   local path="${1#./}"
 
   case "$path" in
+    ai-workflow-workspace/projects/*/context.md)
+      return 1
+      ;;
+    ai-workflow-workspace/projects/*/context/*|ai-workflow-workspace/repo/context/*|ai-workflow-workspace/repo/legacy/*|ai-workflow-workspace/skills/*/context/*)
+      # The inherited Git-index namespace is independent of the active runtime.
+      return 0
+      ;;
     .systems/ai/skills/*/context/*)
       return 0
       ;;
