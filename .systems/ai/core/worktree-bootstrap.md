@@ -1,5 +1,7 @@
 # worktree-bootstrap.md
 
+Registered System startup follows work-lead.md and the neutral System contract, independent of provider. Root/worktree shims load a short role-aware entry and conditional agent-contract-details.md routes. Preserve existing owner instructions; standalone/unbound mode and existing install/FF-only gates remain. Claude/other provider adapters are design-only until verified; do not create imports, bypass external trust dialogs or claim native support automatically.
+
 ## Purpose
 
 Provide a safe preflight when a target worktree is expected to use AI Workflow but lacks the nested `ai-workflow/` clone or root `AGENTS.md` shim.

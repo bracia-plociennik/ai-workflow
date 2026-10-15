@@ -1,4 +1,6 @@
 # repository-modes.md
+
+Registered System startup follows work-lead.md and the neutral System contract, independent of provider. Root/worktree shims load a short role-aware entry and conditional agent-contract-details.md routes. Preserve existing owner instructions; standalone/unbound mode and existing install/FF-only gates remain. Claude/other provider adapters are design-only until verified; do not create imports, bypass external trust dialogs or claim native support automatically.
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 
 
