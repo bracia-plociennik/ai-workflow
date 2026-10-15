@@ -1,5 +1,7 @@
 # AGENTS.md
 
+For an owner-registered AI System, use .systems/ai/core/work-lead.md and the verified neutral System startup contract. System governs covered goals/configurable execution through one work-lead role; human and delegated System use the same procedure. Actual owner-reserved, factual QA, risk/privacy and tool constraints remain binding. A scope/status projection is never permission.
+
 For explicitly activated approved tasks, use `.systems/ai/core/goal-focused-maintenance.md`: keep proven independent incidental debt in one private owner queue without unsolicited narration; E01–E05 and actual goal blockers are immediate. Five active causes or three genuinely affected parent tasks produce one milestone summary. One stable parent shares a total 600-second incidental budget across resumes and System coordination. Queue metadata does not recursively create TaskNotes/Capture. Current required QA, approvals and full release/update gates remain binding; missing support retains existing behavior. This policy changes disclosure and eligible local repair routing, not platform authority.
 
 For free-form new work, use `.systems/ai/core/intent-to-execution-brief.md` inside existing intake. Preserve original intent, minimal provenance/disposition and exact permission/phase ceiling. Optional private style follows `.systems/ai/core/style-profile.md`; current instruction wins, observations stay tentative, feedback writes require exact scoped consent. No new phase, automatic TaskNotes or profile-based approval.
