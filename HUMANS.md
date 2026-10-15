@@ -1903,3 +1903,9 @@ Free-form requests are interpreted inside existing intake, preserving goal, expl
 ## Goal-focused maintenance (scoped opt-in)
 
 See `.systems/ai/core/goal-focused-maintenance.md`. One private nearest-owner queue records independently evidenced incidental debt without unsolicited narration below five active causes or three actually affected parent tasks. E01–E05 and current-goal blockers are immediate; one stable parent shares 600 seconds incidental work across resumes/adapters. Local eligibility requires actual target approval and quality; there is no background executor. On request/milestone or authorized Dreaming review, inspect the same queue. Full/current QA and original history remain binding. Versioned committed source support must be verified before activation; no installation, migration, publication or owner-final approval follows from a capability label.
+
+## Registered AI System leadership
+
+A registered owner AI System can lead supported configurable decisions through the same work-lead role and phase/quality procedure as a human. Verify actual scope and owner provenance; metadata is not consent. Unbound standalone Workflow keeps direct human leadership. See .systems/ai/core/work-lead.md for equality of gates, reservations, revocation and source compatibility.
+
+AGENTS.md is a bounded entry router; the complete prior execution contract remains in .systems/ai/core/agent-contract-details.md and loads on matching triggers. Existing custom project instructions are preserved. No management role is imported into development, no automatic project enrollment or extra coordinator is created. Native Codex startup is provided by the separate reviewed System adapter; Claude and other tools remain MVP design/unverified. `check-work-lead` is included in standard/full validation and checks consumer source conformance only.

@@ -86,13 +86,18 @@ class WorkLead(unittest.TestCase):
             self.inspect(resource=str(link / 'foreign'))
 
     def test_explicit_schema3_cli_preserves_unknown_quality_gate(self):
+        repository = self.root / 'repository'
+        subprocess.run(['git', 'init', '-q', str(repository)], check=True)
+        subprocess.run(['git', '-C', str(repository), '-c', 'user.name=Synthetic',
+                        '-c', 'user.email=synthetic@example.invalid', 'commit',
+                        '--allow-empty', '-qm', 'fixture'], check=True)
         owner = self.root / 'workspace/projects/synthetic'
         owner.mkdir(parents=True)
         (owner / 'status.md').write_text('| `current-phase` | `phase-4-implementation` |\n')
         (owner / 'lead.json').write_text(json.dumps(self.record))
         result = subprocess.run([sys.executable, '-B', str(ROOT / '.systems/scripts/lib/coordinator-status.py'),
-                                 '--workflow', str(ROOT), '--workspace', str(self.root / 'workspace'),
-                                 '--repo', str(ROOT), '--project', 'synthetic', '--schema-version', '3',
+                                 '--workflow', str(repository), '--workspace', str(self.root / 'workspace'),
+                                 '--repo', str(repository), '--project', 'synthetic', '--schema-version', '3',
                                  '--lead-record', 'lead.json', '--resource', str(self.resource),
                                  '--requested-action', 'implementation'], capture_output=True, text=True)
         out = json.loads(result.stdout)

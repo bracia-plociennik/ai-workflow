@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""Offline consumer conformance; never authenticates an owner or native behavior."""
+import hashlib,json
+from pathlib import Path
+import subprocess,sys
+root=Path(__file__).resolve().parents[2]
+expected=('AGENTS.md','.systems/ai/core/work-lead.md','.systems/ai/core/permissions.md',
+          '.systems/ai/core/risk-model.md','.systems/ai/core/runtime-integrity.md',
+          '.systems/scripts/lib/coordinator-status.py')
+value=json.loads((root/'.systems/ai/capabilities/work-lead-v1.json').read_text())
+assert set(value)=={'schema_version','contract','source_files','native_verification'}
+assert type(value['schema_version']) is int and value['schema_version']==1
+assert value['contract']=='work-lead-v1'
+assert value['native_verification']=='requires-installation-specific-proof'
+assert set(value['source_files'])==set(expected)
+for rel in expected:
+    path=root/rel
+    assert not path.is_symlink() and hashlib.sha256(path.read_bytes()).hexdigest()==value['source_files'][rel],rel
+assert (root/'AGENTS.md').stat().st_size<=16384
+result=subprocess.run([sys.executable,'-B',str(root/'.systems/scripts/tests/work-lead.py')])
+raise SystemExit(result.returncode)

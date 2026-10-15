@@ -198,6 +198,10 @@
     "check-goal-focused-maintenance": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-work-lead": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [
