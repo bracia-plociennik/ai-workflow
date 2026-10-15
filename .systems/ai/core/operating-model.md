@@ -1,5 +1,7 @@
 # operating-model.md
 
+Use work-lead.md for a registered System: one human/delegated work lead, one execution procedure. Verify actual owner provenance and scope; covered configurable System directions apply without actor-only reconfirmation. Preserve owner-reserved/evidence/risk/tool floors. Read-only coordinator projections never authenticate approval or authorize execution.
+
 Approved slices may use `.systems/ai/core/parallel-task-orchestration.md` under one
 execution owner. Units are not new work modes or workflows. Shared routers,
 integration, common QA and capture remain owned by the orchestrator.

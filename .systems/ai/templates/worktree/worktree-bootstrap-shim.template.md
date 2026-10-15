@@ -1,5 +1,7 @@
 # AI Workflow Worktree Bootstrap Shim
 
+For an owner-registered System, resolve its user registration and neutral agent-startup.md from the actual CWD. Read the installed Workflow work-lead.md: System leads covered configurable decisions through one human/System procedure; actual owner reservations, facts/QA, risk/privacy and tool restrictions remain binding. A context/status projection never grants consent. Do not import an ancestor management role into this project. If unbound, standalone human-led Workflow remains unchanged. Unknown bound context permits inspection and blocks affected execution; no implicit installation or enrollment.
+
 Before workflow-governed work:
 
 1. Confirm `ai-workflow-workspace/` or another owner-accepted strong installation marker.

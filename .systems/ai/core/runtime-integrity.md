@@ -1,5 +1,7 @@
 # runtime-integrity.md
 
+Use work-lead.md for a registered System: one human/delegated work lead, one execution procedure. Verify actual owner provenance and scope; covered configurable System directions apply without actor-only reconfirmation. Preserve owner-reserved/evidence/risk/tool floors. Read-only coordinator projections never authenticate approval or authorize execution.
+
 ## Purpose
 
 Canonical runtime and evidence rules supporting selective workflow overhead. These rules never grant writes, approvals or formal PASS.

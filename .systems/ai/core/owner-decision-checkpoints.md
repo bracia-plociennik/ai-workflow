@@ -1,5 +1,7 @@
 # owner-decision-checkpoints.md
 
+Use work-lead.md for a registered System: one human/delegated work lead, one execution procedure. Verify actual owner provenance and scope; covered configurable System directions apply without actor-only reconfirmation. Preserve owner-reserved/evidence/risk/tool floors. Read-only coordinator projections never authenticate approval or authorize execution.
+
 ## Purpose
 
 `Owner Decision Discovery` makes meaningful owner choices visible before dependent work begins. Resolve `auto` or `human-coop` under execution-modes.md first. Auto selects covered safe reversible choices and queues owner-only decisions; Human Coop asks about material decisions and owner preferences.
