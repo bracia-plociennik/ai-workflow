@@ -705,5 +705,57 @@ Synthetic artifact intent and criteria review, no implementation claim.
                 with self.subTest(text=text): self.assertEqual(run.returncode,expected)
 
 
+class QaCollectionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.fixture_home = tempfile.TemporaryDirectory(prefix='qa-collection-')
+        cls.framework = Path(cls.fixture_home.name)/'framework'
+        public_fixture(ROOT, cls.framework)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.fixture_home.cleanup()
+
+    def setUp(self):
+        self.runtime = tempfile.TemporaryDirectory(prefix='qa-runtime-')
+        self.addCleanup(self.runtime.cleanup)
+        self.workspace = Path(self.runtime.name)
+        (self.workspace/'projects/alpha/quality').mkdir(parents=True)
+
+    def assessment(self, path):
+        target = self.workspace/path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text('# Intentionally invalid assessment\nQA verification contract: `full-qa-verification-v2`\n')
+        return target
+
+    def run_check(self, *args):
+        env = {**os.environ, 'AI_WORKFLOW_WORKSPACE_HOME':str(self.workspace), 'AI_WORKFLOW_MODE':'official'}
+        return subprocess.run([str(self.framework/'.systems/scripts/check-qa-evidence'), *args],
+                              env=env, capture_output=True, text=True, timeout=30)
+
+    def test_archived_snapshot_is_data_in_full_and_project_checks(self):
+        saved = self.assessment('projects/alpha/evidence/checkpoint/quality/phase-2-plan-qa.md')
+        before = saved.read_bytes()
+        for args in ((), ('--project','alpha')):
+            with self.subTest(args=args):
+                result = self.run_check(*args)
+                self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertEqual(saved.read_bytes(),before)
+
+    def test_full_collection_still_checks_each_canonical_project(self):
+        self.assessment('projects/beta/quality/phase-2-plan-qa.md')
+        self.assertNotEqual(self.run_check().returncode,0)
+        self.assertEqual(self.run_check('--project','alpha').returncode,0)
+        self.assertNotEqual(self.run_check('--project','beta').returncode,0)
+
+    def test_nested_canonical_history_remains_subject_to_validation(self):
+        self.assessment('projects/alpha/quality/history/phase-2-plan-qa.md')
+        for args in ((), ('--project','alpha')):
+            with self.subTest(args=args):
+                result=self.run_check(*args)
+                self.assertNotEqual(result.returncode,0)
+                self.assertIn('Invalid PASS evidence',result.stdout)
+
+
 if __name__=='__main__':
     unittest.main(verbosity=2)
