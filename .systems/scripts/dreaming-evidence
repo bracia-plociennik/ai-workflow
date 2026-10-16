@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from dreaming_evidence_reader import main
+raise SystemExit(main())
