@@ -137,3 +137,20 @@ Nightly or AFK execution can be planned later as a separate owner-approved micro
 ## Goal-Focused Maintenance Integration
 
 When scoped goal-focused-maintenance.md is active, read the nearest-owner maintenance/queue.json only for the authorized advisory report. Do not mutate queue/policy/budget/presentation flags/tasks/Capture/source/approvals/scheduler or execute repairs. A written Dream Report is not an owner delivery receipt. Use sanitized summaries/references, not raw private sources; live coordinator later verifies actual presentation if it occurs.
+## Opt-in evidence interface v1
+
+An explicit caller may use the pure validator and synthetic contract fixtures under `.systems/ai/templates/dreaming/evidence/v1/`. Transport version 1 is independent of Dream Report versions 1/2. Metadata grants no read/write/approval authority; local capabilities bind actual producer bytes. Native states retain their original meaning. Legacy routing is unchanged.
+
+### Explicit evidence provider
+
+`dreaming-evidence capabilities` fingerprints local provider/guard code. `dreaming-evidence inspect --request <private-policy.json>` resolves official/target with the existing resolver, then reads only explicitly owned bounded scopes. Returned envelope/chunks are private caller data, not overview output. All read items remain pending until actual agent analysis is recorded; no PASS/DONE text is converted to approval. Native QA/capture may be validated by the current native readers only when every referenced input is separately authorized by this policy; otherwise quality remains unknown. No full native reader may bypass the body guard through an input reference. Changed ignored runtime invalidates source hashes despite unchanged Git HEAD.
+
+## Universal evidence v2
+
+`dreaming_universal_evidence.py` is a pure, versioned protocol mirrored in AI System.
+It validates generic findings, source/context closure, owner-derived privacy and independent
+recipient proposals. It performs no reads, model calls, scheduler activation or native writes.
+The existing evidence/provider-v1 and native QA/capture interfaces remain unchanged. AI System
+owns the optional universal coordinator and private personal-profile execution. Personal data
+is never an implicit new Workflow evidence class or a WEP approval. A consumer's accepted
+proposal cannot grant another consumer permissions or mark any native task/Quality completed.
