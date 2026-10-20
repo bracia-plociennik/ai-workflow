@@ -226,3 +226,7 @@ The footer is invalid when:
 ## Goal-Focused Maintenance Integration
 
 Activated goal-focused-maintenance.md governs incidental disclosure. Progress/final replies focus on the requested outcome and necessary decisions; below thresholds omit unsolicited historical debt/count/reminder commentary while retaining inspectable evidence. Immediately surface E01–E05 and current-goal blockers before affected unsafe work. Five distinct active causes or a third truly obstructed parent task yield one consolidated milestone summary with actual presentation receipt. On explicit request show the full scoped queue including uncertainty. Required current limits, failed gates and incomplete delivery remain truthful; no assertion of all-green from silence. Host UI tool logs remain outside this narration policy.
+
+## Sprint iteration
+
+For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.

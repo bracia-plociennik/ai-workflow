@@ -62,6 +62,10 @@ def render(record, workflow, workspace, project):
     if set(record) != required or type(record["schema"]) is not int or record["schema"] not in {1, 2}:
         raise ValueError("invalid reviewer record")
     kind = record["kind"]
+    if kind == 'implementation-quality':
+        sys.path.insert(0, str(HERE.parent))
+        import sprint_iteration
+        sprint_iteration.project_guard(workspace, project, workflow, generating=True, task=record.get('task'))
     if kind not in qa.KINDS or record["verdict"] not in {"PASS", "FAIL"}:
         raise ValueError("unsupported quality kind or supplied verdict")
     task = record["task"]

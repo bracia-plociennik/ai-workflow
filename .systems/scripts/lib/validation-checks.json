@@ -206,6 +206,10 @@
     "check-task-resource-cleanup": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-sprint-iteration": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

@@ -598,6 +598,10 @@ def assess(report, workflow_root, workspace_root, project, target_root=None, exp
     for section, result in declared_report_results(lines).items():
         if result not in allowed_results:
             raise InvalidAssessment("report-level " + ("Result" if section == "Metadata" else "Final verdict") + " conflicts with current verdict")
+    if not schema_only and not historical and metadata['Artifact kind'] == 'implementation-quality' and verdict == 'PASS':
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        import sprint_iteration
+        sprint_iteration.project_guard(workspace_root, project, workflow_root, generating=True, task=identity.split(':',1)[1])
     validate_gate_subsection(metadata["Artifact kind"], verdict, sections)
     if require_pass and verdict != "PASS":
         raise InvalidAssessment("status PASS conflicts with current QA verdict")

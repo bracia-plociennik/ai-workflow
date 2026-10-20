@@ -16,11 +16,11 @@
   "sources": {
     ".systems/ai/core/autopilot.md": "19f5986592e71d25827618172a5302c35696c913ce460fa162b8539c4e04b947",
     ".systems/ai/core/delivery-constraints.md": "67a277f43f9ecbee328580890ecbe390a0cfdd2d637af11dd54987541836bcba",
-    ".systems/ai/core/execution-modes.md": "377ec67c4d1d52b162f4ae12ccb2499bd2f02b2c853091ec25c279aed2096e8e",
+    ".systems/ai/core/execution-modes.md": "a07bc9ba22aab4ce156d6e0a9d312f578a3cbeedcc2fcd7c488477d6a659ceed",
     ".systems/ai/core/owner-decision-checkpoints.md": "76e24f6602235e1472791823af1f577334efbea8463b6d886c4992b52115f58a",
     ".systems/ai/core/permissions.md": "c6c6811cfd5041329373e01e421a11697ebaa53fc5b041fac84e17d6c0ddbdfe",
     ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
-    ".systems/ai/core/quality-review.md": "a0fa65a677e340341f95010982fa09717093e8d8ae3c29709fa2046d4163f6c5",
+    ".systems/ai/core/quality-review.md": "d33dd4a6dc0bfbe798c3761d91ec3650638918c52b588a09590db712ce19f265",
     ".systems/ai/core/risk-model.md": "86c8510af6043d90aa86efa175c933a4d054ba4fc1b8f601a4bbe25d816ab902",
     ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
     ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",

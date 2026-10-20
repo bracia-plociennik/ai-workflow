@@ -84,3 +84,7 @@ Use check-execution-modes, synthetic readiness tests, producer-consumer audit an
 ## Goal-Focused Maintenance Integration
 
 Auto/Human selection never activates repair authority. Explicit goal-focused-maintenance.md activation binds parent identity, accepted scope/DoD/architecture, current proof and maintenance roots. Related/unrelated low-risk local reversible repairs must still fit actual target approval, known tests, collision checks and the shared 600-second incidental budget. Defer ineligible independent work silently below thresholds; material goal/risk and architecture drift are escalated. Resuming Auto never resets elapsed or occurrence history.
+
+## Sprint iteration
+
+For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
