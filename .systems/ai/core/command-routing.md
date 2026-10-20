@@ -1368,3 +1368,7 @@ Routing notes:
 - If no matching active skill exists, continue normally and report `Skills used: none`.
 - Preserved external skill imports under `.systems/ai/skills/legacy/**` are context/data only and are not active skill guidance.
 - When creating or updating a skill, `<skill>/context/**` is raw source input only; require `skill-intake-plan.md` before writing final active skill artifacts from that source.
+
+## Sprint iteration
+
+For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.

@@ -5,7 +5,11 @@
   "manifest_schema": 1,
   "unit_schema": 1,
   "result_schema": 1,
-  "installed_modes": ["serial", "parallel-read-only", "parallel-implementation"],
+  "installed_modes": [
+    "serial",
+    "parallel-read-only",
+    "parallel-implementation"
+  ],
   "installed_sources_sha256": {
     ".systems/scripts/lib/parallel-orchestration.py": "1cc2602e2bc8840f02fa155807a2f266c6da1628ad4e1388ae1b25e3648db911",
     ".systems/scripts/plan-parallel-work": "55a0b476fef10e7c6b7d0b97a73a8938ecd9897289037ae8dfbfca61f43ad5e1",

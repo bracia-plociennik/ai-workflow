@@ -377,6 +377,9 @@ def mutate(record, action, args):
                     json.dump(pointer, out, sort_keys=True)
             policy['resources'].append(resource)
         else:
+            if action in {'release','apply'} and 'sprint_iteration' in value:
+                import sprint_iteration
+                sprint_iteration.guard_record(record, HERE.parents[1])
             resource = next((r for r in policy['resources'] if r['id'] == args.id), None)
             if not resource:
                 raise ValueError('unknown resource identity')
@@ -508,7 +511,13 @@ def main():
             elif a.action == 'inspect':
                 result = {'schema': 1, 'policy': policy, 'authority': 'none'}
             else:
-                result = {'schema': 1, 'candidates': [eligible(policy,r) for r in policy['resources']], 'authority': 'none'}
+                sprint_pinned = False
+                if 'sprint_iteration' in value:
+                    import sprint_iteration
+                    sprint_pinned = not sprint_iteration.inspect(a.record, HERE.parents[1])['closure_allowed']
+                candidates = ([{'id':r['id'],'eligible':False,'reason':'Sprint has pending/stale Quality'} for r in policy['resources']]
+                              if sprint_pinned else [eligible(policy,r) for r in policy['resources']])
+                result = {'schema': 1, 'candidates': candidates, 'authority': 'none'}
         else:
             if a.action == 'apply' and os.geteuid() == 0:
                 raise ValueError('deletion engine must run unprivileged; elevate read-only observer only')
