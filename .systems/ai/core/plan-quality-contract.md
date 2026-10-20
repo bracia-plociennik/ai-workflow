@@ -78,3 +78,7 @@ Plan Quality Contract must not:
 - make `not-applicable` valid for implementation-capable work without a justified non-write route;
 - make `Quality skipped by owner opt-out` a formal PASS;
 - replace findings-first QA, Review Completeness Gate, or PASS Integrity Gate.
+
+## Proportional judgment in plans
+
+Use critical-judgment.md when preparing or reviewing new/revised plans: test material premises, unnecessary scope, viable simpler/no-change options and early experiments. Existing artifact QA checks the actual reasoning; no separate counterphase or compulsory per-response critique.

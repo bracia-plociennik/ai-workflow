@@ -87,3 +87,14 @@ next-valid-step: <create context.md|revise idea|owner decision>
 - Optional active style revision/source (advisory only; current instruction wins):
 
 Use existing inline/context/task evidence for a tiny clear request, not another mandatory file. No inferred approval/deadline or automatic feedback write.
+
+## Critical judgment evidence
+
+Complete proportionally for this new or explicitly revised scope under critical-judgment.md. Use no material objection or not-applicable with a specific reason where appropriate; never fabricate findings or alternatives.
+
+- Goal versus proposed mechanism:
+- Material assumption and evidence:
+- Strongest supported objection or none with reason:
+- Simpler or no-change option when viable:
+- Reconsideration trigger:
+- Recommendation and accepted tradeoff:

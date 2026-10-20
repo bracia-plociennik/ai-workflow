@@ -476,3 +476,7 @@ DoD:
 ```
 
 ---
+
+## Critical judgment
+
+Use critical-judgment.md. Translate material objections and What-if scenarios into observable acceptance conditions, concrete checks or explicitly accepted limitations. Keep factual assumptions distinguishable from owner preferences.

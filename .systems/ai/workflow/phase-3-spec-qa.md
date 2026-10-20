@@ -310,3 +310,7 @@ DoD fazy:
 ```
 
 ---
+
+## Critical judgment QA
+
+Use critical-judgment.md. Verify the material premise, meaningful phase-specific producer fields and actual evidence for the recommendation. A heading or claimed review is insufficient; no forced objections. Missing material reasoning routes through this existing QA/fix loop, with existing owner authority and phase numbering preserved.

@@ -385,3 +385,7 @@ DoD:
 ```
 
 ---
+
+## Critical judgment
+
+Use critical-judgment.md. Compare new implementation facts with the accepted premises. Correct covered technical choices; route material goal/scope/architecture changes through existing decisions and refresh affected specs/QA before execution.
