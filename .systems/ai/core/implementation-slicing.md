@@ -193,3 +193,7 @@ For implementation-class writes in these modes:
 - record slice evidence in the final response or durable artifact when one exists.
 
 If slicing reveals missing acceptance criteria, unclear DoD, risk above low for side-task mode, dependency conflict, or unsafe external effects, stop and route to the normal workflow.
+
+## Sprint iteration
+
+For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.

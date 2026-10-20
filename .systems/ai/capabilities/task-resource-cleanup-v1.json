@@ -3,17 +3,18 @@
   "capability": "task-resource-cleanup-v1",
   "contract_version": 1,
   "files": {
-    ".systems/ai/core/task-resource-cleanup.md": "bd4498955b361077bca024a26c3aa02a8e46e7abc0635d09e97ec5a7c2097c9d",
+    ".systems/ai/core/task-resource-cleanup.md": "b77f47352db2a8e60b5e8f1196cc6ec2e6cc9f987acc29e6783d563a9b281f43",
     ".systems/scripts/bootstrap-target-worktree": "9fb0306741327d757ee30a96a070f2de62004450d8e60f7e04d41574f5d9d5fb",
     ".systems/scripts/durable_runtime.py": "8124dd5682860ccb7e362b8bd9aa8cc64994be9bb6b33b58065a7005c9969b31",
     ".systems/scripts/init-workspace": "6550da683b5d08ab429e062d272c968331b929135ad14f3c7e08614ae303f9a5",
     ".systems/scripts/lib/execution-efficiency.py": "3a629641105874520e68b672ffa5a91fa3d804c4f939694b5b62dd824189d3fa",
-    ".systems/scripts/lib/quality-record.py": "714b682bfbd5a202db78b3fccaf3fb1d8927486920ec69c80953829f465c1569",
+    ".systems/scripts/lib/quality-record.py": "ba6b7346ae918418444b8baa5e5ec2b302e44812d7a70eea1958980049aa9505",
     ".systems/scripts/lib/task-resource-activity.py": "6767aad092da31ab04a3edd68e24d21eac42b607bad86073d8a5721314f9da81",
     ".systems/scripts/lib/validation-timing.py": "29cff15aba77efa48de6a49ee888f30859db46521d0d8c506fb1771f96062fdd",
     ".systems/scripts/manage-task-resources": "49f85ebd5b31fac95552e5adfd248b4dd3152d6af0ddf313b8e41d9750cc3094",
     ".systems/scripts/resolve-workflow-env": "d088396f1e7e3ae61ed915c2f5973fa62393ea2d4574f766b46b2e346b7c114b",
-    ".systems/scripts/task_resource_cleanup.py": "c550396926f5c1fd80fe7fdb1c9eee9176d54afe16f47f26a20e15e106351018"
+    ".systems/scripts/task_resource_cleanup.py": "d3b8be854ea244fd37fdd849916e97950cb96e2e0fa8ad58c5eae14d3641b215",
+    ".systems/scripts/sprint_iteration.py": "c8cc3b2ce2f4eaf722102291bb04a6c20bab943ce9e1a130eb4842925d1a862e"
   },
   "authority": "none"
 }

@@ -250,6 +250,13 @@ def status(workflow, workspace, repo, project, schema_version=1, lead_record=Non
             blockers.append('QA evidence unavailable or stale: ' + str(error))
     else:
         blockers.append('No recognized current formal QA route; declaration is not verified')
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        import sprint_iteration
+        sprint_iteration.project_guard(workspace, project, workflow)
+    except (ValueError, OSError, KeyError) as error:
+        verified = None
+        blockers.append('Sprint closure unavailable: ' + str(error))
     captures = capture.inventory(workspace, workflow, repo, project)
     if captures['invalid']:
         blockers.append('Invalid capture evidence')

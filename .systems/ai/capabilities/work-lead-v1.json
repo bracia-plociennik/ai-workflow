@@ -2,12 +2,12 @@
   "schema_version": 1,
   "contract": "work-lead-v1",
   "source_files": {
-    "AGENTS.md": "9cf7b5ed236ee3186a0e5ee97b97499e58453f8cea5cf73d194fd6df3e04c701",
+    "AGENTS.md": "7d0dc1b1ea79854856af5e79464c7d6638cac2261624791826643d8bd39974a1",
     ".systems/ai/core/work-lead.md": "1810765889945edc6b47c0dedb0b3d5d7f442579a2a33f343b08e451b4bf0b1b",
     ".systems/ai/core/permissions.md": "c6c6811cfd5041329373e01e421a11697ebaa53fc5b041fac84e17d6c0ddbdfe",
     ".systems/ai/core/risk-model.md": "86c8510af6043d90aa86efa175c933a4d054ba4fc1b8f601a4bbe25d816ab902",
     ".systems/ai/core/runtime-integrity.md": "924f24ff03511561d39e971715675f7432d297ae40404d7d6aa0a2d4a3fbac54",
-    ".systems/scripts/lib/coordinator-status.py": "d713238f4ad803cccd32aac58439b09488c41685395dc64175038461e5f76403"
+    ".systems/scripts/lib/coordinator-status.py": "c1019589730db0d46915b77703865c4c9c8baa4dc06d48c230f2e6538d7b2722"
   },
   "native_verification": "requires-installation-specific-proof"
 }
