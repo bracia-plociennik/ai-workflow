@@ -92,7 +92,10 @@ def render(record, workflow, workspace, project):
     if not entries or len({(root, path) for root, path, _ in entries}) != len(entries):
         raise ValueError("empty or duplicate producer inputs")
     bound = "".join(sorted(root + ":" + path + "=" + checksum + "\n" for root, path, checksum in entries))
-    head = subprocess.check_output(["git", "-C", str(workflow), "rev-parse", "HEAD"], text=True).strip()
+    sys.path.insert(0, str(HERE.parent))
+    import durable_runtime
+    assessed_target = durable_runtime.execution_target(workflow)
+    head = subprocess.check_output(["git", "-C", str(assessed_target), "rev-parse", "HEAD"], text=True).strip()
     sections = record["sections"]
     if not isinstance(sections, dict) or not sections:
         raise ValueError("reviewer must supply semantic sections")
@@ -137,7 +140,10 @@ def render(record, workflow, workspace, project):
     return output, body
 
 
-def publish(output, body):
+def publish(output, body, *, target=False, workspace=None):
+    sys.path.insert(0, str(HERE.parent))
+    import durable_runtime
+    durable_runtime.guard_output(output, target=target, workspace=workspace)
     if any(p.is_symlink() for p in (output, *output.parents)):
         raise ValueError("linked quality output")
     if output.exists():
@@ -176,7 +182,7 @@ def main():
         if args.dry_run:
             print(body)
         else:
-            publish(output, body)
+            publish(output, body, target=workflow, workspace=workspace)
             print(str(output))
         return 0
     except (ValueError, OSError, qa.InvalidAssessment, subprocess.SubprocessError, TypeError, KeyError) as error:

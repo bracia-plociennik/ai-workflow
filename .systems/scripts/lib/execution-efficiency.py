@@ -99,8 +99,11 @@ def verify_record(record, key):
     return record
 
 
-def publish(path, value):
-    path = canonical_path(timing.safe_output(str(path)))
+def publish(path, value, *, source_root=False):
+    sys.path.insert(0, str(HERE.parent))
+    import durable_runtime
+    durable_runtime.guard_output(path, target=source_root)
+    path = canonical_path(timing.safe_output(str(path), source_root=source_root or None))
     # Reject linked parents rather than resolving them into a permitted output.
     if any(parent.is_symlink() for parent in (path, *path.parents)):
         raise ValueError("linked evidence output")
@@ -291,7 +294,7 @@ def execute_plan(plan_path, output, key_path, previous_path=None, progress="summ
               "exit_code": status, "planned": IDs, "checks": records,
               "coverage_result": "unverified", "final_evidence_eligible": False}
     result["authentication"] = sign(result, key)
-    publish(output, result)
+    publish(output, result, source_root=root)
     return status
 
 
@@ -302,7 +305,7 @@ def source_run_start(output, key_path):
              "source": source_identity(WORKFLOW), "environment": environment_identity(),
              "root": digest(str(WORKFLOW)), "state": "started", "exit_code": None}
     value["authentication"] = sign(value, key)
-    publish(output, value)
+    publish(output, value, source_root=WORKFLOW)
 
 
 def source_run_finish(start_path, output, key_path, status, checks):
@@ -322,7 +325,7 @@ def source_run_finish(start_path, output, key_path, status, checks):
               "source_exit_code": status,
               "checks": checks, "supporting_only": True}
     result["authentication"] = sign(result, key)
-    publish(output, result)
+    publish(output, result, source_root=WORKFLOW)
     if not valid:
         raise ValueError("full source receipt is incomplete or changed")
 
@@ -373,7 +376,7 @@ def artifact_closure(workspace, project, receipt, key_path, output):
               "runtime_fingerprint": before, "semantic_qa_required": True,
               "approval_granted": False, "exit_code": result,
               "coverage": "complete" if result == 0 else "incomplete"}
-    publish(output, report)
+    publish(output, report, source_root=WORKFLOW)
     return result
 
 

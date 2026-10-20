@@ -345,3 +345,5 @@ See `.systems/ai/core/goal-focused-maintenance.md`. One private nearest-owner qu
 A registered owner AI System can lead supported configurable decisions through the same work-lead role and phase/quality procedure as a human. Verify actual scope and owner provenance; metadata is not consent. Unbound standalone Workflow keeps direct human leadership. See .systems/ai/core/work-lead.md for equality of gates, reservations, revocation and source compatibility.
 
 AGENTS.md is a bounded entry router; the complete prior execution contract remains in .systems/ai/core/agent-contract-details.md and loads on matching triggers. Existing custom project instructions are preserved. No management role is imported into development, no automatic project enrollment or extra coordinator is created. Native Codex startup is provided by the separate reviewed System adapter; Claude and other tools remain MVP design/unverified. `check-work-lead` is included in standard/full validation and checks consumer source conformance only.
+
+Task resource lifecycle and durable QA/Capture: `.systems/ai/core/task-resource-cleanup.md`.

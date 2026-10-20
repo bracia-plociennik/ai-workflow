@@ -32,7 +32,7 @@ index/history equality and `check-workspace-publication` privacy/hash binding.
 
 One coordinator owns shared development workspace writes. Inherited files are
 supporting historical data, not current approvals or QA. Worker runtime evidence
-uses an explicitly selected private/ignored or temporary workspace; do not
+uses an explicitly selected durable private/ignored workspace outside the auxiliary tree; do not
 write into the inherited snapshot. Local unstaged workspace content is not a
 publication inventory: preserve it, and stage exact reviewed paths only.
 
@@ -65,3 +65,5 @@ Local commits follow phase-commit-policy.md and exact reviewed staging. This
 contract grants no automatic push, PR, merge to main, branch deletion, production
 action or final-owner-yes. Published snapshots and green scripts are supporting
 evidence only, not current technical or owner acceptance.
+
+For new managed disposable execution, bind durable runtime before initialization under `task-resource-cleanup.md`. Bootstrap accepts `--durable-workspace`, `--canonical-target` and `--work-record`; all three and recorded approval are required. Do not create QA/Capture inside the auxiliary target.
