@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract": "work-lead-v1",
   "source_files": {
-    "AGENTS.md": "7d0dc1b1ea79854856af5e79464c7d6638cac2261624791826643d8bd39974a1",
+    "AGENTS.md": "2c57bbb7cc0bf1d0e5671a5e64f6ca0bca4a6b406f93a500cfbe458be8cfbc31",
     ".systems/ai/core/work-lead.md": "1810765889945edc6b47c0dedb0b3d5d7f442579a2a33f343b08e451b4bf0b1b",
     ".systems/ai/core/permissions.md": "c6c6811cfd5041329373e01e421a11697ebaa53fc5b041fac84e17d6c0ddbdfe",
     ".systems/ai/core/risk-model.md": "86c8510af6043d90aa86efa175c933a4d054ba4fc1b8f601a4bbe25d816ab902",
