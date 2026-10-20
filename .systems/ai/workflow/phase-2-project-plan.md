@@ -421,3 +421,7 @@ powstał artefakt AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/planning/phase-2
 ```
 
 ---
+
+## Critical judgment
+
+Use critical-judgment.md. Question unnecessary scope, dependency order and whether a small experiment can falsify a costly assumption before committing to implementation.

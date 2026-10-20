@@ -420,3 +420,7 @@ Jeśli nie przechodzi:
 ```
 
 ---
+
+## Critical judgment
+
+Use critical-judgment.md. Review whether the right problem was solved and material premises remain justified, including overbuild/underbuild and new evidence contradicting the agent’s own recommendation. Plan compliance alone is insufficient.

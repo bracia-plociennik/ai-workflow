@@ -226,3 +226,7 @@ The footer is invalid when:
 ## Goal-Focused Maintenance Integration
 
 Activated goal-focused-maintenance.md governs incidental disclosure. Progress/final replies focus on the requested outcome and necessary decisions; below thresholds omit unsolicited historical debt/count/reminder commentary while retaining inspectable evidence. Immediately surface E01–E05 and current-goal blockers before affected unsafe work. Five distinct active causes or a third truly obstructed parent task yield one consolidated milestone summary with actual presentation receipt. On explicit request show the full scoped queue including uncertainty. Required current limits, failed gates and incomplete delivery remain truthful; no assertion of all-green from silence. Host UI tool logs remain outside this narration policy.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

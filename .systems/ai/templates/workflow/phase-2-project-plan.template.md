@@ -162,3 +162,11 @@ The same task IDs must be present in `AI_WORKFLOW_WORKSPACE_HOME/projects/<proje
 - Optional active style revision/source (advisory only; current instruction wins):
 
 Use existing inline/context/task evidence for a tiny clear request, not another mandatory file. No inferred approval/deadline or automatic feedback write.
+
+## Critical judgment evidence
+
+Complete proportionally for this new or explicitly revised scope under critical-judgment.md. Use no material objection or not-applicable with a specific reason where appropriate; never fabricate findings or alternatives.
+
+- Unnecessary work removed or retained with reason:
+- Sequencing and dependency challenge:
+- Small experiment or reason not applicable:
