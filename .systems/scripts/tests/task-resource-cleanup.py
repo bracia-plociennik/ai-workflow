@@ -3,6 +3,7 @@
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 import argparse
+import errno
 import importlib.util
 import json
 import os
@@ -46,8 +47,14 @@ class Lifecycle(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         if cls.created_workspace:
-            cls.storage.rmdir()
-            cls.fixture_workspace.rmdir()
+            # Parallel smoke children can share this explicitly selected test storage.
+            # Remove only empty fixture directories; preserve a sibling's active data.
+            try:
+                cls.storage.rmdir()
+                cls.fixture_workspace.rmdir()
+            except OSError as exc:
+                if exc.errno not in {errno.ENOTEMPTY, errno.ENOENT}:
+                    raise
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(dir=self.storage, prefix='case-')
@@ -108,6 +115,28 @@ class Lifecycle(unittest.TestCase):
 
     def rewrite_proof(self):
         self.proof.write_text(json.dumps(self.proof_value))
+
+    def test_fresh_validation_exports_future_durable_storage_to_nested_child(self):
+        source = self.root / 'fresh-source'
+        source.mkdir()
+        shutil.copytree(SCRIPTS.parent, source / '.systems')
+        child = source / '.systems/scripts/check-task-resource-cleanup'
+        child.write_text("""#!/usr/bin/env bash
+set -euo pipefail
+[[ -n "${TASK_RESOURCE_TEST_STORAGE:-}" ]]
+[[ ! -e "$TASK_RESOURCE_TEST_STORAGE" ]]
+mkdir -p "$TASK_RESOURCE_TEST_STORAGE"
+env AI_WORKFLOW_WORKSPACE_HOME=/tmp/unbound-child python3 -c 'import os,sys; sys.path.insert(0, sys.argv[1]); import durable_runtime as rt; rt.durable(os.environ["TASK_RESOURCE_TEST_STORAGE"]); print("FUTURE_DURABLE_STORAGE_REACHED_CHILD")' "$(dirname "$0")"
+rmdir "$TASK_RESOURCE_TEST_STORAGE"
+""")
+        child.chmod(0o755)
+        env = dict(os.environ)
+        for key in ['TASK_RESOURCE_TEST_STORAGE','AI_WORKFLOW_HOME','AI_WORKFLOW_MODE','AI_WORKFLOW_WORKSPACE_HOME','TARGET_REPO_ROOT']:
+            env.pop(key, None)
+        result = subprocess.run([str(source / '.systems/scripts/validate-workflow'),'--profile','scoped','--checks','check-task-resource-cleanup'],cwd=source,env=env,capture_output=True,text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('FUTURE_DURABLE_STORAGE_REACHED_CHILD', result.stdout)
+        self.assertFalse((source / 'ai-workflow-workspace').exists())
 
     def test_cache_then_whole_worktree_and_evidence_survival(self):
         self.register();self.release()
