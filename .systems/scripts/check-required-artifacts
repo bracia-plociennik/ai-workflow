@@ -6,6 +6,10 @@ required=(
   ".systems/scripts/manage-sprint"
   ".systems/scripts/sprint_iteration.py"
   ".systems/scripts/check-sprint-iteration"
+
+  ".systems/ai/core/critical-judgment.md"
+  ".systems/scripts/check-critical-judgment"
+  ".systems/scripts/critical_judgment.py"
   ".systems/ai/core/goal-focused-maintenance.md"
   ".systems/ai/capabilities/goal-focused-maintenance-v1.json"
   ".systems/scripts/check-goal-focused-maintenance"

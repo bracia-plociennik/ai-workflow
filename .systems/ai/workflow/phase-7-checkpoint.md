@@ -475,3 +475,7 @@ Checkpoint must account for scoped `Distillation State` records, including `read
 - Suggested entry summary:
 
 For registered task resources apply `task-resource-cleanup.md` after the required current evidence is durable and resources are released. Cleanup does not close a project, infer final-owner-yes or add a phase. Keep skipped resources and continue independent work.
+
+## Critical judgment
+
+Use critical-judgment.md. Preserve material decisions, their factual basis, informed accepted tradeoffs and reconsideration triggers in the current checkpoint. Do not repeat settled debates or rewrite original QA.

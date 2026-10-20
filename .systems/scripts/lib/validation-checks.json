@@ -207,6 +207,10 @@
       "dependencies": [],
       "scope": "framework"
     },
+    "check-critical-judgment": {
+      "dependencies": [],
+      "scope": "framework"
+    },
     "check-sprint-iteration": {
       "dependencies": [],
       "scope": "framework"

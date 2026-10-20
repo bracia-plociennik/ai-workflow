@@ -20,7 +20,7 @@
     ".systems/ai/core/owner-decision-checkpoints.md": "76e24f6602235e1472791823af1f577334efbea8463b6d886c4992b52115f58a",
     ".systems/ai/core/permissions.md": "c6c6811cfd5041329373e01e421a11697ebaa53fc5b041fac84e17d6c0ddbdfe",
     ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
-    ".systems/ai/core/quality-review.md": "d33dd4a6dc0bfbe798c3761d91ec3650638918c52b588a09590db712ce19f265",
+    ".systems/ai/core/quality-review.md": "7adabbd71c379353849b24b8891c9f6bf8d39b68b63a3248419cadbdfb71b583",
     ".systems/ai/core/risk-model.md": "86c8510af6043d90aa86efa175c933a4d054ba4fc1b8f601a4bbe25d816ab902",
     ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
     ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",

@@ -404,3 +404,7 @@ Only these Markdown filenames may stay uppercase:
 Template filenames use `.template.md`.
 
 For registered task resources apply `task-resource-cleanup.md` after the required current evidence is durable and resources are released. Cleanup does not close a project, infer final-owner-yes or add a phase. Keep skipped resources and continue independent work.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

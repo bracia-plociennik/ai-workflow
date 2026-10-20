@@ -172,3 +172,7 @@ Return:
 
 Do not create `context.md` until the validated idea is accepted.
 ```
+
+## Critical judgment
+
+Use critical-judgment.md inside this existing phase, proportionally to the idea. Evaluate the material assumption and strongest supported objection against the actual goal and constraints, a simpler option (including no change when viable), and the condition that would change the recommendation. A sound idea may have no material objection; do not fabricate alternatives or reopen an informed permitted tradeoff without new evidence. Record the reasoning in the existing artifact.

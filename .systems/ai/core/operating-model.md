@@ -300,3 +300,7 @@ Napisz:
 Choose the recommendation from the active gate, status, phase `Next allowed phases`, project artifacts, blockers, risk model, and user intent. Choose exactly one safe alternative that does not bypass gates, evidence, approval, risk policy, Definition of Done, stop conditions, or final owner approval. Both `Napisz:` prompts must be directly usable by the user.
 
 For new registered task resources follow `task-resource-cleanup.md`: bind a durable runtime before temporary execution, keep QA/Capture outside it, claim before reuse, and perform eligible cleanup after actual safe closure and during subsequent work. No automatic adoption of older directories.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

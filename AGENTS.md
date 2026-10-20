@@ -119,3 +119,7 @@ Default Idea Validation follows task-intake.md after batch triage; explicit opt-
 Installation starts with phase-0-init. Workspace-owned materials use AI_WORKFLOW_WORKSPACE_HOME/skills/, AI_WORKFLOW_WORKSPACE_HOME/external-memory/ and AI_WORKFLOW_WORKSPACE_HOME/system-insights/. Skill context/ is raw data; complete skill-intake-plan.md before final skill artifacts. Do not edit `.systems/**` from target repositories; route upstream product changes through official development.
 
 Task-local Sprint preview/feedback defers implementation QA under .systems/ai/core/sprint-iteration.md only after actual explicit activation and verified support. Pending work is not completed/PASS or cleanup-ready; owner final acceptance starts verification.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

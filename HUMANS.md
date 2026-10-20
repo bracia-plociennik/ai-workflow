@@ -1915,3 +1915,7 @@ Task resource lifecycle and durable QA/Capture: `.systems/ai/core/task-resource-
 ## Sprint
 
 Use “Włącz sprint dla tego zadania” for fast dev/test preview iterations. “Ładnie, ale jeszcze…” keeps iterating; “Podoba mi się, to finalna wersja”, “Działa, tak zostawiamy” or “Testuj teraz” starts verification. “Pauza”/“Wznów sprint” preserves unfinished work. Automated checks and full review wait for that signal; required preview compilation and safety protections remain. Production needs exact separate owner approval. Final tests/QA still precede completion and publication. One persistent task record, no per-round Capture. See `.systems/ai/core/sprint-iteration.md` and `manage-sprint --help`.
+
+## Independent judgment
+
+`critical-judgment.md` defines proportional evidence-based assessment: challenge material premises, offer feasible simpler options, correct the agent’s own recommendations, respect informed permitted tradeoffs and keep routine work brief. Workflow uses existing phases and meaningful What-if/acceptance evidence; this adds no counterphase, historical QA migration or new permission. Actual Codex evaluations are required for this delivery; structural checks alone do not establish behavior.
