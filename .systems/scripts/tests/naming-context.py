@@ -15,7 +15,7 @@ class NamingContext(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / 'repo'; root.mkdir()
             scripts = root / '.systems/scripts'; scripts.mkdir(parents=True)
-            for name in ('check-naming', 'resolve-workflow-env'):
+            for name in ('check-naming', 'resolve-workflow-env', 'durable_runtime.py'):
                 shutil.copy2(ROOT / '.systems/scripts' / name, scripts / name)
             (root / 'AGENTS.md').write_text('# Synthetic official repo')
             file = root / relative; file.parent.mkdir(parents=True); file.write_text('# Synthetic source')

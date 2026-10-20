@@ -71,7 +71,14 @@ class EvidenceTests(unittest.TestCase):
         self.ci_environment = patch.dict(os.environ, {"CI": ""})
         self.ci_environment.start()
         self.addCleanup(self.ci_environment.stop)
-        self.tmp = tempfile.TemporaryDirectory(prefix="eff-tests-")
+        # Bound-source evidence fixtures follow the actual persistent namespace.
+        sys.path.insert(0, str(ROOT / '.systems/scripts'))
+        import durable_runtime
+        binding = durable_runtime.load(ROOT)
+        storage = Path(binding['workspace']) / 'projects/task-resource-cleanup-v1/evidence/efficiency-fixtures' if binding else None
+        if storage is not None:
+            storage.mkdir(parents=True, exist_ok=True)
+        self.tmp = tempfile.TemporaryDirectory(prefix="eff-tests-", dir=storage)
         self.root = Path(self.tmp.name).resolve()
         self.workspace = self.root / "workspace"
         self.project = self.workspace / "projects/synthetic"
@@ -149,13 +156,13 @@ class EvidenceTests(unittest.TestCase):
 
     def test_atomic_publish_no_clobber_and_link(self):
         output = self.root / "out.json"
-        eff.publish(output, {"one": 1})
+        eff.publish(output, {"one": 1}, source_root=ROOT)
         with self.assertRaisesRegex(ValueError, "already exists"):
-            eff.publish(output, {"two": 2})
+            eff.publish(output, {"two": 2}, source_root=ROOT)
         directory = self.root / "linked"
         directory.symlink_to(self.root, target_is_directory=True)
         with self.assertRaisesRegex(ValueError, "linked"):
-            eff.publish(directory / "other.json", {})
+            eff.publish(directory / "other.json", {}, source_root=ROOT)
         self.assertEqual(json.loads(output.read_text()), {"one": 1})
 
     def test_sensitive_traversal_and_missing_inputs_rejected(self):

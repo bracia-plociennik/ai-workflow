@@ -196,3 +196,5 @@ Skipped checks must include:
 - reason skipped;
 - whether the skip affects `PASS`;
 - fallback evidence, if any.
+
+Task resources: `.systems/scripts/manage-task-resources` (inspect/plan read-only); `.systems/scripts/check-task-resource-cleanup` verifies the guarded lifecycle. Read `task-resource-cleanup.md` before mutation.

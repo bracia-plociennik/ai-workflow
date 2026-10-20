@@ -168,6 +168,11 @@ if [[ -n "$scope_manifest" && "$profile" != "scoped" ]]; then
   exit 1
 fi
 source "$(dirname "$0")/resolve-workflow-env"
+if [[ -z "${TASK_RESOURCE_TEST_STORAGE:-}" ]]; then
+  if python3 -B -c 'import sys; from pathlib import Path; sys.path.insert(0, sys.argv[1]); import durable_runtime as rt; p=rt.unlinked(sys.argv[2], exists=False); assert not rt.temporary(p); ancestor=p; exec("while not ancestor.exists(): ancestor=ancestor.parent"); rt.durable(ancestor)' "$AI_WORKFLOW_HOME/.systems/scripts" "$AI_WORKFLOW_WORKSPACE_HOME" 2>/dev/null; then
+    export TASK_RESOURCE_TEST_STORAGE="$AI_WORKFLOW_WORKSPACE_HOME"
+  fi
+fi
 
 if [[ -n "$execution_plan" ]]; then
   [[ "$profile" == scoped && -z "$checks$scope_manifest$source_receipt$timing_output$project" && -n "$evidence_output" && -n "$receipt_key_file" ]] || {
@@ -423,6 +428,7 @@ run_core_validators() {
   run_cmd .systems/scripts/check-end-of-task-capture
   run_cmd .systems/scripts/check-cross-system-upgrade-handoff
   run_cmd .systems/scripts/check-worktree-bootstrap
+  run_cmd .systems/scripts/check-task-resource-cleanup
   run_cmd .systems/scripts/check-validation-routing
   run_cmd .systems/scripts/check-model-selection-guidance
   run_cmd .systems/scripts/check-delivery-constraints

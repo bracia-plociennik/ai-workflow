@@ -402,3 +402,5 @@ Only these Markdown filenames may stay uppercase:
 `.systems/scripts/check-naming` intentionally ignores preserved legacy input under `AI_WORKFLOW_WORKSPACE_HOME/repo/legacy/**`, detailed repo context entries under `AI_WORKFLOW_WORKSPACE_HOME/repo/context/**`, supporting project source materials under `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context/**`, skill source materials under `AI_WORKFLOW_WORKSPACE_HOME/skills/<skill>/context/**` and `.systems/ai/skills/<skill>/context/**`, and external skill source material under `.systems/ai/skills/legacy/**`. The canonical repo context router remains `AI_WORKFLOW_WORKSPACE_HOME/repo/core/context.md`. The canonical accepted project context remains `AI_WORKFLOW_WORKSPACE_HOME/projects/<project>/context.md` and is still validated by status gates before architecture and later phases.
 
 Template filenames use `.template.md`.
+
+For registered task resources apply `task-resource-cleanup.md` after the required current evidence is durable and resources are released. Cleanup does not close a project, infer final-owner-yes or add a phase. Keep skipped resources and continue independent work.

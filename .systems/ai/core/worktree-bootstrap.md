@@ -68,3 +68,5 @@ Smoke tests must use a local bare remote and must not contact GitHub.
 ## Authority Boundary
 
 Bootstrap cannot overwrite target-owned files, change product code, bypass platform approval, infer an installation from a weak marker, normalize a dirty clone, or merge existing root instructions.
+
+For new managed disposable execution, bind durable runtime before initialization under `task-resource-cleanup.md`. Bootstrap accepts `--durable-workspace`, `--canonical-target` and `--work-record`; all three and recorded approval are required. Do not create QA/Capture inside the auxiliary target.

@@ -51,6 +51,10 @@ else
   workspace_home="$target_repo_root/ai-workflow-workspace"
 fi
 
+bound_workspace="$(python3 -B "$script_dir/durable_runtime.py" resolve --target "$target_repo_root" --requested "${workspace_arg:-${AI_WORKFLOW_WORKSPACE_HOME:-}}")" || exit 2
+if [[ -n "$bound_workspace" ]]; then
+  workspace_home="$bound_workspace"
+fi
 mkdir -p "$workspace_home"
 workspace_home="$(cd "$workspace_home" && pwd -P)"
 

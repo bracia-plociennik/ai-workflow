@@ -473,3 +473,5 @@ Checkpoint must account for scoped `Distillation State` records, including `read
 - Privacy/scope check: `<pass|fail|n/a>`
 - Suggested entry title:
 - Suggested entry summary:
+
+For registered task resources apply `task-resource-cleanup.md` after the required current evidence is durable and resources are released. Cleanup does not close a project, infer final-owner-yes or add a phase. Keep skipped resources and continue independent work.

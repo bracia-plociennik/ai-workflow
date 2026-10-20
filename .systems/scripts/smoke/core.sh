@@ -265,7 +265,7 @@ with tempfile.TemporaryDirectory(prefix="lv003-scope-") as directory:
     lib.mkdir(parents=True)
     for name in ("validation-scope.py", "validation-checks.json", "validation-timing.py", "policy-boundaries.sh", "qa-evidence.py"):
         shutil.copy2(source / ".systems/scripts/lib" / name, lib / name)
-    for name in ("validate-workflow", "resolve-workflow-env", "run-with-timeout"):
+    for name in ("validate-workflow", "resolve-workflow-env", "durable_runtime.py", "run-with-timeout"):
         shutil.copy2(source / ".systems/scripts" / name, scripts / name)
     registry_path = lib / "validation-checks.json"
     registry = json.loads(registry_path.read_text())
