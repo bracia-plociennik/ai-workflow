@@ -122,4 +122,4 @@ Task-local Sprint preview/feedback defers implementation QA under .systems/ai/co
 
 ## Independent judgment
 
-Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.
+Read and apply `.systems/ai/core/critical-judgment.md` for proportional judgment and its evidence, authority, brevity and accepted-tradeoff boundaries.
