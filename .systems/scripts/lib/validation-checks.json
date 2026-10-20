@@ -206,6 +206,10 @@
     "check-task-resource-cleanup": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-critical-judgment": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

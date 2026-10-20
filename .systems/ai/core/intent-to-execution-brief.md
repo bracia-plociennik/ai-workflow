@@ -31,3 +31,7 @@ Keep raw conversations/dumps/client files in their approved owner namespace; bri
 "Auto, plan only, no commits" → plan ceiling, no implementation/commit, auto-unbounded if limits absent; no deadline question. "Owner-approved local edit, stop after checkpoint" → exact target/scope/DoD, covered reversible choices, required QA/capture/checkpoint, no Phase8 unless separately triggered. "Human Coop, make it better" with a material unresolved outcome → at most 1–3 grouped outcome questions, no invented permission. A current "answer in English" overrides an older confirmed language preference.
 
 Structural validation and source profiles are supporting-only. Native B01–B25 original-input evaluations and formal implementation Quality verify behavior; missing actual outputs cannot be replaced by expected fixture responses. A profile proves only exact reviewed sources, never model compliance or owner approval.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

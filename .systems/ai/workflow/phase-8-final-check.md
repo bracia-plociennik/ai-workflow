@@ -359,3 +359,7 @@ DoD:
 goal-focused-maintenance.md is a disclosure/scoped history policy, not final-owner-yes. At an explicitly requested Phase8, review the private issue queue and current proof; proven independent historical debt does not by itself block the active goal, but unknown/shared/duplicate/foreign dependencies do. Current technical acceptance and actual owner final approval remain required. Store actual presented receipt only after a surfaced summary; no automatic Phase8 from the queue.
 
 For registered task resources apply `task-resource-cleanup.md` after the required current evidence is durable and resources are released. Cleanup does not close a project, infer final-owner-yes or add a phase. Keep skipped resources and continue independent work.
+
+## Critical judgment
+
+Use critical-judgment.md. Review the current outcome against owner intent and material decisions, including reconsideration triggers reached since planning. Preserve actual technical QA and the separate final-owner-yes gate.

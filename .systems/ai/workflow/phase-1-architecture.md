@@ -281,3 +281,7 @@ Report the advisory model recommendation from `.systems/ai/core/model-selection-
 - Privacy/scope check: `<pass|fail|n/a>`
 - Suggested entry title:
 - Suggested entry summary:
+
+## Critical judgment and What-if
+
+Use critical-judgment.md. For material assumptions, trace a credible What-if scenario, consequence, system response, verification and reconsideration trigger. Assess failure/retry/recovery, concurrency and scale when relevant. Compare feasible approaches against the goal and cost; do not assume the chosen design is sound merely because its normal path works. Record a reason when no material scenario applies rather than inventing one.
