@@ -6,6 +6,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -74,8 +75,8 @@ class EvidenceTests(unittest.TestCase):
         # Bound-source evidence fixtures follow the actual persistent namespace.
         sys.path.insert(0, str(ROOT / '.systems/scripts'))
         import durable_runtime
-        binding = durable_runtime.load(ROOT)
-        storage = Path(binding['workspace']) / 'projects/task-resource-cleanup-v1/evidence/efficiency-fixtures' if binding else None
+        binding = durable_runtime.load(durable_runtime.execution_target(ROOT))
+        storage = Path(binding['work_record']).parent / 'evidence/efficiency-fixtures' if binding else None
         if storage is not None:
             storage.mkdir(parents=True, exist_ok=True)
         self.tmp = tempfile.TemporaryDirectory(prefix="eff-tests-", dir=storage)
@@ -89,6 +90,78 @@ class EvidenceTests(unittest.TestCase):
 
     def tearDown(self):
         self.tmp.cleanup()
+
+    def test_nested_targets_use_own_head_and_bound_fixture_storage(self):
+        import durable_runtime as rt
+        target = rt.execution_target(ROOT)
+        binding = rt.load(target)
+        storage = (Path(binding['work_record']).parent / 'evidence/efficiency-fixtures' if binding
+                   else target / 'ai-workflow-workspace/.efficiency-fixtures')
+        storage.mkdir(parents=True, exist_ok=True)
+        rt.durable(storage)
+        with tempfile.TemporaryDirectory(prefix='nested-', dir=storage) as directory:
+            base = Path(directory)
+
+            def git(repo, *args):
+                return subprocess.check_output(['git', '-C', str(repo), *args], stderr=subprocess.PIPE, text=True).strip()
+
+            def initialize(repo):
+                repo.mkdir(parents=True)
+                git(repo, 'init', '-b', 'main')
+                git(repo, 'config', 'user.name', 'Synthetic Test')
+                git(repo, 'config', 'user.email', 'synthetic@example.invalid')
+
+            consumer = base / 'projects/consumer'
+            initialize(consumer)
+            (consumer / 'source.txt').write_text('Synthetic consumer identity.\n')
+            git(consumer, 'add', 'source.txt')
+            git(consumer, 'commit', '-m', 'test: initialize consumer')
+            work = base / '.worktrees/consumer/task'
+            work.parent.mkdir(parents=True)
+            git(consumer, 'worktree', 'add', '-b', 'codex/synthetic', str(work))
+            workspace = base / 'durable-runtime'
+            owner = workspace / 'projects/synthetic-owner'
+            owner.mkdir(parents=True)
+            record = owner / 'work.json'
+            record.write_text(json.dumps({'task_resource_cleanup': {
+                'schema': 1, 'canonical': rt.identity(consumer), 'workspace': str(workspace)}}))
+            rt.bind(work, consumer, workspace, record)
+            with self.assertRaisesRegex(ValueError, 'bound durable runtime'):
+                rt.guard_output(base / 'outside.json', target=work)
+            paths = subprocess.check_output(['git', '-C', str(ROOT), 'ls-files', '-z'], text=True).split('\0')
+            selected = [
+                'test_atomic_publish_no_clobber_and_link',
+                'test_full_source_receipt_success_and_stale_rejection',
+                'test_iteration_inventory_and_source_drift',
+                'test_public_shell_lifecycle_executes_before_success',
+                'test_historical_integrity_without_live_input_and_no_progression',
+            ]
+            for source, bound in ((consumer, False), (work, True)):
+                with self.subTest(bound=bound):
+                    workflow = source / 'ai-workflow'
+                    initialize(workflow)
+                    for relative in paths:
+                        if not relative or relative.startswith('ai-workflow-workspace/'):
+                            continue
+                        original = ROOT / relative
+                        if not original.is_file():
+                            continue
+                        destination = workflow / relative
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(original, destination)
+                    git(workflow, 'add', '--all')
+                    git(workflow, 'commit', '-m', 'test: initialize nested workflow')
+                    self.assertNotEqual(git(workflow, 'rev-parse', 'HEAD'), git(source, 'rev-parse', 'HEAD'))
+                    env = dict(os.environ)
+                    for key in ['AI_WORKFLOW_HOME', 'AI_WORKFLOW_MODE', 'AI_WORKFLOW_WORKSPACE_HOME',
+                                'TARGET_REPO_ROOT', 'TASK_RESOURCE_TEST_STORAGE']:
+                        env.pop(key, None)
+                    result = subprocess.run([sys.executable, str(workflow / '.systems/scripts/tests/execution-efficiency.py'),
+                                             *['EvidenceTests.' + name for name in selected]],
+                                            cwd=workflow, env=env, capture_output=True, text=True, timeout=90)
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    if bound:
+                        self.assertTrue((owner / 'evidence/efficiency-fixtures').is_dir())
 
     def receipt(self):
         value = {"schema": 1, "run_id": "source-run", "state": "completed", "exit_code": 0, "binding": "a"}
@@ -403,10 +476,15 @@ class EvidenceTests(unittest.TestCase):
     def test_historical_integrity_without_live_input_and_no_progression(self):
         output, body = producer.render(supplied_review(), ROOT, self.workspace, "synthetic")
         producer.publish(output, body)
+        import durable_runtime
+        assessed_head = subprocess.check_output(
+            ["git", "-C", str(durable_runtime.execution_target(ROOT)), "rev-parse", "HEAD"], text=True).strip()
+        metadata, _ = qa.read_current(body.splitlines())
+        self.assertEqual(metadata["Assessed source HEAD"], assessed_head)
         decision = self.project / "decisions/history.md"
         decision.write_text("- History decision: approved\n- Approved report: quality/" + output.name + "\n- Approved state: historical\n- Source: synthetic owner-approved preservation")
         registry = {"schema": 1, "assessments": [{"path": "quality/" + output.name, "sha256": eff.file_hash(output),
-                     "state": "historical", "assessed_head": subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip(),
+                     "state": "historical", "assessed_head": assessed_head,
                      "decision": "decisions/history.md", "decision_sha256": eff.file_hash(decision)}]}
         (self.project / "quality-assessments.json").write_text(json.dumps(registry))
         (self.project / "context.md").unlink()
@@ -416,6 +494,10 @@ class EvidenceTests(unittest.TestCase):
             qa.assess(output, ROOT, self.workspace, "synthetic", require_pass=True)
         with self.assertRaisesRegex(qa.InvalidAssessment, "cannot supply current PASS"):
             qa.assess(output, ROOT, self.workspace, "synthetic", require_pass=True, history_integrity=True)
+        registry["assessments"][0]["assessed_head"] = "0" * 40 if assessed_head != "0" * 40 else "1" * 40
+        (self.project / "quality-assessments.json").write_text(json.dumps(registry))
+        with self.assertRaisesRegex(qa.InvalidAssessment, "historical baseline does not match"):
+            qa.assess(output, ROOT, self.workspace, "synthetic", history_integrity=True)
         output.write_text(body + "\nchanged")
         with self.assertRaisesRegex(qa.InvalidAssessment, "integrity mismatch"):
             qa.assess(output, ROOT, self.workspace, "synthetic", history_integrity=True)
