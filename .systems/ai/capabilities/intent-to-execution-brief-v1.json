@@ -1,7 +1,7 @@
 {
   "contract": "intent-to-execution-brief-v1",
   "semantic_version": 1,
-  "tested_commit": "a9c27f7a599dd81f1cb74d0147e6c348f39bf954",
+  "tested_commit": "9d6a3b25cc14ef77c7ab0dde73cdb6b965e3c0a1",
   "mode_mapping": {
     "auto": "auto",
     "human": "human-coop"
