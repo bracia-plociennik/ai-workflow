@@ -40,6 +40,7 @@ class BindingTests(unittest.TestCase):
                      'execution-efficiency', 'validation-timing', 'capture-record',
                      'capture-state', 'coordinator-status', 'parallel-orchestration'):
             shutil.copy2(LIB / (name + '.py'), self.lib / (name + '.py'))
+        shutil.copy2(ROOT / '.systems/scripts/durable_runtime.py', self.lib.parent / 'durable_runtime.py')
         (self.lib / 'validation-checks.json').write_text(json.dumps({'checks': {'check-fixture': {}}}))
         (self.repo / 'AGENTS.md').write_text('Synthetic source baseline')
         (self.repo / '.gitignore').write_text('ai-workflow-workspace/\n.systems/ignored/\n__pycache__/\n*.pyc\n')

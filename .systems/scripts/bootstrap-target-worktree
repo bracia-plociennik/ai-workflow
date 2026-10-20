@@ -5,10 +5,13 @@ canonical_remote="https://github.com/bracia-plociennik/ai-workflow.git"
 target=""
 accepted_marker=""
 approved=0
+durable_workspace=""
+canonical_target=""
+work_record=""
 
 usage() {
   cat <<'EOF'
-Usage: bootstrap-target-worktree --target <target-repo> --approved [--accepted-marker <relative-path>]
+Usage: bootstrap-target-worktree --target <target-repo> --approved [--accepted-marker <relative-path>] [--durable-workspace <path> --canonical-target <path> --work-record <path>]
 
 Production uses the canonical AI Workflow GitHub remote. A remote override is
 accepted only when AI_WORKFLOW_BOOTSTRAP_TEST_MODE=1.
@@ -52,6 +55,15 @@ while [[ $# -gt 0 ]]; do
     --accepted-marker)
       [[ $# -ge 2 ]] || fail "--accepted-marker requires a value"
       accepted_marker="$2"
+      shift 2
+      ;;
+    --durable-workspace|--canonical-target|--work-record)
+      [[ $# -ge 2 ]] || fail "$1 requires a value"
+      case "$1" in
+        --durable-workspace) durable_workspace="$2" ;;
+        --canonical-target) canonical_target="$2" ;;
+        --work-record) work_record="$2" ;;
+      esac
       shift 2
       ;;
     --approved)
@@ -110,6 +122,23 @@ fi
 
 [[ "$strong_marker" -eq 1 ]] || fail "missing strong AI Workflow installation marker"
 
+binding_tool="$(cd "$(dirname "$0")" && pwd -P)/durable_runtime.py"
+binding_requested=0
+if [[ -n "$durable_workspace$canonical_target$work_record" ]]; then
+  [[ "$approved" -eq 1 && -n "$durable_workspace" && -n "$canonical_target" && -n "$work_record" ]] || fail "durable binding requires approved complete workspace/canonical/work-record"
+  python3 -B "$binding_tool" bind --target "$target" --canonical "$canonical_target" --workspace "$durable_workspace" --work-record "$work_record" --requested "${AI_WORKFLOW_WORKSPACE_HOME:-}" --dry-run >/dev/null
+  binding_requested=1
+  workspace_target="$durable_workspace"
+else
+  bound_workspace="$(python3 -B "$binding_tool" resolve --target "$target" --requested "${AI_WORKFLOW_WORKSPACE_HOME:-}")" || fail "durable runtime binding required"
+  workspace_target="${bound_workspace:-$target/ai-workflow-workspace}"
+fi
+ensure_runtime_binding() {
+  if [[ "$binding_requested" -eq 1 ]]; then
+    python3 -B "$binding_tool" bind --target "$target" --canonical "$canonical_target" --workspace "$durable_workspace" --work-record "$work_record" --requested "${AI_WORKFLOW_WORKSPACE_HOME:-}" --approved >/dev/null
+  fi
+}
+
 expected_remote="$canonical_remote"
 if [[ "${AI_WORKFLOW_BOOTSTRAP_TEST_MODE:-0}" == "1" ]]; then
   expected_remote="${AI_WORKFLOW_BOOTSTRAP_REMOTE:-}"
@@ -158,9 +187,11 @@ if [[ -e "$clone" ]]; then
   fi
   if [[ "$needs_init" -eq 1 ]]; then
     [[ "$approved" -eq 1 ]] || fail "repairing the root shim or local excludes requires recorded write approval"
+    ensure_runtime_binding
     env -u AI_WORKFLOW_WORKSPACE_HOME "$clone/.systems/scripts/init-workspace" \
-      --workspace "$target/ai-workflow-workspace"
+      --workspace "$workspace_target"
   fi
+  ensure_runtime_binding
   echo "Worktree bootstrap result: existing installation verified"
   exit 0
 fi
@@ -181,11 +212,12 @@ clone_origin="$(git -C "$clone" remote get-url origin 2>/dev/null || true)"
 [[ -x "$clone/.systems/scripts/init-workspace" ]] || fail "clone is missing executable init-workspace"
 [[ -z "$(git -C "$clone" status --porcelain)" ]] || fail "new clone is unexpectedly dirty"
 
+ensure_runtime_binding
 env -u AI_WORKFLOW_WORKSPACE_HOME "$clone/.systems/scripts/init-workspace" \
-  --workspace "$target/ai-workflow-workspace"
+  --workspace "$workspace_target"
 
 [[ -f "$target/AGENTS.md" ]] || fail "init-workspace did not create root AGENTS.md"
-[[ -f "$target/ai-workflow-workspace/repo/core/init.md" ]] || fail "init-workspace did not create init evidence"
+[[ -f "$workspace_target/repo/core/init.md" ]] || fail "init-workspace did not create init evidence"
 grep -qxF "/AGENTS.md" "$exclude_file" || fail "init-workspace did not exclude root AGENTS.md"
 grep -qxF "/ai-workflow/" "$exclude_file" || fail "init-workspace did not exclude nested clone"
 

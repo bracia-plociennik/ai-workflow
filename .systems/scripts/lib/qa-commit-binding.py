@@ -434,7 +434,7 @@ def main():
             raise ValueError('declare AI_WORKFLOW_QA_BINDING_KEY_FILE before snapshot, receipt and verification')
         if args.action == 'snapshot':
             value = snapshot(args.workflow_root, args.workspace_root, args.project, args.task, read(args.evidence))
-            load('execution-efficiency').publish(args.output, value)
+            load('execution-efficiency').publish(args.output, value, source_root=args.workflow_root)
             print(json.dumps({'schema': 1, 'snapshot_sha256': load('execution-efficiency').file_hash(args.output),
                               'path': str(args.output), 'authority': 'none'}, sort_keys=True))
         else:

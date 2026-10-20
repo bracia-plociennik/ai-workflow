@@ -17,13 +17,27 @@ HEADER = (
 FIELD = re.compile(r"^[a-zA-Z0-9_.-]+$")
 
 
-def safe_output(raw):
+def safe_output(raw, *, source_root=None):
     path = Path(raw).expanduser().absolute()
     if path.exists() and not path.is_file():
         raise ValueError("timing output is not a regular file")
     if path.is_symlink():
         raise ValueError("timing output must not be a symlink")
     resolved = path.resolve()
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    import durable_runtime
+    try:
+        source = Path(source_root) if source_root else Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], stderr=subprocess.PIPE, text=True).strip())
+    except subprocess.SubprocessError:
+        source = None
+    source = durable_runtime.execution_target(source) if source else None
+    bound = durable_runtime.load(source) if source else None
+    if bound and resolved.is_relative_to(Path(bound['workspace'])):
+        durable_runtime.guard_output(path, target=source)
+        tracked_bound = subprocess.run(["git", "-C", bound['canonical']['root'], "ls-files", "--error-unmatch", str(resolved)], capture_output=True)
+        if tracked_bound.returncode == 0:
+            raise ValueError("bound output is tracked by git")
+        return path
     tracked = subprocess.run(
         ["git", "ls-files", "--error-unmatch", str(path)], check=False, capture_output=True
     )

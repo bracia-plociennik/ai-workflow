@@ -202,6 +202,10 @@
     "check-work-lead": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-task-resource-cleanup": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

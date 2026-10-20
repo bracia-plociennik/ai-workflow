@@ -45,7 +45,11 @@ resolve_ai_workflow_env() {
     export TARGET_REPO_ROOT="$resolver_home"
   fi
 
-  if [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
+  local bound_workspace
+  bound_workspace="$(python3 -B "$resolver_script_dir/durable_runtime.py" resolve --target "$TARGET_REPO_ROOT" --requested "${AI_WORKFLOW_WORKSPACE_HOME:-}")" || return 2
+  if [[ -n "$bound_workspace" ]]; then
+    workspace_home="$bound_workspace"
+  elif [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
     workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
     if [[ "$workspace_home" != /* ]]; then
       workspace_home="$TARGET_REPO_ROOT/$workspace_home"
