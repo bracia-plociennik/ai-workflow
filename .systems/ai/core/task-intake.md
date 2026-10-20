@@ -205,3 +205,7 @@ Then provide the plan, clarification, or safe next step. Finish the whole respon
 ## Goal-Focused Maintenance Integration
 
 During scoped activation, record the stable parent outcome, accepted goal/DoD/architecture, nearest canonical owner, current required proof identities and concrete owner-approved maintenance target roots. Read existing queue rather than creating a second cause/task budget. Apply goal-focused-maintenance.md: separate actual goal/risk blockers from independently evidenced incidental debt. Preserve the intake lens internally; below thresholds do not recite unrelated debt to the owner. Unknown dependencies cannot be marked independent.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

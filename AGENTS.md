@@ -117,3 +117,7 @@ Optional Knowledge Capture follows contract-compliance.md and knowledge-capture-
 Default Idea Validation follows task-intake.md after batch triage; explicit opt-out reports “Idea validation skipped by owner opt-out” and residual risk. A validator needs its successful AI_WORKFLOW_VALIDATE_COMPLETE marker; canonical updater states ahead or diverged stop for reconciliation.
 
 Installation starts with phase-0-init. Workspace-owned materials use AI_WORKFLOW_WORKSPACE_HOME/skills/, AI_WORKFLOW_WORKSPACE_HOME/external-memory/ and AI_WORKFLOW_WORKSPACE_HOME/system-insights/. Skill context/ is raw data; complete skill-intake-plan.md before final skill artifacts. Do not edit `.systems/**` from target repositories; route upstream product changes through official development.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

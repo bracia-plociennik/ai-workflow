@@ -1911,3 +1911,7 @@ A registered owner AI System can lead supported configurable decisions through t
 AGENTS.md is a bounded entry router; the complete prior execution contract remains in .systems/ai/core/agent-contract-details.md and loads on matching triggers. Existing custom project instructions are preserved. No management role is imported into development, no automatic project enrollment or extra coordinator is created. Native Codex startup is provided by the separate reviewed System adapter; Claude and other tools remain MVP design/unverified. `check-work-lead` is included in standard/full validation and checks consumer source conformance only.
 
 Task resource lifecycle and durable QA/Capture: `.systems/ai/core/task-resource-cleanup.md`.
+
+## Independent judgment
+
+`critical-judgment.md` defines proportional evidence-based assessment: challenge material premises, offer feasible simpler options, correct the agent’s own recommendations, respect informed permitted tradeoffs and keep routine work brief. Workflow uses existing phases and meaningful What-if/acceptance evidence; this adds no counterphase, historical QA migration or new permission. Actual Codex evaluations are required for this delivery; structural checks alone do not establish behavior.

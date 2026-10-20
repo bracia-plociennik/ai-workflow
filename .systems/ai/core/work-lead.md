@@ -17,3 +17,7 @@ A narrower read-only request wins over earlier broader mandate; revoked/supersed
 
 ## Consumers and future gates
 Operating model, permissions, risk, owner decision checkpoints, execution modes, autopilot, runtime integrity and command routing all use this classification. QA and phase files retain their requirements. No fake final-owner-yes, risk relabeling or test bypass. Native obedience is proved by actual Codex acceptance; the schema tests prove only deterministic protocol behavior. Claude/other adapter MVPs remain unverified design until tested separately.
+
+## Independent judgment
+
+Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

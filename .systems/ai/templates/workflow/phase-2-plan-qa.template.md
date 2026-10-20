@@ -147,3 +147,9 @@
 - Privacy/scope check: `<pass|fail|n/a>`
 - Suggested entry title:
 - Suggested entry summary:
+
+## Critical judgment evidence
+
+Complete proportionally for this new or explicitly revised scope under critical-judgment.md. Use no material objection or not-applicable with a specific reason where appropriate; never fabricate findings or alternatives.
+
+- Unnecessary scope and early experiment review:
