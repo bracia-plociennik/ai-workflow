@@ -233,6 +233,10 @@ Use intent-to-execution-brief.md: original owner intent and accepted decisions r
 
 Activated goal-focused-maintenance.md separates incident notification from task verdict. Review actual current goal, dependency closure and evidence of independence; unknown impact cannot get a silent-safe label. Current correctness/verification defects are E04 and invalidate Quality as before. Independent historical debt may be recorded privately below thresholds, but never omit an in-scope finding or claim a skipped required check passed. Review raw errors truthfully in evidence without unsolicited owner debt narration.
 
+## Sprint iteration
+
+For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
+
 ## Independent judgment
 
 Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.

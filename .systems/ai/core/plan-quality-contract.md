@@ -79,6 +79,10 @@ Plan Quality Contract must not:
 - make `Quality skipped by owner opt-out` a formal PASS;
 - replace findings-first QA, Review Completeness Gate, or PASS Integrity Gate.
 
+## Sprint iteration
+
+For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
+
 ## Proportional judgment in plans
 
 Use critical-judgment.md when preparing or reviewing new/revised plans: test material premises, unnecessary scope, viable simpler/no-change options and early experiments. Existing artifact QA checks the actual reasoning; no separate counterphase or compulsory per-response critique.
