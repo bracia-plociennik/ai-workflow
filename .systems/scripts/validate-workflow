@@ -19,6 +19,8 @@ reuse_record=""
 source_receipt=""
 source_start=""
 executed_checks=""
+guard_state=""
+validation_input_roots=()
 
 validation_started=0
 completion_emitted=0
@@ -35,6 +37,10 @@ Profiles:
   full      Complete validation, including check-validator-smoke-tests. Explicit heavy validator.
   scoped    Explicit --checks plus declared dependency closure. Coverage requires a current manifest.
   fast      Cheap sanity checks. Iteration only.
+
+Input stability:
+  --validation-input-root path  Additional complete owning read-input namespace.
+  Product inputs and --project inputs are guarded automatically; no writer lock.
 
 Evidence:
   scoped --execution-plan path --evidence-output path --receipt-key-file path [--reuse-record path]
@@ -56,6 +62,9 @@ while [[ "$#" -gt 0 ]]; do
       esac
       shift 2
       ;;
+    --validation-input-root)
+      [[ "$#" -ge 2 ]] || { echo "Missing input root" >&2; exit 1; }
+      validation_input_roots+=("$2"); shift 2 ;;
     --profile)
       if [[ "$#" -lt 2 ]]; then
         echo "Missing value for --profile"
@@ -204,6 +213,12 @@ printf 'AI_WORKFLOW_VALIDATE_START profile=%s progress=%s\n' "$profile" "$progre
 
 finish_validation() {
   local status="$?"
+  if [[ -n "${guard_state:-}" && -f "$guard_state" ]]; then
+    if ! python3 -B "$AI_WORKFLOW_HOME/.systems/scripts/validation_input_guard.py" finish --state "$guard_state"; then
+      [[ "$status" != 0 ]] || status=75
+    fi
+    rm -f "$guard_state"
+  fi
   local result="fail"
   if [[ "$status" -eq 0 ]]; then
     result="pass"
@@ -256,6 +271,28 @@ validation_started_at=$SECONDS
 trap finish_validation EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
+
+# Guard actual live product inputs even for untimed runs. Selected runtime is
+# separate from source identity; stdout/stderr and exact new outputs are sinks.
+guard_state="$(mktemp)"
+rm "$guard_state"
+guard_args=(start --root "$AI_WORKFLOW_HOME" --state "$guard_state")
+[[ -z "$project" ]] || validation_input_roots+=("$AI_WORKFLOW_WORKSPACE_HOME/projects/$project")
+if [[ -n "$scope_manifest" ]]; then
+  # Validate scope ownership/coverage before reading paths supplied by the manifest.
+  scope_args=(--checks "$checks" --repo "$TARGET_REPO_ROOT" --workspace "$AI_WORKFLOW_WORKSPACE_HOME" --manifest "$scope_manifest")
+  [[ -z "$project" ]] || scope_args+=(--project "$project")
+  scope_plan="$(python3 .systems/scripts/lib/validation-scope.py plan "${scope_args[@]}")"
+  scope_guard_lines="$(python3 -B -c 'import json,sys; from pathlib import Path; m=json.load(open(sys.argv[1])); print("\n".join(str(Path(m["workspace"])/r["root"]) for r in m["runtime"]))' "$scope_manifest")"
+  while IFS= read -r scope_guard_root; do
+    [[ -z "$scope_guard_root" ]] || validation_input_roots+=("$scope_guard_root")
+  done <<< "$scope_guard_lines"
+fi
+for guard_root in "${validation_input_roots[@]}"; do guard_args+=(--input-root "$guard_root"); done
+for guard_output in "$timing_output" "$source_receipt" "$evidence_output"; do
+  [[ -z "$guard_output" ]] || guard_args+=(--output "$guard_output")
+done
+python3 -B "$AI_WORKFLOW_HOME/.systems/scripts/validation_input_guard.py" "${guard_args[@]}" 3>&1 4>&2
 
 if [[ -n "$execution_plan" ]]; then
   current_stage="iteration-plan"
@@ -394,6 +431,7 @@ run_fast_checks() {
 }
 
 run_core_validators() {
+  run_cmd .systems/scripts/check-validation-concurrency
   run_cmd .systems/scripts/check-execution-efficiency
   run_cmd .systems/scripts/check-required-artifacts
   run_cmd .systems/scripts/check-prompt-composition
@@ -460,7 +498,7 @@ if [[ "$profile" == "scoped" ]]; then
   scope_args=(--checks "$checks" --repo "$TARGET_REPO_ROOT" --workspace "$AI_WORKFLOW_WORKSPACE_HOME")
   [[ -z "$scope_manifest" ]] || scope_args+=(--manifest "$scope_manifest")
   [[ -z "$project" ]] || scope_args+=(--project "$project")
-  scope_plan="$(python3 .systems/scripts/lib/validation-scope.py plan "${scope_args[@]}")"
+  [[ -n "$scope_plan" ]] || scope_plan="$(python3 .systems/scripts/lib/validation-scope.py plan "${scope_args[@]}")"
   scope_lines="$(python3 .systems/scripts/lib/validation-scope.py lines --plan "$scope_plan")"
   while IFS=$'\t' read -r check_name scope_root scope_project scope_current_id; do
     check_args=()

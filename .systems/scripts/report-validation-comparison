@@ -27,21 +27,10 @@ def digest(data):
 
 
 def source_digest():
-    paths = subprocess.check_output(
-        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"]
-    ).split(b"\0")
-    h = hashlib.sha256()
-    for raw in sorted(p for p in paths if p):
-        path = Path(os.fsdecode(raw))
-        h.update(raw + b"\0")
-        if path.is_symlink():
-            h.update(os.fsencode(os.readlink(path)))
-        elif path.is_file():
-            h.update(path.read_bytes())
-        else:
-            h.update(b"MISSING")
-        h.update(b"\0")
-    return h.hexdigest()
+    # Versioned product scope: private runtime is never source input.
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from validation_input_guard import product_digest
+    return product_digest(Path.cwd())
 
 
 def timing_rows(path):
@@ -140,6 +129,7 @@ def capture(args):
         raise ValueError("source does not match the timed run identity")
     manifest = {
         "schema_version": 2,
+        "source_scope": "product-v1",
         "revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "source_digest": timed_source_digest,
         "capture_source_digest": observed_source_digest,
@@ -173,6 +163,9 @@ def load_manifest(raw):
     )
     if data.get("schema_version") not in (1, 2) or any(key not in data for key in required):
         raise ValueError("incomplete comparison manifest")
+    if "source_scope" in data and (data["schema_version"] != 2 or data["source_scope"] != "product-v1"):
+        raise ValueError("unsupported comparison source scope")
+    data["source_scope"] = data.get("source_scope", "legacy-repository-v1")
     if not data["run_id"].startswith(data["source_digest"] + "-"):
         raise ValueError("source does not match its manifest")
     if data.get("source_drift") and data["status"] == "complete":
@@ -200,7 +193,7 @@ def summarize(args):
     runs = [load_manifest(path) for path in args.manifests]
     if len(runs) < 3:
         raise ValueError("at least three runs are required")
-    stable = ("revision", "source_digest", "runtime", "profile", "scope_fingerprint", "input_fingerprint", "setup_regime", "checks", "tests")
+    stable = ("source_scope", "revision", "source_digest", "runtime", "profile", "scope_fingerprint", "input_fingerprint", "setup_regime", "checks", "tests")
     if len({run["run_id"] for run in runs}) != len(runs):
         raise ValueError("duplicate run IDs")
     if any(run["status"] != "complete" for run in runs):
@@ -249,7 +242,7 @@ def main():
     candidate = summarize(argparse.Namespace(manifests=args.candidate))
     if {run["run_id"] for run in baseline["runs"]} & {run["run_id"] for run in candidate["runs"]}:
         raise ValueError("baseline and candidate reuse a run ID")
-    comparable = ("runtime", "profile", "scope_fingerprint", "input_fingerprint", "setup_regime", "checks", "tests")
+    comparable = ("source_scope", "runtime", "profile", "scope_fingerprint", "input_fingerprint", "setup_regime", "checks", "tests")
     if any(baseline["runs"][0][key] != candidate["runs"][0][key] for key in comparable):
         raise ValueError("baseline and candidate inputs or coverage differ")
     before = [run["wall_seconds"] for run in baseline["runs"]]
