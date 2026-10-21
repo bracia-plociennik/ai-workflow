@@ -1,6 +1,4 @@
 {
-  "contract": 1,
-  "capability": "execution-modes-v1",
   "behaviors": [
     "scoped-approval",
     "dependency-local-blocking",
@@ -9,17 +7,19 @@
     "technical-phase-8",
     "human-material-questions"
   ],
+  "capability": "execution-modes-v1",
+  "contract": 1,
   "mode_mapping": {
     "auto": "auto",
     "human": "human-coop"
   },
   "sources": {
-    ".systems/ai/core/autopilot.md": "19f5986592e71d25827618172a5302c35696c913ce460fa162b8539c4e04b947",
+    ".systems/ai/core/autopilot.md": "fc9b6d81b319590d3f7d34273ccdbc74624fc7c31632e2797dd825abfe12f5a1",
     ".systems/ai/core/delivery-constraints.md": "67a277f43f9ecbee328580890ecbe390a0cfdd2d637af11dd54987541836bcba",
-    ".systems/ai/core/execution-modes.md": "a07bc9ba22aab4ce156d6e0a9d312f578a3cbeedcc2fcd7c488477d6a659ceed",
+    ".systems/ai/core/execution-modes.md": "92883e093f1f2e293dff494a918582fc956477ff0f52715734c0bf5b53203dcd",
     ".systems/ai/core/owner-decision-checkpoints.md": "76e24f6602235e1472791823af1f577334efbea8463b6d886c4992b52115f58a",
     ".systems/ai/core/permissions.md": "c6c6811cfd5041329373e01e421a11697ebaa53fc5b041fac84e17d6c0ddbdfe",
-    ".systems/ai/core/phase-commit-policy.md": "3b4e51dc119e7d686ff0c81f190c92c2dff62d4467abbe7a5006d4f1bdf99b93",
+    ".systems/ai/core/phase-commit-policy.md": "3f31ff7ea467548d5fe0149176620c780b200836186171431c999832a2c8ec55",
     ".systems/ai/core/quality-review.md": "7adabbd71c379353849b24b8891c9f6bf8d39b68b63a3248419cadbdfb71b583",
     ".systems/ai/core/risk-model.md": "86c8510af6043d90aa86efa175c933a4d054ba4fc1b8f601a4bbe25d816ab902",
     ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",

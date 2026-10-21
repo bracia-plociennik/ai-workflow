@@ -51,7 +51,7 @@ def read(record):
     return value,policy,sprint
 
 
-def validate(sprint,policy,record):
+def validate_v1(sprint,policy,record):
     fields(sprint,FIELDS,'Sprint state')
     if type(sprint['schema']) is not int or sprint['schema']!=SCHEMA or sprint['state'] not in STATES:
         raise ValueError('unsupported Sprint schema/state')
@@ -140,7 +140,7 @@ def quality(sprint, workflow):
     return assessed
 
 
-def inspect(record, workflow=None):
+def inspect_v1(record, workflow=None):
     _,_,sprint=read(record)
     if sprint is None:return {'schema':1,'state':'inactive','deferred':False,'closure_allowed':True,'authority':'none'}
     current=population(sprint)
@@ -178,7 +178,7 @@ def project_guard(workspace, project, workflow, *, generating=False, task=None):
             else:guard_record(record,workflow)
 
 
-def mutate(record,action,args):
+def mutate_v1(record,action,args):
     value,policy,sprint=read(record)
     with resources.lock(policy):
         value,policy,sprint=read(record)
@@ -234,9 +234,48 @@ def mutate(record,action,args):
     return inspect(record,args.workflow_root)
 
 
+# V1 stays byte-compatible at the record boundary; new CLI tasks select V2.
+def validate(sprint, policy, record):
+    if sprint.get('schema') == 2:
+        import sprint_v2
+        return sprint_v2.validate(sprint, policy, record)
+    return validate_v1(sprint, policy, record)
+
+
+def inspect(record, workflow=None):
+    _, _, sprint = read(record)
+    if sprint is not None and sprint['schema'] == 2:
+        import sprint_v2
+        return sprint_v2.inspect(record, workflow)
+    return inspect_v1(record, workflow)
+
+
+def mutate(record, action, args):
+    _, _, sprint = read(record)
+    if (sprint is not None and sprint['schema'] == 2) or (action == 'start' and getattr(args, 'schema', 1) == 2):
+        import sprint_v2
+        return sprint_v2.mutate(record, action, args)
+    return mutate_v1(record, action, args)
+
+
+def progress(workspace, project, workflow):
+    """Descriptive continuation, separate from formal QA/closure admission."""
+    owner = Path(workspace) / 'projects' / project
+    views = []
+    for record in owner.rglob('*.json'):
+        if any(part in {'evidence','quality','context','reviews','decisions'} for part in record.relative_to(owner).parts):
+            continue
+        value = runtime.read_json(record)
+        if isinstance(value, dict) and value.get('sprint_iteration', {}).get('schema') == 2:
+            _, _, sprint = read(record)
+            views.append({'task': sprint['task'], **inspect(record, workflow)})
+    return {'tasks': views, 'full_quality_pending': any(not v['closure_allowed'] for v in views),
+            'continuation_ready': bool(views) and all(v.get('continuation_allowed') for v in views), 'authority': 'none'}
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action',choices=['inspect','start','preview','pause','resume','accept','request-verification','refresh-verification','complete'])
+    p.add_argument('action',choices=['inspect','start','preview','pause','resume','accept','request-verification','refresh-verification','complete','qa-run','complete-targeted','request-full-verification'])
     p.add_argument('--record',type=Path,required=True)
     p.add_argument('--approved',action='store_true',help='caller verified actual scoped owner mandate; never consent itself')
     p.add_argument('--expected-revision',type=int)
@@ -245,7 +284,12 @@ def main():
     p.add_argument('--production-approval',type=Path);p.add_argument('--preview-id');p.add_argument('--reference')
     p.add_argument('--message');p.add_argument('--origin',choices=['owner','source','worker'],default='source');p.add_argument('--owner-reference')
     p.add_argument('--correction-review',type=Path);p.add_argument('--report',type=Path);p.add_argument('--workflow-root',type=Path,default=Path(__file__).resolve().parents[2])
-    a=p.parse_args()
+    p.add_argument('--schema',type=int,choices=[1,2],default=2)
+    p.add_argument('--result',choices=['passed','failed','incomplete'])
+    raw=sys.argv[1:]
+    split=raw.index('--') if '--' in raw else len(raw)
+    a=p.parse_args(raw[:split])
+    a.command=raw[split+1:]
     try:
         if a.action=='inspect':out=inspect(a.record,a.workflow_root)
         else:

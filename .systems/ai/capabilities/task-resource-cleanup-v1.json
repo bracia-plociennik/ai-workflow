@@ -1,9 +1,10 @@
 {
-  "schema": 1,
+  "authority": "none",
   "capability": "task-resource-cleanup-v1",
   "contract_version": 1,
   "files": {
-    ".systems/ai/core/task-resource-cleanup.md": "b77f47352db2a8e60b5e8f1196cc6ec2e6cc9f987acc29e6783d563a9b281f43",
+    ".systems/ai/core/default-sprint.md": "fa0c0d8ff7154a83221244e455cf22d664a680d5020e0de4a2df456a0673313d",
+    ".systems/ai/core/task-resource-cleanup.md": "3792002ca375a83326730d6ff2f56edadc1bf0f8530ecaf53045dea01b2d1ebe",
     ".systems/scripts/bootstrap-target-worktree": "9fb0306741327d757ee30a96a070f2de62004450d8e60f7e04d41574f5d9d5fb",
     ".systems/scripts/durable_runtime.py": "8124dd5682860ccb7e362b8bd9aa8cc64994be9bb6b33b58065a7005c9969b31",
     ".systems/scripts/init-workspace": "6550da683b5d08ab429e062d272c968331b929135ad14f3c7e08614ae303f9a5",
@@ -13,8 +14,9 @@
     ".systems/scripts/lib/validation-timing.py": "29cff15aba77efa48de6a49ee888f30859db46521d0d8c506fb1771f96062fdd",
     ".systems/scripts/manage-task-resources": "49f85ebd5b31fac95552e5adfd248b4dd3152d6af0ddf313b8e41d9750cc3094",
     ".systems/scripts/resolve-workflow-env": "d088396f1e7e3ae61ed915c2f5973fa62393ea2d4574f766b46b2e346b7c114b",
-    ".systems/scripts/task_resource_cleanup.py": "d3b8be854ea244fd37fdd849916e97950cb96e2e0fa8ad58c5eae14d3641b215",
-    ".systems/scripts/sprint_iteration.py": "c8cc3b2ce2f4eaf722102291bb04a6c20bab943ce9e1a130eb4842925d1a862e"
+    ".systems/scripts/sprint_iteration.py": "a31ab227e688a3927215740823ed437ddc5fe1bd9b318088c1800e35ac6cd06e",
+    ".systems/scripts/sprint_v2.py": "e4ca5ad23ab6f325c1a7761efc6af0a14faec06648b44a8867409f018ac0578d",
+    ".systems/scripts/task_resource_cleanup.py": "d3b8be854ea244fd37fdd849916e97950cb96e2e0fa8ad58c5eae14d3641b215"
   },
-  "authority": "none"
+  "schema": 1
 }

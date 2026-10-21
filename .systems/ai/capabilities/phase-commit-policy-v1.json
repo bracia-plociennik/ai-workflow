@@ -1,8 +1,8 @@
 {
-  "schema": 1,
+  "authority": "none",
   "capability": "phase-commit-policy-v1",
-  "snapshot_schema": 1,
-  "qa_contract": "full-qa-verification-v3",
   "capture_schema": 3,
-  "authority": "none"
+  "qa_contract": "full-qa-verification-v3",
+  "schema": 1,
+  "snapshot_schema": 1
 }

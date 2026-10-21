@@ -424,3 +424,7 @@ Jeśli nie przechodzi:
 ## Critical judgment
 
 Use critical-judgment.md. Review whether the right problem was solved and material premises remain justified, including overbuild/underbuild and new evidence contradicting the agent’s own recommendation. Plan compliance alone is insufficient.
+
+## Default Sprint V2 routing
+
+Apply `default-sprint.md` when schema2 is active. Phases5–7 are incremental and leave full quality pending; Phase8 is owner-triggered full verification of the project/dependencies, with actual final-owner-yes required for closure. Targeted evidence never supplies full implementation-quality PASS. Unrelated maintenance uses manual Phase X. Legacy V1/unsupported work retains its installed gates.
