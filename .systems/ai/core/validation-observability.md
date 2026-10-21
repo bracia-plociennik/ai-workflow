@@ -45,8 +45,10 @@ An older five-column reader must reject the v2 header explicitly if it cannot
 ignore appended columns. The timing sink must be a new ignored-workspace or
 temporary file; symlink, tracked, unrelated existing and escaping paths fail
 before validation begins. Timing files contain no command output.
-The run ID binds a SHA-256 digest of the tracked and non-ignored untracked
-source tree at start; validation rechecks that digest at completion. A changed
+The run ID binds a versioned product-v1 SHA-256 digest of the complete live
+product namespace at start; validation rechecks that digest at completion.
+Private runtime is not product source. See validation-concurrency.md for the
+automatic guard, selected runtime inputs and cooperative change-detection limits. A changed
 source tree makes the timed run fail. Capture recomputes the digest before
 freezing its manifest; later comparisons verify the manifest against the
 frozen timing file without demanding that an intentionally older baseline
@@ -116,3 +118,5 @@ No full-suite speedup follows merely from this partition or one timing run.
 
 Green workflow scripts remain supporting evidence. Semantic QA, product checks,
 DoD, findings, blockers, and residual risk determine quality.
+
+New capture manifests preserve schema 2 transport and add source_scope=product-v1. Frozen schema 1/2 manifests without that field remain readable as legacy-repository-v1 without rewriting; baseline/variant comparisons reject mixed source scopes. Historical current-source re-capture is not automatic.

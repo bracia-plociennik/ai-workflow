@@ -214,6 +214,10 @@
     "check-sprint-iteration": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-validation-concurrency": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [
