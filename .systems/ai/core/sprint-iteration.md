@@ -1,3 +1,5 @@
+> New compatible implementation tasks follow `default-sprint.md` V2. The V1 rules below apply only to existing/explicit schema1 records.
+
 # Sprint Iteration V1
 
 ## Activation and one owner

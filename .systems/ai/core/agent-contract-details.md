@@ -1,3 +1,5 @@
+> Compatible new implementation tasks use `default-sprint.md` V2: bounded targeted QA after acceptance and incremental phases5–7; explicit full verification/Phase8 remains separate. This scoped rule takes precedence over ordinary implementation/checkpoint chaining below. V1 and unsupported tasks retain installed rules. `Phase X` / `-all` follows `phase-x-maintenance.md`; manual only, never autopilot/Dreaming.
+
 # Detailed Agent Contract
 
 For an owner-registered AI System, use .systems/ai/core/work-lead.md and the verified neutral System startup contract. System governs covered goals/configurable execution through one work-lead role; human and delegated System use the same procedure. Actual owner-reserved, factual QA, risk/privacy and tool constraints remain binding. A scope/status projection is never permission.

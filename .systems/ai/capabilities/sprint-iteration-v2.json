@@ -1,0 +1,18 @@
+{
+  "authority": "none",
+  "capability": "sprint-iteration-v2",
+  "contract_version": 2,
+  "files": {
+    ".systems/ai/core/default-sprint.md": "fa0c0d8ff7154a83221244e455cf22d664a680d5020e0de4a2df456a0673313d",
+    ".systems/ai/core/sprint-iteration.md": "dd796b7e27e96df82f7f473769a4039a0756c161086fc6f80e43717259aa810d",
+    ".systems/scripts/durable_runtime.py": "8124dd5682860ccb7e362b8bd9aa8cc64994be9bb6b33b58065a7005c9969b31",
+    ".systems/scripts/lib/coordinator-status.py": "25ff8123d7093331bc7771e14e2245f793de04ffa1b3c16f600440bad2dc7819",
+    ".systems/scripts/lib/qa-evidence.py": "1a379dd4ae4a9dc85c951d84fb35c72750592227889eceb04b53f0d75dacff66",
+    ".systems/scripts/lib/quality-record.py": "ba6b7346ae918418444b8baa5e5ec2b302e44812d7a70eea1958980049aa9505",
+    ".systems/scripts/manage-sprint": "36c8b5fb6d74e7e555492043133635aa1e4a07a5d9530efb593dc41ee66632f1",
+    ".systems/scripts/sprint_iteration.py": "a31ab227e688a3927215740823ed437ddc5fe1bd9b318088c1800e35ac6cd06e",
+    ".systems/scripts/sprint_v2.py": "e4ca5ad23ab6f325c1a7761efc6af0a14faec06648b44a8867409f018ac0578d",
+    ".systems/scripts/task_resource_cleanup.py": "d3b8be854ea244fd37fdd849916e97950cb96e2e0fa8ad58c5eae14d3641b215"
+  },
+  "schema": 1
+}

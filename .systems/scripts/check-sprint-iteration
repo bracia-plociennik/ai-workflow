@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-exec python3 -B "$script_dir/tests/sprint-iteration.py"
+python3 -B "$script_dir/tests/sprint-iteration.py"
+python3 -B "$script_dir/tests/sprint-v2.py"
+python3 -B "$script_dir/tests/phase-x.py"

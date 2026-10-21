@@ -284,6 +284,7 @@ def status(workflow, workspace, repo, project, schema_version=1, lead_record=Non
             'gate': 'verified-' + verified['verdict'].lower() if verified and not blockers else 'unknown',
             'blockers': blockers, 'evidence_paths': evidence, 'capture_inventory': captures,
             'freshness': 'current' if verified and not blockers else 'unknown', 'execution_authorized': False}
+    out['sprint_progress'] = sprint_iteration.progress(workspace, project, workflow)
     if schema_version in (2, 3):
         out.update(schema_version=schema_version, parallel_capability=capability)
     if schema_version == 3:
