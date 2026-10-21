@@ -2,7 +2,9 @@
 set -euo pipefail
 
 profile="standard"
-project=""
+project="${AI_WORKFLOW_VALIDATION_PROJECT:-}"
+# A task-local selection is consumed here, never inherited by isolated children.
+unset AI_WORKFLOW_VALIDATION_PROJECT
 checks=""
 scope_manifest=""
 scope_plan=""
@@ -210,6 +212,7 @@ fi
 
 validation_started=1
 printf 'AI_WORKFLOW_VALIDATE_START profile=%s progress=%s\n' "$profile" "$progress"
+printf 'AI_WORKFLOW_VALIDATION_SCOPE runtime_project=%s product=all\n' "${project:-all}"
 
 finish_validation() {
   local status="$?"

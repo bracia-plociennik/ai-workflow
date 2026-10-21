@@ -5,6 +5,7 @@ dry_run=0
 skip_validation=0
 remote_arg=""
 branch_arg=""
+validation_project="${AI_WORKFLOW_VALIDATION_PROJECT:-}"
 update_result="fail"
 update_completion_emitted=0
 update_started_at=0
@@ -17,6 +18,8 @@ Options:
   --dry-run              classify paths and print planned update without fetching or merging
   --remote <name>        remote to fetch from (default: upstream tracking remote or origin)
   --branch <name>        branch to merge (default: upstream tracking branch or main)
+  --validation-project <slug>
+                         select owning runtime; full source and smoke stay required
   --skip-validation      skip post-update validators; unsafe for final PASS
   -h, --help             show this help
 EOF
@@ -38,6 +41,11 @@ while [[ $# -gt 0 ]]; do
       [[ -n "$branch_arg" ]] || { echo "Missing value for --branch"; exit 2; }
       shift 2
       ;;
+    --validation-project)
+      validation_project="${2:-}"
+      [[ -n "$validation_project" ]] || { echo "Missing validation project" >&2; exit 2; }
+      shift 2
+      ;;
     --skip-validation)
       skip_validation=1
       shift
@@ -53,6 +61,10 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ -n "$validation_project" && ! "$validation_project" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
+  echo "Unsafe validation project slug" >&2; exit 2
+fi
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 ai_workflow_home="$(cd "$script_dir/../.." && pwd -P)"
@@ -136,6 +148,10 @@ parent_root="$(cd "$ai_workflow_home/.." && pwd -P)"
 workspace_home="${AI_WORKFLOW_WORKSPACE_HOME:-}"
 if [[ -z "$workspace_home" ]]; then
   workspace_home="$parent_root/ai-workflow-workspace"
+fi
+
+if [[ -n "$validation_project" && ! -d "$workspace_home/projects/$validation_project" ]]; then
+  echo "Missing selected validation project" >&2; exit 2
 fi
 
 if [[ -e "$workspace_home" ]]; then
@@ -226,7 +242,8 @@ if [[ "$skip_validation" -eq 1 ]]; then
 else
   echo "AI_WORKFLOW_UPDATE_VALIDATION_START profile=full progress=summary"
   set +e
-  .systems/scripts/validate-workflow --profile full --progress summary
+  printf 'AI_WORKFLOW_UPDATE_VALIDATION_SCOPE runtime_project=%s product=all\n' "${validation_project:-all}"
+  AI_WORKFLOW_VALIDATION_PROJECT="$validation_project" .systems/scripts/validate-workflow --profile full --progress summary
   validation_status=$?
   set -e
   if [[ "$validation_status" -ne 0 ]]; then
