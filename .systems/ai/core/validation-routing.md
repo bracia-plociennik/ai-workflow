@@ -74,3 +74,8 @@ goal-focused-maintenance.md does not relax required full/source/release/updater 
 ## Sprint iteration
 
 For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
+
+
+## Concurrent validation inputs
+
+Follow `validation-concurrency.md`: automatic product-v1 stability guards run even without timing. Select actual runtime inputs with the owning project/scope manifest or repeatable `--validation-input-root`. Unrelated runtime writes are not product drift; changed assessed inputs never grant successful evidence. No automatic retry or historical QA rewrite.
