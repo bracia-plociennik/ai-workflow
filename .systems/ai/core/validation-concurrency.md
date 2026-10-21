@@ -14,3 +14,10 @@ Full/smoke, semantic QA, permission and owner gates are unchanged. Product-v1 st
 
 ## Verification
 check-validation-concurrency executes synthetic adversarial tests of actual public runner invocations and concurrent processes: unrelated writes and own output remain valid, changes to product/selected inputs fail, modes/links/missing roots and original failed exits stay safe. Full source validation includes this check in both products. Consumers absent in older installations require normal approved updates.
+
+
+## Explicit update validation scope
+
+The official updater accepts `--validation-project <owning-project>`; it preserves full product checks and every smoke group, selecting only existing runtime consumers through the full validator's `--project` contract. Default remains global. Never describe a selected result as healthy unselected global runtime.
+
+For bootstrapping from an older updater, the explicitly supplied per-invocation `AI_WORKFLOW_VALIDATION_PROJECT=<owning-project>` is consumed by the new validator after the ordinary approved FF update. Verify the actual `AI_WORKFLOW_VALIDATION_SCOPE runtime_project=... product=all` marker; older consumers that lack it do not prove scoped support. The validator removes this variable before child/fixture execution, and an explicit `--project` argument wins. No registry-derived selection or permission from metadata. Unsupported/unsafe/missing scope fails rather than falling back. Original ahead/diverged, no-reset and current QA gates remain binding.
