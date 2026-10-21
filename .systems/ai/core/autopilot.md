@@ -1,3 +1,5 @@
+> Compatible new implementation tasks use `default-sprint.md` V2: bounded targeted QA after acceptance and incremental phases5–7; explicit full verification/Phase8 remains separate. This scoped rule takes precedence over ordinary implementation/checkpoint chaining below. V1 and unsupported tasks retain installed rules. `Phase X` / `-all` follows `phase-x-maintenance.md`; manual only, never autopilot/Dreaming.
+
 # autopilot.md
 
 Use work-lead.md for a registered System: one human/delegated work lead, one execution procedure. Verify actual owner provenance and scope; covered configurable System directions apply without actor-only reconfirmation. Preserve owner-reserved/evidence/risk/tool floors. Read-only coordinator projections never authenticate approval or authorize execution.

@@ -118,7 +118,7 @@ Default Idea Validation follows task-intake.md after batch triage; explicit opt-
 
 Installation starts with phase-0-init. Workspace-owned materials use AI_WORKFLOW_WORKSPACE_HOME/skills/, AI_WORKFLOW_WORKSPACE_HOME/external-memory/ and AI_WORKFLOW_WORKSPACE_HOME/system-insights/. Skill context/ is raw data; complete skill-intake-plan.md before final skill artifacts. Do not edit `.systems/**` from target repositories; route upstream product changes through official development.
 
-Task-local Sprint preview/feedback defers implementation QA under .systems/ai/core/sprint-iteration.md only after actual explicit activation and verified support. Pending work is not completed/PASS or cleanup-ready; owner final acceptance starts verification.
+Default compatible implementation uses .systems/ai/core/default-sprint.md: preview, 300-second targeted QA on acceptance, explicit full Phase8. Existing Sprint V1 stays unchanged. Manual Phase X/-all follows phase-x-maintenance.md. Pending full QA pins closure/cleanup.
 
 ## Independent judgment
 

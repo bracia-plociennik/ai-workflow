@@ -479,3 +479,7 @@ For registered task resources apply `task-resource-cleanup.md` after the require
 ## Critical judgment
 
 Use critical-judgment.md. Preserve material decisions, their factual basis, informed accepted tradeoffs and reconsideration triggers in the current checkpoint. Do not repeat settled debates or rewrite original QA.
+
+## Default Sprint V2 routing
+
+Apply `default-sprint.md` when schema2 is active. Phases5–7 are incremental and leave full quality pending; Phase8 is owner-triggered full verification of the project/dependencies, with actual final-owner-yes required for closure. Targeted evidence never supplies full implementation-quality PASS. Unrelated maintenance uses manual Phase X. Legacy V1/unsupported work retains its installed gates.
