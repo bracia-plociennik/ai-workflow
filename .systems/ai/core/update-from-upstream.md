@@ -108,3 +108,10 @@ After a successful update:
 - local Dream Reports remain in the target-owned workspace;
 - legacy source filenames remain unchanged because the update does not edit workspace legacy files;
 - validators pass.
+
+
+## Explicit update validation scope
+
+The official updater accepts `--validation-project <owning-project>`; it preserves full product checks and every smoke group, selecting only existing runtime consumers through the full validator's `--project` contract. Default remains global. Never describe a selected result as healthy unselected global runtime.
+
+For bootstrapping from an older updater, the explicitly supplied per-invocation `AI_WORKFLOW_VALIDATION_PROJECT=<owning-project>` is consumed by the new validator after the ordinary approved FF update. Verify the actual `AI_WORKFLOW_VALIDATION_SCOPE runtime_project=... product=all` marker; older consumers that lack it do not prove scoped support. The validator removes this variable before child/fixture execution, and an explicit `--project` argument wins. No registry-derived selection or permission from metadata. Unsupported/unsafe/missing scope fails rather than falling back. Original ahead/diverged, no-reset and current QA gates remain binding.
