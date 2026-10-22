@@ -1,0 +1,5 @@
+interface:
+  display_name: "Luna-first"
+  short_description: "Scoped model routing with one repair and Sol takeover"
+policy:
+  allow_implicit_invocation: true
