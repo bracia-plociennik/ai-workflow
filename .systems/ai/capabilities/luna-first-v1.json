@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "capability": "luna-first-v1",
+  "contract_version": 1,
+  "authority": "none",
+  "files": {
+    ".systems/ai/core/luna-first.md": "1f3a0cf6016b580bc600fd1513f44d8d280ca81a2f5fa65288029639d756e586",
+    ".systems/scripts/luna_first.py": "22ea969bc8422e691a1bb84cfbec7e37c20dd8d281d2fedd99f892b98b485f2d",
+    ".systems/scripts/manage-luna-first": "23c0cea2a0580b60fc6baa3548edd28b53412a2af1e5ce49dbdf5ace8ba55ec6"
+  }
+}

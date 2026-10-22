@@ -218,6 +218,10 @@
     "check-validation-concurrency": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-luna-first": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

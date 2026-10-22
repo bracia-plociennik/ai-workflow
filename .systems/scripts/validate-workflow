@@ -473,6 +473,7 @@ run_core_validators() {
   run_cmd .systems/scripts/check-sprint-iteration
 
   run_cmd .systems/scripts/check-critical-judgment
+  run_cmd .systems/scripts/check-luna-first
   run_cmd .systems/scripts/check-validation-routing
   run_cmd .systems/scripts/check-model-selection-guidance
   run_cmd .systems/scripts/check-delivery-constraints
