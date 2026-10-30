@@ -139,6 +139,23 @@ ensure_runtime_binding() {
   fi
 }
 
+shared_home="$(python3 -B "$binding_tool" shared-home --target "$target")" || fail "invalid shared Workflow binding"
+if [[ -n "$shared_home" ]]; then
+  [[ "$approved" -eq 1 ]] || fail "shared bootstrap requires --approved"
+  shared_init_args=()
+  if [[ -e "$target/AGENTS.md" ]]; then
+    [[ ! -L "$target/AGENTS.md" ]] || fail "root AGENTS.md is linked"
+    cmp -s "$target/AGENTS.md" "$shared_home/.systems/ai/templates/root-agents-shared.template.md" || \
+      fail "root AGENTS.md exists; preserve and review its shared routing merge"
+    shared_init_args+=(--no-root-agents)
+  fi
+  ensure_runtime_binding
+  AI_WORKFLOW_TARGET_ROOT="$target" AI_WORKFLOW_WORKSPACE_HOME="$workspace_target" \
+    "$shared_home/.systems/scripts/init-workspace" --target "$target" "${shared_init_args[@]}"
+  echo "Shared Workflow bootstrap completed; no nested clone created."
+  exit 0
+fi
+
 expected_remote="$canonical_remote"
 if [[ "${AI_WORKFLOW_BOOTSTRAP_TEST_MODE:-0}" == "1" ]]; then
   expected_remote="${AI_WORKFLOW_BOOTSTRAP_REMOTE:-}"

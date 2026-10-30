@@ -68,6 +68,7 @@ fi
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 ai_workflow_home="$(cd "$script_dir/../.." && pwd -P)"
+update_invocation_cwd="$PWD"
 cd "$ai_workflow_home"
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -144,11 +145,14 @@ if [[ -e "workspace" ]]; then
   exit 1
 fi
 
-parent_root="$(cd "$ai_workflow_home/.." && pwd -P)"
-workspace_home="${AI_WORKFLOW_WORKSPACE_HOME:-}"
-if [[ -z "$workspace_home" ]]; then
-  workspace_home="$parent_root/ai-workflow-workspace"
+shared_update_home="$(python3 -B "$script_dir/durable_runtime.py" shared-home --target "$(dirname "$ai_workflow_home")")" || exit 2
+if [[ "$shared_update_home" == "$ai_workflow_home" && -z "${AI_WORKFLOW_TARGET_ROOT:-}" ]]; then
+  update_target="$(git -C "$update_invocation_cwd" rev-parse --show-toplevel)"
+  [[ "$update_target" != "$ai_workflow_home" ]] || update_target="$(dirname "$ai_workflow_home")"
+  export AI_WORKFLOW_TARGET_ROOT="$update_target"
 fi
+source "$script_dir/resolve-workflow-env"
+workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
 
 if [[ -n "$validation_project" && ! -d "$workspace_home/projects/$validation_project" ]]; then
   echo "Missing selected validation project" >&2; exit 2
@@ -271,7 +275,9 @@ fi
 echo
 echo "Workspace schema was not modified by update-from-upstream."
 echo "Recommended next command to backfill missing target-owned workspace schema files without overwriting existing runtime:"
-if [[ "$workspace_home" == "$parent_root/ai-workflow-workspace" ]]; then
+if [[ "$AI_WORKFLOW_MODE_RESOLVED" == shared ]]; then
+  printf '  AI_WORKFLOW_TARGET_ROOT=%q %q --workspace %q\n' "$TARGET_REPO_ROOT" "$ai_workflow_home/.systems/scripts/update-workspace" "$workspace_home"
+elif [[ "$workspace_home" == "$TARGET_REPO_ROOT/ai-workflow-workspace" ]]; then
   echo "  ai-workflow/.systems/scripts/update-workspace"
 else
   printf '  AI_WORKFLOW_WORKSPACE_HOME=%q ai-workflow/.systems/scripts/update-workspace\n' "$workspace_home"

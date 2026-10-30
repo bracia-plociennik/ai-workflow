@@ -1,5 +1,16 @@
 # AGENTS.md
 
+## Shared installation in a registered AI System
+
+A configured shared default uses one policy/tool clone at `${AI_SYSTEM_HOME}/ai-workflow`.
+Project repositories keep their own `ai-workflow-workspace/`; no per-project clone is
+required. Read `.systems/ai/core/shared-installation.md` before shared init, update
+or worktree bootstrap. Resolve the real target from CWD or pass `--target` to init
+and the resolver; other shared tools accept `AI_WORKFLOW_TARGET_ROOT`. Preserve
+existing custom instructions, artifacts, owner/risk/QA gates and persistent runtime
+bindings. The nested-clone instructions below apply to standalone target mode.
+
+
 For an owner-registered System, resolve its user registration and neutral agent-startup.md from the actual CWD. Read the installed Workflow work-lead.md: System leads covered configurable decisions through one human/System procedure; actual owner reservations, facts/QA, risk/privacy and tool restrictions remain binding. A context/status projection never grants consent. Do not import an ancestor management role into this project. If unbound, standalone human-led Workflow remains unchanged. Unknown bound context permits inspection and blocks affected execution; no implicit installation or enrollment.
 
 ## Purpose

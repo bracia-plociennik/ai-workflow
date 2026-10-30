@@ -6,6 +6,7 @@ usage() {
 Usage: .systems/scripts/update-workspace [options]
 
 Options:
+  --target <path>        exact shared-installation project root
   --workspace <path>     workspace path (default: resolved AI_WORKFLOW_WORKSPACE_HOME)
   --dry-run              print missing workspace schema files without writing
   -h, --help             show this help
@@ -14,9 +15,13 @@ EOF
 
 dry_run=0
 workspace_arg=""
+target_arg=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --target)
+      [[ $# -ge 2 && -n "$2" ]] || { echo "Missing target" >&2; exit 2; }
+      target_arg="$2"; shift 2 ;;
     --workspace)
       workspace_arg="${2:-}"
       [[ -n "$workspace_arg" ]] || { echo "Missing value for --workspace"; exit 2; }
@@ -39,6 +44,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+[[ -z "$target_arg" ]] || export AI_WORKFLOW_TARGET_ROOT="$target_arg"
+[[ -z "$workspace_arg" ]] || export AI_WORKFLOW_WORKSPACE_HOME="$workspace_arg"
 source "$script_dir/resolve-workflow-env"
 
 templates="$AI_WORKFLOW_HOME/.systems/ai/templates"

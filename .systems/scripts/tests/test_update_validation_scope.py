@@ -17,7 +17,9 @@ class UpdateScopeTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory(prefix='update-scope-test-');self.addCleanup(self.tmp.cleanup)
         self.base=Path(self.tmp.name);self.target=self.base/'target';self.clone=self.target/'ai-workflow';self.clone.mkdir(parents=True)
         self.scripts=self.clone/'.systems/scripts';self.scripts.mkdir(parents=True)
-        shutil.copy2(SCRIPTS/'update-from-upstream',self.scripts/'update-from-upstream')
+        for name in ('update-from-upstream','resolve-workflow-env','durable_runtime.py'):
+            shutil.copy2(SCRIPTS/name,self.scripts/name)
+        subprocess.run(['git','init','-q',str(self.target)],check=True)
         validator=self.scripts/'validate-workflow';validator.write_text('#!/bin/sh\nprintf "FAKE_VALIDATOR args=%s scope=%s\\n" "$*" "${AI_WORKFLOW_VALIDATION_PROJECT:-all}"\n');validator.chmod(0o755)
         (self.clone/'README.md').write_text('Synthetic tool source\n')
         subprocess.run(['git','init','-q','--bare',str(self.base/'remote.git')],check=True)
