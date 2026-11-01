@@ -6,7 +6,7 @@
     ".systems/ai/core/shared-installation.md": "a630364257a8492d9ca363ac43612d6c6dc217820b5d2fbfd0514ee460ca03ff",
     ".systems/ai/templates/root-agents-shared.template.md": "c528c8a18ea513b42eb5f19a2ba84dfa4f8f47c944311cc3b7d87c2dc7f810e0",
     ".systems/scripts/bootstrap-target-worktree": "c842e1d065853f6f96a72c7f61efffde1479012268470f34a36e8730b7bfd96f",
-    ".systems/scripts/durable_runtime.py": "c4129939a0fbc127008b9858507d5959bf28207f9f67ab19993c45df1bf1cfab",
+    ".systems/scripts/durable_runtime.py": "32b3f2e2894b9edd367318157d45fc3da19d46a3c711ed1423967b2053ecfada",
     ".systems/scripts/init-workspace": "bfc48ce16c0a05543fc68bf0e477efd72de5f5c9ee6a7bad25bea7a3e7da371e",
     ".systems/scripts/resolve-workflow-env": "d5ebc1bf65170838649f07c9b013a42514d7ed27438175ba5537d5d2dfe73190",
     ".systems/scripts/update-from-upstream": "5aad90ffcb8d288933f489ef766f3321d50f7a98075ac1aa89d37bab0c861780",

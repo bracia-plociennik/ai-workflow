@@ -36,3 +36,93 @@ Closure dependencies may explicitly use role=archive for immutable historical re
 At the next task use `manage-task-resources list --canonical <verified-repo> --workspace <selected-durable-runtime>` to discover only already registered record pointers in that Git repository. It is read-only, creates nothing and excludes foreign runtime pointers before reading their target. Review actual current owner scope/revocation for each record, then plan and apply only eligible authorized resources; read-only work never applies. No filesystem-wide scan or legacy adoption. System infers the installed executor from the explicit canonical target for list/init as well as existing records.
 
 Task-local Sprint under sprint-iteration.md pins release/apply while iterating, paused, verifying or stale. The executor checks the actual owning record under the shared lock; no state label/owner appearance acceptance can replace current implementation Quality.
+
+## Opt-in reviewed webpack cache profile
+
+Capability: `next-webpack-cache-v1`. Explicit `init --schema 2` creates a new policy;
+the existing closed schema1 is never converted. Schema2 retains the same policy
+fields. Old consumers reject schema2, including its runtime binding. Update the
+compatible Workflow consumer first and review the System counterpart before any
+installation; this source capability does not advertise installed/native support.
+
+Only `register --kind cache --profile next-webpack-cache-v1 --cache-review FILE`
+selects this profile. The exact target is `<auxiliary-source>/.next/cache/webpack`,
+inside the approved `.worktrees` collection with the canonical common Git identity.
+It cannot qualify an ancestor, canonical repository, scratch cache or lookalike.
+Registration requires actual exact owner scope, `--approved`, a current reviewed
+snapshot and activity observation of the whole source environment. Existing data
+is explicitly enrolled as existing data; no automatic discovery/adoption. The
+resource starts active. Registration is neither release nor apply.
+
+Schema2 profiled resources have exactly the existing fields `id`, `kind`, `path`,
+`state`, `keep`, `released_at`, `closure`, `identity`, `manifest`, plus `profile`,
+`enrollment_review` (durable path/SHA reference), and `review_revision` (32 lowercase
+hex characters). Claim/resume clears closure and enrollment review and replaces
+the revision, invalidating old proofs even if bytes did not change. Explicit
+`release --closure NEW --cache-review NEW` may renew a review for an active cache;
+the proof must use the current inspect revision and current cache/source snapshot.
+Without renewal the release proof must match the enrollment review exactly.
+
+The separate closed proof has `schema: 1`, `kind: reviewed-cache-eviction-v1`,
+`work_id`, nonempty `reviewed_by`, `state: complete`, `profile`, exact `path`,
+`identity` (device/inode), `manifest`, `source`, `source_manifest`, `index_sha256`,
+`reports`, `dependencies`, `task_records`, `workers`, `claims`, `reconstruction`,
+`dependency_review` and `review_revision`. No unknown fields are accepted. `source`
+contains exact `root`, `git_common`, `head`, and root filesystem `identity`.
+`dependency_review` has exactly `complete: true`, `cache_required: false`, and a
+nonempty `evidence` rationale. `reconstruction` describes reviewed generation from
+retained inputs; no command from proof data is executed. These are substantive
+review attestations, not application Quality PASS or proof from a filename.
+Workers/claims are lists of exact `{state, evidence}` objects, terminated/released
+respectively with nonempty evidence; actual termination remains a caller duty.
+
+Reports, dependencies and task_records are unique exact durable owning-runtime
+`{path, sha256}` references; reports/tasks are nonempty. No archive escape. Required
+reports/dependencies mentioning the target or `.next/cache/webpack` retain it.
+Task records cover the one owning task, every record in canonical Git ownership
+pointers, and all additional relevant tasks found by actual semantic review.
+Unknown or unreviewed relevant tasks retain the cache. Their hash binds the full
+parsed JSON, except the owning task's current cache resource and cleanup receipts
+(to avoid proof cycles). Other resources/holds, scope and Sprint remain bound.
+Malformed, missing, conflicting/foreign pointers and overlapping foreign owners
+retain. Explicit active/kept same-record overlaps also retain. Labels and empty
+claims never establish factual completeness by themselves.
+
+`source_manifest` exhaustively inventories the current worktree, excluding only
+root Git administrative `.git` and this exact webpack subtree. Ignored/untracked
+inputs and image/SWC/build siblings remain bound. This deliberately conservative
+profile rejects environments containing links, mounts, hardlinks, nested Git or
+special files. Known secret-bearing paths are rejected before hashing. There is
+no automatic node_modules/.env exemption; unsupported environments are retained.
+Entries are `[dir, mode, device, inode]` or
+`[file, mode, logical_bytes, sha256, device, inode, allocated_bytes]`.
+The cache manifest uses the same format. Its only allowed directories are
+`(client|server|edge-server)-(production|development)`; regular filenames directly
+inside are `(index|decimal).pack`, optionally `.gz`/`.br` then `.old`. No source,
+evidence, secrets, tracked inputs or unknown contents are eligible. Exact HEAD,
+index bytes, source/cache/root identities, manifests and evidence must still match.
+
+This proof separates required parent source from reviewed generated cache only
+for this profile. It never supplies whole-worktree closure or weakens V1
+source_roots pinning/retention. Unknown reconstructibility/dependency resolution
+retains. No historical QA is migrated or edited to obtain eligibility.
+
+`review-cache --record RECORD --path EXACT --profile next-webpack-cache-v1`
+performs read-only legacy qualification. It returns exact path/profile, identity,
+logical/allocated bytes and a SHA-256 of canonical JSON inventory, eligibility and
+reasons. An unregistered candidate remains retained even when geometrically valid.
+It may inspect geometry for proposed schema2 while clearly preserving the actual
+schema1 policy. It creates no lock, policy, enrollment, timestamp or proof; an
+optional supplied proof cannot authorize an unregistered candidate. `inspect` and
+`plan` stay read-only. Apply always needs separate actual exact scope and approval.
+
+Apply reuses the common Git lock/journal, observes the whole environment and then
+revalidates all current evidence/inputs. Descriptor-relative removal checks root
+identity and the full approved manifest again before the first unlink, then
+deletes only approved entries through checked directory descriptors. New/changed
+data, symlinks, races, interruption and partial removal retain recovery state;
+there is no recursive deletion of unknown files or automatic replay. Cooperating
+exclusive control is required: the Unix account is not isolated from malicious
+or noncooperating writers. Disable/keep and pending Sprint retain their precedence.
+Never test this feature by evicting a real candidate; acceptance uses disposable
+synthetic fixtures, preservation checks and real read-only dry-run only.

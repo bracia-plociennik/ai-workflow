@@ -116,6 +116,238 @@ class Lifecycle(unittest.TestCase):
     def rewrite_proof(self):
         self.proof.write_text(json.dumps(self.proof_value))
 
+    def prepare_cache_profile(self):
+        # Separate explicit schema2 record. No migration of the original schema1 fixture.
+        self.record = self.workspace / 'cache-work.json'
+        self.record.write_text(json.dumps({'work_id': 'work-001', 'project': 'fixture'}))
+        tr.init_record(self.record, self.repo, self.workspace, self.root, schema=2)
+        self.cache = self.cache / 'webpack'
+        (self.cache / 'client-production').mkdir(parents=True)
+        (self.cache / 'client-production/0.pack').write_bytes(b'reconstructible synthetic webpack cache')
+        (self.cache.parent / 'images').mkdir()
+        (self.cache.parent / 'images/image.bin').write_bytes(b'image sibling')
+        (self.cache.parent / 'swc').mkdir()
+        (self.cache.parent / 'swc/swc.bin').write_bytes(b'swc sibling')
+        self.proof_value = {
+            'schema': 1, 'kind': 'reviewed-cache-eviction-v1', 'work_id': 'work-001',
+            'reviewed_by': 'synthetic-reviewer', 'state': 'complete', 'profile': tr.CACHE_PROFILE,
+            'review_revision': '1234567890abcdef1234567890abcdef',
+            'path': str(self.cache), 'identity': [self.cache.stat().st_dev, self.cache.stat().st_ino],
+            'manifest': tr.webpack_inventory(self.cache),
+            'source': {**rt.identity(self.work), 'head': git(self.work, 'rev-parse', 'HEAD'),
+                       'identity': [self.work.stat().st_dev, self.work.stat().st_ino]},
+            'source_manifest': tr.profile_inventory(self.work, exclude=('.git', '.next/cache/webpack')),
+            'index_sha256': tr.digest(git(self.work, 'rev-parse', '--path-format=absolute', '--git-path', 'index')),
+            'reports': [{'path': str(self.report), 'sha256': tr.digest(self.report)}], 'dependencies': [],
+            'task_records': [{'path': str(self.record), 'sha256': tr.task_fingerprint(self.record, 'work-001', 'cache')}],
+            'workers': [], 'claims': [],
+            'reconstruction': 'Fixture pack is generated from the retained literal synthetic bytes in this test.',
+            'dependency_review': {'complete': True, 'cache_required': False,
+                                  'evidence': 'Full fixture source inventory and current synthetic report exclude webpack input.'}}
+        self.rewrite_proof()
+
+    def register_cache_profile(self):
+        return tr.mutate(self.record, 'register', self.args(profile=tr.CACHE_PROFILE, cache_review=self.proof))
+
+    def test_profile_cache_only_preserves_pinned_source_reports_and_siblings(self):
+        self.prepare_cache_profile()
+        before = tr.profile_inventory(self.work, exclude=('.git', '.next/cache/webpack'))
+        report_sha = tr.digest(self.report)
+        self.register_cache_profile(); self.release()
+        decision = self.decision()
+        self.assertTrue(decision['eligible'], decision)
+        self.assertEqual(decision['manifest_sha256'], tr.manifest_digest(self.proof_value['manifest']))
+        observed = []
+        with patch.object(tr, 'observe', side_effect=lambda path: observed.append(path) or {'complete': True, 'busy': False, 'reason': 'synthetic idle'}):
+            result = tr.mutate(self.record, 'apply', self.args())
+        self.assertEqual(result['action'], 'deleted')
+        self.assertFalse(self.cache.exists()); self.assertTrue(self.work.is_dir())
+        self.assertEqual(before, tr.profile_inventory(self.work, exclude=('.git', '.next/cache/webpack')))
+        self.assertEqual(report_sha, tr.digest(self.report))
+        self.assertTrue(observed); self.assertEqual(set(observed), {self.work})
+        self.assertEqual((self.cache.parent / 'images/image.bin').read_bytes(), b'image sibling')
+        self.assertEqual((self.cache.parent / 'swc/swc.bin').read_bytes(), b'swc sibling')
+        # The separate cache proof never supplies a whole-worktree closure.
+        self.register('tree', 'worktree', self.work)
+        with self.assertRaises(ValueError): self.release('tree')
+
+    def test_profile_schema_is_explicit_and_does_not_migrate(self):
+        self.prepare_cache_profile()
+        with self.assertRaises(ValueError): tr.init_record(self.record, self.repo, self.workspace, self.root)
+        tr.mutate(self.record, 'bind-runtime', self.args())
+        self.assertEqual(rt.load(self.work)['workspace'], str(self.workspace))
+        self.register_cache_profile()
+        value = rt.read_json(self.record); value['task_resource_cleanup']['schema'] = 1
+        tr.save(self.record, value)
+        with self.assertRaises(ValueError): tr.load(self.record)
+
+    def test_profile_proof_rejects_incomplete_claims_unknown_fields_and_cache_inputs(self):
+        self.prepare_cache_profile()
+        mutations = [lambda v: v.update(schema=2), lambda v: v.update(kind='reviewed-task-closure-v1'),
+                     lambda v: v.update(unknown=True), lambda v: v.update(reconstruction=''),
+                     lambda v: v['dependency_review'].update(complete=False),
+                     lambda v: v['dependency_review'].update(cache_required=True),
+                     lambda v: v.update(workers=[{'state': 'active', 'evidence': 'not stopped'}]),
+                     lambda v: v.update(claims=[{'state': 'active', 'evidence': 'still claimed'}]),
+                     lambda v: v.update(task_records=[]), lambda v: v.update(source_manifest={})]
+        import copy
+        original = copy.deepcopy(self.proof_value)
+        for mutation in mutations:
+            with self.subTest(mutation=mutation):
+                self.proof_value = copy.deepcopy(original); mutation(self.proof_value); self.rewrite_proof()
+                with self.assertRaises(ValueError): self.register_cache_profile()
+        self.assertTrue(self.cache.is_dir())
+
+    def test_profile_source_index_head_and_report_drift_retain(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        (self.work / 'code.txt').write_text('changed source')
+        self.assertFalse(self.decision()['eligible'])
+        (self.work / 'code.txt').write_text('integrated result\n')
+        self.report.write_text('changed report')
+        self.assertFalse(self.decision()['eligible'])
+        self.report.write_text('Synthetic current review for integrated canonical source.\n')
+        git(self.work, 'update-index', '--assume-unchanged', 'code.txt')
+        self.assertFalse(self.decision()['eligible'])
+        git(self.work, 'update-index', '--no-assume-unchanged', 'code.txt')
+        git(self.work, 'commit', '--allow-empty', '-m', 'test: move fixture head')
+        self.assertFalse(self.decision()['eligible'])
+
+    def test_profile_cache_mutation_and_ignored_source_input_retain(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        (self.cache / 'client-production/0.pack').write_bytes(b'changed')
+        self.assertFalse(self.decision()['eligible'])
+        (self.work / 'local-ignored').write_text('new ignored input')
+        self.assertFalse(self.decision()['eligible'])
+
+    def test_profile_owner_hold_and_foreign_record_overlap_retain(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        self.register('tree', 'worktree', self.work)
+        tr.mutate(self.record, 'keep', self.args(id='tree'))
+        self.assertFalse(self.decision()['eligible'])
+        self.assertTrue(self.cache.exists())
+
+    def test_profile_current_report_cannot_require_cache(self):
+        self.prepare_cache_profile()
+        self.report.write_text('Required input: ' + str(self.cache))
+        self.proof_value['reports'][0]['sha256'] = tr.digest(self.report); self.rewrite_proof()
+        with self.assertRaises(ValueError): self.register_cache_profile()
+
+    def test_profile_rejects_unknown_source_secret_links_and_tracked_cache(self):
+        self.prepare_cache_profile()
+        for name in ('client-production/source.js', 'client-production/.env', 'client-production/evidence.md'):
+            extra = self.cache / name; extra.write_text('must survive')
+            with self.assertRaises(ValueError): self.register_cache_profile()
+            extra.unlink()
+        linked = self.cache / 'client-production/1.pack'
+        linked.symlink_to(self.work / 'code.txt')
+        with self.assertRaises(ValueError): self.register_cache_profile()
+        linked.unlink(); os.link(self.work / 'code.txt', linked)
+        with self.assertRaises(ValueError): self.register_cache_profile()
+        linked.unlink()
+        git(self.work, 'add', '-f', '.next/cache/webpack/client-production/0.pack')
+        with self.assertRaises(ValueError): self.register_cache_profile()
+
+    def test_profile_exact_path_foreign_repo_and_missing_observer_retain(self):
+        self.prepare_cache_profile()
+        for path in (self.cache.parent, self.cache.parent / 'webpack-extra', self.repo / '.next/cache/webpack', self.root / '.tmp/work-001/webpack-cache-final'):
+            path.mkdir(parents=True, exist_ok=True)
+            result = tr.review_cache(self.record, path, tr.CACHE_PROFILE)
+            self.assertFalse(result['eligible']); self.assertTrue(result['reasons'])
+        with patch.object(tr, 'observe', return_value={'complete': False, 'busy': True, 'reason': 'no visibility'}):
+            with self.assertRaises(ValueError): self.register_cache_profile()
+        with patch.object(tr.os.path, 'ismount', return_value=True):
+            with self.assertRaises(ValueError): self.register_cache_profile()
+
+    def test_profile_readonly_review_never_registers_or_creates_locks(self):
+        self.prepare_cache_profile()
+        common = Path(rt.identity(self.repo)['git_common'])
+        lock = common / 'task-resource-cleanup.lock'; lock.unlink()
+        before = self.record.read_bytes(); stat_before = self.record.stat()
+        result = tr.review_cache(self.record, self.cache, tr.CACHE_PROFILE)
+        self.assertFalse(result['eligible']); self.assertIn('manifest_sha256', result)
+        self.assertFalse(result['execution_authorized']); self.assertEqual(before, self.record.read_bytes())
+        self.assertEqual(stat_before.st_mtime_ns, self.record.stat().st_mtime_ns)
+        self.assertFalse(lock.exists()); self.assertTrue(self.cache.exists())
+
+    def test_profile_task_drift_new_owner_pointer_and_common_lock_retain(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        policy, resource = self.resource()
+        with tr.lock(policy):
+            with self.assertRaises(BlockingIOError): tr.mutate(self.record, 'apply', self.args())
+        value = rt.read_json(self.record); value['new_required_input'] = 'changed task scope'; tr.save(self.record, value)
+        self.assertFalse(self.decision()['eligible'])
+        value.pop('new_required_input'); tr.save(self.record, value)
+        owners = Path(policy['canonical']['git_common']) / 'task-resource-owners'
+        (owners / 'foreign.json').write_text(json.dumps({'id': 'unknown', 'path': str(self.work), 'record': str(self.workspace / 'missing-task.json')}))
+        self.assertFalse(self.decision()['eligible'])
+
+    def test_profile_journal_race_and_interruption_never_replay(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        original_save = tr.save
+        def changed_after_journal(path, value):
+            original_save(path, value)
+            if value['task_resource_cleanup']['resources'][0]['state'] == 'deleting':
+                (self.cache / 'client-production/1.pack').write_bytes(b'new unreviewed data')
+        with patch.object(tr, 'save', side_effect=changed_after_journal):
+            with self.assertRaises(ValueError): tr.mutate(self.record, 'apply', self.args())
+        self.assertEqual(self.resource()[1]['state'], 'deleting')
+        self.assertTrue((self.cache / 'client-production/0.pack').exists())
+        self.assertTrue((self.cache / 'client-production/1.pack').exists())
+        self.assertFalse(tr.mutate(self.record, 'apply', self.args())['eligible'])
+
+    def test_profile_descriptor_boundary_rechecks_exact_inventory(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        remove = tr.remove_profile
+        def race(path, resource, snapshot, proof):
+            (path / 'client-production/source.js').write_bytes(b'unique source must survive')
+            return remove(path, resource, snapshot, proof)
+        with patch.object(tr, 'remove_profile', side_effect=race):
+            with self.assertRaises(ValueError): tr.mutate(self.record, 'apply', self.args())
+        self.assertTrue((self.cache / 'client-production/source.js').exists())
+        self.assertEqual(self.resource()[1]['state'], 'deleting')
+
+    def test_profile_crash_keeps_recovery_state(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        with patch.object(tr, 'remove_profile', side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt): tr.mutate(self.record, 'apply', self.args())
+        self.assertEqual(self.resource()[1]['state'], 'deleting')
+        self.assertFalse(tr.mutate(self.record, 'apply', self.args())['eligible'])
+
+    def test_profile_resume_invalidates_old_proof_until_explicit_current_review(self):
+        self.prepare_cache_profile(); self.register_cache_profile(); self.release()
+        tr.mutate(self.record, 'resume', self.args())
+        with self.assertRaises(ValueError): self.release()
+        with self.assertRaises(ValueError): tr.mutate(self.record, 'release', self.args(cache_review=self.proof))
+        self.proof_value['review_revision'] = self.resource()[1]['review_revision']; self.rewrite_proof()
+        tr.mutate(self.record, 'release', self.args(cache_review=self.proof))
+        self.assertTrue(self.decision()['eligible'])
+
+    def test_profile_relative_report_reference_and_secret_source_are_retained(self):
+        self.prepare_cache_profile()
+        self.report.write_text('Build input .next/cache/webpack/client-production/0.pack')
+        self.proof_value['reports'][0]['sha256'] = tr.digest(self.report); self.rewrite_proof()
+        with self.assertRaises(ValueError): self.register_cache_profile()
+        self.report.write_text('Required source remains available.')
+        self.proof_value['reports'][0]['sha256'] = tr.digest(self.report); self.rewrite_proof()
+        (self.work / '.env').write_text('synthetic fake credential, never hash')
+        with self.assertRaises(ValueError): self.register_cache_profile()
+
+    def test_profile_foreign_git_identity_and_busy_writer_refused(self):
+        self.prepare_cache_profile()
+        other = self.root / '.worktrees/foreign'; other.mkdir(parents=True)
+        git(other, 'init', '-b', 'dev')
+        target = other / '.next/cache/webpack'; target.mkdir(parents=True)
+        result = tr.review_cache(self.record, target, tr.CACHE_PROFILE)
+        self.assertFalse(result['eligible']); self.assertIn('another repository', ' '.join(result['reasons']))
+        with patch.object(tr, 'observe', return_value={'complete': True, 'busy': True, 'reason': 'active writer'}):
+            with self.assertRaises(ValueError): self.register_cache_profile()
+
+    def test_profile_malformed_task_evidence_fails_closed(self):
+        self.prepare_cache_profile()
+        for value in ([], {'work_id': 'work-001', 'task_resource_cleanup': None}):
+            self.record.write_text(json.dumps(value))
+            with self.assertRaises(ValueError): tr.task_fingerprint(self.record, 'work-001', 'cache')
+
     def test_fresh_validation_exports_future_durable_storage_to_nested_child(self):
         source = self.root / 'fresh-source'
         source.mkdir()
