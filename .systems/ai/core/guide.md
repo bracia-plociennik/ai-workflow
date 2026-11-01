@@ -99,7 +99,7 @@ Use these locations when orienting the user:
 
 Guide mode is a specialized use of the global response contract in `.systems/ai/core/response-contract.md`.
 
-Every guide response must include:
+When a material next step or owner decision remains, the guide response must include:
 
 - current status;
 - sources checked;
@@ -108,7 +108,7 @@ Every guide response must include:
 - exactly one alternative with impact;
 - exact copy-paste prompts for the recommended path and the alternative path.
 
-The recommendation and alternative should appear under the `Co dalej?` footer unless the response shape would become confusing; in that case keep this guide structure and still preserve exactly one recommendation with impact, one alternative with impact, and direct `Napisz:` prompts for both paths.
+Only in that decision/continuation branch, the recommendation and alternative should appear under the `Co dalej?` footer unless the response shape would become confusing; in that case keep this guide structure and still preserve exactly one recommendation with impact, one alternative with impact, and direct `Napisz:` prompts for both paths.
 
 Use this shape:
 
@@ -138,6 +138,12 @@ Alternative:
   <copy-paste prompt for the alternative path>
   ```
 ````
+
+When the accepted goal is complete, report that no further necessary action remains;
+do not add a recommendation/alternative, export suggestion or new task merely to
+fill this guide structure. Distinguish optional follow-up and another goal's gates.
+Use current evidence, not an already resolved historical blocker. Actual missing
+mandatory QA remains blocking. See task-efficiency.md.
 
 Do not provide a long menu of options. If more possibilities exist, pick the safest recommendation and one meaningful alternative.
 

@@ -105,3 +105,61 @@ samples per compared variant; label synthetic mechanism measurements separately
 from end-to-end agent latency. Never manufacture a slow baseline or claim speed
 improvement from shorter prose, fewer tests or synthetic success alone. No raw
 conversation/client data is exported for benchmarking.
+
+## Outcome, readiness and scope boundaries
+
+For every task kind, distinguish the accepted deliverable from its verified quality,
+deployment and actual enabled effect. In the existing intake/work record state the
+observable completion, current bounded scope, exclusions and material prerequisites.
+Check early whether data, access, a reference example, owner decision or environment
+needed to verify or enable the result exists and is current. Use a short inline note
+for small tasks, not another mandatory document, phase or schema. Do not require
+code test terminology for research, writing, analysis or organizational work.
+
+A missing activation prerequisite blocks activation, not independently authorized
+work. Report which accepted outcome remains unavailable; deployed code is not an
+enabled effect. Freeze a smaller deliverable before adding independent features or
+a second release. Queue additions unless required for current correctness/safety.
+
+Before reporting a blocker reconcile it with the latest relevant status and later
+evidence. Historical failures are not current blockers. If current state is not
+accessible, say unconfirmed and name the missing observation. Conversely an old
+PASS does not prove current success. Do not rewrite old QA to resolve this distinction.
+
+## Sufficient verification and justified repetition
+
+Within the existing Check Plan each expensive activity names the question or DoD
+it proves, why it is needed now and which changed inputs or actual boundary require
+a repeat. This applies to reading, research, delegation, review, measurement and
+testing. Repetition needs new relevant evidence, a changed hypothesis/input or an
+applicable mandatory gate; elapsed time, habit and a desire for more evidence alone
+are not reasons. A failed relevant check still requires correction and verification.
+
+Fix command paths, metadata and fixture setup with focused checks before the costly
+campaign. Verify affected behavior/dependencies after code changes; use artifact
+consumers for artifact-only edits. Scale, benchmark variants and repeated fairness
+runs need an actual performance/acceptance question. Research stops when the sources
+suffice; an additional search must address a named correctness or safety gap.
+Existing mandatory full CI, release and updater checks still execute fresh; unknown
+dependency coverage never grants reuse. No universal smaller test count, arbitrary
+time limit or risk downgrade is introduced. Stabilize/review the final source slice
+before full-required checks to avoid preventable repeats.
+
+Completion of the accepted goal permits "no blockers" or "nothing further required".
+Separate optional improvements and requirements of a different goal (publication,
+activation or formal project closure) from missing work for this goal. Do not create
+a recommendation, alternative or extra task to fill a response quota. Actual
+mandatory missing QA remains a blocker. Keep real owner final-approval gates.
+
+## Objective process retrospective
+
+On request review existing task artifacts/events; signal a clear anomaly briefly
+from available evidence without automatically starting another model or full audit.
+Distinguish inherent complexity, changed requirements, real product defects,
+executor/setup mistakes, environment constraints, redundant work and insufficient
+data. Each finding links evidence, proposed improvement and a future check. An
+appropriate result is no significant inefficiency found. Do not invent a slow
+baseline, model reasoning, minute attribution, percentages or savings. Compare the
+whole path to accepted quality, including rework, coordination and owner effort.
+Preserve raw/private sources with their owner; portable rules/examples are generic.
+A retrospective recommends policy changes; it does not self-modify policy or history.

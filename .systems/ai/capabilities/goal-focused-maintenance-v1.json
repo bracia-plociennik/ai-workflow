@@ -53,7 +53,7 @@
     },
     ".systems/ai/capabilities/task-efficiency-v1.json": {
       "mode": "100644",
-      "sha256": "d5b9a54fd48f894cdcfd7d58bffe329fb1aeadaaf7cdf32f88ee38529e1b496c"
+      "sha256": "49013a071ba2f0bbb1c016eb79d410092a6c1fb691ed1cca35f3fe87c5828cfd"
     },
     ".systems/ai/capabilities/task-resource-cleanup-v1.json": {
       "mode": "100644",
@@ -145,7 +145,7 @@
     },
     ".systems/ai/core/execution-efficiency.md": {
       "mode": "100644",
-      "sha256": "8211d1a90f5010c1f6b008edcfec33babd71b2063203a6f74bec93975eeb6262"
+      "sha256": "da164f72b09484e67a0316f5b788cec01f168fe51e287e717cdb64d3964fc566"
     },
     ".systems/ai/core/execution-modes.md": {
       "mode": "100644",
@@ -161,11 +161,11 @@
     },
     ".systems/ai/core/guide.md": {
       "mode": "100644",
-      "sha256": "5a3bd26b321d3e159af80cc0d1d6a229f7ee21d854cd84444246b3341db6a2a1"
+      "sha256": "46c979a7483de0c9f3aef071a25d75a3f0b64723cb85127f11ade48c14a6343c"
     },
     ".systems/ai/core/implementation-slicing.md": {
       "mode": "100644",
-      "sha256": "e19f1c68c931a50234a1afc11a7c7ab0b5e09582500e41324f77d84e654f39cc"
+      "sha256": "926d5ba5707685775bd464b7248b857a9887dbd1d67c87c7186e609b3ed4c03a"
     },
     ".systems/ai/core/installation.md": {
       "mode": "100644",
@@ -261,7 +261,7 @@
     },
     ".systems/ai/core/response-contract.md": {
       "mode": "100644",
-      "sha256": "10a7caff063673123fc286a06edb666fead803a67e477fabeaabafbb0963e0ab"
+      "sha256": "1d09eb6e97f79818d070c6e52b3836f108438f29fdfb768a68f41aa913d8bd40"
     },
     ".systems/ai/core/risk-model.md": {
       "mode": "100644",
@@ -301,7 +301,7 @@
     },
     ".systems/ai/core/task-efficiency.md": {
       "mode": "100644",
-      "sha256": "3bc3238bb456fc679ca4e4b7bdb149ea938510181e95041f2d64ebffd53d3faf"
+      "sha256": "46e90c1cf87400e239692c21d0d7ed425be788f25a9f867c535fd84cba018b22"
     },
     ".systems/ai/core/task-intake.md": {
       "mode": "100644",
