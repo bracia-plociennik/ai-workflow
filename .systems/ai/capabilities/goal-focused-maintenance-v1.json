@@ -41,7 +41,7 @@
     },
     ".systems/ai/capabilities/shared-installation-v1.json": {
       "mode": "100644",
-      "sha256": "d34f1192e59065676b24134e8ee2804ffdc5c5109c69e20a7ab1773f8c0f8e91"
+      "sha256": "fcaf5494037fede40197fbdd3096f4574fd662035ee3da3c1e9192994de26e4e"
     },
     ".systems/ai/capabilities/sprint-iteration-v1.json": {
       "mode": "100644",
@@ -2293,7 +2293,7 @@
     },
     ".systems/scripts/tests/test_update_validation_scope.py": {
       "mode": "100644",
-      "sha256": "e65cbb365b2b5825b9b80da34bfe18b761686e806e3da26d763c5228f5f0728e"
+      "sha256": "fb82fafc48a19d8b034fe6d1462cdefb9350c3f4571718dea367e2f240100b6f"
     },
     ".systems/scripts/tests/test_validation_input_guard.py": {
       "mode": "100644",
@@ -2305,7 +2305,7 @@
     },
     ".systems/scripts/update-from-upstream": {
       "mode": "100755",
-      "sha256": "fc7ae70031d6819f3c62416d73d80f736d69be8b35a9f884332f422136b752df"
+      "sha256": "5aad90ffcb8d288933f489ef766f3321d50f7a98075ac1aa89d37bab0c861780"
     },
     ".systems/scripts/update-workspace": {
       "mode": "100755",
