@@ -2201,7 +2201,7 @@
     },
     ".systems/scripts/tests/execution-efficiency.py": {
       "mode": "100644",
-      "sha256": "5b0da95557a1fc2df0aab8328a3c2ac2170870f2ec74a8ebbc1063c386a4176f"
+      "sha256": "1cbc7ac782aea3fc329310d7d128075353b6f95ee2adc5429df2e645a303f531"
     },
     ".systems/scripts/tests/execution-modes.py": {
       "mode": "100644",
@@ -2253,7 +2253,7 @@
     },
     ".systems/scripts/tests/task-resource-cleanup.py": {
       "mode": "100644",
-      "sha256": "dd21afce23a4a70f5865ee54c3242eb4e753786dfc411b266211e1e25cf17f87"
+      "sha256": "b5a4faee0fbdd10c0d60f0aa6a345f6931e160f26678cb918144decd2a8d7ac2"
     },
     ".systems/scripts/tests/test_dreaming_evidence_contract.py": {
       "mode": "100644",
