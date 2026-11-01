@@ -141,3 +141,8 @@ Collect three samples per variant for bounded multi-consumer defect,
 runtime-only closure and shared-contract change with equivalent assertions.
 Synthetic script savings do not prove whole-agent/production speedup.
 Record no-improvement and inconclusive results.
+
+
+## Task finalization
+
+For a requested result or owner supplementation, apply `task-finalization.md`: batch consequential questions, reuse current source-bound context, keep advisory additions off the critical path, and finish at the accepted DoD. The optional `prepare-finalization` projection extends this record; no new queue or approval authority. Tiny answers need no extra record.
