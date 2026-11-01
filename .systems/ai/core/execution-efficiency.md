@@ -150,3 +150,10 @@ existing intake and risk/approval/quality gates, without an extra mandatory phas
 or per-answer artifacts. State specific unknowns, stop research when evidence is
 sufficient, and stop work at accepted completion. Keep current model and explicit
 owner-only delegation. No universal minutes limit or automatic production action.
+
+## General outcome and check discipline
+
+Use task-efficiency.md for bounded deliverables, prerequisites, separate readiness
+states, current blockers, justified costly repeats and objective retrospectives
+across all task kinds. Keep one existing work record, truthful unknown timing and
+current source-bound verification; no new mandatory phase or approval database.

@@ -199,3 +199,12 @@ If slicing reveals missing acceptance criteria, unclear DoD, risk above low for 
 ## Sprint iteration
 
 For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
+
+## Early prerequisites and bounded delivery
+
+Use task-efficiency.md in the existing slice plan: check material verification and
+activation prerequisites early, distinguish code/quality/deployment/enabled effect,
+and freeze the current deliverable before unrelated additions or another release.
+A runnable independent slice is not proof of the whole effect. Keep exact DoD,
+actual scope permissions and mandatory quality; use focused setup checks before
+expensive campaigns and record the relevant reason for each repeat.
