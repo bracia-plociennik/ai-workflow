@@ -247,7 +247,9 @@ else
   echo "AI_WORKFLOW_UPDATE_VALIDATION_START profile=full progress=summary"
   set +e
   printf 'AI_WORKFLOW_UPDATE_VALIDATION_SCOPE runtime_project=%s product=all\n' "${validation_project:-all}"
-  AI_WORKFLOW_VALIDATION_PROJECT="$validation_project" .systems/scripts/validate-workflow --profile full --progress summary
+  # The explicit resolver input belongs to this invocation; keep the resolved
+  # TARGET_REPO_ROOT output, without leaking an input into isolated children.
+  AI_WORKFLOW_VALIDATION_PROJECT="$validation_project" env -u AI_WORKFLOW_TARGET_ROOT .systems/scripts/validate-workflow --profile full --progress summary
   validation_status=$?
   set -e
   if [[ "$validation_status" -ne 0 ]]; then
