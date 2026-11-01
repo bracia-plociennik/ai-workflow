@@ -141,3 +141,12 @@ Collect three samples per variant for bounded multi-consumer defect,
 runtime-only closure and shared-contract change with equivalent assertions.
 Synthetic script savings do not prove whole-agent/production speedup.
 Record no-improvement and inconclusive results.
+
+## Proportional task execution
+
+Use task-efficiency.md for answers, research, diagnosis, planning, implementation,
+integrations and bounded operations. Select the minimum sufficient path inside
+existing intake and risk/approval/quality gates, without an extra mandatory phase
+or per-answer artifacts. State specific unknowns, stop research when evidence is
+sufficient, and stop work at accepted completion. Keep current model and explicit
+owner-only delegation. No universal minutes limit or automatic production action.

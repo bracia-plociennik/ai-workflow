@@ -211,3 +211,12 @@ During scoped activation, record the stable parent outcome, accepted goal/DoD/ar
 ## Independent judgment
 
 Use `.systems/ai/core/critical-judgment.md` for proportional, evidence-based assessment of the goal, proposed mechanism and the agent's own advice. State material objections directly with basis, consequence and a feasible recommendation; acknowledge sound ideas and uncertainty. Preserve existing authority and phase gates, short routine answers, informed permitted tradeoffs and applicable quiet handling of independent minor debt.
+
+## Proportional task execution
+
+Use task-efficiency.md for answers, research, diagnosis, planning, implementation,
+integrations and bounded operations. Select the minimum sufficient path inside
+existing intake and risk/approval/quality gates, without an extra mandatory phase
+or per-answer artifacts. State specific unknowns, stop research when evidence is
+sufficient, and stop work at accepted completion. Keep current model and explicit
+owner-only delegation. No universal minutes limit or automatic production action.

@@ -51,6 +51,10 @@
       "mode": "100644",
       "sha256": "19a7f294930dd85cc968dde8beddc1faeb5cad47988c8a3e9323f3cd4bdf4863"
     },
+    ".systems/ai/capabilities/task-efficiency-v1.json": {
+      "mode": "100644",
+      "sha256": "af5e1242e61ae4c618a676517e61eca970e02f8f7fcaa60f30f48e13b851552f"
+    },
     ".systems/ai/capabilities/task-resource-cleanup-v1.json": {
       "mode": "100644",
       "sha256": "8b032dd3a5c239976db41e6c9a6e7f4b40bcc9470228d768d63d8e79631a951b"
@@ -81,7 +85,7 @@
     },
     ".systems/ai/core/command-routing.md": {
       "mode": "100644",
-      "sha256": "be90a5a235fbbfb9fe215d615c385ea48bb6007127d7fcc20c80c794a7a1dae0"
+      "sha256": "0c7ae7b37b18821c7b0bcc8c19030808ad0a211528015c83075f661f4c3ba21e"
     },
     ".systems/ai/core/commands.md": {
       "mode": "100644",
@@ -141,7 +145,7 @@
     },
     ".systems/ai/core/execution-efficiency.md": {
       "mode": "100644",
-      "sha256": "37e9965c3b0f3f4ada8677bc1f96fb9ae0b789a74bc616fa606a637ef6858a3d"
+      "sha256": "8211d1a90f5010c1f6b008edcfec33babd71b2063203a6f74bec93975eeb6262"
     },
     ".systems/ai/core/execution-modes.md": {
       "mode": "100644",
@@ -257,7 +261,7 @@
     },
     ".systems/ai/core/response-contract.md": {
       "mode": "100644",
-      "sha256": "0064055a5da30c8237d446652c7c8eb390aee0d5c22b2086eb5a3030ca7e89d8"
+      "sha256": "10a7caff063673123fc286a06edb666fead803a67e477fabeaabafbb0963e0ab"
     },
     ".systems/ai/core/risk-model.md": {
       "mode": "100644",
@@ -295,9 +299,13 @@
       "mode": "100644",
       "sha256": "7a1e9fdc8fde43a7e64d2b17fe5812931e137c0f605435c3b8da2df2bdce3be0"
     },
+    ".systems/ai/core/task-efficiency.md": {
+      "mode": "100644",
+      "sha256": "3bc3238bb456fc679ca4e4b7bdb149ea938510181e95041f2d64ebffd53d3faf"
+    },
     ".systems/ai/core/task-intake.md": {
       "mode": "100644",
-      "sha256": "46b09605c7fbb4ffa26221e5d8533cbc50fe0d4c4c8fcb4b480a18bdbf7d0b48"
+      "sha256": "c2430d71b0401af46423b578810bd06aba762faedf68780994f14854f56647db"
     },
     ".systems/ai/core/task-resource-cleanup.md": {
       "mode": "100644",
@@ -1765,7 +1773,7 @@
     },
     ".systems/scripts/check-execution-efficiency": {
       "mode": "100755",
-      "sha256": "9773a4f9c926b4b31adce19567a3da608ab49f85328cb962a981a8a4570a8fd9"
+      "sha256": "52f745e3c6318e07173cd81d4879eb3ba45acd649eaf86fbfc7355ce3df2ea9e"
     },
     ".systems/scripts/check-execution-modes": {
       "mode": "100755",
@@ -2171,6 +2179,10 @@
       "mode": "100755",
       "sha256": "99960df4c10e4b0e5bc1e4a02b4047f7cda9dfa6576f8a3262f507cd5b6b8abe"
     },
+    ".systems/scripts/task_efficiency.py": {
+      "mode": "100644",
+      "sha256": "1bd798206e9ad66b2e729ae5b5f6925776d88f1eb3231c0f0a18ca975907718d"
+    },
     ".systems/scripts/task_resource_cleanup.py": {
       "mode": "100644",
       "sha256": "d3b8be854ea244fd37fdd849916e97950cb96e2e0fa8ad58c5eae14d3641b215"
@@ -2274,6 +2286,10 @@
     ".systems/scripts/tests/test_shared_installation.py": {
       "mode": "100644",
       "sha256": "1bf2d48a9f9f7cda68ae17c94f48d09b7ddbc6c1c09be3c82a9d2074eff51b27"
+    },
+    ".systems/scripts/tests/test_task_efficiency.py": {
+      "mode": "100644",
+      "sha256": "90906995f9932b24f2939e7f72dcdd53d8691414253df970853a6be3c7df9ccd"
     },
     ".systems/scripts/tests/test_update_validation_scope.py": {
       "mode": "100644",

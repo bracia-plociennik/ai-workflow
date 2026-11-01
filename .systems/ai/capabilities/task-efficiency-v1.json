@@ -1,0 +1,13 @@
+{
+  "authority": "none",
+  "contract": "task-efficiency-v1",
+  "files": {
+    ".systems/ai/core/command-routing.md": "0c7ae7b37b18821c7b0bcc8c19030808ad0a211528015c83075f661f4c3ba21e",
+    ".systems/ai/core/execution-efficiency.md": "8211d1a90f5010c1f6b008edcfec33babd71b2063203a6f74bec93975eeb6262",
+    ".systems/ai/core/response-contract.md": "10a7caff063673123fc286a06edb666fead803a67e477fabeaabafbb0963e0ab",
+    ".systems/ai/core/task-efficiency.md": "3bc3238bb456fc679ca4e4b7bdb149ea938510181e95041f2d64ebffd53d3faf",
+    ".systems/ai/core/task-intake.md": "c2430d71b0401af46423b578810bd06aba762faedf68780994f14854f56647db",
+    ".systems/scripts/task_efficiency.py": "1bd798206e9ad66b2e729ae5b5f6925776d88f1eb3231c0f0a18ca975907718d"
+  },
+  "schema_version": 1
+}

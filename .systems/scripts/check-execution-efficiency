@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+task_efficiency_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
+python3 -B "$task_efficiency_root/.systems/scripts/tests/test_task_efficiency.py"
 behavioral=0
 if [[ "${1:-}" == --behavioral && "$#" == 1 ]]; then
   behavioral=1
