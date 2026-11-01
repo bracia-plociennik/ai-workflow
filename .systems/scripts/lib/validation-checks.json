@@ -222,6 +222,10 @@
     "check-luna-first": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-shared-installation": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

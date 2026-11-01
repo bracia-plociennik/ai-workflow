@@ -6,6 +6,7 @@ usage() {
 Usage: .systems/scripts/init-workspace [options]
 
 Options:
+  --target <path>        exact project root for the registered shared installation
   --workspace <path>     workspace path (default: ../ai-workflow-workspace)
   --no-root-agents       do not create target root AGENTS.md shim
   -h, --help             show this help
@@ -13,10 +14,14 @@ EOF
 }
 
 workspace_arg=""
+target_arg=""
 create_root_agents=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --target)
+      [[ $# -ge 2 && -n "$2" ]] || { echo "Missing target" >&2; exit 2; }
+      target_arg="$2"; shift 2 ;;
     --workspace)
       workspace_arg="${2:-}"
       [[ -n "$workspace_arg" ]] || { echo "Missing value for --workspace"; exit 2; }
@@ -39,22 +44,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-ai_workflow_home="$(cd "$script_dir/../.." && pwd -P)"
-target_repo_root="$(cd "$ai_workflow_home/.." && pwd -P)"
+[[ -z "$target_arg" ]] || export AI_WORKFLOW_TARGET_ROOT="$target_arg"
+[[ -z "$workspace_arg" ]] || export AI_WORKFLOW_WORKSPACE_HOME="$workspace_arg"
+source "$script_dir/resolve-workflow-env"
+ai_workflow_home="$AI_WORKFLOW_HOME"
+target_repo_root="$TARGET_REPO_ROOT"
 templates="$ai_workflow_home/.systems/ai/templates"
-
-if [[ -n "$workspace_arg" ]]; then
-  workspace_home="$workspace_arg"
-elif [[ -n "${AI_WORKFLOW_WORKSPACE_HOME:-}" ]]; then
-  workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
-else
-  workspace_home="$target_repo_root/ai-workflow-workspace"
-fi
-
-bound_workspace="$(python3 -B "$script_dir/durable_runtime.py" resolve --target "$target_repo_root" --requested "${workspace_arg:-${AI_WORKFLOW_WORKSPACE_HOME:-}}")" || exit 2
-if [[ -n "$bound_workspace" ]]; then
-  workspace_home="$bound_workspace"
-fi
+workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"
 mkdir -p "$workspace_home"
 workspace_home="$(cd "$workspace_home" && pwd -P)"
 
@@ -374,7 +370,11 @@ if [[ "$create_root_agents" -eq 1 ]]; then
     echo "AGENTS.md exists: not overwritten; owner merge required."
     root_agents_status="owner-merge-required"
   else
-    copy_template "$templates/root-agents.template.md" "$root_agents"
+    if [[ "$AI_WORKFLOW_MODE_RESOLVED" == shared ]]; then
+      copy_template "$templates/root-agents-shared.template.md" "$root_agents"
+    else
+      copy_template "$templates/root-agents.template.md" "$root_agents"
+    fi
     root_agents_status="created"
   fi
 else
@@ -383,7 +383,9 @@ fi
 
 if git -C "$target_repo_root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   append_exclude_once "/AGENTS.md" "$target_repo_root"
-  append_exclude_once "/ai-workflow/" "$target_repo_root"
+  if [[ "$AI_WORKFLOW_MODE_RESOLVED" != shared ]]; then
+    append_exclude_once "/ai-workflow/" "$target_repo_root"
+  fi
 fi
 
 init_status="ready-for-repo-intake"

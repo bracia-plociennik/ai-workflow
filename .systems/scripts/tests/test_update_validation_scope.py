@@ -17,8 +17,10 @@ class UpdateScopeTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory(prefix='update-scope-test-');self.addCleanup(self.tmp.cleanup)
         self.base=Path(self.tmp.name);self.target=self.base/'target';self.clone=self.target/'ai-workflow';self.clone.mkdir(parents=True)
         self.scripts=self.clone/'.systems/scripts';self.scripts.mkdir(parents=True)
-        shutil.copy2(SCRIPTS/'update-from-upstream',self.scripts/'update-from-upstream')
-        validator=self.scripts/'validate-workflow';validator.write_text('#!/bin/sh\nprintf "FAKE_VALIDATOR args=%s scope=%s\\n" "$*" "${AI_WORKFLOW_VALIDATION_PROJECT:-all}"\n');validator.chmod(0o755)
+        for name in ('update-from-upstream','resolve-workflow-env','durable_runtime.py'):
+            shutil.copy2(SCRIPTS/name,self.scripts/name)
+        subprocess.run(['git','init','-q',str(self.target)],check=True)
+        validator=self.scripts/'validate-workflow';validator.write_text('#!/bin/sh\nprintf "FAKE_VALIDATOR args=%s scope=%s explicit=%s resolved=%s\\n" "$*" "${AI_WORKFLOW_VALIDATION_PROJECT:-all}" "${AI_WORKFLOW_TARGET_ROOT-unset}" "$TARGET_REPO_ROOT"\n');validator.chmod(0o755)
         (self.clone/'README.md').write_text('Synthetic tool source\n')
         subprocess.run(['git','init','-q','--bare',str(self.base/'remote.git')],check=True)
         self.git('init','-q','-b','main');self.git('config','user.name','Synthetic');self.git('config','user.email','synthetic@example.invalid');self.git('add','.');self.git('commit','-qm','synthetic');self.git('remote','add','origin',str(self.base/'remote.git'));self.git('push','-qu','origin','main')
@@ -35,6 +37,12 @@ class UpdateScopeTests(unittest.TestCase):
         self.assertIn('FAKE_VALIDATOR args=--profile full --progress summary scope=selected',r.stdout)
         self.assertIn('AI_WORKFLOW_UPDATE_VALIDATION_SCOPE runtime_project=selected product=all',r.stdout)
         self.assertIn('AI_WORKFLOW_UPDATE_COMPLETE result=pass',r.stdout)
+    def test_explicit_input_is_consumed_without_losing_resolved_target(self):
+        env={**self.env,'AI_WORKFLOW_TARGET_ROOT':str(self.target)}
+        r=self.run_update(env=env)
+        self.assertEqual(r.returncode,0,r.stdout+r.stderr)
+        self.assertIn('explicit=unset resolved='+str(self.target),r.stdout)
+
     def test_default_remains_global(self):
         r=self.run_update();self.assertEqual(r.returncode,0,r.stdout+r.stderr);self.assertIn('scope=all',r.stdout)
     def test_invalid_and_missing_scope_reject_without_validation(self):

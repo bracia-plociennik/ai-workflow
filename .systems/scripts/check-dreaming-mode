@@ -4,6 +4,8 @@ set -euo pipefail
 fail=0
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+python3 -B -m unittest discover -s "$script_dir/tests" -p test_dreaming_maintenance.py
+
 source "$script_dir/resolve-workflow-env"
 repo_root="$AI_WORKFLOW_HOME"
 workspace_home="$AI_WORKFLOW_WORKSPACE_HOME"

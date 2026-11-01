@@ -153,7 +153,7 @@ class EvidenceTests(unittest.TestCase):
                     git(workflow, 'commit', '-m', 'test: initialize nested workflow')
                     self.assertNotEqual(git(workflow, 'rev-parse', 'HEAD'), git(source, 'rev-parse', 'HEAD'))
                     env = dict(os.environ)
-                    for key in ['AI_WORKFLOW_HOME', 'AI_WORKFLOW_MODE', 'AI_WORKFLOW_WORKSPACE_HOME',
+                    for key in ['AI_WORKFLOW_TARGET_ROOT','AI_WORKFLOW_HOME', 'AI_WORKFLOW_MODE', 'AI_WORKFLOW_WORKSPACE_HOME',
                                 'TARGET_REPO_ROOT', 'TASK_RESOURCE_TEST_STORAGE']:
                         env.pop(key, None)
                     result = subprocess.run([sys.executable, str(workflow / '.systems/scripts/tests/execution-efficiency.py'),
@@ -274,7 +274,7 @@ class EvidenceTests(unittest.TestCase):
         ps = binary / "ps"
         ps.write_text("#!/bin/sh\nprintf '123 1\\n'\n")
         ps.chmod(0o700)
-        env = {**os.environ, "PATH": str(binary) + os.pathsep + os.environ["PATH"]}
+        env = {**os.environ, "HOME": str(self.root), "PATH": str(binary) + os.pathsep + os.environ["PATH"]}
         env.pop("CI", None)
         key = self.root / "key"
         key.write_bytes(self.key)

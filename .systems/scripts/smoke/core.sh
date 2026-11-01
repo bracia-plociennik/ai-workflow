@@ -115,6 +115,17 @@ source "$(pwd -P)/.systems/scripts/smoke/common.sh"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/status.md" "$tmp/example-status.orig"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/tasks.md" "$tmp/example-tasks.orig"
 cp "$tmp/.systems/ai/examples/projects/EXAMPLE/quality/phase-5-ex-01-quality.md" "$tmp/example-phase5-quality.orig"
+# Supply the updater's real path-resolution dependencies to its old minimal
+# lifecycle fixture. The frozen commands/assertions remain byte-for-byte intact.
+git() {
+  if [[ "${1:-}" == -C && -n "${update_ai:-}" && "${2:-}" == "$update_ai" && "${3:-}" == init ]]; then
+    command git init -q "$update_target"
+    cp "$tmp/.systems/scripts/resolve-workflow-env" "$update_ai/.systems/scripts/resolve-workflow-env"
+    cp "$tmp/.systems/scripts/durable_runtime.py" "$update_ai/.systems/scripts/durable_runtime.py"
+  fi
+  command git "$@"
+}
+
 # BEGIN FROZEN region-0701-1210
 
 synthetic_source_digest="$(.systems/scripts/report-validation-comparison source-digest)"

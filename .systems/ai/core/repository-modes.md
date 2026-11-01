@@ -6,7 +6,7 @@ For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at pla
 
 ## Purpose
 
-AI Workflow supports two repository modes. The mode changes path resolution only; it does not change gates, risk policy, permissions, Definition of Done, or evidence requirements.
+AI Workflow supports official, nested target and shared repository modes. The mode changes path resolution only; it does not change gates, risk policy, permissions, Definition of Done, or evidence requirements.
 
 ## Official Repo Mode
 
@@ -47,7 +47,7 @@ Default target workspace:
 
 Use `.systems/scripts/resolve-workflow-env` for shell scripts that need path resolution.
 
-- `AI_WORKFLOW_MODE=auto|official|target`, default `auto`.
+- `AI_WORKFLOW_MODE=auto|official|target|shared`, default `auto`.
 - `AI_WORKFLOW_WORKSPACE_HOME` overrides the default workspace path.
 - In `official` mode, default workspace is inside `AI_WORKFLOW_HOME`.
 - In `target` mode, default workspace is beside `AI_WORKFLOW_HOME`.
@@ -74,3 +74,11 @@ AI_WORKFLOW_WORKSPACE_HOME
 The absence of an inner `ai-workflow/` directory in the upstream repository is not a branch policy violation.
 
 Local Git branch identity and the canonical `origin` URL govern the exception. Verified detached GitHub Actions push/PR context may identify `dev`; PR inheritance requires an unchanged two-parent merge baseline. A PR targeting `main` remains forbidden when runtime is tracked. `AI_WORKFLOW_BRANCH_POLICY=dev` cannot override branch or installation identity, while `public` always forbids tracked runtime. The primary development checkout and new implementation worktrees use explicit `dev`. Follow `development-worktree-policy.md` for main-based filtered publication; never merge dev runtime history or its dev-only ignore configuration into main.
+
+## Shared Repo Mode
+
+Use the owner-enabled registered System installation for eligible repositories in
+its root. Shared tool home and actual target are independent; each target retains
+its own artifact workspace or durable worktree binding. Use explicit target or
+verified CWD, not the installation parent. See shared-installation.md for the exact
+configuration, failure boundaries, bootstrap/update and retirement contract.

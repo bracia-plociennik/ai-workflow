@@ -1,5 +1,16 @@
 # HUMANS.md
 
+## Shared installation in a registered AI System
+
+A configured shared default uses one policy/tool clone at `${AI_SYSTEM_HOME}/ai-workflow`.
+Project repositories keep their own `ai-workflow-workspace/`; no per-project clone is
+required. Read `.systems/ai/core/shared-installation.md` before shared init, update
+or worktree bootstrap. Resolve the real target from CWD or pass `--target` to init
+and the resolver; other shared tools accept `AI_WORKFLOW_TARGET_ROOT`. Preserve
+existing custom instructions, artifacts, owner/risk/QA gates and persistent runtime
+bindings. The nested-clone instructions below apply to standalone target mode.
+
+
 Przed wyborem katalogu użyj `.systems/ai/core/workspace-directory-layout.md`: właściwe repozytoria zostają w `projects/`, dodatkowe worktree’y trafiają do `.worktrees/<repository-id>/<work-id>/`, a pliki robocze do `.tmp/<work-id>/` pod wybranym rootem kolekcji. `AI_WORKFLOW_WORKSPACE_HOME/projects/` nadal przechowuje plany, taski i QA. Zapisz trwałe dowody poza `.tmp`; nie przenoś historii ani nie usuwaj danych automatycznie.
 
 Oficjalny checkout rozwojowy pracuje na `dev`. Nowe owned worktree `codex/<scope>` tworzysz jawnie od `dev`, nie domyślnego `main` narzędzia. Mogą dziedziczyć niezmieniony, sprawdzony snapshot workspace, ale nie aktualizują go. Feature PR kierujesz do dev; ukończony produkt publikujesz z osobnego source-only release brancha od main przez PR do main. Nie scalasz dev bezpośrednio do main, bo przeniosłoby to historię workspace. Reguły: `.systems/ai/core/development-worktree-policy.md`.

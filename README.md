@@ -1,4 +1,15 @@
 # AI Workflow Template
+
+## Shared installation in a registered AI System
+
+A configured shared default uses one policy/tool clone at `${AI_SYSTEM_HOME}/ai-workflow`.
+Project repositories keep their own `ai-workflow-workspace/`; no per-project clone is
+required. Read `.systems/ai/core/shared-installation.md` before shared init, update
+or worktree bootstrap. Resolve the real target from CWD or pass `--target` to init
+and the resolver; other shared tools accept `AI_WORKFLOW_TARGET_ROOT`. Preserve
+existing custom instructions, artifacts, owner/risk/QA gates and persistent runtime
+bindings. The nested-clone instructions below apply to standalone target mode.
+
 For future approved scopes, use `.systems/ai/core/phase-commit-policy.md` at planning-range end and phases 6/7/8. Explicit no-commit is not overridden; current PTO approval is non-retroactive. Ignored-only/no-op creates no commit. Phase8 requires actual final-owner-yes, counterpart impact must be resolved, one coordinator owns the index, and push is never inferred. Bound V3/schema3 is opt-in and current-only; unsupported proof needs fresh QA. Fresh owned artifact closure remains separate from source equivalence. Validator: `check-phase-commit-policy`.
 
 

@@ -131,7 +131,7 @@ rmdir "$TASK_RESOURCE_TEST_STORAGE"
 """)
         child.chmod(0o755)
         env = dict(os.environ)
-        for key in ['TASK_RESOURCE_TEST_STORAGE','AI_WORKFLOW_HOME','AI_WORKFLOW_MODE','AI_WORKFLOW_WORKSPACE_HOME','TARGET_REPO_ROOT']:
+        for key in ['TASK_RESOURCE_TEST_STORAGE','AI_WORKFLOW_TARGET_ROOT','AI_WORKFLOW_HOME','AI_WORKFLOW_MODE','AI_WORKFLOW_WORKSPACE_HOME','TARGET_REPO_ROOT']:
             env.pop(key, None)
         result = subprocess.run([str(source / '.systems/scripts/validate-workflow'),'--profile','scoped','--checks','check-task-resource-cleanup'],cwd=source,env=env,capture_output=True,text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
@@ -387,7 +387,7 @@ rmdir "$TASK_RESOURCE_TEST_STORAGE"
         git(origin,'add','.systems','AGENTS.md','HUMANS.md','README.md','.gitignore');git(origin,'commit','-m','test: local workflow producer')
         marker=self.work/'workflow-marker';marker.write_text('Owner-accepted Workflow installation marker for synthetic test.')
         env={k:v for k,v in os.environ.items() if not k.startswith('AI_WORKFLOW_')}
-        env.update(AI_WORKFLOW_BOOTSTRAP_TEST_MODE='1',AI_WORKFLOW_BOOTSTRAP_REMOTE=str(origin),TMPDIR=str(self.root))
+        env.update(HOME=str(self.root),AI_WORKFLOW_BOOTSTRAP_TEST_MODE='1',AI_WORKFLOW_BOOTSTRAP_REMOTE=str(origin),TMPDIR=str(self.root))
         result=subprocess.run([str(SCRIPTS/'bootstrap-target-worktree'),'--target',str(self.work),'--approved','--accepted-marker','workflow-marker','--durable-workspace',str(self.workspace),'--canonical-target',str(self.repo),'--work-record',str(self.record)],env=env,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
         self.assertTrue((self.workspace/'repo/core/init.md').is_file())
