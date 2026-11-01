@@ -1374,12 +1374,3 @@ Routing notes:
 ## Sprint iteration
 
 For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
-
-## Proportional task execution
-
-Use task-efficiency.md for answers, research, diagnosis, planning, implementation,
-integrations and bounded operations. Select the minimum sufficient path inside
-existing intake and risk/approval/quality gates, without an extra mandatory phase
-or per-answer artifacts. State specific unknowns, stop research when evidence is
-sufficient, and stop work at accepted completion. Keep current model and explicit
-owner-only delegation. No universal minutes limit or automatic production action.

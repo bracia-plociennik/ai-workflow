@@ -53,7 +53,7 @@
     },
     ".systems/ai/capabilities/task-efficiency-v1.json": {
       "mode": "100644",
-      "sha256": "af5e1242e61ae4c618a676517e61eca970e02f8f7fcaa60f30f48e13b851552f"
+      "sha256": "d5b9a54fd48f894cdcfd7d58bffe329fb1aeadaaf7cdf32f88ee38529e1b496c"
     },
     ".systems/ai/capabilities/task-resource-cleanup-v1.json": {
       "mode": "100644",
@@ -85,7 +85,7 @@
     },
     ".systems/ai/core/command-routing.md": {
       "mode": "100644",
-      "sha256": "0c7ae7b37b18821c7b0bcc8c19030808ad0a211528015c83075f661f4c3ba21e"
+      "sha256": "be90a5a235fbbfb9fe215d615c385ea48bb6007127d7fcc20c80c794a7a1dae0"
     },
     ".systems/ai/core/commands.md": {
       "mode": "100644",
@@ -305,7 +305,7 @@
     },
     ".systems/ai/core/task-intake.md": {
       "mode": "100644",
-      "sha256": "c2430d71b0401af46423b578810bd06aba762faedf68780994f14854f56647db"
+      "sha256": "46b09605c7fbb4ffa26221e5d8533cbc50fe0d4c4c8fcb4b480a18bdbf7d0b48"
     },
     ".systems/ai/core/task-resource-cleanup.md": {
       "mode": "100644",
