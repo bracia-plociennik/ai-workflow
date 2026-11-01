@@ -131,7 +131,7 @@ rmdir "$TASK_RESOURCE_TEST_STORAGE"
 """)
         child.chmod(0o755)
         env = dict(os.environ)
-        for key in ['TASK_RESOURCE_TEST_STORAGE','AI_WORKFLOW_HOME','AI_WORKFLOW_MODE','AI_WORKFLOW_WORKSPACE_HOME','TARGET_REPO_ROOT']:
+        for key in ['TASK_RESOURCE_TEST_STORAGE','AI_WORKFLOW_TARGET_ROOT','AI_WORKFLOW_HOME','AI_WORKFLOW_MODE','AI_WORKFLOW_WORKSPACE_HOME','TARGET_REPO_ROOT']:
             env.pop(key, None)
         result = subprocess.run([str(source / '.systems/scripts/validate-workflow'),'--profile','scoped','--checks','check-task-resource-cleanup'],cwd=source,env=env,capture_output=True,text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
