@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Validate a minimal System mentor projection; never load private personal goals."""
+import json
+import re
+import sys
+sys.dont_write_bytecode = True
+
+
+def validate(value):
+    if not isinstance(value, dict) or set(value) != {'contract', 'authority', 'execution_authorized', 'task_hash', 'context_hash', 'action', 'reason_codes'}:
+        raise ValueError('invalid projection')
+    if value['contract'] != 'wig-mentoring-project-v1' or value['authority'] != 'none' or value['execution_authorized'] is not False:
+        raise ValueError('invalid projection')
+    if any(not isinstance(value[k], str) or not re.fullmatch('[a-f0-9]{64}', value[k]) for k in ['task_hash', 'context_hash']):
+        raise ValueError('invalid identity')
+    allowed = {'mentor-disabled', 'not-a-decision-boundary', 'already-addressed-for-this-task', 'task-finished', 'current-goal-unknown', 'necessary-obligation-or-dependency', 'daily-weekly-intent-conflict', 'task-diverges-from-confirmed-priority', 'aligned', 'alignment-not-established'}
+    if value['action'] not in {'quiet', 'clarify', 'suggest-return'} or not isinstance(value['reason_codes'], list) or len(value['reason_codes']) != 1 or value['reason_codes'][0] not in allowed:
+        raise ValueError('invalid action')
+    expected = {'current-goal-unknown': 'clarify', 'daily-weekly-intent-conflict': 'clarify', 'task-diverges-from-confirmed-priority': 'suggest-return'}
+    if value['action'] != expected.get(value['reason_codes'][0], 'quiet'):
+        raise ValueError('inconsistent projection')
+    return value
+
+
+def unique(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:raise ValueError('duplicate field')
+        result[key] = value
+    return result
+
+
+if __name__ == '__main__':
+    try:
+        raw = sys.stdin.read(4097)
+        if len(raw) > 4096:raise ValueError('oversized projection')
+        print(json.dumps(validate(json.loads(raw, object_pairs_hook=unique)), sort_keys=True))
+    except (ValueError, TypeError, KeyError):
+        print('{"authority":"none","execution_authorized":false,"error":"invalid-mentor-projection"}')
+        raise SystemExit(2)

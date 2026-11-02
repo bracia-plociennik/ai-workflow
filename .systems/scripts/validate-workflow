@@ -436,6 +436,7 @@ run_fast_checks() {
 run_core_validators() {
   run_cmd .systems/scripts/check-validation-concurrency
   run_cmd .systems/scripts/check-execution-efficiency
+  run_cmd .systems/scripts/check-wig-mentoring
   run_cmd .systems/scripts/check-required-artifacts
   run_cmd .systems/scripts/check-prompt-composition
   run_cmd .systems/scripts/check-branch-policy
