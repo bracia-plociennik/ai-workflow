@@ -275,7 +275,7 @@ Final responses must include:
 - skipped validation with reason;
 - remaining risk or blocker.
 
-Every substantive response must end with:
+When response-contract.md requires a decision/handoff footer, end with the following. Its satisfied-goal branch takes precedence; do not manufacture next work:
 
 ````text
 Co dalej?

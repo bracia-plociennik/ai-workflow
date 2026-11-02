@@ -86,3 +86,9 @@ For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep t
 ## Proportional judgment in plans
 
 Use critical-judgment.md when preparing or reviewing new/revised plans: test material premises, unnecessary scope, viable simpler/no-change options and early experiments. Existing artifact QA checks the actual reasoning; no separate counterphase or compulsory per-response critique.
+
+## Owner task linkage
+For an owner-selected SilverBullet plan, task-intake.md requires the exact task
+link and complete ## TODO stages before dependent execution, including small
+work and planning-range. A read-only/Plan ceiling defers the save visibly; it
+does not waive technical QA, grant writes or create a second technical tracker.
