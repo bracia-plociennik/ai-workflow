@@ -41,8 +41,12 @@ require_literal() {
 
 contract=".systems/ai/core/response-contract.md"
 
+require_ref "$contract" '^## Satisfied goal and current blockers$' "satisfied goal short response"
+require_literal "$contract" 'This branch takes precedence' "short branch before footer quotas"
+require_literal "$contract" 'pending accounting' "required WEP stays separate"
+
 require_ref "$contract" '^## Execution Trace$' "Execution Trace section"
-require_ref "$contract" 'Every substantive response must include an `Execution Trace` block immediately before the final `Co dalej\?` footer' "trace before footer"
+require_ref "$contract" 'Every substantive response requiring the full footer must include an `Execution Trace` block immediately before the final `Co dalej\?` footer' "trace before footer"
 require_ref "$contract" '`Co dalej\?` must remain the final human-facing section' "Co dalej final footer"
 
 for field in \
@@ -90,5 +94,9 @@ policy_reject_unsafe_pattern \
   'no sources needed|sources are optional|Execution Trace may be omitted for substantive responses|Execution Trace[^.\n]{0,80}(after|following|later than)[^.\n]{0,80}Co dalej\?' \
   "Unsafe response evidence trace wording found" \
   AGENTS.md HUMANS.md README.md .systems/ai/core .systems/ai/workflow .systems/ai/templates
+
+policy_reject_unsafe_pattern \
+  'always say no blockers|no blockers even (when|if) (required )?QA (fails|is missing)|required WEP approval may be invented' \
+  "Unsafe completion authority wording found" "$contract"
 
 exit "$fail"

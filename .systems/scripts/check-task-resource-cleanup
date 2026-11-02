@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-exec python3 -B "$script_dir/tests/task-resource-cleanup.py"
+python3 -B "$script_dir/tests/task-resource-cleanup.py"
+exec python3 -B "$script_dir/tests/storage-audit.py"

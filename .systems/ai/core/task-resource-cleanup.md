@@ -19,6 +19,31 @@ Workflow .systems/scripts/manage-task-resources takes an existing JSON --record 
 
 The versioned reviewed-task-closure-v1 evidence names owning work, current reports/dependencies with hashes, complete live source roots, confirmed terminated workers/released claims, canonical commit/ref and actual push requirement/remote ref. Keep required QA/Capture outside temporary source roots; final current QA assesses the integrated canonical result. Legacy records without task_resource_cleanup stay inspect-only. Missing evidence, unknown fields/version, stale source/proof or incomplete observation means retained, never a fabricated success.
 
+## Read-only physical storage audit
+
+`audit-storage --path DIR --priority-filesystem /` reports metadata for explicitly
+named candidates, including legacy directories. Repeat `--path` as needed.
+Parent/child paths and physical aliases are not added twice; inode overlap with
+an excluded candidate also excludes an alias estimate. Incomplete inventories are excluded from
+aggregate estimates. It never follows symlinks or nested mounts or reads candidate
+file contents. Optional paired `--canonical REPO --workspace DURABLE_RUNTIME`
+reads registered ownership pointers and reports overlapping keep/active/disabled
+state. This is not a complete dependency, activity or task assessment. No
+registration or cleanup occurs.
+
+`--exclude-month YYYY-MM --timezone ZONE` excludes a candidate estimate when any
+observed path name or mtime matches. Repeat `--exclude-path DIR` for owner
+exclusions; overlapping candidates are excluded too. Missing visibility and the
+per-candidate `--max-entries` bound or fixed 128-directory depth bound produce an incomplete report. Allocated blocks
+are classification potential, not guaranteed freed space. Every report retains
+authority none, execution_authorized false and safe_reclaimable_bytes zero.
+Existing review, plan, release and apply gates remain independently binding.
+
+Source validation may encounter a local native `AGENTS.override.md` entrypoint.
+The naming check accepts only an ignored, untracked root copy; tracked, nested
+or nonignored copies remain invalid. This naming rule grants no execution
+authority or adapter approval; exact source/entrypoint review remains separate.
+
 ## Removal boundaries
 Only registered .next/cache, exact generated scratch manifests under collection .tmp/<work-id>/, and auxiliary linked worktrees under collection .worktrees/ are eligible. Canonical repos are never disposable. Cache profile excludes tracked source and rejects evidence/secrets/special/linked/hardlinked content. Git-clean alone is insufficient: ignored/untracked/modified files, nested repositories, submodules, mounts, identity changes or unique data retain a whole environment. Never silently adopt old directories or globally ignore .next as QA input. Establish generated-input classification before new QA; unknown existing inputs keep current strict rules.
 

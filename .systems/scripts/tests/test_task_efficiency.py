@@ -32,6 +32,50 @@ class TaskPaths(unittest.TestCase):
             self.assertNotIn(out['route'], {'spawn', 'change-model'})
         self.assertEqual(t.assess(facts())['route'], 'answer-directly')
 
+    def test_completed_optional_and_resolved_history_keep_direct_status_path(self):
+        # These are observed facts, not an autonomous completion classifier.
+        for case in ('accepted-goal-complete','only-optional-polish','historical-failure-later-resolved'):
+            with self.subTest(case=case):
+                out=t.assess(facts('answer'))
+                self.assertEqual(out['route'],'answer-directly')
+                self.assertFalse(out['execution_authorized'])
+        for missing in ('required_gates_satisfied','access_available','evidence_sufficient'):
+            value=facts('answer');value[missing]=False
+            self.assertNotEqual(t.assess(value)['route'],'answer-directly')
+        pending_wep=facts('answer');pending_wep['required_gates_satisfied']=False
+        self.assertEqual(t.assess(pending_wep)['route'],'blocked')
+
+    def test_active_completion_and_plan_contracts_are_reachable(self):
+        core=ROOT.parents[0]/'ai/core'
+        response=(core/'response-contract.md').read_text()
+        short=response.split('## Satisfied goal and current blockers',1)[1].split('## Intent brief',1)[0]
+        self.assertIn('This branch takes precedence',short)
+        self.assertIn('pending accounting',short)
+        self.assertIn('mandatory check remains blocking',short)
+        self.assertNotIn('Every substantive response must end with:',(core/'operating-model.md').read_text())
+        plan=(core/'task-intake.md').read_text()
+        for term in ('Owner-selected SilverBullet plan persistence','task_id','planning-range','first','finish last','expected file SHA256','read-only','registered System adapter'):
+            self.assertIn(term,plan)
+
+    def test_completion_policy_validator_fails_closed(self):
+        import tempfile, shutil
+        repo=ROOT.parents[1]
+        with tempfile.TemporaryDirectory() as temporary:
+            target=Path(temporary)
+            paths=['AGENTS.md','HUMANS.md','README.md','.systems/scripts/check-response-evidence-trace','.systems/scripts/lib/policy-boundaries.sh','.systems/ai/core/response-contract.md','.systems/ai/core/commands.md','.systems/scripts/validate-workflow','.systems/scripts/check-required-artifacts','.systems/scripts/check-validator-smoke-tests']
+            for name in paths:
+                output=target/name;output.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(repo/name,output)
+            for name in ('workflow','templates'):(target/'.systems/ai'/name).mkdir()
+            contract=target/'.systems/ai/core/response-contract.md';original=contract.read_text()
+            def check():return subprocess.run(['bash',str(target/'.systems/scripts/check-response-evidence-trace')],cwd=target,capture_output=True,text=True)
+            self.assertEqual(check().returncode,0)
+            contract.write_text(original+'\nDo not always say no blockers.\n')
+            self.assertEqual(check().returncode,0)
+            for clause in ('Always say no blockers.','Do not always say no blockers; however no blockers even when required QA fails.','Do not always say no blockers and required WEP approval may be invented.'):
+                contract.write_text(original+'\n'+clause+'\n');result=check()
+                self.assertNotEqual(result.returncode,0);self.assertIn('Unsafe completion authority wording',result.stdout)
+            contract.unlink();result=check();self.assertNotEqual(result.returncode,0);self.assertIn('Missing file',result.stdout)
+
     def test_necessary_unknown_and_access_hold(self):
         f = facts('diagnosis'); f['evidence_sufficient'] = False
         self.assertEqual(t.assess(f)['route'], 'resolve-specific-unknown')

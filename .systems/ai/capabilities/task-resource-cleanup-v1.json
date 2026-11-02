@@ -4,7 +4,7 @@
   "contract_version": 1,
   "files": {
     ".systems/ai/core/default-sprint.md": "9df004aa712e5209010b0575eb3461464ae72dc566461eb59f3ee1ad77edf96b",
-    ".systems/ai/core/task-resource-cleanup.md": "98fcda81f197756f4529e5da2f62f425f2484a602eddf186ee981481b6d61bcf",
+    ".systems/ai/core/task-resource-cleanup.md": "67883d1396f24464c5ab300e8620a6b192e943581fef544056a8fc4d95f7f3a6",
     ".systems/scripts/bootstrap-target-worktree": "c842e1d065853f6f96a72c7f61efffde1479012268470f34a36e8730b7bfd96f",
     ".systems/scripts/durable_runtime.py": "32b3f2e2894b9edd367318157d45fc3da19d46a3c711ed1423967b2053ecfada",
     ".systems/scripts/init-workspace": "bfc48ce16c0a05543fc68bf0e477efd72de5f5c9ee6a7bad25bea7a3e7da371e",
