@@ -1,0 +1,13 @@
+{
+  "authority": "none",
+  "contract": "wig-mentoring-v1",
+  "files": {
+    ".systems/ai/core/critical-judgment.md": "b3c4ed89d6946f34382b7b6586ecac6265acb1f879ee321fe7c9488d82c0f669",
+    ".systems/ai/core/wig-mentoring.md": "27b5f2b1f3b5c365c40f0da862655e5938f23f98da04a15c508706072d75a920",
+    ".systems/scripts/check-wig-mentoring": "203914bd277f30e068e9c50cf8e6d9fad9a9d4c575d240c97e7c49ba78a42c09",
+    ".systems/scripts/prepare-wig-mentoring": "1f2e9f0d6fe4af5b766dc2bad4d6545acbae876aaeea0af20a7221e9612e1bcb",
+    ".systems/scripts/tests/wig-mentoring.py": "4c58b99f1991c5fdd7b3370abb42f1665be4c6b11029f223e93f128110be516a"
+  },
+  "project_contract": "wig-mentoring-project-v1",
+  "schema_version": 1
+}

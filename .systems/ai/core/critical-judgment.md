@@ -28,3 +28,6 @@ Structural checks verify source routing and actual phase/template/QA field mappi
 ## Workflow adapter
 
 Use existing work-lead.md, phase gates and decision routes. A covered System direction receives the same scrutiny as a human direction. Return supported objections to the actual work lead; do not invent a second approval chain or treat actor type as extra permission. Standalone Workflow applies this contract with its human work lead.
+
+## Owner-enabled WIG mentoring
+At new-task, next-task, material scope-change and plan-review, apply wig-mentoring.md through the verified System lead. Consume only the minimal projection validated by .systems/scripts/prepare-wig-mentoring; never import a personal default or raw goals. One brief nonblocking intervention per stable task/context; conscious exceptions survive resume. Ordinary commands/tests stay quiet, necessary obligations and rest may precede WIG, and missing context never becomes an execution blocker. No inferred inactivity, compulsory justification, background reminders or new model calls.
