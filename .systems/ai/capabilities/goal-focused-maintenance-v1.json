@@ -25,7 +25,7 @@
     },
     ".systems/ai/capabilities/intent-to-execution-brief-v1.json": {
       "mode": "100644",
-      "sha256": "0234e22dcd8b1561f48f0bca9bed6084c0c742bdd9ff5fea7007ec3ad141c460"
+      "sha256": "a74aff86958c09270e345da452ec008f446df0d525611a6cf93bcb2781ceb236"
     },
     ".systems/ai/capabilities/luna-first-v1.json": {
       "mode": "100644",
