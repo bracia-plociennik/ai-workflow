@@ -57,6 +57,15 @@ is_exempt_markdown_path() {
   local base
   base="$(basename "$path")"
 
+  # Provider-owned local entrypoints are not published product Markdown.
+  # Naming acceptance grants no instruction/adapter authority; the System still
+  # requires its exact reviewed original/override pair before task execution.
+  if [[ "${path#./}" == "AGENTS.override.md" ]] &&
+     ! git ls-files --error-unmatch -- AGENTS.override.md >/dev/null 2>&1 &&
+     git check-ignore --quiet -- AGENTS.override.md; then
+    return 0
+  fi
+
   [[ "$path" == "AGENTS.md" || "$path" == "./AGENTS.md" || "$path" == "HUMANS.md" || "$path" == "./HUMANS.md" || "$base" == "README.md" ]]
 }
 

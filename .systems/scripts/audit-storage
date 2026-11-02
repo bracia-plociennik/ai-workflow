@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+"""Read-only physical storage audit of explicit paths; never deletion eligibility.
+
+No file contents, symlink targets, nested mounts or unregistered records are scanned.
+Allocated sizes are potential storage, not proof of reconstructibility or consent.
+"""
+import argparse
+from datetime import datetime
+import json
+import os
+from pathlib import Path
+import re
+import stat
+import sys
+from zoneinfo import ZoneInfo
+
+# Optional lifecycle imports must not create bytecode during a read-only audit.
+sys.dont_write_bytecode = True
+
+
+def absolute(value):
+    return Path(os.path.abspath(value))
+
+
+def overlap(left, right):
+    return left == right or left.is_relative_to(right) or right.is_relative_to(left)
+
+
+def signature(info):
+    return (info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
+            info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+def open_directory(path):
+    """Never follow a symlink in any component, including candidate ancestors."""
+    fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        for part in path.parts[1:]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+            os.close(fd)
+            fd = child
+        return fd
+    except BaseException:
+        os.close(fd)
+        raise
+
+
+def mounts():
+    points = set()
+    # Fail closed on unsupported/inaccessible mount inventory. No privileged probe.
+    for line in Path('/proc/self/mountinfo').read_text().splitlines():
+        fields = line.split()
+        if len(fields) < 7 or '-' not in fields:
+            raise ValueError('incomplete mount inventory')
+        raw = fields[4]
+        raw = re.sub(r'\\(040|011|012|134)', lambda m: chr(int(m[1], 8)), raw)
+        points.add(Path(raw))
+    return points
+
+
+def scan(path, priority_device, excluded_months, timezone, excluded_paths, limit, mount_points):
+    result = {'path': str(path), 'complete': False, 'allocated_bytes': 0,
+              'priority_allocated_bytes': 0, 'entry_count': 0,
+              'excluded': False, 'reasons': [], 'safe_reclaimable_bytes': 0,
+              'execution_authorized': False}
+    if any(overlap(path, p) for p in excluded_paths):
+        result.update(excluded=True)
+        result['reasons'].append('owner-excluded path')
+    seen = set()
+    allocations = {}
+    result['_allocations'] = allocations
+    # Also accept compact YYYYMMDD and YYYY_MM_DD names, but not numeric prefixes.
+    date_names = [re.compile(r'(?<!\d)' + month[:4] + r'[-_]?' + month[5:] + r'(?=\D|$|\d{2}(?:\D|$))')
+                  for month in excluded_months]
+
+    def record(info, name):
+        result['entry_count'] += 1
+        if result['entry_count'] > limit:
+            raise ValueError('entry limit reached; partial inventory')
+        identity = (info.st_dev, info.st_ino)
+        if identity not in seen:
+            seen.add(identity)
+            size = info.st_blocks * 512
+            allocations[identity] = size
+            result['allocated_bytes'] += size
+            if info.st_dev == priority_device:
+                result['priority_allocated_bytes'] += size
+        month = datetime.fromtimestamp(info.st_mtime_ns / 1e9, timezone).strftime('%Y-%m')
+        if month in excluded_months or any(p.search(str(name)) for p in date_names):
+            result['excluded'] = True
+            if 'owner-excluded month in name or modification time' not in result['reasons']:
+                result['reasons'].append('owner-excluded month in name or modification time')
+
+    def walk(fd, current, root_device):
+        if len(current.relative_to(path).parts) > 128:
+            raise ValueError('directory depth limit reached; partial inventory')
+        before = os.fstat(fd)
+        record(before, current)
+        with os.scandir(fd) as entries:
+            walk_entries(entries, fd, current, root_device)
+        if signature(before) != signature(os.fstat(fd)):
+            raise ValueError('directory changed during observation')
+
+    def walk_entries(entries, fd, current, root_device):
+        for entry in entries:
+            name = entry.name
+            child_path = current / name
+            info = os.stat(name, dir_fd=fd, follow_symlinks=False)
+            if child_path in mount_points or info.st_dev != root_device:
+                raise ValueError('nested mount retained without traversal')
+            if stat.S_ISLNK(info.st_mode):
+                raise ValueError('symlink retained without following target')
+            if stat.S_ISDIR(info.st_mode):
+                child = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+                try:
+                    if signature(info) != signature(os.fstat(child)):
+                        raise ValueError('directory changed during observation')
+                    walk(child, child_path, root_device)
+                    if signature(info) != signature(os.stat(name, dir_fd=fd, follow_symlinks=False)):
+                        raise ValueError('directory replaced during observation')
+                finally:
+                    os.close(child)
+            elif stat.S_ISREG(info.st_mode):
+                record(info, child_path)
+                if info.st_nlink != 1:
+                    raise ValueError('hardlinked file; removal would not imply reclaimed blocks')
+            else:
+                raise ValueError('special file retained')
+
+    try:
+        fd = open_directory(path)
+        try:
+            device = os.fstat(fd).st_dev
+            result['device'] = device
+            result['identity'] = [device, os.fstat(fd).st_ino]
+            result['priority_filesystem'] = device == priority_device
+            if device != priority_device:
+                result['reasons'].append('different physical filesystem; zero priority gain')
+            walk(fd, path, device)
+            current_fd = open_directory(path)
+            try:
+                if signature(os.fstat(current_fd)) != signature(os.fstat(fd)):
+                    raise ValueError('candidate replaced during observation')
+            finally:
+                os.close(current_fd)
+        finally:
+            os.close(fd)
+        result['complete'] = True
+    except (OSError, ValueError, OverflowError) as error:
+        # Do not print underlying content or follow a link to diagnose it.
+        result['reasons'].append(str(error) if isinstance(error, ValueError)
+                                 else 'incomplete filesystem visibility: ' + type(error).__name__)
+    result['reasons'].append('metadata audit only; QA, activity, supported profile and approval not established')
+    return result
+
+
+def retention(canonical, workspace):
+    """Reuse existing pointer validation; never discover/adopt legacy directories."""
+    import task_resource_cleanup as lifecycle
+    found = lifecycle.discover(canonical, workspace)
+    policies = []
+    for item in found['records']:
+        _, policy = lifecycle.load(Path(item['record']))
+        stop = lifecycle.runtime.unlinked(
+            Path(policy['canonical']['git_common']) / 'task-resource-cleanup.disabled', exists=False)
+        policies.append((item['record'], policy, stop.exists()))
+    return policies, found['retained']
+
+
+def audit(paths, priority, months=(), timezone='UTC', excluded_paths=(), limit=100000,
+          canonical=None, workspace=None):
+    months = sorted(set(months))
+    for month in months:
+        if not re.fullmatch(r'\d{4}-(0[1-9]|1[0-2])', month) or month.startswith('0000'):
+            raise ValueError('exclude-month must use YYYY-MM')
+    if type(limit) is not int or not 1 <= limit <= 1000000:
+        raise ValueError('max-entries must be between 1 and 1000000')
+    if bool(canonical) != bool(workspace):
+        raise ValueError('canonical and workspace must be supplied together')
+    zone = ZoneInfo(timezone)
+    paths = sorted(set(absolute(p) for p in paths))
+    priority = absolute(priority)
+    priority_fd = open_directory(priority)
+    try:
+        priority_device = os.fstat(priority_fd).st_dev
+    finally:
+        os.close(priority_fd)
+    policies, unknown = retention(canonical, workspace) if canonical else ([], [])
+    mount_points = mounts()
+    rows = [scan(p, priority_device, months, zone, [absolute(e) for e in excluded_paths],
+                 limit, mount_points) for p in paths]
+    allocations = [row.pop('_allocations') for row in rows]
+    excluded_inodes = {key for row, items in zip(rows, allocations) if row['excluded'] for key in items}
+    counted_roots = set()
+    for row, items in zip(rows, allocations):
+        path = Path(row['path'])
+        if not row['excluded'] and excluded_inodes.intersection(items):
+            row['excluded'] = True
+            row['reasons'].append('owner-excluded physical overlap')
+        row['retention'] = []
+        for record, policy, stopped in policies:
+            for resource in policy['resources']:
+                if resource['state'] == 'deleted' or not overlap(path, Path(resource['path'])):
+                    continue
+                row['retention'].append({'record': record, 'id': resource['id'],
+                                         'state': resource['state'], 'keep': resource['keep'],
+                                         'cleanup_disabled': stopped or not policy['enabled']})
+        row['retention_visibility'] = ('unknown' if unknown else 'registered-pointers-only') if canonical else 'not-requested'
+        identity = tuple(row.get('identity', ()))
+        row['counted_in_totals'] = (row['complete'] and identity not in counted_roots
+                                   and not any(path.is_relative_to(p) for p in paths if p != path))
+        if row['counted_in_totals']:
+            counted_roots.add(identity)
+    counted, unexcluded = {}, {}
+    for row, items in zip(rows, allocations):
+        if row['counted_in_totals']:
+            for key, size in items.items():
+                counted.setdefault(key, size)
+                if not row['excluded']:
+                    unexcluded.setdefault(key, size)
+    # A failed parent conservatively prevents any nested row from inflating totals.
+    return {'schema': 1, 'authority': 'none', 'execution_authorized': False,
+            'priority_filesystem': str(priority), 'priority_device': priority_device,
+            'timezone': timezone, 'excluded_months': months,
+            'candidates': rows, 'unknown_ownership_pointers': unknown,
+            'totals': {'complete_nonoverlapping_allocated_bytes': sum(counted.values()),
+                       'priority_allocated_bytes': sum(size for key, size in counted.items() if key[0] == priority_device),
+                       'unexcluded_priority_allocated_bytes': sum(size for key, size in unexcluded.items() if key[0] == priority_device),
+                       'safe_reclaimable_bytes': 0},
+            'limits': ['Point-in-time metadata only; no file-content or reconstructibility proof.',
+                       'Allocated blocks may be shared/compressed; df gain is measured only after a separately authorized removal.',
+                       'Only explicit paths and registered owning pointers inspected; no complete task/dependency/activity assessment.',
+                       'Month exclusion retains the entire candidate if any observed entry matches; incomplete scans remain uncertain.']}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--path', type=Path, action='append', required=True, help='Explicit directory; repeatable')
+    parser.add_argument('--priority-filesystem', type=Path, required=True)
+    parser.add_argument('--exclude-month', action='append', default=[])
+    parser.add_argument('--exclude-path', type=Path, action='append', default=[])
+    parser.add_argument('--timezone', default='UTC')
+    parser.add_argument('--max-entries', type=int, default=100000, help='Per-candidate metadata bound')
+    parser.add_argument('--canonical', type=Path)
+    parser.add_argument('--workspace', type=Path)
+    args = parser.parse_args()
+    try:
+        value = audit(args.path, args.priority_filesystem, args.exclude_month, args.timezone,
+                      args.exclude_path, args.max_entries, args.canonical, args.workspace)
+    except (OSError, ValueError, KeyError) as error:
+        print(json.dumps({'authority': 'none', 'execution_authorized': False,
+                          'error': str(error)}))
+        return 2
+    print(json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2))
+    return 0 if all(r['complete'] for r in value['candidates']) and not value['unknown_ownership_pointers'] else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

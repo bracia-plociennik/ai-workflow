@@ -3,12 +3,12 @@
   "capability": "next-webpack-cache-v1",
   "contract_version": 1,
   "files": {
-    ".systems/ai/core/task-resource-cleanup.md": "98fcda81f197756f4529e5da2f62f425f2484a602eddf186ee981481b6d61bcf",
+    ".systems/ai/core/task-resource-cleanup.md": "67883d1396f24464c5ab300e8620a6b192e943581fef544056a8fc4d95f7f3a6",
     ".systems/scripts/durable_runtime.py": "32b3f2e2894b9edd367318157d45fc3da19d46a3c711ed1423967b2053ecfada",
     ".systems/scripts/lib/task-resource-activity.py": "6767aad092da31ab04a3edd68e24d21eac42b607bad86073d8a5721314f9da81",
     ".systems/scripts/manage-task-resources": "49f85ebd5b31fac95552e5adfd248b4dd3152d6af0ddf313b8e41d9750cc3094",
     ".systems/scripts/task_resource_cleanup.py": "dd7f1e170ced7aee0366644d9d83943d1ec5e05c1f3e0a91544a2f16b5191a75",
-    ".systems/scripts/tests/task-resource-cleanup.py": "d217fe628e57496612bf51418587993ee7b10308de21dbef63e15c58b4bf755b"
+    ".systems/scripts/tests/task-resource-cleanup.py": "8da04d50657abf8a20be2d221ed7fef7145072571c7db077fb43245dadeb9a1c"
   },
   "schema": 1
 }

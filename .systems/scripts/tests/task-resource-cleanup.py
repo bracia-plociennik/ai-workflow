@@ -628,10 +628,15 @@ rmdir "$TASK_RESOURCE_TEST_STORAGE"
         resolved=subprocess.check_output([str(self.work/'ai-workflow/.systems/scripts/resolve-workflow-env')],env=env,text=True)
         self.assertIn('AI_WORKFLOW_WORKSPACE_HOME='+str(self.workspace),resolved)
         nested = self.work/'ai-workflow'
-        self.assertEqual(rt.execution_target(nested), self.work)
-        rt.guard_output(self.workspace/'new-quality.md',target=nested,workspace=self.workspace)
-        with self.assertRaises(ValueError):
-            rt.guard_output(self.work/'bad-quality.md',target=nested,workspace=self.workspace)
+        # Direct calls use the same isolated fixture environment as its subprocesses.
+        # A source-validator's official/shared mode must not leak into nested-target checks.
+        with patch.dict(os.environ, env, clear=True):
+            self.assertEqual(rt.execution_target(nested), self.work)
+            rt.guard_output(self.workspace/'new-quality.md',target=nested,workspace=self.workspace)
+            with self.assertRaises(ValueError):
+                rt.guard_output(self.work/'bad-quality.md',target=nested,workspace=self.workspace)
+        with patch.dict(os.environ, {'AI_WORKFLOW_MODE': 'official'}):
+            self.assertEqual(rt.execution_target(nested), nested)
 
     def test_repo_stop_marker_covers_other_loaded_records(self):
         self.register();self.release();policy,resource=self.resource()
