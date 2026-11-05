@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 class NamingContext(unittest.TestCase):
-    def check(self, relative, frozen=False):
+    def check(self, relative, frozen=False, sparse=False):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / 'repo'; root.mkdir()
             scripts = root / '.systems/scripts'; scripts.mkdir(parents=True)
@@ -23,6 +23,10 @@ class NamingContext(unittest.TestCase):
                 (root / 'ai-workflow-workspace/projects/import/evals/frozen/freeze.md').write_text('# Synthetic accepted freeze')
             subprocess.run(['git', 'init', '-q', str(root)], check=True)
             subprocess.run(['git', '-C', str(root), 'add', '.'], check=True)
+            if sparse:
+                marker = 'ai-workflow-workspace/projects/import/evals/frozen/freeze.md'
+                subprocess.run(['git', '-C', str(root), 'update-index', '--skip-worktree', marker], check=True)
+                (root / marker).unlink()
             workspace = Path(tmp) / 'private-runtime'; workspace.mkdir()
             env = dict(os.environ, AI_WORKFLOW_MODE='official', AI_WORKFLOW_WORKSPACE_HOME=str(workspace))
             return subprocess.run([str(scripts / 'check-naming')], cwd=root, env=env, capture_output=True, text=True)
@@ -44,6 +48,11 @@ class NamingContext(unittest.TestCase):
         path = 'ai-workflow-workspace/projects/import/evals/frozen/fixture/Original_Input.md'
         self.assertEqual(self.check(path, frozen=True).returncode, 0)
         self.assertNotEqual(self.check(path).returncode, 0)
+
+    def test_sparse_frozen_marker_is_read_from_index(self):
+        path = 'ai-workflow-workspace/projects/import/evals/frozen/fixture/Original_Input.md'
+        result = self.check(path, frozen=True, sparse=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 if __name__ == '__main__':

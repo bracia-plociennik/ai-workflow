@@ -230,6 +230,10 @@
     "check-wig-mentoring": {
       "dependencies": [],
       "scope": "framework"
+    },
+    "check-roadmap-tools": {
+      "dependencies": [],
+      "scope": "framework"
     }
   },
   "runtime_required": [

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "capability": "managed-storage-v1",
+  "files": {
+    ".systems/scripts/manage-storage-capacity": "82673812f51d3adf1f185b11ffc7e57a2de9f3ed06f493bfee61fa97b9d92a72",
+    ".systems/scripts/storage_capacity.py": "1cabfbb3133320da009d2770e1b8b7f918c71faccef1f05a16d27ddadd8598ee",
+    ".systems/scripts/create-source-worktree": "cc5683cb6c5a39096391a8bd066e89607d5511d3082bab04275e5552dd79c013",
+    ".systems/scripts/analyze-task-retrospective": "d4937d03a8b89af4a4aa7e7275093a4127dd6132b8dae913b3c3ccefc8e03c32",
+    ".systems/scripts/task_retrospective.py": "2b10b0a072aa4a21d5ef488b84e98dfc5b758350ad1f0f1ce1feb935107de7a5",
+    ".systems/scripts/task_resource_cleanup.py": "dd7f1e170ced7aee0366644d9d83943d1ec5e05c1f3e0a91544a2f16b5191a75",
+    ".systems/scripts/durable_runtime.py": "32b3f2e2894b9edd367318157d45fc3da19d46a3c711ed1423967b2053ecfada"
+  },
+  "authority": "none"
+}

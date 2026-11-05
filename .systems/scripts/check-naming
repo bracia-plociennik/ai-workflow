@@ -105,6 +105,16 @@ is_frozen_eval_input_path() {
   if [[ "$relative" =~ ^([^/]+)/evals/([^/]+)/(fixture/|runs/[^/]+/checkout/) ]]; then
     eval_root="$context_workspace/projects/${BASH_REMATCH[1]}/evals/${BASH_REMATCH[2]}"
     [[ -s "$eval_root/freeze.md" ]] && return 0
+    # Sparse source checkouts retain the reviewed freeze in the Git index.
+    if [[ "$context_workspace" == "$repo_root/ai-workflow-workspace" ]]; then
+      local indexed_freeze="${eval_root#"$repo_root"/}/freeze.md"
+      local sparse_marker
+      sparse_marker="$(git ls-files -v -- "$indexed_freeze")"
+      if [[ "$sparse_marker" == "S $indexed_freeze" ]] &&
+         [[ "$(git cat-file -s ":$indexed_freeze" 2>/dev/null || echo 0)" -gt 0 ]]; then
+        return 0
+      fi
+    fi
   fi
 
   return 1

@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+"""Create a registered source checkout with an external durable runtime."""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+import sys
+from types import SimpleNamespace
+
+from durable_runtime import identity, read_json, unlinked
+from storage_capacity import filesystem, reserve, release
+from task_resource_cleanup import init_record, mutate
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for name in ('canonical', 'workspace', 'collection', 'record', 'target', 'state-dir'):
+        parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--branch', required=True)
+    parser.add_argument('--bytes', type=int, required=True)
+    parser.add_argument('--inodes', type=int, required=True)
+    parser.add_argument('--resource-id', required=True)
+    parser.add_argument('--approved', action='store_true')
+    args = parser.parse_args()
+    try:
+        if not args.approved or not args.branch.startswith('codex/'):
+            raise ValueError('verified scope and codex branch required')
+        canonical = unlinked(args.canonical)
+        target = unlinked(args.target, exists=False)
+        if target.exists() or not target.is_relative_to(unlinked(args.collection) / '.worktrees'):
+            raise ValueError('new target must be in the registered worktree collection')
+        if filesystem(canonical)['device'] != filesystem(target.parent)['device']:
+            raise ValueError('cross-filesystem checkout requires separate allocation review')
+        identity(canonical)
+        work_id = read_json(args.record)['work_id']
+        init_record(args.record, canonical, args.workspace, args.collection)
+        allocation = reserve(args.state_dir, target.parent, work_id, args.bytes, args.inodes)
+        try:
+            subprocess.run(['git', '-C', str(canonical), 'worktree', 'add', '--no-checkout',
+                            '-b', args.branch, str(target), 'dev'], check=True)
+            common = dict(target=target, approved=True, id=args.resource_id, kind='worktree',
+                          path=target, profile=None, cache_review=None)
+            mutate(args.record, 'bind-runtime', SimpleNamespace(**common))
+            mutate(args.record, 'register', SimpleNamespace(**common))
+            for command in (['sparse-checkout', 'init', '--no-cone'],
+                            ['sparse-checkout', 'set', '--no-cone', '/*', '!/ai-workflow-workspace/'],
+                            ['checkout']):
+                subprocess.run(['git', '-C', str(target), *command], check=True)
+        finally:
+            release(args.state_dir, allocation['id'], work_id)
+        print(json.dumps(dict(target=str(target), runtime=str(args.workspace),
+                              work_id=work_id, resource_id=args.resource_id)))
+    except (ValueError, OSError, subprocess.SubprocessError) as exc:
+        parser.exit(2, 'Source worktree: ' + str(exc) + '\n')
+
+
+if __name__ == '__main__':
+    main()
