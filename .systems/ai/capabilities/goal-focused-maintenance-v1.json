@@ -1969,7 +1969,7 @@
     },
     ".systems/scripts/check-validator-smoke-tests": {
       "mode": "100755",
-      "sha256": "97f55c3e1155f0f283d308adea42e41fee9297ee4c5086dc1fc4e08c11d74403"
+      "sha256": "076cd555195b75b3403023d51782207641c69abc9d84f3c202e6214899afb3ff"
     },
     ".systems/scripts/check-wig-mentoring": {
       "mode": "100755",
@@ -2221,7 +2221,7 @@
     },
     ".systems/scripts/smoke/manifest.json": {
       "mode": "100644",
-      "sha256": "469d1e0c4ad3840b6a3f77d34652499c5e806e0bae450298d30127ff6d2fa403"
+      "sha256": "61723a2ac0312f2460aa5703df930499d613e4f3acbe7131c3e23652dac1bf76"
     },
     ".systems/scripts/smoke/policy.sh": {
       "mode": "100644",

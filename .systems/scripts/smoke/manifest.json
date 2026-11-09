@@ -11712,6 +11712,61 @@
       "cleanup_id": "restore-execution-mode-source",
       "mutation_id": "execution-modes-stale-capability",
       "expected_outcome": "reject intended boundary with diagnostic"
+    },
+    {
+      "id": "end-of-task-capture-requires-coverage-start",
+      "group": "policy",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-policy",
+      "command_contract": "run_must_fail \"end-of-task-capture-requires-coverage-start\" .systems/scripts/check-end-of-task-capture",
+      "setup_id": "isolated-capture-template-or-contract-copy",
+      "cleanup_id": "restore-exact-original-capture-bytes",
+      "mutation_id": "end-of-task-capture-requires-coverage-start",
+      "expected_outcome": "reject intended incremental capture violation with exact diagnostic and exit 1"
+    },
+    {
+      "id": "end-of-task-capture-requires-topic-coverage",
+      "group": "policy",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-policy",
+      "command_contract": "run_must_fail \"end-of-task-capture-requires-topic-coverage\" .systems/scripts/check-end-of-task-capture",
+      "setup_id": "isolated-capture-template-or-contract-copy",
+      "cleanup_id": "restore-exact-original-capture-bytes",
+      "mutation_id": "end-of-task-capture-requires-topic-coverage",
+      "expected_outcome": "reject intended incremental capture violation with exact diagnostic and exit 1"
+    },
+    {
+      "id": "end-of-task-capture-requires-readback",
+      "group": "policy",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-policy",
+      "command_contract": "run_must_fail \"end-of-task-capture-requires-readback\" .systems/scripts/check-end-of-task-capture",
+      "setup_id": "isolated-capture-template-or-contract-copy",
+      "cleanup_id": "restore-exact-original-capture-bytes",
+      "mutation_id": "end-of-task-capture-requires-readback",
+      "expected_outcome": "reject intended incremental capture violation with exact diagnostic and exit 1"
+    },
+    {
+      "id": "end-of-task-capture-blocks-read-only-write",
+      "group": "policy",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-policy",
+      "command_contract": "run_must_fail \"end-of-task-capture-blocks-read-only-write\" .systems/scripts/check-end-of-task-capture",
+      "setup_id": "isolated-capture-template-or-contract-copy",
+      "cleanup_id": "restore-exact-original-capture-bytes",
+      "mutation_id": "end-of-task-capture-blocks-read-only-write",
+      "expected_outcome": "reject intended incremental capture violation with exact diagnostic and exit 1"
+    },
+    {
+      "id": "end-of-task-capture-blocks-unverified-boundary",
+      "group": "policy",
+      "helper": "run_must_fail",
+      "region_id": "supplemental-policy",
+      "command_contract": "run_must_fail \"end-of-task-capture-blocks-unverified-boundary\" .systems/scripts/check-end-of-task-capture",
+      "setup_id": "isolated-capture-template-or-contract-copy",
+      "cleanup_id": "restore-exact-original-capture-bytes",
+      "mutation_id": "end-of-task-capture-blocks-unverified-boundary",
+      "expected_outcome": "reject intended incremental capture violation with exact diagnostic and exit 1"
     }
   ],
   "files_sha256": {
