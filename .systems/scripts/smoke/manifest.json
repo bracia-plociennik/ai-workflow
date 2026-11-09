@@ -789,7 +789,12 @@
     "execution-modes-qualified-independent-policy",
     "execution-modes-blocked-unit-policy",
     "execution-modes-missing-capability",
-    "execution-modes-stale-capability"
+    "execution-modes-stale-capability",
+    "end-of-task-capture-requires-coverage-start",
+    "end-of-task-capture-requires-topic-coverage",
+    "end-of-task-capture-requires-readback",
+    "end-of-task-capture-blocks-read-only-write",
+    "end-of-task-capture-blocks-unverified-boundary"
   ],
   "external_assertion_audit": [
     {
@@ -3142,7 +3147,12 @@
     "execution-modes-qualified-independent-policy": "core",
     "execution-modes-blocked-unit-policy": "core",
     "execution-modes-missing-capability": "core",
-    "execution-modes-stale-capability": "core"
+    "execution-modes-stale-capability": "core",
+    "end-of-task-capture-requires-coverage-start": "policy",
+    "end-of-task-capture-requires-topic-coverage": "policy",
+    "end-of-task-capture-requires-readback": "policy",
+    "end-of-task-capture-blocks-read-only-write": "policy",
+    "end-of-task-capture-blocks-unverified-boundary": "policy"
   },
   "tests": [
     {
@@ -11705,11 +11715,11 @@
     }
   ],
   "files_sha256": {
-    "common.sh": "7fb7a207b5c9b7ca2508a2883c1e19a7e947edd918f4787754292d3b27772ea5",
+    "common.sh": "7c36d73f2036750865be77cd184162e1b027af8d0eda4ed42e1720be921d244d",
     "quality.sh": "df3e514dd8945369367a4a2d024f2ec121ac9f416db8a8f1e1f411c3e1fc08da",
     "workspace.sh": "0b2281cd5f5526e77a7e7cc927aa5fcb38fba774e96695ae09b92cf4885bae55",
     "skills.sh": "7a5b36cc5fadc9c16329d8e28d363352a2e30a4dc1b995630d4c2397062d414d",
-    "policy.sh": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9",
+    "policy.sh": "2f09fdf3ceae515b05a1a7cce83ad93ab4c20aa177f486342b0020ad1dcf4819",
     "core.sh": "00807c0910a68f1e668fdb25b84e602bfab54d2eb826ee0dca67f94764e1de79"
   }
 }
