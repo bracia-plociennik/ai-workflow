@@ -25,7 +25,7 @@
     },
     ".systems/ai/capabilities/intent-to-execution-brief-v1.json": {
       "mode": "100644",
-      "sha256": "a74aff86958c09270e345da452ec008f446df0d525611a6cf93bcb2781ceb236"
+      "sha256": "41bd5dff5cb14fb8eb3efdcfbaaeb54c39617f432dfd99d7a3cb10cb47937592"
     },
     ".systems/ai/capabilities/luna-first-v1.json": {
       "mode": "100644",
@@ -61,7 +61,7 @@
     },
     ".systems/ai/capabilities/task-efficiency-v1.json": {
       "mode": "100644",
-      "sha256": "ed8f66fd443fb543e86ef92ad9a4b018c146b66224094459f3d166d29c15af5b"
+      "sha256": "7399abbd2d24ede2329195ec06384f904d6cfb87e5470a8616dd4fc0e8a7bda8"
     },
     ".systems/ai/capabilities/task-resource-cleanup-v1.json": {
       "mode": "100644",
