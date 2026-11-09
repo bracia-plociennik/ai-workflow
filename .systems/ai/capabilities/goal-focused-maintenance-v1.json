@@ -97,7 +97,7 @@
     },
     ".systems/ai/core/command-routing.md": {
       "mode": "100644",
-      "sha256": "be90a5a235fbbfb9fe215d615c385ea48bb6007127d7fcc20c80c794a7a1dae0"
+      "sha256": "e997074b833423c1a9e9c15affb3b35410202f8baa94070692a4686b88753638"
     },
     ".systems/ai/core/commands.md": {
       "mode": "100644",
@@ -157,7 +157,7 @@
     },
     ".systems/ai/core/end-of-task-capture.md": {
       "mode": "100644",
-      "sha256": "583d850510e023f51fdbbf1480f0cc2b5a3ac98e99da504c9fef84d6b81aa552"
+      "sha256": "47c1f44b3fbf2fa1fb683929b7e73aba9bcdab9c04ae10926e670a23b567c16b"
     },
     ".systems/ai/core/execution-efficiency.md": {
       "mode": "100644",
@@ -209,7 +209,7 @@
     },
     ".systems/ai/core/memory.md": {
       "mode": "100644",
-      "sha256": "3c7d4e1cd02e12bcd11f3c6b7923dd2f2d3d9937807e51cf3e0382b48589d1af"
+      "sha256": "df6f8929ba53501361eb68618b30a25173538b2ea542b849d06ab1641771a673"
     },
     ".systems/ai/core/model-selection-guidance.md": {
       "mode": "100644",
@@ -281,7 +281,7 @@
     },
     ".systems/ai/core/response-contract.md": {
       "mode": "100644",
-      "sha256": "f1c54bad17e266c47ce10f866b3d69fe50d417ccdcf1b4c486550ce4a4bbfb2f"
+      "sha256": "40b6aa74588f778134d7e9440cf5bbb0d94e5065956aac7c838a7770e2d06c41"
     },
     ".systems/ai/core/risk-model.md": {
       "mode": "100644",
@@ -1153,7 +1153,7 @@
     },
     ".systems/ai/templates/capture/end-of-task-capture.template.md": {
       "mode": "100644",
-      "sha256": "ecea07f454e56b3a5767efdbeaa7a69d52e4289e3b3431d27a27f14bf7ad1511"
+      "sha256": "7a47582df6368f9ed6d058cec23304c271166664aff759e388eac63f808b6d77"
     },
     ".systems/ai/templates/capture/knowledge-capture-reminder.template.md": {
       "mode": "100644",
@@ -1809,7 +1809,7 @@
     },
     ".systems/scripts/check-end-of-task-capture": {
       "mode": "100755",
-      "sha256": "5d118c1e582af88431819fd05bb4d3e641c33303650fc3c5046ec6f1dcee0d2a"
+      "sha256": "e848f0596566793ea80cd94cdb48e7bc94ee271a54bdec40286df97f7f9f280f"
     },
     ".systems/scripts/check-execution-efficiency": {
       "mode": "100755",
@@ -2213,7 +2213,7 @@
     },
     ".systems/scripts/smoke/common.sh": {
       "mode": "100644",
-      "sha256": "7fb7a207b5c9b7ca2508a2883c1e19a7e947edd918f4787754292d3b27772ea5"
+      "sha256": "7c36d73f2036750865be77cd184162e1b027af8d0eda4ed42e1720be921d244d"
     },
     ".systems/scripts/smoke/core.sh": {
       "mode": "100644",
@@ -2225,7 +2225,7 @@
     },
     ".systems/scripts/smoke/policy.sh": {
       "mode": "100644",
-      "sha256": "d7cd1a55d842128afa039fbcf6b3f9f80a1e0741fb3793c7a9f35e8d86adc6a9"
+      "sha256": "2f09fdf3ceae515b05a1a7cce83ad93ab4c20aa177f486342b0020ad1dcf4819"
     },
     ".systems/scripts/smoke/quality.sh": {
       "mode": "100644",

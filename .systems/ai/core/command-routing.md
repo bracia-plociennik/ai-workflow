@@ -763,6 +763,8 @@ Routing notes:
 
 Route through `.systems/ai/core/end-of-task-capture.md` only when the owner includes completion/capture intent. Exact `Koniec pracy` and `Koniec zadania` commands mean `capture-now` and cannot end as acknowledge-only responses.
 
+Direct `Zdestyluj i zapisz`, `Zdestyluj i zapisz wiedzę`, standalone `Koniec` and standalone `Kończymy` use end-of-task-capture.md Incremental whole-chat coverage. Review the full uncaptured conversation interval and all topics. Explicit `read-only`, `tylko w czacie` or `bez zapisu` selects inline-only output with zero durable effects. Quoted/example/idea-validation wording supplies no current capture trigger. Preserve formal-phase precedence and the separate `koniec bloku` route. Unfinished work receives factual status and a resume point while formal quality remains pending.
+
 Polish variants:
 
 - `To koniec zadania.`
