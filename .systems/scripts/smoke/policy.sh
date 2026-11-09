@@ -1012,6 +1012,34 @@ mv "$tmp/.systems/ai/core/end-of-task-capture.md.bak" "$tmp/.systems/ai/core/end
 
 # END FROZEN region-3828-3924
 
+# Incremental whole-chat coverage regressions.
+cp "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.incremental-bak"
+perl -0pi -e 's/^- Coverage start:.*\n//m' "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+run_must_fail "end-of-task-capture-requires-coverage-start" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.incremental-bak" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+
+cp "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.incremental-bak"
+perl -0pi -e 's/^- Topic coverage:.*\n//m' "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+run_must_fail "end-of-task-capture-requires-topic-coverage" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.incremental-bak" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+
+cp "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.incremental-bak"
+perl -0pi -e 's/^- Readback verification:.*\n//m' "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+run_must_fail "end-of-task-capture-requires-readback" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md.incremental-bak" "$tmp/.systems/ai/templates/capture/end-of-task-capture.template.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.incremental-bak"
+printf '\nread-only capture may write memory.\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-read-only-write" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.incremental-bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+cp "$tmp/.systems/ai/core/end-of-task-capture.md" "$tmp/.systems/ai/core/end-of-task-capture.md.incremental-bak"
+printf '\ncapture boundary may advance after failed write.\n' >> "$tmp/.systems/ai/core/end-of-task-capture.md"
+run_must_fail "end-of-task-capture-blocks-unverified-boundary" .systems/scripts/check-end-of-task-capture
+mv "$tmp/.systems/ai/core/end-of-task-capture.md.incremental-bak" "$tmp/.systems/ai/core/end-of-task-capture.md"
+
+
+
 # BEGIN FROZEN region-4034-4051
 
 cp "$tmp/.systems/ai/core/response-contract.md" "$tmp/.systems/ai/core/response-contract.md.bak"

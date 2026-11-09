@@ -56,7 +56,7 @@ It uses the same memory scope boundaries as this router:
 - System Insights only for anonymized cross-project operating lessons and skill candidates;
 - status/evidence only for source-backed state synchronization.
 
-Default End-of-Task Capture output is proposal-only. Exact `Koniec pracy` and `Koniec zadania` mean `capture-now` and provide explicit owner capture intent. Durable memory writes still require clear target, scope, privacy, quality, evidence, and write permission.
+End-of-Task Capture follows the current owner intent and the incremental whole-chat coverage in end-of-task-capture.md. Read-only output has zero durable effects. Unclear capture authority remains proposal-only. Exact `Koniec pracy` and `Koniec zadania` mean `capture-now` and provide explicit owner capture intent. Durable memory writes still require clear target, scope, privacy, quality, evidence, and write permission.
 
 ## Knowledge Capture Reminder
 

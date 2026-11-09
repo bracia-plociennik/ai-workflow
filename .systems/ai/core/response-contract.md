@@ -121,7 +121,7 @@ Do not say `no sources needed` for a substantive response. If no files, tools, o
 
 If the owner explicitly opts out of Default Idea Validation with `bez idea validation`, `bez walidacji pomysłu`, `without idea validation`, `skip idea validation`, or `fast path no idea validation`, the trace must include `Idea validation skipped by owner opt-out` and residual risk. This reports only the skipped idea/task validation lens; it does not waive source-of-truth order, risk model, permissions, safe environment checks, required evidence, QA/Quality, owner approvals, phase gates, change-request routing, or final owner approval.
 
-If End-of-Task Capture is used, the trace must state whether it was the matched route or supporting output, whether the mode was `capture-now` or `proposal-only`, which sources were reviewed, whether durable writes were performed or skipped, and residual risk. Exact `Koniec pracy` and `Koniec zadania` cannot produce an acknowledge-only response. Use `.systems/ai/core/end-of-task-capture.md` for the required `End-of-Task Capture` block.
+If End-of-Task Capture is used, the trace must state whether it was the matched route or supporting output, whether the mode was `capture-now`, `proposal-only` or `read-only`, which sources were reviewed, whether durable writes were performed or skipped, and residual risk. Exact `Koniec pracy` and `Koniec zadania` cannot produce an acknowledge-only response. Use `.systems/ai/core/end-of-task-capture.md` for the required `End-of-Task Capture` block.
 
 If Knowledge Capture Reminder is used, the trace must state the trigger, previous work scope, capture state, recommended target, whether capture is required or optional, whether writes are allowed, whether commit or push is allowed, owner skip state, and residual risk. Use `.systems/ai/core/knowledge-capture-reminder.md` for the required block.
 
@@ -267,3 +267,7 @@ existing intake and risk/approval/quality gates, without an extra mandatory phas
 or per-answer artifacts. State specific unknowns, stop research when evidence is
 sufficient, and stop work at accepted completion. Keep current model and explicit
 owner-only delegation. No universal minutes limit or automatic production action.
+
+## Incremental chat-end confirmation
+
+Use end-of-task-capture.md for the full uncaptured conversation interval and per-topic coverage. Confirm the actual saved range, references, uncovered items and useful resume point briefly. Read-only requests receive their summary or export inline, with zero durable effects. A no-new-knowledge result is complete when every relevant topic is already covered. Missing implementation QA remains visible as unfinished work.

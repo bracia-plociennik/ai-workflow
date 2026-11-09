@@ -428,6 +428,11 @@ run_must_fail() {
       cross-system-handoff-requires-external-memory-namespace) expected_diagnostic='Shared-impact handoff must live under ai-workflow-workspace/external-memory/memory/';;
       end-of-task-capture-requires-koniec-pracy) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/core/end-of-task-capture\.md: trigger: Koniec pracy';;
       end-of-task-capture-blocks-acknowledge-only) expected_diagnostic='Koniec pracy may acknowledge only and ask what to do next\.';;
+      end-of-task-capture-requires-coverage-start) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/templates/capture/end-of-task-capture\.template\.md: incremental template field: Coverage start';;
+      end-of-task-capture-requires-topic-coverage) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/templates/capture/end-of-task-capture\.template\.md: incremental template field: Topic coverage';;
+      end-of-task-capture-requires-readback) expected_diagnostic='Missing end-of-task capture reference in \.systems/ai/templates/capture/end-of-task-capture\.template\.md: incremental template field: Readback verification';;
+      end-of-task-capture-blocks-read-only-write) expected_diagnostic='read-only capture may write memory\.';;
+      end-of-task-capture-blocks-unverified-boundary) expected_diagnostic='capture boundary may advance after failed write\.';;
       validation-routing-requires-script-applicability) expected_diagnostic='Missing validation routing requirement in \.systems/ai/templates/workflow/phase-5-quality\.template\.md: field: Workflow script applicability';;
       validation-routing-blocks-green-scripts-pass) expected_diagnostic='Green scripts equal PASS\.';;
       model-selection-requires-non-blocking-field) expected_diagnostic='Missing model guidance requirement in \.systems/ai/templates/workflow/phase-4-implementation\.template\.md: model field: Blocking: `no`';;

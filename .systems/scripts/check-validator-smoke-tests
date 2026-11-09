@@ -179,7 +179,7 @@ def load_manifest(root):
         group = ownership[test["id"]]
         if test.get("group") != group or test.get("helper") not in ("run_must_pass", "run_must_fail"):
             reject("test outcome contract: " + test["id"])
-        if test.get("region_id") not in seen_regions and test.get("region_id") != "supplemental-core":
+        if test.get("region_id") not in seen_regions and test.get("region_id") not in {"supplemental-core", "supplemental-" + group}:
             reject("test region contract: " + test["id"])
         for field in ("command_contract", "setup_id", "cleanup_id", "mutation_id", "expected_outcome"):
             if not isinstance(test.get(field), str) or not test[field].strip():
