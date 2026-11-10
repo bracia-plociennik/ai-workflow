@@ -42,3 +42,7 @@ Every decision made during spec, implementation, QA, fix loop, distillation, che
     - re-QA
   impact: null
 ```
+
+## AFK/ZW continuation references
+
+Use execution-modes.md. Keep unresolved owner decisions in this existing list with stable IDs, affected units/dependents, blocking reason, actual sources tried, options/recommendation, impacts and unlocked work. Existing readiness/state references runnable independent work, preparation, source owner-absence/return and resume point. Do not add AFK fields to the strict V1/V2 projection JSON or create a second queue. Owner absence grants no new permission.
