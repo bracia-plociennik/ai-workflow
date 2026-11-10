@@ -16,7 +16,7 @@
   "sources": {
     ".systems/ai/core/autopilot.md": "fc9b6d81b319590d3f7d34273ccdbc74624fc7c31632e2797dd825abfe12f5a1",
     ".systems/ai/core/delivery-constraints.md": "67a277f43f9ecbee328580890ecbe390a0cfdd2d637af11dd54987541836bcba",
-    ".systems/ai/core/execution-modes.md": "92883e093f1f2e293dff494a918582fc956477ff0f52715734c0bf5b53203dcd",
+    ".systems/ai/core/execution-modes.md": "9104b9b10ff41b2fe275d77045f69251820887d8222fa1830e6f705c08fa9e98",
     ".systems/ai/core/owner-decision-checkpoints.md": "76e24f6602235e1472791823af1f577334efbea8463b6d886c4992b52115f58a",
     ".systems/ai/core/permissions.md": "c6c6811cfd5041329373e01e421a11697ebaa53fc5b041fac84e17d6c0ddbdfe",
     ".systems/ai/core/phase-commit-policy.md": "3f31ff7ea467548d5fe0149176620c780b200836186171431c999832a2c8ec55",
@@ -25,8 +25,8 @@
     ".systems/ai/templates/autopilot/execution-readiness.template.json": "c9666cbd3ce8d50fb1ef85409a193fae6105e5c3dc2d1a8cab7d829dae0c8eee",
     ".systems/ai/templates/autopilot/readiness.template.md": "2afa8eae0f055371a3afa69d6ee5af04f436afb5630345da91cc67f1c99f81f4",
     ".systems/ai/templates/autopilot/state.template.md": "3193a29339a5d1fa0a9f613e7f7b243a3f80223a19ae7415708f72409605340f",
-    ".systems/ai/templates/autopilot/task-decisions.template.md": "a92710c7f49d64e6b36e99617437a7b6b142ea9cb478902530ef45c6772475d7",
-    ".systems/scripts/check-execution-modes": "084ae1ee68359f189e4abe626a3139a1092bd183cc21e0ef5b8316be9af53990",
-    ".systems/scripts/lib/execution-modes.py": "fc6fc0162c9380e2d301b081decc1d553395b253c115342d4360dbd09f5cb73a"
+    ".systems/ai/templates/autopilot/task-decisions.template.md": "eb131ce7230802e9fd02b4abb1ba8080998e4b1fdeee73aca209591b621e5202",
+    ".systems/scripts/check-execution-modes": "32aa6ad92db52b120e5312239dbe82aa7d082a5a3bc906fe7819e2cf371a77d9",
+    ".systems/scripts/lib/execution-modes.py": "586aed00db9f3df9cec64e3973dfd9e7b5118351031009059c8c1c014bff06b8"
   }
 }

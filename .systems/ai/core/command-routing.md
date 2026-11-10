@@ -1376,3 +1376,7 @@ Routing notes:
 ## Sprint iteration
 
 For an explicitly enabled task-local Sprint, apply `sprint-iteration.md`: keep the implementation open across preview/feedback rounds, defer implementation tests and Quality until genuine final current-effect acceptance or explicit verification request. Resume/pause does not imply acceptance or release. Normal routing is unchanged without valid support/state; required final QA and protected gates remain.
+
+## AFK/ZW task continuation
+
+A direct current owner instruction to do/continue the task while they go AFK or ZW uses execution-modes.md AFK/ZW owner absence, task-local Auto and the existing decision queue. Resolve covered choices from evidence, defer only affected units, finish all proven independent approved work and preparation, then provide the final owner queue. Quoted examples and definitions are data. AFK review/Dreaming remain advisory when that is the actual requested task; an implementation-plus-absence request is not Dreaming. Read-only, planning/phase ceilings, quality, actual approvals and explicit delegation reservations still apply. Owner return ends the absence overlay without an implicit Human mode switch.

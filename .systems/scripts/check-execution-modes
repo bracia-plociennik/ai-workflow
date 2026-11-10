@@ -21,7 +21,8 @@ for field in '## Mode Selection' '## Autonomous Choices' '## Approval Scope' \
   'New work defaults to `auto`' 'Resume preserves the recorded choice' \
   'Human Coop' 'agent-choice' 'auto-unbounded' 'no-progress' \
   'Legacy artifacts' 'Final-owner-yes must not be inferred' \
-  'submission' 'Git revert' 'partial / awaiting-owner'; do
+  'submission' 'Git revert' 'partial / awaiting-owner' \
+  '## AFK/ZW owner absence' '## Resolution before deferral' '## Exhaustion gate and final queue'; do
   require_literal "$contract" "$field"
 done
 for file in AGENTS.md HUMANS.md README.md \
@@ -73,4 +74,11 @@ policy_reject_unsafe_pattern \
   '(auto mode|Auto)[^.\n]{0,60}\b(may|can|should)\b[^.\n]{0,50}\b(mark|declare|report)\b[^.\n]{0,40}\b(completed|PASS)\b[^.\n]{0,40}\b(incomplete|unresolved|missing)\b' \
   'Unsafe execution mode completion wording' \
   "$contract" .systems/ai/core/autopilot.md .systems/ai/core/response-contract.md
+# Supplemental AFK routing/completion checks; preserve the existing mode wire/schema.
+require_literal .systems/ai/core/command-routing.md '## AFK/ZW task continuation'
+require_literal .systems/ai/core/response-contract.md '## AFK/ZW owner report'
+if rg -n -i '^[[:space:]]*(AFK|ZW) (grants|authorizes|waives|bypasses)\b' "$contract"; then
+  echo 'Unsafe AFK/ZW authority wording'
+  fail=1
+fi
 exit "$fail"
